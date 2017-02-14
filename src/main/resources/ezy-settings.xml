@@ -1,0 +1,20 @@
+<settings
+	xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
+  		ezy-settings-1.0.0.xsd"
+	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<application-loader>
+		<clazz>com.tvd12</clazz>
+	</application-loader>
+	
+	<applications>
+		<application>
+			<name>videopoker</name>
+			<entry>com.tvd12.example.extension.VideoPokerAppEntry</entry>
+		</application>
+	</applications>
+	
+</settings>
+
+<!-- http://localhost:8080/schema/ezyfox/settings/ -->

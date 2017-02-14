@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.tvd12.com/schema/ezyfox/settings"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.tvd12.com/schema/ezyfox/settings"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:element name="settings">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="application-loader" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="applications" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="application-loader" type="application-loader-type" />
+	<xs:element name="applications" type="applications-type" />
+	<xs:element name="application" type="application-type" />
+	
+	<xs:complexType name="application-loader-type">
+		<xs:all>
+			<xs:element name="clazz" type="class-type" minOccurs="1" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="applications-type">
+		<xs:all>
+			<xs:element ref="application" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="application-type">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entry" type="class-type" minOccurs="1" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:simpleType name="class-type">
+		<xs:restriction base="not-empty-type" />
+	</xs:simpleType>
+	
+	<xs:simpleType name="not-empty-type">
+		<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

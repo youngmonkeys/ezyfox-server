@@ -1,0 +1,2 @@
+# ezyfox-server
+EzyFox Server

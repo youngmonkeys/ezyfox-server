@@ -11,7 +11,7 @@
 	<applications>
 		<application>
 			<name>videopoker</name>
-			<entry>com.tvd12.example.extension.VideoPokerAppEntry</entry>
+			<entry-loader>com.tvd12.example.extension.VideoPokerAppEntryLoader</entry-loader>
 		</application>
 	</applications>
 	

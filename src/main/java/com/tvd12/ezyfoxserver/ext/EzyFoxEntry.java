@@ -3,14 +3,14 @@
  */
 package com.tvd12.ezyfoxserver.ext;
 
+import com.tvd12.ezyfoxserver.entities.EzyFoxDestroyable;
+
 /**
  * @author tavandung12
  *
  */
-public interface EzyFoxEntry {
+public interface EzyFoxEntry extends EzyFoxDestroyable {
 
-    void boost();
-    
-    void destroy();
+    void boost() throws Exception;
     
 }

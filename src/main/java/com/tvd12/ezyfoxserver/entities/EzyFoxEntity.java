@@ -16,26 +16,25 @@ public abstract class EzyFoxEntity implements EzyFoxProperties {
     // map of key/value properties of model
     @Getter
     protected Map<Object, Object> properties 
-        = new ConcurrentHashMap<>();
+    		= new ConcurrentHashMap<>();
     
-    /**
-     * put key and value to map
-     * @see java.util.Map#put(Object, Object)
-     * 
-     * @param key key 
-     * @param value value
+    /*
+     * (non-Javadoc)
+     * @see com.tvd12.ezyfoxserver.entities.EzyFoxProperties#setProperty(java.lang.Object, java.lang.Object)
      */
     @Override
     public void setProperty(Object key, Object value) {
         properties.put(key, value);
     }
     
-    /**
-     * get the value to which the specified key is mapped
-     * @see java.util.Map#get(Object)
-     * 
-     * @param key key
-     * @return a value
+    @Override
+    public void setProperties(Map<? extends Object, ? extends Object> map) {
+    	properties.putAll(map);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see com.tvd12.ezyfoxserver.entities.EzyFoxProperties#getProperty(java.lang.Object)
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -43,17 +42,14 @@ public abstract class EzyFoxEntity implements EzyFoxProperties {
         return (T) properties.get(key);
     }
     
-    /**
-     * get the value to which the specified key is mapped and cast value to specific type
-     * @see java.util.Map#get(Object)
-     * 
-     * @param key key
-     * @param clazz specific type
-     * @return a value
+    /*
+     * (non-Javadoc)
+     * @see com.tvd12.ezyfoxserver.entities.EzyFoxProperties#getProperty(java.lang.Object, java.lang.Class)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T getProperty(Object key, Class<T> clazz) {
-        return clazz.cast(properties.get(key));
+        return (T)properties.get(key);
     }
     
     /**

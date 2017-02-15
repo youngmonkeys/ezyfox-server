@@ -31,7 +31,7 @@
 	<xs:complexType name="application-type">
 		<xs:all>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:element name="entry" type="class-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
 		</xs:all>
 	</xs:complexType>
 	

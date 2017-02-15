@@ -17,4 +17,7 @@ public class EzyFoxConfig {
 	@Property("ezyfox.version")
 	private String ezyfoxVersion;
 	
+	@Property("logback.config.file")
+	private String logbackConfigFile;
+	
 }

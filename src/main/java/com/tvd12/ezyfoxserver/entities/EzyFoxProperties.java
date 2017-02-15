@@ -3,6 +3,8 @@
  */
 package com.tvd12.ezyfoxserver.entities;
 
+import java.util.Map;
+
 /**
  * Each model in application should have properties, and we think key/value is good idea
  * 
@@ -17,7 +19,14 @@ public interface EzyFoxProperties {
      * @param key key 
      * @param value value
      */
-    public void setProperty(Object key, Object value);
+    void setProperty(final Object key, final Object value);
+    
+    /**
+     * put all
+     * 
+     * @param map the map to put
+     */
+    void setProperties(final Map<? extends Object, ? extends Object> map);
     
     /**
      * get the value to which the specified key is mapped
@@ -26,7 +35,7 @@ public interface EzyFoxProperties {
      * @param key key
      * @return a value
      */
-    public <T> T getProperty(Object key);
+    <T> T getProperty(final Object key);
     
     /**
      * get the value to which the specified key is mapped and cast value to specific type
@@ -36,14 +45,14 @@ public interface EzyFoxProperties {
      * @param clazz specific type
      * @return a value
      */
-    public <T> T getProperty(Object key, Class<T> clazz);
+    <T> T getProperty(final Object key, final Class<T> clazz);
     
     /**
      * removes the mapping for a key from the map
      * 
      * @param key the key
      */
-    public void removeProperty(Object key);
+    void removeProperty(final Object key);
 
     /**
      * check whether has value mapped to the or not
@@ -51,6 +60,6 @@ public interface EzyFoxProperties {
      * @param key the key to check
      * @return true or false;
      */
-    public boolean containsKey(Object key);
+    boolean containsKey(final Object key);
     
 }

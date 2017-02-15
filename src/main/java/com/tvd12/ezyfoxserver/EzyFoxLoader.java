@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyFoxConfig;
 import com.tvd12.ezyfoxserver.config.EzyFoxSettings;
+import com.tvd12.ezyfoxserver.service.EzyFoxJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyFoxXmlReading;
 
 /**
@@ -25,8 +26,9 @@ public class EzyFoxLoader {
     
     private Logger logger;
     private EzyFoxConfig config;
-    private EzyFoxXmlReading xmlReading;
     private ClassLoader classLoader;
+    private EzyFoxXmlReading xmlReading;
+    private EzyFoxJsonMapping jsonMapping;
     
     private EzyFoxLoader() {
         this.logger = LoggerFactory.getLogger(getClass());
@@ -40,6 +42,7 @@ public class EzyFoxLoader {
     	EzyFox answer = new EzyFox();
     	answer.setConfig(config);
     	answer.setXmlReading(xmlReading);
+    	answer.setJsonMapping(jsonMapping);
     	answer.setClassLoader(classLoader);
     	answer.setSettings(readSettings());
     	answer.setAppClassLoaders(newAppClassLoaders());
@@ -123,6 +126,11 @@ public class EzyFoxLoader {
     
     public EzyFoxLoader xmlReading(EzyFoxXmlReading xmlReading) {
     	this.xmlReading = xmlReading;
+    	return this;
+    }
+    
+    public EzyFoxLoader jsonMapping(EzyFoxJsonMapping jsonMapping) {
+    	this.jsonMapping = jsonMapping;
     	return this;
     }
     

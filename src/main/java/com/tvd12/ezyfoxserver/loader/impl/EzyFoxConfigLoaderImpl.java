@@ -11,6 +11,13 @@ public class EzyFoxConfigLoaderImpl implements EzyFoxConfigLoader {
 
 	private String filePath;
 	
+	private EzyFoxConfigLoaderImpl() {
+	}
+	
+	public static EzyFoxConfigLoaderImpl newInstance() {
+		return new EzyFoxConfigLoaderImpl();
+	}
+	
 	public EzyFoxConfigLoaderImpl filePath(final String filePath) {
 		this.filePath = filePath;
 		return this;
@@ -19,10 +26,10 @@ public class EzyFoxConfigLoaderImpl implements EzyFoxConfigLoader {
 	@Override
 	public EzyFoxConfig load() {
 		validateFilePath(filePath);
-		return doload();
+		return doLoad();
 	}
 	
-	private EzyFoxConfig doload() {
+	private EzyFoxConfig doLoad() {
 		return new PropertiesMapper()
 				.context(getClass())
 				.clazz(EzyFoxConfig.class)

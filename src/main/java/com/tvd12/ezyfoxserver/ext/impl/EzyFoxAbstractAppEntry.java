@@ -10,5 +10,4 @@ import com.tvd12.ezyfoxserver.ext.EzyFoxAppEntry;
  *
  */
 public abstract class EzyFoxAbstractAppEntry extends EzyFoxAbstractEntry implements EzyFoxAppEntry {
-
 }

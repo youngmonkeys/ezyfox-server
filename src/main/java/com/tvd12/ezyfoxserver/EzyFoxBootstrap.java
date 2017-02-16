@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfoxserver.ext.EzyFoxAppEntry;
+import com.tvd12.ezyfoxserver.ext.EzyFoxPluginEntry;
 import com.tvd12.ezyfoxserver.loader.EzyFoxAppEntryLoader;
+import com.tvd12.ezyfoxserver.loader.EzyFoxPluginEntryLoader;
 
 import lombok.Builder;
 
@@ -15,8 +17,10 @@ public class EzyFoxBootstrap {
 	
 	public void boost() {
 		startAllApps();
+		startAllPlugins();
 	}
 	
+	//====================== apps ===================
 	private void startAllApps() {
 		ezyFox.getAppNames().forEach(this::startApp);
 	}
@@ -37,8 +41,34 @@ public class EzyFoxBootstrap {
 	}
 	
 	private void startApp(final EzyFoxAppEntry entry) throws Exception {
-		entry.boost();
+		entry.start();
 	}
+	//=================================================
+	
+	//===================== plugins ===================
+	private void startAllPlugins() {
+		ezyFox.getPluginNames().forEach(this::startPlugin);
+	}
+	
+	private void startPlugin(final String pluginName) {
+		try {
+			getLogger().info("plugin " + pluginName + " loading...");
+			startPlugin(ezyFox.newPluginEntryLoader(pluginName));
+			getLogger().info("plugin" + pluginName + " loaded");
+		}
+		catch(Exception e) {
+			getLogger().error("can not start plugin " + pluginName, e);
+		} 
+	}
+	
+	private void startPlugin(final EzyFoxPluginEntryLoader loader) throws Exception {
+		startPlugin(loader.load());
+	}
+	
+	private void startPlugin(final EzyFoxPluginEntry entry) throws Exception {
+		entry.start();
+	}
+	//=================================================
 	
 	private Logger getLogger() {
 		return LoggerFactory.getLogger(getClass());

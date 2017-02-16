@@ -11,6 +11,6 @@ import com.tvd12.ezyfoxserver.entities.EzyFoxDestroyable;
  */
 public interface EzyFoxEntry extends EzyFoxDestroyable {
 
-    void boost() throws Exception;
+    void start() throws Exception;
     
 }

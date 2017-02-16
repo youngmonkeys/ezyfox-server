@@ -17,21 +17,26 @@ import lombok.ToString;
 @Getter
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "application")
-@JsonPropertyOrder({"id", "name", "entryLoader"})
-public class EzyFoxApp {
+@XmlRootElement(name = "plugin")
+@JsonPropertyOrder({"id", "name", "entryLoader", "priority"})
+public class EzyFoxPlugin {
 
 	private final int id;
 	
 	@XmlElement(name = "name")
 	private String name;
 	
+	@XmlElement(name = "priority")
+	private int priority;
+	
 	@XmlElement(name = "entry-loader")
 	private String entryLoader;
 	
 	private static final AtomicInteger COUNT = new AtomicInteger(0);
 	
-	public EzyFoxApp() {
+	public EzyFoxPlugin() {
 		this.id = COUNT.incrementAndGet();
 	}
+	
+	
 }

@@ -15,6 +15,12 @@
 		</application>
 	</applications>
 	
+	<plugins>
+		<plugin>
+			<name>auth</name>
+			<entry-loader>com.tvd12.example.extension.VideoPokerPluginEntryLoader</entry-loader>
+		</plugin>
+	</plugins>
 </settings>
 
 <!-- http://localhost:8080/schema/ezyfox/settings/ -->

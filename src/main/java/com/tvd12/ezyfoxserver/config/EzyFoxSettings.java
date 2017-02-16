@@ -25,6 +25,10 @@ public class EzyFoxSettings {
 	@XmlElement(name = "applications")
 	private EzyFoxApps applications;
 	
+	@XmlElement(name = "plugins")
+	private EzyFoxPlugins plugins;
+	
+	//==================== apps ================//
 	@JsonIgnore
 	public Set<String> getAppNames() {
 		return applications.getAppNames();
@@ -42,5 +46,26 @@ public class EzyFoxSettings {
 	public EzyFoxApp getAppById(final Integer id) {
 		return applications.getAppById(id);
 	}
+	//=============================================//
+	
+	//==================== plugins ================//
+	@JsonIgnore
+	public Set<String> getPluginNames() {
+		return plugins.getPluginNames();
+	}
+	
+	@JsonIgnore
+	public Set<Integer> getPluginIds() {
+		return plugins.getPluginIds();
+	}
+	
+	public EzyFoxPlugin getPluginByName(final String name) {
+		return plugins.getPluginByName(name);
+	}
+	
+	public EzyFoxPlugin getPluginById(final Integer id) {
+		return plugins.getPluginById(id);
+	}
+	//=============================================//
 	
 }

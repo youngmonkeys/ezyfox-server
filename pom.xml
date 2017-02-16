@@ -17,6 +17,7 @@
 		<google.guava.version>21.0</google.guava.version>
 		<reflections.version>0.9.10</reflections.version>
 		<commons.io.version>2.5</commons.io.version>
+		<netty.all.version>4.1.8.Final</netty.all.version>
 		<lombok.version>1.16.10</lombok.version>
 		<logback.version>1.1.7</logback.version>
 		<groovy.version>2.4.6</groovy.version>
@@ -25,6 +26,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>${netty.all.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "applications")
 @JsonIgnoreProperties({"appsByIds", "appsByNames", "appNames", "appIds"})
+@JsonPropertyOrder({"size", "apps"})
 public class EzyFoxApps {
 
 	private final List<EzyFoxApp> apps;
@@ -67,6 +69,10 @@ public class EzyFoxApps {
 		if(appsByIds.containsKey(id))
 			return appsByIds.get(id);
 		throw new IllegalArgumentException("has no app with id: " + id);
+	}
+	
+	public int getSize() {
+		return apps.size();
 	}
 	
 }

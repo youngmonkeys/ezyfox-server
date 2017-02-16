@@ -7,7 +7,8 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="application-loader" minOccurs="1" maxOccurs="1" />
-				<xs:element ref="applications" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -15,6 +16,8 @@
 	<xs:element name="application-loader" type="application-loader-type" />
 	<xs:element name="applications" type="applications-type" />
 	<xs:element name="application" type="application-type" />
+	<xs:element name="plugins" type="plugins-type" />
+	<xs:element name="plugin" type="plugin-type" />
 	
 	<xs:complexType name="application-loader-type">
 		<xs:all>
@@ -32,6 +35,20 @@
 		<xs:all>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="plugins-type">
+		<xs:all>
+			<xs:element ref="plugin" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="plugin-type">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
 		</xs:all>
 	</xs:complexType>
 	

@@ -3,7 +3,7 @@
  */
 package com.tvd12.ezyfoxserver.ext;
 
-import com.tvd12.ezyfoxserver.entities.EzyFoxDestroyable;
+import com.tvd12.ezyfoxserver.entity.EzyFoxDestroyable;
 
 /**
  * @author tavandung12

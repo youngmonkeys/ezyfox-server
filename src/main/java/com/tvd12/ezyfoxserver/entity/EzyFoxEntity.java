@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.entities;
+package com.tvd12.ezyfoxserver.entity;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

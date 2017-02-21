@@ -263,7 +263,7 @@ public final class EzyFoxDataConverter {
     }
     
     /**
-     * Convert a array to a List
+     * Convert an array to a List
      * 
      * @param value an object represent to an array
      * @return a list object
@@ -278,13 +278,104 @@ public final class EzyFoxDataConverter {
     }
     
     /**
-     * Convert a array to a List
+     * Convert an array to a List
      * 
      * @param value the array to convert
      * @return a list object
      */
 	public static <T> List<T> arrayToList(T[] value) {
     	return Lists.newArrayList(value);
+    }
+	
+	/**
+     * Convert boolean array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Boolean> arrayToList(boolean[] value) {
+		List<Boolean> answer = new ArrayList<>();
+		for(boolean v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert char array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Character> arrayToList(char[] value) {
+		List<Character> answer = new ArrayList<>();
+		for(char v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert double array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Double> arrayToList(double[] value) {
+		List<Double> answer = new ArrayList<>();
+		for(double v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert float array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Float> arrayToList(float[] value) {
+		List<Float> answer = new ArrayList<>();
+		for(float v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert int array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Integer> arrayToList(int[] value) {
+		List<Integer> answer = new ArrayList<>();
+		for(int v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert long array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Long> arrayToList(long[] value) {
+		List<Long> answer = new ArrayList<>();
+		for(long v : value)
+			answer.add(v);
+		return answer;
+    }
+	
+	/**
+     * Convert short array to List
+     * 
+     * @param value the array to convert
+     * @return a list object
+     */
+	public static List<Short> arrayToList(short[] value) {
+		List<Short> answer = new ArrayList<>();
+		for(short v : value)
+			answer.add(v);
+		return answer;
     }
     
     /**

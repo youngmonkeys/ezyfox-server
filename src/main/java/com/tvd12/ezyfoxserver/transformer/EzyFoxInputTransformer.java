@@ -24,26 +24,26 @@ public class EzyFoxInputTransformer {
 		TRANSFORMER = defaultTransformers();
 	}
 	
-	public Object transform(final Object input) {
-		return  input == null 
-				? transformNullValue(input) 
-				: transformNonNullValue(input);
+	public Object transform(final Object value) {
+		return  value == null 
+				? transformNullValue(value) 
+				: transformNonNullValue(value);
 	}
 	
-	protected Object transformNullValue(final Object input) {
-		return input;
+	protected Object transformNullValue(final Object value) {
+		return value;
 	}
 	
-	protected Object transformNonNullValue(final Object input) {
-		return transformNonNullValue(input, getTransformers());
+	protected Object transformNonNullValue(final Object value) {
+		return transformNonNullValue(value, getTransformers());
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Object transformNonNullValue(final Object input, 
+	protected Object transformNonNullValue(final Object value, 
 			final Map<Class, EzyFoxToObject> transformers) {
-		if(transformers.containsKey(input.getClass()))
-			return transformers.get(input.getClass()).transform(input);
-		return input;
+		if(transformers.containsKey(value.getClass()))
+			return transformers.get(value.getClass()).transform(value);
+		return value;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -63,170 +63,170 @@ public class EzyFoxInputTransformer {
 		//primitive type
 		answer.put(Boolean.class, new EzyFoxToObject<Boolean>() {
 			@Override
-			public Object transform(Boolean input) {
-				return input;
+			public Object transform(Boolean value) {
+				return value;
 			}
 		});
 		answer.put(Byte.class, new EzyFoxToObject<Byte>() {
 			@Override
-			public Object transform(Byte input) {
-				return input;
+			public Object transform(Byte value) {
+				return value;
 			}
 		});
 		answer.put(Character.class, new EzyFoxToObject<Character>() {
 			@Override
-			public Object transform(Character input) {
-				return (byte)input.charValue();
+			public Object transform(Character value) {
+				return new Byte((byte)value.charValue());
 			}
 		});
 		answer.put(Double.class, new EzyFoxToObject<Double>() {
 			@Override
-			public Object transform(Double input) {
-				return input;
+			public Object transform(Double value) {
+				return value;
 			}
 		});
 		answer.put(Float.class, new EzyFoxToObject<Float>() {
 			@Override
-			public Object transform(Float input) {
-				return input;
+			public Object transform(Float value) {
+				return value;
 			}
 		});
 		answer.put(Integer.class, new EzyFoxToObject<Integer>() {
 			@Override
-			public Object transform(Integer input) {
-				return input;
+			public Object transform(Integer value) {
+				return value;
 			}
 		});
 		answer.put(Long.class, new EzyFoxToObject<Long>() {
 			@Override
-			public Object transform(Long input) {
-				return input;
+			public Object transform(Long value) {
+				return value;
 			}
 		});
 		answer.put(Short.class, new EzyFoxToObject<Short>() {
 			@Override
-			public Object transform(Short input) {
-				return input;
+			public Object transform(Short value) {
+				return value;
 			}
 		});
 		answer.put(String.class, new EzyFoxToObject<String>() {
 			@Override
-			public Object transform(String input) {
-				return input;
+			public Object transform(String value) {
+				return value;
 			}
 		});
 		
 		//primitive array
 		answer.put(boolean[].class, new EzyFoxToObject<boolean[]>() {
 			@Override
-			public Object transform(boolean[] input) {
-				return arrayToList(input);
+			public Object transform(boolean[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(byte[].class, new EzyFoxToObject<byte[]>() {
 			@Override
-			public Object transform(byte[] input) {
-				return input;
+			public Object transform(byte[] value) {
+				return value;
 			}
 		});
 		answer.put(char[].class, new EzyFoxToObject<char[]>() {
 			@Override
-			public Object transform(char[] input) {
-				return charArrayToByteArray(input);
+			public Object transform(char[] value) {
+				return charArrayToByteArray(value);
 			}
 		});
 		answer.put(double[].class, new EzyFoxToObject<double[]>() {
 			@Override
-			public Object transform(double[] input) {
-				return arrayToList(input);
+			public Object transform(double[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(float[].class, new EzyFoxToObject<float[]>() {
 			@Override
-			public Object transform(float[] input) {
-				return arrayToList(input);
+			public Object transform(float[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(int[].class, new EzyFoxToObject<int[]>() {
 			@Override
-			public Object transform(int[] input) {
-				return arrayToList(input);
+			public Object transform(int[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(long[].class, new EzyFoxToObject<long[]>() {
 			@Override
-			public Object transform(long[] input) {
-				return arrayToList(input);
+			public Object transform(long[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(short[].class, new EzyFoxToObject<short[]>() {
 			@Override
-			public Object transform(short[] input) {
-				return arrayToList(input);
+			public Object transform(short[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(String[].class, new EzyFoxToObject<String[]>() {
 			@Override
-			public Object transform(String[] input) {
-				return arrayToList(input);
+			public Object transform(String[] value) {
+				return arrayToList(value);
 			}
 		});
 		
 		//wrapper array
 		answer.put(Boolean[].class, new EzyFoxToObject<Boolean[]>() {
 			@Override
-			public Object transform(Boolean[] input) {
-				return arrayToList(input);
+			public Object transform(Boolean[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(Byte[].class, new EzyFoxToObject<Byte[]>() {
 			@Override
-			public Object transform(Byte[] input) {
-				return toPrimitiveByteArray(input);
+			public Object transform(Byte[] value) {
+				return toPrimitiveByteArray(value);
 			}
 		});
 		answer.put(Character[].class, new EzyFoxToObject<Character[]>() {
 			@Override
-			public Object transform(Character[] input) {
-				return charWrapperArrayToPrimitiveByteArray(input);
+			public Object transform(Character[] value) {
+				return charWrapperArrayToPrimitiveByteArray(value);
 			}
 		});
 		answer.put(Double[].class, new EzyFoxToObject<Double[]>() {
 			@Override
-			public Object transform(Double[] input) {
-				return arrayToList(input);
+			public Object transform(Double[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(Float[].class, new EzyFoxToObject<Float[]>() {
 			@Override
-			public Object transform(Float[] input) {
-				return arrayToList(input);
+			public Object transform(Float[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(Integer[].class, new EzyFoxToObject<Integer[]>() {
 			@Override
-			public Object transform(Integer[] input) {
-				return arrayToList(input);
+			public Object transform(Integer[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(Long[].class, new EzyFoxToObject<Long[]>() {
 			@Override
-			public Object transform(Long[] input) {
-				return arrayToList(input);
+			public Object transform(Long[] value) {
+				return arrayToList(value);
 			}
 		});
 		answer.put(Short[].class, new EzyFoxToObject<Short[]>() {
 			@Override
-			public Object transform(Short[] input) {
-				return arrayToList(input);
+			public Object transform(Short[] value) {
+				return arrayToList(value);
 			}
 		});
 		
 		//other
 		answer.put(Date.class, new EzyFoxToObject<Date>() {
 			@Override
-			public Object transform(Date input) {
-				return FastDateFormat.getInstance(getDateFormatPattern()).format(input);
+			public Object transform(Date value) {
+				return FastDateFormat.getInstance(getDateFormatPattern()).format(value);
 			}
 		});
 		

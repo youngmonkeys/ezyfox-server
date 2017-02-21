@@ -11,7 +11,7 @@ import java.net.URLClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfoxserver.util.EzyFoxEntryFiles;
+import com.tvd12.ezyfoxserver.util.EzyEntryFiles;
 
 import lombok.Getter;
 
@@ -66,7 +66,7 @@ public class EzyAppClassLoader extends URLClassLoader {
     
     private static URL[] getURLsByPath(File directory) {
         try {
-            return new EzyFoxEntryFiles().directory(directory).getURLs();
+            return new EzyEntryFiles().directory(directory).getURLs();
         } catch (IOException e) {
             throw new IllegalStateException("can not load classes from path: " + directory, e);
         }

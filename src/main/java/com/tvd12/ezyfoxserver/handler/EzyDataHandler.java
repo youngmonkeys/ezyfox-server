@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.temp;
+package com.tvd12.ezyfoxserver.handler;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -8,7 +8,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 /**
  * Created by tavandung12 on 1/17/17.
  */
-public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+public class EzyDataHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

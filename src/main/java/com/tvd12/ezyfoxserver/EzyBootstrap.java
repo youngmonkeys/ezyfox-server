@@ -16,8 +16,8 @@ public class EzyBootstrap {
 	private EzyServer ezyFox;
 	
 	public void boost() {
-		startAllApps();
 		startAllPlugins();
+		startAllApps();
 	}
 	
 	//====================== apps ===================

@@ -9,45 +9,82 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 
+import lombok.Setter;
+
 @SuppressWarnings("unchecked")
 public class EzyArrayList extends ArrayList<Object> implements EzyArray {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
-	private EzyInputTransformer inputTransformer;
-	private EzyOutputTransformer outputTransformer;
+	@Setter
+	protected EzyInputTransformer inputTransformer;
+	@Setter
+	protected EzyOutputTransformer outputTransformer;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#get(int, java.lang.Class)
+	 */
 	@Override
 	public <T> T get(final int index, final Class<T> type) {
 		return (T) transformOutput(super.get(index), type);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.lang.Object[])
+	 */
 	@Override
-	public void add(final Object... values) {
-		this.add(Lists.newArrayList(values));
+	public <T> void add(final T... items) {
+		this.add(Lists.newArrayList(items));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.util.Collection)
+	 */
 	@Override
-	public void add(final Collection<Object> values) {
-		super.addAll(values);
+	public void add(final Collection<? extends Object> items) {
+		super.addAll(items);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see java.util.ArrayList#add(java.lang.Object)
+	 */
 	@Override
-	public boolean add(Object e) {
-		if(e == null)
-			return super.add(e);
-		return super.add(transformInput(e));
+	public boolean add(Object item) {
+		if(item == null)
+			return super.add(item);
+		return super.add(transformInput(item));
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#toList()
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List toList() {
 		return this;
 	}
 	
-	protected Object transformInput(final Object e) {
-		return inputTransformer.transform(e);
+	/**
+	 * Transform input value
+	 * 
+	 * @param input the input value
+	 * @return the transformed value
+	 */
+	protected Object transformInput(final Object input) {
+		return inputTransformer.transform(input);
 	}
-	
+
+	/**
+	 * Transform output value
+	 * 
+	 * @param output the output value
+	 * @param type the output type
+	 * @return the transformed value
+	 */
 	@SuppressWarnings("rawtypes")
 	private Object transformOutput(final Object output, final Class type) {
 		return outputTransformer.transform(output, type);

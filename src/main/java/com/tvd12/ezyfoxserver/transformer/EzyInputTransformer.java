@@ -13,6 +13,9 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import com.tvd12.ezyfoxserver.EzyEnvironment;
 import com.tvd12.ezyfoxserver.EzySystem;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
 import com.tvd12.ezyfoxserver.function.EzyToObject;
 
 public class EzyInputTransformer {
@@ -227,6 +230,16 @@ public class EzyInputTransformer {
 			@Override
 			public Object transform(Date value) {
 				return FastDateFormat.getInstance(getDateFormatPattern()).format(value);
+			}
+		});
+		
+		//me
+		answer.put(EzyObject[].class, new EzyToObject<EzyObject[]>() {
+			@Override
+			public Object transform(EzyObject[] value) {
+				EzyArray answer = new EzyArrayList();
+				answer.add(value);
+				return answer;
 			}
 		});
 		

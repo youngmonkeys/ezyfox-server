@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfoxserver.EzyEnvironment;
 import com.tvd12.ezyfoxserver.EzySystem;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.EzyToObject;
 
 public class EzyOutputTransformer {
@@ -231,6 +233,17 @@ public class EzyOutputTransformer {
 					getLogger().info("value = " + value + " is invalid", e);
 				}
 				return null;
+			}
+		});
+		
+		//me
+		answer.put(EzyObject[].class, new EzyToObject<EzyArray>() {
+			@Override
+			public Object transform(EzyArray value) {
+				EzyObject[] answer = new EzyObject[value.size()];
+				for(int i = 0 ; i < value.size() ; i++) 
+					answer[i] = value.get(i, EzyObject.class);
+				return answer;
 			}
 		});
 		

@@ -7,11 +7,15 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 
+import lombok.Setter;
+
 @SuppressWarnings("unchecked")
 public class EzyHashMap extends HashMap<Object, Object> implements EzyObject {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
+	@Setter
 	private EzyInputTransformer inputTransformer;
+	@Setter
 	private EzyOutputTransformer outputTransformer;
 
 	@Override

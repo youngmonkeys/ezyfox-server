@@ -11,7 +11,7 @@ public interface EzyRoArray {
 	 * @param index the index
 	 * @return the value
 	 */
-	<T> T get(int index);
+	<T> T get(final int index);
 	
 	/**
 	 * Get value by index
@@ -21,7 +21,7 @@ public interface EzyRoArray {
 	 * @param type the value type
 	 * @return the value
 	 */
-	<T> T get(int index, Class<T> type);
+	<T> T get(final int index, final Class<T> type);
 	
 	/**
 	 * @return the size of array

@@ -56,6 +56,14 @@
 			<artifactId>reflections</artifactId>
 			<version>${reflections.version}</version>
 		</dependency>
+		
+		<!-- codec -->
+		<dependency>
+		    <groupId>org.msgpack</groupId>
+		    <artifactId>msgpack</artifactId>
+		    <version>0.6.12</version>
+		</dependency>
+		
 
 		<!-- logback -->
 		<dependency>

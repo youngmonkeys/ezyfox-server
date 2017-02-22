@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.transformer;
 
 import static com.tvd12.ezyfoxserver.util.EzyDataConverter.*;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
@@ -18,7 +19,8 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.EzyToObject;
 
-public class EzyOutputTransformer {
+public class EzyOutputTransformer implements Serializable {
+	private static final long serialVersionUID = 8067491929651725682L;
 	
 	@SuppressWarnings("rawtypes")
 	private static final Map<Class, EzyToObject> TRANSFORMER;

@@ -14,6 +14,7 @@ public interface EzyObject extends EzyRoObject {
 	/**
 	 * @see java.util.Map#put(java.lang.Object, java.lang.Object)
 	 * 
+	 * @param <V> the value type
 	 * @param key the key
 	 * @param value the value
 	 * @return the old value
@@ -28,8 +29,9 @@ public interface EzyObject extends EzyRoObject {
     void putAll(Map<? extends Object, ? extends Object> m);
     
     /**
-     * @set
+     * @see java.util.Map#remove(java.lang.Object)
      * 
+     * @param <V> the value type
      * @param key the key
      * @return the removed value
      */

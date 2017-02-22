@@ -1,7 +1,9 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
@@ -10,31 +12,117 @@ import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 import lombok.Setter;
 
 @SuppressWarnings("unchecked")
-public class EzyHashMap extends HashMap<Object, Object> implements EzyObject {
+public class EzyHashMap implements EzyObject, Serializable {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
+	private Map<Object, Object> map = new HashMap<>();
+	
 	@Setter
-	private EzyInputTransformer inputTransformer;
+	private transient EzyInputTransformer inputTransformer;
 	@Setter
-	private EzyOutputTransformer outputTransformer;
+	private transient EzyOutputTransformer outputTransformer;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#put(java.lang.Object, java.lang.Object)
+	 */
 	@Override
-	public Object put(Object key, Object value) {
+	public <V> V put(Object key, Object value) {
 		if(key == null)
 			throw new IllegalArgumentException("key can't be null");
-		if(value == null)
-			return super.put(key, value);
-		return super.put(key, transformInput(value));
-	}
-
-	@Override
-	public <V> V get(Object key, Class<V> clazz) {
-		return (V) transformOutput(super.get(key), clazz);
+		return (V) map.put(key, transformInput(value));
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#putAll(java.util.Map)
+	 */
 	@Override
-	public Map<? extends Object, ? extends Object> toMap() {
-		return this;
+	public void putAll(Map<? extends Object, ? extends Object> m) {
+		for(Object key : m.keySet())
+			put(key, m.get(key));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#get(java.lang.Object, java.lang.Class)
+	 */
+	@Override
+	public <V> V get(Object key, Class<V> clazz) {
+		return (V) transformOutput(map.get(key), clazz);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#remove(java.lang.Object)
+	 */
+	@Override
+	public <V> V remove(Object key) {
+		return (V) map.remove(key);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#size()
+	 */
+	@Override
+	public int size() {
+		return map.size();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#isEmpty()
+	 */
+	@Override
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#containsKey(java.lang.Object)
+	 */
+	@Override
+	public boolean containsKey(Object key) {
+		return map.containsKey(key);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#get(java.lang.Object)
+	 */
+	@Override
+	public <V> V get(Object key) {
+		return (V) map.get(key);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#keySet()
+	 */
+	@Override
+	public Set<Object> keySet() {
+		return map.keySet();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#clear()
+	 */
+	@Override
+	public void clear() {
+		map.clear();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#toMap()
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Map toMap() {
+		return map;
 	}
 	
 	private Object transformInput(final Object input) {

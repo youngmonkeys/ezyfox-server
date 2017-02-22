@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,21 +13,28 @@ import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 import lombok.Setter;
 
 @SuppressWarnings("unchecked")
-public class EzyArrayList extends ArrayList<Object> implements EzyArray {
+public class EzyArrayList implements EzyArray, Serializable {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
+	private List<Object> list = new ArrayList<>();
+	
 	@Setter
-	protected EzyInputTransformer inputTransformer;
+	protected transient EzyInputTransformer inputTransformer;
 	@Setter
-	protected EzyOutputTransformer outputTransformer;
+	protected transient EzyOutputTransformer outputTransformer;
 
+	@Override
+	public <T> T get(int index) {
+		return (T)list.get(index);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#get(int, java.lang.Class)
 	 */
 	@Override
 	public <T> T get(final int index, final Class<T> type) {
-		return (T) transformOutput(super.get(index), type);
+		return (T) transformOutput(list.get(index), type);
 	}
 
 	/*
@@ -44,18 +52,34 @@ public class EzyArrayList extends ArrayList<Object> implements EzyArray {
 	 */
 	@Override
 	public void add(final Collection<? extends Object> items) {
-		super.addAll(items);
+		list.addAll(items);
 	}
 	
 	/*
 	 * (non-Javadoc)
-	 * @see java.util.ArrayList#add(java.lang.Object)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#size()
 	 */
 	@Override
-	public boolean add(Object item) {
-		if(item == null)
-			return super.add(item);
-		return super.add(transformInput(item));
+	public int size() {
+		return list.size();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#set(int, java.lang.Object)
+	 */
+	@Override
+	public <T> T set(int index, Object item) {
+		return (T) list.set(index, transformInput(item));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#remove(int)
+	 */
+	@Override
+	public <T> T remove(int index) {
+		return (T) list.remove(index);
 	}
 	
 	/*
@@ -65,7 +89,19 @@ public class EzyArrayList extends ArrayList<Object> implements EzyArray {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List toList() {
-		return this;
+		return list;
+	}
+	
+	/**
+	 * add an item to the list
+	 * 
+	 * @param item the item
+	 * @return add successful or not
+	 */
+	protected boolean add(Object item) {
+		if(item == null)
+			return list.add(item);
+		return list.add(transformInput(item));
 	}
 	
 	/**
@@ -89,5 +125,5 @@ public class EzyArrayList extends ArrayList<Object> implements EzyArray {
 	private Object transformOutput(final Object output, final Class type) {
 		return outputTransformer.transform(output, type);
 	}
-	
+
 }

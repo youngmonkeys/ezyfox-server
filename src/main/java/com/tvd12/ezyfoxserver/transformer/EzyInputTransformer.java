@@ -5,6 +5,7 @@ import static com.tvd12.ezyfoxserver.util.EzyDataConverter.charArrayToByteArray;
 import static com.tvd12.ezyfoxserver.util.EzyDataConverter.charWrapperArrayToPrimitiveByteArray;
 import static com.tvd12.ezyfoxserver.util.EzyDataConverter.toPrimitiveByteArray;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,8 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
 import com.tvd12.ezyfoxserver.function.EzyToObject;
 
-public class EzyInputTransformer {
+public class EzyInputTransformer implements Serializable {
+	private static final long serialVersionUID = 5436415615070699119L;
 	
 	@SuppressWarnings("rawtypes")
 	private static final Map<Class, EzyToObject> TRANSFORMER;

@@ -32,7 +32,7 @@ public interface EzyRoObject {
      * @param key key
      * @return true or false
      */
-    boolean containsKey(Object key);
+    boolean containsKey(final Object key);
     
     /**
      * @see java.util.Map#get(java.lang.Object)
@@ -41,7 +41,7 @@ public interface EzyRoObject {
      * @param key key 
      * @return a value 
      */
-    <V> V get(Object key);
+    <V> V get(final Object key);
     
     /**
      * 
@@ -54,7 +54,7 @@ public interface EzyRoObject {
      * @param clazz type of value
      * @return a value
      */
-    <V> V get(Object key, Class<V> clazz);
+    <V> V get(final Object key, final Class<V> clazz);
     
     /**
      * @see java.util.Map#keySet()
@@ -68,7 +68,8 @@ public interface EzyRoObject {
      * 
      * @return a map
      */
-    Map<? extends Object, ? extends Object> toMap();
+    @SuppressWarnings("rawtypes")
+	Map toMap();
     
     /**
      * @see java.util.Map#get(java.lang.Object)
@@ -78,7 +79,7 @@ public interface EzyRoObject {
      * @param defValue the default value
      * @return the value mapped to key 
      */
-    default <V> V get(Object key, V defValue) {
+    default <V> V get(final Object key, final V defValue) {
     	return containsKey(key) ? get(key) : defValue;
     }
 }

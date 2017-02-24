@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
+import com.tvd12.ezyfoxserver.entity.EzyStartable;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import lombok.Setter;
 
-public class EzyServerBootstrap implements EzyDestroyable {
+public class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	@Setter
 	private EventLoopGroup childGroup;
@@ -19,10 +20,15 @@ public class EzyServerBootstrap implements EzyDestroyable {
 	@Setter
 	private ServerBootstrap serverBootstrap;
 	
+	@Setter
+	private EzyBootstrap localBootstrap;
+	
 	private transient ChannelFuture channelFuture;
 	
+	@Override
 	public void start() throws Exception {
-		this.channelFuture = serverBootstrap.bind().sync();
+		startLocalBootstrap();
+		startServerBootstrap();
 	}
 	
 	@Override
@@ -30,6 +36,14 @@ public class EzyServerBootstrap implements EzyDestroyable {
 		closeChannelFuture();
 		shutdownParentGroup();
 		shutdownChildGroup();
+	}
+	
+	protected void startServerBootstrap() throws Exception {
+		this.channelFuture = serverBootstrap.bind().sync();
+	}
+	
+	protected void startLocalBootstrap() throws Exception {
+		localBootstrap.start();
 	}
 	
 	protected void shutdownChildGroup() {

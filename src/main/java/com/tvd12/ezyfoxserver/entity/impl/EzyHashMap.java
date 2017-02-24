@@ -37,8 +37,9 @@ public class EzyHashMap implements EzyObject, Serializable {
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#putAll(java.util.Map)
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void putAll(Map<? extends Object, ? extends Object> m) {
+	public void putAll(Map m) {
 		for(Object key : m.keySet())
 			put(key, m.get(key));
 	}

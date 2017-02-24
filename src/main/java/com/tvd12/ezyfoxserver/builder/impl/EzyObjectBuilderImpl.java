@@ -8,18 +8,16 @@ import com.tvd12.ezyfoxserver.entity.impl.EzyHashMap;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 
-import lombok.Setter;
-
-public class EzyObjectBuilderImpl implements EzyObjectBuilder {
+public class EzyObjectBuilderImpl 
+		extends EzyInOutTransformerNeeder 
+		implements EzyObjectBuilder {
 
 	protected EzyObject product;
 	
-	@Setter
-	protected EzyInputTransformer inputTransformer;
-	@Setter
-	protected EzyOutputTransformer outputTransformer;
-	
-	public EzyObjectBuilderImpl() {
+	public EzyObjectBuilderImpl(
+			EzyInputTransformer inputTransformer, 
+			EzyOutputTransformer outputTransformer) {
+		super(inputTransformer, outputTransformer);
 		this.product = newProduct();
 	}
 	
@@ -44,8 +42,9 @@ public class EzyObjectBuilderImpl implements EzyObjectBuilder {
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.builder.EzyObjectBuilder#append(java.util.Map)
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public EzyObjectBuilder append(Map<? extends Object, ? extends Object> map) {
+	public EzyObjectBuilder append(Map map) {
 		this.product.putAll(map);
 		return this;
 	}
@@ -57,6 +56,13 @@ public class EzyObjectBuilderImpl implements EzyObjectBuilder {
 	@Override
 	public EzyObject build() {
 		return this.product;
+	}
+	
+	public static class Creator extends AbstractCreator<EzyObjectBuilderImpl> {
+		@Override
+		public EzyObjectBuilderImpl create() {
+			return new EzyObjectBuilderImpl(inputTransformer, outputTransformer);
+		}
 	}
 	
 }

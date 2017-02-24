@@ -2,15 +2,17 @@ package com.tvd12.ezyfoxserver.builder.impl;
 
 import java.net.InetSocketAddress;
 
+import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.handler.EzyDataHandler;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.CombinedChannelDuplexHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -19,7 +21,8 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	private int port;
 	private EventLoopGroup childGroup;
 	private EventLoopGroup parentGroup;
-	private String combinedCodecHandler;
+	private EzyBootstrap localBootstrap;
+	private EzyCodecCreator codecCreator;
 	
 	/*
 	 * (non-Javadoc)
@@ -52,8 +55,14 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	@Override
-	public EzyServerBootstrapBuilder combinedCodecHandler(String className) {
-		this.combinedCodecHandler = className;
+	public EzyServerBootstrapBuilder localBootstrap(EzyBootstrap localBootstrap) {
+		this.localBootstrap = localBootstrap;
+		return this;
+	}
+	
+	@Override
+	public EzyServerBootstrapBuilder codecCreator(EzyCodecCreator codecCreator) {
+		this.codecCreator = codecCreator;
 		return this;
 	}
 	
@@ -61,6 +70,7 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		EzyServerBootstrap answer = new EzyServerBootstrap();
 		answer.setChildGroup(childGroup);
 		answer.setParentGroup(parentGroup);
+		answer.setLocalBootstrap(localBootstrap);
 		answer.setServerBootstrap(createServerBootstrap());
 		return answer;
 	}
@@ -74,8 +84,7 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	private ChannelInitializer<Channel> newChannelInitializer() {
-		return EzyChannelInitializer.builder()
-				.combinedCodecHandler(combinedCodecHandler).build();
+		return EzyChannelInitializer.builder().codecCreator(codecCreator).build();
 	}
 	
 	private ServerBootstrap newServerBootstrap() {
@@ -92,19 +101,20 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 
 class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	
-	@SuppressWarnings("rawtypes")
-	protected CombinedChannelDuplexHandler combinedCodecHandler;
+	private EzyCodecCreator codecCreator;
 	
 	protected EzyChannelInitializer(Builder builder) {
-		this.combinedCodecHandler = builder.combinedCodecHandler;
+		this.codecCreator = builder.codecCreator;
 	}
 	
 	@Override
 	protected void initChannel(Channel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		pipeline.addLast(combinedCodecHandler);
+		pipeline.addLast(codecCreator.newDecoder());
 		pipeline.addLast(new EzyDataHandler());
-		pipeline.addLast(combinedCodecHandler);
+		pipeline.addLast(codecCreator.newEncoder());
+//		ch.config().setOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024));
+		ch.config().setOption(ChannelOption.SO_RCVBUF, 2048);
 	}
 	
 	public static Builder builder() {
@@ -113,11 +123,10 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	
 	public static class Builder {
 		
-		@SuppressWarnings("rawtypes")
-		protected CombinedChannelDuplexHandler combinedCodecHandler;
+		private EzyCodecCreator codecCreator;
 		
-		public Builder combinedCodecHandler(final String className) {
-			this.combinedCodecHandler = newCombinedCodecHandler(className);
+		public Builder codecCreator(EzyCodecCreator codecCreator) {
+			this.codecCreator = codecCreator;
 			return this;
 		}
 		
@@ -125,15 +134,6 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 			return new EzyChannelInitializer(this);
 		}
 		
-		@SuppressWarnings("rawtypes")
-		private CombinedChannelDuplexHandler newCombinedCodecHandler(final String className) {
-			try {
-				return (CombinedChannelDuplexHandler) Class.forName(className).newInstance();
-			}
-			catch(Exception e) {
-				throw new IllegalArgumentException(e);
-			}
-		}
 	}
 }
 

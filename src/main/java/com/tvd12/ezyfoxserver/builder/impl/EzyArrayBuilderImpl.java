@@ -8,18 +8,16 @@ import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 
-import lombok.Setter;
-
-public class EzyArrayBuilderImpl implements EzyArrayBuilder {
+public class EzyArrayBuilderImpl
+		extends EzyInOutTransformerNeeder
+		implements EzyArrayBuilder {
 
 	protected EzyArray product;
 	
-	@Setter
-	protected EzyInputTransformer inputTransformer;
-	@Setter
-	protected EzyOutputTransformer outputTransformer;
-	
-	public EzyArrayBuilderImpl() {
+	public EzyArrayBuilderImpl(
+			EzyInputTransformer inputTransformer, 
+			EzyOutputTransformer outputTransformer) {
+		super(inputTransformer, outputTransformer);
 		this.product = newProduct();
 	}
 	
@@ -58,6 +56,13 @@ public class EzyArrayBuilderImpl implements EzyArrayBuilder {
 	@Override
 	public EzyArray build() {
 		return product;
+	}
+	
+	public static class Creator extends AbstractCreator<EzyArrayBuilderImpl> {
+		@Override
+		public EzyArrayBuilderImpl create() {
+			return new EzyArrayBuilderImpl(inputTransformer, outputTransformer);
+		}
 	}
 
 }

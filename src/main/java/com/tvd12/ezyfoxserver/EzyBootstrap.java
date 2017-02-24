@@ -3,6 +3,8 @@ package com.tvd12.ezyfoxserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
+import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.loader.EzyAppEntryLoader;
@@ -11,13 +13,19 @@ import com.tvd12.ezyfoxserver.loader.EzyPluginEntryLoader;
 import lombok.Builder;
 
 @Builder
-public class EzyBootstrap {
+public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 
 	private EzyServer ezyFox;
 	
-	public void boost() {
+	@Override
+	public void start() throws Exception {
 		startAllPlugins();
 		startAllApps();
+	}
+	
+	@Override
+	public void destroy() {
+		//TODO destroy apps and plugins
 	}
 	
 	//====================== apps ===================

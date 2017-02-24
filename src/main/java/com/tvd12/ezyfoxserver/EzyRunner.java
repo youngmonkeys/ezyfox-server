@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.builder.impl.EzyServerBootstrapBuilderImpl;
+import com.tvd12.ezyfoxserver.codec.MsgPackCodecCreator;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.loader.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.loader.impl.EzyConfigLoaderImpl;
@@ -16,6 +19,8 @@ import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
 import com.tvd12.ezyfoxserver.service.impl.EzyJsonMappingImpl;
 import com.tvd12.ezyfoxserver.service.impl.EzyXmlReadingImpl;
+
+import io.netty.channel.nio.NioEventLoopGroup;
 
 /**
  * @author tavandung12
@@ -37,22 +42,35 @@ public class EzyRunner {
     	startSystem(readConfig(new File(configFile).toString()));
     }
     
-    private static void startSystem(final EzyConfig config) {
+    private static void startSystem(final EzyConfig config) throws Exception {
     	setSystemProperties(config);
     	startEzyFox(config);
     }
     
-    private static void startEzyFox(final EzyConfig config) {
+    private static void startEzyFox(final EzyConfig config) throws Exception {
     	startEzyFox(loadEzyFox(config));
     }
     
-    private static void startEzyFox(final EzyServer ezyFox) {
+    private static void startEzyFox(final EzyServer ezyFox) throws Exception {
     	getLogger().info(ezyFox.toString());
-    	getBoostrap(ezyFox).boost();
+    	newServerBoostrap(newLocalBoostrap(ezyFox)).start();;
     }
     
-    private static EzyBootstrap getBoostrap(final EzyServer ezyFox) {
+    private static EzyServerBootstrap newServerBoostrap(final EzyBootstrap localBootstrap) {
+    	return newServerBootstrapBuilder()
+    			.port(3005)
+    			.localBootstrap(localBootstrap)
+    			.parentGroup(new NioEventLoopGroup())
+    			.codecCreator(new MsgPackCodecCreator())
+    			.build();
+    }
+    
+    private static EzyBootstrap newLocalBoostrap(final EzyServer ezyFox) {
     	return EzyBootstrap.builder().ezyFox(ezyFox).build();
+    }
+    
+    private static EzyServerBootstrapBuilder newServerBootstrapBuilder() {
+    	return new EzyServerBootstrapBuilderImpl();
     }
     
     private static void setSystemProperties(final EzyConfig config) {

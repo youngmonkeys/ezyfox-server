@@ -46,16 +46,16 @@ public class EzyBuilderFactoryImpl implements EzyBuilderFactory {
 	private static final Map<Class, Supplier> defaultSuppliers() {
 		Map<Class, Supplier> answer = new HashMap<>();
 		answer.put(EzyObjectBuilder.class, () -> {
-			EzyObjectBuilderImpl builder = new EzyObjectBuilderImpl();
-			builder.setInputTransformer(INPUT_TRANSFORMER);
-			builder.setOutputTransformer(OUTPUT_TRANSFORMER);
-			return builder;
+			return new EzyObjectBuilderImpl.Creator()
+					.inputTransformer(INPUT_TRANSFORMER)
+					.outputTransformer(OUTPUT_TRANSFORMER)
+					.create();
 		});
 		answer.put(EzyArrayBuilder.class, () -> {
-			EzyArrayBuilderImpl builder = new EzyArrayBuilderImpl();
-			builder.setInputTransformer(INPUT_TRANSFORMER);
-			builder.setOutputTransformer(OUTPUT_TRANSFORMER);
-			return builder;
+			return new EzyArrayBuilderImpl.Creator()
+				.inputTransformer(INPUT_TRANSFORMER)
+				.outputTransformer(OUTPUT_TRANSFORMER)
+				.create();
 		});
 		return answer;
 	}

@@ -26,7 +26,8 @@ public interface EzyObject extends EzyRoObject {
      * 
      * @param values the map value
      */
-    void putAll(Map<? extends Object, ? extends Object> m);
+    @SuppressWarnings("rawtypes")
+	void putAll(Map m);
     
     /**
      * @see java.util.Map#remove(java.lang.Object)

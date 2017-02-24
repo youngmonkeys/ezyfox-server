@@ -21,7 +21,8 @@ public interface EzyObjectBuilder extends EzyBuilder<EzyObject> {
 	 * @param map the map to add
 	 * @return this pointer
 	 */
-	EzyObjectBuilder append(final Map<? extends Object, ? extends Object> map);
+	@SuppressWarnings("rawtypes")
+	EzyObjectBuilder append(final Map map);
 	
 	/**
 	 * build a value mapped to the key and add to product

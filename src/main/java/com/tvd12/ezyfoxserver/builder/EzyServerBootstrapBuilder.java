@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.builder;
 
+import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 
 import io.netty.channel.EventLoopGroup;
 
@@ -31,11 +33,19 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	EzyServerBootstrapBuilder parentGroup(final EventLoopGroup parentGroup);
 	
 	/**
-	 * Set combined codec handler class name
+	 * Set codec creator
 	 * 
-	 * @param className the class name
+	 * @param codecCreator the creator
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder combinedCodecHandler(final String className);
+	EzyServerBootstrapBuilder codecCreator(EzyCodecCreator codecCreator);
+
+	/**
+	 * Set local bootstrap
+	 * 
+	 * @param localBootstrap the local bootstrap
+	 * @return this pointer
+	 */
+	EzyServerBootstrapBuilder localBootstrap(EzyBootstrap localBootstrap);
 	
 }

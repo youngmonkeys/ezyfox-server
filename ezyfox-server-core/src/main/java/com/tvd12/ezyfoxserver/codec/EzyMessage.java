@@ -1,13 +1,39 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import lombok.Getter;
-import lombok.Setter;
+public interface EzyMessage {
 
-@Setter
-@Getter
-public class EzyMessage {
-
-	private int size;
-	private byte[] content;
+	/**
+	 * Get size of message
+	 * 
+	 * @return the size of message
+	 */
+	int getSize();
+	
+	/**
+	 * Get content of message in byte array
+	 * 
+	 * @return the content of message
+	 */
+	byte[] getContent();
+	
+	/**
+	 * Get header of message
+	 * 
+	 * @return the message header
+	 */
+	EzyMessageHeader getHeader();
+	
+	/**
+	 * Get length of message's size, 2 or 4
+	 * 
+	 * @return the length of message's size
+	 */
+	default int getSizeLength() {
+		return getHeader().isBigSize() ? 4 : 2;
+	}
+	
+	default boolean hasBigSize() {
+		return getHeader().isBigSize();
+	}
 	
 }

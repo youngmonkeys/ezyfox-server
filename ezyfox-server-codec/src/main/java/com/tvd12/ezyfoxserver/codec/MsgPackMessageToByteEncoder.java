@@ -32,7 +32,7 @@ public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyObject>
 	}
 	
 	private EzyMessageToBytes newMessageToBytes() {
-		return MessageToBytesImpl.builder().build();
+		return EzySimpleMessageToBytes.builder().build();
 	}
 
 	@Override

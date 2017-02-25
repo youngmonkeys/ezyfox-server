@@ -20,10 +20,19 @@ public class MsgPackObjectToMessage implements EzyObjectToMessage {
 	}
 	
 	private EzyMessage convert(byte[] content) {
-		EzyMessage message = new EzyMessage();
-		message.setSize(content.length);
-		message.setContent(content);
-		return message;
+		return EzyMessageBuilder.messageBuilder()
+				.size(content.length)
+				.content(content)
+				.header(newHeader(content))
+				.build();
+	}
+	
+	private EzyMessageHeader newHeader(byte[] content) {
+		return EzyMessageBuilder.headerBuilder()
+				.bigSize(true)
+				.compressed(false)
+				.encrypted(true)
+				.build();
 	}
 	
 	public static Builder builder() {

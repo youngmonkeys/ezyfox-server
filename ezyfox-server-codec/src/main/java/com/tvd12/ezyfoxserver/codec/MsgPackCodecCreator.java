@@ -10,6 +10,7 @@ import org.msgpack.template.AbstractTemplate;
 import org.msgpack.unpacker.Unpacker;
 
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
+import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 

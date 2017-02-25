@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.msgpack.MessagePack;
 
+import com.tvd12.ezyfoxserver.codec.EzyObjectToBytes;
+
 import lombok.Builder;
 
 @Builder

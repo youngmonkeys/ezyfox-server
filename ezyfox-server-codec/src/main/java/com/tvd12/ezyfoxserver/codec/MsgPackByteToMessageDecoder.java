@@ -1,11 +1,8 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.PREPARE_MESSAGE;
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_CONTENT;
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_SIZE;
+import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.*;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,32 +22,22 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) 
-			throws Exception {
-		handlers.handle(in, out);
+	protected void decode(ChannelHandlerContext ctx, 
+			ByteBuf in, List<Object> out) throws Exception {
+		handlers.handle(ctx, in, out);
 	}
 	
 }
 
-interface Handler {
-	
-	EzyIDecodeState nextState();
-	
-	Handler nextHandler();
-	
-	boolean handle(ByteBuf in, List<Object> out);
-	
-}
-
 @Setter
-abstract class AbstractHandler implements Handler {
+abstract class AbstractHandler implements EzyDecodeHandler {
 	
-	protected Handler nextHandler;
+	protected EzyDecodeHandler nextHandler;
 	protected MessagePack msgPack;
 	protected EzyMessageReader messageReader;
 	
 	@Override
-	public Handler nextHandler() {
+	public EzyDecodeHandler nextHandler() {
 		return nextHandler;
 	}
 }
@@ -67,6 +54,20 @@ class PrepareMessage extends AbstractHandler {
 		messageReader.clear();
 		return true;
 	}
+}
+
+class ReadMessageHeader extends AbstractHandler {
+
+	@Override
+	public EzyIDecodeState nextState() {
+		return EzyDecodeState.READ_MESSAGE_HEADER;
+	}
+
+	@Override
+	public boolean handle(ByteBuf in, List<Object> out) {
+		return messageReader.readHeader(in);
+	}
+	
 }
 
 class ReadMessageSize extends AbstractHandler {
@@ -111,29 +112,17 @@ class ReadMessageContent extends AbstractHandler {
 	
 }
 
-class Handlers {
-	
-	private EzyIDecodeState state;
-	private Map<EzyIDecodeState, Handler> handers;
+class Handlers extends EzyDecodeHandlers {
 	
 	protected Handlers(Builder builder) {
-		this.state = PREPARE_MESSAGE;
-		this.handers = builder.newHandlers();
-	}
-	
-	public void handle(ByteBuf in, List<Object> out) {
-		Handler handler = handers.get(state);
-		while(handler != null && handler.handle(in, out)) {
-			state = handler.nextState();
-			handler = handler.nextHandler();
-		}
+		super(builder);
 	}
 	
 	public static Builder builder() {
 		return new Builder();
 	}
 	
-	public static class Builder {
+	public static class Builder extends AbstractBuilder {
 		protected MessagePack msgPack;
 		protected EzyMessageReader messageReader;
 		
@@ -150,27 +139,29 @@ class Handlers {
 			return new Handlers(this);
 		}
 		
-		public Map<EzyIDecodeState, Handler> newHandlers() {
-			Handler prepareMessage = new PrepareMessage();
-			Handler readMessageSize = new ReadMessageSize();
-			Handler readMessageContent = new ReadMessageContent();
-			Map<EzyIDecodeState, Handler> answer = new HashMap<>();
-			answer.put(PREPARE_MESSAGE, newHandler(prepareMessage, readMessageSize));
+		@Override
+		protected void addHandlers(
+				Map<EzyIDecodeState, EzyDecodeHandler> answer) {
+			EzyDecodeHandler readMessgeHeader = new ReadMessageHeader();
+			EzyDecodeHandler prepareMessage = new PrepareMessage();
+			EzyDecodeHandler readMessageSize = new ReadMessageSize();
+			EzyDecodeHandler readMessageContent = new ReadMessageContent();
+			answer.put(PREPARE_MESSAGE, newHandler(prepareMessage, readMessgeHeader));
+			answer.put(READ_MESSAGE_HEADER, newHandler(readMessgeHeader, readMessageSize));
 			answer.put(READ_MESSAGE_SIZE, newHandler(readMessageSize, readMessageContent));
 			answer.put(READ_MESSAGE_CONTENT, newHandler(readMessageContent));
-			return answer;
 		}
 		
 		
-		private Handler newHandler(Handler handler) {
+		private EzyDecodeHandler newHandler(EzyDecodeHandler handler) {
 			return newHandler(handler, null);
 		}
 		
-		private Handler newHandler(Handler handler, Handler next) {
+		private EzyDecodeHandler newHandler(EzyDecodeHandler handler, EzyDecodeHandler next) {
 			return newHandler((AbstractHandler)handler, next);
 		}
 		
-		private Handler newHandler(AbstractHandler handler, Handler next) {
+		private EzyDecodeHandler newHandler(AbstractHandler handler, EzyDecodeHandler next) {
 			handler.setMsgPack(msgPack);
 			handler.setNextHandler(next);
 			handler.setMessageReader(messageReader);

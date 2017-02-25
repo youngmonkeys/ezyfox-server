@@ -1,11 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.tvd12</groupId>
 	<artifactId>ezyfox-server</artifactId>
 	<version>1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>ezyfox-server</name>
 	<url>http://maven.apache.org</url>
@@ -172,11 +172,11 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<mkdir dir="${deploy.path}/${directory.lib}" />
+										<mkdir dir="${deploy.path}/${directory.lib}"/>
 										<copy todir="${deploy.path}/${directory.lib}">
-											<fileset dir="target/${project.name}-${project.version}-bin/lib" />
+											<fileset dir="target/${project.name}-${project.version}-bin/lib"/>
 										</copy>
-										<delete dir="${deploy.path}/${directory.lib}/classes" />
+										<delete dir="${deploy.path}/${directory.lib}/classes"/>
 									</tasks>
 								</configuration>
 								<goals>
@@ -189,4 +189,10 @@
 			</build>
 		</profile>
 	</profiles>
+  <modules>
+    <module>ezyfox-server-core</module>
+    <module>ezyfox-server-codec</module>
+    <module>ezyfox-server-runner</module>
+    <module>ezyfox-server-client</module>
+  </modules>
 </project>

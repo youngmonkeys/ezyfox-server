@@ -3,6 +3,7 @@
  */
 package com.tvd12.ezyfoxserver.client;
 
+import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
@@ -22,13 +23,21 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyObject> {
 		EzyObjectBuilder builder = EzyFactory
 				.create(EzyObjectBuilder.class)
     			.append("hello", "world");
-		for(int i = 0 ; i < 200 ; i++)
+		EzyObjectBuilder builder2 = EzyFactory
+				.create(EzyObjectBuilder.class)
+    			.append("hello", "world");
+		EzyArrayBuilder arrayBuilder = EzyFactory
+				.create(EzyArrayBuilder.class)
+				.append(builder2);
+		builder.append("array", arrayBuilder);
+		for(int i = 0 ; i < 20 ; i++)
 			builder.append("hello-" + i, "world-" + i);
 		int count = 0;
 		while(count ++ < 100) {
 			Thread.sleep(1000);
 			ctx.writeAndFlush(builder.build());
 		}
+    	System.out.println("active complete");
     }
     
     @Override

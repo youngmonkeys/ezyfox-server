@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.codec;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.msgpack.MessagePack;
@@ -9,8 +10,10 @@ import org.msgpack.packer.Packer;
 import org.msgpack.template.AbstractTemplate;
 import org.msgpack.unpacker.Unpacker;
 
+import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
@@ -24,6 +27,7 @@ public class MsgPackCodecCreator implements EzyCodecCreator {
 	public MsgPackCodecCreator() {
 		this.msgPack = new MessagePack();
 		this.msgPack.register(EzyObject.class, new EzyObjectTemplate());
+		this.msgPack.register(EzyArray.class, new EzyArrayTemplate());
 	}
 	
 	@Override
@@ -69,4 +73,39 @@ class EzyObjectTemplate extends AbstractTemplate<EzyObject> {
 				 .append(u.read(Map.class))
 				 .build();
 	}
+}
+
+class EzyArrayTemplate extends AbstractTemplate<EzyArray> {
+	
+	@Override
+	public void write(Packer pk, EzyArray target, boolean required) 
+			throws IOException {
+		if(target != null)
+			writeNotNull(pk, target);
+		else 
+			writeNull(pk, required);
+		
+	}
+	
+	private void writeNull(Packer pk, boolean required) throws IOException {
+        if (!required)
+        	pk.writeNil();
+        else
+            throw new MessageTypeException("Attempted to write null");
+	}
+	
+	private void writeNotNull(Packer pk, EzyArray target) throws IOException {
+		pk.write(target.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public EzyArray read(Unpacker u, EzyArray to, boolean required) throws IOException {
+		 if (!required && u.trySkipNil()) 
+	            return null;
+		 return EzyFactory.create(EzyArrayBuilder.class)
+				 .append(u.read(List.class))
+				 .build();
+	}
+	
 }

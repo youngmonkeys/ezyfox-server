@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import java.net.SocketAddress;
+
 public interface EzySession extends EzyProperties {
 
 	/**
@@ -120,5 +122,19 @@ public interface EzySession extends EzyProperties {
 	 * @return the server full ip address
 	 */
 	String getServerAddress();
+	
+	/**
+	 * Get client full ip address
+	 * 
+	 * @return the client full ip address
+	 */
+	void setClientAddress(SocketAddress address);
+	
+	/**
+	 * Get server full ip address
+	 * 
+	 * @return the server full ip address
+	 */
+	void setServerAddress(SocketAddress address);
 	
 }

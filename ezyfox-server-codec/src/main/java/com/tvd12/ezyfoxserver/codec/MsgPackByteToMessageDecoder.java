@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.msgpack.MessagePack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +17,12 @@ import lombok.Setter;
 
 public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 
+	private Logger logger;
 	private Handlers handlers;
+	
+	public MsgPackByteToMessageDecoder() {
+		this.logger = LoggerFactory.getLogger(getClass());
+	}
 	
 	public MsgPackByteToMessageDecoder(MessagePack msgPack) {
 		this.handlers = Handlers.builder().msgPack(msgPack).build();
@@ -24,6 +31,7 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 	@Override
 	protected void decode(ChannelHandlerContext ctx, 
 			ByteBuf in, List<Object> out) throws Exception {
+		logger.debug("decode {} bytes", in.readableBytes());
 		handlers.handle(ctx, in, out);
 	}
 	

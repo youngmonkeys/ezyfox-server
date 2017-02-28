@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.builder;
 
 import com.tvd12.ezyfoxserver.EzyBootstrap;
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 
@@ -15,6 +16,14 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @return this pointer
 	 */
 	EzyServerBootstrapBuilder port(final int port);
+	
+	/**
+	 * set server
+	 * 
+	 * @param boss the server
+	 * @return this pointer
+	 */
+	EzyServerBootstrapBuilder boss(final EzyServer boss);
 	
 	/**
 	 * set child group

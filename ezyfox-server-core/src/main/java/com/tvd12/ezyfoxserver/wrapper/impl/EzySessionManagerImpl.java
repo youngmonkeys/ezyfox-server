@@ -8,15 +8,19 @@ import com.tvd12.ezyfoxserver.factory.impl.EzySessionFactoryImpl;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectPool;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
+import io.netty.channel.Channel;
+
 public class EzySessionManagerImpl 
 		extends EzyObjectPool<EzySession> 
 		implements EzySessionManager {
 	
 	protected EzySessionFactory sessionFactory;
 	protected ConcurrentHashMap<String, EzySession> sessionsByToken;
+	protected ConcurrentHashMap<Channel, EzySession> sessionsByChannel;
 	
 	{
 		sessionsByToken = new ConcurrentHashMap<>();
+		sessionsByChannel = new ConcurrentHashMap<>();
 	}
 	
 	protected EzySessionManagerImpl(Builder builder) {
@@ -31,10 +35,16 @@ public class EzySessionManagerImpl
 	}
 	
 	@Override
-	public EzySession borrowSession() {
+	public EzySession borrowSession(Channel channel) {
 		EzySession session = borrowObject();
-		sessionsByToken.put(session.getToken(), session);
+		sessionsByChannel.putIfAbsent(channel, session);
+		sessionsByToken.putIfAbsent(session.getToken(), session);
 		return session;
+	}
+	
+	@Override
+	public EzySession getSession(Channel channel) {
+		return sessionsByChannel.get(channel);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzySettings;
 import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 
 /**
  * @author tavandung12
@@ -26,6 +27,7 @@ public class EzyLoader {
     
     private Logger logger;
     private EzyConfig config;
+    private EzyManagers managers;
     private ClassLoader classLoader;
     private EzyXmlReading xmlReading;
     private EzyJsonMapping jsonMapping;
@@ -41,6 +43,7 @@ public class EzyLoader {
     public EzyServer load() {
     	EzyServer answer = new EzyServer();
     	answer.setConfig(config);
+    	answer.setManagers(managers);
     	answer.setXmlReading(xmlReading);
     	answer.setJsonMapping(jsonMapping);
     	answer.setClassLoader(classLoader);
@@ -121,6 +124,11 @@ public class EzyLoader {
     
     public EzyLoader config(EzyConfig config) {
     	this.config = config;
+    	return this;
+    }
+    
+    public EzyLoader managers(EzyManagers managers) {
+    	this.managers = managers;
     	return this;
     }
     

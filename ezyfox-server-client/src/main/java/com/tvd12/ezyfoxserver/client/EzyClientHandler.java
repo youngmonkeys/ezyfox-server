@@ -30,10 +30,10 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyObject> {
 				.create(EzyArrayBuilder.class)
 				.append(builder2);
 		builder.append("array", arrayBuilder);
-		for(int i = 0 ; i < 20 ; i++)
+		for(int i = 0 ; i < 5 ; i++)
 			builder.append("hello-" + i, "world-" + i);
 		int count = 0;
-		while(count ++ < 100) {
+		while(count ++ < 5) {
 			Thread.sleep(1000);
 			ctx.writeAndFlush(builder.build());
 		}

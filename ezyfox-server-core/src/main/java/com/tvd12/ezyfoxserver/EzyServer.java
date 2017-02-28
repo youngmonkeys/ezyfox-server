@@ -14,6 +14,7 @@ import com.tvd12.ezyfoxserver.loader.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.loader.EzyPluginEntryLoader;
 import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,8 @@ public class EzyServer {
 	private EzyConfig config;
 	private EzySettings settings;
 	
+	@JsonIgnore
+	private EzyManagers managers;
 	@JsonIgnore
 	private ClassLoader classLoader;
 	@JsonIgnore

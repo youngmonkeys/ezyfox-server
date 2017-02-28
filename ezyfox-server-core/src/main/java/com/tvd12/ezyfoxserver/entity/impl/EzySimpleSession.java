@@ -1,21 +1,25 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
-import java.net.InetAddress;
+import java.net.SocketAddress;
 
+import com.tvd12.ezyfoxserver.codec.EzyMD5;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class EzySimpleSession extends EzyEntity implements EzySession {
 
 	protected long id;
 	protected String token;
+	protected String fullToken;
 	protected long creationTime;
 	protected long lastActivityTime;
 	protected long lastReadTime;
@@ -23,9 +27,14 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	protected long readBytes;
 	protected long writtenBytes;
 	protected long maxIdleTime;
-	protected InetAddress clientAddress;
-	protected InetAddress serverAddress;
+	protected SocketAddress clientAddress;
+	protected SocketAddress serverAddress;
 
+	public void setToken(String token) {
+		this.fullToken = token;
+		this.token = EzyMD5.cryptUTF(token);
+	}
+	
 	@Override
 	public void addReadBytes(long bytes) {
 		this.readBytes += bytes;
@@ -38,12 +47,12 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	
 	@Override
 	public String getClientAddress() {
-		return clientAddress.toString();
+		return clientAddress != null ? clientAddress.toString() : "unknown";
 	}
 	
 	@Override
 	public String getServerAddress() {
-		return serverAddress.toString();
+		return serverAddress != null ? serverAddress.toString() : "unknown";
 	}
 	
 }

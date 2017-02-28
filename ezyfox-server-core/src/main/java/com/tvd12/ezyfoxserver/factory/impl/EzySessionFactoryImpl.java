@@ -27,7 +27,7 @@ public class EzySessionFactoryImpl implements EzySessionFactory {
 		session.setId(SESSION_COUNTER.incrementAndGet());
 		session.setCreationTime(System.currentTimeMillis());
 		session.setToken(tokenGeneration.generate());
-		return newSession();
+		return session;
 	}
 	
 }

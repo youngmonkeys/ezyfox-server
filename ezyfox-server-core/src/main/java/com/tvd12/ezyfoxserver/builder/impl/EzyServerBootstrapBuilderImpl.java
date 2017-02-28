@@ -3,10 +3,13 @@ package com.tvd12.ezyfoxserver.builder.impl;
 import java.net.InetSocketAddress;
 
 import com.tvd12.ezyfoxserver.EzyBootstrap;
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.handler.EzyDataHandler;
+import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
+import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -18,6 +21,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder {
 
 	private int port;
+	private EzyServer boss;
 	private EventLoopGroup childGroup;
 	private EventLoopGroup parentGroup;
 	private EzyBootstrap localBootstrap;
@@ -28,8 +32,14 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#port(int)
 	 */
 	@Override
-	public EzyServerBootstrapBuilder port(final int port) {
+	public EzyServerBootstrapBuilder port(int port) {
 		this.port = port;
+		return this;
+	}
+	
+	@Override
+	public EzyServerBootstrapBuilder boss(EzyServer boss) {
+		this.boss = boss;
 		return this;
 	}
 	
@@ -53,18 +63,31 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#localBootstrap(com.tvd12.ezyfoxserver.EzyBootstrap)
+	 */
 	@Override
 	public EzyServerBootstrapBuilder localBootstrap(EzyBootstrap localBootstrap) {
 		this.localBootstrap = localBootstrap;
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#codecCreator(com.tvd12.ezyfoxserver.codec.EzyCodecCreator)
+	 */
 	@Override
 	public EzyServerBootstrapBuilder codecCreator(EzyCodecCreator codecCreator) {
 		this.codecCreator = codecCreator;
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyBuilder#build()
+	 */
+	@Override
 	public EzyServerBootstrap build() {
 		EzyServerBootstrap answer = new EzyServerBootstrap();
 		answer.setChildGroup(childGroup);
@@ -83,7 +106,19 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	private ChannelInitializer<Channel> newChannelInitializer() {
-		return EzyChannelInitializer.builder().codecCreator(codecCreator).build();
+		return EzyChannelInitializer.builder()
+				.codecCreator(codecCreator)
+				.dataHandlerCreator(newDataHandlerCreator())
+				.build();
+	}
+	
+	private EzyDataHandlerCreator newDataHandlerCreator() {
+		return EzyDataHandlerCreatorImpl.builder()
+				.sessionManager(getSessionManager()).build();
+	}
+	
+	private EzySessionManager getSessionManager() {
+		return boss.getManagers().getManager(EzySessionManager.class);
 	}
 	
 	private ServerBootstrap newServerBootstrap() {
@@ -101,16 +136,18 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	
 	private EzyCodecCreator codecCreator;
+	private EzyDataHandlerCreator dataHandlerCreator;
 	
 	protected EzyChannelInitializer(Builder builder) {
 		this.codecCreator = builder.codecCreator;
+		this.dataHandlerCreator = builder.dataHandlerCreator;
 	}
 	
 	@Override
 	protected void initChannel(Channel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 		pipeline.addLast(codecCreator.newDecoder());
-		pipeline.addLast(new EzyDataHandler());
+		pipeline.addLast(dataHandlerCreator.newHandler());
 		pipeline.addLast(codecCreator.newEncoder());
 	}
 	
@@ -121,9 +158,15 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	public static class Builder {
 		
 		private EzyCodecCreator codecCreator;
+		private EzyDataHandlerCreator dataHandlerCreator;
 		
 		public Builder codecCreator(EzyCodecCreator codecCreator) {
 			this.codecCreator = codecCreator;
+			return this;
+		}
+		
+		public Builder dataHandlerCreator(EzyDataHandlerCreator dataHandlerCreator) {
+			this.dataHandlerCreator = dataHandlerCreator;
 			return this;
 		}
 		

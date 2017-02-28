@@ -24,6 +24,8 @@ import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
 import com.tvd12.ezyfoxserver.service.impl.EzyJsonMappingImpl;
 import com.tvd12.ezyfoxserver.service.impl.EzyXmlReadingImpl;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -65,20 +67,27 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     
     protected void startEzyFox(final EzyServer ezyFox) throws Exception {
     	getLogger().info(ezyFox.toString());
-    	newServerBoostrap(newLocalBoostrap(ezyFox)).start();
+    	newServerBoostrap(ezyFox, newLocalBoostrap(ezyFox)).start();
     }
     
-    protected EzyServerBootstrap newServerBoostrap(final EzyBootstrap localBootstrap) {
+    protected EzyServerBootstrap newServerBoostrap(
+    		final EzyServer ezyFox, final EzyBootstrap localBootstrap) {
     	return newServerBootstrapBuilder()
     			.port(3005)
+    			.boss(ezyFox)
     			.localBootstrap(localBootstrap)
-    			.parentGroup(newParentEventLoopGroup())
     			.codecCreator(newCodecCreator())
+    			.parentGroup(newParentEventLoopGroup())
+    			.childGroup(newChildEventLoopGroup())
     			.build();
     }
     
     protected EventLoopGroup newParentEventLoopGroup() {
     	return new NioEventLoopGroup(0, EzyExecutors.newThreadFactory("parenteventloopgroup"));
+    }
+    
+    protected EventLoopGroup newChildEventLoopGroup() {
+    	return new NioEventLoopGroup(0, EzyExecutors.newThreadFactory("childeventloopgroup"));
     }
     
     protected EzyBootstrap newLocalBoostrap(final EzyServer ezyFox) {
@@ -96,6 +105,7 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     protected EzyServer loadEzyFox(final EzyConfig config) {
     	return EzyLoader.newInstance()
     			.config(config)
+    			.managers(getManagers())
     			.xmlReading(getXmlReading())
     			.jsonMapping(getJsonMapping())
     			.classLoader(getClassLoader())
@@ -129,6 +139,10 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     			.build();
     }
     
+    protected EzyManagers getManagers() {
+    	return EzyManagersImpl.builder().build();
+    }
+    
     protected EzyJsonMapping getJsonMapping() {
     	return EzyJsonMappingImpl.builder().build();
     }
@@ -153,6 +167,7 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     		return this;
     	}
     	
+    	@Override
     	public EzyStarter build() {
     		return new EzyStarter(this);
     	}

@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.util;
+package com.tvd12.ezyfoxserver.codec;
 
 import java.io.UnsupportedEncodingException;
 

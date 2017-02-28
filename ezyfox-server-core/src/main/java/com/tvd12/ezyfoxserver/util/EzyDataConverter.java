@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
  *
  */
 
-public final class EzyDataConverter {
+public abstract class EzyDataConverter {
     
     // prevent new instance
     private EzyDataConverter() {}

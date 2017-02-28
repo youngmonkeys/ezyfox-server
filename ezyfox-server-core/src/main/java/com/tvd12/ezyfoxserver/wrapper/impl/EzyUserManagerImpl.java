@@ -2,17 +2,18 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
-public class SimpleUserManager implements EzyUserManager {
+public class EzyUserManagerImpl implements EzyUserManager {
 
 	private ConcurrentHashMap<Long, EzyUser> usersById;
 	private ConcurrentHashMap<String, EzyUser> usersByName;
 	private ConcurrentHashMap<EzySession, EzyUser> usersBySession;
 	
-	public SimpleUserManager() {
+	public EzyUserManagerImpl(Builder builder) {
 		this.usersById = new ConcurrentHashMap<>();
 		this.usersByName = new ConcurrentHashMap<>();
 		this.usersBySession = new ConcurrentHashMap<>();
@@ -96,7 +97,13 @@ public class SimpleUserManager implements EzyUserManager {
 		}
 	}
 	
-	
-	
+	public static class Builder implements EzyBuilder<EzyUserManagerImpl> {
+		
+		@Override
+		public EzyUserManagerImpl build() {
+			return new EzyUserManagerImpl(this);
+		}
+		
+	}
 	
 }

@@ -11,7 +11,6 @@ import com.tvd12.ezyfoxserver.handler.EzyDataHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -113,8 +112,6 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		pipeline.addLast(codecCreator.newDecoder());
 		pipeline.addLast(new EzyDataHandler());
 		pipeline.addLast(codecCreator.newEncoder());
-//		ch.config().setOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024));
-		ch.config().setOption(ChannelOption.SO_RCVBUF, 2048);
 	}
 	
 	public static Builder builder() {

@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.entity;
 
 import java.net.SocketAddress;
 
+import io.netty.channel.Channel;
+
 public interface EzySession extends EzyProperties {
 
 	/**
@@ -17,6 +19,13 @@ public interface EzySession extends EzyProperties {
 	 * @return the session token
 	 */
 	String getToken();
+	
+	/**
+	 * Set token
+	 * 
+	 * @param token the token
+	 */
+	void setToken(final String token);
 	
 	/**
 	 * Get creation time in long
@@ -86,7 +95,7 @@ public interface EzySession extends EzyProperties {
 	 * 
 	 * @param bytes the read bytes
 	 */
-	void addReadBytes(long bytes);
+	void addReadBytes(final long bytes);
 	
 	/**
 	 * Get written bytes
@@ -100,7 +109,7 @@ public interface EzySession extends EzyProperties {
 	 * 
 	 * @param bytes the written bytes
 	 */
-	void addWrittenBytes(long bytes);
+	void addWrittenBytes(final long bytes);
 	
 	/**
 	 * Get max idle time
@@ -110,31 +119,31 @@ public interface EzySession extends EzyProperties {
 	long getMaxIdleTime();
 	
 	/**
+	 * Get the channel mapped to this session
+	 * 
+	 * @return the channel
+	 */
+	Channel getChannel();
+	
+	/**
+	 * Map this session to the channel
+	 * 
+	 * @param channel the channel
+	 */
+	void setChannel(final Channel channel);
+	
+	/**
 	 * Get client full ip address
 	 * 
 	 * @return the client full ip address
 	 */
-	String getClientAddress();
+	SocketAddress getClientAddress();
 	
 	/**
 	 * Get server full ip address
 	 * 
 	 * @return the server full ip address
 	 */
-	String getServerAddress();
-	
-	/**
-	 * Get client full ip address
-	 * 
-	 * @return the client full ip address
-	 */
-	void setClientAddress(SocketAddress address);
-	
-	/**
-	 * Get server full ip address
-	 * 
-	 * @return the server full ip address
-	 */
-	void setServerAddress(SocketAddress address);
+	SocketAddress getServerAddress();
 	
 }

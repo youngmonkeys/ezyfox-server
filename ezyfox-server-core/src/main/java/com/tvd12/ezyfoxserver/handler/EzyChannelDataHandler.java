@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
@@ -15,28 +14,40 @@ import lombok.Setter;
 /**
  * Created by tavandung12 on 1/17/17.
  */
-public class EzyDataHandler extends ChannelInboundHandlerAdapter {
+public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter {
 	
 	@Getter
-	private Logger logger;	
+	protected Logger logger;	
 	@Setter
-	private EzySessionManager sessionManager;
+	protected EzySessionManager sessionManager;
 	
-	public EzyDataHandler() {
+	public EzyChannelDataHandler() {
 		this.logger = LoggerFactory.getLogger(getClass());
 	}
 	
+	protected abstract void sessionAdded(final EzySession session);
+	protected abstract void dataReceived(final EzySession session, final Object data);
+	
 	@Override
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-		Channel channel = ctx.channel();
-		EzySession session = sessionManager.borrowSession(channel);
+		handlerAdded(ctx, borrowSession(ctx));
+	}
+	
+	protected EzySession borrowSession(ChannelHandlerContext ctx) {
+		return sessionManager.borrowSession(ctx.channel());
+	}
+	
+	private void handlerAdded(ChannelHandlerContext ctx, EzySession session) {
+		updateSessionAll(ctx, session);
+		sessionAdded(session);
+	}
+	
+	private void updateSessionAll(ChannelHandlerContext ctx, EzySession session) {
 		session.setCreationTime(System.currentTimeMillis());
 		session.setLastActivityTime(System.currentTimeMillis());
 		session.setLastReadTime(System.currentTimeMillis());
 		session.setLastWriteTime(System.currentTimeMillis());
-		session.setClientAddress(channel.remoteAddress());
-		session.setServerAddress(channel.localAddress());
-		logger.info("add session: {}", session);
+		session.setProperty(ChannelHandlerContext.class, ctx);
 	}
 
     @Override
@@ -44,12 +55,12 @@ public class EzyDataHandler extends ChannelInboundHandlerAdapter {
     	EzySession session = sessionManager.getSession(ctx.channel());
     	logger.info("server received: {}", msg);
     	logger.info("from session: {}", session);
+    	dataReceived(session, msg);
     }
     
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
     	logger.info("channel read complete");
-//        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     }
     
     @Override
@@ -57,4 +68,5 @@ public class EzyDataHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
+    
 }

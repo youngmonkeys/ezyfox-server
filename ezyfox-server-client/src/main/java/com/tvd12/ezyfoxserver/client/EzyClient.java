@@ -5,6 +5,7 @@ package com.tvd12.ezyfoxserver.client;
 
 import java.net.InetSocketAddress;
 
+import com.tvd12.ezyfoxserver.client.handler.EzyClientHandler;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.codec.MsgPackCodecCreator;
 

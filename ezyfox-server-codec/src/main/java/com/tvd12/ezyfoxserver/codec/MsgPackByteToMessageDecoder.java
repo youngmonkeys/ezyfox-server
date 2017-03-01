@@ -20,8 +20,8 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 	private Logger logger;
 	private Handlers handlers;
 	
-	public MsgPackByteToMessageDecoder() {
-		this.logger = LoggerFactory.getLogger(getClass());
+	{
+		logger = LoggerFactory.getLogger(getClass());
 	}
 	
 	public MsgPackByteToMessageDecoder(MessagePack msgPack) {
@@ -31,7 +31,7 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 	@Override
 	protected void decode(ChannelHandlerContext ctx, 
 			ByteBuf in, List<Object> out) throws Exception {
-		logger.debug("decode {} bytes", in.readableBytes());
+		logger.debug("decode {} bytes", in);
 		handlers.handle(ctx, in, out);
 	}
 	
@@ -39,9 +39,9 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 
 @Setter
 abstract class AbstractHandler implements EzyDecodeHandler {
-	
-	protected EzyDecodeHandler nextHandler;
+
 	protected MessagePack msgPack;
+	protected EzyDecodeHandler nextHandler;
 	protected EzyMessageReader messageReader;
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +11,7 @@ import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 import lombok.Setter;
 
 @SuppressWarnings("unchecked")
-public class EzyHashMap implements EzyObject, Serializable {
+public class EzyHashMap implements EzyObject {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
 	private Map<Object, Object> map = new HashMap<>();

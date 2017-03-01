@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +12,7 @@ import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
 import lombok.Setter;
 
 @SuppressWarnings("unchecked")
-public class EzyArrayList implements EzyArray, Serializable {
+public class EzyArrayList implements EzyArray {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
 	private List<Object> list = new ArrayList<>();

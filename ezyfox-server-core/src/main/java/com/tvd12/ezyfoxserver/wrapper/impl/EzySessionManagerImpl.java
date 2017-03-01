@@ -6,6 +6,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.factory.EzySessionFactory;
 import com.tvd12.ezyfoxserver.factory.impl.EzySessionFactoryImpl;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectPool;
+import com.tvd12.ezyfoxserver.service.EzySessionTokenGeneration;
+import com.tvd12.ezyfoxserver.service.impl.EzySessionTokenGenerationImpl;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.channel.Channel;
@@ -15,12 +17,14 @@ public class EzySessionManagerImpl
 		implements EzySessionManager {
 	
 	protected EzySessionFactory sessionFactory;
+	private EzySessionTokenGeneration tokenGeneration;
 	protected ConcurrentHashMap<String, EzySession> sessionsByToken;
 	protected ConcurrentHashMap<Channel, EzySession> sessionsByChannel;
 	
 	{
 		sessionsByToken = new ConcurrentHashMap<>();
 		sessionsByChannel = new ConcurrentHashMap<>();
+		tokenGeneration = new EzySessionTokenGenerationImpl();
 	}
 	
 	protected EzySessionManagerImpl(Builder builder) {
@@ -31,12 +35,15 @@ public class EzySessionManagerImpl
 	@Override
 	public void returnSession(EzySession session) {
 		sessionsByToken.remove(session.getToken());
+		sessionsByChannel.remove(session.getChannel());
 		returnObject(session);
 	}
 	
 	@Override
 	public EzySession borrowSession(Channel channel) {
 		EzySession session = borrowObject();
+		session.setChannel(channel);
+		session.setToken(newTokenSession());
 		sessionsByChannel.putIfAbsent(channel, session);
 		sessionsByToken.putIfAbsent(session.getToken(), session);
 		return session;
@@ -49,7 +56,9 @@ public class EzySessionManagerImpl
 
 	@Override
 	protected EzySession createObject() {
-		return newSession();
+		EzySession session = newSession();
+		session.setToken(newTokenSession());
+		return session;
 	}
 	
 	@Override
@@ -59,6 +68,10 @@ public class EzySessionManagerImpl
 	
 	protected EzySession newSession() {
 		return sessionFactory.newSession();
+	}
+	
+	protected String newTokenSession() {
+		return tokenGeneration.generate();
 	}
 
 	public static class Builder extends AbstractBuilder<EzySession, Builder> {

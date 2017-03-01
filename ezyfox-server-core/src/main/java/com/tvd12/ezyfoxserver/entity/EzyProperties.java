@@ -32,7 +32,7 @@ public interface EzyProperties {
      * get the value to which the specified key is mapped
      * 
      * @param <T> type of value
-     * @param key key
+     * @param key the key
      * @return a value
      */
     <T> T getProperty(final Object key);
@@ -61,5 +61,16 @@ public interface EzyProperties {
      * @return true or false;
      */
     boolean containsKey(final Object key);
+    
+    /**
+     * get the value to which the specified key is mapped
+     * 
+     * @param <T> type of value
+     * @param key the key
+     * @return a value
+     */
+    default <T> T getProperty(final Class<T> key) {
+    	return getProperty(key);
+    }
     
 }

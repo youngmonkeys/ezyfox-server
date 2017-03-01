@@ -1,7 +1,8 @@
 package com.tvd12.ezyfoxserver.creator.impl;
 
 import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
-import com.tvd12.ezyfoxserver.handler.EzyDataHandler;
+import com.tvd12.ezyfoxserver.handler.EzyChannelDataHandler;
+import com.tvd12.ezyfoxserver.handler.EzyChannelSessionHandler;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.channel.ChannelHandlerAdapter;
@@ -14,7 +15,7 @@ public class EzyDataHandlerCreatorImpl implements EzyDataHandlerCreator {
 	
 	@Override
 	public ChannelHandlerAdapter newHandler() {
-		EzyDataHandler handler = new EzyDataHandler();
+		EzyChannelDataHandler handler = new EzyChannelSessionHandler();
 		handler.setSessionManager(sessionManager);
 		return handler;
 	}

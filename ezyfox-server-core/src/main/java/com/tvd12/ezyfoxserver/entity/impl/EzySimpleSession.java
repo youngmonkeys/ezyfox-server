@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.codec.EzyMD5;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
+import io.netty.channel.Channel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +28,8 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	protected long readBytes;
 	protected long writtenBytes;
 	protected long maxIdleTime;
-	protected SocketAddress clientAddress;
-	protected SocketAddress serverAddress;
+	
+	protected Channel channel;
 
 	public void setToken(String token) {
 		this.fullToken = token;
@@ -46,13 +47,13 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	}
 	
 	@Override
-	public String getClientAddress() {
-		return clientAddress != null ? clientAddress.toString() : "unknown";
+	public SocketAddress getClientAddress() {
+		return channel.remoteAddress();
 	}
 	
 	@Override
-	public String getServerAddress() {
-		return serverAddress != null ? serverAddress.toString() : "unknown";
+	public SocketAddress getServerAddress() {
+		return channel.localAddress();
 	}
 	
 }

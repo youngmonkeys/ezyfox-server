@@ -10,7 +10,7 @@ import java.util.Set;
  * @author tavandung12
  *
  */
-public interface EzyRoObject {
+public interface EzyRoObject extends EzyData {
 
     /**
      * @see java.util.Map#size()

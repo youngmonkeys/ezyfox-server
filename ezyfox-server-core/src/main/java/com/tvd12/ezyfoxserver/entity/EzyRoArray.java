@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.entity;
 
 import java.util.List;
 
-public interface EzyRoArray {
+public interface EzyRoArray extends EzyData {
 
 	/**
 	 * Get value by index

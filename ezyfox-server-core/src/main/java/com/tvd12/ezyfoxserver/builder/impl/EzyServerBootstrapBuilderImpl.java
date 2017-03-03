@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
 import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
+import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -37,6 +38,10 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#boss(com.tvd12.ezyfoxserver.EzyServer)
+	 */
 	@Override
 	public EzyServerBootstrapBuilder boss(EzyServer boss) {
 		this.boss = boss;
@@ -114,7 +119,13 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	
 	private EzyDataHandlerCreator newDataHandlerCreator() {
 		return EzyDataHandlerCreatorImpl.builder()
-				.sessionManager(getSessionManager()).build();
+				.controllers(getControllers())
+				.sessionManager(getSessionManager())
+				.build();
+	}
+	
+	private EzyControllers getControllers() {
+		return boss.getControllers();
 	}
 	
 	private EzySessionManager getSessionManager() {

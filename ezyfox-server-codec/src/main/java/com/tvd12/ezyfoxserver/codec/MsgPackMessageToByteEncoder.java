@@ -4,14 +4,14 @@ import org.msgpack.MessagePack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfoxserver.entity.EzyData;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.ReferenceCountUtil;
 
-public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyData> {
+public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyArray> {
 
 	private Logger logger;
 	private EzyMessageToBytes messageToBytes;
@@ -36,16 +36,16 @@ public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyData> {
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, EzyData msg, ByteBuf out) 
+	protected void encode(ChannelHandlerContext ctx, EzyArray msg, ByteBuf out) 
 			throws Exception {
 		writeMessage(convertObjectToBytes(msg), out);
 	}
 	
-	private ByteBuf convertObjectToBytes(EzyData object) {
+	private ByteBuf convertObjectToBytes(EzyArray object) {
 		return convertMessageToBytes(convertObjectToMessage(object));
 	}
 	
-	private EzyMessage convertObjectToMessage(EzyData object) {
+	private EzyMessage convertObjectToMessage(EzyArray object) {
 		return objectToMessage.convert(object);
 	}
 	

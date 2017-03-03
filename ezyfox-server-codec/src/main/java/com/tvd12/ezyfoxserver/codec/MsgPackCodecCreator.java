@@ -1,21 +1,9 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import org.msgpack.MessagePack;
-import org.msgpack.MessageTypeException;
-import org.msgpack.packer.Packer;
-import org.msgpack.template.AbstractTemplate;
-import org.msgpack.unpacker.Unpacker;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
-import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOutboundHandler;
@@ -26,8 +14,8 @@ public class MsgPackCodecCreator implements EzyCodecCreator {
 	
 	public MsgPackCodecCreator() {
 		this.msgPack = new MessagePack();
-		this.msgPack.register(EzyObject.class, new EzyObjectTemplate());
-		this.msgPack.register(EzyArray.class, new EzyArrayTemplate());
+		this.msgPack.register(EzyObject.class, new MsgPackObjectTemplate());
+		this.msgPack.register(EzyArray.class, new MsgPackArrayTemplate());
 	}
 	
 	@Override
@@ -37,75 +25,7 @@ public class MsgPackCodecCreator implements EzyCodecCreator {
 
 	@Override
 	public ChannelInboundHandlerAdapter newDecoder() {
-		return new MsgPackByteToMessageDecoder(msgPack);
+		return new MsgPackByteToMessageDecoder();
 	}
 
-}
-
-class EzyObjectTemplate extends AbstractTemplate<EzyObject> {
-	
-	@Override
-	public void write(Packer pk, EzyObject target, boolean required) 
-			throws IOException {
-		if(target != null)
-			writeNotNull(pk, target);
-		else 
-			writeNull(pk, required);
-		
-	}
-	
-	private void writeNull(Packer pk, boolean required) throws IOException {
-        if (!required)
-        	pk.writeNil();
-        else
-            throw new MessageTypeException("Attempted to write null");
-	}
-	
-	private void writeNotNull(Packer pk, EzyObject target) throws IOException {
-		pk.write(target.toMap());
-	}
-
-	@Override
-	public EzyObject read(Unpacker u, EzyObject to, boolean required) throws IOException {
-		 if (!required && u.trySkipNil()) 
-	            return null;
-		 return EzyFactory.create(EzyObjectBuilder.class)
-				 .append(u.read(Map.class))
-				 .build();
-	}
-}
-
-class EzyArrayTemplate extends AbstractTemplate<EzyArray> {
-	
-	@Override
-	public void write(Packer pk, EzyArray target, boolean required) 
-			throws IOException {
-		if(target != null)
-			writeNotNull(pk, target);
-		else 
-			writeNull(pk, required);
-		
-	}
-	
-	private void writeNull(Packer pk, boolean required) throws IOException {
-        if (!required)
-        	pk.writeNil();
-        else
-            throw new MessageTypeException("Attempted to write null");
-	}
-	
-	private void writeNotNull(Packer pk, EzyArray target) throws IOException {
-		pk.write(target.toList());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public EzyArray read(Unpacker u, EzyArray to, boolean required) throws IOException {
-		 if (!required && u.trySkipNil()) 
-	            return null;
-		 return EzyFactory.create(EzyArrayBuilder.class)
-				 .append(u.read(List.class))
-				 .build();
-	}
-	
 }

@@ -1,18 +1,20 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.*;
+import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.PREPARE_MESSAGE;
+import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_CONTENT;
+import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_HEADER;
+import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_SIZE;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.msgpack.MessagePack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
@@ -22,12 +24,9 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 	
 	{
 		logger = LoggerFactory.getLogger(getClass());
+		handlers = Handlers.builder().build();
 	}
 	
-	public MsgPackByteToMessageDecoder(MessagePack msgPack) {
-		this.handlers = Handlers.builder().msgPack(msgPack).build();
-	}
-
 	@Override
 	protected void decode(ChannelHandlerContext ctx, 
 			ByteBuf in, List<Object> out) throws Exception {
@@ -40,7 +39,6 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 @Setter
 abstract class AbstractHandler implements EzyDecodeHandler {
 
-	protected MessagePack msgPack;
 	protected EzyDecodeHandler nextHandler;
 	protected EzyMessageReader messageReader;
 	
@@ -91,8 +89,11 @@ class ReadMessageSize extends AbstractHandler {
 	}
 }
 
+@AllArgsConstructor
 class ReadMessageContent extends AbstractHandler {
 
+	protected MsgPackDeserializer deserializer;
+	
 	@Override
 	public EzyIDecodeState nextState() {
 		return PREPARE_MESSAGE;
@@ -111,11 +112,7 @@ class ReadMessageContent extends AbstractHandler {
 	}
 	
 	private Object readMessageContent(byte[] content) {
-		try {
-			return msgPack.read(content);
-		} catch (IOException e) {
-			throw new IllegalArgumentException(e);
-		}
+		return deserializer.deserialize(content);
 	}
 	
 }
@@ -131,16 +128,12 @@ class Handlers extends EzyDecodeHandlers {
 	}
 	
 	public static class Builder extends AbstractBuilder {
-		protected MessagePack msgPack;
 		protected EzyMessageReader messageReader;
+		protected MsgPackDeserializer deserializer;
 		
-		protected Builder() {
-			this.messageReader = new EzyMessageReader();
-		}
-		
-		public Builder msgPack(MessagePack msgPack) {
-			this.msgPack = msgPack;
-			return this;
+		{
+			messageReader = new EzyMessageReader();
+			deserializer = new MsgPackSimpleDeserializer();
 		}
 		
 		public Handlers build() {
@@ -153,7 +146,7 @@ class Handlers extends EzyDecodeHandlers {
 			EzyDecodeHandler readMessgeHeader = new ReadMessageHeader();
 			EzyDecodeHandler prepareMessage = new PrepareMessage();
 			EzyDecodeHandler readMessageSize = new ReadMessageSize();
-			EzyDecodeHandler readMessageContent = new ReadMessageContent();
+			EzyDecodeHandler readMessageContent = new ReadMessageContent(deserializer);
 			answer.put(PREPARE_MESSAGE, newHandler(prepareMessage, readMessgeHeader));
 			answer.put(READ_MESSAGE_HEADER, newHandler(readMessgeHeader, readMessageSize));
 			answer.put(READ_MESSAGE_SIZE, newHandler(readMessageSize, readMessageContent));
@@ -170,7 +163,6 @@ class Handlers extends EzyDecodeHandlers {
 		}
 		
 		private EzyDecodeHandler newHandler(AbstractHandler handler, EzyDecodeHandler next) {
-			handler.setMsgPack(msgPack);
 			handler.setNextHandler(next);
 			handler.setMessageReader(messageReader);
 			return handler;

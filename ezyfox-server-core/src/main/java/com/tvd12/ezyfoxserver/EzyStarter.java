@@ -105,7 +105,6 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     protected EzyServer loadEzyFox(final EzyConfig config) {
     	return EzyLoader.newInstance()
     			.config(config)
-    			.managers(getManagers())
     			.xmlReading(getXmlReading())
     			.jsonMapping(getJsonMapping())
     			.classLoader(getClassLoader())

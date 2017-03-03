@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.client.request;
 
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractRequest extends EzyFixedCommandRequest {
 
-	private String command;
+	private int appId;
+	private EzyConstant command;
 	
 }

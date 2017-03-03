@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
@@ -26,15 +27,25 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 	}
 	
 	protected abstract void sessionAdded(final EzySession session);
-	protected abstract void dataReceived(final EzySession session, final Object data);
+	protected abstract void dataReceived(final EzySession session, final EzyArray msg);
 	
 	@Override
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
 		handlerAdded(ctx, borrowSession(ctx));
 	}
 	
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		logger.info("session remove");
+		returnSession(ctx);
+	}
+	
 	protected EzySession borrowSession(ChannelHandlerContext ctx) {
 		return sessionManager.borrowSession(ctx.channel());
+	}
+	
+	protected void returnSession(ChannelHandlerContext ctx) {
+		sessionManager.returnSession(getSession(ctx));
 	}
 	
 	private void handlerAdded(ChannelHandlerContext ctx, EzySession session) {
@@ -52,10 +63,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    	EzySession session = sessionManager.getSession(ctx.channel());
-    	logger.info("server received: {}", msg);
-    	logger.info("from session: {}", session);
-    	dataReceived(session, msg);
+    	dataReceived(getSession(ctx), (EzyArray)msg);
     }
     
     @Override
@@ -67,6 +75,10 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
+    }
+    
+    protected EzySession getSession(ChannelHandlerContext ctx) {
+    	return sessionManager.getSession(ctx.channel());
     }
     
 }

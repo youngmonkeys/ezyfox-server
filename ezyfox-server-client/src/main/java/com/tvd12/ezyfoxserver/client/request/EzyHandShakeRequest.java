@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.client.request;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
+import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
 public class EzyHandShakeRequest implements EzyRequest {
@@ -12,8 +14,13 @@ public class EzyHandShakeRequest implements EzyRequest {
 	}
 	
 	@Override
-	public String getCommand() {
-		return "hs";
+	public int getAppId() {
+		return 15;
+	}
+	
+	@Override
+	public EzyConstant getCommand() {
+		return EzyCommand.HAND_SHAKE;
 	}
 	
 	@Override

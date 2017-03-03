@@ -34,8 +34,9 @@ public class EzyRequestSerializerImpl implements EzyRequestSerializer {
 			@Override
 			public EzyArray serialize(EzyRequest request) {
 				return EzyFactory.create(EzyArrayBuilder.class)
-						.append(request.getCommand())
-						.append(request.getData())
+						.append(request.getAppId())
+						.append(request.getCommand().getId())
+//						.append(request.getData())
 						.build();
 			}
 		});

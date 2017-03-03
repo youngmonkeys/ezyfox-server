@@ -133,4 +133,9 @@ public class EzyHashMap implements EzyObject {
 	private Object transformOutput(final Object output, final Class type) {
 		return outputTransformer.transform(output, type);
 	}
+	
+	@Override
+	public String toString() {
+		return map.toString();
+	}
 }

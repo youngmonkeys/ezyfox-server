@@ -9,8 +9,8 @@ import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
-import com.tvd12.ezyfoxserver.util.EzyByteUtil;
-import com.tvd12.ezyfoxserver.util.EzyStringUtil;
+import com.tvd12.ezyfoxserver.util.EzyBytes;
+import com.tvd12.ezyfoxserver.util.EzyStrings;
 
 public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 
@@ -50,7 +50,7 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 	
 	protected void addParsers(Map<MsgPackType, Parser> parsers) {
-		parsers.put(MsgPackType.POSITIVE_FIXINT, this::parsePositiveInt); //1
+		parsers.put(MsgPackType.POSITIVE_FIXINT, this::parsePositiveFixInt); //1
 		parsers.put(MsgPackType.FIXMAP, this::parseFixMap);
 		parsers.put(MsgPackType.FIXARRAY, this::parseFixArray); //2
 		parsers.put(MsgPackType.FIXSTR, this::parseFixStr);
@@ -74,7 +74,7 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	
 	protected Object parseBin(ByteBuffer buffer, int length) {
 		System.out.println("length = " + length);
-		return EzyByteUtil.copy(buffer, length);
+		return EzyBytes.copy(buffer, length);
 	}
 	
 	protected Object parseTrue(ByteBuffer buffer) {
@@ -111,10 +111,10 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 
 	protected String parseString(ByteBuffer buffer, int size) {
 		System.out.println("str.size = " + size);
-		return EzyStringUtil.newUTF(buffer, size);
+		return EzyStrings.newUTF(buffer, size);
 	}
 	
-	protected int parsePositiveInt(ByteBuffer buffer) {
+	protected int parsePositiveFixInt(ByteBuffer buffer) {
 		return (buffer.get() & 0x7F);
 	}
 	
@@ -149,8 +149,8 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 		buffer.position(buffer.position() + offset);
 	}
 	
-}
-
-interface Parser {
-	Object parse(ByteBuffer buffer); 
+	private static interface Parser {
+		Object parse(ByteBuffer buffer); 
+	}
+	
 }

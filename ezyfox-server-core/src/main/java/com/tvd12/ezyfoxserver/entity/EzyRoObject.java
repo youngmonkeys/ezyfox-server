@@ -4,6 +4,7 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -62,6 +63,13 @@ public interface EzyRoObject extends EzyData {
      * @return set of keys
      */
     Set<Object> keySet();
+    
+    /**
+     * @see java.util.Map#entrySet()
+     * 
+     * @return set of entries
+     */
+    Set<Entry<Object, Object>> entrySet();
 
     /**
      * Convert this object to map

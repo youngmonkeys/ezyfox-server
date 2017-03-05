@@ -2,7 +2,9 @@ package com.tvd12.ezyfoxserver.entity.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
@@ -79,6 +81,24 @@ public class EzyArrayList implements EzyArray {
 	@Override
 	public <T> T remove(int index) {
 		return (T) list.remove(index);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#forEach(java.util.function.Consumer)
+	 */
+	@Override
+	public void forEach(Consumer<Object> action) {
+		list.forEach(action);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#iterator()
+	 */
+	@Override
+	public Iterator<Object> iterator() {
+		return list.iterator();
 	}
 	
 	/*

@@ -3,9 +3,9 @@ package com.tvd12.ezyfoxserver.util;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
-public abstract class EzyStringUtil {
+public abstract class EzyStrings {
 
-	private EzyStringUtil() {
+	private EzyStrings() {
 	}
 	
 	public static String newUTF(byte[] bytes) {
@@ -16,9 +16,21 @@ public abstract class EzyStringUtil {
 		return newString(buffer, size, "UTF-8");
 	}
 	
+	public static byte[] getUTFBytes(String str) {
+		return getBytes(str, "UTF-8");
+	}
+	
 	public static String newString(byte[] bytes, String charset) {
 		try {
 			return new String(bytes, charset);
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	public static byte[] getBytes(String str, String charset) {
+		try {
+			return str.getBytes(charset);
 		} catch (UnsupportedEncodingException e) {
 			throw new IllegalArgumentException(e);
 		}

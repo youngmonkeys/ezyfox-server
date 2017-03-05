@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Consumer;
 
 public interface EzyArray extends EzyRoArray {
 	
@@ -35,5 +37,18 @@ public interface EzyArray extends EzyRoArray {
 	 */
 	<T> T remove(final int index);
 	
+	/**
+	 * For each
+	 * 
+	 * @param action the action
+	 */
+	void forEach(Consumer<Object> action);
+	
+	/**
+	 * @see java.util.List#iterator()
+	 * 
+	 * @return the iterator
+	 */
+	Iterator<Object> iterator();
 	
 }

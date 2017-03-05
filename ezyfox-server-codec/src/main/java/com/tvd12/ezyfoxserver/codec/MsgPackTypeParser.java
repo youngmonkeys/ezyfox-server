@@ -3,6 +3,8 @@ package com.tvd12.ezyfoxserver.codec;
 public class MsgPackTypeParser {
 
 	public MsgPackType parse(int type) {
+		if(type == 0xc4)
+			return MsgPackType.BIN8;
 		if (0x00 <= type && type <= 0x7f)
 			return MsgPackType.POSITIVE_FIXINT;
 		if (0x80 <= type && type <= 0x8f)
@@ -19,8 +21,6 @@ public class MsgPackTypeParser {
 			return MsgPackType.FALSE;
 		if(type == 0xc3)
 			return MsgPackType.TRUE;
-		if(type == 0xc4)
-			return MsgPackType.BIN8;
 		if(type == 0xc5)
 			return MsgPackType.BIN16;
 		if(type == 0xc6)

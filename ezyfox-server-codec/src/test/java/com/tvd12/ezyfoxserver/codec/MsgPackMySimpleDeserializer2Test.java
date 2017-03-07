@@ -9,22 +9,28 @@ import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.io.EzyMath;
 
-public class MsgPackSimpleDeserializer2Test extends MsgPackCodecTest {
+public class MsgPackMySimpleDeserializer2Test extends MsgPackCodecTest {
 
 	@Test
 	public void test1() throws IOException {
+		byte[] bin8 = new byte[EzyMath.bin2int(1)];
+		byte[] bin16 = new byte[EzyMath.bin2int(6)];
 		byte[] bin32 = new byte[EzyMath.bin2int(17)];
+		Arrays.fill(bin8, (byte)'a');
+		Arrays.fill(bin16, (byte)'b');
 		Arrays.fill(bin32, (byte)'c');
-		String str32 = new String(bin32);
+		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
-				.append("k", str32);
+				.append("a", bin16)
+				.append("b", bin16)
+				.append("c", bin32);
 		EzyArray request = newArrayBuilder()
 				.append(15)
 				.append(26)
 				.append("abcdef")
 				.append(dataBuilder)
 				.build();
-		byte[] bytes = msgPack.write(request);
+		byte[] bytes = serializer.serialize(request);
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);
 		getLogger().info("answer = {}", answer);

@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.util;
+package com.tvd12.ezyfoxserver.io;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

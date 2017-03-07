@@ -1,10 +1,6 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MAX_BIN8_SIZE;
-import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MAX_FIXARRAY_SIZE;
-import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MAX_FIXMAP_SIZE;
-import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MAX_FIXSTR_SIZE;
-import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MAX_POSITIVE_FIXINT;
+import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,8 +11,8 @@ import java.util.Set;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.CastIntToByte;
-import com.tvd12.ezyfoxserver.util.EzyBytes;
-import com.tvd12.ezyfoxserver.util.EzyStrings;
+import com.tvd12.ezyfoxserver.io.EzyBytes;
+import com.tvd12.ezyfoxserver.io.EzyStrings;
 
 public class MsgPackSimpleSerializer implements MsgPackSerializer, CastIntToByte {
 
@@ -82,6 +78,7 @@ public class MsgPackSimpleSerializer implements MsgPackSerializer, CastIntToByte
 	}
 	
 	protected void addParsers(Map<Class<?>, Parser> parsers) {
+		parsers.put(Long.class, this::parseInt);
 		parsers.put(Integer.class, this::parseInt);
 		parsers.put(Map.class, this::parseMap);
 		parsers.put(EzyObject.class, this::parseObject);
@@ -92,7 +89,7 @@ public class MsgPackSimpleSerializer implements MsgPackSerializer, CastIntToByte
 	}
 	
 	protected byte[] parseInt(Object value) {
-		return intSerializer.serialize((int)value);
+		return intSerializer.serialize(((Number)value).longValue());
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -202,13 +199,23 @@ class BinSizeSerializer implements CastIntToByte {
 	public byte[] serialize(int size) {
 		if(size <= MAX_BIN8_SIZE)
 			return parse8(size);
-		return new byte[0];
+		if(size <= MAX_BIN16_SIZE)
+			return parse16(size);
+		return parse32(size);
 	}
 	
 	private byte[] parse8(int size) {
 		return new byte[] {
 			cast(0xc4), cast(size)
 		};
+	}
+	
+	private byte[] parse16(int size) {
+		return EzyBytes.getBytes(0xc5 , size, 2);
+	}
+	
+	private byte[] parse32(int size) {
+		return EzyBytes.getBytes(0xc6 , size, 4);
 	}
 }
 
@@ -217,13 +224,29 @@ class StringSizeSerializer implements CastIntToByte {
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXSTR_SIZE)
 			return parseFix(size);
-		return new byte[0];
+		if(size <= MAX_STR8_SIZE)
+			return parse8(size);
+		if(size <= MAX_STR16_SIZE)
+			return parse16(size);
+		return parse32(size);
 	}
 	
 	private byte[] parseFix(int size) {
 		return new byte[] {
 			cast(0xa0 | size)
 		};
+	}
+	
+	private byte[] parse8(int size) {
+		return EzyBytes.getBytes(0xd9, size, 1);
+	}
+	
+	private byte[] parse16(int size) {
+		return EzyBytes.getBytes(0xda, size, 2);
+	}
+	
+	private byte[] parse32(int size) {
+		return EzyBytes.getBytes(0xdb, size, 4);
 	}
 }
 
@@ -247,7 +270,9 @@ class MapSizeSerializer implements CastIntToByte {
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXMAP_SIZE)
 			return parseFix(size);
-		return new byte[0];
+		if(size <= MAX_MAP16_SIZE)
+			return parse16(size);
+		return parse32(size);
 	}
 	
 	private byte[] parseFix(int size) {
@@ -255,27 +280,85 @@ class MapSizeSerializer implements CastIntToByte {
 			cast(0x80 | size)
 		};
 	}
+	
+	private byte[] parse16(int size) {
+		return EzyBytes.getBytes(0xde, size, 2);
+	}
+	
+	private byte[] parse32(int size) {
+		return EzyBytes.getBytes(0xde, size, 2);
+	}
 }
 
 class IntSerializer implements CastIntToByte {
 	
-	public byte[] serialize(int value) {
+	public byte[] serialize(long value) {
 		return value > 0 
 				? parsePositive(value) 
 				: parseNegative(value);
 	}
 	
-	private byte[] parsePositive(int value) {
+	private byte[] parsePositive(long value) {
 		if(value <= MAX_POSITIVE_FIXINT)
 			return parsePositiveFix(value);
-		return new byte[0];
+		if(value < MAX_UINT8)
+			return parseU8(value);
+		if(value < MAX_BIN16_SIZE)
+			return parseU16(value);
+		if(value < MAX_BIN32_SIZE)
+			return parseU32(value);
+		return parseU64(value);
 	}
 	
-	private byte[] parsePositiveFix(int value) {
+	private byte[] parsePositiveFix(long value) {
 		return new byte[] {cast(0x0 | value)};
 	}
 	
-	private byte[] parseNegative(int value) {
-		return new byte[0];
+	private byte[] parseU8(long value) {
+		return EzyBytes.getBytes(0xcc, value, 1);
+	}
+	
+	private byte[] parseU16(long value) {
+		return EzyBytes.getBytes(0xcd, value, 2);
+	}
+	
+	private byte[] parseU32(long value) {
+		return EzyBytes.getBytes(0xce, value, 4);
+	}
+	
+	private byte[] parseU64(long value) {
+		return EzyBytes.getBytes(0xcf, value, 8);
+	}
+	
+	private byte[] parseNegative(long value) {
+		if(value < MIN_NEGATIVE_FIXINT)
+			return parseNegativeFix(value);
+		if(value < MIN_INT8)
+			return parse8(value);
+		if(value < MIN_INT16)
+			return parse16(value);
+		if(value < MIN_INT32)
+			return parse32(value);
+		return parse64(value);
+	}
+	
+	private byte[] parseNegativeFix(long value) {
+		return new byte[] {cast(0xe0 | value)};
+	}
+	
+	private byte[] parse8(long value) {
+		return EzyBytes.getBytes(0xd0, value, 1);
+	}
+	
+	private byte[] parse16(long value) {
+		return EzyBytes.getBytes(0xd1, value, 2);
+	}
+	
+	private byte[] parse32(long value) {
+		return EzyBytes.getBytes(0xd2, value, 4);
+	}
+	
+	private byte[] parse64(long value) {
+		return EzyBytes.getBytes(0xd3, value, 8);
 	}
 }

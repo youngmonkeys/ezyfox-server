@@ -1,30 +1,41 @@
 package com.tvd12.ezyfoxserver.codec;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.io.EzyMath;
+import com.tvd12.ezyfoxserver.io.EzyInts;
 
-public class MsgPackSimpleDeserializer2Test extends MsgPackCodecTest {
+public class MsgPackMySimpleDeserializerTest extends MsgPackCodecTest {
 
 	@Test
 	public void test1() throws IOException {
-		byte[] bin32 = new byte[EzyMath.bin2int(17)];
-		Arrays.fill(bin32, (byte)'c');
-		String str32 = new String(bin32);
+		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
-				.append("k", str32);
+				.append("a", 1)
+				.append("b", 2)
+				.append("c", (Integer)null)
+				.append("d", false)
+				.append("e", true)
+				.append("f", new byte[] {'a', 'b', 'c'})
+				.append("i", EzyInts.bin2int(6))
+				.append("j", EzyInts.bin2int(12))
+				.append("k", EzyInts.bin2int(18))
+				.append("l", EzyInts.bin2int(34))
+				.append("m", -EzyInts.bin2int(6))
+				.append("n", -EzyInts.bin2int(12))
+				.append("o", -EzyInts.bin2int(18))
+				.append("p", -EzyInts.bin2int(34))
+				;
 		EzyArray request = newArrayBuilder()
 				.append(15)
 				.append(26)
 				.append("abcdef")
 				.append(dataBuilder)
 				.build();
-		byte[] bytes = msgPack.write(request);
+		byte[] bytes = serializer.serialize(request);
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);
 		getLogger().info("answer = {}", answer);

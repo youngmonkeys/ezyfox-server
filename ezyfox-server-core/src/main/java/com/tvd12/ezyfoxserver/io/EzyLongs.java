@@ -12,6 +12,10 @@ public abstract class EzyLongs {
 	}
 	
 	public static long bin2long(byte[] bytes) {
+		return EzyMath.bin2long(bytes);
+	}
+	
+	public static long bin2ulong(byte[] bytes) {
 		return EzyMath.bin2ulong(bytes);
 	}
 	
@@ -19,4 +23,7 @@ public abstract class EzyLongs {
 		return bin2long(EzyBytes.copy(buffer, size));
 	}
 	
+	public static long bin2ulong(ByteBuffer buffer, int size) {
+		return bin2ulong(EzyBytes.copy(buffer, size));
+	}
 }

@@ -10,34 +10,37 @@ public abstract class EzyMath {
 	}
 	
 	public static int bin2int(byte[] bytes) {
-		return (int) bin2ulong(bytes);
+		return (int) bin2long(bytes);
 	}
 	
 	public static long bin2long(int length) {
-		int result = 0;
+		long result = 0;
 		for(int i = 0 ; i < length ; i++)
-			result |= 1 << i;
+			result |= 1L << i;
 		return result;
 	}
 	
 	public static long bin2ulong(byte[] bytes) {
-		long result = 0;
-		int size = bytes.length - 1;
-		for(int i = 0 ; i < bytes.length ; i++)
-			result += ((bytes[i] & 0xff) << ((size - i) * 8));
-		return result;
+		return bin2long(bytes, true);
 	}
 	
 	public static long bin2long(byte[] bytes) {
-		return -(((bin2ulong(bytes)) - 1) ^ ((1 << bytes.length * 8) - 1));
+		return bin2long(bytes, false);
 	}
 	
-	public static void main(String[] args) {
-		int value = -EzyMath.bin2int(14);
-		
-		byte[] bytes = EzyBytes.getBytes(value, 3);
-		System.out.println(EzyPrints.printBits(bytes));
-		System.out.println("value = " + value  + ", " + bin2long(bytes) + " " + (3 << 1));
+	private static long bin2long(byte[] bytes, boolean unsigned) {
+		int len = bytes.length - 1;
+		long result = (long)bytes[0];
+		result = unsigned ? result & 0xff : result;
+		result = result << (len * 8);
+		for(int i = 1 ; i <= len ; i++)
+			result |= ((long)bytes[i] & 0xff) << ((len - i) * 8);
+		return result;
+	}
+	
+	public static void xor(byte[] bytes) {
+		for(int i = 0 ; i < bytes.length ; i++)
+			bytes[i] ^= 0xff;
 	}
 	
 }

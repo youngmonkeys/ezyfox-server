@@ -13,7 +13,8 @@ public abstract class EzyPrints {
 	}
 	
 	public static String printBits(byte value) {
-		return insertBegin(Integer.toBinaryString(value & 0xff), "0", 8);
+		String str = insertBegin(Integer.toBinaryString(value & 0xff), "0", 8);
+		return str.substring(str.length() - 8);
 	}
 	
 	public static String insertBegin(String str, String ch, int maxlen) {

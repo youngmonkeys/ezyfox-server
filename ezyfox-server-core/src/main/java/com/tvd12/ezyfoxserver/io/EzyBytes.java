@@ -11,6 +11,18 @@ public abstract class EzyBytes {
 		return EzyByteBuffers.getBytes(buffer, size);
 	}
 	
+	public static byte[] getBytes(int first, int value, int size) {
+		return getBytes(first, (long)value, size);
+	}
+	
+	public static byte[] getBytes(int first, long value, int size) {
+		return getBytes((byte)first, value, size);
+	}
+	
+	public static byte[] getBytes(byte first, long value, int size) {
+		return EzyArrays.merge(first, getBytes(value, size));
+	}
+	
 	public static byte[] copy(byte[][] bytess) {
 		int index = 0;
 		byte[] answer = new byte[totalBytes(bytess)];
@@ -31,22 +43,13 @@ public abstract class EzyBytes {
 	public static byte[] getBytes(long value, int size) {
 		byte[] bytes = new byte[size];
 		for(int i = 0 ; i < size ; i++)
-			bytes[i] = (byte)(value >> ((size - i - 1) * 8));
+			bytes[i] = (byte)((value >> ((size - i - 1) * 8) & 0xff));
 		return bytes;
 	}
 	
-	public static byte[] getBytes(int first, int value, int size) {
-		return getBytes(first, (long)value, size);
-	}
-	
-	public static byte[] getBytes(int first, long value, int size) {
-		byte[] bytes = getBytes((byte)first, value, size);
-		System.out.println("value = " + value + ", after = " + EzyLongs.bin2long(bytes));
-		return bytes;
-	}
-	
-	public static byte[] getBytes(byte first, long value, int size) {
-		return EzyArrays.merge(first, getBytes(value, size));
+	public static void main(String[] args) {
+		byte[] bytes = EzyBytes.getBytes(0x3c, -1, 3);
+		System.out.println(EzyPrints.printBits(bytes));
 	}
 	
 }

@@ -331,13 +331,13 @@ class IntSerializer implements CastIntToByte {
 	}
 	
 	private byte[] parseNegative(long value) {
-		if(value < MIN_NEGATIVE_FIXINT)
+		if(value >= MIN_NEGATIVE_FIXINT)
 			return parseNegativeFix(value);
-		if(value < MIN_INT8)
+		if(value >= MIN_INT8)
 			return parse8(value);
-		if(value < MIN_INT16)
+		if(value >= MIN_INT16)
 			return parse16(value);
-		if(value < MIN_INT32)
+		if(value >= MIN_INT32)
 			return parse32(value);
 		return parse64(value);
 	}

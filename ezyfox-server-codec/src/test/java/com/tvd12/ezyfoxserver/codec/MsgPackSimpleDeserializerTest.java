@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.io.EzyInts;
+import com.tvd12.ezyfoxserver.io.EzyLongs;
 
 public class MsgPackSimpleDeserializerTest extends MsgPackCodecTest {
 
@@ -24,11 +25,11 @@ public class MsgPackSimpleDeserializerTest extends MsgPackCodecTest {
 				.append("i", EzyInts.bin2int(6))
 				.append("j", EzyInts.bin2int(12))
 				.append("k", EzyInts.bin2int(18))
-				.append("l", EzyInts.bin2int(34))
+				.append("l", EzyLongs.bin2long(34))
 				.append("m", -EzyInts.bin2int(6))
 				.append("n", -EzyInts.bin2int(12))
 				.append("o", -EzyInts.bin2int(18))
-				.append("p", -EzyInts.bin2int(34))
+				.append("p", -EzyLongs.bin2long(34))
 				;
 		EzyArray request = newArrayBuilder()
 				.append(15)

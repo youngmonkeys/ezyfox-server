@@ -34,4 +34,18 @@ public interface EzyRoArray extends EzyData {
 	 */
 	<T> List<T> toList();
 	
+	/**
+	 * @param <T> type of value
+	 * @param type the item type
+	 * @return covert this array to list
+	 */
+	<T> List<T> toList(Class<T> type);
+	
+	/**
+	 * @param <T> the array type
+	 * @param type type array type
+	 * @return the array value
+	 */
+	<T> T toArray(Class<T> type);
+	
 }

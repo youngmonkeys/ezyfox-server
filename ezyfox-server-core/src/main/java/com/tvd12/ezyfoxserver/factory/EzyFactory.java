@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.tvd12.ezyfoxserver.factory.impl.EzyBuilderFactoryImpl;
 
-public class EzyFactory {
+public abstract class EzyFactory {
 
 	private static final List<EzyCreator> CREATORS;
 	

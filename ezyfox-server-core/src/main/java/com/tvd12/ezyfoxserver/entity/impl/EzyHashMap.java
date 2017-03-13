@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.entity.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;

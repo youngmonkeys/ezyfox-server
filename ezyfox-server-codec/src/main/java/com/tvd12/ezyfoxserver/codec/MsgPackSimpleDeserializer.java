@@ -8,7 +8,6 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
 import com.tvd12.ezyfoxserver.io.EzyInts;
 import com.tvd12.ezyfoxserver.io.EzyLongs;
@@ -268,11 +267,11 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 	
 	protected EzyObjectBuilder newObjectBuilder() {
-		return EzyFactory.create(EzyObjectBuilder.class);
+		return EzyEntityFactory.create(EzyObjectBuilder.class);
 	}
 	
 	protected EzyArrayBuilder newArrayBuilder() {
-		return EzyFactory.create(EzyArrayBuilder.class);
+		return EzyEntityFactory.create(EzyArrayBuilder.class);
 	}
 	
 	protected MsgPackType getDataType(int type) {

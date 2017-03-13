@@ -8,22 +8,28 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.builder.impl.EzyArrayBuilderImpl;
 import com.tvd12.ezyfoxserver.builder.impl.EzyObjectBuilderImpl;
+import com.tvd12.ezyfoxserver.concurrent.EzyLazyInitializer;
 import com.tvd12.ezyfoxserver.factory.EzyBuilderFactory;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.transformer.EzySimpleInputTransformer;
+import com.tvd12.ezyfoxserver.transformer.EzySimpleOutputTransformer;
 
 public class EzyBuilderFactoryImpl implements EzyBuilderFactory {
 
 	@SuppressWarnings("rawtypes")
-	private static final Map<Class, Supplier> SUPPLIERS;
+	private EzyLazyInitializer<Map<Class, Supplier>> suppliers;
 	
 	private static final EzyInputTransformer INPUT_TRANSFORMER;
 	private static final EzyOutputTransformer OUTPUT_TRANSFORMER;
 	
+	{
+		suppliers = new EzyLazyInitializer<>(this::defaultSuppliers);
+	}
+	
 	static {
-		INPUT_TRANSFORMER 	= new EzyInputTransformer();
-		OUTPUT_TRANSFORMER 	= new EzyOutputTransformer();
-		SUPPLIERS 			= defaultSuppliers();
+		INPUT_TRANSFORMER 	= new EzySimpleInputTransformer();
+		OUTPUT_TRANSFORMER 	= new EzySimpleOutputTransformer();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -34,27 +40,35 @@ public class EzyBuilderFactoryImpl implements EzyBuilderFactory {
 	
 	@Override
 	public <T> boolean creatable(Class<T> productType) {
-		return SUPPLIERS.containsKey(productType);
+		return getSuppliers().containsKey(productType);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	protected Map<Class, Supplier> getSuppliers() {
-		return SUPPLIERS;
+		return suppliers.get();
+	}
+	
+	protected EzyInputTransformer getInputTransformer() {
+		return INPUT_TRANSFORMER;
+	}
+	
+	protected EzyOutputTransformer getOutputTransformer() {
+		return OUTPUT_TRANSFORMER;
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static final Map<Class, Supplier> defaultSuppliers() {
+	private final Map<Class, Supplier> defaultSuppliers() {
 		Map<Class, Supplier> answer = new HashMap<>();
 		answer.put(EzyObjectBuilder.class, () -> {
 			return new EzyObjectBuilderImpl.Creator()
-					.inputTransformer(INPUT_TRANSFORMER)
-					.outputTransformer(OUTPUT_TRANSFORMER)
+					.inputTransformer(getInputTransformer())
+					.outputTransformer(getOutputTransformer())
 					.create();
 		});
 		answer.put(EzyArrayBuilder.class, () -> {
 			return new EzyArrayBuilderImpl.Creator()
-				.inputTransformer(INPUT_TRANSFORMER)
-				.outputTransformer(OUTPUT_TRANSFORMER)
+				.inputTransformer(getInputTransformer())
+				.outputTransformer(getOutputTransformer())
 				.create();
 		});
 		return answer;

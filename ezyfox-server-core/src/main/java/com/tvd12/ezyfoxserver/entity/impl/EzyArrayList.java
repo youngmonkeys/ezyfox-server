@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.util.EzyLiteCollectionConverter;
 
 import lombok.Setter;
 
@@ -111,6 +112,18 @@ public class EzyArrayList implements EzyArray {
 		return list;
 	}
 	
+	@Override
+	public <T> List<T> toList(Class<T> type) {
+		return toList();
+	}
+	
+	@Override
+	public <T> T toArray(Class<T> type) {
+		if(!type.isArray())
+			throw new IllegalArgumentException(type + " is not array type");
+		return EzyLiteCollectionConverter.toArray(list, type);
+	}
+	
 	/**
 	 * add an item to the list
 	 * 
@@ -145,6 +158,10 @@ public class EzyArrayList implements EzyArray {
 		return outputTransformer.transform(output, type);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return list.toString();

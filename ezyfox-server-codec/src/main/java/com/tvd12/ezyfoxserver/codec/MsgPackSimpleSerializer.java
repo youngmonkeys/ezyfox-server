@@ -29,7 +29,7 @@ import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.function.CastIntToByte;
+import com.tvd12.ezyfoxserver.function.EzyCastIntToByte;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 import com.tvd12.ezyfoxserver.util.EzyBoolsIterator;
@@ -42,7 +42,7 @@ import com.tvd12.ezyfoxserver.util.EzyShortsIterator;
 import com.tvd12.ezyfoxserver.util.EzyStringsIterator;
 import com.tvd12.ezyfoxserver.util.EzyWrapperIterator;
 
-public class MsgPackSimpleSerializer implements MsgPackSerializer, CastIntToByte {
+public class MsgPackSimpleSerializer implements MsgPackSerializer, EzyCastIntToByte {
 
 	protected Map<Class<?>, Parser> parsers;
 	
@@ -451,7 +451,7 @@ public class MsgPackSimpleSerializer implements MsgPackSerializer, CastIntToByte
 	}
 }
 
-class BinSizeSerializer implements CastIntToByte {
+class BinSizeSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_BIN8_SIZE)
@@ -476,7 +476,7 @@ class BinSizeSerializer implements CastIntToByte {
 	}
 }
 
-class StringSizeSerializer implements CastIntToByte {
+class StringSizeSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXSTR_SIZE)
@@ -507,7 +507,7 @@ class StringSizeSerializer implements CastIntToByte {
 	}
 }
 
-class ArraySizeSerializer implements CastIntToByte {
+class ArraySizeSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXARRAY_SIZE)
@@ -532,7 +532,7 @@ class ArraySizeSerializer implements CastIntToByte {
 	}
 }
 
-class MapSizeSerializer implements CastIntToByte {
+class MapSizeSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXMAP_SIZE)
@@ -557,7 +557,7 @@ class MapSizeSerializer implements CastIntToByte {
 	}
 }
 
-class IntSerializer implements CastIntToByte {
+class IntSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(long value) {
 		return value > 0 
@@ -630,7 +630,7 @@ class IntSerializer implements CastIntToByte {
 	}
 }
 
-class DoubleSerializer implements CastIntToByte {
+class DoubleSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(double value) {
 		return EzyBytes.getBytes(cast(0xcb), value);
@@ -638,7 +638,7 @@ class DoubleSerializer implements CastIntToByte {
 	
 }
 
-class FloatSerializer implements CastIntToByte {
+class FloatSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(float value) {
 		return EzyBytes.getBytes(cast(0xca), value);

@@ -1,10 +1,10 @@
-package com.tvd12.ezyfoxserver.util;
+package com.tvd12.ezyfoxserver.helper;
 
 import com.tvd12.ezyfoxserver.function.EzyInitialize;
 
-public class EzyLazyInitializer {
+public class EzyLazyInitHelper {
 	
-	private EzyLazyInitializer() {
+	private EzyLazyInitHelper() {
 	}
 
 	public static <T> T init(Object context, EzyInitialize<T> initer) {

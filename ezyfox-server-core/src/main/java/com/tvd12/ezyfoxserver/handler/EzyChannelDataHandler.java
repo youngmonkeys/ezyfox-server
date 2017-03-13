@@ -18,7 +18,9 @@ import lombok.Setter;
 public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter {
 	
 	@Getter
-	protected Logger logger;	
+	protected Logger logger;
+	@Getter
+	protected EzySession session;
 	@Setter
 	protected EzySessionManager sessionManager;
 	
@@ -26,8 +28,8 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 		this.logger = LoggerFactory.getLogger(getClass());
 	}
 	
-	protected abstract void sessionAdded(final EzySession session);
-	protected abstract void dataReceived(final EzySession session, final EzyArray msg);
+	protected abstract void sessionAdded(EzySession session);
+	protected abstract void dataReceived(EzySession session, EzyArray msg);
 	
 	@Override
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -41,11 +43,12 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 	}
 	
 	protected EzySession borrowSession(ChannelHandlerContext ctx) {
-		return sessionManager.borrowSession(ctx.channel());
+		session = sessionManager.borrowSession(ctx.channel());
+		return session;
 	}
 	
 	protected void returnSession(ChannelHandlerContext ctx) {
-		sessionManager.returnSession(getSession(ctx));
+		sessionManager.returnSession(session);
 	}
 	
 	private void handlerAdded(ChannelHandlerContext ctx, EzySession session) {
@@ -63,7 +66,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    	dataReceived(getSession(ctx), (EzyArray)msg);
+    	dataReceived(session, (EzyArray)msg);
     }
     
     @Override
@@ -75,10 +78,6 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
-    }
-    
-    protected EzySession getSession(ChannelHandlerContext ctx) {
-    	return sessionManager.getSession(ctx.channel());
     }
     
 }

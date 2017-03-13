@@ -29,4 +29,12 @@ public interface EzySessionManager {
 	 */
 	EzySession getSession(final Channel channel);
 	
+	/**
+	 * Get session by token
+	 * 
+	 * @param token the token
+	 * @return the session mapped to the token
+	 */
+	EzySession getSession(final String token);
+	
 }

@@ -53,6 +53,11 @@ public class EzySessionManagerImpl
 	public EzySession getSession(Channel channel) {
 		return sessionsByChannel.get(channel);
 	}
+	
+	@Override
+	public EzySession getSession(String token) {
+		return sessionsByToken.get(token);
+	}
 
 	@Override
 	protected EzySession createObject() {

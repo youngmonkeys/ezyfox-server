@@ -36,7 +36,7 @@ public class EzyRequestSerializerImpl implements EzyRequestSerializer {
 				return EzyFactory.create(EzyArrayBuilder.class)
 						.append(request.getAppId())
 						.append(request.getCommand().getId())
-//						.append(request.getData())
+						.append(request.getData())
 						.build();
 			}
 		});

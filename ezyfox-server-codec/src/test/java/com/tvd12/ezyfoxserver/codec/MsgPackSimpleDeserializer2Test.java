@@ -13,7 +13,7 @@ public class MsgPackSimpleDeserializer2Test extends MsgPackCodecTest {
 
 	@Test
 	public void test1() throws IOException {
-		byte[] bin32 = new byte[EzyMath.bin2int(17)];
+		byte[] bin32 = new byte[EzyMath.bin2int(16)];
 		Arrays.fill(bin32, (byte)'c');
 		String str32 = new String(bin32);
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
@@ -27,7 +27,6 @@ public class MsgPackSimpleDeserializer2Test extends MsgPackCodecTest {
 		byte[] bytes = msgPack.write(request);
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);
-		getLogger().info("answer = {}", answer);
 		int appId = answer.get(0);
 		int command = answer.get(1);
 		String token = answer.get(2);

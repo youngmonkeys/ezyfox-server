@@ -9,6 +9,10 @@ public abstract class EzyMath {
 		return (int) bin2long(length);
 	}
 	
+	public static int bin2uint(byte[] bytes) {
+		return (int) bin2ulong(bytes);
+	}
+	
 	public static int bin2int(byte[] bytes) {
 		return (int) bin2long(bytes);
 	}

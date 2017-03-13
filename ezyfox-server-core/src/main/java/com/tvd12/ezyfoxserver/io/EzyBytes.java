@@ -23,6 +23,22 @@ public abstract class EzyBytes {
 		return EzyArrays.merge(first, getBytes(value, size));
 	}
 	
+	public static byte[] getBytes(byte first, double value) {
+		return EzyArrays.merge(first, getBytes(value));
+	}
+	
+	public static byte[] getBytes(byte first, float value) {
+		return EzyArrays.merge(first, getBytes(value));
+	}
+	
+	public static byte[] getBytes(double value) {
+		return getBytes(Double.doubleToLongBits(value), 4);
+	}
+	
+	public static byte[] getBytes(float value) {
+		return getBytes(Float.floatToIntBits(value), 8);
+	}
+	
 	public static byte[] copy(byte[][] bytess) {
 		int index = 0;
 		byte[] answer = new byte[totalBytes(bytess)];

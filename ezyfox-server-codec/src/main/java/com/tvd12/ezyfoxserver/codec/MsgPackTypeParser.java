@@ -69,7 +69,7 @@ public class MsgPackTypeParser {
 			return MsgPackType.STR32;
 		if(type == 0xdc)
 			return MsgPackType.ARRAY16;
-		if(type == 0xdc)
+		if(type == 0xdd)
 			return MsgPackType.ARRAY32;
 		if(type == 0xde)
 			return MsgPackType.MAP16;

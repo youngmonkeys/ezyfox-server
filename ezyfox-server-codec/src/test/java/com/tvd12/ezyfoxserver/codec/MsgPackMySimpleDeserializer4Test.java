@@ -2,14 +2,14 @@ package com.tvd12.ezyfoxserver.codec;
 
 import java.io.IOException;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.io.EzyMath;
+import static org.testng.Assert.*;
 
-public class MsgPackSimpleDeserializer3Test extends MsgPackCodecTest {
+public class MsgPackMySimpleDeserializer4Test extends MsgPackCodecTest {
 
 	@Test
 	public void test1() throws IOException {
@@ -19,10 +19,11 @@ public class MsgPackSimpleDeserializer3Test extends MsgPackCodecTest {
 //		for(int i = 1 ; i < 500 ; i++) 
 			builder.append(i);
 //		builder.append(300);
-		byte[] bytes = msgPack.write(builder.build());
+		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
+		byte[] bytes = serializer.serialize(builder.build());
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);
-		Assert.assertEquals(answer.get(size - 1), new Integer(size - 1));
+		assertEquals(answer.get(size - 1), new Integer(size - 1));
 	}
 	
 }

@@ -48,9 +48,7 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 	
 	protected Object deserialize(ByteBuffer buffer, MsgPackType type) {
-		Object value = parsers.get(type).parse(buffer);
-		System.out.println("paser type = " + type + ", value = " + value);
-		return value;
+		return parsers.get(type).parse(buffer);
 	}
 	
 	protected Map<MsgPackType, Parser> defaultParsers() {
@@ -158,7 +156,6 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 	
 	protected EzyObject parseMap(ByteBuffer buffer, int size) {
-		System.out.println("map.size = " + size);
 		EzyObjectBuilder builder = newObjectBuilder();
 		for(int i = 0 ; i < size ; i++)
 			builder.append(deserialize(buffer), deserialize(buffer));
@@ -182,7 +179,6 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 
 	protected String parseString(ByteBuffer buffer, int nbytes) {
-		System.out.println("str.nbytes = " + nbytes);
 		return EzyStrings.newUTF(buffer, parseStringSize(buffer, nbytes));
 	}
 	
@@ -309,7 +305,7 @@ abstract class AbstractSizeDeserializer {
 	
 	protected int getOther(ByteBuffer buffer, int nbytes) {
 		buffer.get();
-		return EzyInts.bin2int(buffer, nbytes - 1);
+		return EzyInts.bin2uint(buffer, nbytes - 1);
 	}
 }
 

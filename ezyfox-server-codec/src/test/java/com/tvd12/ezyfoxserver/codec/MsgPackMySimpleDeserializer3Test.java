@@ -36,7 +36,6 @@ public class MsgPackMySimpleDeserializer3Test extends MsgPackCodecTest {
 		byte[] bytes = serializer.serialize(request);
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);
-		getLogger().info("answer = {}", answer);
 		int appId = answer.get(0);
 		int command = answer.get(1);
 		String token = answer.get(2);

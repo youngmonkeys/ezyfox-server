@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.entity.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyObject;
@@ -60,6 +61,15 @@ public class EzyHashMap implements EzyObject {
 	@Override
 	public <V> V remove(Object key) {
 		return (V) map.remove(key);
+	}
+	
+	/*
+	 * 
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public <V> V compute(Object key, BiFunction func) {
+		return (V) map.compute(key, func);
 	}
 	
 	/*

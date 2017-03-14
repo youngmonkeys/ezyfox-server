@@ -24,6 +24,14 @@ public class EzyArrayList implements EzyArray {
 	protected transient EzyInputTransformer inputTransformer;
 	@Setter
 	protected transient EzyOutputTransformer outputTransformer;
+	
+	public EzyArrayList() {
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public EzyArrayList(Collection items) {
+		list.addAll(items);
+	}
 
 	@Override
 	public <T> T get(int index) {
@@ -37,6 +45,15 @@ public class EzyArrayList implements EzyArray {
 	@Override
 	public <T> T get(final int index, final Class<T> type) {
 		return (T) transformOutput(list.get(index), type);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#sub(int, int)
+	 */
+	@Override
+	public EzyArray sub(int fromIndex, int toIndex) {
+		return new EzyArrayList(list.subList(fromIndex, toIndex));
 	}
 
 	/*

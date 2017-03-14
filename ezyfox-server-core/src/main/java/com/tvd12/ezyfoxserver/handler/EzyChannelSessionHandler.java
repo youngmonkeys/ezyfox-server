@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.controller.EzyServerController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.exception.EzyRequestHandleException;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -56,7 +57,7 @@ public class EzyChannelSessionHandler extends EzyChannelDataHandler {
 			handleRequest(appId, controllers.getController(cmd), data);
 		}
 		catch(Exception e) {
-			throw new IllegalStateException(newHandleRequestErrorMessage(appId, cmd, data), e);
+			throw new EzyRequestHandleException(newHandleRequestErrorMessage(appId, cmd, data), e);
 		}
 	}
 	

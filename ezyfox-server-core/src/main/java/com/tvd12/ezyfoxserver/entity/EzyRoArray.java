@@ -24,6 +24,15 @@ public interface EzyRoArray extends EzyData {
 	<T> T get(final int index, final Class<T> type);
 	
 	/**
+	 * Get new array
+	 * 
+	 * @param fromIndex the from index
+	 * @param toIndex the to index
+	 * @return the new array
+	 */
+	EzyArray sub(int fromIndex, int toIndex);
+	
+	/**
 	 * @return the size of array
 	 */
 	int size();

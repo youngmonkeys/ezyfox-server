@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Support to transport data between objects
@@ -37,6 +38,16 @@ public interface EzyObject extends EzyRoObject {
      * @return the removed value
      */
     <V> V remove(Object key);
+    
+    /**
+     * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
+     * 
+     * @param key the key
+     * @param func the function
+     * @return the value
+     */
+    @SuppressWarnings("rawtypes")
+	<V> V compute(Object key, BiFunction func);
     
     /**
      * @see java.util.Map#clear()

@@ -22,11 +22,17 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EzySettings {
 
+	protected int numThreads;
+	
 	@XmlElement(name = "applications")
-	private EzyApps applications;
+	protected EzyApps applications;
 	
 	@XmlElement(name = "plugins")
-	private EzyPlugins plugins;
+	protected EzyPlugins plugins;
+	
+	{
+		numThreads = 30;
+	}
 	
 	//==================== apps ================//
 	@JsonIgnore

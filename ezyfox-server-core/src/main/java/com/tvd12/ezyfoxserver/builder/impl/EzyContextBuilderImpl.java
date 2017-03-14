@@ -2,9 +2,11 @@ package com.tvd12.ezyfoxserver.builder.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.builder.EzyContextBuilder;
+import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.config.EzyApp;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -26,9 +28,16 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 	public EzyServerContext build() {
 		EzySimpleContext context = new EzySimpleContext();
 		context.setBoss(boss);
+		context.setWorkerExecutor(newWorkerExecutor());
 		context.addAppContexts(newAppContexts(context));
 		context.setProperty(EzyResponseSerializer.class, newResponseSerializer());
 		return context;
+	}
+	
+	protected ExecutorService newWorkerExecutor() {
+		String threadName = "worker";
+		int nthreads = boss.getSettings().getNumThreads();
+		return EzyExecutors.newFixedThreadPool(nthreads, threadName);
 	}
 	
 	protected Collection<EzyAppContext> newAppContexts(EzyContext parent) {
@@ -42,7 +51,14 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 		EzySimpleAppContext appContext = new EzySimpleAppContext();
 		appContext.setApp(app);
 		appContext.setParent(parent);
+		appContext.setWorkerExecutor(newAppWorkerExecutor(app));
 		return appContext;
+	}
+	
+	protected ExecutorService newAppWorkerExecutor(EzyApp app) {
+		String threadName = "app-worker";
+		int nthreads = app.getNumThreads();
+		return EzyExecutors.newFixedThreadPool(nthreads, threadName);
 	}
 	
 	protected EzyResponseSerializer newResponseSerializer() {

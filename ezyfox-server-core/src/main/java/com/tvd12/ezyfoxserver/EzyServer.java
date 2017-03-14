@@ -29,21 +29,21 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EzyServer {
 
-	private EzyConfig config;
-	private EzySettings settings;
+	protected EzyConfig config;
+	protected EzySettings settings;
 	
 	@JsonIgnore
-	private EzyManagers managers;
+	protected EzyManagers managers;
 	@JsonIgnore
-	private ClassLoader classLoader;
+	protected ClassLoader classLoader;
 	@JsonIgnore
-	private EzyXmlReading xmlReading;
+	protected EzyXmlReading xmlReading;
 	@JsonIgnore
-	private EzyJsonMapping jsonMapping;
+	protected EzyJsonMapping jsonMapping;
 	@JsonIgnore
-	private EzyControllers controllers;
+	protected EzyControllers controllers;
 	@JsonIgnore
-	private Map<String, EzyAppClassLoader> appClassLoaders;
+	protected Map<String, EzyAppClassLoader> appClassLoaders;
 	
 	@JsonIgnore
 	public Set<String> getAppNames() {

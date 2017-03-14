@@ -21,18 +21,24 @@ import lombok.ToString;
 @JsonPropertyOrder({"id", "name", "entryLoader", "priority"})
 public class EzyPlugin {
 
-	private final int id;
+	protected final int id;
 	
 	@XmlElement(name = "name")
-	private String name;
+	protected String name;
 	
 	@XmlElement(name = "priority")
-	private int priority;
+	protected int priority;
 	
 	@XmlElement(name = "entry-loader")
-	private String entryLoader;
+	protected String entryLoader;
+	
+	protected int numThreads;
 	
 	private static final AtomicInteger COUNT = new AtomicInteger(0);
+	
+	{
+		numThreads = 30;
+	}
 	
 	public EzyPlugin() {
 		this.id = COUNT.incrementAndGet();

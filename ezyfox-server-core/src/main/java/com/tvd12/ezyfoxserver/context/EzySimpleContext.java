@@ -3,10 +3,13 @@ package com.tvd12.ezyfoxserver.context;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.impl.EzyRunWorkerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 
 import lombok.Getter;
@@ -17,22 +20,25 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 	@Setter
 	@Getter
 	protected EzyServer boss;
+	@Setter
+	@Getter
+	protected ExecutorService workerExecutor;
 	
 	@SuppressWarnings("rawtypes")
-	protected Map<Class, Supplier> suppliers;
+	protected Map<Class, Supplier> commandSuppliers;
 	
 	protected Map<Integer, EzyAppContext> appContexts;
 	
 	{
 		appContexts = new HashMap<>();
-		suppliers = defaultCommandCreators();
+		commandSuppliers = defaultCommandSuppliers();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(Class<T> clazz) {
-		if(suppliers.containsKey(clazz))
-			return (T) suppliers.get(clazz).get();
+		if(commandSuppliers.containsKey(clazz))
+			return (T) commandSuppliers.get(clazz).get();
 		if(containsKey(clazz))
 			return getProperty(clazz);
 		throw new IllegalArgumentException("has no instance of " + clazz);
@@ -47,18 +53,19 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 			addAppContext(ctx.getApp().getId(), ctx);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Map<Class, Supplier> defaultCommandCreators() {
-		Map<Class, Supplier> answer = new HashMap<>();
-		answer.put(EzySendMessage.class, EzySendMessageImpl::new);
-		return answer;
-	}
-
 	@Override
 	public EzyAppContext getAppContext(int appId) {
 		if(appContexts.containsKey(appId))
 			return appContexts.get(appId);
 		throw new IllegalArgumentException("has not app with id = " + appId);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected Map<Class, Supplier> defaultCommandSuppliers() {
+		Map<Class, Supplier> answer = new HashMap<>();
+		answer.put(EzySendMessage.class, () -> new EzySendMessageImpl());
+		answer.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));
+		return answer;
 	}
 	
 }

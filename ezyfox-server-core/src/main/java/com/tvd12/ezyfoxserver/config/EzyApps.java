@@ -28,9 +28,9 @@ import lombok.ToString;
 @JsonPropertyOrder({"size", "apps"})
 public class EzyApps {
 
-	private final List<EzyApp> apps;
-	private final Map<Integer, EzyApp> appsByIds;
-	private final Map<String, EzyApp> appsByNames;
+	protected final List<EzyApp> apps;
+	protected final Map<Integer, EzyApp> appsByIds;
+	protected final Map<String, EzyApp> appsByNames;
 	
 	public EzyApps() {
 		this.apps = new ArrayList<>();

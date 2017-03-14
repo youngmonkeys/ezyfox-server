@@ -28,9 +28,9 @@ import lombok.ToString;
 @JsonPropertyOrder({"size", "plugins"})
 public class EzyPlugins {
 
-	private final List<EzyPlugin> plugins;
-	private final Map<Integer, EzyPlugin> pluginsByIds;
-	private final Map<String, EzyPlugin> pluginsByNames;
+	protected final List<EzyPlugin> plugins;
+	protected final Map<Integer, EzyPlugin> pluginsByIds;
+	protected final Map<String, EzyPlugin> pluginsByNames;
 	
 	public EzyPlugins() {
 		this.plugins = new ArrayList<>();

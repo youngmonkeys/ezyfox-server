@@ -70,7 +70,7 @@ public interface EzyProperties {
      * @return a value
      */
     default <T> T getProperty(final Class<T> key) {
-    	return getProperty(key);
+    	return getProperty((Object)key);
     }
     
 }

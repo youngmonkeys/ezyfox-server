@@ -7,21 +7,18 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 
 public class EzyControllersImpl implements EzyControllers {
 
-	@SuppressWarnings("rawtypes")
 	private Map<EzyConstant, EzyController> controllers;
 	
 	protected EzyControllersImpl(Builder builder) {
 		this.controllers = builder.newControllers();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public EzyController<EzyData> getController(EzyConstant cmd) {
+	public EzyController getController(EzyConstant cmd) {
 		return controllers.get(cmd);
 	}
 	
@@ -31,7 +28,6 @@ public class EzyControllersImpl implements EzyControllers {
 	
 	public static class Builder {
 		
-		@SuppressWarnings("rawtypes")
 		protected Map<EzyConstant, EzyController>
 				newControllers() {
 			Map<EzyConstant, EzyController> answer = new HashMap<>();

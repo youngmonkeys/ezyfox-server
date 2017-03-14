@@ -14,12 +14,11 @@ import lombok.Setter;
 public class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	@Setter
-	private EventLoopGroup childGroup;
+	protected EventLoopGroup childGroup;
 	@Setter
-	private EventLoopGroup parentGroup;
+	protected EventLoopGroup parentGroup;
 	@Setter
-	private ServerBootstrap serverBootstrap;
-	
+	protected ServerBootstrap serverBootstrap;
 	@Setter
 	private EzyBootstrap localBootstrap;
 	

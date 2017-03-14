@@ -6,4 +6,6 @@ public interface EzyServerContext extends EzyContext {
 
 	EzyServer getBoss();
 	
+	EzyAppContext getAppContext(int appId);
+	
 }

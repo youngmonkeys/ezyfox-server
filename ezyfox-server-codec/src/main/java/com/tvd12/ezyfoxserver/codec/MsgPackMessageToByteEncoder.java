@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import org.msgpack.MessagePack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,18 +16,18 @@ public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyArray> 
 	private EzyMessageToBytes messageToBytes;
 	private EzyObjectToMessage objectToMessage;
 
-	public MsgPackMessageToByteEncoder(MessagePack msgPack) {
+	public MsgPackMessageToByteEncoder() {
 		this.logger = newLogger();
 		this.messageToBytes = newMessageToBytes();
-		this.objectToMessage = newObjectToMessage(msgPack);
+		this.objectToMessage = newObjectToMessage();
 	}
 	
 	private Logger newLogger() {
 		return LoggerFactory.getLogger(getClass());
 	}
 	
-	private EzyObjectToMessage newObjectToMessage(MessagePack msgPack) {
-		return MsgPackObjectToMessage.builder().msgPack(msgPack).build();
+	private EzyObjectToMessage newObjectToMessage() {
+		return MsgPackObjectToMessage.builder().build();
 	}
 	
 	private EzyMessageToBytes newMessageToBytes() {

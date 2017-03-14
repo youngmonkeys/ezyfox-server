@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import org.msgpack.MessagePack;
-
 public class MsgPackObjectToMessage implements EzyObjectToMessage {
 
 	private EzyObjectToBytes objectToBytes;
@@ -40,19 +38,17 @@ public class MsgPackObjectToMessage implements EzyObjectToMessage {
 	}
 	
 	public static class Builder {
-		private MessagePack msgPack;
-		
-		public Builder msgPack(MessagePack msgPack) {
-			this.msgPack = msgPack;
-			return this;
-		}
-		
+
 		public EzyObjectToMessage build() {
 			return new MsgPackObjectToMessage(this);
 		}
 		
 		protected EzyObjectToBytes newObjectToBytes() {
-			return MsgPackObjectToBytes.builder().msgPack(msgPack).build();
+			return MsgPackObjectToBytes.builder().serializer(newSerializer()).build();
+		}
+		
+		protected MsgPackSerializer newSerializer() {
+			return new MsgPackSimpleSerializer();
 		}
 	}
 	

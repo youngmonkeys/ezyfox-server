@@ -34,6 +34,7 @@ public class MsgPackMySimpleDeserializerTest extends MsgPackCodecTest {
 				.append(15)
 				.append(26)
 				.append("abcdef")
+				.append(-1)
 				.append(dataBuilder)
 				.build();
 		byte[] bytes = serializer.serialize(request);

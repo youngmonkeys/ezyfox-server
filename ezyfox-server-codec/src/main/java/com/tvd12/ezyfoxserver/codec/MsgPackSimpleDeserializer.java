@@ -190,7 +190,7 @@ public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
 	}
 	
 	protected int parseNegativeFixInt(ByteBuffer buffer) {
-		return (buffer.get() & 0x1F);
+		return buffer.get();
 	}
 	
 	protected int parseUInt8(ByteBuffer buffer) {

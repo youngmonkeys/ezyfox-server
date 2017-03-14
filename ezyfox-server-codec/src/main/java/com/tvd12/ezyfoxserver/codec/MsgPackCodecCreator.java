@@ -20,7 +20,7 @@ public class MsgPackCodecCreator implements EzyCodecCreator {
 	
 	@Override
 	public ChannelOutboundHandler newEncoder() {
-		return new MsgPackMessageToByteEncoder(msgPack);
+		return new MsgPackMessageToByteEncoder();
 	}
 
 	@Override

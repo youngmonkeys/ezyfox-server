@@ -7,12 +7,15 @@ import java.net.InetSocketAddress;
 
 import com.tvd12.ezyfoxserver.client.handler.EzyClientHandler;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
+import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.codec.MsgPackCodecCreator;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -66,9 +69,11 @@ public class EzyClient {
 		@Override
 		protected void initChannel(Channel ch) throws Exception {
 			ChannelPipeline pipeline = ch.pipeline();
-			pipeline.addLast(CODEC_CREATOR.newEncoder());
+			ChannelOutboundHandler encoder = CODEC_CREATOR.newEncoder();
+			ChannelInboundHandlerAdapter decoder = CODEC_CREATOR.newDecoder();
+			pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
 			pipeline.addLast(new EzyClientHandler());
-			pipeline.addLast(CODEC_CREATOR.newDecoder());
+			pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
 		}
 	}
     

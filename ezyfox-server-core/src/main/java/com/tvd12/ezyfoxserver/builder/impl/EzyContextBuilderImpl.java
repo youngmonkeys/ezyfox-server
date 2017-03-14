@@ -8,8 +8,11 @@ import com.tvd12.ezyfoxserver.builder.EzyContextBuilder;
 import com.tvd12.ezyfoxserver.config.EzyApp;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleContext;
+import com.tvd12.ezyfoxserver.service.EzyResponseSerializer;
+import com.tvd12.ezyfoxserver.service.impl.EzyResponseSerializerImpl;
 
 public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilderImpl> {
 
@@ -20,10 +23,11 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 	}
 	
 	@Override
-	public EzyContext build() {
+	public EzyServerContext build() {
 		EzySimpleContext context = new EzySimpleContext();
 		context.setBoss(boss);
 		context.addAppContexts(newAppContexts(context));
+		context.setProperty(EzyResponseSerializer.class, newResponseSerializer());
 		return context;
 	}
 	
@@ -39,6 +43,10 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 		appContext.setApp(app);
 		appContext.setParent(parent);
 		return appContext;
+	}
+	
+	protected EzyResponseSerializer newResponseSerializer() {
+		return EzyResponseSerializerImpl.builder().build();
 	}
 	
 	@Override

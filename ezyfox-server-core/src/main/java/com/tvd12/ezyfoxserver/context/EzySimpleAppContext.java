@@ -14,8 +14,8 @@ public class EzySimpleAppContext extends EzyBaseContext implements EzyAppContext
 	protected EzyContext parent;
 	
 	@Override
-	public <T> T command(Class<T> clazz) {
-		return parent.command(clazz);
+	public <T> T get(Class<T> clazz) {
+		return parent.get(clazz);
 	}
 
 }

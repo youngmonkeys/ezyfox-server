@@ -13,7 +13,7 @@
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.core.ConsoleAppender
 
-import static ch.qos.logback.classic.Level.INFO
+import static ch.qos.logback.classic.Level.DEBUG
 
 appender("stdout", ConsoleAppender) {
   target = "System.out"
@@ -22,4 +22,4 @@ appender("stdout", ConsoleAppender) {
     pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level  %class{36}.%M %L  - %msg%n"
   }
 }
-root(INFO, ["stdout"])
+root(DEBUG, ["stdout"])

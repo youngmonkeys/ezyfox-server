@@ -1,15 +1,15 @@
-package com.tvd12.ezyfoxserver.client.request;
+package com.tvd12.ezyfoxserver.response;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
-public class EzyHandShakeRequest implements EzyRequest {
+public class EzyHandShakeResponse implements EzyResponse {
 
 	private String token;
 	
-	protected EzyHandShakeRequest(Builder builder) {
+	protected EzyHandShakeResponse(Builder builder) {
 		this.token = builder.token;
 	}
 	
@@ -41,8 +41,8 @@ public class EzyHandShakeRequest implements EzyRequest {
 			return this;
 		}
 		
-		public EzyHandShakeRequest build() {
-			return new EzyHandShakeRequest(this);
+		public EzyHandShakeResponse build() {
+			return new EzyHandShakeResponse(this);
 		}
 	}
 

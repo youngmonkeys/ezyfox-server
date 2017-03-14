@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.entity.impl;
 import java.net.SocketAddress;
 
 import com.tvd12.ezyfoxserver.codec.EzyMD5;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
@@ -54,6 +55,11 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	@Override
 	public SocketAddress getServerAddress() {
 		return channel.localAddress();
+	}
+	
+	@Override
+	public void send(EzyData data) {
+		channel.writeAndFlush(data);
 	}
 	
 }

@@ -7,6 +7,8 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
+import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
 import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
@@ -14,7 +16,9 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -94,45 +98,54 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	 */
 	@Override
 	public EzyServerBootstrap build() {
+		return build(newContext());
+	}
+	
+	protected EzyServerBootstrap build(EzyServerContext ctx) {
 		EzyServerBootstrap answer = new EzyServerBootstrap();
 		answer.setChildGroup(childGroup);
 		answer.setParentGroup(parentGroup);
 		answer.setLocalBootstrap(localBootstrap);
-		answer.setServerBootstrap(createServerBootstrap());
+		answer.setServerBootstrap(createServerBootstrap(ctx));
 		return answer;
 	}
 	
-	protected ServerBootstrap createServerBootstrap() {
+	protected EzyServerContext newContext() {
+		return EzyContextBuilderImpl.builder().boss(boss).build();
+	}
+	
+	protected ServerBootstrap createServerBootstrap(EzyServerContext ctx) {
 		return newServerBootstrap()
 				.group(parentGroup, childGroup)
 				.channel(NioServerSocketChannel.class)
 				.localAddress(new InetSocketAddress(port))
-				.childHandler(newChannelInitializer());
+				.childHandler(newChannelInitializer(ctx));
 	}
 	
-	private ChannelInitializer<Channel> newChannelInitializer() {
+	private ChannelInitializer<Channel> newChannelInitializer(EzyServerContext ctx) {
 		return EzyChannelInitializer.builder()
 				.codecCreator(codecCreator)
-				.dataHandlerCreator(newDataHandlerCreator())
+				.dataHandlerCreator(newDataHandlerCreator(ctx))
 				.build();
 	}
 	
-	private EzyDataHandlerCreator newDataHandlerCreator() {
+	protected EzyDataHandlerCreator newDataHandlerCreator(EzyServerContext ctx) {
 		return EzyDataHandlerCreatorImpl.builder()
+				.context(ctx)
 				.controllers(getControllers())
 				.sessionManager(getSessionManager())
 				.build();
 	}
 	
-	private EzyControllers getControllers() {
+	protected EzyControllers getControllers() {
 		return boss.getControllers();
 	}
 	
-	private EzySessionManager getSessionManager() {
+	protected EzySessionManager getSessionManager() {
 		return boss.getManagers().getManager(EzySessionManager.class);
 	}
 	
-	private ServerBootstrap newServerBootstrap() {
+	protected ServerBootstrap newServerBootstrap() {
 		return new ServerBootstrap() {
 			@Override
 			public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup) {
@@ -157,9 +170,11 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	@Override
 	protected void initChannel(Channel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		pipeline.addLast(codecCreator.newDecoder());
+		ChannelOutboundHandler encoder = codecCreator.newEncoder();
+		ChannelInboundHandlerAdapter decoder = codecCreator.newDecoder();
+		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
 		pipeline.addLast(dataHandlerCreator.newHandler());
-		pipeline.addLast(codecCreator.newEncoder());
+		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
 	}
 	
 	public static Builder builder() {

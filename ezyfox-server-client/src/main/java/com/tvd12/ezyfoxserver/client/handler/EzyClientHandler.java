@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.tvd12.ezyfoxserver.client.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
 import com.tvd12.ezyfoxserver.client.serialize.iml.EzyRequestSerializerImpl;
-import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,7 +18,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author tavandung12
  *
  */
-public class EzyClientHandler extends SimpleChannelInboundHandler<EzyObject> {
+public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
 
 	private EzyRequestSerializer requestSerializer;
 	
@@ -36,8 +36,8 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyObject> {
     }
     
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, EzyObject in) throws Exception {
-        System.out.println("Client recived: " + in);
+    protected void channelRead0(ChannelHandlerContext ctx, EzyArray in) throws Exception {
+    	getLogger().info("Client recived: " + in);
     }
     
     @Override

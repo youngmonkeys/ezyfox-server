@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,10 +30,12 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T command(Class<T> clazz) {
+	public <T> T get(Class<T> clazz) {
 		if(suppliers.containsKey(clazz))
-			return (T) suppliers.get(clazz);
-		throw new IllegalArgumentException("has no command with " + clazz);
+			return (T) suppliers.get(clazz).get();
+		if(containsKey(clazz))
+			return getProperty(clazz);
+		throw new IllegalArgumentException("has no instance of " + clazz);
 	}
 	
 	public void addAppContext(int appId, EzyAppContext appContext) {
@@ -46,7 +50,15 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 	@SuppressWarnings("rawtypes")
 	public Map<Class, Supplier> defaultCommandCreators() {
 		Map<Class, Supplier> answer = new HashMap<>();
+		answer.put(EzySendMessage.class, EzySendMessageImpl::new);
 		return answer;
+	}
+
+	@Override
+	public EzyAppContext getAppContext(int appId) {
+		if(appContexts.containsKey(appId))
+			return appContexts.get(appId);
+		throw new IllegalArgumentException("has not app with id = " + appId);
 	}
 	
 }

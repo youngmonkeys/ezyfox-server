@@ -4,6 +4,6 @@ import com.tvd12.ezyfoxserver.entity.EzyProperties;
 
 public interface EzyContext extends EzyProperties {
 
-	<T> T command(Class<T> clazz);
+	<T> T get(Class<T> clazz);
 	
 }

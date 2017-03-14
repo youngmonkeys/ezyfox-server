@@ -4,7 +4,7 @@ import java.net.SocketAddress;
 
 import io.netty.channel.Channel;
 
-public interface EzySession extends EzyProperties {
+public interface EzySession extends EzySender, EzyProperties {
 
 	/**
 	 * Get session id

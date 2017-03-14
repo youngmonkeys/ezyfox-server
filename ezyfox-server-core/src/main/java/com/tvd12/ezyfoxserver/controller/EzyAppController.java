@@ -1,11 +1,6 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfoxserver.context.EzyContext;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 
-public interface EzyAppController extends EzyController {
-
-	public void handle(EzyContext ctx, EzySession session, EzyArray data);
-	
+public interface EzyAppController<T extends EzyData> extends EzyController<T> {
 }

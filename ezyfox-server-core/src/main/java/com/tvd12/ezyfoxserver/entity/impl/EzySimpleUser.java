@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -16,5 +17,10 @@ public class EzySimpleUser extends EzyEntity implements EzyUser {
 	protected long id;
 	protected String name;
 	protected EzySession session;
+	
+	@Override
+	public void send(EzyData data) {
+		session.send(data);
+	}
 	
 }

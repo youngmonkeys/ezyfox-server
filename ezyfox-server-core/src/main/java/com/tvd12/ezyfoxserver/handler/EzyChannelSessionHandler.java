@@ -1,26 +1,33 @@
 package com.tvd12.ezyfoxserver.handler;
 
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.controller.EzyAppController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyServerController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
+import lombok.Getter;
 import lombok.Setter;
 
 public class EzyChannelSessionHandler extends EzyChannelDataHandler {
 
-	@Setter
 	protected EzyServerContext context;
 	@Setter
 	protected EzyControllers controllers;
+	@Getter
+	protected EzyUserManager userManager;
 	
 	@Override
 	protected void sessionAdded(EzySession session) {
@@ -53,13 +60,22 @@ public class EzyChannelSessionHandler extends EzyChannelDataHandler {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	protected void handleRequest(int appId, EzyController controller, EzyData data) {
 		if(appId < 0)
 			handleServerRequest(controller, data);
+		else
+			handleAppRequest(controller, data);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	protected void handleServerRequest(EzyController controller, EzyData data) {
 		((EzyServerController)controller).handle(context, session, (EzyArray)data);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected void handleAppRequest(EzyController controller, EzyData data) {
+		((EzyAppController)controller).handle(context, session, data);
 	}
 	
 	protected EzyAppContext getAppContext(int appId) {
@@ -68,6 +84,21 @@ public class EzyChannelSessionHandler extends EzyChannelDataHandler {
 	
 	protected EzyContext getContext(int appId) {
 		return appId < 0 ? context : context.getAppContext(appId);
+	}
+	
+	public void setContext(EzyServerContext ctx) {
+		this.context = ctx;
+		this.controllers = getBoss().getControllers();
+		this.sessionManager = getManagers().getManager(EzySessionManager.class);
+		this.userManager = getManagers().getManager(EzyUserManager.class);
+	}
+	
+	protected EzyServer getBoss() {
+		return context.getBoss();
+	}
+	
+	protected EzyManagers getManagers() {
+		return getBoss().getManagers();
 	}
 	
 	protected String newHandleRequestErrorMessage(int appId, EzyConstant cmd, EzyData data) {

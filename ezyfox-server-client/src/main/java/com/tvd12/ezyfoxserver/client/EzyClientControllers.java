@@ -1,37 +1,30 @@
-package com.tvd12.ezyfoxserver.wrapper.impl;
+package com.tvd12.ezyfoxserver.client;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tvd12.ezyfoxserver.client.controller.EzyHandShakeController;
+import com.tvd12.ezyfoxserver.client.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyController;
-import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
-import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyControllersImpl;
 
-public class EzyControllersImpl implements EzyControllers {
-
-	@SuppressWarnings("rawtypes")
-	protected Map<EzyConstant, EzyController> controllers;
+public class EzyClientControllers extends EzyControllersImpl {
 	
-	protected EzyControllersImpl(Builder builder) {
-		this.controllers = builder.newControllers();
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public EzyController getController(EzyConstant cmd) {
-		return controllers.get(cmd);
+	protected EzyClientControllers(Builder builder) {
+		super(builder);
 	}
 	
 	public static Builder builder() {
 		return new Builder();
 	}
-	
-	public static class Builder {
+
+	public static class Builder extends EzyControllersImpl.Builder {
 		
 		@SuppressWarnings("rawtypes")
+		@Override
 		protected Map<EzyConstant, EzyController> newControllers() {
 			Map<EzyConstant, EzyController> answer = new HashMap<>();
 			answer.put(EzyCommand.HAND_SHAKE, new EzyHandShakeController());
@@ -39,8 +32,9 @@ public class EzyControllersImpl implements EzyControllers {
 			return answer;
 		}
 		
+		@Override
 		public EzyControllers build() {
-			return new EzyControllersImpl(this);
+			return new EzyClientControllers(this);
 		}
 	}
 

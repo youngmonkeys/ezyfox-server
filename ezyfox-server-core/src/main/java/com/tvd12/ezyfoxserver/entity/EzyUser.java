@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.entity;
 
-public interface EzyUser extends EzyProperties {
+public interface EzyUser extends EzySender, EzyProperties {
 
 	/**
 	 * Get user id

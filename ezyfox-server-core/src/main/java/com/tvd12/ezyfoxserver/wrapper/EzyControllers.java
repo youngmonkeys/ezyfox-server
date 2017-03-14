@@ -5,6 +5,7 @@ import com.tvd12.ezyfoxserver.controller.EzyController;
 
 public interface EzyControllers {
 
+	@SuppressWarnings("rawtypes")
 	EzyController getController(EzyConstant cmd);
 	
 }

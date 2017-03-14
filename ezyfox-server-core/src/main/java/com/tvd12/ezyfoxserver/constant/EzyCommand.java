@@ -4,7 +4,9 @@ import lombok.Getter;
 
 public enum EzyCommand implements EzyConstant {
 
-	HAND_SHAKE(1);
+	ERROR(0),
+	HAND_SHAKE(1),
+	LOGIN(2);
 	
 	@Getter
 	private final int id;

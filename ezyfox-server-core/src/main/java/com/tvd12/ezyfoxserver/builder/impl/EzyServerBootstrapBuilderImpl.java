@@ -11,8 +11,6 @@ import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
 import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
-import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -132,17 +130,7 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	protected EzyDataHandlerCreator newDataHandlerCreator(EzyServerContext ctx) {
 		return EzyDataHandlerCreatorImpl.builder()
 				.context(ctx)
-				.controllers(getControllers())
-				.sessionManager(getSessionManager())
 				.build();
-	}
-	
-	protected EzyControllers getControllers() {
-		return boss.getControllers();
-	}
-	
-	protected EzySessionManager getSessionManager() {
-		return boss.getManagers().getManager(EzySessionManager.class);
 	}
 	
 	protected ServerBootstrap newServerBootstrap() {

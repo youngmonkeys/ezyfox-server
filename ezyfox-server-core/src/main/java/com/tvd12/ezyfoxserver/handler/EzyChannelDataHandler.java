@@ -10,7 +10,6 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Created by tavandung12 on 1/17/17.
@@ -21,7 +20,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 	protected Logger logger;
 	@Getter
 	protected EzySession session;
-	@Setter
+	@Getter
 	protected EzySessionManager sessionManager;
 	
 	public EzyChannelDataHandler() {
@@ -76,8 +75,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
     
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
+    	getLogger().error("exception caught at session " + session, cause);
     }
     
 }

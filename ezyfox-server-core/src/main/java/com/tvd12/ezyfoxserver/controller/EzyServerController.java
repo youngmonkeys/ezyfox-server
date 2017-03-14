@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
-public interface EzyServerController extends EzyController {
+public interface EzyServerController extends EzyController<EzyArray> {
 
 	public void handle(EzyContext ctx, EzySession session, EzyArray data);
 	

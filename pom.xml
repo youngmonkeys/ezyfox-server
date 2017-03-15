@@ -12,20 +12,23 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<google.guava.version>21.0</google.guava.version>
 		<reflections.version>0.9.10</reflections.version>
-		<commons.io.version>2.5</commons.io.version>
 		<netty.all.version>4.1.8.Final</netty.all.version>
 		<commons.codec.version>1.10</commons.codec.version>
+		<properties.file.version>1.0.3</properties.file.version>
+		
+		<commons.io.version>2.5</commons.io.version>
 		<lombok.version>1.16.10</lombok.version>
 		<logback.version>1.1.7</logback.version>
 		<groovy.version>2.4.6</groovy.version>
 		<jackson.version>2.8.6</jackson.version>
-		<properties.file.version>1.0.3</properties.file.version>
+		
 		<directory.lib>lib</directory.lib>
-		<deploy.path>/Users/tavandung12/Documents/tvd12/java/deploy/ezyfox-server</deploy.path>
+		<deploy.path>${env.EZYFOX_SERVER_HOME}</deploy.path>
 	</properties>
 
 	<dependencies>
@@ -107,18 +110,6 @@
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>com.tvd12.ezyfoxserver.EzyFoxRunner</mainClass>
-						</manifest>
-					</archive>
 				</configuration>
 			</plugin>
 		</plugins>

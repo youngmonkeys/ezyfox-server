@@ -69,6 +69,56 @@ public class EzySimpleOutputTransformer implements EzyOutputTransformer, Seriali
 		Map<Class, EzyToObject> answer = new HashMap<>();
 		
 		//primitive type
+		answer.put(boolean.class, new EzyToObject<Boolean>() {
+			@Override
+			public Object transform(Boolean value) {
+				return value;
+			}
+		});
+		answer.put(byte.class, new EzyToObject<Byte>() {
+			@Override
+			public Object transform(Byte value) {
+				return value;
+			}
+		});
+		answer.put(char.class, new EzyToObject<Byte>() {
+			@Override
+			public Object transform(Byte value) {
+				return (char)value.byteValue();
+			}
+		});
+		answer.put(double.class, new EzyToObject<Double>() {
+			@Override
+			public Object transform(Double value) {
+				return value;
+			}
+		});
+		answer.put(float.class, new EzyToObject<Float>() {
+			@Override
+			public Object transform(Float value) {
+				return value;
+			}
+		});
+		answer.put(int.class, new EzyToObject<Integer>() {
+			@Override
+			public Object transform(Integer value) {
+				return value;
+			}
+		});
+		answer.put(long.class, new EzyToObject<Long>() {
+			@Override
+			public Object transform(Long value) {
+				return value;
+			}
+		});
+		answer.put(short.class, new EzyToObject<Short>() {
+			@Override
+			public Object transform(Short value) {
+				return value;
+			}
+		});
+		
+		//primitive type
 		answer.put(Boolean.class, new EzyToObject<Boolean>() {
 			@Override
 			public Object transform(Boolean value) {

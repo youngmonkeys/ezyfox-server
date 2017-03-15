@@ -22,7 +22,9 @@ public class EzyControllersImpl implements EzyControllers {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public EzyController getController(EzyConstant cmd) {
-		return controllers.get(cmd);
+		if(controllers.containsKey(cmd))
+			return controllers.get(cmd);
+		throw new IllegalArgumentException("has no controller with cmd = " + cmd);
 	}
 	
 	public static Builder builder() {

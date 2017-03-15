@@ -42,7 +42,7 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        getLogger().info("loadClass({})", name);
+        getLogger().debug("loadClass({})", name);
         return super.loadClass(name);
     }
     
@@ -51,7 +51,7 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        getLogger().info("findClass({})", name);
+        getLogger().debug("findClass({})", name);
         return super.findClass(name);
     }
     

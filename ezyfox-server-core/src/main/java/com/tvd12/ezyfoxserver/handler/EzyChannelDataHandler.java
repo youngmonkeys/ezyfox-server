@@ -37,7 +37,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
 	
 	@Override
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		logger.info("session remove");
+		logger.debug("session remove");
 		returnSession(ctx);
 	}
 	

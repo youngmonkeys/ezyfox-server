@@ -6,7 +6,8 @@ public enum EzyCommand implements EzyConstant {
 
 	ERROR(0),
 	HAND_SHAKE(1),
-	LOGIN(2);
+	LOGIN(2),
+	ACCESS_APP(3);
 	
 	@Getter
 	private final int id;

@@ -35,9 +35,9 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private void startApp(final String appName) {
 		try {
-			getLogger().info("app " + appName + " loading...");
+			getLogger().debug("app " + appName + " loading...");
 			startApp(ezyFox.newAppEntryLoader(appName));
-			getLogger().info("app " + appName + " loaded");
+			getLogger().debug("app " + appName + " loaded");
 		}
 		catch(Exception e) {
 			getLogger().error("can not start app " + appName, e);
@@ -60,9 +60,9 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private void startPlugin(final String pluginName) {
 		try {
-			getLogger().info("plugin " + pluginName + " loading...");
+			getLogger().debug("plugin " + pluginName + " loading...");
 			startPlugin(ezyFox.newPluginEntryLoader(pluginName));
-			getLogger().info("plugin" + pluginName + " loaded");
+			getLogger().debug("plugin " + pluginName + " loaded");
 		}
 		catch(Exception e) {
 			getLogger().error("can not start plugin " + pluginName, e);

@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.client.controller;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
+import com.tvd12.ezyfoxserver.client.EzyClientSingleton;
 import com.tvd12.ezyfoxserver.client.request.EzyRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -30,5 +31,9 @@ public class EzyAbstractController extends EzyLoggable {
 	
 	protected EzyObjectBuilder newObjectBuilder() {
 		return EzyFactory.create(EzyObjectBuilder.class);
+	}
+	
+	protected EzyClientSingleton getSingleton() {
+		return EzyClientSingleton.getInstance();
 	}
 }

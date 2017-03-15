@@ -70,6 +70,56 @@ public class EzyLiteOutputTransformer implements EzyOutputTransformer, Serializa
 		Map<Class, EzyToObject> answer = new HashMap<>();
 		
 		//primitive type
+		answer.put(boolean.class, new EzyToObject<Boolean>() {
+			@Override
+			public Object transform(Boolean value) {
+				return value;
+			}
+		});
+		answer.put(byte.class, new EzyToObject<Integer>() {
+			@Override
+			public Object transform(Integer value) {
+				return value.byteValue();
+			}
+		});
+		answer.put(char.class, new EzyToObject<Integer>() {
+			@Override
+			public Object transform(Integer value) {
+				return (char)value.intValue();
+			}
+		});
+		answer.put(double.class, new EzyToObject<Double>() {
+			@Override
+			public Object transform(Double value) {
+				return value;
+			}
+		});
+		answer.put(float.class, new EzyToObject<Float>() {
+			@Override
+			public Object transform(Float value) {
+				return value;
+			}
+		});
+		answer.put(int.class, new EzyToObject<Integer>() {
+			@Override
+			public Object transform(Integer value) {
+				return value;
+			}
+		});
+		answer.put(long.class, new EzyToObject<Number>() {
+			@Override
+			public Object transform(Number value) {
+				return value.longValue();
+			}
+		});
+		answer.put(short.class, new EzyToObject<Integer>() {
+			@Override
+			public Object transform(Integer value) {
+				return value.shortValue();
+			}
+		});
+		
+		//primitive type
 		answer.put(Boolean.class, new EzyToObject<Boolean>() {
 			@Override
 			public Object transform(Boolean value) {
@@ -106,10 +156,10 @@ public class EzyLiteOutputTransformer implements EzyOutputTransformer, Serializa
 				return value;
 			}
 		});
-		answer.put(Long.class, new EzyToObject<Long>() {
+		answer.put(Long.class, new EzyToObject<Number>() {
 			@Override
-			public Object transform(Long value) {
-				return value;
+			public Object transform(Number value) {
+				return value.longValue();
 			}
 		});
 		answer.put(Short.class, new EzyToObject<Integer>() {

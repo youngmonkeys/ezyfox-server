@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tvd12.ezyfoxserver.ext.impl;
+package com.tvd12.ezyfoxserver.ext;
 
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 

@@ -1,13 +1,27 @@
 package com.tvd12.ezyfoxserver.io;
 
-import static com.tvd12.ezyfoxserver.util.EzyDataConverter.*;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.byteArrayToCharArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveBoolArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveDoubleArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveFloatArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveIntArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveLongArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToPrimitiveShortArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToStringArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperBoolArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperDoubleArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperFloatArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperIntArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperLongArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.collectionToWrapperShortArray;
+import static com.tvd12.ezyfoxserver.util.EzyDataConverter.toCharWrapperArray;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.Logger;
@@ -66,7 +80,7 @@ public class EzySimpleOutputTransformer implements EzyOutputTransformer, Seriali
 	@SuppressWarnings("rawtypes")
 	private static Map<Class, EzyToObject> 
 			defaultTransformers() {
-		Map<Class, EzyToObject> answer = new HashMap<>();
+		Map<Class, EzyToObject> answer = new ConcurrentHashMap<>();
 		
 		//primitive type
 		answer.put(boolean.class, new EzyToObject<Boolean>() {

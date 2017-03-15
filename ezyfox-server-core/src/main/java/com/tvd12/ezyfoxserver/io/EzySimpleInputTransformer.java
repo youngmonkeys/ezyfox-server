@@ -7,8 +7,8 @@ import static com.tvd12.ezyfoxserver.util.EzyDataConverter.toPrimitiveByteArray;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -64,7 +64,7 @@ public class EzySimpleInputTransformer implements EzyInputTransformer, Serializa
 	@SuppressWarnings("rawtypes")
 	private static Map<Class, EzyToObject> 
 			defaultTransformers() {
-		Map<Class, EzyToObject> answer = new HashMap<>();
+		Map<Class, EzyToObject> answer = new ConcurrentHashMap<>();
 		
 		//primitive type
 		answer.put(Boolean.class, new EzyToObject<Boolean>() {

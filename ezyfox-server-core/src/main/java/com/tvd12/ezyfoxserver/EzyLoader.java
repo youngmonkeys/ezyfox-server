@@ -6,8 +6,8 @@ package com.tvd12.ezyfoxserver;
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ public class EzyLoader {
     }
     
     private Map<String, EzyAppClassLoader> newAppClassLoaders() {
-        Map<String, EzyAppClassLoader> answer = new HashMap<>();
+        Map<String, EzyAppClassLoader> answer = new ConcurrentHashMap<>();
         for(File dir : getEntryFolders())
         	answer.put(dir.getName(), newAppClassLoader(dir));
         return answer;

@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
@@ -36,7 +36,7 @@ public class EzyControllersImpl implements EzyControllers {
 		
 		@SuppressWarnings("rawtypes")
 		protected Map<EzyConstant, EzyController> newControllers() {
-			Map<EzyConstant, EzyController> answer = new HashMap<>();
+			Map<EzyConstant, EzyController> answer = new ConcurrentHashMap<>();
 			answer.put(EzyCommand.HAND_SHAKE, new EzyHandShakeController());
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
 			answer.put(EzyCommand.ACCESS_APP, new EzyAccessAppController());

@@ -11,13 +11,16 @@ import com.tvd12.ezyfoxserver.client.EzyClientContext;
 import com.tvd12.ezyfoxserver.client.EzyClientSingleton;
 import com.tvd12.ezyfoxserver.client.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
+import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.entity.impl.EzySimpleSession;
+import com.tvd12.ezyfoxserver.exception.EzyResponseHandleException;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -70,16 +73,26 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, EzyArray msg) throws Exception {
     	getLogger().info("Client recived: " + msg);
-    	int appId = msg.get(0);
-		int cmdId = msg.get(1);
-		EzyData data = msg.get(2);
+		int cmdId = msg.get(0);
+		EzyData data = msg.get(1);
 		EzyCommand cmd = EzyCommand.valueOf(cmdId);
-		handleRequest(appId, cmd, data);
+		handleResponse(cmd, data);
+    }
+    
+	protected void handleResponse(EzyCommand cmd, EzyData data) {
+    	context.get(EzyRunWorker.class).run(() -> { 
+    		tryHandleResponse(cmd, data);
+    	});
     }
     
     @SuppressWarnings("unchecked")
-	protected void handleRequest(int appId, EzyCommand cmd, EzyData data) {
-    	controllers.getController(cmd).handle(context, getReceiver(), data);
+	protected void tryHandleResponse(EzyCommand cmd, EzyData data) {
+    	try {
+    		controllers.getController(cmd).handle(context, getReceiver(), data);
+    	}
+    	catch(Exception e) {
+    		throw new EzyResponseHandleException(newHandleRequestErrorMessage(cmd, data), e);
+    	}
     }
     
     protected Object getReceiver() {
@@ -108,6 +121,10 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         getLogger().error("exception caught at session", cause);
     }
+    
+    protected String newHandleRequestErrorMessage(EzyConstant cmd, EzyData data) {
+		return "error when handle request command: " + cmd + ", data: " + data;
+	}
     
     protected Logger getLogger() {
     	return LoggerFactory.getLogger(getClass());

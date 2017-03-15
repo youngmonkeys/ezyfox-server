@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.entity.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiFunction;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
@@ -16,12 +16,16 @@ import lombok.Setter;
 public class EzyHashMap implements EzyObject {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
-	private HashMap<Object, Object> map = new HashMap<>();
+	protected HashMap<Object, Object> map;
 	
 	@Setter
-	private transient EzyInputTransformer inputTransformer;
+	protected transient EzyInputTransformer inputTransformer;
 	@Setter
-	private transient EzyOutputTransformer outputTransformer;
+	protected transient EzyOutputTransformer outputTransformer;
+	
+	{
+		map = new HashMap<>();
+	}
 	
 	/*
 	 * (non-Javadoc)

@@ -17,6 +17,7 @@ import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MIN_INT32;
 import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MIN_INT8;
 import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MIN_NEGATIVE_FIXINT;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -140,6 +141,7 @@ public class MsgPackSimpleSerializer implements MsgPackSerializer, EzyCastIntToB
 		parsers.put(Short[].class, this::parseWrapperShorts);
 		
 		parsers.put(Map.class, this::parseMap);
+		parsers.put(AbstractMap.class, this::parseMap);
 		parsers.put(EzyObject.class, this::parseObject);
 		parsers.put(EzyArray.class, this::parseArray);
 		parsers.put(Collection.class, this::parseCollection);

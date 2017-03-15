@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -28,7 +28,7 @@ public class EzyManagersImpl implements EzyManagers {
 	public static class Builder {
 		
 		protected Map<Object, Object> newManagers() {
-			Map<Object, Object> answer = new HashMap<>();
+			Map<Object, Object> answer = new ConcurrentHashMap<>();
 			answer.put(EzyUserManager.class, new EzyUserManagerImpl.Builder().build());
 			answer.put(EzySessionManager.class, new EzySessionManagerImpl.Builder().build());
 			return answer; 

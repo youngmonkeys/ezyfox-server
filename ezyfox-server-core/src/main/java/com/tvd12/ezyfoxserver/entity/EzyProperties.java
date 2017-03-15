@@ -19,14 +19,14 @@ public interface EzyProperties {
      * @param key key 
      * @param value value
      */
-    void setProperty(final Object key, final Object value);
+    void setProperty(Object key, Object value);
     
     /**
      * put all
      * 
      * @param map the map to put
      */
-    void setProperties(final Map<? extends Object, ? extends Object> map);
+    void setProperties(Map<? extends Object, ? extends Object> map);
     
     /**
      * get the value to which the specified key is mapped
@@ -35,7 +35,7 @@ public interface EzyProperties {
      * @param key the key
      * @return a value
      */
-    <T> T getProperty(final Object key);
+    <T> T getProperty(Object key);
     
     /**
      * get the value to which the specified key is mapped and cast value to specific type
@@ -45,14 +45,14 @@ public interface EzyProperties {
      * @param clazz specific type
      * @return a value
      */
-    <T> T getProperty(final Object key, final Class<T> clazz);
+    <T> T getProperty(Object key, Class<T> clazz);
     
     /**
      * removes the mapping for a key from the map
      * 
      * @param key the key
      */
-    void removeProperty(final Object key);
+    void removeProperty(Object key);
 
     /**
      * check whether has value mapped to the or not
@@ -60,7 +60,7 @@ public interface EzyProperties {
      * @param key the key to check
      * @return true or false;
      */
-    boolean containsKey(final Object key);
+    boolean containsKey(Object key);
     
     /**
      * get the value to which the specified key is mapped
@@ -69,7 +69,7 @@ public interface EzyProperties {
      * @param key the key
      * @return a value
      */
-    default <T> T getProperty(final Class<T> key) {
+    default <T> T getProperty(Class<T> key) {
     	return getProperty((Object)key);
     }
     

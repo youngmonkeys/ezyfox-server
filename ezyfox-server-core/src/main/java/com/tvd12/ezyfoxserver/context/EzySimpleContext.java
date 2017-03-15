@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.context;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
@@ -66,7 +67,7 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 	
 	@SuppressWarnings("rawtypes")
 	protected Map<Class, Supplier> defaultCommandSuppliers() {
-		Map<Class, Supplier> answer = new HashMap<>();
+		Map<Class, Supplier> answer = new ConcurrentHashMap<>();
 		answer.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		answer.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));
 		answer.put(EzyFetchServer.class, () -> new EzyFetchServerImpl(getBoss()));

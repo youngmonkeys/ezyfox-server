@@ -18,12 +18,16 @@ import lombok.Setter;
 public class EzyArrayList implements EzyArray {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
-	private ArrayList<Object> list = new ArrayList<>();
+	protected ArrayList<Object> list;
 	
 	@Setter
 	protected transient EzyInputTransformer inputTransformer;
 	@Setter
 	protected transient EzyOutputTransformer outputTransformer;
+	
+	{
+		list = new ArrayList<>();
+	}
 	
 	public EzyArrayList() {
 	}
@@ -43,7 +47,7 @@ public class EzyArrayList implements EzyArray {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#get(int, java.lang.Class)
 	 */
 	@Override
-	public <T> T get(final int index, final Class<T> type) {
+	public <T> T get(int index, Class<T> type) {
 		return (T) transformOutput(list.get(index), type);
 	}
 	
@@ -61,7 +65,7 @@ public class EzyArrayList implements EzyArray {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.lang.Object[])
 	 */
 	@Override
-	public <T> void add(final T... items) {
+	public <T> void add(T... items) {
 		this.add(Lists.newArrayList(items));
 	}
 
@@ -70,7 +74,7 @@ public class EzyArrayList implements EzyArray {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.util.Collection)
 	 */
 	@Override
-	public void add(final Collection<? extends Object> items) {
+	public void add(Collection<? extends Object> items) {
 		list.addAll(items);
 	}
 	
@@ -190,7 +194,7 @@ public class EzyArrayList implements EzyArray {
 	 * @param input the input value
 	 * @return the transformed value
 	 */
-	protected Object transformInput(final Object input) {
+	protected Object transformInput(Object input) {
 		return inputTransformer.transform(input);
 	}
 
@@ -202,7 +206,7 @@ public class EzyArrayList implements EzyArray {
 	 * @return the transformed value
 	 */
 	@SuppressWarnings("rawtypes")
-	private Object transformOutput(final Object output, final Class type) {
+	private Object transformOutput(Object output, Class type) {
 		return outputTransformer.transform(output, type);
 	}
 	

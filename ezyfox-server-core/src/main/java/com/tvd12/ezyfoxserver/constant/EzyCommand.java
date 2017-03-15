@@ -7,12 +7,13 @@ public enum EzyCommand implements EzyConstant {
 	ERROR(0),
 	HAND_SHAKE(1),
 	LOGIN(2),
-	ACCESS_APP(3);
+	ACCESS_APP(3),
+	REQUEST_APP(4);
 	
 	@Getter
 	private final int id;
 	
-	private EzyCommand(final int id) {
+	private EzyCommand(int id) {
 		this.id = id;
 	}
 	
@@ -21,7 +22,7 @@ public enum EzyCommand implements EzyConstant {
 		return toString();
 	}
 	
-	public static EzyCommand valueOf(final int id) {
+	public static EzyCommand valueOf(int id) {
 		for(EzyCommand cmd : values())
 			if(cmd.getId() == id)
 				return cmd;

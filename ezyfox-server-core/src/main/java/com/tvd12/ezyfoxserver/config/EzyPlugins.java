@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.config;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,8 +34,8 @@ public class EzyPlugins {
 	
 	public EzyPlugins() {
 		this.plugins = new ArrayList<>();
-		this.pluginsByIds = new HashMap<>();
-		this.pluginsByNames = new HashMap<>();
+		this.pluginsByIds = new ConcurrentHashMap<>();
+		this.pluginsByNames = new ConcurrentHashMap<>();
 	}
 	
 	@XmlElement(name = "plugin")

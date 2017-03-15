@@ -17,11 +17,6 @@ public class EzyAccessAppResponse implements EzyResponse {
 	}
 	
 	@Override
-	public int getAppId() {
-		return -1;
-	}
-	
-	@Override
 	public EzyConstant getCommand() {
 		return EzyCommand.ACCESS_APP;
 	}

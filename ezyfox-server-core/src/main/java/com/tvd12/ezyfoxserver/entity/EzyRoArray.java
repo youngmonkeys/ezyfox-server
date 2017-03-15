@@ -11,7 +11,7 @@ public interface EzyRoArray extends EzyData {
 	 * @param index the index
 	 * @return the value
 	 */
-	<T> T get(final int index);
+	<T> T get(int index);
 	
 	/**
 	 * Get value by index
@@ -21,7 +21,7 @@ public interface EzyRoArray extends EzyData {
 	 * @param type the value type
 	 * @return the value
 	 */
-	<T> T get(final int index, final Class<T> type);
+	<T> T get(int index, Class<T> type);
 	
 	/**
 	 * Get new array

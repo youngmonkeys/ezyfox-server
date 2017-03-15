@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.tvd12.ezyfoxserver.entity.EzyData;
@@ -14,14 +15,15 @@ import lombok.Setter;
 @Setter
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class EzySimpleUser extends EzyEntity implements EzyUser {
-
+public class EzySimpleUser extends EzyEntity implements EzyUser, Serializable {
+	private static final long serialVersionUID = -7846882289922504595L;
+	
 	protected long id;
 	protected String name;
 	protected String password;
-	protected EzySession session;
+	protected transient EzySession session;
 	
-	private static final AtomicLong COUNTER;
+	private transient static final AtomicLong COUNTER;
 	
 	static {
 		COUNTER = new AtomicLong(0);

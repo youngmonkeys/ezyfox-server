@@ -25,7 +25,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param token the token
 	 */
-	void setToken(final String token);
+	void setToken(String token);
 	
 	/**
 	 * Get creation time in long
@@ -39,7 +39,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param time the creation time
 	 */
-	void setCreationTime(final long time);
+	void setCreationTime(long time);
 	
 	/**
 	 * Get last activity time in long
@@ -53,7 +53,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param time the last activity time
 	 */
-	void setLastActivityTime(final long time);
+	void setLastActivityTime(long time);
 	
 	/**
 	 * Get last read time in long
@@ -67,7 +67,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param time the last read time
 	 */
-	void setLastReadTime(final long time);
+	void setLastReadTime(long time);
 	
 	/**
 	 * Get last write time in long
@@ -81,7 +81,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param time the last read time
 	 */
-	void setLastWriteTime(final long time);
+	void setLastWriteTime(long time);
 	
 	/**
 	 * Get read bytes
@@ -95,7 +95,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param bytes the read bytes
 	 */
-	void addReadBytes(final long bytes);
+	void addReadBytes(long bytes);
 	
 	/**
 	 * Get written bytes
@@ -109,7 +109,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param bytes the written bytes
 	 */
-	void addWrittenBytes(final long bytes);
+	void addWrittenBytes(long bytes);
 	
 	/**
 	 * Get max idle time
@@ -130,7 +130,7 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * 
 	 * @param channel the channel
 	 */
-	void setChannel(final Channel channel);
+	void setChannel(Channel channel);
 	
 	/**
 	 * Get client full ip address

@@ -14,11 +14,6 @@ public class EzyHandShakeRequest implements EzyRequest {
 	}
 	
 	@Override
-	public int getAppId() {
-		return -1;
-	}
-	
-	@Override
 	public EzyConstant getCommand() {
 		return EzyCommand.HAND_SHAKE;
 	}

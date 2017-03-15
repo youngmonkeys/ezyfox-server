@@ -13,14 +13,14 @@ public interface EzyArray extends EzyRoArray {
 	 * @param items the items to add
 	 */
 	@SuppressWarnings("unchecked")
-	<T> void add(final T... items);
+	<T> void add(T... items);
 	
 	/**
 	 * Add values to array
 	 * 
 	 * @param items the items to add
 	 */
-	void add(final Collection<? extends Object> items);
+	void add(Collection<? extends Object> items);
 	
 	/**
 	 * Set value at the index
@@ -28,14 +28,14 @@ public interface EzyArray extends EzyRoArray {
 	 * @param index the index
 	 * @param item the item to set
 	 */
-	<T> T set(final int index, final Object item);
+	<T> T set(int index, Object item);
 	
 	/**
 	 * Remove value at the index
 	 * 
 	 * @param index the index
 	 */
-	<T> T remove(final int index);
+	<T> T remove(int index);
 	
 	/**
 	 * For each

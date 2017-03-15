@@ -6,18 +6,31 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>1.0.0</version>
+		<version>0.0.1</version>
 	</parent>
-	
+
 	<artifactId>ezyfox-server-codec</artifactId>
+	
+	<version>1.0.0</version>	
 	<name>ezyfox-server-codec</name>
 	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<core.version>1.0.0</core.version>
+		<msgpack.version>0.6.12</msgpack.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-core</artifactId>
-			<version>${project.version}</version>
+			<version>${core.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.msgpack</groupId>
+		    <artifactId>msgpack</artifactId>
+		    <version>${msgpack.version}</version>
 		</dependency>
 	</dependencies>
 

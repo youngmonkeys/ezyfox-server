@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.transformer;
+package com.tvd12.ezyfoxserver.io;
 
 public interface EzyInputTransformer {
 

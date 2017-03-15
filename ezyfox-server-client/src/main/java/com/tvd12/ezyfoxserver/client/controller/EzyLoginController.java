@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.entity.impl.EzySimpleUser;
 
 public class EzyLoginController 
 		extends EzyAbstractController 
-		implements EzyServerController {
+		implements EzyServerController<EzySession> {
 
 	@Override
 	public void handle(EzyContext ctx, EzySession session, EzyArray data) {

@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.transformer;
+package com.tvd12.ezyfoxserver.io;
 
 import static com.tvd12.ezyfoxserver.util.EzyDataConverter.byteArrayToCharArray;
 import static com.tvd12.ezyfoxserver.util.EzyDataConverter.toByteWrapperArray;

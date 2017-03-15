@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.builder.impl;
 
 import com.tvd12.ezyfoxserver.function.EzyCreation;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
 public class EzyInOutTransformerNeeder {
 

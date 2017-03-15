@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.codec;
 
 import com.tvd12.ezyfoxserver.factory.impl.EzyBuilderFactoryImpl;
-import com.tvd12.ezyfoxserver.transformer.EzyLiteOutputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyLiteOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
 public abstract class EzyEntityFactory {
 

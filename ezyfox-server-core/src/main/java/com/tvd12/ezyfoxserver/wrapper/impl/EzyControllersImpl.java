@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
@@ -38,6 +39,7 @@ public class EzyControllersImpl implements EzyControllers {
 			Map<EzyConstant, EzyController> answer = new HashMap<>();
 			answer.put(EzyCommand.HAND_SHAKE, new EzyHandShakeController());
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
+			answer.put(EzyCommand.ACCESS_APP, new EzyAccessAppController());
 			return answer;
 		}
 		

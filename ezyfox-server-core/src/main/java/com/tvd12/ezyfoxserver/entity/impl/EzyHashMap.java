@@ -7,8 +7,8 @@ import java.util.function.BiFunction;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
 import lombok.Setter;
 

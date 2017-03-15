@@ -7,9 +7,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyFetchAppByName;
 import com.tvd12.ezyfoxserver.command.EzyFetchServer;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.impl.EzyFetchAppByNameImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFetchServerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyRunWorkerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
@@ -68,6 +70,7 @@ public class EzySimpleContext extends EzyBaseContext implements EzyServerContext
 		answer.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		answer.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));
 		answer.put(EzyFetchServer.class, () -> new EzyFetchServerImpl(getBoss()));
+		answer.put(EzyFetchAppByName.class, () -> new EzyFetchAppByNameImpl(getBoss()));
 		return answer;
 	}
 	

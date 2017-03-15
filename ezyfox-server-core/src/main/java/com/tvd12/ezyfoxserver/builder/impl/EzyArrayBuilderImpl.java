@@ -5,8 +5,8 @@ import java.util.Collection;
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
 public class EzyArrayBuilderImpl
 		extends EzyInOutTransformerNeeder

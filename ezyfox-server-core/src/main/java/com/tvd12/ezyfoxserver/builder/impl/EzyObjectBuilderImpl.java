@@ -5,8 +5,8 @@ import java.util.Map;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.entity.impl.EzyHashMap;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
 public class EzyObjectBuilderImpl 
 		extends EzyInOutTransformerNeeder 

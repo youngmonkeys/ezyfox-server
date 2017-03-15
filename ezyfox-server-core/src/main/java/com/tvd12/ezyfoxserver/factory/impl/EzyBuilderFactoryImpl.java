@@ -10,10 +10,10 @@ import com.tvd12.ezyfoxserver.builder.impl.EzyArrayBuilderImpl;
 import com.tvd12.ezyfoxserver.builder.impl.EzyObjectBuilderImpl;
 import com.tvd12.ezyfoxserver.concurrent.EzyLazyInitializer;
 import com.tvd12.ezyfoxserver.factory.EzyBuilderFactory;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzySimpleInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzySimpleOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzySimpleInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzySimpleOutputTransformer;
 
 public class EzyBuilderFactoryImpl implements EzyBuilderFactory {
 

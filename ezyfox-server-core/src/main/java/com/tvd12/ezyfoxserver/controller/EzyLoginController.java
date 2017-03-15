@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 
 public class EzyLoginController 
 		extends EzyAbstractServerController 
-		implements EzyServerController {
+		implements EzyServerController<EzySession> {
 
 	@Override
 	public void handle(EzyContext ctx, EzySession session, EzyArray data) {

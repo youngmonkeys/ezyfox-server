@@ -8,8 +8,8 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.transformer.EzyInputTransformer;
-import com.tvd12.ezyfoxserver.transformer.EzyOutputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
+import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 import com.tvd12.ezyfoxserver.util.EzyLiteCollectionConverter;
 
 import lombok.Setter;

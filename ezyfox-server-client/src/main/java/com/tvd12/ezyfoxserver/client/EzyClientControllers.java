@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tvd12.ezyfoxserver.client.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.client.controller.EzyHandShakeController;
 import com.tvd12.ezyfoxserver.client.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
@@ -29,6 +30,7 @@ public class EzyClientControllers extends EzyControllersImpl {
 			Map<EzyConstant, EzyController> answer = new HashMap<>();
 			answer.put(EzyCommand.HAND_SHAKE, new EzyHandShakeController());
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
+			answer.put(EzyCommand.ACCESS_APP, new EzyAccessAppController());
 			return answer;
 		}
 		

@@ -10,7 +10,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public class EzyHandShakeController 
 		extends EzyAbstractController 
-		implements EzyServerController {
+		implements EzyServerController<EzySession> {
 
 	@Override
 	public void handle(EzyContext ctx, EzySession session, EzyArray data) {

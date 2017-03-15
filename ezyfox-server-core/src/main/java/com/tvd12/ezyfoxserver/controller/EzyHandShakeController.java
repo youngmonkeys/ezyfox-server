@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 
 public class EzyHandShakeController 
 		extends EzyAbstractController 
-		implements EzyServerController {
+		implements EzyServerController<EzySession> {
 
 	@Override
 	public void handle(EzyContext ctx, EzySession session, EzyArray data) {

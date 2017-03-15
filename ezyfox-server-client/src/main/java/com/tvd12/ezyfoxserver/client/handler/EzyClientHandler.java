@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfoxserver.client.EzyClient;
 import com.tvd12.ezyfoxserver.client.EzyClientContext;
+import com.tvd12.ezyfoxserver.client.EzyClientSingleton;
 import com.tvd12.ezyfoxserver.client.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
@@ -15,6 +16,7 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.entity.impl.EzySimpleSession;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 
@@ -77,7 +79,11 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     
     @SuppressWarnings("unchecked")
 	protected void handleRequest(int appId, EzyCommand cmd, EzyData data) {
-    	controllers.getController(cmd).handle(context, session, data);
+    	controllers.getController(cmd).handle(context, getReceiver(), data);
+    }
+    
+    protected Object getReceiver() {
+    	return getMe() == null ? session : getMe();
     }
     
     public void setContext(EzyClientContext ctx) {
@@ -88,6 +94,14 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     
     protected EzyClient getClient() {
     	return context.getClient();
+    }
+    
+    protected EzyUser getMe() {
+    	return getSingleton().getMe();
+    }
+    
+    protected EzyClientSingleton getSingleton() {
+    	return EzyClientSingleton.getInstance();
     }
     
     @Override

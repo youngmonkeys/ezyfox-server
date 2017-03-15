@@ -18,7 +18,7 @@ import lombok.Setter;
 public class EzyArrayList implements EzyArray {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
-	private List<Object> list = new ArrayList<>();
+	private ArrayList<Object> list = new ArrayList<>();
 	
 	@Setter
 	protected transient EzyInputTransformer inputTransformer;
@@ -129,16 +129,47 @@ public class EzyArrayList implements EzyArray {
 		return list;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#toList(java.lang.Class)
+	 */
 	@Override
 	public <T> List<T> toList(Class<T> type) {
 		return toList();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#toArray(java.lang.Class)
+	 */
 	@Override
 	public <T> T toArray(Class<T> type) {
 		if(!type.isArray())
 			throw new IllegalArgumentException(type + " is not array type");
 		return EzyLiteCollectionConverter.toArray(list, type);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return new EzyArrayList((Collection) list.clone());
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#duplicate()
+	 */
+	@Override
+	public EzyArray duplicate() {
+		try {
+			return (EzyArray) clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 	
 	/**

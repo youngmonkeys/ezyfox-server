@@ -51,4 +51,10 @@ public interface EzyArray extends EzyRoArray {
 	 */
 	Iterator<Object> iterator();
 	
+	/**
+     * @see com.tvd12.ezyfoxserver.entity.EzyData#duplicate()
+     */
+    @Override
+    EzyArray duplicate();
+	
 }

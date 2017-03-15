@@ -16,13 +16,13 @@ import lombok.Setter;
 public class EzyHashMap implements EzyObject {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
-	private Map<Object, Object> map = new HashMap<>();
+	private HashMap<Object, Object> map = new HashMap<>();
 	
 	@Setter
 	private transient EzyInputTransformer inputTransformer;
 	@Setter
 	private transient EzyOutputTransformer outputTransformer;
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#put(java.lang.Object, java.lang.Object)
@@ -143,6 +143,32 @@ public class EzyHashMap implements EzyObject {
 	@Override
 	public Map toMap() {
 		return map;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		EzyHashMap clone = new EzyHashMap();
+		clone.setInputTransformer(inputTransformer);
+		clone.setOutputTransformer(outputTransformer);
+		clone.map.putAll(map);
+		return clone;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyObject#duplicate()
+	 */
+	@Override
+	public EzyObject duplicate() {
+		try {
+			return (EzyObject) clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 	
 	private Object transformInput(final Object input) {

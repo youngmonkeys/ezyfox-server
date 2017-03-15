@@ -53,5 +53,11 @@ public interface EzyObject extends EzyRoObject {
      * @see java.util.Map#clear()
      */
     void clear();
+    
+    /**
+     * @see com.tvd12.ezyfoxserver.entity.EzyData#duplicate()
+     */
+    @Override
+    EzyObject duplicate();
 
 }

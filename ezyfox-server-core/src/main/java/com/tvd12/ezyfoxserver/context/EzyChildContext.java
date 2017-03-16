@@ -38,7 +38,7 @@ public class EzyChildContext extends EzyAbstractContext {
 	
 	@SuppressWarnings("rawtypes")
 	protected void addUnsafeCommands(Set<Class> unsafeCommands) {
-//		unsafeCommands.add(EzyFireEvent.class);
+		//TODO add some commands
 	}
 	
 	@SuppressWarnings("rawtypes")

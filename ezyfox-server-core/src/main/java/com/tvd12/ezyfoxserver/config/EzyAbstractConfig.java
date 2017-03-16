@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.NONE)
-public abstract class EzyAbstractConfig {
+public abstract class EzyAbstractConfig implements EzyEventControllerAdder {
 
 	protected final int id;
 	
@@ -42,6 +42,7 @@ public abstract class EzyAbstractConfig {
 	}
 	
 	@SuppressWarnings("rawtypes")
+	@Override
 	public void addEventController(EzyConstant eventType, EzyEventController ctrl) {
 		eventControllers.addController(eventType, ctrl);
 	}

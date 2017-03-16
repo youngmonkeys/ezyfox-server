@@ -6,7 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 import com.tvd12.ezyfoxserver.config.EzyApp;
 import com.tvd12.ezyfoxserver.config.EzyPlugin;
@@ -95,6 +97,7 @@ public class EzySimpleContext extends EzyAbstractContext implements EzyServerCon
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
 		super.addCommandSuppliers(suppliers);
 		suppliers.put(EzySendMessage.class, () -> new EzySendMessageImpl());
+		suppliers.put(EzyFireEvent.class, () -> new EzyFireEventImpl(this));
 	}
 	
 }

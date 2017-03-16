@@ -1,19 +1,19 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.config.EzyApp;
+import com.tvd12.ezyfoxserver.config.EzyPlugin;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
-public class EzyFireAppEventImpl 
+public class EzyPluginFireEventImpl 
 		extends EzyAbstractCommand 
 		implements EzyFireEvent {
 
-	private EzyAppContext context;
+	private EzyPluginContext context;
 	
-	public EzyFireAppEventImpl(EzyAppContext context) {
+	public EzyPluginFireEventImpl(EzyPluginContext context) {
 		this.context = context;
 	}
 	
@@ -24,10 +24,10 @@ public class EzyFireAppEventImpl
 	}
 	
 	protected EzyEventControllers getEventControllers() {
-		return getApp().getEventControllers();
+		return getPlugin().getEventControllers();
 	}
 	
-	protected EzyApp getApp() {
-		return context.getApp();
+	protected EzyPlugin getPlugin() {
+		return context.getPlugin();
 	}
 }

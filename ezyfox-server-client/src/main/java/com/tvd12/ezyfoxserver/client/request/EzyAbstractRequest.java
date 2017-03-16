@@ -7,9 +7,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class EzyAbstractRequest extends EzyFixedCommandRequest {
+public abstract class EzyAbstractRequest extends EzyFixedCmdRequest {
 
-	private int appId;
-	private EzyConstant command;
+	protected EzyConstant command;
+	
+	protected EzyAbstractRequest(Builder<?> builder) {
+		super(builder);
+		this.command = builder.command;
+	}
+	
+	public abstract static class Builder<B extends Builder<B>> 
+			extends EzyFixedCmdRequest.Builder<B> {
+		
+		protected EzyConstant command;
+		
+		public B command(EzyConstant cmd) {
+			this.command = cmd;
+			return getThis();
+		}
+	}
 	
 }

@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
+import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 
 public class EzyControllersImpl implements EzyControllers {
@@ -40,6 +41,7 @@ public class EzyControllersImpl implements EzyControllers {
 			answer.put(EzyCommand.HAND_SHAKE, new EzyHandShakeController());
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
 			answer.put(EzyCommand.ACCESS_APP, new EzyAccessAppController());
+			answer.put(EzyCommand.REQUEST_APP, new EzyRequestAppController());
 			return answer;
 		}
 		

@@ -3,6 +3,9 @@ package com.tvd12.ezyfoxserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
@@ -15,7 +18,7 @@ import lombok.Builder;
 @Builder
 public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 
-	private EzyServer ezyFox;
+	protected EzyServerContext context;
 	
 	@Override
 	public void start() throws Exception {
@@ -29,14 +32,14 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	//====================== apps ===================
-	private void startAllApps() {
-		ezyFox.getAppNames().forEach(this::startApp);
+	protected void startAllApps() {
+		getServer().getAppNames().forEach(this::startApp);
 	}
 	
-	private void startApp(final String appName) {
+	protected void startApp(String appName) {
 		try {
 			getLogger().debug("app " + appName + " loading...");
-			startApp(ezyFox.newAppEntryLoader(appName));
+			startApp(appName, getServer().newAppEntryLoader(appName));
 			getLogger().debug("app " + appName + " loaded");
 		}
 		catch(Exception e) {
@@ -44,24 +47,25 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 		} 
 	}
 	
-	private void startApp(final EzyAppEntryLoader loader) throws Exception {
-		startApp(loader.load());
+	protected void startApp(String appName, EzyAppEntryLoader loader) throws Exception {
+		startApp(appName, loader.load());
 	}
 	
-	private void startApp(final EzyAppEntry entry) throws Exception {
+	protected void startApp(String appName, EzyAppEntry entry) throws Exception {
+		entry.config(getAppContext(appName));
 		entry.start();
 	}
 	//=================================================
 	
 	//===================== plugins ===================
-	private void startAllPlugins() {
-		ezyFox.getPluginNames().forEach(this::startPlugin);
+	protected void startAllPlugins() {
+		getServer().getPluginNames().forEach(this::startPlugin);
 	}
 	
-	private void startPlugin(final String pluginName) {
+	protected void startPlugin(String pluginName) {
 		try {
 			getLogger().debug("plugin " + pluginName + " loading...");
-			startPlugin(ezyFox.newPluginEntryLoader(pluginName));
+			startPlugin(pluginName, getServer().newPluginEntryLoader(pluginName));
 			getLogger().debug("plugin " + pluginName + " loaded");
 		}
 		catch(Exception e) {
@@ -69,16 +73,30 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 		} 
 	}
 	
-	private void startPlugin(final EzyPluginEntryLoader loader) throws Exception {
-		startPlugin(loader.load());
+	protected void startPlugin(String pluginName, EzyPluginEntryLoader loader) 
+			throws Exception {
+		startPlugin(pluginName, loader.load());
 	}
 	
-	private void startPlugin(final EzyPluginEntry entry) throws Exception {
+	protected void startPlugin(String pluginName, EzyPluginEntry entry) throws Exception {
+		entry.config(getPluginContext(pluginName));
 		entry.start();
 	}
 	//=================================================
 	
-	private Logger getLogger() {
+	protected EzyServer getServer() {
+		return context.getBoss();
+	}
+	
+	protected EzyAppContext getAppContext(String appName) {
+		return context.getAppContext(appName);
+	}
+	
+	protected EzyPluginContext getPluginContext(String pluginName) {
+		return context.getPluginContext(pluginName);
+	}
+	
+	protected Logger getLogger() {
 		return LoggerFactory.getLogger(getClass());
 	}
 	

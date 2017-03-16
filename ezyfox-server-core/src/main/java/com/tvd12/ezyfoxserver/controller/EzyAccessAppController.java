@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfoxserver.command.EzyFetchAppByName;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.config.EzyApp;
 import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
@@ -15,15 +15,15 @@ public class EzyAccessAppController
 		implements EzyServerController<EzyUser> {
 
 	@Override
-	public void handle(EzyContext ctx, EzyUser user, EzyArray data) {
+	public void handle(EzyServerContext ctx, EzyUser user, EzyArray data) {
 		getLogger().info("begin access app handler {}", data);
 		process(ctx, user, data);
 		getLogger().info("end access app handler");
 	}
 	
-	protected void process(EzyContext ctx, EzyUser user, EzyArray data) {
+	protected void process(EzyServerContext ctx, EzyUser user, EzyArray data) {
 		String appName = data.get(0);
-		EzyApp app = ctx.get(EzyFetchAppByName.class).get(appName);
+		EzyApp app = ctx.getAppContext(appName).getApp();
 		response(ctx, user, getAccessAppResponse(ctx, app, newAccessAppData()));
 	}
 	

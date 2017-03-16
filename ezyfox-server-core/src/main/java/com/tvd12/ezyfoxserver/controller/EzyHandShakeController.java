@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.controller;
 
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
@@ -11,7 +12,7 @@ public class EzyHandShakeController
 		implements EzyServerController<EzySession> {
 
 	@Override
-	public void handle(EzyContext ctx, EzySession session, EzyArray data) {
+	public void handle(EzyServerContext ctx, EzySession session, EzyArray data) {
 		String token = data.get(0);
 		getLogger().info("begin hanshake handler, token = {}", token);
 		response(ctx, session);

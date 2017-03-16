@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.controller;
 
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
@@ -15,7 +16,7 @@ public class EzyLoginController
 		implements EzyServerController<EzySession> {
 
 	@Override
-	public void handle(EzyContext ctx, EzySession session, EzyArray data) {
+	public void handle(EzyServerContext ctx, EzySession session, EzyArray data) {
 		getLogger().info("begin login handler {}", data);
 		process(ctx, session, newInOutData(data));
 		getLogger().info("end login handler");
@@ -28,16 +29,16 @@ public class EzyLoginController
 				.build();
 	}
 	
-	protected void process(EzyContext ctx, EzySession session, EzyArray inout) {
+	protected void process(EzyServerContext ctx, EzySession session, EzyArray inout) {
 		process(ctx, newUser(session, inout.get(0)), inout.get(1));
 	}
 	
-	protected void process(EzyContext ctx, EzyUser user, EzyObject out) {
+	protected void process(EzyServerContext ctx, EzyUser user, EzyObject out) {
 		addUser(ctx, user);
 		response(ctx, user, out);
 	}
 	
-	protected void addUser(EzyContext ctx, EzyUser user) {
+	protected void addUser(EzyServerContext ctx, EzyUser user) {
 		getUserManager(ctx).addUser(user);
 	}
 	

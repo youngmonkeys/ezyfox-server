@@ -67,15 +67,13 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     
     protected void startEzyFox(final EzyServer ezyFox) throws Exception {
     	getLogger().info(ezyFox.toString());
-    	newServerBoostrap(ezyFox, newLocalBoostrap(ezyFox)).start();
+    	newServerBoostrap(ezyFox).start();
     }
     
-    protected EzyServerBootstrap newServerBoostrap(
-    		final EzyServer ezyFox, final EzyBootstrap localBootstrap) {
+    protected EzyServerBootstrap newServerBoostrap(final EzyServer ezyFox) {
     	return newServerBootstrapBuilder()
     			.port(3005)
     			.boss(ezyFox)
-    			.localBootstrap(localBootstrap)
     			.codecCreator(newCodecCreator())
     			.parentGroup(newParentEventLoopGroup())
     			.childGroup(newChildEventLoopGroup())
@@ -88,10 +86,6 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     
     protected EventLoopGroup newChildEventLoopGroup() {
     	return new NioEventLoopGroup(0, EzyExecutors.newThreadFactory("childeventloopgroup"));
-    }
-    
-    protected EzyBootstrap newLocalBoostrap(final EzyServer ezyFox) {
-    	return EzyBootstrap.builder().ezyFox(ezyFox).build();
     }
     
     protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {

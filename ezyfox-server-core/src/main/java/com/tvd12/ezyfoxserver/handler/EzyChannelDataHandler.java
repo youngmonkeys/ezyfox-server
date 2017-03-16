@@ -70,7 +70,7 @@ public abstract class EzyChannelDataHandler extends ChannelInboundHandlerAdapter
     
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-    	logger.info("channel read complete");
+    	logger.debug("channel read complete");
     }
     
     @Override

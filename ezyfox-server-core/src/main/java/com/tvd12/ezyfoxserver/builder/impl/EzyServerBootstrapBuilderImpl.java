@@ -27,7 +27,6 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	private EzyServer boss;
 	private EventLoopGroup childGroup;
 	private EventLoopGroup parentGroup;
-	private EzyBootstrap localBootstrap;
 	private EzyCodecCreator codecCreator;
 	
 	/*
@@ -72,16 +71,6 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	
 	/*
 	 * (non-Javadoc)
-	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#localBootstrap(com.tvd12.ezyfoxserver.EzyBootstrap)
-	 */
-	@Override
-	public EzyServerBootstrapBuilder localBootstrap(EzyBootstrap localBootstrap) {
-		this.localBootstrap = localBootstrap;
-		return this;
-	}
-	
-	/*
-	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#codecCreator(com.tvd12.ezyfoxserver.codec.EzyCodecCreator)
 	 */
 	@Override
@@ -89,6 +78,10 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		this.codecCreator = codecCreator;
 		return this;
 	}
+	
+	protected EzyBootstrap newLocalBoostrap(EzyServerContext context) {
+    	return EzyBootstrap.builder().context(context).build();
+    }
 	
 	/*
 	 * (non-Javadoc)
@@ -101,9 +94,10 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	
 	protected EzyServerBootstrap build(EzyServerContext ctx) {
 		EzyServerBootstrap answer = new EzyServerBootstrap();
+		answer.setContext(ctx);
 		answer.setChildGroup(childGroup);
 		answer.setParentGroup(parentGroup);
-		answer.setLocalBootstrap(localBootstrap);
+		answer.setLocalBootstrap(newLocalBoostrap(ctx));
 		answer.setServerBootstrap(createServerBootstrap(ctx));
 		return answer;
 	}

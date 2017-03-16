@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,30 +21,25 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "plugin")
 @JsonPropertyOrder({"id", "name", "entryLoader", "priority"})
-public class EzyPlugin {
+public class EzyPlugin extends EzyAbstractConfig {
 
-	protected final int id;
-	
-	@XmlElement(name = "name")
-	protected String name;
-	
 	@XmlElement(name = "priority")
 	protected int priority;
 	
-	@XmlElement(name = "entry-loader")
-	protected String entryLoader;
+	private static final AtomicInteger COUNTER;
 	
-	protected int numThreads;
-	
-	private static final AtomicInteger COUNT = new AtomicInteger(0);
-	
-	{
-		numThreads = 30;
+	static {
+		COUNTER = new AtomicInteger(0);
 	}
 	
-	public EzyPlugin() {
-		this.id = COUNT.incrementAndGet();
+	@Override
+	protected EzyEventControllers newEventControllers() {
+		return EzyEventPluginControllersImpl.builder().build();
 	}
 	
+	@Override
+	protected AtomicInteger getIdCounter() {
+		return COUNTER;
+	}
 	
 }

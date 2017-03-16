@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyStartable;
 
@@ -12,7 +13,9 @@ import io.netty.channel.EventLoopGroup;
 import lombok.Setter;
 
 public class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
-
+	
+	@Setter
+	protected EzyServerContext context;
 	@Setter
 	protected EventLoopGroup childGroup;
 	@Setter

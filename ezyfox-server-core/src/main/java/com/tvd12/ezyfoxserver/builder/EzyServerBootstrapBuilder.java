@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.builder;
 
-import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
@@ -15,7 +14,7 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @param port the port
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder port(final int port);
+	EzyServerBootstrapBuilder port(int port);
 	
 	/**
 	 * set server
@@ -23,7 +22,7 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @param boss the server
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder boss(final EzyServer boss);
+	EzyServerBootstrapBuilder boss(EzyServer boss);
 	
 	/**
 	 * set child group
@@ -31,7 +30,7 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @param childGroup the child group
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder childGroup(final EventLoopGroup childGroup);
+	EzyServerBootstrapBuilder childGroup(EventLoopGroup childGroup);
 	
 	/**
 	 * set parent group
@@ -39,7 +38,7 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @param parentGroup the parent group
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder parentGroup(final EventLoopGroup parentGroup);
+	EzyServerBootstrapBuilder parentGroup(EventLoopGroup parentGroup);
 	
 	/**
 	 * Set codec creator
@@ -49,12 +48,4 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 */
 	EzyServerBootstrapBuilder codecCreator(EzyCodecCreator codecCreator);
 
-	/**
-	 * Set local bootstrap
-	 * 
-	 * @param localBootstrap the local bootstrap
-	 * @return this pointer
-	 */
-	EzyServerBootstrapBuilder localBootstrap(EzyBootstrap localBootstrap);
-	
 }

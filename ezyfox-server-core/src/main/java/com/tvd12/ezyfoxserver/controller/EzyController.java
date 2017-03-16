@@ -1,9 +1,7 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfoxserver.context.EzyContext;
-
-public interface EzyController<R, D> {
+public interface EzyController<C, R, D> {
 	
-	public void handle(EzyContext ctx, R rev, D data);
+	void handle(C ctx, R rev, D data);
 	
 }

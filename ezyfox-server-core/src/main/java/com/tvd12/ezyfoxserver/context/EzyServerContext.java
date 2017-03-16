@@ -8,4 +8,10 @@ public interface EzyServerContext extends EzyContext {
 	
 	EzyAppContext getAppContext(int appId);
 	
+	EzyAppContext getAppContext(String appName);
+	
+	EzyPluginContext getPluginContext(int pluginId);
+	
+	EzyPluginContext getPluginContext(String pluginName);
+	
 }

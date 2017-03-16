@@ -8,11 +8,14 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.builder.EzyContextBuilder;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.config.EzyApp;
+import com.tvd12.ezyfoxserver.config.EzyPlugin;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleContext;
+import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.service.EzyResponseSerializer;
 import com.tvd12.ezyfoxserver.service.impl.EzyResponseSerializerImpl;
 
@@ -30,6 +33,7 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 		context.setBoss(boss);
 		context.setWorkerExecutor(newWorkerExecutor());
 		context.addAppContexts(newAppContexts(context));
+		context.addPluginContexts(newPluginContexts(context));
 		context.setProperty(EzyResponseSerializer.class, newResponseSerializer());
 		return context;
 	}
@@ -55,9 +59,30 @@ public class EzyContextBuilderImpl implements EzyContextBuilder<EzyContextBuilde
 		return appContext;
 	}
 	
+	protected Collection<EzyPluginContext> newPluginContexts(EzyContext parent) {
+		Collection<EzyPluginContext> contexts = new ArrayList<>();
+		for(Integer appId : boss.getPluginIds())
+			contexts.add(newPluginContext(parent, boss.getPluginById(appId)));
+		return contexts;
+	}
+	
+	protected EzyPluginContext newPluginContext(EzyContext parent, EzyPlugin plugin) {
+		EzySimplePluginContext pluginContext = new EzySimplePluginContext();
+		pluginContext.setPlugin(plugin);
+		pluginContext.setParent(parent);
+		pluginContext.setWorkerExecutor(newPluginWorkerExecutor(plugin));
+		return pluginContext;
+	}
+	
 	protected ExecutorService newAppWorkerExecutor(EzyApp app) {
 		String threadName = "app-worker";
 		int nthreads = app.getNumThreads();
+		return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+	}
+	
+	protected ExecutorService newPluginWorkerExecutor(EzyPlugin plugin) {
+		String threadName = "plugin-worker";
+		int nthreads = plugin.getNumThreads();
 		return EzyExecutors.newFixedThreadPool(nthreads, threadName);
 	}
 	

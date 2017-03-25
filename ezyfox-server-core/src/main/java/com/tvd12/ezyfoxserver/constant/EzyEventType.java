@@ -5,7 +5,8 @@ import lombok.Getter;
 public enum EzyEventType implements EzyConstant {
 
 	SERVER_READY(1),
-	USER_REQUEST(2);
+	USER_LOGIN(2),
+	USER_REQUEST(3);
 	
 	@Getter
 	private final int id;

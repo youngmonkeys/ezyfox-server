@@ -4,8 +4,8 @@ import java.util.Set;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
+import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -13,26 +13,15 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent {
+public class EzyFirePluginEventImpl 
+		extends EzyAbstractCommand 
+		implements EzyFirePluginEvent {
 
 	private EzyServerContext context;
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
 		firePluginsEvent(type, event);
-		fireAppsEvent(type, event);
-	}
-	
-	protected void fireAppsEvent(EzyConstant type, EzyEvent event) {
-		getAppIds().forEach((appId) -> fireAppEvent(appId, type, event));
-	}
-	
-	protected void fireAppEvent(int appId, EzyConstant type, EzyEvent event) {
-		fireAppEvent(context.getAppContext(appId), type, event);
-	}
-	
-	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event) {
-		ctx.get(EzyFireEvent.class).fire(type, event);
 	}
 	
 	protected void firePluginsEvent(EzyConstant type, EzyEvent event) {
@@ -45,10 +34,6 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
 		ctx.get(EzyFireEvent.class).fire(type, event);
-	}
-	
-	protected Set<Integer> getAppIds() {
-		return getServer().getAppIds();
 	}
 	
 	protected Set<Integer> getPluginIds() {

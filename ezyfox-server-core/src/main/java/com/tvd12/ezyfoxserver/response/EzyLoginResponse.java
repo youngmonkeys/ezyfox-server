@@ -3,13 +3,12 @@ package com.tvd12.ezyfoxserver.response;
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
 public class EzyLoginResponse implements EzyResponse {
 
 	private long userId;
-	private EzyData data;
+	private Object data;
 	private String username;
 	
 	protected EzyLoginResponse(Builder builder) {
@@ -38,7 +37,7 @@ public class EzyLoginResponse implements EzyResponse {
 	
 	public static class Builder {
 		private long userId;
-		private EzyData data;
+		private Object data;
 		private String username;
 		
 		public Builder userId(long userId) {
@@ -46,7 +45,7 @@ public class EzyLoginResponse implements EzyResponse {
 			return this;
 		}
 		
-		public Builder data(EzyData data) {
+		public Builder data(Object data) {
 			this.data = data;
 			return this;
 		}

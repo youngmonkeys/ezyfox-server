@@ -8,11 +8,10 @@
 		<artifactId>ezyfox-server</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	
+
 	<artifactId>ezyfox-server-core</artifactId>
-	
+
 	<version>1.0.0</version>
 	<name>ezyfox-server-core</name>
 	<url>http://maven.apache.org</url>
-	
 </project>

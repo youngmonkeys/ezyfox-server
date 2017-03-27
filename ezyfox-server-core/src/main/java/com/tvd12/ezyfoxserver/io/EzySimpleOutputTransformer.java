@@ -32,15 +32,20 @@ import com.tvd12.ezyfoxserver.EzySystem;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.EzyToObject;
+import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
-public class EzySimpleOutputTransformer implements EzyOutputTransformer, Serializable {
+public class EzySimpleOutputTransformer
+		extends EzyLoggable
+		implements EzyOutputTransformer, Serializable {
 	private static final long serialVersionUID = 8067491929651725682L;
 	
+	private static final Logger LOGGER;
 	@SuppressWarnings("rawtypes")
 	private static final Map<Class, EzyToObject> TRANSFORMER;
 	
 	static {
 		TRANSFORMER = defaultTransformers();
+		LOGGER = LoggerFactory.getLogger(EzySimpleOutputTransformer.class);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -295,7 +300,7 @@ public class EzySimpleOutputTransformer implements EzyOutputTransformer, Seriali
 				try {
 					return FastDateFormat.getInstance(getDateFormatPattern()).parse(value);
 				} catch (ParseException e) {
-					getLogger().info("value = " + value + " is invalid", e);
+					LOGGER.info("value = " + value + " is invalid", e);
 				}
 				return null;
 			}
@@ -313,10 +318,6 @@ public class EzySimpleOutputTransformer implements EzyOutputTransformer, Seriali
 		});
 		
 		return answer;
-	}
-	
-	private static Logger getLogger() {
-		return LoggerFactory.getLogger(EzySimpleOutputTransformer.class);
 	}
 	
 }

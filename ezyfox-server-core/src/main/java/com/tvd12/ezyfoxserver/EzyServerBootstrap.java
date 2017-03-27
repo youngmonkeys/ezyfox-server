@@ -27,30 +27,45 @@ public class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
 	@Setter
 	protected ServerBootstrap serverBootstrap;
 	@Setter
+	protected ServerBootstrap wsServerBootstrap;
+	@Setter
 	private EzyBootstrap localBootstrap;
 	
 	private transient ChannelFuture channelFuture;
+	private transient ChannelFuture wsChannelFuture;
 	
 	@Override
 	public void start() throws Exception {
 		startLocalBootstrap();
 		startServerBootstrap();
+		startWsServerBootstrap();
 		notifyServerReady();
 	}
 	
 	@Override
 	public void destroy() {
 		closeChannelFuture();
+		closeWsChannelFuture();
 		shutdownParentGroup();
 		shutdownChildGroup();
 	}
 	
-	protected void startServerBootstrap() throws Exception {
-		this.channelFuture = serverBootstrap.bind().sync();
+	protected void startLocalBootstrap() throws Exception {
+		getLogger().debug("starting local bootstrap ....");
+		localBootstrap.start();
+		getLogger().debug("starting local bootstrap successful");
 	}
 	
-	protected void startLocalBootstrap() throws Exception {
-		localBootstrap.start();
+	protected void startServerBootstrap() throws Exception {
+		getLogger().debug("starting start bootstrap ....");
+		this.channelFuture = serverBootstrap.bind().sync();
+		getLogger().debug("starting server bootstrap successful");
+	}
+	
+	protected void startWsServerBootstrap() throws Exception {
+		getLogger().debug("starting ws server bootstrap ....");
+		this.wsChannelFuture = wsServerBootstrap.bind().sync();
+		getLogger().debug("starting ws server bootstrap successful");
 	}
 	
 	protected void notifyServerReady() {
@@ -83,6 +98,14 @@ public class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
 			this.channelFuture.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			getLogger().error("close channel future error", e);
+		}
+	}
+	
+	protected void closeWsChannelFuture() {
+		try {
+			this.wsChannelFuture.channel().closeFuture().sync();
+		} catch (InterruptedException e) {
+			getLogger().error("close ws channel future error", e);
 		}
 	}
 	

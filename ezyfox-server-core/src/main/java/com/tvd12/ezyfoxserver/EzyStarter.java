@@ -73,6 +73,7 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     protected EzyServerBootstrap newServerBoostrap(final EzyServer ezyFox) {
     	return newServerBootstrapBuilder()
     			.port(3005)
+    			.wsport(2208)
     			.boss(ezyFox)
     			.codecCreator(newCodecCreator())
     			.parentGroup(newParentEventLoopGroup())

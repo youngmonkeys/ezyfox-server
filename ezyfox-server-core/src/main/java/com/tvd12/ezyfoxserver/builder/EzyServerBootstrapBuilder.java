@@ -17,6 +17,14 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	EzyServerBootstrapBuilder port(int port);
 	
 	/**
+	 * set ws port
+	 * 
+	 * @param wsport the  ws port
+	 * @return this pointer
+	 */
+	EzyServerBootstrapBuilder wsport(int wsport);
+	
+	/**
 	 * set server
 	 * 
 	 * @param boss the server

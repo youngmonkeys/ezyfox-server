@@ -1,29 +1,22 @@
 package com.tvd12.ezyfoxserver.builder.impl;
 
-import java.net.InetSocketAddress;
-
 import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
-import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOutboundHandler;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder {
 
 	private int port;
+	private int wsport;
 	private EzyServer boss;
 	private EventLoopGroup childGroup;
 	private EventLoopGroup parentGroup;
@@ -36,6 +29,12 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	@Override
 	public EzyServerBootstrapBuilder port(int port) {
 		this.port = port;
+		return this;
+	}
+	
+	@Override
+	public EzyServerBootstrapBuilder wsport(int wsport) {
+		this.wsport = wsport;
 		return this;
 	}
 	
@@ -99,6 +98,7 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		answer.setParentGroup(parentGroup);
 		answer.setLocalBootstrap(newLocalBoostrap(ctx));
 		answer.setServerBootstrap(createServerBootstrap(ctx));
+		answer.setWsServerBootstrap(createWsServerBootstrap(ctx));
 		return answer;
 	}
 	
@@ -107,81 +107,46 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	protected ServerBootstrap createServerBootstrap(EzyServerContext ctx) {
-		return newServerBootstrap()
-				.group(parentGroup, childGroup)
-				.channel(NioServerSocketChannel.class)
-				.localAddress(new InetSocketAddress(port))
-				.childHandler(newChannelInitializer(ctx));
+		return createServerBootstrap(newServerBootstrapCreator(), ctx, port);
 	}
 	
-	private ChannelInitializer<Channel> newChannelInitializer(EzyServerContext ctx) {
-		return EzyChannelInitializer.builder()
-				.codecCreator(codecCreator)
-				.dataHandlerCreator(newDataHandlerCreator(ctx))
-				.build();
+	protected ServerBootstrap createWsServerBootstrap(EzyServerContext ctx) {
+		return createServerBootstrap(newWsServerBootstrapCreator(), ctx, wsport);
 	}
 	
-	protected EzyDataHandlerCreator newDataHandlerCreator(EzyServerContext ctx) {
-		return EzyDataHandlerCreatorImpl.builder()
+	protected EzyServerBootstrapCreator newServerBootstrapCreator() {
+		return EzyServerBootstrapCreator.newInstance().codecCreator(codecCreator);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected EzyWsServerBootstrapCreator newWsServerBootstrapCreator() {
+		return EzyWsServerBootstrapCreator.newInstance();
+//		return EzyWsSecureServerBootstrapCreator.newInstance()
+//				.sslContext(createWsSslContext());
+	}
+	
+	protected SslContext createWsSslContext()  {
+		try {
+			return tryCreateWsSslContext();
+		}
+		catch(Exception e) {
+			throw new IllegalStateException("can not create ssl context", e);
+		}
+	}
+	
+	protected SslContext tryCreateWsSslContext() throws Exception {
+		SelfSignedCertificate cert = new SelfSignedCertificate();
+		return SslContextBuilder.forServer(cert.certificate(), cert.privateKey()).build();
+	}
+	
+	protected ServerBootstrap createServerBootstrap(
+			EzyAbstractBootstrapCreator<?> creator, EzyServerContext ctx, int port) {
+		return creator
+				.port(port)
 				.context(ctx)
-				.build();
-	}
-	
-	protected ServerBootstrap newServerBootstrap() {
-		return new ServerBootstrap() {
-			@Override
-			public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup) {
-				return childGroup != null 
-						? super.group(parentGroup, childGroup) 
-						: super.group(parentGroup);
-			}
-		};
-	}
-}
-
-class EzyChannelInitializer extends ChannelInitializer<Channel> {
-	
-	private EzyCodecCreator codecCreator;
-	private EzyDataHandlerCreator dataHandlerCreator;
-	
-	protected EzyChannelInitializer(Builder builder) {
-		this.codecCreator = builder.codecCreator;
-		this.dataHandlerCreator = builder.dataHandlerCreator;
-	}
-	
-	@Override
-	protected void initChannel(Channel ch) throws Exception {
-		ChannelPipeline pipeline = ch.pipeline();
-		ChannelOutboundHandler encoder = codecCreator.newEncoder();
-		ChannelInboundHandlerAdapter decoder = codecCreator.newDecoder();
-		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
-		pipeline.addLast(dataHandlerCreator.newHandler());
-		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
-	}
-	
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder {
-		
-		private EzyCodecCreator codecCreator;
-		private EzyDataHandlerCreator dataHandlerCreator;
-		
-		public Builder codecCreator(EzyCodecCreator codecCreator) {
-			this.codecCreator = codecCreator;
-			return this;
-		}
-		
-		public Builder dataHandlerCreator(EzyDataHandlerCreator dataHandlerCreator) {
-			this.dataHandlerCreator = dataHandlerCreator;
-			return this;
-		}
-		
-		public EzyChannelInitializer build() {
-			return new EzyChannelInitializer(this);
-		}
-		
+				.childGroup(childGroup)
+				.parentGroup(parentGroup)
+				.create();
 	}
 }
 

@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.builder.impl;
 
 import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
+import com.tvd12.ezyfoxserver.handler.EzyWsFrameHandler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInboundHandler;
@@ -26,6 +27,7 @@ class EzyWsChannelInitializer extends EzyChannelInitializer {
 		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
 		pipeline.addLast(new ChunkedWriteHandler());
 		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+		pipeline.addLast(new EzyWsFrameHandler());
 		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
 		pipeline.addLast(newDataHandler());
 		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));

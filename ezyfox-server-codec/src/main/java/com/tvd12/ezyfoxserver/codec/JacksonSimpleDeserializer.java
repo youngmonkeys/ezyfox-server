@@ -74,7 +74,7 @@ public class JacksonSimpleDeserializer
 		EzyArrayBuilder arrayBuilder = newArrayBuilder();
 		Iterator<JsonNode> iterator = node.iterator();
 		while(iterator.hasNext())
-			arrayBuilder.append(iterator.next());
+			arrayBuilder.append(parse(iterator.next()));
 		return arrayBuilder.build();
 	}
 	

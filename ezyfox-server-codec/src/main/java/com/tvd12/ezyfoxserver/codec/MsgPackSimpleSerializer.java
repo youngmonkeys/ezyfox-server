@@ -20,13 +20,13 @@ import static com.tvd12.ezyfoxserver.codec.MsgPackConstant.MIN_NEGATIVE_FIXINT;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
@@ -87,7 +87,7 @@ public class MsgPackSimpleSerializer implements EzyMessageSerializer, EzyCastInt
 	}
 	
 	protected Map<Class<?>, Parser> defaultParsers() {
-		Map<Class<?>, Parser> parsers = new HashMap<>();
+		Map<Class<?>, Parser> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	}

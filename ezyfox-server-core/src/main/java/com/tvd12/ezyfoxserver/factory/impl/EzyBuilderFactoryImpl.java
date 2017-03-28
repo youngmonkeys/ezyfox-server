@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.factory.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
@@ -58,7 +58,7 @@ public class EzyBuilderFactoryImpl implements EzyBuilderFactory {
 	
 	@SuppressWarnings("rawtypes")
 	private final Map<Class, Supplier> defaultSuppliers() {
-		Map<Class, Supplier> answer = new HashMap<>();
+		Map<Class, Supplier> answer = new ConcurrentHashMap<>();
 		answer.put(EzyObjectBuilder.class, () -> {
 			return new EzyObjectBuilderImpl.Creator()
 					.inputTransformer(getInputTransformer())

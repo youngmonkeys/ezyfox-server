@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +73,7 @@ public class JacksonSimpleSerializer
 	}
 	
 	protected Map<Class<?>, Parser> defaultParsers() {
-		Map<Class<?>, Parser> parsers = new HashMap<>();
+		Map<Class<?>, Parser> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	}

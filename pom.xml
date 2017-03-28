@@ -180,10 +180,4 @@
 			</build>
 		</profile>
 	</profiles>
-  <modules>
-    <module>ezyfox-server-core</module>
-    <module>ezyfox-server-codec</module>
-    <module>ezyfox-server-runner</module>
-    <module>ezyfox-server-client</module>
-  </modules>
 </project>

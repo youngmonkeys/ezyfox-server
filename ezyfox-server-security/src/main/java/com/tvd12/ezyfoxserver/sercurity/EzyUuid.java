@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.codec;
+package com.tvd12.ezyfoxserver.sercurity;
 
 import java.util.UUID;
 

@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.entity.impl;
 
 import java.net.SocketAddress;
 
-import com.tvd12.ezyfoxserver.codec.EzyMD5;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 
 import io.netty.channel.Channel;
 import lombok.EqualsAndHashCode;

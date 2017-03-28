@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.codec;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
@@ -52,7 +52,7 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 	}
 	
 	protected Map<MsgPackType, Parser> defaultParsers() {
-		Map<MsgPackType, Parser> parsers = new HashMap<>();
+		Map<MsgPackType, Parser> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	}

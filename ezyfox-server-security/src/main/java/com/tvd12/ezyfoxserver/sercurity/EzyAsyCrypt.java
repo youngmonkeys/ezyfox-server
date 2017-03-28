@@ -104,7 +104,7 @@ public class EzyAsyCrypt {
 	private static Map<Class, BytesFunction> defaultBytesConverters() {
 		Map<Class, BytesFunction> answer = new ConcurrentHashMap<>();
 		answer.put(byte[].class, (bytes) -> bytes);
-		answer.put(String.class, (bytes) -> EzyBase64.encode2utf8(bytes));
+		answer.put(String.class, (bytes) -> EzyBase64.encode2utf8((byte[])bytes));
 		return answer;
 	}
 	

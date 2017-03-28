@@ -10,9 +10,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
-import com.tvd12.ezyfoxserver.codec.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
 import com.tvd12.test.base.BaseTest;
 
 public class JacksonTest extends BaseTest {

@@ -19,12 +19,12 @@ import lombok.Setter;
 
 public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 
-	private Logger logger;
-	private Handlers handlers;
+	protected final Logger logger;
+	protected final Handlers handlers;
 	
-	{
-		logger = LoggerFactory.getLogger(getClass());
-		handlers = Handlers.builder().build();
+	public MsgPackByteToMessageDecoder(EzyMessageDeserializer deserializer) {
+		this.logger = LoggerFactory.getLogger(getClass());
+		this.handlers = Handlers.builder().deserializer(deserializer).build();
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ class ReadMessageSize extends AbstractHandler {
 @AllArgsConstructor
 class ReadMessageContent extends AbstractHandler {
 
-	protected MsgPackDeserializer deserializer;
+	protected EzyMessageDeserializer deserializer;
 	
 	@Override
 	public EzyIDecodeState nextState() {
@@ -129,11 +129,15 @@ class Handlers extends EzyDecodeHandlers {
 	
 	public static class Builder extends AbstractBuilder {
 		protected EzyMessageReader messageReader;
-		protected MsgPackDeserializer deserializer;
+		protected EzyMessageDeserializer deserializer;
 		
 		{
 			messageReader = new EzyMessageReader();
-			deserializer = new MsgPackSimpleDeserializer();
+		}
+		
+		public Builder deserializer(EzyMessageDeserializer deserializer) {
+			this.deserializer = deserializer;
+			return this;
 		}
 		
 		public Handlers build() {

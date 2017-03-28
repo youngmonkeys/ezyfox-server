@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.codec;
+package com.tvd12.ezyfoxserver.factory;
 
 import com.tvd12.ezyfoxserver.factory.impl.EzyBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.io.EzyLiteOutputTransformer;

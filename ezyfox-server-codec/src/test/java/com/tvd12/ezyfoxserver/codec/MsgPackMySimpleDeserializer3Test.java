@@ -22,7 +22,7 @@ public class MsgPackMySimpleDeserializer3Test extends MsgPackCodecTest {
 		String str8 = new String(bin8);
 		String str16 = new String(bin16);
 		String str32 = new String(bin32);
-		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
+		EzyMessageSerializer serializer = new MsgPackSimpleSerializer();
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
 				.append("a", str8)
 				.append("b", str16)

@@ -11,6 +11,14 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 
 public class MsgPackObjectTemplate extends AbstractTemplate<EzyObject> {
 	
+	private static final EzyMessageSerializer SERIALIZER;
+	private static final EzyMessageDeserializer DESERIALIZER;
+	
+	static {
+		SERIALIZER = new MsgPackSimpleSerializer();
+		DESERIALIZER = new MsgPackSimpleDeserializer();
+	}
+	
 	@Override
 	public void write(Packer pk, EzyObject target, boolean required) 
 			throws IOException {
@@ -29,11 +37,11 @@ public class MsgPackObjectTemplate extends AbstractTemplate<EzyObject> {
 	}
 	
 	private void writeNotNull(Packer pk, EzyObject target) throws IOException {
-		pk.write(target.toMap());
+		pk.write(SERIALIZER.serialize(target));
 	}
 
 	@Override
 	public EzyObject read(Unpacker u, EzyObject to, boolean required) throws IOException {
-		throw new UnsupportedOperationException();
+		return DESERIALIZER.deserialize(u.readByteArray());
 	}
 }

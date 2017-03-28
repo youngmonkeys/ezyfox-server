@@ -5,14 +5,24 @@ import io.netty.channel.ChannelOutboundHandler;
 
 public class MsgPackCodecCreator implements EzyCodecCreator {
 
-	@Override
-	public ChannelOutboundHandler newEncoder() {
-		return new MsgPackMessageToByteEncoder();
+	protected EzyMessageToBytes messageToBytes;
+	protected EzyObjectToMessage objectToMessage;
+	protected EzyMessageDeserializer deserializer;
+	
+	{
+		deserializer = new MsgPackSimpleDeserializer();
+		messageToBytes = EzySimpleMessageToBytes.builder().build();
+		objectToMessage = MsgPackObjectToMessage.builder().build();
 	}
-
+	
 	@Override
 	public ChannelInboundHandlerAdapter newDecoder() {
-		return new MsgPackByteToMessageDecoder();
+		return new MsgPackByteToMessageDecoder(deserializer);
+	}
+	
+	@Override
+	public ChannelOutboundHandler newEncoder() {
+		return new MsgPackMessageToByteEncoder(messageToBytes, objectToMessage);
 	}
 
 }

@@ -13,7 +13,7 @@ public class MsgPackMySimpleDeserializerTest extends MsgPackCodecTest {
 
 	@Test
 	public void test1() throws IOException {
-		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
+		EzyMessageSerializer serializer = new MsgPackSimpleSerializer();
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
 				.append("a", 1)
 				.append("b", 2)

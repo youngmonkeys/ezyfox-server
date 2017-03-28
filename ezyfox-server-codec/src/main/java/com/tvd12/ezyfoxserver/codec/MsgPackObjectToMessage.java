@@ -47,7 +47,7 @@ public class MsgPackObjectToMessage implements EzyObjectToMessage {
 			return MsgPackObjectToBytes.builder().serializer(newSerializer()).build();
 		}
 		
-		protected MsgPackSerializer newSerializer() {
+		protected EzyMessageSerializer newSerializer() {
 			return new MsgPackSimpleSerializer();
 		}
 	}

@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public class MsgPackObjectToBytes implements EzyObjectToBytes {
 
-	private MsgPackSerializer serializer;
+	private EzyMessageSerializer serializer;
 	
 	@Override
 	public byte[] convert(Object object) {

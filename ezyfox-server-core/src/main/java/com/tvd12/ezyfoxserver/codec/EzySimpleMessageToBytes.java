@@ -78,7 +78,7 @@ class MessageToByteBuf implements Converter<ByteBuf> {
 	}
 	
 	private int getCapacity(EzyMessage message){
-		return 1 /*header size*/ + message.getSizeLength() + message.getContent().length;
+		return 1 + message.getSizeLength() + message.getContent().length;
 	}
 	
 }

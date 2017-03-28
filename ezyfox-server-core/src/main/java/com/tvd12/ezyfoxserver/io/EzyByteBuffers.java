@@ -7,6 +7,10 @@ public abstract class EzyByteBuffers {
 	private EzyByteBuffers() {
 	}
 	
+	public static byte[] getBytes(ByteBuffer buffer) {
+		return getBytes(buffer, buffer.remaining());
+	}
+	
 	public static byte[] getBytes(ByteBuffer buffer, int size) {
 		byte[] bytes = new byte[size];
 		buffer.get(bytes);

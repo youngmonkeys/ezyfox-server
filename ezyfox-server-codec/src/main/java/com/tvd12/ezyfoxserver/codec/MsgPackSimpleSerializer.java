@@ -39,11 +39,12 @@ import com.tvd12.ezyfoxserver.util.EzyDoublesIterator;
 import com.tvd12.ezyfoxserver.util.EzyFloatsIterator;
 import com.tvd12.ezyfoxserver.util.EzyIntsIterator;
 import com.tvd12.ezyfoxserver.util.EzyLongsIterator;
+import com.tvd12.ezyfoxserver.util.EzyMaps;
 import com.tvd12.ezyfoxserver.util.EzyShortsIterator;
 import com.tvd12.ezyfoxserver.util.EzyStringsIterator;
 import com.tvd12.ezyfoxserver.util.EzyWrapperIterator;
 
-public class MsgPackSimpleSerializer implements MsgPackSerializer, EzyCastIntToByte {
+public class MsgPackSimpleSerializer implements EzyMessageSerializer, EzyCastIntToByte {
 
 	protected Map<Class<?>, Parser> parsers;
 	
@@ -82,26 +83,7 @@ public class MsgPackSimpleSerializer implements MsgPackSerializer, EzyCastIntToB
 	}
 	
 	protected Parser getParser(Class<?> type) {
-		if(type == Object.class)
-			return null;
-		Parser parser = parsers.get(type);
-		if(parser == null && type.getInterfaces() != null)
-			parser = getParserOfInterfaces(type);
-		if(parser == null && type.getSuperclass() != null)
-			parser = getParserOfSuper(type);
-		return parser;
-	}
-	
-	protected Parser getParserOfSuper(Class<?> type) {
-		return getParser(type.getSuperclass());
-	}
-	
-	protected Parser getParserOfInterfaces(Class<?> type) {
-		Parser answer = null;
-		for(Class<?> clazz : type.getInterfaces())
-			if((answer = getParser(clazz)) != null)
-				return answer;
-		return answer;
+		return EzyMaps.getValue(parsers, type);
 	}
 	
 	protected Map<Class<?>, Parser> defaultParsers() {

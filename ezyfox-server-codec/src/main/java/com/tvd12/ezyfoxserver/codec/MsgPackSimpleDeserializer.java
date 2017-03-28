@@ -8,12 +8,13 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
 import com.tvd12.ezyfoxserver.io.EzyInts;
 import com.tvd12.ezyfoxserver.io.EzyLongs;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 
-public class MsgPackSimpleDeserializer implements MsgPackDeserializer {
+public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 
 	private MsgPackTypeParser typeParser;
 	private Map<MsgPackType, Parser> parsers;

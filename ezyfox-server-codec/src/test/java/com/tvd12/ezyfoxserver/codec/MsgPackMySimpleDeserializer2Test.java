@@ -19,7 +19,7 @@ public class MsgPackMySimpleDeserializer2Test extends MsgPackCodecTest {
 		Arrays.fill(bin8, (byte)'a');
 		Arrays.fill(bin16, (byte)'b');
 		Arrays.fill(bin32, (byte)'c');
-		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
+		EzyMessageSerializer serializer = new MsgPackSimpleSerializer();
 		EzyObjectBuilder dataBuilder = newObjectBuilder()
 				.append("a", bin16)
 				.append("b", bin16)

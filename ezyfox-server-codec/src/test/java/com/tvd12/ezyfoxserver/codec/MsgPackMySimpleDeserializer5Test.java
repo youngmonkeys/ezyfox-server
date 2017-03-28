@@ -19,7 +19,7 @@ public class MsgPackMySimpleDeserializer5Test extends MsgPackCodecTest {
 //		for(int i = 1 ; i < 500 ; i++) 
 			builder.append(i);
 //		builder.append(300);
-		MsgPackSerializer serializer = new MsgPackSimpleSerializer();
+		EzyMessageSerializer serializer = new MsgPackSimpleSerializer();
 		byte[] bytes = serializer.serialize(builder.build());
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
 		EzyArray answer = deserializer.deserialize(bytes);

@@ -12,26 +12,16 @@ import io.netty.util.ReferenceCountUtil;
 
 public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyArray> {
 
-	private Logger logger;
-	private EzyMessageToBytes messageToBytes;
-	private EzyObjectToMessage objectToMessage;
-
-	public MsgPackMessageToByteEncoder() {
-		this.logger = newLogger();
-		this.messageToBytes = newMessageToBytes();
-		this.objectToMessage = newObjectToMessage();
-	}
+	protected final Logger logger;
+	protected final EzyMessageToBytes messageToBytes;
+	protected final EzyObjectToMessage objectToMessage;
 	
-	private Logger newLogger() {
-		return LoggerFactory.getLogger(getClass());
-	}
-	
-	private EzyObjectToMessage newObjectToMessage() {
-		return MsgPackObjectToMessage.builder().build();
-	}
-	
-	private EzyMessageToBytes newMessageToBytes() {
-		return EzySimpleMessageToBytes.builder().build();
+	public MsgPackMessageToByteEncoder(
+			EzyMessageToBytes messageToBytes,
+			EzyObjectToMessage objectToMessage) {
+		this.messageToBytes = messageToBytes;
+		this.objectToMessage = objectToMessage;
+		this.logger = LoggerFactory.getLogger(getClass());
 	}
 
 	@Override
@@ -40,20 +30,20 @@ public class MsgPackMessageToByteEncoder extends MessageToByteEncoder<EzyArray> 
 		writeMessage(convertObjectToBytes(msg), out);
 	}
 	
-	private ByteBuf convertObjectToBytes(EzyArray object) {
+	protected ByteBuf convertObjectToBytes(EzyArray object) {
 		return convertMessageToBytes(convertObjectToMessage(object));
 	}
 	
-	private EzyMessage convertObjectToMessage(EzyArray object) {
+	protected EzyMessage convertObjectToMessage(EzyArray object) {
 		return objectToMessage.convert(object);
 	}
 	
-	private ByteBuf convertMessageToBytes(EzyMessage message) {
+	protected ByteBuf convertMessageToBytes(EzyMessage message) {
 		return messageToBytes.convert(message, ByteBuf.class);
 	}
 	
-	private void writeMessage(ByteBuf message, ByteBuf out) {
-		logger.info("write message with size {}", message.readableBytes());
+	protected void writeMessage(ByteBuf message, ByteBuf out) {
+		logger.debug("write message with size {}", message.readableBytes());
 		out.writeBytes(message);
 		ReferenceCountUtil.release(message);
 	}

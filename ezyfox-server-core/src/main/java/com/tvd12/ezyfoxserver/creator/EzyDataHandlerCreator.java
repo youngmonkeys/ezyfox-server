@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.creator;
 
-import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelHandler;
 
 public interface EzyDataHandlerCreator {
 
-	ChannelHandlerAdapter newHandler();
+	ChannelHandler newHandler();
 	
 }

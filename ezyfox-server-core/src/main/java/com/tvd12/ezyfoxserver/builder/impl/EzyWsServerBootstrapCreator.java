@@ -1,20 +1,17 @@
 package com.tvd12.ezyfoxserver.builder.impl;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
+import com.tvd12.ezyfoxserver.builder.impl.EzyChannelInitializer.Builder;
 
 public class EzyWsServerBootstrapCreator<C extends EzyWsServerBootstrapCreator<C>> 
-		extends EzyAbstractBootstrapCreator<C> {
+		extends EzyServerBootstrapCreator<C> {
 
-	@SuppressWarnings("rawtypes")
-	public static EzyWsServerBootstrapCreator newInstance() {
-		return new EzyWsServerBootstrapCreator();
+	public static EzyWsServerBootstrapCreator<?> newInstance() {
+		return new EzyWsServerBootstrapCreator<>();
 	}
 
 	@Override
-	protected ChannelInitializer<Channel> newChannelInitializer() {
-		return newWsChannelInitializerBuilder()
-				.build();
+	protected Builder newChannelInitializerBuilder() {
+		return newWsChannelInitializerBuilder();
 	}
 	
 	protected EzyWsChannelInitializer.Builder newWsChannelInitializerBuilder() {

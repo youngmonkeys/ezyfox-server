@@ -55,5 +55,13 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	 * @return this pointer
 	 */
 	EzyServerBootstrapBuilder codecCreator(EzyCodecCreator codecCreator);
+	
+	/**
+	 * Set ws codec creator
+	 * 
+	 * @param wsCodecCreator the ws creator
+	 * @return this pointer
+	 */
+	EzyServerBootstrapBuilder wsCodecCreator(EzyCodecCreator wsCodecCreator);
 
 }

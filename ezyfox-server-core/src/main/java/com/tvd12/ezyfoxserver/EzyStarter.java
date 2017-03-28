@@ -76,6 +76,7 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     			.wsport(2208)
     			.boss(ezyFox)
     			.codecCreator(newCodecCreator())
+    			.wsCodecCreator(newWsCodecCreator())
     			.parentGroup(newParentEventLoopGroup())
     			.childGroup(newChildEventLoopGroup())
     			.build();
@@ -145,8 +146,16 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     	return EzyClassUtil.newInstance(getCodecCreatorClassName());
     }
     
+    protected EzyCodecCreator newWsCodecCreator() {
+    	return EzyClassUtil.newInstance(getWsCodecCreatorClassName());
+    }
+    
     protected String getCodecCreatorClassName() {
     	return "com.tvd12.ezyfoxserver.codec.MsgPackCodecCreator";
+    }
+    
+    protected String getWsCodecCreatorClassName() {
+    	return "com.tvd12.ezyfoxserver.codec.JacksonCodecCreator";
     }
     
     protected Logger getLogger() {

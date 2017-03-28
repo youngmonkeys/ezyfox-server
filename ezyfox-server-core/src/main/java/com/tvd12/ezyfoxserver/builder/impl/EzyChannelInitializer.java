@@ -5,15 +5,16 @@ import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.creator.EzyDataHandlerCreator;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
 
 class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	
-	private EzyCodecCreator codecCreator;
-	private EzyDataHandlerCreator dataHandlerCreator;
+	protected EzyCodecCreator codecCreator;
+	protected EzyDataHandlerCreator dataHandlerCreator;
 	
 	protected EzyChannelInitializer(Builder builder) {
 		this.codecCreator = builder.codecCreator;
@@ -22,12 +23,28 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	
 	@Override
 	protected void initChannel(Channel ch) throws Exception {
+		initChannel(ch, newEncoder(), newDecoder());
+	}
+	
+	protected void initChannel(Channel ch, 
+			ChannelOutboundHandler encoder, 
+			ChannelInboundHandler decoder) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		ChannelOutboundHandler encoder = codecCreator.newEncoder();
-		ChannelInboundHandlerAdapter decoder = codecCreator.newDecoder();
 		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
-		pipeline.addLast(dataHandlerCreator.newHandler());
+		pipeline.addLast(newDataHandler());
 		pipeline.addLast(new EzyCombinedCodec(decoder, encoder));
+	}
+	
+	protected ChannelHandler newDataHandler() {
+		return dataHandlerCreator.newHandler();
+	}
+	
+	protected ChannelOutboundHandler newEncoder() {
+		return codecCreator.newEncoder();
+	}
+	
+	protected ChannelInboundHandler newDecoder() {
+		return codecCreator.newDecoder();
 	}
 	
 	public static Builder builder() {

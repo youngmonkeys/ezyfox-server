@@ -7,26 +7,30 @@ import com.tvd12.ezyfoxserver.creator.impl.EzyDataHandlerCreatorImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
-public class EzyServerBootstrapCreator 
-		extends EzyAbstractBootstrapCreator<EzyServerBootstrapCreator> {
+public class EzyServerBootstrapCreator<C extends EzyServerBootstrapCreator<C>> 
+		extends EzyAbstractBootstrapCreator<C> {
 
 	protected EzyCodecCreator codecCreator;
 	
-	public static EzyServerBootstrapCreator newInstance() {
-		return new EzyServerBootstrapCreator();
+	public static EzyServerBootstrapCreator<?> newInstance() {
+		return new EzyServerBootstrapCreator<>();
 	}
 	
-	public EzyServerBootstrapCreator codecCreator(EzyCodecCreator codecCreator) {
+	public C codecCreator(EzyCodecCreator codecCreator) {
 		this.codecCreator = codecCreator;
-		return this;
+		return getThis();
 	}
 
 	@Override
 	protected ChannelInitializer<Channel> newChannelInitializer() {
-		return EzyChannelInitializer.builder()
+		return newChannelInitializerBuilder()
 				.codecCreator(codecCreator)
 				.dataHandlerCreator(newDataHandlerCreator())
 				.build();
+	}
+	
+	protected EzyChannelInitializer.Builder newChannelInitializerBuilder() {
+		return EzyChannelInitializer.builder();
 	}
 	
 	protected EzyDataHandlerCreator newDataHandlerCreator() {

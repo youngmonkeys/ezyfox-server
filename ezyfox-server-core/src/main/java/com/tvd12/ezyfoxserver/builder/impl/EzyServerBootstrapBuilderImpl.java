@@ -21,6 +21,7 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	private EventLoopGroup childGroup;
 	private EventLoopGroup parentGroup;
 	private EzyCodecCreator codecCreator;
+	private EzyCodecCreator wsCodecCreator;
 	
 	/*
 	 * (non-Javadoc)
@@ -32,6 +33,10 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#wsport(int)
+	 */
 	@Override
 	public EzyServerBootstrapBuilder wsport(int wsport) {
 		this.wsport = wsport;
@@ -78,6 +83,16 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 		return this;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder#wsCodecCreator(com.tvd12.ezyfoxserver.codec.EzyCodecCreator)
+	 */
+	@Override
+	public EzyServerBootstrapBuilder wsCodecCreator(EzyCodecCreator wsCodecCreator) {
+		this.wsCodecCreator = wsCodecCreator;
+		return this;
+	}
+	
 	protected EzyBootstrap newLocalBoostrap(EzyServerContext context) {
     	return EzyBootstrap.builder().context(context).build();
     }
@@ -107,22 +122,23 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	protected ServerBootstrap createServerBootstrap(EzyServerContext ctx) {
-		return createServerBootstrap(newServerBootstrapCreator(), ctx, port);
+		return createServerBootstrap(newServerBootstrapCreator(), ctx);
 	}
 	
 	protected ServerBootstrap createWsServerBootstrap(EzyServerContext ctx) {
-		return createServerBootstrap(newWsServerBootstrapCreator(), ctx, wsport);
+		return createServerBootstrap(newWsServerBootstrapCreator(), ctx);
 	}
 	
-	protected EzyServerBootstrapCreator newServerBootstrapCreator() {
-		return EzyServerBootstrapCreator.newInstance().codecCreator(codecCreator);
+	protected EzyServerBootstrapCreator<?> newServerBootstrapCreator() {
+		return EzyServerBootstrapCreator.newInstance()
+				.port(port)
+				.codecCreator(codecCreator);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	protected EzyWsServerBootstrapCreator newWsServerBootstrapCreator() {
-		return EzyWsServerBootstrapCreator.newInstance();
-//		return EzyWsSecureServerBootstrapCreator.newInstance()
-//				.sslContext(createWsSslContext());
+	protected EzyWsServerBootstrapCreator<?> newWsServerBootstrapCreator() {
+		return EzyWsServerBootstrapCreator.newInstance()
+				.port(wsport)
+				.codecCreator(wsCodecCreator);
 	}
 	
 	protected SslContext createWsSslContext()  {
@@ -140,9 +156,8 @@ public class EzyServerBootstrapBuilderImpl implements EzyServerBootstrapBuilder 
 	}
 	
 	protected ServerBootstrap createServerBootstrap(
-			EzyAbstractBootstrapCreator<?> creator, EzyServerContext ctx, int port) {
+			EzyAbstractBootstrapCreator<?> creator, EzyServerContext ctx) {
 		return creator
-				.port(port)
 				.context(ctx)
 				.childGroup(childGroup)
 				.parentGroup(parentGroup)

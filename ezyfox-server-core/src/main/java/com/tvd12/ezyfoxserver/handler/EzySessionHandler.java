@@ -11,6 +11,7 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyRequestHandleException;
+import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -39,18 +40,31 @@ public class EzySessionHandler extends EzyDataHandler {
 	}
 	
 	protected void handleRequest(EzyConstant cmd, EzyData data) {
-		context.get(EzyRunWorker.class).run(() -> {
-			tryHandleRequest(cmd, data);
-		});
+		context.get(EzyRunWorker.class).run(() ->
+			tryHandleRequest(cmd, data)
+		);
 	}
 	
 	protected void tryHandleRequest(EzyConstant cmd, EzyData data) {
 		try {
+			interceptRequest(controllers.getInterceptor(cmd), data);
 			handleRequest(controllers.getController(cmd), data);
 		}
 		catch(Exception e) {
 			throw new EzyRequestHandleException(newHandleRequestErrorMessage(cmd, data), e);
 		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected void interceptRequest(EzyInterceptor interceptor, EzyData data) 
+			throws Exception {
+		interceptServerRequest(interceptor, data);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected void interceptServerRequest(EzyInterceptor interceptor, EzyData data) 
+			throws Exception {
+		interceptor.intercept(context, getReceiver(), data);
 	}
 	
 	@SuppressWarnings("rawtypes")

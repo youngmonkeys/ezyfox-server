@@ -1,6 +1,9 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.net.SocketAddress;
+import java.util.concurrent.locks.Lock;
+
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 
 import io.netty.channel.Channel;
 
@@ -160,6 +163,71 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * @return the max idle time
 	 */
 	long getMaxIdleTime();
+	
+	/**
+	 * 
+	 * @param time the max idle time
+	 */
+	void setMaxIdleTime(long time);
+	
+	/**
+	 * Set logged in or not
+	 * 
+	 * @param value logged in or not
+	 */
+	void setLoggedIn(boolean value);
+	
+	/**
+	 * @return true of user has logged in
+	 */
+	boolean isLoggedIn();
+
+	/**
+	 * @param time the logged time
+	 */
+	void setLoggedInTime(long time);
+	
+	/**
+	 * @return the logged in time
+	 */
+	long getLoggedInTime();
+	
+	/**
+	 * @param time the max waiting for user login time
+	 */
+	void setMaxWaitingTime(long time);
+	
+	/**
+	 * 
+	 * @return time the max waiting for user login time
+	 */
+	long getMaxWaitingTime();
+	
+	/**
+	 * @param activated session is active or not
+	 */
+	void setActivated(boolean activated);
+	
+	/**
+	 * 
+	 * @return session is active or not
+	 */
+	boolean isActivated();
+	
+	/**
+	 * @return the lock
+	 */
+	Lock getLock();
+	
+	/**
+	 * @param delegate the delegate
+	 */
+	void setDelegate(EzySessionDelegate delegate);
+	
+	/**
+	 * @return the delegate
+	 */
+	EzySessionDelegate getDelegate();
 	
 	/**
 	 * Get the channel mapped to this session

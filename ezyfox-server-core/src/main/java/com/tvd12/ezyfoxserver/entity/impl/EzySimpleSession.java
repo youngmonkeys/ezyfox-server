@@ -1,7 +1,10 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
 import java.net.SocketAddress;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -20,6 +23,7 @@ import lombok.ToString;
 public class EzySimpleSession extends EzyEntity implements EzySession {
 
 	protected long id;
+	protected Lock lock;
 	protected long creationTime;
 	protected long lastActivityTime;
 	protected long lastReadTime;
@@ -30,10 +34,21 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	protected byte[] privateKey;
 	protected byte[] publicKey;
 	protected byte[] clientKey;
+	protected boolean loggedIn;
+	protected boolean activated;
+	protected long loggedInTime;
+	protected long maxWaitingTime;
 	protected String reconnectToken;
 	protected String fullReconnectToken;
+	protected EzySessionDelegate delegate;
 	
 	protected Channel channel;
+	
+	{
+		maxIdleTime = 3 * 60 * 1000;
+		maxWaitingTime = 6 * 1000;
+		lock = new ReentrantLock();
+	}
 
 	public void setReconnectToken(String token) {
 		this.fullReconnectToken = token;
@@ -63,6 +78,11 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	@Override
 	public void send(EzyData data) {
 		channel.writeAndFlush(data);
+	}
+	
+	@Override
+	public void setActivated(boolean value) {
+		this.activated = value;
 	}
 	
 }

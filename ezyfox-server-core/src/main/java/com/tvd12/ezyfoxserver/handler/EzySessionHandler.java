@@ -20,7 +20,6 @@ import lombok.Setter;
 
 public class EzySessionHandler extends EzyDataHandler {
 
-	protected EzyServerContext context;
 	@Setter
 	protected EzyControllers controllers;
 

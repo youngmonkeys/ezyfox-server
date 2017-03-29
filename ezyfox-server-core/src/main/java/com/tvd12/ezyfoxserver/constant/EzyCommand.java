@@ -8,7 +8,8 @@ public enum EzyCommand implements EzyConstant {
 	HAND_SHAKE(1),
 	LOGIN(2),
 	ACCESS_APP(3),
-	REQUEST_APP(4);
+	REQUEST_APP(4),
+	DISCONNECT(5);
 	
 	@Getter
 	private final int id;

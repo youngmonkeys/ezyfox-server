@@ -6,7 +6,8 @@ public enum EzyEventType implements EzyConstant {
 
 	SERVER_READY(1),
 	USER_LOGIN(2),
-	USER_REQUEST(3);
+	USER_REQUEST(3),
+	USER_DISCONNECT(4);
 	
 	@Getter
 	private final int id;

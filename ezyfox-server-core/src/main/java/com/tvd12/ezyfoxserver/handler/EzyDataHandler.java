@@ -3,20 +3,24 @@ package com.tvd12.ezyfoxserver.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.delegate.EzySessionAdapter;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 
-public abstract class EzyDataHandler extends EzyLoggable {
+public abstract class EzyDataHandler extends EzySessionAdapter {
 
 	@Getter
 	protected Logger logger;
 	@Getter
 	protected EzySession session;
+	
+	protected EzyServerContext context;
+	
 	@Getter
 	protected EzySessionManager sessionManager;
 	
@@ -32,12 +36,13 @@ public abstract class EzyDataHandler extends EzyLoggable {
 	}
 	
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		logger.debug("session remove");
-		returnSession(ctx);
+		logger.debug("data handler removed");
+//		returnSession(ctx);
 	}
 	
 	protected EzySession borrowSession(ChannelHandlerContext ctx) {
 		session = sessionManager.borrowSession(ctx.channel());
+		session.setDelegate(this);
 		return session;
 	}
 	
@@ -69,4 +74,5 @@ public abstract class EzyDataHandler extends EzyLoggable {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     	getLogger().error("exception caught at session " + session, cause);
     }
+    
 }

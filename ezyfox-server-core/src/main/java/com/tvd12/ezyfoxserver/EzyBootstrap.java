@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.loader.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.loader.EzyPluginEntryLoader;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 
 import lombok.Builder;
 
@@ -24,11 +25,16 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 	public void start() throws Exception {
 		startAllPlugins();
 		startAllApps();
+		startManagers();
 	}
 	
 	@Override
 	public void destroy() {
 		//TODO destroy apps and plugins
+	}
+	
+	protected void startManagers() {
+		getManagers().startManagers();
 	}
 	
 	//====================== apps ===================
@@ -94,6 +100,10 @@ public class EzyBootstrap implements EzyStartable, EzyDestroyable {
 	
 	protected EzyPluginContext getPluginContext(String pluginName) {
 		return context.getPluginContext(pluginName);
+	}
+	
+	protected EzyManagers getManagers() {
+		return getServer().getManagers();
 	}
 	
 	protected Logger getLogger() {

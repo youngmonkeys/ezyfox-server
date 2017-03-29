@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import io.netty.channel.Channel;
@@ -20,6 +21,14 @@ public interface EzySessionManager {
 	 * @param session the session
 	 */
 	void returnSession(final EzySession session);
+	
+	/**
+	 * Return the session to pool
+	 * 
+	 * @param session the session
+	 * @param reason the reason
+	 */
+	void returnSession(final EzySession session, EzyConstant reason);
 	
 	/**
 	 * Get session by channel

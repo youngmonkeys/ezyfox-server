@@ -10,4 +10,9 @@ public interface EzyManagers {
 	 */
 	<T> T getManager(final Class<T> managerClass);
 	
+	/**
+	 * Start start able managers
+	 */
+	void startManagers();
+	
 }

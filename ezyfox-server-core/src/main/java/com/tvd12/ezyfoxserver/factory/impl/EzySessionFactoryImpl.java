@@ -15,7 +15,7 @@ public class EzySessionFactoryImpl implements EzySessionFactory {
 	}
 	
 	@Override
-	public EzySession newSession() {
+	public EzySession newProduct() {
 		EzySimpleSession session = new EzySimpleSession();
 		session.setId(counter.incrementAndGet());
 		session.setCreationTime(System.currentTimeMillis());

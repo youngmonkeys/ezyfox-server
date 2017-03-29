@@ -6,9 +6,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
+import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyFireAppEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFirePluginEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
@@ -101,6 +105,8 @@ public class EzySimpleContext extends EzyAbstractContext implements EzyServerCon
 		suppliers.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		suppliers.put(EzyFireEvent.class, () -> new EzyFireEventImpl(this));
 		suppliers.put(EzyFirePluginEvent.class, () -> new EzyFirePluginEventImpl(this));
+		suppliers.put(EzyFireAppEvent.class, ()-> new EzyFireAppEventImpl(this));
+		suppliers.put(EzyDisconnectUser.class, ()-> new EzyDisconnectUserImpl(this));
 	}
 	
 }

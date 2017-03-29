@@ -24,8 +24,6 @@ import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
 import com.tvd12.ezyfoxserver.service.impl.EzyJsonMappingImpl;
 import com.tvd12.ezyfoxserver.service.impl.EzyXmlReadingImpl;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -132,10 +130,6 @@ public class EzyStarter implements EzyStartable, EzyDestroyable {
     			.classLoader(getClassLoader())
     			.contextPath("com.tvd12.ezyfoxserver")
     			.build();
-    }
-    
-    protected EzyManagers getManagers() {
-    	return EzyManagersImpl.builder().build();
     }
     
     protected EzyJsonMapping getJsonMapping() {

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.command.EzyAddEventController;
+import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddEventControllerImpl;
@@ -35,6 +36,7 @@ public class EzySimpleAppContext
 	protected void addUnsafeCommands(Set<Class> unsafeCommands) {
 		super.addUnsafeCommands(unsafeCommands);
 		unsafeCommands.add(EzyFirePluginEvent.class);
+		unsafeCommands.add(EzyFireAppEvent.class);
 	}
 	
 }

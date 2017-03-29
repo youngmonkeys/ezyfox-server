@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.handler;
 
+import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
@@ -42,6 +44,18 @@ public class EzyUserHandler extends EzySessionHandler {
 	public void setContext(EzyServerContext ctx) {
 		super.setContext(ctx);
 		this.userManager = getManagers().getManager(EzyUserManager.class);
+	}
+	
+	@Override
+    public void onSessionReturned(EzyConstant reason) {
+    	newDisconnectUser(reason).execute();
+    }
+	
+	protected EzyDisconnectUser newDisconnectUser(EzyConstant reason) {
+		return context.get(EzyDisconnectUser.class)
+				.session(session)
+				.user(user)
+				.reason(reason);
 	}
 	
 }

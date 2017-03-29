@@ -41,6 +41,10 @@ public class EzyFileKeysGenerator extends EzyKeysGenerator {
 		if(file != null)
 			fileWriter.write(key.getEncoded(), file);
 	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
 
 	public static class Builder extends EzyKeysGenerator.Builder<Builder> {
 		protected File publicKeyFile;
@@ -62,6 +66,10 @@ public class EzyFileKeysGenerator extends EzyKeysGenerator {
 			return this;
 		}
 		
+		@Override
+		public EzyFileKeysGenerator build() {
+			return new EzyFileKeysGenerator(this);
+		}
 		
 	}
 	

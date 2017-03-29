@@ -6,6 +6,8 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
+import com.tvd12.ezyfoxserver.sercurity.EzyAsyCrypt;
+import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 
 public class EzyHandShakeController 
 		extends EzyAbstractController 
@@ -13,11 +15,18 @@ public class EzyHandShakeController
 
 	@Override
 	public void handle(EzyServerContext ctx, EzySession session, EzyArray data) {
-		String token = data.get(0);
-		getLogger().info("begin hanshake handler, token = {}", token);
+		String clientKey = data.get(0);
+		String reconnectToken = data.get(1);
+		getLogger().debug("begin hanshake handler, key = {} token = {}", clientKey, reconnectToken);
+		updateSession(session, data);
 		response(ctx, session);
-		getLogger().info("end hanshake handler, token = {}", session.getToken());
+		getLogger().debug("end hanshake handler, token = {}", session.getReconnectToken());
 	}
+	
+	protected void updateSession(EzySession session, EzyArray data) {
+		session.setClientKey(EzyBase64.decode(data.get(0, String.class)));
+	}
+	
 	
 	protected void response(EzyContext ctx, EzySession session) {
 		ctx.get(EzySendMessage.class)
@@ -32,8 +41,34 @@ public class EzyHandShakeController
 	
 	protected EzyHandShakeResponse newResponse(EzySession session) {
 		return EzyHandShakeResponse.builder()
-				.token(session.getToken())
+				.publicKey(encryptServerPublicKey(session))
+				.reconnectToken(encryptReconnectToken(session))
 				.build();
+	}
+	
+	protected String encryptServerPublicKey(EzySession session) {
+		return EzyBase64.decode2utf8(session.getPublicKey());
+	}
+	
+	protected String encryptReconnectToken(EzySession session) {
+		return encryptReconnectToken(session.getClientKey(), session.getReconnectToken());
+	}
+	
+	protected String encryptReconnectToken(byte[] key, String token) {
+		try {
+			return tryEncryptReconnectToken(key, token);
+		}
+		catch(Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	protected String tryEncryptReconnectToken(byte[] key, String token) 
+			throws Exception {
+		return EzyAsyCrypt.builder()
+				.algorithm("RSA")
+				.publicKey(key)
+				.build().encrypt(token, String.class);
 	}
 
 }

@@ -15,13 +15,11 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"privateKey", "publicKey", "clientKey", "fullReconnectToken"})
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class EzySimpleSession extends EzyEntity implements EzySession {
 
 	protected long id;
-	protected String token;
-	protected String fullToken;
 	protected long creationTime;
 	protected long lastActivityTime;
 	protected long lastReadTime;
@@ -29,12 +27,17 @@ public class EzySimpleSession extends EzyEntity implements EzySession {
 	protected long readBytes;
 	protected long writtenBytes;
 	protected long maxIdleTime;
+	protected byte[] privateKey;
+	protected byte[] publicKey;
+	protected byte[] clientKey;
+	protected String reconnectToken;
+	protected String fullReconnectToken;
 	
 	protected Channel channel;
 
-	public void setToken(String token) {
-		this.fullToken = token;
-		this.token = EzyMD5.cryptUTF(token);
+	public void setReconnectToken(String token) {
+		this.fullReconnectToken = token;
+		this.reconnectToken = EzyMD5.cryptUTF(token);
 	}
 	
 	@Override

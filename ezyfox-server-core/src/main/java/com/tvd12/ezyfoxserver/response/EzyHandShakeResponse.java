@@ -1,16 +1,16 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
-public class EzyHandShakeResponse implements EzyResponse {
+public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse {
 
-	private String token;
+	private String publicKey;
+	private String reconnectToken;
 	
 	protected EzyHandShakeResponse(Builder builder) {
-		this.token = builder.token;
+		this.publicKey = builder.publicKey;
+		this.reconnectToken = builder.reconnectToken;
 	}
 	
 	@Override
@@ -20,8 +20,10 @@ public class EzyHandShakeResponse implements EzyResponse {
 	
 	@Override
 	public Object getData() {
-		return EzyFactory.create(EzyArrayBuilder.class)
-				.append(token).build();
+		return newArrayBuilder()
+				.append(publicKey)
+				.append(reconnectToken)
+				.build();
 	}
 	
 	public static Builder builder() {
@@ -29,10 +31,16 @@ public class EzyHandShakeResponse implements EzyResponse {
 	}
 	
 	public static class Builder {
-		private String token;
+		private String publicKey;
+		private String reconnectToken;
 		
-		public Builder token(String token) {
-			this.token = token;
+		public Builder publicKey(String publicKey) {
+			this.publicKey = publicKey;
+			return this;
+		}
+		
+		public Builder reconnectToken(String reconnectToken) {
+			this.reconnectToken = reconnectToken;
 			return this;
 		}
 		

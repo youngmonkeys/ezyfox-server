@@ -62,6 +62,10 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 		if(file != null)
 			fileWriter.write(data, file);
 	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
 
 	public static class Builder extends EzyAsyCrypt.Builder<Builder> {
 		protected File publicKeyFile;
@@ -101,7 +105,7 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 		}
 		
 		@Override
-		public EzyAsyCrypt build() {
+		public EzyFileAsyCrypt build() {
 			return new EzyFileAsyCrypt(this);
 		}
 		

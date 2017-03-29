@@ -14,18 +14,61 @@ public interface EzySession extends EzySender, EzyProperties {
 	long getId();
 	
 	/**
-	 * Get session token
+	 * Get client key to encrypt data send to client
 	 * 
-	 * @return the session token
+	 * @return the client key
 	 */
-	String getToken();
+	byte[] getClientKey();
 	
 	/**
-	 * Set token
 	 * 
-	 * @param token the token
+	 * Set client key
+	 * 
+	 * @param key the client key
 	 */
-	void setToken(String token);
+	void setClientKey(byte[] key);
+	
+	/**
+	 * Get session reconnect token
+	 * 
+	 * @return the session reconnect token
+	 */
+	String getReconnectToken();
+	
+	/**
+	 * Set reconnect token
+	 * 
+	 * @param token the reconnect token
+	 */
+	void setReconnectToken(String token);
+	
+	/**
+	 * The private key that decrypt data
+	 * 
+	 * @param key the key
+	 */
+	void setPrivateKey(byte[] key);
+	
+	/**
+	 * Get private key
+	 * 
+	 * @return the private key
+	 */
+	byte[] getPrivateKey();
+	
+	/**
+	 * Set public key that encrypt data
+	 * 
+	 * @param key the public key
+	 */
+	void setPublicKey(byte[] key);
+	
+	/**
+	 * Get public key
+	 * 
+	 * @return the public key
+	 */
+	byte[] getPublicKey();
 	
 	/**
 	 * Get creation time in long

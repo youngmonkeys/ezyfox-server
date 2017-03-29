@@ -38,7 +38,7 @@ public interface EzyConstant {
 	 * @param id the constant id
 	 * @return a constant
 	 */
-	static EzyConstant one(final int id) {
+	static EzyConstant one(int id) {
 		return new EzyConstant() {
 			@Override
 			public int getId() {

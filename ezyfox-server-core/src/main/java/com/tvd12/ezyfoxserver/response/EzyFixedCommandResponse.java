@@ -5,7 +5,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class EzyFixedCommandResponse implements EzyResponse {
+public abstract class EzyFixedCommandResponse 
+		extends EzyBaseResponse 
+		implements EzyResponse {
 
 	private Object data;
 	

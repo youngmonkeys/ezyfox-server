@@ -7,7 +7,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class EzyFixedCmdRequest implements EzyRequest {
+public abstract class EzyFixedCmdRequest
+		extends EzyBaseRequest
+		implements EzyRequest {
 
 	protected Object data;
 	

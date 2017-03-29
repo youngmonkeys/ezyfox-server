@@ -1,9 +1,7 @@
 package com.tvd12.ezyfoxserver.client.request;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
 public class EzyJoinRoomRequest extends EzyFixedCmdAppRequest {
 
@@ -18,7 +16,7 @@ public class EzyJoinRoomRequest extends EzyFixedCmdAppRequest {
 	
 	@Override
 	public Object getData() {
-		return EzyFactory.create(EzyArrayBuilder.class)
+		return newArrayBuilder()
 				.append(getAppId())
 				.append(data)
 				.build();

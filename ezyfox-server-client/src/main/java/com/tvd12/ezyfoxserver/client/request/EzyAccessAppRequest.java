@@ -1,12 +1,10 @@
 package com.tvd12.ezyfoxserver.client.request;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
-public class EzyAccessAppRequest implements EzyRequest {
+public class EzyAccessAppRequest extends EzyBaseRequest implements EzyRequest {
 
 	private String appName;
 	private EzyData data;
@@ -23,7 +21,7 @@ public class EzyAccessAppRequest implements EzyRequest {
 	
 	@Override
 	public Object getData() {
-		return EzyFactory.create(EzyArrayBuilder.class)
+		return newArrayBuilder()
 				.append(appName)
 				.append(data)
 				.build();

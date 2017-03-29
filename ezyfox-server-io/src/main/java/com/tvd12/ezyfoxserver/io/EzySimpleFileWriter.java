@@ -1,15 +1,15 @@
 package com.tvd12.ezyfoxserver.io;
 
 import java.io.File;
-import java.io.FileOutputStream;
+
+import org.apache.commons.io.FileUtils;
 
 public class EzySimpleFileWriter implements EzyFileWriter {
 
-	@SuppressWarnings("resource")
 	@Override
 	public void write(byte[] data, File file) {
 		try {
-			new FileOutputStream(file).write(data);
+			FileUtils.writeByteArrayToFile(file, data);
 		}
 		catch(Exception e) {
 			throw new IllegalArgumentException(e);

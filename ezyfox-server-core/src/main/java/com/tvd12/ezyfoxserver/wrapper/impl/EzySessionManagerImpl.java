@@ -1,11 +1,13 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
+import java.security.KeyPair;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.factory.EzySessionFactory;
 import com.tvd12.ezyfoxserver.factory.impl.EzySessionFactoryImpl;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectPool;
+import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGeneration;
 import com.tvd12.ezyfoxserver.service.impl.EzySessionTokenGenerationImpl;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -34,18 +36,21 @@ public class EzySessionManagerImpl
 	
 	@Override
 	public void returnSession(EzySession session) {
-		sessionsByToken.remove(session.getToken());
+		sessionsByToken.remove(session.getReconnectToken());
 		sessionsByChannel.remove(session.getChannel());
 		returnObject(session);
 	}
 	
 	@Override
 	public EzySession borrowSession(Channel channel) {
+		KeyPair keyPair = newKeyPair();
 		EzySession session = borrowObject();
 		session.setChannel(channel);
-		session.setToken(newTokenSession());
+		session.setReconnectToken(newTokenSession());
+		session.setPublicKey(keyPair.getPublic().getEncoded());
+		session.setPrivateKey(keyPair.getPrivate().getEncoded());
 		sessionsByChannel.putIfAbsent(channel, session);
-		sessionsByToken.putIfAbsent(session.getToken(), session);
+		sessionsByToken.putIfAbsent(session.getReconnectToken(), session);
 		return session;
 	}
 	
@@ -62,13 +67,13 @@ public class EzySessionManagerImpl
 	@Override
 	protected EzySession createObject() {
 		EzySession session = newSession();
-		session.setToken(newTokenSession());
+		session.setReconnectToken(newTokenSession());
 		return session;
 	}
 	
 	@Override
 	protected void removeObject(EzySession object) {
-		sessionsByToken.remove(object.getToken());
+		sessionsByToken.remove(object.getReconnectToken());
 	}
 	
 	protected EzySession newSession() {
@@ -77,6 +82,13 @@ public class EzySessionManagerImpl
 	
 	protected String newTokenSession() {
 		return tokenGeneration.generate();
+	}
+	
+	protected KeyPair newKeyPair() {
+		return EzyKeysGenerator.builder()
+				.keyLength(512)
+				.algorithm("RSA")
+				.build().generate();
 	}
 
 	public static class Builder extends AbstractBuilder<EzySession, Builder> {

@@ -1,11 +1,9 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
-public class EzyLoginResponse implements EzyResponse {
+public class EzyLoginResponse extends EzyBaseResponse implements EzyResponse {
 
 	private long userId;
 	private Object data;
@@ -24,7 +22,7 @@ public class EzyLoginResponse implements EzyResponse {
 	
 	@Override
 	public Object getData() {
-		return EzyFactory.create(EzyArrayBuilder.class)
+		return newArrayBuilder()
 				.append(userId)
 				.append(username)
 				.append(data)

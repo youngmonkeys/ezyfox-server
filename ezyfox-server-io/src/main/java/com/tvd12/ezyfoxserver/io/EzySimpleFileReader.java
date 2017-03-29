@@ -1,18 +1,15 @@
 package com.tvd12.ezyfoxserver.io;
 
 import java.io.File;
-import java.io.FileInputStream;
+
+import org.apache.commons.io.FileUtils;
 
 public class EzySimpleFileReader implements EzyFileReader {
 
-	@SuppressWarnings("resource")
 	@Override
 	public byte[] readBytes(File file) {
 		try {
-			FileInputStream is = new FileInputStream(file);
-			byte[] bytes = new byte[is.available()];
-			is.read(bytes);
-			return bytes;
+			return FileUtils.readFileToByteArray(file);
 		}
 		catch(Exception e) {
 			throw new IllegalArgumentException(e);

@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.client.controller;
 import com.tvd12.ezyfoxserver.client.EzyClientContext;
 import com.tvd12.ezyfoxserver.client.request.EzyAccessAppRequest;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
@@ -16,14 +17,14 @@ public class EzyLoginController
 
 	@Override
 	public void handle(EzyClientContext ctx, EzySession session, EzyArray data) {
-		setMe(session, data);
+		setMe(ctx, session, data);
 		sendAccessAppRequest(ctx);
 	}
 	
 	protected void sendAccessAppRequest(EzyContext ctx) {
 		ctx.get(EzySendMessage.class)
 			.data(newAccessAppData(ctx))
-			.sender(getSingleton().getMe())
+			.sender(getMe(ctx))
 			.execute();
 	}
 	
@@ -42,8 +43,8 @@ public class EzyLoginController
 		return newObjectBuilder().build();
 	}
 	
-	protected void setMe(EzySession session, EzyArray data) {
-		getSingleton().setMe(createMe(session, data));
+	protected void setMe(EzyContext ctx, EzySession session, EzyArray data) {
+		setProperty(ctx, EzyClientConstant.ME, createMe(session, data));
 	}
 	
 	protected EzyUser createMe(EzySession session, EzyArray data) {

@@ -1,12 +1,10 @@
 package com.tvd12.ezyfoxserver.client.request;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
 
-public class EzyLoginRequest implements EzyRequest {
+public class EzyLoginRequest extends EzyBaseRequest implements EzyRequest {
 
 	private String username;
 	private String password;
@@ -25,7 +23,7 @@ public class EzyLoginRequest implements EzyRequest {
 	
 	@Override
 	public Object getData() {
-		return EzyFactory.create(EzyArrayBuilder.class)
+		return newArrayBuilder()
 				.append(username)
 				.append(password)
 				.append(data)

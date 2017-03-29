@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfoxserver.client.EzyClient;
 import com.tvd12.ezyfoxserver.client.EzyClientContext;
-import com.tvd12.ezyfoxserver.client.EzyClientSingleton;
 import com.tvd12.ezyfoxserver.client.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -57,7 +57,7 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     }
     
     protected EzyHandShakeRequest newHandShakeRequest() {
-    	return EzyHandShakeRequest.builder().token("12345678").build();
+    	return EzyHandShakeRequest.builder().build();
     }
     
     protected void createNewSession(ChannelHandlerContext ctx) {
@@ -110,11 +110,7 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     }
     
     protected EzyUser getMe() {
-    	return getSingleton().getMe();
-    }
-    
-    protected EzyClientSingleton getSingleton() {
-    	return EzyClientSingleton.getInstance();
+    	return context.getProperty(EzyClientConstant.ME);
     }
     
     @Override

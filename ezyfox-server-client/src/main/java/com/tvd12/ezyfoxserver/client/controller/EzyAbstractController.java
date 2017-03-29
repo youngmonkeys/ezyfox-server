@@ -2,12 +2,13 @@ package com.tvd12.ezyfoxserver.client.controller;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
-import com.tvd12.ezyfoxserver.client.EzyClientSingleton;
 import com.tvd12.ezyfoxserver.client.request.EzyRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
+import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.factory.EzyFactory;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -33,7 +34,15 @@ public class EzyAbstractController extends EzyLoggable {
 		return EzyFactory.create(EzyObjectBuilder.class);
 	}
 	
-	protected EzyClientSingleton getSingleton() {
-		return EzyClientSingleton.getInstance();
+	protected EzyUser getMe(EzyContext ctx) {
+		return getProperty(ctx, EzyClientConstant.ME);
+	}
+	
+	protected <T> T getProperty(EzyContext ctx, Object key) {
+		return ctx.getProperty(key);
+	}
+	
+	protected void setProperty(EzyContext ctx, Object key, Object value) {
+		ctx.setProperty(key, value);
 	}
 }

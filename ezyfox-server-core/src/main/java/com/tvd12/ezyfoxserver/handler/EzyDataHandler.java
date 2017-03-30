@@ -37,7 +37,6 @@ public abstract class EzyDataHandler extends EzySessionAdapter {
 	
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		logger.debug("data handler removed");
-//		returnSession(ctx);
 	}
 	
 	protected EzySession borrowSession(ChannelHandlerContext ctx) {

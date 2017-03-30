@@ -11,6 +11,7 @@ import com.tvd12.ezyfoxserver.client.serialize.iml.EzyRequestSerializerImpl;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
+import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -31,24 +32,35 @@ import lombok.Builder;
  *
  */
 @Builder
-public class EzyClientBoostrap extends EzyLoggable implements EzyStartable {
+public class EzyClientBoostrap 
+		extends EzyLoggable 
+		implements EzyStartable, EzyDestroyable {
 
 	protected int port;
     protected String host;
     protected EzyClient client;
     protected EzyCodecCreator codecCreator;
     
+    @Override
     public void start() throws Exception {
         EventLoopGroup group = newLoopGroup();
         try {
             Bootstrap b = newBootstrap(group);
             getLogger().info("client connecting...");
             ChannelFuture f = b.connect().sync();
-            f.channel().closeFuture().sync();
+            f.channel().closeFuture().addListener((future) ->
+            		getLogger().info("channel future close")
+			).sync();
         }
         finally {
-            group.shutdownGracefully().sync();
+            group.shutdownGracefully().addListener((future) ->
+				getLogger().info("event loop group shutdown")
+            ).sync();
         }
+    }
+    
+    @Override
+    public void destroy() {
     }
     
     protected Bootstrap newBootstrap(EventLoopGroup group) {

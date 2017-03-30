@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfoxserver.client.cmd.impl.EzyClientShutdownImpl;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.command.impl.EzyRunWorkerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
@@ -15,7 +17,9 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
 
-public class EzySimpleClientContext extends EzyEntity implements EzyClientContext {
+public class EzySimpleClientContext 
+		extends EzyEntity 
+		implements EzyClientContext {
 
 	@Setter
 	@Getter
@@ -47,7 +51,14 @@ public class EzySimpleClientContext extends EzyEntity implements EzyClientContex
 		Map<Class, Supplier> answer = new HashMap<>();
 		answer.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		answer.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));
+		answer.put(EzyShutdown.class, () -> new EzyClientShutdownImpl(this));
 		return answer;
+	}
+	
+	@Override
+	public void destroy() {
+		client.destroy();
+		workerExecutor.shutdown();
 	}
 
 }

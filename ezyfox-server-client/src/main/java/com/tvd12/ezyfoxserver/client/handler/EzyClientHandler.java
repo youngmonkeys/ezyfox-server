@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.client.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
@@ -44,6 +45,21 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     	sendHandShakeRequest();
     	getLogger().info("has send handshake");
     }
+	
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		getLogger().info("handler removed");
+		context.get(EzyShutdown.class).execute();
+	}
+	
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, EzyArray msg) throws Exception {
+    	getLogger().info("Client recived: " + msg);
+		int cmdId = msg.get(0);
+		EzyData data = msg.get(1);
+		EzyCommand cmd = EzyCommand.valueOf(cmdId);
+		handleResponse(cmd, data);
+    }
     
     protected void sendHandShakeRequest() {
     	context.get(EzySendMessage.class)
@@ -69,15 +85,6 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
 		session.setChannel(ctx.channel());
 		return session;
 	}
-    
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, EzyArray msg) throws Exception {
-    	getLogger().info("Client recived: " + msg);
-		int cmdId = msg.get(0);
-		EzyData data = msg.get(1);
-		EzyCommand cmd = EzyCommand.valueOf(cmdId);
-		handleResponse(cmd, data);
-    }
     
 	protected void handleResponse(EzyCommand cmd, EzyData data) {
     	context.get(EzyRunWorker.class).run(() -> { 

@@ -8,17 +8,14 @@
 		<artifactId>ezyfox-server</artifactId>
 		<version>0.0.1</version>
 	</parent>
-
-	<artifactId>ezyfox-server-core</artifactId>
-
+	<artifactId>ezyfox-server-msgpack</artifactId>
 	<version>1.0.0</version>
-	<name>ezyfox-server-core</name>
+	<name>ezyfox-server-msgpack</name>
 	<url>http://maven.apache.org</url>
-	
 	<properties>
+		<msgpack.version>0.6.12</msgpack.version>
 		<codec.version>1.0.0</codec.version>
 	</properties>
-	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
@@ -26,9 +23,9 @@
 			<version>${codec.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-security</artifactId>
-			<version>1.0.0</version>
+		    <groupId>org.msgpack</groupId>
+		    <artifactId>msgpack</artifactId>
+		    <version>${msgpack.version}</version>
 		</dependency>
 	</dependencies>
 </project>

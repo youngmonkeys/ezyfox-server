@@ -21,6 +21,7 @@ public class EzyLoginController
 	public void handle(EzyServerContext ctx, EzySession session, EzyArray data) {
 		getLogger().info("begin login handler {}", data);
 		doHandle(ctx, session, data);
+		updateSession(session);
 		getLogger().info("end login handler");
 	}
 	
@@ -36,6 +37,10 @@ public class EzyLoginController
 	protected void process(EzyServerContext ctx, EzyUserLoginEvent event) {
 		firePluginEvent(ctx, event);
 		process(ctx, newUser(event), event);
+	}
+	
+	protected void updateSession(EzySession session) {
+		session.setLoggedIn(true);
 	}
 	
 	protected void firePluginEvent(EzyServerContext ctx, EzyUserLoginEvent event) {

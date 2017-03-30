@@ -16,7 +16,7 @@ public class EzyHandShakeController
 	public void handle(EzyClientContext ctx, EzySession session, EzyArray data) {
 		getLogger().info("begin handle handshake, server key {}, reconnect token {}",
 				data.get(0), data.get(1));
-//		sendLoginRequest(ctx, session);
+		sendLoginRequest(ctx, session);
 		getLogger().info("end handshake sending login request");
 	}
 	

@@ -54,12 +54,22 @@ public class EzySessionManagerImpl
 		session.setChannel(null);
 		session.setDelegate(null);
 		session.setActivated(false);
+		session.setLoggedIn(false);
 		getLogger().info("return session {}, remain = {}", session, borrowedObjects.size());
 	}
 	
 	protected void notifySessionReturned(EzySession session, EzyConstant reason) {
 		if(reason != null)
+			tryNotifySessionReturned(session, reason);
+	}
+	
+	protected void tryNotifySessionReturned(EzySession session, EzyConstant reason) {
+		try {
 			session.getDelegate().onSessionReturned(reason);
+		}
+		catch(Exception e) {
+			getLogger().debug("notify session returned error", e);
+		}
 	}
 	
 	@Override

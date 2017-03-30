@@ -25,5 +25,10 @@
 			<artifactId>ezyfox-server-codec</artifactId>
 			<version>${codec.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-msgpack</artifactId>
+			<version>${codec.version}</version>
+		</dependency>
 	</dependencies>
 </project>

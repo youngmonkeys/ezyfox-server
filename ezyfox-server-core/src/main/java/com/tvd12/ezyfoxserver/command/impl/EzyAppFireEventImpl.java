@@ -4,6 +4,7 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.config.EzyApp;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
@@ -17,10 +18,20 @@ public class EzyAppFireEventImpl
 		this.context = context;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-		getEventControllers().getController(type).handle(context, event);
+		fire(getController(type), event);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void fire(EzyEventController ctrl, EzyEvent event) {
+		if(ctrl != null)
+			ctrl.handle(context, event);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected EzyEventController getController(EzyConstant type) {
+		return getEventControllers().getController(type);
 	}
 	
 	protected EzyEventControllers getEventControllers() {

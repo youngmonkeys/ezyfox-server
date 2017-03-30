@@ -17,7 +17,6 @@
 	
 	<properties>
 		<core.version>1.0.0</core.version>
-		<msgpack.version>0.6.12</msgpack.version>
 	</properties>
 	
 	<dependencies>
@@ -25,12 +24,6 @@
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-core</artifactId>
 			<version>${core.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.msgpack</groupId>
-		    <artifactId>msgpack</artifactId>
-		    <version>${msgpack.version}</version>
 		</dependency>
 	</dependencies>
 

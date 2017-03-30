@@ -26,9 +26,7 @@ public abstract class EzyAbstractEventControllers implements EzyEventControllers
 	@SuppressWarnings("rawtypes")
 	@Override
 	public EzyEventController getController(EzyConstant eventType) {
-		if(controllers.containsKey(eventType))
-			return controllers.get(eventType);
-		throw new IllegalArgumentException("has no controller with event = " + eventType);
+		return controllers.get(eventType);
 	}
 	
 	public abstract static class Builder {

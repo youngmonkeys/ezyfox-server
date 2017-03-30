@@ -8,11 +8,9 @@
 		<artifactId>ezyfox-server</artifactId>
 		<version>0.0.1</version>
 	</parent>
-
-	<artifactId>ezyfox-server-core</artifactId>
-
+	<artifactId>ezyfox-server-jackson</artifactId>
 	<version>1.0.0</version>
-	<name>ezyfox-server-core</name>
+	<name>ezyfox-server-jackson</name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
@@ -25,10 +23,6 @@
 			<artifactId>ezyfox-server-codec</artifactId>
 			<version>${codec.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-security</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 	</dependencies>
+	
 </project>

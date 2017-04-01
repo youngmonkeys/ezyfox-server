@@ -9,21 +9,17 @@
 		<version>0.0.1</version>
 	</parent>
 	
-	<artifactId>ezyfox-server-runner</artifactId>
+	<artifactId>ezyfox-server-nettyrunner</artifactId>
 	
 	<version>1.0.0</version>
-	<name>ezyfox-server-runner</name>
+	<name>ezyfox-server-nettyrunner</name>
 	<url>http://maven.apache.org</url>
-	
-	<properties>
-		<codec.version>1.0.0</codec.version>
-	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-codec</artifactId>
-			<version>${codec.version}</version>
+			<artifactId>ezyfox-server-netty</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 	

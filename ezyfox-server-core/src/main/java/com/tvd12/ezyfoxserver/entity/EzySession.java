@@ -5,8 +5,6 @@ import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 
-import io.netty.channel.Channel;
-
 public interface EzySession extends EzySender, EzyProperties {
 
 	/**
@@ -230,20 +228,6 @@ public interface EzySession extends EzySender, EzyProperties {
 	EzySessionDelegate getDelegate();
 	
 	/**
-	 * Get the channel mapped to this session
-	 * 
-	 * @return the channel
-	 */
-	Channel getChannel();
-	
-	/**
-	 * Map this session to the channel
-	 * 
-	 * @param channel the channel
-	 */
-	void setChannel(Channel channel);
-	
-	/**
 	 * Get client full ip address
 	 * 
 	 * @return the client full ip address
@@ -256,5 +240,15 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * @return the server full ip address
 	 */
 	SocketAddress getServerAddress();
+	
+	/**
+	 * close this session
+	 */
+	void close();
+	
+	/**
+	 * disconnect this session
+	 */
+	void disconnect();
 	
 }

@@ -8,27 +8,20 @@
 		<artifactId>ezyfox-server</artifactId>
 		<version>0.0.1</version>
 	</parent>
-
 	<artifactId>ezyfox-server-core</artifactId>
-
 	<version>1.0.0</version>
 	<name>ezyfox-server-core</name>
 	<url>http://maven.apache.org</url>
-	
 	<properties>
-		<codec.version>1.0.0</codec.version>
+		<common.version>1.0.0</common.version>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-codec</artifactId>
-			<version>${codec.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-security</artifactId>
-			<version>1.0.0</version>
+			<artifactId>ezyfox-server-common</artifactId>
+			<version>${common.version}</version>
 		</dependency>
 	</dependencies>
+	
 </project>

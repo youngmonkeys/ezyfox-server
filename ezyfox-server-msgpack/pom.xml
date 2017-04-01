@@ -15,8 +15,14 @@
 	<properties>
 		<msgpack.version>0.6.12</msgpack.version>
 		<codec.version>1.0.0</codec.version>
+		<common.version>1.0.0</common.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-common</artifactId>
+			<version>${common.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-codec</artifactId>

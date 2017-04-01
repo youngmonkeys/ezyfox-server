@@ -3,24 +3,22 @@ package com.tvd12.ezyfoxserver.wrapper;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
-import io.netty.channel.Channel;
-
-public interface EzySessionManager {
+public interface EzySessionManager<S extends EzySession> {
 
 	/**
-	 * Borrow session from pool and map the session to channel 
+	 * Get session by token
 	 * 
-	 * @param channel the channel
-	 * @return the session mapped channel
+	 * @param token the token
+	 * @return the session mapped to the token
 	 */
-	EzySession borrowSession(final Channel channel);
+	EzySession getSession(String token);
 	
 	/**
 	 * Return the session to pool
 	 * 
 	 * @param session the session
 	 */
-	void returnSession(final EzySession session);
+	void returnSession(S session);
 	
 	/**
 	 * Return the session to pool
@@ -28,22 +26,6 @@ public interface EzySessionManager {
 	 * @param session the session
 	 * @param reason the reason
 	 */
-	void returnSession(final EzySession session, EzyConstant reason);
-	
-	/**
-	 * Get session by channel
-	 * 
-	 * @param channel the channel
-	 * @return the session mapped to the channel
-	 */
-	EzySession getSession(final Channel channel);
-	
-	/**
-	 * Get session by token
-	 * 
-	 * @param token the token
-	 * @return the session mapped to the token
-	 */
-	EzySession getSession(final String token);
+	void returnSession(S session, EzyConstant reason);
 	
 }

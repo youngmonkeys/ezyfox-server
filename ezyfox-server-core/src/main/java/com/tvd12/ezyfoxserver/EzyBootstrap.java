@@ -9,9 +9,9 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
+import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
-import com.tvd12.ezyfoxserver.loader.EzyAppEntryLoader;
-import com.tvd12.ezyfoxserver.loader.EzyPluginEntryLoader;
+import com.tvd12.ezyfoxserver.ext.EzyPluginEntryLoader;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 
 import lombok.Builder;

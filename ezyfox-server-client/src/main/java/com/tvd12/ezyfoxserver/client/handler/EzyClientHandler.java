@@ -19,8 +19,8 @@ import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzySimpleSession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.entity.impl.EzySimpleSession;
 import com.tvd12.ezyfoxserver.exception.EzyResponseHandleException;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 
@@ -81,7 +81,7 @@ public class EzyClientHandler extends SimpleChannelInboundHandler<EzyArray> {
     }
     
     protected EzySession newSession(ChannelHandlerContext ctx) {
-		EzySimpleSession session = new EzySimpleSession();
+    	EzySimpleSession session = new EzySimpleSession();
 		session.setChannel(ctx.channel());
 		return session;
 	}

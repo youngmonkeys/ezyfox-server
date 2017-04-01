@@ -97,6 +97,10 @@ public class EzyUserManagerImpl implements EzyUserManager {
 		}
 	}
 	
+	public static Builder builder() {
+		return new Builder();
+	}
+	
 	public static class Builder implements EzyBuilder<EzyUserManagerImpl> {
 		
 		@Override

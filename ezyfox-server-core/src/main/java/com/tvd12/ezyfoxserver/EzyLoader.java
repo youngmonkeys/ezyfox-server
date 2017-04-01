@@ -19,8 +19,6 @@ import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
 import com.tvd12.ezyfoxserver.service.EzyXmlReading;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyControllersImpl;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 
 /**
  * @author tavandung12
@@ -28,11 +26,13 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
  */
 public class EzyLoader {
     
-    private Logger logger;
-    private EzyConfig config;
-    private ClassLoader classLoader;
-    private EzyXmlReading xmlReading;
-    private EzyJsonMapping jsonMapping;
+    protected Logger logger;
+    protected EzyConfig config;
+    protected EzyManagers managers;
+    protected ClassLoader classLoader;
+    protected EzyXmlReading xmlReading;
+    protected EzyJsonMapping jsonMapping;
+    protected EzyControllers controllers;
     
     private EzyLoader() {
         this.logger = LoggerFactory.getLogger(getClass());
@@ -45,22 +45,14 @@ public class EzyLoader {
     public EzyServer load() {
     	EzyServer answer = new EzyServer();
     	answer.setConfig(config);
+    	answer.setManagers(managers);
     	answer.setXmlReading(xmlReading);
-    	answer.setManagers(newManagers());
     	answer.setJsonMapping(jsonMapping);
     	answer.setClassLoader(classLoader);
     	answer.setSettings(readSettings());
-    	answer.setControllers(newControllers());
+    	answer.setControllers(controllers);
     	answer.setAppClassLoaders(newAppClassLoaders());
     	return answer;
-    }
-    
-    public EzyManagers newManagers() {
-    	return EzyManagersImpl.builder().build();
-    }
-    
-    public EzyControllers newControllers() {
-    	return EzyControllersImpl.builder().build();
     }
     
     private EzySettings readSettings() {
@@ -135,6 +127,16 @@ public class EzyLoader {
     
     public EzyLoader config(EzyConfig config) {
     	this.config = config;
+    	return this;
+    }
+    
+    public EzyLoader managers(EzyManagers managers) {
+    	this.managers = managers;
+    	return this;
+    }
+    
+    public EzyLoader controllers(EzyControllers controllers) {
+    	this.controllers = controllers;
     	return this;
     }
     

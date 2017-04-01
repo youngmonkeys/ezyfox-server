@@ -18,13 +18,4 @@
 	<properties>
 		<core.version>1.0.0</core.version>
 	</properties>
-	
-	<dependencies>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-core</artifactId>
-			<version>${core.version}</version>
-		</dependency>
-	</dependencies>
-
 </project>

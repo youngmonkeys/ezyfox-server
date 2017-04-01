@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public class EzyManagersImpl extends EzyLoggable implements EzyManagers {
@@ -17,12 +16,29 @@ public class EzyManagersImpl extends EzyLoggable implements EzyManagers {
 		this.managers = builder.newManagers();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.wrapper.EzyManagers#getManager(java.lang.Class)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getManager(Class<T> managerClass) {
-		return (T) managers.get(managerClass);
+	public <T> T getManager(Class<T> clazz) {
+		return (T) managers.get(clazz);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.wrapper.EzyManagers#addManager(java.lang.Class, java.lang.Object)
+	 */
+	@Override
+	public <T> void addManager(Class<T> clazz, T instance) {
+		managers.put(clazz, instance);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.wrapper.EzyManagers#startManagers()
+	 */
 	@Override
 	public void startManagers() {
 		managers.values().forEach(this::startManager);
@@ -45,8 +61,7 @@ public class EzyManagersImpl extends EzyLoggable implements EzyManagers {
 		
 		protected Map<Object, Object> newManagers() {
 			Map<Object, Object> answer = new ConcurrentHashMap<>();
-			answer.put(EzyUserManager.class, new EzyUserManagerImpl.Builder().build());
-			answer.put(EzySessionManager.class, new EzySessionManagerImpl.Builder().build());
+			answer.put(EzyUserManager.class, EzyUserManagerImpl.builder().build());
 			return answer; 
 		}
 		

@@ -17,7 +17,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<google.guava.version>21.0</google.guava.version>
 		<reflections.version>0.9.10</reflections.version>
-		<netty.all.version>4.1.8.Final</netty.all.version>
 		<commons.codec.version>1.10</commons.codec.version>
 		<properties.file.version>1.0.3</properties.file.version>
 		
@@ -36,11 +35,6 @@
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>${commons.codec.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty.all.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -180,4 +174,8 @@
 			</build>
 		</profile>
 	</profiles>
+  <modules>
+    <module>ezyfox-server-netty</module>
+    <module>ezyfox-server-nettymsgpack</module>
+  </modules>
 </project>

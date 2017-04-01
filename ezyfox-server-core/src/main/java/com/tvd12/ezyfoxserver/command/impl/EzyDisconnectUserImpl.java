@@ -83,8 +83,8 @@ public class EzyDisconnectUserImpl
 	}
 	
 	protected void disconnect() {
-		session.getChannel().disconnect().syncUninterruptibly();
-		session.getChannel().close();
+		session.disconnect();
+		session.close();
 	}
 
 	@Override

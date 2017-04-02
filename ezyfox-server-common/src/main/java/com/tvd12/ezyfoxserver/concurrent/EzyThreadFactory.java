@@ -68,6 +68,10 @@ public class EzyThreadFactory extends EzyLoggable implements ThreadFactory  {
 		return StringUtils.isEmpty(prefix) ? poolName : prefix + "-" + poolName;
 	}
 	
+	public static Builder builder() {
+		return new Builder();
+	}
+	
 	public static class Builder implements EzyBuilder<EzyThreadFactory> {
 
 		protected int priority;
@@ -89,8 +93,14 @@ public class EzyThreadFactory extends EzyLoggable implements ThreadFactory  {
 			this.priority = priority;
 			return this;
 		}
+		
 		public Builder daemon(boolean daemon) {
 			this.daemon = daemon;
+			return this;
+		}
+		
+		public Builder prefix(String prefix) {
+			this.prefix = prefix;
 			return this;
 		}
 		

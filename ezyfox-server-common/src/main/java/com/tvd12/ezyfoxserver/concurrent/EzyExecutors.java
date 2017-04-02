@@ -45,7 +45,7 @@ public abstract class EzyExecutors {
 	
 	public static EzyThreadFactory newThreadFactory(
 			final String poolName, final boolean daemon, final int priority) {
-		return new EzyThreadFactory.Builder()
+		return EzyThreadFactory.builder()
 				.daemon(daemon)
 				.priority(priority)
 				.poolName(poolName)

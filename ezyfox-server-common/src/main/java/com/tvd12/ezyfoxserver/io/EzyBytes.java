@@ -32,11 +32,27 @@ public abstract class EzyBytes {
 	}
 	
 	public static byte[] getBytes(double value) {
-		return getBytes(Double.doubleToLongBits(value), 4);
+		return getBytes(Double.doubleToLongBits(value), 8);
 	}
 	
 	public static byte[] getBytes(float value) {
-		return getBytes(Float.floatToIntBits(value), 8);
+		return getBytes(Float.floatToIntBits(value), 4);
+	}
+	
+	public static byte[] getBytes(long value) {
+		return getBytes(value, 8);
+	}
+	
+	public static byte[] getBytes(int value) {
+		return getBytes(value, 4);
+	}
+	
+	public static byte[] getBytes(short value) {
+		return getBytes(value, 2);
+	}
+	
+	public static byte[] getBytes(byte first, byte[] value) {
+		return EzyArrays.merge(first, value);
 	}
 	
 	public static byte[] copy(byte[][] bytess) {

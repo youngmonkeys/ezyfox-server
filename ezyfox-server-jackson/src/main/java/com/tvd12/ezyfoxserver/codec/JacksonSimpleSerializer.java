@@ -7,45 +7,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.util.EzyMaps;
+import com.tvd12.ezyfoxserver.function.EzyParser;
 
 public class JacksonSimpleSerializer 
-		extends JacksonObjectMapperSetter 
+		extends EzyAbstractSerializer 
 		implements EzyMessageSerializer {
 
-	protected Map<Class<?>, Parser> parsers;
-	
-	{
-		parsers = defaultParsers();
-	}
+	protected ObjectMapper objectMapper;
 	
 	public JacksonSimpleSerializer(ObjectMapper objectMapper) {
-		super(objectMapper);
+		this.objectMapper = objectMapper;
 	}
-	
+
 	@Override
-	public byte[] serialize(Object value) {
-		return tryParse(value);
-	}
-	
-	protected byte[] tryParse(Object value) {
-		return value == null ? parseNull() : parseNotNull(value);
-	}
-	
-	protected byte[] parseNull() {
+	protected byte[] parseNil() {
 		return null;
 	}
 	
-	protected byte[] parseNotNull(Object value) {
-		return parseNotNull(getParser(value.getClass()), value);
-	}
-	
-	protected byte[] parseNotNull(Parser parser, Object value) {
-		return parser != null ? parser.parse(value) : writeValueAsBytes(value);
-	}
-	
-	protected Parser getParser(Class<?> type) {
-		return EzyMaps.getValue(parsers, type);
+	@Override
+	protected byte[] parseWithNoParser(Object value) {
+		return writeValueAsBytes(value);
 	}
 	
 	protected byte[] parseObject(Object obj) {
@@ -72,18 +53,15 @@ public class JacksonSimpleSerializer
 		}
 	}
 	
-	protected Map<Class<?>, Parser> defaultParsers() {
-		Map<Class<?>, Parser> parsers = new ConcurrentHashMap<>();
+	protected Map<Class<?>, EzyParser<Object, byte[]>> defaultParsers() {
+		Map<Class<?>, EzyParser<Object, byte[]>> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	}
 	
-	protected void addParsers(Map<Class<?>, Parser> parsers) {
+	protected void addParsers(Map<Class<?>, EzyParser<Object, byte[]>> parsers) {
 		parsers.put(EzyObject.class, this::parseObject);
 		parsers.put(EzyArray.class, this::parseArray);
 	}
 	
-	private static interface Parser {
-		byte[] parse(Object value);
-	}
 }

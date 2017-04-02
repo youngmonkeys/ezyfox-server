@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
+import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
 import com.tvd12.ezyfoxserver.io.EzyInts;
 import com.tvd12.ezyfoxserver.io.EzyLongs;
@@ -17,7 +18,7 @@ import com.tvd12.ezyfoxserver.io.EzyStrings;
 public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 
 	private MsgPackTypeParser typeParser;
-	private Map<MsgPackType, Parser> parsers;
+	private Map<MsgPackType, EzyParser<ByteBuffer, Object>> parsers;
 	
 	private MapSizeDeserializer mapSizeDeserializer;
 	private ArraySizeDeserializer arraySizeDeserializer;
@@ -51,13 +52,13 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 		return parsers.get(type).parse(buffer);
 	}
 	
-	protected Map<MsgPackType, Parser> defaultParsers() {
-		Map<MsgPackType, Parser> parsers = new ConcurrentHashMap<>();
+	protected Map<MsgPackType, EzyParser<ByteBuffer, Object>> defaultParsers() {
+		Map<MsgPackType, EzyParser<ByteBuffer, Object>> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	}
 	
-	protected void addParsers(Map<MsgPackType, Parser> parsers) {
+	protected void addParsers(Map<MsgPackType, EzyParser<ByteBuffer, Object>> parsers) {
 		parsers.put(MsgPackType.POSITIVE_FIXINT, this::parsePositiveFixInt); //0K
 		parsers.put(MsgPackType.NEGATIVE_FIXINT, this::parseNegativeFixInt); //OK
 		parsers.put(MsgPackType.UINT8, this::parseUInt8); //OK
@@ -285,10 +286,6 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 	
 	protected void updateBufferPosition(ByteBuffer buffer, int offset) {
 		buffer.position(buffer.position() + offset);
-	}
-	
-	private static interface Parser {
-		Object parse(ByteBuffer buffer); 
 	}
 	
 }

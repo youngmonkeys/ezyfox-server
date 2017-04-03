@@ -11,7 +11,7 @@ import java.util.Map;
  * @author tavandung12
  *
  */
-public interface EzyProperties {
+public interface EzyProperties extends EzyRoProperties {
 
     /**
      * put key and value to map
@@ -29,48 +29,10 @@ public interface EzyProperties {
     void setProperties(Map<? extends Object, ? extends Object> map);
     
     /**
-     * get the value to which the specified key is mapped
-     * 
-     * @param <T> type of value
-     * @param key the key
-     * @return a value
-     */
-    <T> T getProperty(Object key);
-    
-    /**
-     * get the value to which the specified key is mapped and cast value to specific type
-     * 
-     * @param <T> the value type
-     * @param key key
-     * @param clazz specific type
-     * @return a value
-     */
-    <T> T getProperty(Object key, Class<T> clazz);
-    
-    /**
      * removes the mapping for a key from the map
      * 
      * @param key the key
      */
     void removeProperty(Object key);
 
-    /**
-     * check whether has value mapped to the or not
-     * 
-     * @param key the key to check
-     * @return true or false;
-     */
-    boolean containsKey(Object key);
-    
-    /**
-     * get the value to which the specified key is mapped
-     * 
-     * @param <T> type of value
-     * @param key the key
-     * @return a value
-     */
-    default <T> T getProperty(Class<T> key) {
-    	return getProperty((Object)key);
-    }
-    
 }

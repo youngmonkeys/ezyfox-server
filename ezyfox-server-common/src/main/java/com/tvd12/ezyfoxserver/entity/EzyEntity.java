@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
-import lombok.Getter;
 
 /**
  * Each model in application should have properties, and we think key/value is good idea 
@@ -14,7 +13,6 @@ import lombok.Getter;
 public abstract class EzyEntity implements EzyProperties {
 
     // map of key/value properties of model
-    @Getter
     protected Map<Object, Object> properties 
     		= new ConcurrentHashMap<>();
     
@@ -71,6 +69,13 @@ public abstract class EzyEntity implements EzyProperties {
     @Override
     public boolean containsKey(Object key) {
     	return properties.containsKey(key);
+    }
+    
+    @Override
+    public Properties getProperties() {
+    	Properties prop = new Properties();
+    	prop.putAll(properties);
+    	return prop;
     }
     
 }

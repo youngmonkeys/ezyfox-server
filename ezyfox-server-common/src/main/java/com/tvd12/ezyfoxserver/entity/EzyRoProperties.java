@@ -1,6 +1,15 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import java.util.Properties;
+
 public interface EzyRoProperties {
+	
+	/**
+     * Get all properties
+     * 
+     * @return all properties
+     */
+    Properties getProperties();
 
 	/**
      * get the value to which the specified key is mapped

@@ -17,32 +17,40 @@ public class EzyNettyServerBootstrap extends EzyServerBootstrap {
 	@Setter
 	protected ServerBootstrap wsServerBootstrap;
 	
+	protected ChannelFuture channelFuture;
+	protected ChannelFuture wsChannelFuture;
+	
 	@Override
 	protected void startOtherBootstraps() throws Exception {
 		startServerBootstrap();
 		startWsServerBootstrap();
+		waitAndCloseChannelFuture();
+		waitAndCloseWsChannelFuture();
 		waitAndShutdownEventLoopGroups();
 	}
 	
 	protected void startServerBootstrap() throws Exception {
-		startBootstrap(serverBootstrap, "socket");
+		getLogger().debug("starting server bootstrap ....");
+		channelFuture = serverBootstrap.bind().sync();
+		getLogger().debug("server bootstrap started");
 	}
 	
 	protected void startWsServerBootstrap() throws Exception {
-		startBootstrap(wsServerBootstrap, "websocket");
-	}
-	
-	private void startBootstrap(ServerBootstrap bootstrap, String type) throws Exception {
-		getLogger().debug("starting {} server bootstrap ....", type);
-		ChannelFuture future = serverBootstrap.bind().sync();
-		getLogger().debug("{} server bootstrap started", type);
-		waitAndCloseChannelFuture(future, type);
+		getLogger().debug("starting server bootstrap ....");
+		wsChannelFuture = wsServerBootstrap.bind().sync();
+		getLogger().debug("server bootstrap started");
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void waitAndCloseChannelFuture(ChannelFuture future, String type) {
-		future.channel().closeFuture()
-			.addListener(newChannelFutureListener(type)).syncUninterruptibly();
+	protected void waitAndCloseChannelFuture() {
+		channelFuture.channel().closeFuture()
+			.addListener(newChannelFutureListener("socket")).syncUninterruptibly();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void waitAndCloseWsChannelFuture() {
+		wsChannelFuture.channel().closeFuture()
+			.addListener(newChannelFutureListener("websocket")).syncUninterruptibly();
 	}
 	
 	@SuppressWarnings("rawtypes")

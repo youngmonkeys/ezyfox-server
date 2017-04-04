@@ -21,6 +21,11 @@
 			<artifactId>ezyfox-server-netty</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-nettycodec</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

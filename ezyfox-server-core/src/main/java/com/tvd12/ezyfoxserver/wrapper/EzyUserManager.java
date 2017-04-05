@@ -10,7 +10,7 @@ public interface EzyUserManager {
 	 * 
 	 * @param user the user
 	 */
-	void addUser(final EzyUser user);
+	void addUser(EzyUser user);
 	
 	/**
 	 * Get user by id
@@ -18,7 +18,7 @@ public interface EzyUserManager {
 	 * @param userId the user id
 	 * @return the user
 	 */
-	EzyUser getUser(final long userId);
+	EzyUser getUser(long userId);
 	
 	/**
 	 * Get user by id
@@ -26,7 +26,7 @@ public interface EzyUserManager {
 	 * @param username the user name
 	 * @return the user
 	 */
-	EzyUser getUser(final String username);
+	EzyUser getUser(String username);
 	
 	/**
 	 * Get user by id
@@ -34,7 +34,7 @@ public interface EzyUserManager {
 	 * @param session the user session
 	 * @return the user
 	 */
-	EzyUser getUser(final EzySession session);
+	EzyUser getUser(EzySession session);
 	
 	/**
 	 * Check whether contains user or not
@@ -42,7 +42,7 @@ public interface EzyUserManager {
 	 * @param userId the user id
 	 * @return true or false
 	 */
-	boolean containsUser(final long userId);
+	boolean containsUser(long userId);
 	
 	/**
 	 * Check whether contains user or not
@@ -50,7 +50,7 @@ public interface EzyUserManager {
 	 * @param username the user name
 	 * @return true or false
 	 */
-	boolean containsUser(final String username);
+	boolean containsUser(String username);
 	
 	/**
 	 * Check whether contains user or not
@@ -58,14 +58,14 @@ public interface EzyUserManager {
 	 * @param session the user session
 	 * @return true or false
 	 */
-	boolean containsUser(final EzySession session);
+	boolean containsUser(EzySession session);
 	
 	/**
 	 * Remove user
 	 * 
 	 * @param user the user
 	 */
-	void removeUser(final EzyUser user);
+	void removeUser(EzyUser user);
 	
 	/**
 	 * Check whether contains user or not
@@ -73,7 +73,7 @@ public interface EzyUserManager {
 	 * @param user the user
 	 * @return true or false
 	 */
-	default boolean containsUser(final EzyUser user) {
+	default boolean containsUser(EzyUser user) {
 		return containsUser(user.getName());
 	}
 	
@@ -82,7 +82,7 @@ public interface EzyUserManager {
 	 * 
 	 * @param userId the user id
 	 */
-	default void removeUser(final long userId) {
+	default void removeUser(long userId) {
 		removeUser(getUser(userId));
 	}
 	

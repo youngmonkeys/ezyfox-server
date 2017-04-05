@@ -6,7 +6,8 @@ public enum EzySessionRemoveReason implements EzyConstant {
 
 	UNKNOWN(0),
 	IDLE(1),
-	NOT_LOGGED_IN(2);
+	NOT_LOGGED_IN(2),
+	ANOTHER_DEVICE_LOGIN(3);
 	
 	@Getter
 	private final int id;

@@ -6,6 +6,14 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 public interface EzySessionManager<S extends EzySession> {
 
 	/**
+	 * Check contains session mapped to token or not
+	 * 
+	 * @param token the reconnect token
+	 * @return true or false
+	 */
+	boolean containsSession(String token); 
+	
+	/**
 	 * Get session by token
 	 * 
 	 * @param token the token

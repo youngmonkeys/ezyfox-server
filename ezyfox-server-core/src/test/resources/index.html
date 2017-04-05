@@ -51,7 +51,8 @@
 
                         $('#handshake').click(function () {
                             /* var msg = $('#msg').val() */
-                            var msg = [1, ["abcd"]];
+                            var msg = [1, ["MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAK6mRsBCaVBVfn5uEiLNpi+Xg27HY3vp3lmNhyhoukik/jVzBFUQn3pNnBoYcvmXq/coebDt3T3HJzwqaFNk768CAwEAAQ==", 
+                                           ""]];
                             ws.send(JSON.stringify(msg));
                         })
 

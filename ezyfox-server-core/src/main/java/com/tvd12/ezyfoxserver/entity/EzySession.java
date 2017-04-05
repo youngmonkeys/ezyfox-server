@@ -15,6 +15,20 @@ public interface EzySession extends EzySender, EzyProperties {
 	long getId();
 	
 	/**
+	 * Get client id
+	 * 
+	 * @return  the client id
+	 */
+	String getClientId();
+	
+	/**
+	 * Set client id
+	 * 
+	 * @param id the client id
+	 */
+	void setClientId(String id);
+	
+	/**
 	 * Get client key to encrypt data send to client
 	 * 
 	 * @return the client key

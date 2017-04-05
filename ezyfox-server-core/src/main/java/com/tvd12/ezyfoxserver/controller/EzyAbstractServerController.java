@@ -4,8 +4,10 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public class EzyAbstractServerController extends EzyAbstractController {
@@ -20,6 +22,11 @@ public class EzyAbstractServerController extends EzyAbstractController {
 	
 	protected EzyUserManager getUserManager(EzyServerContext ctx) {
 		return getManagers(ctx).getManager(EzyUserManager.class);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
+		return getManagers(ctx).getManager(EzySessionManager.class);
 	}
 	
 	protected EzyAppContext getAppContext(EzyServerContext ctx, int appId) {

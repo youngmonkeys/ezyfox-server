@@ -35,6 +35,11 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	@Override
+	public boolean containsSession(String token) {
+		return sessionsByToken.contains(token);
+	}
+	
+	@Override
 	public void returnSession(S session) {
 		returnSession(session, null);
 	}

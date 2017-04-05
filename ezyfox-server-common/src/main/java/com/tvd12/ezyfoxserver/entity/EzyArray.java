@@ -25,6 +25,7 @@ public interface EzyArray extends EzyRoArray {
 	/**
 	 * Set value at the index
 	 * 
+	 * @param <T> the value type
 	 * @param index the index
 	 * @param item the item to set
 	 */
@@ -33,7 +34,9 @@ public interface EzyArray extends EzyRoArray {
 	/**
 	 * Remove value at the index
 	 * 
+	 * @param <T> the value type
 	 * @param index the index
+	 * @return the removed value
 	 */
 	<T> T remove(int index);
 	

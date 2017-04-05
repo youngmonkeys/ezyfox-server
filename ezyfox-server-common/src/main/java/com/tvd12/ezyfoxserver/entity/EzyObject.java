@@ -25,7 +25,7 @@ public interface EzyObject extends EzyRoObject {
     /**
      * @see java.util.Map#putAll(java.util.Map)
      * 
-     * @param values the map value
+     * @param m the map value
      */
     @SuppressWarnings("rawtypes")
 	void putAll(Map m);
@@ -42,6 +42,7 @@ public interface EzyObject extends EzyRoObject {
     /**
      * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
      * 
+     * @param <V> the value type
      * @param key the key
      * @param func the function
      * @return the value

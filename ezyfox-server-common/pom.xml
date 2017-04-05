@@ -11,13 +11,13 @@
 
 	<artifactId>ezyfox-server-common</artifactId>
 
-	<version>1.0.0</version>
+	<version>0.0.2</version>
 	<name>ezyfox-server-common </name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<codec.version>1.0.0</codec.version>
-		<security.version>1.0.0</security.version>
+		<codec.version>0.0.1</codec.version>
+		<security.version>0.0.1</security.version>
 	</properties>
 	
 	<dependencies>

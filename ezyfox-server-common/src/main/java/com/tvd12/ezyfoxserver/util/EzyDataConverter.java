@@ -265,6 +265,7 @@ public abstract class EzyDataConverter {
     /**
      * Convert an array to a List
      * 
+     * @param <T> the value type
      * @param value an object represent to an array
      * @return a list object
      */
@@ -280,6 +281,7 @@ public abstract class EzyDataConverter {
     /**
      * Convert an array to a List
      * 
+     * @param <T> the value type
      * @param value the array to convert
      * @return a list object
      */

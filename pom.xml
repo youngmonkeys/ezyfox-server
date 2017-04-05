@@ -174,9 +174,4 @@
 			</build>
 		</profile>
 	</profiles>
-  <modules>
-    <module>ezyfox-server-netty</module>
-    <module>ezyfox-server-nettymsgpack</module>
-    <module>ezyfox-server-sfs2x</module>
-  </modules>
 </project>

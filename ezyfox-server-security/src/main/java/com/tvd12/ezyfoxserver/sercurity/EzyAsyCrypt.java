@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Cipher;
 
-import com.tvd12.ezyfoxserver.sercurity.function.BytesFunction;
+import com.tvd12.ezyfoxserver.function.EzyBytesFunction;
 
 public class EzyAsyCrypt {
 
@@ -21,7 +21,7 @@ public class EzyAsyCrypt {
 	protected KeyFactory keyFactory;
 	
 	@SuppressWarnings("rawtypes")
-	protected static final Map<Class, BytesFunction> BYTES_CONVERTERS;
+	protected static final Map<Class, EzyBytesFunction> BYTES_CONVERTERS;
 	
 	static {
 		BYTES_CONVERTERS = defaultBytesConverters();
@@ -76,12 +76,12 @@ public class EzyAsyCrypt {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	protected Map<Class, BytesFunction> getBytesConverters() {
+	protected Map<Class, EzyBytesFunction> getBytesConverters() {
 		return BYTES_CONVERTERS;
 	}
 
 	/**
-	 * @see https://docs.oracle.com/javase/8/docs/api/java/security/spec/PKCS8EncodedKeySpec.html
+	 * https://docs.oracle.com/javase/8/docs/api/java/security/spec/PKCS8EncodedKeySpec.html
 	 * 
 	 * @return the private key object
 	 * @throws Exception when get any errors
@@ -91,7 +91,7 @@ public class EzyAsyCrypt {
 	}
 
 	/**
-	 * @see https://docs.oracle.com/javase/8/docs/api/java/security/spec/X509EncodedKeySpec.html
+	 * https://docs.oracle.com/javase/8/docs/api/java/security/spec/X509EncodedKeySpec.html
 	 * 
 	 * @return the public key
 	 * @throws Exception when get any error
@@ -101,8 +101,8 @@ public class EzyAsyCrypt {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static Map<Class, BytesFunction> defaultBytesConverters() {
-		Map<Class, BytesFunction> answer = new ConcurrentHashMap<>();
+	private static Map<Class, EzyBytesFunction> defaultBytesConverters() {
+		Map<Class, EzyBytesFunction> answer = new ConcurrentHashMap<>();
 		answer.put(byte[].class, (bytes) -> bytes);
 		answer.put(String.class, (bytes) -> EzyBase64.encode2utf8((byte[])bytes));
 		return answer;

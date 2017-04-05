@@ -9,7 +9,7 @@
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>ezyfox-server-security</artifactId>
-	<version>1.0.0</version>
+	<version>0.0.1</version>
 	<name>ezyfox-server-security</name>
 	<url>http://maven.apache.org</url>
 	
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-io</artifactId>
-			<version>1.0.0</version>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 	

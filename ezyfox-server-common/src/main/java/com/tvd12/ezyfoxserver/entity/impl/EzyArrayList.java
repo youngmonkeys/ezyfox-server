@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.entity.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
@@ -66,7 +66,7 @@ public class EzyArrayList implements EzyArray {
 	 */
 	@Override
 	public <T> void add(T... items) {
-		this.add(Lists.newArrayList(items));
+		this.add(Arrays.asList(items));
 	}
 
 	/*

@@ -9,13 +9,13 @@
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>ezyfox-server-msgpack</artifactId>
-	<version>1.0.0</version>
+	<version>0.0.2</version>
 	<name>ezyfox-server-msgpack</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<msgpack.version>0.6.12</msgpack.version>
-		<codec.version>1.0.0</codec.version>
-		<common.version>1.0.0</common.version>
+		<codec.version>0.0.1</codec.version>
+		<common.version>0.0.1</common.version>
 	</properties>
 	<dependencies>
 		<dependency>

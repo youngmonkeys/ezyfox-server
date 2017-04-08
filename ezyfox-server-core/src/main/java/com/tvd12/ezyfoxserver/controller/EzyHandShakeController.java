@@ -10,29 +10,30 @@ import com.tvd12.ezyfoxserver.sercurity.EzyAsyCrypt;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 
 public class EzyHandShakeController 
-		extends EzyAbstractController 
+		extends EzyAbstractServerController 
 		implements EzyServerController<EzySession> {
 
 	@Override
 	public void handle(EzyServerContext ctx, EzySession session, EzyArray data) {
-		String clientKey = data.get(0);
-		String reconnectToken = data.get(1);
-		getLogger().debug("begin hanshake handler, key = {} token = {}", clientKey, reconnectToken);
+		getLogger().debug("begin hanshake handler key = {} token = {}", data.get(1), data.get(2));
 		updateSession(session, data);
 		response(ctx, session);
 		getLogger().debug("end hanshake handler, token = {}", session.getReconnectToken());
 	}
 	
 	protected void updateSession(EzySession session, EzyArray data) {
-		session.setClientKey(EzyBase64.decode(data.get(0, String.class)));
+		session.setClientId(data.get(0));
+		session.setClientKey(EzyBase64.decode(data.get(1, String.class)));
 	}
 	
+	protected boolean isReconnect(EzyServerContext ctx, String reconnectToken) {
+		return getSessionManager(ctx).containsSession(reconnectToken);
+	}
 	
 	protected void response(EzyContext ctx, EzySession session) {
 		ctx.get(EzySendMessage.class)
 			.data(getResponse(ctx, session))
-			.sender(session)
-			.execute();
+			.sender(session).execute();
 	}
 	
 	protected EzyArray getResponse(EzyContext ctx, EzySession session) {

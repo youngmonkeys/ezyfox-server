@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.codec;
 
 import java.io.IOException;
 
+import org.msgpack.MessagePack;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
@@ -37,9 +38,20 @@ public class MsgPackMySimpleDeserializerTest extends MsgPackCodecTest {
 				.append(-1)
 				.append(dataBuilder)
 				.build();
+		long start = System.currentTimeMillis();
 		byte[] bytes = serializer.serialize(request);
+		long end = System.currentTimeMillis() - start;
+		getLogger().info("serialize time elapse = {}", end);
+		MessagePack msgPack = new MessagePack();
+		start = System.currentTimeMillis();
+		msgPack.write(dataBuilder.build().toMap());
+		end = System.currentTimeMillis() - start;
+		getLogger().info("msg serialize time elapse = {}", end);
 		MsgPackSimpleDeserializer deserializer = new MsgPackSimpleDeserializer();
+		start = System.currentTimeMillis();
 		EzyArray answer = deserializer.deserialize(bytes);
+		end = System.currentTimeMillis() - start;
+		getLogger().info("deserialize time elapse = {}", end);
 		getLogger().info("answer = {}", answer);
 		int appId = answer.get(0);
 		int command = answer.get(1);

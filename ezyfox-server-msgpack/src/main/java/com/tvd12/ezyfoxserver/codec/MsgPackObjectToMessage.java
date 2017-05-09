@@ -18,7 +18,7 @@ public class MsgPackObjectToMessage implements EzyObjectToMessage {
 	}
 	
 	private EzyMessage convert(byte[] content) {
-		return EzyMessageBuilder.messageBuilder()
+		return EzyMessageBuilder.newInstance()
 				.size(content.length)
 				.content(content)
 				.header(newHeader(content))
@@ -26,11 +26,15 @@ public class MsgPackObjectToMessage implements EzyObjectToMessage {
 	}
 	
 	private EzyMessageHeader newHeader(byte[] content) {
-		return EzyMessageBuilder.headerBuilder()
-				.bigSize(true)
+		return EzyMessageHeaderBuilder.newInstance()
+				.bigSize(isBigMessage(content))
+				.encrypted(false)
 				.compressed(false)
-				.encrypted(true)
 				.build();
+	}
+	
+	private boolean isBigMessage(byte[] content) {
+		return content.length > MsgPackConstant.MAX_SMALL_MESSAGE_SIZE;
 	}
 	
 	public static Builder builder() {

@@ -20,7 +20,8 @@ public abstract class EzyRunner {
     }
     
     protected void startSystem(String configFile) throws Exception {
-    	newStarter(configFile).start();
+    	EzyStarter starter = newStarter(configFile);
+    	starter.start();
     }
     
     protected EzyStarter newStarter(String configFile) {

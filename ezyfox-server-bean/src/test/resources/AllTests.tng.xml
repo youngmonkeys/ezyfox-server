@@ -1,0 +1,50 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing"></package>
+		</packages>
+	</test>
+	<test name="Annotation">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.annotation"></package>
+		</packages>
+	</test>
+	<test name="Circular">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.circular"></package>
+		</packages>
+	</test>
+	<test name="Prototype">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.prototype"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.prototype1"></package>
+		</packages>
+	</test>
+	<test name="Singleton">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.singleton"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.singleton1"></package>
+		</packages>
+	</test>
+	<test name="Combine">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.combine"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.combine1"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.combine2"></package>
+		</packages>
+	</test>
+	<test name="Configuration">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.configuration"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.configuration1"></package>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.configuration2"></package>
+		</packages>
+	</test>
+	<test name="Supplier">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.bean.testing.supplier"></package>
+		</packages>
+	</test>
+</suite>

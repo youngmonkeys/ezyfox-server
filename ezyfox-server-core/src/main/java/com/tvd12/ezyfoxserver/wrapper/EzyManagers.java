@@ -2,8 +2,13 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 public interface EzyManagers {
 
+    /**
+     * Stop destroyable managers
+     */
+    void stopManagers();
+    
 	/**
-	 * Start start able managers
+	 * Start startable managers
 	 */
 	void startManagers();
 	
@@ -21,6 +26,7 @@ public interface EzyManagers {
 	 * @param clazz the manager interface clazz
 	 * @param instance the manager instance
 	 */
-	<T> void addManager(Class<T> clazz, T instance);
+	@SuppressWarnings("rawtypes")
+    void addManager(Class clazz, Object instance);
 	
 }

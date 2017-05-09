@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing"></package>
+		</packages>
+	</test>
+	<test name="Concurrent">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.concurrent"></package>
+		</packages>
+	</test>
+	<test name="Helper">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.helper"></package>
+		</packages>
+	</test>
+	<test name="Function">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.function"></package>
+		</packages>
+	</test>
+	<test name="Reflect">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.reflect"></package>
+		</packages>
+	</test>
+</suite>

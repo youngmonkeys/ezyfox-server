@@ -11,7 +11,7 @@ public abstract class EzyAbstractSessionFactory<S extends EzySession>
 	private final AtomicInteger counter = new AtomicInteger(0);
 
 	@Override
-	public S newProduct() {
+	public final S newProduct() {
 		S session = newSession();
 		initSession((EzyAbstractSession)session);
 		return session;

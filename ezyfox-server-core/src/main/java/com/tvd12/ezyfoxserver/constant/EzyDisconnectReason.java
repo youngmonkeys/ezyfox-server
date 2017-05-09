@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.constant;
 
+import com.tvd12.ezyfoxserver.util.EzyEnums;
+
 import lombok.Getter;
 
 public enum EzyDisconnectReason implements EzyConstant {
@@ -7,7 +9,11 @@ public enum EzyDisconnectReason implements EzyConstant {
 	UNKNOWN(0),
 	IDLE(1),
 	NOT_LOGGED_IN(2),
-	ANOTHER_DEVICE_LOGIN(3);
+	ANOTHER_SESSION_LOGIN(3),
+	ADMIN_BAN(4),
+    ADMIN_KICK(5),
+    MAX_REQUEST_PER_SECOND(6),
+    MAX_REQUEST_SIZE(7);
 	
 	@Getter
 	private final int id;
@@ -22,10 +28,7 @@ public enum EzyDisconnectReason implements EzyConstant {
 	}
 	
 	public static EzyDisconnectReason valueOf(int id) {
-		for(EzyDisconnectReason reason : values())
-			if(reason.getId() == id)
-				return reason;
-		throw new IllegalArgumentException("has no event with id = " + id);
+		return EzyEnums.valueOf(values(), id);
 	}
 	
 }

@@ -25,7 +25,9 @@ public interface EzyRoObject extends EzyData {
      * 
      * @return true or false
      */
-    boolean isEmpty();
+    default boolean isEmpty() {
+    	return size() == 0;
+    }
     
     /**
      * @see java.util.Map#containsKey(java.lang.Object)
@@ -34,6 +36,14 @@ public interface EzyRoObject extends EzyData {
      * @return true or false
      */
     boolean containsKey(Object key);
+    
+    /**
+     * check contains key and not null value mapped to the key
+     * 
+     * @param key the key
+     * @return true or false
+     */
+    boolean isNotNullValue(Object key);
     
     /**
      * @see java.util.Map#get(java.lang.Object)
@@ -52,10 +62,20 @@ public interface EzyRoObject extends EzyData {
      * 
      * @param <V> the type
      * @param key key
-     * @param clazz type of value
+     * @param type type of value
      * @return a value
      */
-    <V> V get(Object key, Class<V> clazz);
+    <V> V get(Object key, Class<V> type);
+    
+    /**
+     * get but not cast
+     * 
+     * @param key the key
+     * @param type the value type
+     * @return object value
+     */
+    @SuppressWarnings("rawtypes")
+	Object getValue(Object key, Class type);
     
     /**
      * @see java.util.Map#keySet()

@@ -4,16 +4,13 @@
 package com.tvd12.ezyfoxserver.ccl;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfoxserver.util.EzyEntryFiles;
-
-import lombok.Getter;
+import com.tvd12.ezyfoxserver.util.EzyDirectories;
 
 /**
  * @author tavandung12
@@ -21,8 +18,7 @@ import lombok.Getter;
  */
 public class EzyAppClassLoader extends URLClassLoader {
     
-    @Getter
-    protected Logger logger;
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     
     /**
      * @param urls
@@ -30,11 +26,6 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     public EzyAppClassLoader(File directory, ClassLoader parent) {
         super(getURLsByPath(directory), parent);
-        this.initialize(directory);
-    }
-    
-    private void initialize(File directory) {
-        this.logger = LoggerFactory.getLogger(getClass());
     }
     
     /* (non-Javadoc)
@@ -65,11 +56,18 @@ public class EzyAppClassLoader extends URLClassLoader {
     }
     
     private static URL[] getURLsByPath(File directory) {
+        return getURLsByPath(new EzyDirectories().directory(directory));
+    }
+    
+    private static URL[] getURLsByPath(EzyDirectories directories) {
         try {
-            return new EzyEntryFiles().directory(directory).getURLs();
-        } catch (IOException e) {
-            throw new IllegalStateException("can not load classes from path: " + directory, e);
+            return directories.getURLs();
+        } catch (Exception e) {
+            throw new IllegalStateException("can not load classes from path: " + directories, e);
         }
     }
     
+    protected Logger getLogger() {
+    	return logger;
+    }
 }

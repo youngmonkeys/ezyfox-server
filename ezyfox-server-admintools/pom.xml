@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tvd12</groupId>
+		<artifactId>ezyfox-server</artifactId>
+		<version>0.0.2</version>
+	</parent>
+	<artifactId>ezyfox-server-admintools</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+	
+	<name>ezyfox-server-admintools</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<ezy.mongodb.version>1.0.0</ezy.mongodb.version>
+		<ezy.hazelcast.version>1.0.0</ezy.hazelcast.version>
+		<spring.version>4.3.8.RELEASE</spring.version>
+		<struts.version>2.5.10.1</struts.version>
+		<hibernate.version>5.2.10.Final</hibernate.version>
+		<commons.dbcp2.version>2.1.1</commons.dbcp2.version>
+		<mysqlconnector.version>6.0.6</mysqlconnector.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-mongodb</artifactId>
+			<version>${ezy.mongodb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-hazelcast</artifactId>
+			<version>${ezy.hazelcast.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>${struts.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>${struts.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons.dbcp2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysqlconnector.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp.jstl</groupId>
+			<artifactId>jstl-api</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

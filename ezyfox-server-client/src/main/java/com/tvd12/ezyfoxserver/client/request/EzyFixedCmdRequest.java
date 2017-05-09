@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.client.request;
 
 import java.util.HashMap;
 
+import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +16,11 @@ public abstract class EzyFixedCmdRequest
 	protected Object data;
 	
 	protected EzyFixedCmdRequest(Builder<?> builder) {
-		this.data = builder.data;
+		this.data = builder.getData();
 	}
 	
-	public abstract static class Builder<B extends Builder<B>> {
+	public abstract static class Builder<B extends Builder<B>> 
+			implements EzyBuilder<EzyRequest> {
 		protected Object data;
 		
 		public B data(Object data) {
@@ -25,26 +28,14 @@ public abstract class EzyFixedCmdRequest
 			return getThis();
 		}
 		
-		public EzyFixedCmdRequest build() {
-			this.prepare();
-			return newProduct();
-		}
-		
 		@SuppressWarnings("unchecked")
 		protected B getThis() {
 			return (B)this;
 		}
 		
-		protected Object defaultData() {
-			return new HashMap<>();
+		protected Object getData() {
+			return data != null ? data : new HashMap<>();
 		}
-		
-		protected void prepare() {
-			if(data == null)
-				data = defaultData();
-		}
-		
-		protected abstract EzyFixedCmdRequest newProduct();
 	}
 	
 }

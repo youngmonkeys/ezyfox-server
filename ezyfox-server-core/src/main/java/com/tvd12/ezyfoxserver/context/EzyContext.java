@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.context;
 
-import com.tvd12.ezyfoxserver.entity.EzyProperties;
+import com.tvd12.ezyfoxserver.util.EzyProperties;
 
 public interface EzyContext extends EzyProperties {
 

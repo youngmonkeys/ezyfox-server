@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.client.request;
 
-import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 
@@ -16,7 +16,7 @@ public class EzyAccessAppRequest extends EzyBaseRequest implements EzyRequest {
 	
 	@Override
 	public EzyConstant getCommand() {
-		return EzyCommand.ACCESS_APP;
+		return EzyClientCommand.APP_ACCESS;
 	}
 	
 	@Override

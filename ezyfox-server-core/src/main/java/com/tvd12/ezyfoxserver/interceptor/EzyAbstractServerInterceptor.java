@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.interceptor;
 
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
-public abstract class EzyAbstractServerInterceptor<D> 
+public abstract class EzyAbstractServerInterceptor<R> 
 		extends EzyLoggable 
-		implements EzyServerInterceptor<D> {
+		implements EzyServerInterceptor<R> {
 
 }

@@ -8,7 +8,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.config.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 
 public class EzySettingsReaderTest {
 
@@ -17,8 +17,8 @@ public class EzySettingsReaderTest {
 //		JAXBContext jaxbContext = JAXBContext.newInstance(EzyFoxSettings.class);
 		JAXBContext jaxbContext = JAXBContext.newInstance("com.tvd12.ezyfoxserver", getClass().getClassLoader());
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		EzySettings settings = jaxbUnmarshaller
-				.unmarshal(new StreamSource(inputStream()), EzySettings.class).getValue();
+		EzySimpleSettings settings = jaxbUnmarshaller
+				.unmarshal(new StreamSource(inputStream()), EzySimpleSettings.class).getValue();
 		System.out.println(settings);
 	}
 	

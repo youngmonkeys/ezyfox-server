@@ -9,7 +9,7 @@ public class EzyServerReadyController
 
 	@Override
 	public void handle(EzyAppContext ctx, EzyServerReadyEvent event) {
-		getLogger().info("server ready controller");
+		getLogger().info("app: server ready controller");
 	}
 	
 }

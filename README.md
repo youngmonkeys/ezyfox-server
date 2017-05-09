@@ -1,20 +1,20 @@
 # ezyfox-server
 EzyFox Server
 
-#Synopsis
+# Synopsis
 
-#Code Example
+# Code Example
 
-#Motivation
+# Motivation
 
-#API Reference
+# API Reference
 
-#Tests
+# Tests
 
 mvn test
 
-#Contributors
+# Contributors
 
-#License
+# License
 
 - Apache License, Version 2.0

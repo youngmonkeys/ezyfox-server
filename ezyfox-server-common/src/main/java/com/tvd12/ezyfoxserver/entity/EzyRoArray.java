@@ -14,7 +14,7 @@ public interface EzyRoArray extends EzyData {
 	<T> T get(int index);
 	
 	/**
-	 * Get value by index
+	 * Get and cast value by index
 	 * 
 	 * @param <T> the value
 	 * @param index the index
@@ -22,6 +22,25 @@ public interface EzyRoArray extends EzyData {
 	 * @return the value
 	 */
 	<T> T get(int index, Class<T> type);
+	
+	/**
+	 * Get value by index but not cast
+	 * 
+	 * @param <T> the value
+	 * @param index the index
+	 * @param type the value type
+	 * @return the object value
+	 */
+	@SuppressWarnings("rawtypes")
+	Object getValue(int index, Class type);
+	
+	/**
+	 * Check if value in the index is not null
+	 * 
+	 * @param index the index
+	 * @return true or false
+	 */
+	boolean isNotNullValue(int index);
 	
 	/**
 	 * Get new array
@@ -38,6 +57,13 @@ public interface EzyRoArray extends EzyData {
 	int size();
 	
 	/**
+	 * @return is empty or not
+	 */
+	default boolean isEmpty() {
+		return size() == 0;
+	}
+	
+	/**
 	 * @param <T> type of value
 	 * @return covert this array to list
 	 */
@@ -52,9 +78,10 @@ public interface EzyRoArray extends EzyData {
 	
 	/**
 	 * @param <T> the array type
+	 * @param <A> the return type
 	 * @param type type array type
 	 * @return the array value
 	 */
-	<T> T toArray(Class<T> type);
+	<T,A> A toArray(Class<T> type);
 	
 }

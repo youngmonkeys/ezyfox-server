@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.sercurity;
 
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -21,16 +20,21 @@ public class EzyAsyCrypt {
 	protected KeyFactory keyFactory;
 	
 	@SuppressWarnings("rawtypes")
-	protected static final Map<Class, EzyBytesFunction> BYTES_CONVERTERS;
-	
-	static {
-		BYTES_CONVERTERS = defaultBytesConverters();
-	}
+	protected static final Map<Class, EzyBytesFunction> BYTES_CONVERTERS = defaultBytesConverters();
 	
 	protected EzyAsyCrypt(Builder<?> builder) {
+		try {
+			init(builder);
+		}
+		catch(Exception e) {
+			throw new IllegalStateException("init asymmetric encryption error", e);
+		}
+	}
+	
+	protected void init(Builder<?> builder) throws Exception {
 		this.cipher = builder.newCipher();
-		this.publicKey = builder.publicKey;
-		this.privateKey = builder.privateKey;
+		this.publicKey = builder.getPublicKey();
+		this.privateKey = builder.getPrivateKey();
 		this.keyFactory = builder.newKeyFactory();
 	}
 	
@@ -59,7 +63,7 @@ public class EzyAsyCrypt {
     }
 	
 	public byte[] decrypt(String data) throws Exception {
-		return decrypt(data.getBytes("UTF-8"));
+		return decrypt(EzyBase64.decode(data));
     }
 	
 	public <T> T encrypt(String data, Class<T> outType) throws Exception {
@@ -67,7 +71,7 @@ public class EzyAsyCrypt {
 	}
 	
 	public <T> T decrypt(String data, Class<T> outType) throws Exception {
-		return decrypt(data.getBytes("UTF-8"), outType);
+		return decrypt(EzyBase64.decode(data), outType);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -104,7 +108,7 @@ public class EzyAsyCrypt {
 	private static Map<Class, EzyBytesFunction> defaultBytesConverters() {
 		Map<Class, EzyBytesFunction> answer = new ConcurrentHashMap<>();
 		answer.put(byte[].class, (bytes) -> bytes);
-		answer.put(String.class, (bytes) -> EzyBase64.encode2utf8((byte[])bytes));
+		answer.put(String.class, (bytes) -> EzyBase64.encode2utf((byte[])bytes));
 		return answer;
 	}
 	
@@ -133,24 +137,24 @@ public class EzyAsyCrypt {
 			return getThis();
 		}
 		
+		protected byte[] getPublicKey() {
+			return publicKey;
+		}
+		
+		protected byte[] getPrivateKey() {
+			return privateKey;
+		}
+		
 		public EzyAsyCrypt build() {
 			return new EzyAsyCrypt(this);
 		}
 		
-		protected Cipher newCipher() {
-			try {
-				return Cipher.getInstance(algorithm);
-			} catch (Exception e) {
-				throw new IllegalArgumentException(e);
-			}
+		protected Cipher newCipher() throws Exception {
+			return Cipher.getInstance(algorithm);
 		}
 		
-		protected KeyFactory newKeyFactory() {
-			try {
-				return KeyFactory.getInstance(algorithm);
-			} catch (NoSuchAlgorithmException e) {
-				throw new IllegalArgumentException(e);
-			}
+		protected KeyFactory newKeyFactory() throws Exception {
+			return KeyFactory.getInstance(algorithm);
 		}
 		
 		@SuppressWarnings("unchecked")

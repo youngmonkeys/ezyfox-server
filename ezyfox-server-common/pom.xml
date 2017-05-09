@@ -6,30 +6,31 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 	</parent>
 
 	<artifactId>ezyfox-server-common</artifactId>
 
-	<version>0.0.2</version>
+	<version>1.0.0</version>
 	<name>ezyfox-server-common </name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<codec.version>0.0.2</codec.version>
-		<security.version>0.0.1</security.version>
+		<ezy.security.version>1.0.0</ezy.security.version>
+		<ezy.concurrent.version>1.0.0</ezy.concurrent.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-codec</artifactId>
-			<version>${codec.version}</version>
+			<artifactId>ezyfox-server-security</artifactId>
+			<version>${ezy.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-security</artifactId>
-			<version>${security.version}</version>
+			<artifactId>ezyfox-server-concurrent</artifactId>
+			<version>${ezy.concurrent.version}</version>
 		</dependency>
 	</dependencies>
+
 </project>

@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
+import com.tvd12.ezyfoxserver.factory.EzyLiteEntityFactory;
 import com.tvd12.test.base.BaseTest;
 
 public class JacksonTest extends BaseTest {
@@ -52,11 +52,11 @@ public class JacksonTest extends BaseTest {
 	}
 	
 	private EzyArrayBuilder newArrayBuilder() {
-		return EzyEntityFactory.create(EzyArrayBuilder.class);
+		return EzyLiteEntityFactory.create(EzyArrayBuilder.class);
 	}
 	
 	private EzyObjectBuilder newObjectBuilder() {
-		return EzyEntityFactory.create(EzyObjectBuilder.class);
+		return EzyLiteEntityFactory.create(EzyObjectBuilder.class);
 	}
 	
 	private InputStream getJsonInputStream() {

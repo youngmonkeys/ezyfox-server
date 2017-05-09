@@ -1,10 +1,11 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.config.EzyPlugin;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 public class EzyPluginFireEventImpl 
@@ -17,17 +18,30 @@ public class EzyPluginFireEventImpl
 		this.context = context;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
+	@SuppressWarnings("rawtypes")
+    @Override
 	public void fire(EzyConstant type, EzyEvent event) {
-		getEventControllers().getController(type).handle(context, event);
+	    EzyEventController ctrl = getEventController(type);
+	    getLogger().debug("fire event {}, controller = {}", type, ctrl);
+	    fire(ctrl, event);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    protected void fire(EzyEventController ctrl, EzyEvent event) {
+        if(ctrl != null)
+            ctrl.handle(context, event);
+    }
+	
+	@SuppressWarnings("rawtypes")
+    protected EzyEventController getEventController(EzyConstant type) {
+	    return getEventControllers().getController(type);
 	}
 	
 	protected EzyEventControllers getEventControllers() {
-		return getPlugin().getEventControllers();
+		return getPluginSetting().getEventControllers();
 	}
 	
-	protected EzyPlugin getPlugin() {
-		return context.getPlugin();
+	protected EzyPluginSetting getPluginSetting() {
+		return context.getPlugin().getSetting();
 	}
 }

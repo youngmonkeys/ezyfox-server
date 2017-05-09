@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.controller;
 
-public interface EzyController<C, R, D> {
+public interface EzyController<C, R> {
 	
-	void handle(C ctx, R rev, D data);
+	void handle(C ctx, R request);
 	
 }

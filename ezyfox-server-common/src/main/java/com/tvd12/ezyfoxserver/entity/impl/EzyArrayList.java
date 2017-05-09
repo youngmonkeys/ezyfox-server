@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.io.EzyCollectionConverter;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
-import com.tvd12.ezyfoxserver.util.EzyLiteCollectionConverter;
 
 import lombok.Setter;
 
@@ -18,16 +18,14 @@ import lombok.Setter;
 public class EzyArrayList implements EzyArray {
 	private static final long serialVersionUID = 5952111146742741007L;
 	
-	protected ArrayList<Object> list;
+	protected ArrayList<Object> list = new ArrayList<>();
 	
 	@Setter
 	protected transient EzyInputTransformer inputTransformer;
 	@Setter
 	protected transient EzyOutputTransformer outputTransformer;
-	
-	{
-		list = new ArrayList<>();
-	}
+	@Setter
+	protected transient EzyCollectionConverter collectionConverter;
 	
 	public EzyArrayList() {
 	}
@@ -48,7 +46,26 @@ public class EzyArrayList implements EzyArray {
 	 */
 	@Override
 	public <T> T get(int index, Class<T> type) {
-		return (T) transformOutput(list.get(index), type);
+		return (T) getValue(index, type);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#getValue(int, java.lang.Class)
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getValue(int index, Class type) {
+		return transformOutput(list.get(index), type);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#isNotNullIndex(int)
+	 */
+	@Override
+	public boolean isNotNullValue(int index) {
+		return index < size() ? list.get(index) != null : false;
 	}
 	
 	/*
@@ -66,7 +83,7 @@ public class EzyArrayList implements EzyArray {
 	 */
 	@Override
 	public <T> void add(T... items) {
-		this.add(Arrays.asList(items));
+		add(Arrays.asList(items));
 	}
 
 	/*
@@ -75,7 +92,7 @@ public class EzyArrayList implements EzyArray {
 	 */
 	@Override
 	public void add(Collection<? extends Object> items) {
-		list.addAll(items);
+		items.forEach(this::add);
 	}
 	
 	/*
@@ -85,6 +102,15 @@ public class EzyArrayList implements EzyArray {
 	@Override
 	public int size() {
 		return list.size();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#isEmpty()
+	 */
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 	/*
@@ -130,7 +156,7 @@ public class EzyArrayList implements EzyArray {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List toList() {
-		return list;
+		return new ArrayList<>(list);
 	}
 	
 	/*
@@ -147,10 +173,8 @@ public class EzyArrayList implements EzyArray {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#toArray(java.lang.Class)
 	 */
 	@Override
-	public <T> T toArray(Class<T> type) {
-		if(!type.isArray())
-			throw new IllegalArgumentException(type + " is not array type");
-		return EzyLiteCollectionConverter.toArray(list, type);
+	public <T,A> A toArray(Class<T> type) {
+		return getCollectionConverter().toArray(list, type);
 	}
 	
 	/*
@@ -160,7 +184,12 @@ public class EzyArrayList implements EzyArray {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		return new EzyArrayList((Collection) list.clone());
+		super.clone();
+		EzyArrayList clone = new EzyArrayList((Collection) list.clone());
+		clone.setInputTransformer(inputTransformer);
+		clone.setOutputTransformer(outputTransformer);
+		clone.setCollectionConverter(getCollectionConverter());
+		return clone;
 	}
 	
 	/*
@@ -182,10 +211,9 @@ public class EzyArrayList implements EzyArray {
 	 * @param item the item
 	 * @return add successful or not
 	 */
-	protected boolean add(Object item) {
-		if(item == null)
-			return list.add(item);
-		return list.add(transformInput(item));
+	@Override
+	public void add(Object item) {
+		list.add(transformInput(item));
 	}
 	
 	/**
@@ -217,6 +245,10 @@ public class EzyArrayList implements EzyArray {
 	@Override
 	public String toString() {
 		return list.toString();
+	}
+	
+	protected EzyCollectionConverter getCollectionConverter() {
+		return collectionConverter;
 	}
 
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tvd12</groupId>
+		<artifactId>ezyfox-server</artifactId>
+		<version>0.0.2</version>
+	</parent>
+	<artifactId>ezyfox-server-niocodec</artifactId>
+	<version>1.0.0</version>
+
+	<name>ezyfox-server-niocodec</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<ezy.nio.version>1.0.0</ezy.nio.version>
+        <ezy.msgpack.version>1.0.0</ezy.msgpack.version>
+        <ezy.jackson.version>1.0.0</ezy.jackson.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-nio</artifactId>
+			<version>${ezy.nio.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-msgpack</artifactId>
+			<version>${ezy.msgpack.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-jackson</artifactId>
+			<version>${ezy.jackson.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>

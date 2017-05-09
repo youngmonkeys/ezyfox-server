@@ -6,21 +6,23 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 	</parent>
 	<artifactId>ezyfox-server-netty</artifactId>
 	<version>1.0.0</version>
 	<name>ezyfox-server-netty</name>
 	<url>http://maven.apache.org</url>
+
 	<properties>
-		<core.version>1.0.0</core.version>
+		<ezy.boot.version>1.0.0</ezy.boot.version>
 		<netty.all.version>4.1.8.Final</netty.all.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-core</artifactId>
-			<version>${core.version}</version>
+			<artifactId>ezyfox-server-boot</artifactId>
+			<version>${ezy.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>

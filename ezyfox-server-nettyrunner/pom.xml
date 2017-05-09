@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 	</parent>
 	
 	<artifactId>ezyfox-server-nettyrunner</artifactId>
@@ -14,17 +14,22 @@
 	<version>1.0.0</version>
 	<name>ezyfox-server-nettyrunner</name>
 	<url>http://maven.apache.org</url>
+
+	<properties>
+		<ezy.netty.version>1.0.0</ezy.netty.version>
+		<ezy.nettycodec.version>1.0.0</ezy.nettycodec.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-netty</artifactId>
-			<version>1.0.0</version>
+			<version>${ezy.netty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-nettycodec</artifactId>
-			<version>1.0.0</version>
+			<version>${ezy.nettycodec.version}</version>
 		</dependency>
 	</dependencies>
 	
@@ -37,7 +42,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.tvd12.ezyfoxserver.EzyFoxRunner</mainClass>
+							<mainClass>com.tvd12.ezyfoxserver.EzyNettyRunner</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

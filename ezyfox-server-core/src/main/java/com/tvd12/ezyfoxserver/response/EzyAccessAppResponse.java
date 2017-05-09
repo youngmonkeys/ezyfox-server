@@ -3,26 +3,26 @@ package com.tvd12.ezyfoxserver.response;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
+import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
+import lombok.Setter;
+
+@Setter
 public class EzyAccessAppResponse extends EzyBaseResponse implements EzyResponse {
 
-	private int appId;
-	private EzyData data;
-	
-	protected EzyAccessAppResponse(Builder builder) {
-		this.data = builder.data;
-		this.appId = builder.appId;
-	}
+	protected EzyData data;
+	protected EzyAppSetting app;
 	
 	@Override
 	public EzyConstant getCommand() {
-		return EzyCommand.ACCESS_APP;
+		return EzyCommand.APP_ACCESS;
 	}
 	
 	@Override
 	public Object getData() {
 		return newArrayBuilder()
-				.append(appId)
+				.append(app.getId())
+				.append(app.getName())
 				.append(data)
 				.build();
 	}
@@ -31,23 +31,28 @@ public class EzyAccessAppResponse extends EzyBaseResponse implements EzyResponse
 		return new Builder();
 	}
 	
-	public static class Builder {
-		private int appId;
-		private EzyData data;
-		
-		public Builder appId(int appId) {
-			this.appId = appId;
-			return this;
-		}
+	public static class Builder implements EzyResponse.Builder {
+		protected EzyData data;
+		protected EzyAppSetting app;
 		
 		public Builder data(EzyData data) {
 			this.data = data;
 			return this;
 		}
 		
+		public Builder app(EzyAppSetting app) {
+            this.app = app;
+            return this;
+        }
+		
+		@Override
 		public EzyAccessAppResponse build() {
-			return new EzyAccessAppResponse(this);
+		    EzyAccessAppResponse answer = new EzyAccessAppResponse();
+		    answer.setApp(app);
+		    answer.setData(data);
+		    return answer;
 		}
+
 	}
 
 }

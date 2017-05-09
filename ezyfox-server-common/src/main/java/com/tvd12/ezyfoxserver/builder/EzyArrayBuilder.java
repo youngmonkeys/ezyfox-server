@@ -1,10 +1,17 @@
 package com.tvd12.ezyfoxserver.builder;
 
-import java.util.Collection;
-
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 
 public interface EzyArrayBuilder extends EzyBuilder<EzyArray> {
+	
+	/**
+	 * append item to product 
+	 * 
+	 * @param <T> the value type
+	 * @param item the item to add
+	 * @return this pointer
+	 */
+	<T> EzyArrayBuilder append(T item);
 	
 	/**
 	 * append items to product 
@@ -14,7 +21,7 @@ public interface EzyArrayBuilder extends EzyBuilder<EzyArray> {
 	 * @return this pointer
 	 */
 	@SuppressWarnings("unchecked")
-	<T> EzyArrayBuilder append(final T... items);
+	<T> EzyArrayBuilder append(T... items);
 	
 	/**
 	 * append items to product
@@ -22,7 +29,8 @@ public interface EzyArrayBuilder extends EzyBuilder<EzyArray> {
 	 * @param items the items to add
 	 * @return this pointer
 	 */
-	EzyArrayBuilder append(final Collection<? extends Object> items);
+	@SuppressWarnings("rawtypes")
+	EzyArrayBuilder append(Iterable items);
 	
 	/**
 	 * build and add constructed item to product
@@ -31,7 +39,7 @@ public interface EzyArrayBuilder extends EzyBuilder<EzyArray> {
 	 * @return this pointer
 	 */
 	@SuppressWarnings("rawtypes")
-	default EzyArrayBuilder append(final EzyBuilder builder) {
+	default EzyArrayBuilder append(EzyBuilder builder) {
 		return this.append(builder.build());
 	}
 	

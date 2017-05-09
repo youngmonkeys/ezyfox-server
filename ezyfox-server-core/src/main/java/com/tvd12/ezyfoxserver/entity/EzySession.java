@@ -1,11 +1,14 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyProperties;
 
-public interface EzySession extends EzySender, EzyProperties {
+public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Serializable {
 
 	/**
 	 * Get session id
@@ -13,6 +16,13 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * @return the session id
 	 */
 	long getId();
+	
+	/**
+	 * Get session name
+	 * 
+	 * @return the name
+	 */
+	String getName();
 	
 	/**
 	 * Get client id
@@ -42,6 +52,42 @@ public interface EzySession extends EzySender, EzyProperties {
 	 * @param key the client key
 	 */
 	void setClientKey(byte[] key);
+	
+
+	/**
+	 * Get client type
+	 * 
+	 * @return the client type
+	 */
+	String getClientType();
+	
+	/**
+	 * Set client type
+	 * 
+	 * @param type the client type
+	 */
+	void setClientType(String type);
+	
+	/**
+	 * Get client version
+	 * 
+	 * @return the client version
+	 */
+	String getClientVersion();
+	
+	/**
+	 * Set client version
+	 * 
+	 * @param version the client version
+	 */
+	void setClientVersion(String version);
+	
+	/**
+	 * Get session connection type
+	 * 
+	 * @return the connection type
+	 */
+	EzyConnectionType getConnectionType();
 	
 	/**
 	 * Get session reconnect token
@@ -170,6 +216,34 @@ public interface EzySession extends EzySender, EzyProperties {
 	void addWrittenBytes(long bytes);
 	
 	/**
+	 * Get read requests
+	 * 
+	 * @return the number of read request
+	 */
+	int getReadRequests();
+	
+	/**
+	 * add read requests
+	 * 
+	 * @param requests number of read requests
+	 */
+	void addReadRequests(int requests);
+
+	/**
+	 * Get written responses
+	 * 
+	 * @return number of written responses
+	 */
+	int getWrittenResponses();
+	
+	/**
+	 * add written responses
+	 * 
+	 * @param responses number of reponses
+	 */
+	void addWrittenResponses(int responses);
+	
+	/**
 	 * Get max idle time
 	 * 
 	 * @return the max idle time
@@ -227,19 +301,11 @@ public interface EzySession extends EzySender, EzyProperties {
 	boolean isActivated();
 	
 	/**
+	 * 
+	 * @param name the lock name
 	 * @return the lock
 	 */
-	Lock getLock();
-	
-	/**
-	 * @param delegate the delegate
-	 */
-	void setDelegate(EzySessionDelegate delegate);
-	
-	/**
-	 * @return the delegate
-	 */
-	EzySessionDelegate getDelegate();
+	Lock getLock(String name);
 	
 	/**
 	 * Get client full ip address

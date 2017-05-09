@@ -16,15 +16,19 @@ import lombok.Setter;
 public class EzyHashMap implements EzyObject {
 	private static final long serialVersionUID = 2273868568933801751L;
 	
-	protected HashMap<Object, Object> map;
+	protected HashMap<Object, Object> map = new HashMap<>();
 	
 	@Setter
 	protected transient EzyInputTransformer inputTransformer;
 	@Setter
 	protected transient EzyOutputTransformer outputTransformer;
 	
-	{
-		map = new HashMap<>();
+	public EzyHashMap() {
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public EzyHashMap(Map map) {
+		this.map.putAll(map);
 	}
 	
 	/*
@@ -33,8 +37,6 @@ public class EzyHashMap implements EzyObject {
 	 */
 	@Override
 	public <V> V put(Object key, Object value) {
-		if(key == null)
-			throw new IllegalArgumentException("key can't be null");
 		return (V) map.put(key, transformInput(value));
 	}
 	
@@ -54,8 +56,18 @@ public class EzyHashMap implements EzyObject {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#get(java.lang.Object, java.lang.Class)
 	 */
 	@Override
-	public <V> V get(Object key, Class<V> clazz) {
-		return (V) transformOutput(map.get(key), clazz);
+	public <V> V get(Object key, Class<V> type) {
+		return (V) getValue(key, type);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#getValue(java.lang.Object, java.lang.Class)
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getValue(Object key, Class type) {
+		return transformOutput(map.get(key), type);
 	}
 	
 	/*
@@ -102,6 +114,15 @@ public class EzyHashMap implements EzyObject {
 	public boolean containsKey(Object key) {
 		return map.containsKey(key);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoObject#isNotNullKey(java.lang.Object)
+	 */
+	@Override
+	public boolean isNotNullValue(Object key) {
+		return map.get(key) != null;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -146,7 +167,7 @@ public class EzyHashMap implements EzyObject {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Map toMap() {
-		return map;
+		return new HashMap<>(map);
 	}
 	
 	/*
@@ -155,10 +176,10 @@ public class EzyHashMap implements EzyObject {
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		EzyHashMap clone = new EzyHashMap();
+		super.clone();
+		EzyHashMap clone = new EzyHashMap(map);
 		clone.setInputTransformer(inputTransformer);
 		clone.setOutputTransformer(outputTransformer);
-		clone.map.putAll(map);
 		return clone;
 	}
 	
@@ -175,12 +196,12 @@ public class EzyHashMap implements EzyObject {
 		}
 	}
 	
-	private Object transformInput(final Object input) {
+	private Object transformInput(Object input) {
 		return inputTransformer.transform(input);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private Object transformOutput(final Object output, final Class type) {
+	private Object transformOutput(Object output, Class type) {
 		return outputTransformer.transform(output, type);
 	}
 	

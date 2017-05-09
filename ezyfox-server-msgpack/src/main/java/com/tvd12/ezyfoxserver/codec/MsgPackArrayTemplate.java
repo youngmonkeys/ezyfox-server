@@ -2,56 +2,38 @@ package com.tvd12.ezyfoxserver.codec;
 
 import java.io.IOException;
 
-import org.msgpack.MessageTypeException;
 import org.msgpack.packer.Packer;
 import org.msgpack.template.AbstractTemplate;
 import org.msgpack.unpacker.Unpacker;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 
-public class MsgPackArrayTemplate extends AbstractTemplate<EzyArray> {
-	
-	private static final EzyMessageSerializer SERIALIZER;
-	private static final EzyMessageDeserializer DESERIALIZER;
-	
-	static {
-		SERIALIZER = new MsgPackSimpleSerializer();
-		DESERIALIZER = new MsgPackSimpleDeserializer();
-	}
-	
-	@Override
+public class MsgPackArrayTemplate extends AbstractTemplate<EzyArray> { 
+	 
+	@Override 
 	public void write(Packer pk, EzyArray target, boolean required) 
 			throws IOException {
 		if(target != null)
 			writeNotNull(pk, target);
-		else 
+		else  
 			writeNull(pk, required);
-		
-	}
-	
+		 
+	} 
+	 
 	private void writeNull(Packer pk, boolean required) throws IOException {
         if (!required)
         	pk.writeNil();
-        else
-            throw new MessageTypeException("Attempted to write null");
-	}
-	
+        else 
+            throw new NullPointerException("Attempted to write null"); 
+	} 
+	 
 	private void writeNotNull(Packer pk, EzyArray target) throws IOException {
-//		pk.write(SERIALIZER.serialize(target));
 		pk.write(target.toList());
-	}
-
-	@Override
+	} 
+ 
+	@Override 
 	public EzyArray read(Unpacker u, EzyArray to, boolean required) throws IOException {
-		 return getDerializer().deserialize(u.readByteArray());
-	}
-	
-	protected EzyMessageSerializer getSerializer() {
-		return SERIALIZER;
-	}
-	
-	protected EzyMessageDeserializer getDerializer() {
-		return DESERIALIZER;
-	}
-	
-}
+		 throw new UnsupportedOperationException();
+	} 
+	 
+} 

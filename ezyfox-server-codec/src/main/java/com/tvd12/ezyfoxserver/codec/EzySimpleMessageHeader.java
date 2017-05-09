@@ -12,5 +12,6 @@ public class EzySimpleMessageHeader implements EzyMessageHeader {
 	protected boolean bigSize;
 	protected boolean encrypted;
 	protected boolean compressed;
+	protected boolean text;
 	
 }

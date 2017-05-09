@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans      
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+        
+	<tx:annotation-driven />
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/test" />
+		<property name="username" value="root" />
+		<property name="password" value="123" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- mongodb -->
+	<bean id="mongoClient" class="com.tvd12.ezyfoxserver.mongodb.loader.EzyPropertiesMongoClientLoader" factory-method="load">
+		<constructor-arg>
+			<props>
+				<prop key="database.mongo.host">localhost</prop>
+				<prop key="database.mongo.port">27017</prop>
+				<prop key="database.mongo.username">root</prop>
+				<prop key="database.mongo.password">123456</prop>
+				<prop key="database.mongo.database">test</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+
+	<!-- hazelcast -->
+	<bean id="hazelcastFactory" class="com.tvd12.ezyfoxserver.hazelcast.EzyMongoHazelcastFactory">
+		<property name="databaseName" value="test" />
+		<property name="mongoClient" ref="mongoClient" />
+	</bean>
+	<bean id="hazelcastInstance" factory-bean="hazelcastFactory" factory-method="newHazelcast">
+	<!-- <bean id="hazelcastInstance" class="com.hazelcast.core.Hazelcast" factory-method="newHazelcastInstance"> -->
+		<constructor-arg>
+			<bean class="com.hazelcast.config.Config">
+				<property name="groupConfig">
+					<bean class="com.hazelcast.config.GroupConfig">
+						<property name="name" value="dev" />
+						<property name="password" value="pwd" />
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="maxIdService" class="com.tvd12.ezyfoxserver.hazelcast.service.EzySimpleMaxIdService">
+		<property name="hazelcastInstance" ref="hazelcastInstance" />
+		<property name="map">
+			<bean id="maxIdMap" factory-bean="hazelcastInstance" factory-method="getMap">
+				<constructor-arg value="max_ids" />
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- DAO -->
+	<bean id="productDAO" class="com.tvd12.ezyfoxserver.adt.dao.impl.ProductDAOImpl">
+		<constructor-arg>
+			<ref bean="sessionFactory" />
+		</constructor-arg>
+	</bean>
+	
+	<!-- struts action -->
+	<bean id="HomeAction" class="com.tvd12.ezyfoxserver.adt.action.HomeAction">
+		<property name="maxIdService" ref="maxIdService" />
+	</bean>
+
+	<bean id="ListProductAction" class="com.tvd12.ezyfoxserver.adt.action.ListProductAction">
+		<property name="productDAO" ref="productDAO" />
+	</bean>
+	
+</beans>

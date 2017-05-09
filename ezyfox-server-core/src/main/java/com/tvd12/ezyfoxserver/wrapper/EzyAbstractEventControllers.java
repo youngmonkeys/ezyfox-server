@@ -3,9 +3,7 @@ package com.tvd12.ezyfoxserver.wrapper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfoxserver.appcontroller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
 public abstract class EzyAbstractEventControllers implements EzyEventControllers {
@@ -40,7 +38,7 @@ public abstract class EzyAbstractEventControllers implements EzyEventControllers
 		
 		@SuppressWarnings("rawtypes")
 		protected void addControllers(Map<EzyConstant, EzyEventController> answer) {
-			answer.put(EzyEventType.SERVER_READY, new EzyServerReadyController());
+		    // add some controllers
 		}
 		
 		public abstract EzyEventControllers build();

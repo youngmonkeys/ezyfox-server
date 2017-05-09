@@ -29,7 +29,7 @@ public interface EzyMessage {
 	 * @return the length of message's size
 	 */
 	default int getSizeLength() {
-		return getHeader().isBigSize() ? 4 : 2;
+		return hasBigSize() ? 4 : 2;
 	}
 	
 	default boolean hasBigSize() {

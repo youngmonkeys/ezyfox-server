@@ -6,7 +6,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import com.tvd12.ezyfoxserver.io.EzyFileWriter;
+import com.tvd12.ezyfoxserver.file.EzyFileWriter;
 
 public class EzyFileKeysGenerator extends EzyKeysGenerator {
 
@@ -30,16 +30,16 @@ public class EzyFileKeysGenerator extends EzyKeysGenerator {
 	}
 	
 	protected void writePublicKey(PublicKey key) {
-		writeKey(key, publicKeyFile);
+		writeKey(publicKeyFile, key);
 	}
 	
 	protected void writePrivateKey(PrivateKey key) {
-		writeKey(key, privateKeyFile);
+		writeKey(privateKeyFile, key);
 	}
 	
-	protected void writeKey(Key key, File file) {
+	protected void writeKey(File file, Key key) {
 		if(file != null)
-			fileWriter.write(key.getEncoded(), file);
+			fileWriter.write(file, key.getEncoded());
 	}
 	
 	public static Builder builder() {

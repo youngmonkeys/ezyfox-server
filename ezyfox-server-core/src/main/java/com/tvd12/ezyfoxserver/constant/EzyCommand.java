@@ -1,15 +1,24 @@
 package com.tvd12.ezyfoxserver.constant;
 
+import com.tvd12.ezyfoxserver.util.EzyEnums;
+
 import lombok.Getter;
 
 public enum EzyCommand implements EzyConstant {
 
-	ERROR(0),
-	HAND_SHAKE(1),
-	LOGIN(2),
-	ACCESS_APP(3),
-	REQUEST_APP(4),
-	DISCONNECT(5);
+	ERROR(10),
+	HANDSHAKE(11),
+	PING(12),
+    PONG(13),
+    DISCONNECT(14),
+    PLUGIN_REQUEST(15),
+	LOGIN(20),
+	LOGIN_ERROR(21),
+	LOGOUT(22),
+	APP_ACCESS(30),
+	APP_REQUEST(31),
+	APP_JOINED(32),
+	APP_EXIT(33);
 	
 	@Getter
 	private final int id;
@@ -24,10 +33,7 @@ public enum EzyCommand implements EzyConstant {
 	}
 	
 	public static EzyCommand valueOf(int id) {
-		for(EzyCommand cmd : values())
-			if(cmd.getId() == id)
-				return cmd;
-		throw new IllegalArgumentException("has no command with id = " + id);
+		return EzyEnums.valueOf(values(), id);
 	}
 	
 }

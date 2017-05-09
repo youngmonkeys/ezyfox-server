@@ -9,6 +9,6 @@ public abstract class EzyFixedCommandResponse
 		extends EzyBaseResponse 
 		implements EzyResponse {
 
-	private Object data;
+    protected Object data;
 	
 }

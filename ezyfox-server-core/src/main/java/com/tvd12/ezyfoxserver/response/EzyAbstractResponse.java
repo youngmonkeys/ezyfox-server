@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractResponse extends EzyFixedCommandResponse {
 
-	private int appId;
-	private EzyConstant command;
+	protected int appId;
+	protected EzyConstant command;
 	
 }

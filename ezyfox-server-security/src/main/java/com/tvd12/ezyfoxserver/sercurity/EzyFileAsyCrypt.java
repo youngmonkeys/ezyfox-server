@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.sercurity;
 
 import java.io.File;
 
-import com.tvd12.ezyfoxserver.io.EzyFileReader;
-import com.tvd12.ezyfoxserver.io.EzyFileWriter;
+import com.tvd12.ezyfoxserver.file.EzyFileReader;
+import com.tvd12.ezyfoxserver.file.EzyFileWriter;
 
 public class EzyFileAsyCrypt extends EzyAsyCrypt {
 	
@@ -16,8 +16,6 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 		super(builder);
 		this.fileReader = builder.fileReader;
 		this.fileWriter = builder.fileWriter;
-		this.publicKey = builder.getPublicKey();
-		this.privateKey = builder.getPrivateKey();
 		this.outDecryptedFile = builder.outDecryptedFile;
 		this.outEncryptedFile = builder.outEncryptedFile;
 	}
@@ -25,14 +23,14 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 	@Override
 	public byte[] encrypt(byte[] data) throws Exception {
 		byte[] bytes = super.encrypt(data);
-		writeToFile(bytes, outEncryptedFile);
+		writeToFile(outEncryptedFile, bytes);
 		return bytes;
 	}
 	
 	@Override
 	public byte[] decrypt(byte[] data) throws Exception {
 		byte[] bytes = super.decrypt(data);
-		writeToFile(data, outDecryptedFile);
+		writeToFile(outDecryptedFile, bytes);
 		return bytes;
 	}
 	
@@ -58,9 +56,9 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 		return fileReader.readBytes(file);
 	}
 	
-	protected void writeToFile(byte[] data, File file) {
+	protected void writeToFile(File file, byte[] data) {
 		if(file != null)
-			fileWriter.write(data, file);
+			fileWriter.write(file, data);
 	}
 	
 	public static Builder builder() {
@@ -76,7 +74,7 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 		protected EzyFileReader fileReader;
 		
 		public Builder publicKeyFile(File publicKeyFile) {
-			this.publicKeyFile = privateKeyFile;
+			this.publicKeyFile = publicKeyFile;
 			return this;
 		}
 		
@@ -109,10 +107,12 @@ public class EzyFileAsyCrypt extends EzyAsyCrypt {
 			return new EzyFileAsyCrypt(this);
 		}
 		
+		@Override
 		protected byte[] getPublicKey() {
 			return publicKey != null ? publicKey : readPublicKeyFile();
 		}
 		
+		@Override
 		protected byte[] getPrivateKey() {
 			return privateKey != null ? privateKey : readPrivateKeyFile();
 		}

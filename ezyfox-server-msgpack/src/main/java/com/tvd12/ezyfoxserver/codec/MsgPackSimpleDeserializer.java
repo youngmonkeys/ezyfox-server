@@ -8,35 +8,22 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
 import com.tvd12.ezyfoxserver.io.EzyInts;
 import com.tvd12.ezyfoxserver.io.EzyLongs;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
+import com.tvd12.ezyfoxserver.util.EzyLiteEntityBuilders;
 
-public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
+public class MsgPackSimpleDeserializer
+		extends EzyLiteEntityBuilders
+		implements EzyMessageDeserializer {
 
-	private MsgPackTypeParser typeParser;
-	private Map<MsgPackType, EzyParser<ByteBuffer, Object>> parsers;
-	
-	private MapSizeDeserializer mapSizeDeserializer;
-	private ArraySizeDeserializer arraySizeDeserializer;
-	private StringSizeDeserializer stringSizeDeserializer;
-	
-	{
-		parsers = defaultParsers();
-		typeParser = new MsgPackTypeParser();
-		mapSizeDeserializer = new MapSizeDeserializer();
-		arraySizeDeserializer = new ArraySizeDeserializer();
-		stringSizeDeserializer = new StringSizeDeserializer();
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T deserialize(byte[] data) {
-		return (T) deserialize(ByteBuffer.wrap(data));
-	}
+	private MsgPackTypeParser typeParser = new MsgPackTypeParser();
+	private MapSizeDeserializer mapSizeDeserializer = new MapSizeDeserializer();
+	private ArraySizeDeserializer arraySizeDeserializer = new ArraySizeDeserializer();
+	private StringSizeDeserializer stringSizeDeserializer = new StringSizeDeserializer();
+	private Map<MsgPackType, EzyParser<ByteBuffer, Object>> parsers = defaultParsers();
 	
 	@SuppressWarnings("unchecked")
 	public Object deserialize(ByteBuffer buffer) {
@@ -100,7 +87,7 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 	}
 	
 	protected Object parseBin32(ByteBuffer buffer) {
-		return parseBin(buffer, getBinLength(buffer, 5));
+		return parseBin(buffer, getBinLength(buffer, 4));
 	}
 	
 	protected Object parseBin16(ByteBuffer buffer) {
@@ -113,10 +100,7 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 	
 	protected int getBinLength(ByteBuffer buffer, int size) {
 		buffer.get();
-		int result = 0;
-		for(int i = 0 ; i < size ; i++)
-			result += buffer.get() & 0xff;
-		return result;
+		return EzyInts.bin2uint(buffer, size);
 	}
 	
 	protected Object parseBin(ByteBuffer buffer, int length) {
@@ -180,7 +164,7 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 	}
 
 	protected String parseString(ByteBuffer buffer, int nbytes) {
-		return EzyStrings.newUTF(buffer, parseStringSize(buffer, nbytes));
+		return EzyStrings.newUtf(buffer, parseStringSize(buffer, nbytes));
 	}
 	
 	protected int parseStringSize(ByteBuffer buffer, int nbytes) {
@@ -266,14 +250,6 @@ public class MsgPackSimpleDeserializer implements EzyMessageDeserializer {
 		for(int i = 0 ; i < size ; i++) 
 			builder.append(deserialize(buffer));
 		return builder.build();
-	}
-	
-	protected EzyObjectBuilder newObjectBuilder() {
-		return EzyEntityFactory.create(EzyObjectBuilder.class);
-	}
-	
-	protected EzyArrayBuilder newArrayBuilder() {
-		return EzyEntityFactory.create(EzyArrayBuilder.class);
 	}
 	
 	protected MsgPackType getDataType(int type) {

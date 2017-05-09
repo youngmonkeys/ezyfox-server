@@ -1,39 +1,35 @@
 package com.tvd12.ezyfoxserver.client.controller;
 
-import com.tvd12.ezyfoxserver.client.EzyClientContext;
-import com.tvd12.ezyfoxserver.client.request.EzyJoinRoomRequest;
-import com.tvd12.ezyfoxserver.client.request.EzyRequest;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
+import com.tvd12.ezyfoxserver.client.EzyClient;
+import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
+import com.tvd12.ezyfoxserver.client.context.EzyClientAppContext;
+import com.tvd12.ezyfoxserver.client.context.EzyClientContext;
+import com.tvd12.ezyfoxserver.client.context.EzySimpleClientAppContext;
+import com.tvd12.ezyfoxserver.client.entity.EzyClientUser;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public class EzyAccessAppController 
 		extends EzyAbstractController 
-		implements EzyClientController<EzyUser> {
+		implements EzyClientController<EzyClientUser> {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void handle(EzyClientContext ctx, EzyUser user, EzyArray data) {
-		getLogger().info("access app success, appId = " + data.get(0));
-		sendJoinRoomRequest(ctx, user, data.get(0));
-		getLogger().info("sended join room request");
+	public void handle(EzyClientContext ctx, EzyClientUser user, EzyArray data) {
+		getLogger().info("access app success, data = " + data);
+		EzyClientAppContext appCtx = newAppContext(ctx, data);
+		ctx.addAppContext(appCtx);
+		EzyClient client = ctx.getClient();
+		EzyClientAppController ctrl = client.getAppController(EzyClientCommand.ACESS_APP_SUCCESS);
+		if(ctrl != null) ctrl.handle(appCtx, user, data.get(2, EzyArray.class));
 	}
 	
-	protected void sendJoinRoomRequest(EzyClientContext ctx, EzyUser user, int appId) {
-		ctx.get(EzySendMessage.class)
-			.sender(user)
-			.data(serializeToArray(ctx, newJoinRoomRequest(appId)))
-			.execute();
-	}
-	
-	protected EzyRequest newJoinRoomRequest(int appId) {
-		return EzyJoinRoomRequest.builder()
-				.appId(appId)
-				.data(newJoinRoomData())
+	protected EzyClientAppContext newAppContext(EzyClientContext ctx, EzyArray data) {
+		return EzySimpleClientAppContext.builder()
+				.appId(data.get(0, int.class))
+				.appName(data.get(1, String.class))
+				.parent(ctx)
 				.build();
 	}
 	
-	protected EzyArray newJoinRoomData() {
-		return newArrayBuilder().append(1).append("lobby").build();
-	}
-
+	
 }

@@ -32,9 +32,9 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.EzyCastIntToByte;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
+import com.tvd12.ezyfoxserver.io.EzyDataConverter;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 import com.tvd12.ezyfoxserver.util.EzyBoolsIterator;
-import com.tvd12.ezyfoxserver.util.EzyDataConverter;
 import com.tvd12.ezyfoxserver.util.EzyDoublesIterator;
 import com.tvd12.ezyfoxserver.util.EzyFloatsIterator;
 import com.tvd12.ezyfoxserver.util.EzyIntsIterator;
@@ -47,23 +47,13 @@ public class MsgPackSimpleSerializer
 		extends EzyAbstractSerializer 
 		implements EzyCastIntToByte {
 
-	protected IntSerializer intSerializer;
-	protected FloatSerializer floatSerializer;
-	protected DoubleSerializer doubleSerializer;
-	protected BinSizeSerializer binSizeSerializer;
-	protected MapSizeSerializer mapSizeSerializer;
-	protected ArraySizeSerializer arraySizeSerializer;
-	protected StringSizeSerializer stringSizeSerializer;
-
-	{
-		intSerializer = new IntSerializer();
-		floatSerializer = new FloatSerializer();
-		doubleSerializer = new DoubleSerializer();
-		binSizeSerializer = new BinSizeSerializer();
-		mapSizeSerializer = new MapSizeSerializer();
-		arraySizeSerializer = new ArraySizeSerializer();
-		stringSizeSerializer = new StringSizeSerializer();
-	}
+	protected IntSerializer intSerializer = new IntSerializer();
+	protected FloatSerializer floatSerializer = new FloatSerializer();
+	protected DoubleSerializer doubleSerializer = new DoubleSerializer();
+	protected BinSizeSerializer binSizeSerializer = new BinSizeSerializer();
+	protected MapSizeSerializer mapSizeSerializer = new MapSizeSerializer();
+	protected ArraySizeSerializer arraySizeSerializer = new ArraySizeSerializer();
+	protected StringSizeSerializer stringSizeSerializer = new StringSizeSerializer();
 
 	@Override
 	protected void addParsers(Map<Class<?>, EzyParser<Object, byte[]>> parsers) {
@@ -283,7 +273,7 @@ public class MsgPackSimpleSerializer
 	}
 	
 	protected byte[] parseFloat(Object value) {
-		return parseDouble((Float)value);
+		return parseFloat((Float)value);
 	}
 	
 	protected byte[] parseFloat(Float value) {
@@ -295,7 +285,7 @@ public class MsgPackSimpleSerializer
 	}
 	
 	protected byte[] parseShort(Object value) {
-		return parseInt((Short)value);
+		return parseShort((Short)value);
 	}
 	
 	protected byte[] parseShort(Short value) {
@@ -358,10 +348,9 @@ public class MsgPackSimpleSerializer
 	}
 	
 	protected byte[] parseString(String string) {
-		int size = string.length();
 		byte[][] bytess = new byte[2][];
-		bytess[0] = parseStringSize(size);
-		bytess[1] = EzyStrings.getUTFBytes(string);
+		bytess[1] = EzyStrings.getUtfBytes(string);
+		bytess[0] = parseStringSize(bytess[1].length);
 		return EzyBytes.copy(bytess);
 	}
 	
@@ -508,14 +497,14 @@ class MapSizeSerializer implements EzyCastIntToByte {
 	}
 	
 	private byte[] parse32(int size) {
-		return EzyBytes.getBytes(0xde, size, 2);
+		return EzyBytes.getBytes(0xdf, size, 4);
 	}
 }
 
 class IntSerializer implements EzyCastIntToByte {
 	
 	public byte[] serialize(long value) {
-		return value > 0 
+		return value >= 0 
 				? parsePositive(value) 
 				: parseNegative(value);
 	}

@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.context;
 
-import com.tvd12.ezyfoxserver.config.EzyPlugin;
+import com.tvd12.ezyfoxserver.EzyPlugin;
 
-public interface EzyPluginContext extends EzyContext {
+public interface EzyPluginContext extends EzyChildContext {
 	
-	EzyPlugin getPlugin();
+    EzyPlugin getPlugin();
 	
 }

@@ -1,17 +1,12 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
-import com.tvd12.ezyfoxserver.entity.EzySession;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public interface EzyUserManager {
-	
-	/**
-	 * Add user
-	 * 
-	 * @param user the user
-	 */
-	void addUser(EzyUser user);
-	
+    
 	/**
 	 * Get user by id
 	 * 
@@ -29,12 +24,11 @@ public interface EzyUserManager {
 	EzyUser getUser(String username);
 	
 	/**
-	 * Get user by id
+	 * Get users as list
 	 * 
-	 * @param session the user session
-	 * @return the user
+	 * @return The users as list
 	 */
-	EzyUser getUser(EzySession session);
+	List<EzyUser> getUserList();
 	
 	/**
 	 * Check whether contains user or not
@@ -53,19 +47,26 @@ public interface EzyUserManager {
 	boolean containsUser(String username);
 	
 	/**
-	 * Check whether contains user or not
-	 * 
-	 * @param session the user session
-	 * @return true or false
-	 */
-	boolean containsUser(EzySession session);
-	
-	/**
 	 * Remove user
 	 * 
 	 * @param user the user
 	 */
-	void removeUser(EzyUser user);
+	EzyUser removeUser(EzyUser user);
+	
+	/**
+	 * Get lock mapped to username
+	 * 
+	 * @param username the username
+	 * @return the lock
+	 */
+	Lock getLock(String username);
+	
+	/**
+	 * Remove lock mapped to username
+	 * 
+	 * @param username the username
+	 */
+	void removeLock(String username);
 	
 	/**
 	 * Check whether contains user or not
@@ -82,8 +83,8 @@ public interface EzyUserManager {
 	 * 
 	 * @param userId the user id
 	 */
-	default void removeUser(long userId) {
-		removeUser(getUser(userId));
+	default EzyUser removeUser(long userId) {
+		return removeUser(getUser(userId));
 	}
 	
 	/**
@@ -91,16 +92,8 @@ public interface EzyUserManager {
 	 * 
 	 * @param username the user name
 	 */
-	default void removeUser(String username) {
-		removeUser(getUser(username));
+	default EzyUser removeUser(String username) {
+		return removeUser(getUser(username));
 	}
 	
-	/**
-	 * Remove user by session
-	 * 
-	 * @param session the user session
-	 */
-	default void removeUser(EzySession session) {
-		removeUser(getUser(session));
-	}
 }

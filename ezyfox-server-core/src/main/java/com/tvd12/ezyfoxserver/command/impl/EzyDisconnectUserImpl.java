@@ -1,29 +1,34 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import static com.tvd12.ezyfoxserver.context.EzyContexts.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyDisconnectEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzyUserDisconnectEventImpl;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
+import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public class EzyDisconnectUserImpl 
 		extends EzyMessageController 
 		implements EzyDisconnectUser {
 
 	private EzyUser user;
-	private EzySession session;
 	private EzyConstant reason;
 	private boolean fireClientEvent = true;
 	private boolean fireServerEvent = true;
+	private List<EzySession> sessions = new ArrayList<>();
 	
 	private EzyServerContext context;
 	
@@ -33,69 +38,86 @@ public class EzyDisconnectUserImpl
 	
 	@Override
 	public Boolean execute() {
-		notifyServer();
-		sendToClient();
-		disconnect();
-		return Boolean.TRUE;
+	    notifyServer();
+	    removeUserFromApps();
+        sendToClients();
+        disconnectSessions();
+        destroyUser();
+        return Boolean.TRUE;
 	}
 	
-	protected void sendToClient() {
+	protected void sendToClients() {
 		if(fireClientEvent)
-			doSendToClient();
-	}
-	
-	protected void doSendToClient() {
-		context.get(EzySendMessage.class)
-			.sender(session)
-			.data(getDisconnectData())
-			.execute();
-	}
-	
-	protected EzyArray getDisconnectData() {
-		return serializeToArray(context, newDisconnectResponse());
-	}
-	
-	protected EzyResponse newDisconnectResponse() {
-		return EzyDisconnectResponse.builder()
-				.reason(reason)
-				.build();
+			doSendToClients();
 	}
 	
 	protected void notifyServer() {
-		if(shouldNotifyServer())
+		if(fireServerEvent)
 			doNotifyServer();
 	}
 	
-	protected boolean shouldNotifyServer() {
-		return user != null && fireServerEvent;
-	}
-	
 	protected void doNotifyServer() {
-		context.get(EzyFireAppEvent.class)
-			.fire(EzyEventType.USER_DISCONNECT, newDisconnectEvent());
+	    try {
+	        context.get(EzyFireAppEvent.class)
+		        .filter(appCtxt -> containsUser(appCtxt, user))
+		        .fire(EzyEventType.USER_DISCONNECT, newDisconnectEvent());
+	    }
+	    catch(Exception e) {
+	        getLogger().error("notify user disconnect to server error", e);
+	    }
 	}
 	
 	protected EzyEvent newDisconnectEvent() {
-		return EzyDisconnectEventImpl.builder()
+		return EzyUserDisconnectEventImpl.builder()
 				.user(user)
 				.reason(reason)
 				.build();
 	}
 	
-	protected void disconnect() {
-		session.disconnect();
-		session.close();
+	protected void disconnectSessions() {
+	    sessions.forEach(this::disconnectSession);
 	}
+	
+	protected void disconnectSession(EzySession session) {
+        getLogger().info("disconnect session: {}, reason: {}", session.getClientAddress(), reason);
+        session.disconnect();
+        session.close();
+    }
+	
+	protected void doSendToClients() {
+	    sessions.forEach(this::doSendToClient);
+    }
+	
+	protected void doSendToClient(EzySession session) {
+	    response(context, session, newResponse());
+	}
+	
+	protected void destroyUser() {
+	    user.destroy();
+	}
+	
+	protected void removeUserFromApps() {
+	    forEachAppContexts(context, this::removeUserFromApp);
+	}
+	
+	protected void removeUserFromApp(EzyAppContext ctx) {
+	    removeUserFromApp(ctx.getApp().getUserManager());
+	}
+	
+	protected void removeUserFromApp(EzyUserManager userManager) {
+	    if(userManager.containsUser(user))
+	        userManager.removeUser(user);
+	}
+	
+	protected EzyResponse newResponse() {
+        return EzyDisconnectResponse.builder().reason(reason).build();
+    }
 
 	@Override
 	public EzyDisconnectUser user(EzyUser user) {
 		this.user = user;
-		return user != null ? session(user.getSession()) : this;
-	}
-
-	@Override
-	public EzyDisconnectUser session(EzySession session) {
-		this.session = session;
+		if(user != null)
+		    this.sessions.addAll(user.getSessions());
 		return this;
 	}
 
@@ -113,7 +135,7 @@ public class EzyDisconnectUserImpl
 
 	@Override
 	public EzyDisconnectUser fireServerEvent(boolean value) {
-		this.fireClientEvent = value;
+		this.fireServerEvent = value;
 		return this;
 	}
 	

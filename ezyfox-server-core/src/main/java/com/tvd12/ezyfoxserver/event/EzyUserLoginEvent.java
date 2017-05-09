@@ -1,20 +1,19 @@
 package com.tvd12.ezyfoxserver.event;
 
-import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 
-public interface EzyUserLoginEvent extends EzyEvent {
+public interface EzyUserLoginEvent extends EzySessionEvent {
 
-	Object getOutput();
+	EzyData getOutput();
 	
 	String getUsername();
 	
 	String getPassword();
 	
-	EzySession getSession();
-	
-	<T> T getData();
+	EzyArray getData();
 
-	void setOutput(Object output);
+	void setOutput(EzyData output);
 	
 	void setUsername(String username);
 	

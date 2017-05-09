@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 
 public interface EzyServerContext extends EzyContext {
 
-	EzyServer getBoss();
+	EzyServer getServer();
 	
 	EzyAppContext getAppContext(int appId);
 	

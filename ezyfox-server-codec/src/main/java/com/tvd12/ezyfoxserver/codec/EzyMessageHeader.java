@@ -23,4 +23,11 @@ public interface EzyMessageHeader {
 	 */
 	boolean isCompressed(); // bit 3
 	
+	/**
+	 * Check whether message is text or binary type
+	 * 
+	 * @return true is text or false is binary
+	 */
+	boolean isText(); // bit 4
+	
 }

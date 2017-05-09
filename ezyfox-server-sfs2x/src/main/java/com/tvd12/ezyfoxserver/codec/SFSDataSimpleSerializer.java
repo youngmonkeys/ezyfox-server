@@ -58,11 +58,11 @@ public class SFSDataSimpleSerializer
 	}
 	
 	protected byte[] parseString(String value) {
-		return toBytes(SFSDataType.STRING, EzyStrings.getUTFBytes(value));
+		return toBytes(SFSDataType.STRING, EzyStrings.getUtfBytes(value));
 	}
 	
 	protected byte[] parseText(String value) {
-		return toBytes(SFSDataType.TEXT, EzyStrings.getUTFBytes(value));
+		return toBytes(SFSDataType.TEXT, EzyStrings.getUtfBytes(value));
 	}
 	
 	protected byte toByte(SFSDataType type) {

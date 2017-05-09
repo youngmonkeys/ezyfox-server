@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.builder.impl;
 
-import java.util.Collection;
-
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
+import com.tvd12.ezyfoxserver.io.EzyCollectionConverter;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
@@ -13,11 +12,14 @@ public class EzyArrayBuilderImpl
 		implements EzyArrayBuilder {
 
 	protected EzyArray product;
+	protected EzyCollectionConverter collectionConverter;
 	
 	public EzyArrayBuilderImpl(
 			EzyInputTransformer inputTransformer, 
-			EzyOutputTransformer outputTransformer) {
+			EzyOutputTransformer outputTransformer,
+			EzyCollectionConverter collectionConverter) {
 		super(inputTransformer, outputTransformer);
+		this.collectionConverter = collectionConverter;
 		this.product = newProduct();
 	}
 	
@@ -25,7 +27,14 @@ public class EzyArrayBuilderImpl
 		EzyArrayList answer = new EzyArrayList();
 		answer.setInputTransformer(inputTransformer);
 		answer.setOutputTransformer(outputTransformer);
+		answer.setCollectionConverter(collectionConverter);
 		return answer;
+	}
+	
+	@Override
+	public <T> EzyArrayBuilder append(T item) {
+		this.product.add(item);
+		return this;
 	}
 	
 	/*
@@ -43,8 +52,9 @@ public class EzyArrayBuilderImpl
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.builder.EzyArrayBuilder#append(java.util.Collection)
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public EzyArrayBuilder append(Collection<? extends Object> items) {
+	public EzyArrayBuilder append(Iterable items) {
 		this.product.add(items);
 		return this;
 	}
@@ -58,10 +68,19 @@ public class EzyArrayBuilderImpl
 		return product;
 	}
 	
-	public static class Creator extends AbstractCreator<EzyArrayBuilderImpl> {
+	public static class Creator extends AbstractCreator<EzyArrayBuilderImpl, Creator> {
+		
+		protected EzyCollectionConverter collectionConverter;
+		
+		public Creator collectionConverter(EzyCollectionConverter converter) {
+			this.collectionConverter = converter;
+			return this;
+		}
+		
 		@Override
 		public EzyArrayBuilderImpl create() {
-			return new EzyArrayBuilderImpl(inputTransformer, outputTransformer);
+			return new EzyArrayBuilderImpl(
+					inputTransformer, outputTransformer, collectionConverter);
 		}
 	}
 

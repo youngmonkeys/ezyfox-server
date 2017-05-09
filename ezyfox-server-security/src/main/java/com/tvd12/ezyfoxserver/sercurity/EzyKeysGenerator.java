@@ -6,11 +6,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class EzyKeysGenerator {
 
-	protected int keyLength;
+	protected int keysize;
 	protected String algorithm;
 	
 	protected EzyKeysGenerator(Builder<?> builder) {
-		this.keyLength = builder.keyLength;
+		this.keysize = builder.keysize;
 		this.algorithm = builder.algorithm;
 	}
 
@@ -19,7 +19,7 @@ public class EzyKeysGenerator {
 	}
 	
 	protected KeyPair generate(KeyPairGenerator generator) {
-		generator.initialize(keyLength);
+		generator.initialize(keysize);
 		return generator.generateKeyPair();
 	}
 	
@@ -31,16 +31,17 @@ public class EzyKeysGenerator {
 		}
 	}
 	
-	public static Builder<?> builder() {
+	@SuppressWarnings("rawtypes")
+	public static Builder builder() {
 		return new Builder<>();
 	}
 	
 	public static class Builder<B extends Builder<B>> {
-		protected int keyLength;
-		protected String algorithm;
+		protected int keysize = 512;
+		protected String algorithm = "RSA";
 		
-		public B keyLength(int keyLength) {
-			this.keyLength = keyLength;
+		public B keysize(int keysize) {
+			this.keysize = keysize;
 			return getThis();
 		}
 		public B algorithm(String algorithm) {

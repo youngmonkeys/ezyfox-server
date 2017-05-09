@@ -1,20 +1,20 @@
 package com.tvd12.ezyfoxserver.sercurity;
 
-import java.io.UnsupportedEncodingException;
-
 import org.apache.commons.codec.digest.Md5Crypt;
 
-public abstract class EzyMD5 {
+import com.tvd12.ezyfoxserver.io.EzyStrings;
+
+public final class EzyMD5 {
 
 	private EzyMD5() {
 	}
 	
-	public static String cryptUTF(final String input) {
-		try {
-			return Md5Crypt.md5Crypt(input.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new IllegalArgumentException(e);
-		}
+	public static String cryptUtf(String input) {
+		return cryptUtf(input, "$1$ezyfox-server");
+	}
+	
+	public static String cryptUtf(String input, String salt) {
+		return Md5Crypt.md5Crypt(EzyStrings.getUtfBytes(input), salt);
 	}
 	
 }

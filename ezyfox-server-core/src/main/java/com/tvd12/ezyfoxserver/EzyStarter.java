@@ -6,21 +6,20 @@ package com.tvd12.ezyfoxserver;
 import java.io.File;
 import java.nio.file.Paths;
 
+import org.slf4j.LoggerFactory;
+
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
-import com.tvd12.ezyfoxserver.entity.EzyStartable;
-import com.tvd12.ezyfoxserver.loader.EzyConfigLoader;
-import com.tvd12.ezyfoxserver.loader.impl.EzyConfigLoaderImpl;
-import com.tvd12.ezyfoxserver.service.EzyJsonMapping;
-import com.tvd12.ezyfoxserver.service.EzyXmlReading;
-import com.tvd12.ezyfoxserver.service.impl.EzyJsonMappingImpl;
-import com.tvd12.ezyfoxserver.service.impl.EzyXmlReadingImpl;
+import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
+import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
+import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.wrapper.EzyControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyControllersImpl;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
+import com.tvd12.ezyfoxserver.util.EzyProcessor;
+import com.tvd12.ezyfoxserver.util.EzyStartable;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
 
 /**
  * @author tavandung12
@@ -46,6 +45,7 @@ public abstract class EzyStarter
     }
     
     protected void startSystem(EzyConfig config) throws Exception {
+        customLoggerConfig(config);
     	setSystemProperties(config);
     	startEzyFox(config);
     }
@@ -55,72 +55,61 @@ public abstract class EzyStarter
     }
     
     protected void startEzyFox(EzyServer ezyFox) throws Exception {
-    	getLogger().info(ezyFox.toString());
+    	getLogger().info("settings: \n{}", ezyFox.toString());
     	newServerBoostrap(ezyFox).start();
     }
     
     protected EzyServerBootstrap newServerBoostrap(EzyServer ezyFox) {
     	return newServerBootstrapBuilder()
-    			.port(3005)
-    			.wsport(2208)
-    			.boss(ezyFox)
+    			.server(ezyFox)
     			.build();
     }
     
     protected abstract EzyServerBootstrapBuilder newServerBootstrapBuilder();
     
+    protected void customLoggerConfig(EzyConfig config) {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        loggerContext.reset();
+        JoranConfigurator cfg = new JoranConfigurator();
+        cfg.setContext(loggerContext);
+        String configFile = getLoggerConfigFile(config);
+        EzyProcessor.processWithLogException(() -> cfg.doConfigure(configFile));
+    }
+    
     protected void setSystemProperties(EzyConfig config) {
-    	System.setProperty("logback.configurationFile", getLogbackConfigFile(config));
+    	System.setProperty("logback.configurationFile", getLoggerConfigFile(config));
+    	System.setProperty("logging.config", getLoggerConfigFile(config));
     }
     
     protected EzyServer loadEzyFox(EzyConfig config) {
-    	return EzyLoader.newInstance()
+    	return newLoader()
     			.config(config)
-    			.managers(newManagers())
-    			.controllers(newControllers())
-    			.xmlReading(getXmlReading())
-    			.jsonMapping(getJsonMapping())
     			.classLoader(getClassLoader())
     			.load();
     }
     
+    protected EzyLoader newLoader() {
+        return new EzyLoader();
+    }
+    
     protected EzyConfig readConfig(String configFile) throws Exception {
-    	return getConfigLoader(configFile).load();
+    	return getConfigLoader().load(configFile);
     }
     
-    protected EzyConfigLoader getConfigLoader(String configFile) {
-    	return EzyConfigLoaderImpl.newInstance().filePath(configFile);
+    protected EzyConfigLoader getConfigLoader() {
+    	return new EzySimpleConfigLoader();
     }
     
-    public EzyManagers newManagers() {
-    	return EzyManagersImpl.builder().build();
-    }
-    
-    public EzyControllers newControllers() {
-    	return EzyControllersImpl.builder().build();
-    }
-
     protected ClassLoader getClassLoader() {
-        return EzyServer.class.getClassLoader();
+        return EzySimpleServer.class.getClassLoader();
     }
     
-    protected String getLogbackConfigFile(EzyConfig config) {
-    	return getPath(config.getEzyfoxHome(), "settings", config.getLogbackConfigFile()); 
+    protected String getLoggerConfigFile(EzyConfig config) {
+    	return getPath(config.getEzyfoxHome(), EzyFolderNamesSetting.SETTINGS, config.getLoggerConfigFile()); 
     }
     
     protected String getPath(String first, String... more) {
         return Paths.get(first, more).toString();
-    }
-    
-    protected EzyXmlReading getXmlReading() {
-    	return EzyXmlReadingImpl.builder()
-    			.classLoader(getClassLoader())
-    			.contextPath("com.tvd12.ezyfoxserver")
-    			.build();
-    }
-    
-    protected EzyJsonMapping getJsonMapping() {
-    	return EzyJsonMappingImpl.builder().build();
     }
     
     public abstract static class Builder<B extends Builder<B>> 

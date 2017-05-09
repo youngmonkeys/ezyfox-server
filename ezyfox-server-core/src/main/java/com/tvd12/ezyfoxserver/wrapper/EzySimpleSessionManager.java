@@ -2,41 +2,58 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import java.security.KeyPair;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
 
+import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyLockName;
 import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.factory.EzySessionFactory;
+import com.tvd12.ezyfoxserver.io.EzyLists;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectPool;
 import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
-import com.tvd12.ezyfoxserver.service.EzySessionTokenGeneration;
-import com.tvd12.ezyfoxserver.service.impl.EzySessionTokenGenerationImpl;
+import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
+import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
+import com.tvd12.ezyfoxserver.util.EzyIfElse;
+import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyTimes;
 
 public class EzySimpleSessionManager<S extends EzySession> 
 		extends EzyObjectPool<S> 
 		implements EzySessionManager<S> {
 	
-	protected EzySessionTokenGeneration tokenGeneration;
-	protected ConcurrentHashMap<String, S> sessionsByToken;
+	protected final EzySessionTokenGenerator tokenGenerator;
+	protected final ScheduledExecutorService idleValidationService;
+	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<String, S> sessionsByToken = new ConcurrentHashMap<>();
+	
+	protected static final AtomicInteger COUNTER = new AtomicInteger(0);
 	
 	protected EzySimpleSessionManager(Builder<S> builder) {
 		super(builder);
+		this.initializeObjects();
+		this.tokenGenerator = builder.getSessionTokenGenerator();
+		this.idleValidationService = EzyExecutors.newScheduledThreadPool(3, "session-manager");
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected void initComponents(AbstractBuilder builder) {
-		super.initComponents(builder);
-		sessionsByToken = new ConcurrentHashMap<>();
-		tokenGeneration = new EzySessionTokenGenerationImpl();
+	public void addLoggedInSession(S session) {
+	    loggedInSession.put(session.getReconnectToken(), session);
 	}
 	
 	@Override
 	public boolean containsSession(String token) {
-		return sessionsByToken.contains(token);
+		return sessionsByToken.containsKey(token);
 	}
 	
 	@Override
@@ -46,84 +63,141 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@Override
 	public void returnSession(S session, EzyConstant reason) {
-		unmapSession(session);
-		returnObject(session);
-		notifySessionReturned(session, reason);
-		clearSession(session);
-		getLogger().info("return session {}, remain = {}", session, borrowedObjects.size());
+	    checkToReturnSession(session, reason);
+	}
+	
+    protected void doReturnSession(S session, EzyConstant reason) {
+        unmapSession(session);
+        notifySessionReturned(session, reason);
+        clearSession(session);
+        returnObject(session);
+        getLogger().debug("return session, remain sessions = {}", borrowedObjects.size());
+    }
+	
+	protected void checkToReturnSession(S session, EzyConstant reason) {
+	    if(shouldReturnSession(session)) 
+	        returnSessionWithLock(session, reason);
+	}
+	
+	protected void returnSessionWithLock(S session, EzyConstant reason) {
+	    Lock lock = session.getLock(EzyLockName.REMOVE);
+	    EzyProcessor.processWithTryLock(() -> doReturnSession(session, reason), lock);
+	}
+	
+	protected boolean shouldReturnSession(S session) {
+	    return session != null && containsSession(session.getReconnectToken());
 	}
 	
 	protected void unmapSession(S session) {
 		sessionsByToken.remove(session.getReconnectToken());
+		loggedInSession.remove(session.getReconnectToken());
 	}
 	
 	protected void clearSession(S session) {
-		session.setDelegate(null);
-		session.setActivated(false);
-		session.setLoggedIn(false);
+	    getLogger().info("session {} inactive", session.getClientAddress());
+	    session.destroy();
 	}
 	
 	protected void notifySessionReturned(S session, EzyConstant reason) {
-		if(reason != null)
-			tryNotifySessionReturned(session, reason);
+		EzyIfElse.withIf(reason != null, () -> tryNotifySessionReturned(session, reason));
 	}
 	
 	protected void tryNotifySessionReturned(S session, EzyConstant reason) {
 		try {
-			session.getDelegate().onSessionReturned(reason);
+		    EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)session;
+		    hasDelegate.getDelegate().onSessionReturned(reason);
 		}
 		catch(Exception e) {
 			getLogger().debug("notify session returned error", e);
 		}
 	}
 	
-	protected S borrowSession() {
+	@SuppressWarnings("unchecked")
+    protected S borrowSession(EzyConnectionType type) {
 		KeyPair keyPair = newKeyPair();
-		S session = borrowObject();
-		session.setActivated(true);
-		session.setReconnectToken(newTokenSession());
+		EzyAbstractSession session = (EzyAbstractSession)borrowObject();
+		session.setLoggedIn(false);
+		session.setName("Session#" + COUNTER.incrementAndGet());
+		session.setConnectionType(type);
+		session.setReconnectToken(newSessionToken());
 		session.setCreationTime(System.currentTimeMillis());
 		session.setPublicKey(keyPair.getPublic().getEncoded());
 		session.setPrivateKey(keyPair.getPrivate().getEncoded());
-		sessionsByToken.putIfAbsent(session.getReconnectToken(), session);
-		getLogger().info("borrow session {}, sessions size = {}", session, borrowedObjects.size());
-		return session;
+		
+		session.setCreationTime(System.currentTimeMillis());
+        session.setLastActivityTime(System.currentTimeMillis());
+        session.setLastReadTime(System.currentTimeMillis());
+        session.setLastWriteTime(System.currentTimeMillis());
+        session.setActivated(true);
+        S complete = (S)session;
+		sessionsByToken.put(complete.getReconnectToken(), complete);
+		getLogger().debug("borrow session, sessions size = {}", borrowedObjects.size());
+		return complete;
 	}
 	
 	@Override
 	public S getSession(String token) {
 		return sessionsByToken.get(token);
 	}
-
+	
 	@Override
-	protected void removeStaleObjects() {
-		removeUnloggedInSessions();
+	public Set<S> getAllSessions() {
+	    Set<S> all = new HashSet<>();
+	    all.addAll(getRemainObjects());
+	    all.addAll(getBorrowedObjects());
+	    return all;
 	}
 	
+	@Override
+	public List<S> getAliveSessions() {
+	    return new ArrayList<>(sessionsByToken.values());
+	};
+	
+	@Override
+	public List<S> getLoggedInSessions() {
+	    return new ArrayList<>(loggedInSession.values());
+	}
+
 	@Override
 	public void start() throws Exception {
 		super.start();
+		startIdleValidationService();
 		getLogger().debug("start session manager");
 	}
 	
-	protected void removeUnloggedInSessions() {
-		removeUnloggedInSessions(new ArrayList<>(borrowedObjects));
+	protected void startIdleValidationService() {
+	    idleValidationService.scheduleAtFixedRate(
+	            this::validateIdleSessions, 3000, 1000, TimeUnit.MILLISECONDS);
 	}
 	
-	protected void removeUnloggedInSessions(Collection<S> sessions) {
-		sessions.forEach(this::removeUnloggedInSession);
+	protected void validateIdleSessions() {
+	    for(S session : getLoggedInSessions())
+	        if(isIdleSession(session))
+	            returnSession(session, EzySessionRemoveReason.IDLE);
 	}
 	
-	protected void removeUnloggedInSession(S session) {
-		if(isUnloggedInSession(session))
-			returnSession(session, EzySessionRemoveReason.NOT_LOGGED_IN);
-			
+	protected boolean isIdleSession(S session) {
+	    return session.getMaxIdleTime() 
+	            < (System.currentTimeMillis() - session.getLastReadTime());
+	}
+
+	@Override
+	protected boolean isStaleObject(S session) {
+	    return session.isActivated() && isUnloggedInSession(session);
+	}
+	
+	@Override
+	protected void removeStaleObject(S session) {
+	    returnSession(session, EzySessionRemoveReason.NOT_LOGGED_IN);
+	}
+	
+	@Override
+	protected List<S> getCanBeStaleObjects() {
+	    return EzyLists.newArrayList(getBorrowedObjects(), getLoggedInSessions());
 	}
 	
 	protected boolean isUnloggedInSession(EzySession session) {
-		if(session.isLoggedIn())
-			return false;
-		return getSessionRemainWaitingTime(session) <= 0;
+		return session.isLoggedIn() ? false : getSessionRemainWaitingTime(session) <= 0; 
 	}
 	
 	protected long getSessionRemainWaitingTime(EzySession session) {
@@ -131,42 +205,43 @@ public class EzySimpleSessionManager<S extends EzySession>
 				session.getMaxWaitingTime(), session.getCreationTime());
 	}
 	
-	protected String newTokenSession() {
-		return tokenGeneration.generate();
+	protected String newSessionToken() {
+		return tokenGenerator.generate();
 	}
 	
 	protected KeyPair newKeyPair() {
 		return EzyKeysGenerator.builder()
-				.keyLength(512)
+				.keysize(512)
 				.algorithm("RSA")
 				.build().generate();
 	}
+	
+	@Override
+	protected void tryShutdown() {
+	    super.tryShutdown();
+	    this.idleValidationService.shutdown();
+	}
 
 	public abstract static class Builder<S extends EzySession> 
-			extends AbstractBuilder<S, Builder<S>> {
+			extends EzyObjectPool.Builder<S, Builder<S>> {
 
-		protected abstract EzySessionFactory<S> newSessionFactory();
-		
+	    protected EzySessionTokenGenerator tokenGenerator;
+	    
 		@Override
 		protected String getProductName() {
-			return EzySessionManager.class.getSimpleName();
+			return "session-manager";
 		}
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		protected EzySimpleSessionManager newProduct() {
-			return new EzySimpleSessionManager(this);
+		public Builder<S> tokenGenerator(EzySessionTokenGenerator generator) {
+		    this.tokenGenerator = generator;
+		    return this;
 		}
 		
-		@Override
-		protected void prepare() {
-			super.prepare();
-			this.objectFactory = newSessionFactory();
+		protected EzySessionTokenGenerator getSessionTokenGenerator() {
+		    return tokenGenerator != null ? tokenGenerator : new EzySimpleSessionTokenGenerator();
 		}
 		
-		@Override
-		public EzySimpleSessionManager<S> build() {
-			return (EzySimpleSessionManager<S>) super.build();
-		}
+		public abstract EzySimpleSessionManager<S> build();
 		
 	}
 

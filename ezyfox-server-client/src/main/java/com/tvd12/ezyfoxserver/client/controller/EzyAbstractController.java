@@ -1,48 +1,6 @@
 package com.tvd12.ezyfoxserver.client.controller;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
-import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
-import com.tvd12.ezyfoxserver.client.request.EzyRequest;
-import com.tvd12.ezyfoxserver.client.serialize.EzyRequestSerializer;
-import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
-import com.tvd12.ezyfoxserver.context.EzyContext;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.factory.EzyFactory;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 
-public class EzyAbstractController extends EzyLoggable {
-
-	protected EzyRequestSerializer getRequestSerializer(EzyContext ctx) {
-		return ctx.get(EzyRequestSerializer.class);
-	}
-	
-	protected EzyObject serializeToObject(EzyContext ctx, EzyRequest request) {
-		return getRequestSerializer(ctx).serializeToObject(request);
-	}
-	
-	protected EzyArray serializeToArray(EzyContext ctx, EzyRequest request) {
-		return getRequestSerializer(ctx).serializeToArray(request);
-	}
-	
-	protected EzyArrayBuilder newArrayBuilder() {
-		return EzyFactory.create(EzyArrayBuilder.class);
-	}
-	
-	protected EzyObjectBuilder newObjectBuilder() {
-		return EzyFactory.create(EzyObjectBuilder.class);
-	}
-	
-	protected EzyUser getMe(EzyContext ctx) {
-		return getProperty(ctx, EzyClientConstant.ME);
-	}
-	
-	protected <T> T getProperty(EzyContext ctx, Object key) {
-		return ctx.getProperty(key);
-	}
-	
-	protected void setProperty(EzyContext ctx, Object key, Object value) {
-		ctx.setProperty(key, value);
-	}
+public class EzyAbstractController extends EzyEntityBuilders {
 }

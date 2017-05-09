@@ -1,56 +1,62 @@
 package com.tvd12.ezyfoxserver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.entity.EzyDestroyable;
-import com.tvd12.ezyfoxserver.entity.EzyStartable;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzyServerReadyEventImpl;
+import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 import lombok.Setter;
 
-public abstract class EzyServerBootstrap implements EzyStartable, EzyDestroyable {
+public abstract class EzyServerBootstrap
+        extends EzyLoggable
+        implements EzyStartable, EzyDestroyable {
 	
 	@Setter
 	protected EzyServerContext context;
 	@Setter
-	private EzyBootstrap localBootstrap;
+	protected EzyBootstrap localBootstrap;
+	@Setter
+	protected EzyHttpBootstrap httpBootstrap;
 	
 	@Override
 	public void start() throws Exception {
 		startLocalBootstrap();
-		startOtherBootstraps();
-		notifyServerReady();
+		startHttpBootstrap();
+		startOtherBootstraps(this::notifyServerReady);
 	}
 	
-	protected abstract void startOtherBootstraps() throws Exception;
+	protected void startHttpBootstrap() throws Exception {
+	    getLogger().debug("starting http server bootstrap ....");
+	    httpBootstrap.start();
+	    getLogger().debug("http server bootstrap has started");
+	}
 	
+	protected abstract void startOtherBootstraps(Runnable callback) throws Exception;
+	
+	@Override
 	public void destroy() {
 		localBootstrap.destroy();
+		httpBootstrap.destroy();
 	}
 	
 	protected void startLocalBootstrap() throws Exception {
 		getLogger().debug("starting local bootstrap ....");
 		localBootstrap.start();
-		getLogger().debug("starting local bootstrap successful");
+		getLogger().debug("local bootstrap has started");
 	}
 	
 	protected void notifyServerReady() {
+	    getLogger().info("\n{}\n", new EzyBannerPrinter().getBannerString());
 		context.get(EzyFireEvent.class).fire(EzyEventType.SERVER_READY, newServerReadyEvent());
 	}
 	
 	protected EzyEvent newServerReadyEvent() {
-		return EzyServerReadyEventImpl.builder().server(context.getBoss()).build();
+		return EzyServerReadyEventImpl.builder().build();
 	}
-	
-	protected Logger getLogger() {
-		return LoggerFactory.getLogger(getClass());
-	}
-	
-	
 	
 }

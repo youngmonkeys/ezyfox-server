@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.response;
 
+import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 
 public interface EzyResponse {
@@ -8,4 +9,6 @@ public interface EzyResponse {
 	
 	EzyConstant getCommand();
 	
+	interface Builder extends EzyBuilder<EzyResponse> {
+	}
 }

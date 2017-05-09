@@ -58,7 +58,7 @@ public class EzyObjectBuilderImpl
 		return this.product;
 	}
 	
-	public static class Creator extends AbstractCreator<EzyObjectBuilderImpl> {
+	public static class Creator extends AbstractCreator<EzyObjectBuilderImpl, Creator> {
 		@Override
 		public EzyObjectBuilderImpl create() {
 			return new EzyObjectBuilderImpl(inputTransformer, outputTransformer);

@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -11,21 +10,34 @@ import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.io.EzyByteBuffers;
+import com.tvd12.ezyfoxserver.util.EzyLiteEntityBuilders;
 
 public class JacksonSimpleDeserializer
-		extends JacksonObjectMapperSetter
+		extends EzyLiteEntityBuilders
 		implements EzyMessageDeserializer {
 	
+	protected ObjectMapper objectMapper;
+	
 	public JacksonSimpleDeserializer(ObjectMapper objectMapper) {
-		super(objectMapper);
+		this.objectMapper = objectMapper;
+	}
+	
+	@Override
+	public <T> T deserialize(ByteBuffer buffer) {
+		return deserialize(EzyByteBuffers.getBytes(buffer));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T deserialize(byte[] data) {
 		return (T) parse(readTree(data));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T deserialize(String text) {
+		return (T) parse(readTree(text));
 	}
 	
 	protected JsonNode readTree(byte[] data) {
@@ -36,17 +48,25 @@ public class JacksonSimpleDeserializer
 		} 
 	}
 	
+	protected JsonNode readTree(String text) {
+		try {
+			return objectMapper.readTree(text);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("read tree error", e);
+		} 
+	}
+	
 	protected Object parse(JsonNode node) {
-		if(node.isBinary())
-			return parseBinary(node);
-		else if(node.isArray())
+		if(node.isArray())
 			return parseArray(node);
-		else if(node.isObject())
+		if(node.isObject())
 			return parseObject(node);
-		else if(node.isBoolean())
+		if(node.isBoolean())
 			return parseBoolean(node);
-		else if(node.isNumber())
+		if(node.isNumber())
 			return parseNumber(node);
+		if(node.isNull())
+			return null;
 		return parseText(node);
 	}
 	
@@ -60,14 +80,6 @@ public class JacksonSimpleDeserializer
 	
 	protected boolean parseBoolean(JsonNode node) {
 		return node.asBoolean();
-	}
-	
-	protected byte[] parseBinary(JsonNode node) {
-		try {
-			return node.binaryValue();
-		} catch (IOException e) {
-			throw new IllegalStateException("parse binary error", e);
-		}
 	}
 	
 	protected EzyArray parseArray(JsonNode node) {
@@ -88,17 +100,4 @@ public class JacksonSimpleDeserializer
 		return objectBuilder.build();
 	}
 	
-	private EzyArrayBuilder newArrayBuilder() {
-		return EzyEntityFactory.create(EzyArrayBuilder.class);
-	}
-	
-	private EzyObjectBuilder newObjectBuilder() {
-		return EzyEntityFactory.create(EzyObjectBuilder.class);
-	}
-
-	@Override
-	public <T> T deserialize(ByteBuffer buffer) {
-		return deserialize(EzyByteBuffers.getBytes(buffer));
-	}
-
 }

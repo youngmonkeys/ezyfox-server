@@ -1,0 +1,54 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing"></package>
+		</packages>
+	</test>
+	<test name="Util">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.util"></package>
+		</packages>
+	</test>
+	<test name="Helper">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.helper"></package>
+		</packages>
+	</test>
+	<test name="Function">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.function"></package>
+		</packages>
+	</test>
+	<test name="Reflect">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.reflect"></package>
+		</packages>
+	</test>
+	<test name="Constant">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.constant"></package>
+		</packages>
+	</test>
+	<test name="ASM">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.asm"></package>
+		</packages>
+	</test>
+	<test name="IO">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.io"></package>
+		</packages>
+	</test>
+	<test name="Properties">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.properties"></package>
+		</packages>
+	</test>
+	<test name="Exception">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.exception"></package>
+		</packages>
+	</test>
+</suite>

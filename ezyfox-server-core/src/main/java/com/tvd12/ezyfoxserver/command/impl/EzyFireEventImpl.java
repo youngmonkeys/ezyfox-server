@@ -19,6 +19,7 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
+	    getLogger().debug("fire event {}", type);
 		firePluginsEvent(type, event);
 		fireAppsEvent(type, event);
 	}
@@ -56,6 +57,6 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 	}
 	
 	protected EzyServer getServer() {
-		return context.getBoss();
+		return context.getServer();
 	}
 }

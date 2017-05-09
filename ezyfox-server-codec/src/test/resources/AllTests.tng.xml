@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
+	<test name="Codec">
 		<packages>
-			<package name="com.tvd12.ezyfoxserver.codec"></package>
+			<package name="com.tvd12.ezyfoxserver.testing.codec"></package>
 		</packages>
 	</test>
 </suite>

@@ -1,55 +1,37 @@
 package com.tvd12.ezyfoxserver.event.impl;
 
-import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class EzyUserLoginEventImpl 
-		extends EzyAbstractEvent 
-		implements EzyUserLoginEvent {
+@Setter
+@Getter
+public class EzyUserLoginEventImpl extends EzySimpleSessionEvent implements EzyUserLoginEvent {
 
-	@Getter
-	private Object data;
-	@Getter
-	@Setter
-	private String username;
-	@Setter
-	@Getter
-	private String password;
-	@Setter
-	@Getter
-	private Object output;
-	@Getter
-	private EzySession session;
-	
-	protected EzyUserLoginEventImpl(Builder builder) {
-		super(builder);
-		this.data = builder.data;
-		this.output = builder.output;
-		this.session = builder.session;
-		this.username = builder.username;
-		this.password = builder.password;
-	}
+	protected EzyArray data;
+	protected String username;
+	protected String password;
+	protected EzyData output;
 	
 	public static Builder builder() {
 		return new Builder();
 	}
 	
-	public static class Builder extends EzyAbstractEvent.Builder<Builder> {
-		private Object data;
-		private Object output;
-		private String username;
-		private String password;
-		private EzySession session;
+	public static class Builder extends EzySimpleSessionEvent.Builder<Builder> {
+	    protected EzyArray data;
+	    protected EzyData output;
+	    protected String username;
+	    protected String password;
 		
-		public Builder data(Object data) {
+		public Builder data(EzyArray data) {
 			this.data = data;
 			return this;
 		}
 		
-		public Builder output(Object output) {
+		public Builder output(EzyData output) {
 			this.output = output;
 			return this;
 		}
@@ -64,14 +46,19 @@ public class EzyUserLoginEventImpl
 			return this;
 		}
 		
-		public Builder session(EzySession session) {
-			this.session = session;
-			return this;
+		@Override
+		public EzyUserLoginEvent build() {
+		    return (EzyUserLoginEvent)super.build();
 		}
 		
 		@Override
-		public EzyUserLoginEvent build() {
-			return new EzyUserLoginEventImpl(this);
+		protected EzyUserLoginEventImpl newProduct() {
+		    EzyUserLoginEventImpl answer = new EzyUserLoginEventImpl();
+		    answer.setData(data);
+		    answer.setOutput(output);
+		    answer.setUsername(username);
+		    answer.setPassword(password);
+		    return answer;
 		}
 	}
 	

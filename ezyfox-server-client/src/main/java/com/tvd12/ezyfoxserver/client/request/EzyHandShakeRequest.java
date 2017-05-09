@@ -3,10 +3,10 @@ package com.tvd12.ezyfoxserver.client.request;
 import java.io.File;
 import java.security.KeyPair;
 
-import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.io.EzySimpleFileReader;
-import com.tvd12.ezyfoxserver.io.EzySimpleFileWriter;
+import com.tvd12.ezyfoxserver.file.EzySimpleFileReader;
+import com.tvd12.ezyfoxserver.file.EzySimpleFileWriter;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.sercurity.EzyFileAsyCrypt;
 import com.tvd12.ezyfoxserver.sercurity.EzyFileKeysGenerator;
@@ -16,23 +16,29 @@ public class EzyHandShakeRequest extends EzyBaseRequest implements EzyRequest {
 	private KeyPair keyPair;
 	private String publicKey;
 	private String reconnectToken;
+	private String clientId = "";
+	private String clientType = "JAVA";
+	private String clientVersion = "1.0.0";
 	
 	protected EzyHandShakeRequest(Builder builder) {
 		this.reconnectToken = builder.fetchReconnectToken();
 		this.keyPair = builder.newKeyPair();
-		this.publicKey = EzyBase64.encode2utf8(keyPair.getPublic().getEncoded());
+		this.publicKey = EzyBase64.encode2utf(keyPair.getPublic().getEncoded());
 	}
 	
 	@Override
 	public EzyConstant getCommand() {
-		return EzyCommand.HAND_SHAKE;
+		return EzyClientCommand.HANDSHAKE;
 	}
 	
 	@Override
 	public Object getData() {
 		return newArrayBuilder()
+				.append(clientId)
 				.append(publicKey)
 				.append(reconnectToken)
+				.append(clientType)
+				.append(clientVersion)
 				.build();
 	}
 	
@@ -52,9 +58,9 @@ public class EzyHandShakeRequest extends EzyBaseRequest implements EzyRequest {
 		
 		protected KeyPair newKeyPair() {
 			return EzyFileKeysGenerator.builder()
-					.keyLength(512)
+					.keysize(512)
 					.algorithm("RSA")
-					.fileWriter(new EzySimpleFileWriter())
+					.fileWriter(EzySimpleFileWriter.builder().build())
 					.privateKeyFile(getPrivateKeyFile())
 					.build()
 					.generate();
@@ -70,10 +76,11 @@ public class EzyHandShakeRequest extends EzyBaseRequest implements EzyRequest {
 class ReconnectTokenFetcher {
 	
 	public String get() {
-		return decryptToken();
+		return "";
+//		return decryptToken();
 	}
 	
-	private String decryptToken() {
+	protected String decryptToken() {
 		try {
 			return tryDecryptToken();
 		}
@@ -86,7 +93,7 @@ class ReconnectTokenFetcher {
 		return EzyFileAsyCrypt.builder()
 				.algorithm("RSA")
 				.privateKeyFile(getPrivateKeyFile())
-				.fileReader(new EzySimpleFileReader())
+				.fileReader(EzySimpleFileReader.builder().build())
 				.build()
 				.decrypt(getTokenFile(), String.class);
 	}

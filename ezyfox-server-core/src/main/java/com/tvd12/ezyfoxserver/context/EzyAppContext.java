@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.context;
 
-import com.tvd12.ezyfoxserver.config.EzyApp;
+import com.tvd12.ezyfoxserver.EzyApplication;
 
-public interface EzyAppContext extends EzyContext {
+public interface EzyAppContext extends EzyChildContext {
 
-	EzyApp getApp();
+    EzyApplication getApp();
 	
 }

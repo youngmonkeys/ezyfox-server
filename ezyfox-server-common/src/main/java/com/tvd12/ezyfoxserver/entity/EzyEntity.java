@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfoxserver.util.EzyProperties;
+
 /**
  * Each model in application should have properties, and we think key/value is good idea 
  * 

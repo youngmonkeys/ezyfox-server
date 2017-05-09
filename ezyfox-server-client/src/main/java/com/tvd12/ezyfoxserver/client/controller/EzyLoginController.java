@@ -1,65 +1,58 @@
 package com.tvd12.ezyfoxserver.client.controller;
 
-import com.tvd12.ezyfoxserver.client.EzyClientContext;
-import com.tvd12.ezyfoxserver.client.request.EzyAccessAppRequest;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
-import com.tvd12.ezyfoxserver.constants.EzyClientConstant;
-import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.client.EzyClient;
+import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
+import com.tvd12.ezyfoxserver.client.context.EzyClientAppContext;
+import com.tvd12.ezyfoxserver.client.context.EzyClientContext;
+import com.tvd12.ezyfoxserver.client.context.EzySimpleClientAppContext;
+import com.tvd12.ezyfoxserver.client.entity.EzyClientSession;
+import com.tvd12.ezyfoxserver.client.entity.EzySimpleClientUser;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public class EzyLoginController 
 		extends EzyAbstractController 
-		implements EzyClientController<EzySession> {
+		implements EzyClientController<EzyClientSession> {
 
 	@Override
-	public void handle(EzyClientContext ctx, EzySession session, EzyArray data) {
-		setMe(ctx, session, data);
-		sendAccessAppRequest(ctx);
+	public void handle(EzyClientContext ctx, EzyClientSession session, EzyArray data) {
+		updateMe(ctx, data);
+		EzyArray joinedApps = data.get(2, EzyArray.class);
+		if(joinedApps.isEmpty())
+			processNotReconnect(ctx, session, data);
+		else
+			processReconnect(ctx, joinedApps);
 	}
 	
-	protected void sendAccessAppRequest(EzyContext ctx) {
-		ctx.get(EzySendMessage.class)
-			.data(newAccessAppData(ctx))
-			.sender(getMe(ctx))
-			.execute();
+	protected void processNotReconnect(EzyClientContext ctx, EzyClientSession session, EzyArray data) {
 	}
 	
-	protected EzyArray newAccessAppData(EzyContext ctx) {
-		return serializeToArray(ctx, newAccessAppRequest());
+	protected void updateMe(EzyClientContext ctx, EzyArray data) {
+		long userId = data.get(0, long.class);
+		String username = data.get(1, String.class);
+		EzySimpleClientUser me = (EzySimpleClientUser) ctx.getMe();
+		me.setId(userId);
+		me.setName(username);
+		getLogger().info("login success userId = {}, username = {}", userId, username);
 	}
 	
-	protected EzyAccessAppRequest newAccessAppRequest() {
-		return EzyAccessAppRequest.builder()
-				.appName("ezyfox-chat")
-				.data(newAccessAppData())
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void processReconnect(EzyClientContext ctx, EzyArray joinedApps) {
+		for(int i = 0 ; i < joinedApps.size() ; i++) {
+			EzyArray data = joinedApps.get(0, EzyArray.class);
+			EzyClientAppContext appCtx = newAppContext(ctx, data);
+			ctx.addAppContext(appCtx);
+			EzyClient client = ctx.getClient();
+			EzyClientAppController ctrl = client.getAppController(EzyClientCommand.ACESS_APP_SUCCESS);
+			if(ctrl != null) ctrl.handle(appCtx, appCtx.getMe(), newArrayBuilder().build());
+		}
+	}
+	
+	protected EzyClientAppContext newAppContext(EzyClientContext ctx, EzyArray data) {
+		return EzySimpleClientAppContext.builder()
+				.appId(data.get(0, int.class))
+				.appName(data.get(1, String.class))
+				.parent(ctx)
 				.build();
 	}
 	
-	protected EzyObject newAccessAppData() {
-		return newObjectBuilder().build();
-	}
-	
-	protected void setMe(EzyContext ctx, EzySession session, EzyArray data) {
-		setProperty(ctx, EzyClientConstant.ME, createMe(session, data));
-	}
-	
-	protected EzyUser createMe(EzySession session, EzyArray data) {
-		long userId = data.get(0, long.class);
-		String username = data.get(1);
-		EzySimpleUser me = new EzySimpleUser();
-		me.setId(userId);
-		me.setSession(session);
-		me.setName(username);
-		getLogger().info("login success userId = {}, username = {}", userId, username);
-		return me;
-	}
-	
-	protected void sendAccessAppRequest() {
-		
-	}
-
 }

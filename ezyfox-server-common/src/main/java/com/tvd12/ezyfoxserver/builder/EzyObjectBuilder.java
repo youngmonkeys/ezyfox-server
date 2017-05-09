@@ -13,7 +13,7 @@ public interface EzyObjectBuilder extends EzyBuilder<EzyObject> {
 	 * @param value the value
 	 * @return this pointer
 	 */
-	EzyObjectBuilder append(final Object key, final Object value);
+	EzyObjectBuilder append(Object key, Object value);
 	
 	/**
 	 * append a map of key value entries to project
@@ -22,7 +22,7 @@ public interface EzyObjectBuilder extends EzyBuilder<EzyObject> {
 	 * @return this pointer
 	 */
 	@SuppressWarnings("rawtypes")
-	EzyObjectBuilder append(final Map map);
+	EzyObjectBuilder append(Map map);
 	
 	/**
 	 * build a value mapped to the key and add to product
@@ -31,7 +31,8 @@ public interface EzyObjectBuilder extends EzyBuilder<EzyObject> {
 	 * @param builder the builder to build value
 	 * @return this pointer
 	 */
-	default EzyObjectBuilder append(final Object key, final EzyBuilder<?> builder) {
+	@SuppressWarnings("rawtypes")
+	default EzyObjectBuilder append(Object key, EzyBuilder builder) {
 		return this.append(key, builder.build());
 	}
 	

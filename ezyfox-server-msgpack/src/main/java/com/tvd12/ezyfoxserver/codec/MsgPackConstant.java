@@ -1,8 +1,9 @@
 package com.tvd12.ezyfoxserver.codec;
 
+import com.tvd12.ezyfoxserver.io.EzyInts;
 import com.tvd12.ezyfoxserver.io.EzyMath;
 
-public abstract class MsgPackConstant {
+public final class MsgPackConstant {
 
 	private MsgPackConstant() {
 	}
@@ -28,4 +29,7 @@ public abstract class MsgPackConstant {
 	public static final int MAX_BIN8_SIZE 			= EzyMath.bin2int(8);
 	public static final int MAX_BIN16_SIZE 			= EzyMath.bin2int(16);
 	public static final int MAX_BIN32_SIZE 			= EzyMath.bin2int(31);
+	
+	public static final int MAX_SMALL_MESSAGE_SIZE	= EzyInts.bin2int(16);
+	
 }

@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.client.cmd.impl;
 
-import com.tvd12.ezyfoxserver.client.EzyClientContext;
+import com.tvd12.ezyfoxserver.client.context.EzyClientContext;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
 
 public class EzyClientShutdownImpl implements EzyShutdown {

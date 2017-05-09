@@ -1,0 +1,42 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing"></package>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.testing1"></package>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.scan"></package>
+		</packages>
+	</test>
+	<test name="Exception1">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.exception1"></package>
+		</packages>
+	</test>
+	<test name="Exception2">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.exception2"></package>
+		</packages>
+	</test>
+	<test name="Scan1">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.scan1"></package>
+		</packages>
+	</test>
+	<test name="ArrayBinding">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.arraybinding"></package>
+		</packages>
+	</test>
+	<test name="ObjectBinding">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.objectbinding"></package>
+		</packages>
+	</test>
+	
+	<test name="Unwrapper">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.binding.testing.unwrapper"></package>
+		</packages>
+	</test>
+</suite>

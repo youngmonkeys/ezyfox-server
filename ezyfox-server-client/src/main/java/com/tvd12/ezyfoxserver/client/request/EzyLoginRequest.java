@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.client.request;
 
-import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 
@@ -18,7 +18,7 @@ public class EzyLoginRequest extends EzyBaseRequest implements EzyRequest {
 	
 	@Override
 	public EzyConstant getCommand() {
-		return EzyCommand.LOGIN;
+		return EzyClientCommand.LOGIN;
 	}
 	
 	@Override

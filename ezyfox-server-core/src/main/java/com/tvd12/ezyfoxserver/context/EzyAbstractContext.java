@@ -19,11 +19,7 @@ public abstract class EzyAbstractContext extends EzyEntity {
 	protected ExecutorService workerExecutor;
 	
 	@SuppressWarnings("rawtypes")
-	protected Map<Class, Supplier> commandSuppliers;
-	
-	{
-		commandSuppliers = defaultCommandSuppliers();
-	}
+	protected Map<Class, Supplier> commandSuppliers = defaultCommandSuppliers();
 	
 	@SuppressWarnings("rawtypes")
 	protected Map<Class, Supplier> defaultCommandSuppliers() {

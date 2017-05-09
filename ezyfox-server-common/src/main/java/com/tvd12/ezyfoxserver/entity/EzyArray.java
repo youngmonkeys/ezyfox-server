@@ -7,7 +7,15 @@ import java.util.function.Consumer;
 public interface EzyArray extends EzyRoArray {
 	
 	/**
-	 * Add values to array
+	 * Add item to array
+	 * 
+	 * @param <T> the value type
+	 * @param item the item to add
+	 */
+	<T> void add(T item);
+	
+	/**
+	 * Add items to array
 	 * 
 	 * @param <T> the value type
 	 * @param items the items to add
@@ -16,7 +24,7 @@ public interface EzyArray extends EzyRoArray {
 	<T> void add(T... items);
 	
 	/**
-	 * Add values to array
+	 * Add items to array
 	 * 
 	 * @param items the items to add
 	 */

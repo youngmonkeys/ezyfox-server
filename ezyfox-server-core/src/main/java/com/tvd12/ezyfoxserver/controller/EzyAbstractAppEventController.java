@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 
 public abstract class EzyAbstractAppEventController<E> 
-		extends EzyLoggable 
+		extends EzyEntityBuilders 
 		implements EzyAppEventController<E> {
 
 }

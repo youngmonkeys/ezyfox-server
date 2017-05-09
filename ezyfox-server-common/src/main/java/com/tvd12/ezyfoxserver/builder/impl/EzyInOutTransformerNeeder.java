@@ -16,22 +16,30 @@ public class EzyInOutTransformerNeeder {
 		this.outputTransformer = outputTransformer;
 	}
 	
-	public static abstract class AbstractCreator<P extends EzyInOutTransformerNeeder> 
+	public static abstract class AbstractCreator<
+			P extends EzyInOutTransformerNeeder,
+			C extends AbstractCreator<P, C>
+			> 
 			implements EzyCreation<P> {
 		protected EzyInputTransformer inputTransformer;
 		protected EzyOutputTransformer outputTransformer;
 		
-		public AbstractCreator<P> inputTransformer(EzyInputTransformer inputTransformer) {
+		public C inputTransformer(EzyInputTransformer inputTransformer) {
 			this.inputTransformer = inputTransformer;
-			return this;
+			return getThis();
 		}
-		public AbstractCreator<P> outputTransformer(EzyOutputTransformer outputTransformer) {
+		public C outputTransformer(EzyOutputTransformer outputTransformer) {
 			this.outputTransformer = outputTransformer;
-			return this;
+			return getThis();
 		}
 		
 		@Override
 		public abstract P create();
+		
+		@SuppressWarnings("unchecked")
+		protected C getThis() {
+			return (C)this;
+		}
 	}
 	
 }

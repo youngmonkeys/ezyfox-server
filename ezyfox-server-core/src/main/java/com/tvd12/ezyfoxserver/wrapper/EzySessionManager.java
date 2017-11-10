@@ -67,4 +67,19 @@ public interface EzySessionManager<S extends EzySession> {
      */
 	List<S> getLoggedInSessions();
 	
+	/**
+	 * @return all sessions count
+	 */
+	int getAllSessionCount();
+	
+	/**
+	 * @return alive sessions count
+	 */
+	int getAliveSessionCount();
+	
+	/**
+	 * @return logged in session count
+	 */
+	int getLoggedInSessionCount();
+	
 }

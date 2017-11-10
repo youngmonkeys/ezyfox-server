@@ -52,6 +52,11 @@ public class EzySimpleUserManager extends EzyLoggable implements EzyUserManager 
     }
     
     @Override
+    public int getUserCount() {
+        return usersById.size();
+    }
+    
+    @Override
     public Lock getLock(String username) {
         return locks.computeIfAbsent(username, k -> new ReentrantLock());
     }

@@ -31,6 +31,13 @@ public interface EzyUserManager {
 	List<EzyUser> getUserList();
 	
 	/**
+	 * Get count of users
+	 * 
+	 * @return count of users
+	 */
+	int getUserCount();
+	
+	/**
 	 * Check whether contains user or not
 	 * 
 	 * @param userId the user id

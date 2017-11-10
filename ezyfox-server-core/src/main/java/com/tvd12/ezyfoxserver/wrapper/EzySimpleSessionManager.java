@@ -157,7 +157,22 @@ public class EzySimpleSessionManager<S extends EzySession>
 	public List<S> getLoggedInSessions() {
 	    return new ArrayList<>(loggedInSession.values());
 	}
+	
+	@Override
+	public int getAllSessionCount() {
+	    return pool.size() + borrowedObjects.size();
+	}
 
+	@Override
+	public int getAliveSessionCount() {
+	    return sessionsByToken.size();
+	}
+	
+	@Override
+	public int getLoggedInSessionCount() {
+	    return loggedInSession.size();
+	}
+	
 	@Override
 	public void start() throws Exception {
 		super.start();

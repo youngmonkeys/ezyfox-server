@@ -1,6 +1,0 @@
-<html>
-<title>Home</title>
-<body>
-	<h3>${random}</h3>
-</body>
-</html

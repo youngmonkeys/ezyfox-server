@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tvd12</groupId>
+		<artifactId>ezyfox-server</artifactId>
+		<version>0.0.2</version>
+	</parent>
+
+	<artifactId>ezyfox-server-client</artifactId>
+	
+	<version>1.0.0</version>
+	<name>ezyfox-server-client</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<ezy.netty.version>1.0.0</ezy.netty.version>
+		<ezy.nettycodec.version>1.0.0</ezy.nettycodec.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-netty</artifactId>
+			<version>${ezy.netty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-nettycodec</artifactId>
+			<version>${ezy.nettycodec.version}</version>
+		</dependency>
+	</dependencies>
+</project>

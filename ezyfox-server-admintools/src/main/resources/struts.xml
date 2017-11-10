@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration //EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="ezyfox-server-admintools" extends="struts-default">
+    	<default-action-ref name="home" />
+    	
+    	<action name="home" class="HomeAction">
+        	<result name="success">/WEB-INF/views/jsp/home.jsp</result>
+    	</action>
+    	
+    	<action name="home/ftl" class="HomeAction">
+        	<result name="success" type="freemarker">/WEB-INF/views/ftl/home.ftl</result>
+    	</action>
+    	
+    	<action name="home/vm" class="HomeAction">
+        	<result name="success" type="velocity">/WEB-INF/views/vm/home.vm</result>
+    	</action>
+    
+        <action name="list-product" class="ListProductAction">
+            <result name="success">/WEB-INF/views/jsp/list_product.jsp</result>
+        </action>
+    </package>
+</struts>

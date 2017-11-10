@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing"></package>
+		</packages>
+	</test>
+	<test name="Service">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing.service"></package>
+		</packages>
+	</test>
+	<test name="Transaction">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing.transaction"></package>
+		</packages>
+	</test>
+	<test name="Util">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing.util"></package>
+		</packages>
+	</test>
+	<test name="Mapstore">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing.mapstore"></package>
+		</packages>
+	</test>
+	<test name="Entity">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.hazelcast.testing.entity"></package>
+		</packages>
+	</test>
+</suite>

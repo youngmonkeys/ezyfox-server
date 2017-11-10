@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tvd12</groupId>
+		<artifactId>ezyfox-server</artifactId>
+		<version>0.0.2</version>
+	</parent>
+	<artifactId>ezyfox-server-mongodb</artifactId>
+	<name>ezyfox-server-mongodb</name>
+	<version>1.0.0</version>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<mongodb.version>3.4.0</mongodb.version>
+		<ezy.bean.version>1.0.0</ezy.bean.version>
+		<ezy.io.version>1.0.0</ezy.io.version>
+		<ezy.database.version>1.0.0</ezy.database.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-database</artifactId>
+			<version>${ezy.database.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-io</artifactId>
+			<version>${ezy.io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongodb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-bean</artifactId>
+			<version>${ezy.bean.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing"></package>
+		</packages>
+	</test>
+	<test name="IO">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.io"></package>
+		</packages>
+	</test>
+	<test name="File">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.file"></package>
+		</packages>
+	</test>
+	<test name="Performance">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.performance"></package>
+		</packages>
+	</test>
+	<test name="Exception">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.exception"></package>
+		</packages>
+	</test>
+	<test name="Stream">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.stream"></package>
+		</packages>
+	</test>
+</suite>

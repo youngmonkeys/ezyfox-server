@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.tvd12.com/schema/ezyfox/settings"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.tvd12.com/schema/ezyfox/settings"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:element name="settings">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="user-management" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="session-management" minOccurs="0" maxOccurs="1" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="http" type="http-type" />
+	<xs:element name="socket" type="socket-type" />
+	<xs:element name="web-socket" type="web-socket-type" />
+	<xs:element name="applications" type="applications-type" />
+	<xs:element name="application" type="application-type" />
+	<xs:element name="plugins" type="plugins-type" />
+	<xs:element name="plugin" type="plugin-type" />
+	<xs:element name="user-management" type="user-management-type" />
+	<xs:element name="session-management" type="session-management-type" />
+	
+	<xs:complexType name="socket-type">
+		<xs:all>
+			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="web-socket-type">
+		<xs:all>
+			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="ssl-port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+			<xs:element name="ssl-config" type="ssl-config-type" maxOccurs="1" minOccurs="0" />
+			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="ssl-config-type">
+		<xs:all>
+			<xs:element name="file" type="file-type" maxOccurs="1" minOccurs="0" />
+			<xs:element name="loader" type="class-type" maxOccurs="1" minOccurs="0" />
+			<xs:element name="context-factory-builder" type="class-type" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="http-type">
+		<xs:all>
+			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="plugins-type">
+		<xs:all>
+			<xs:element ref="plugin" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="plugin-type">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
+			<xs:element name="worker-thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="applications-type">
+		<xs:all>
+			<xs:element ref="application" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="application-type">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="worker-thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="user-management-type">
+		<xs:all>
+			<xs:element name="user-max-idle-time" minOccurs="0" maxOccurs="1" />
+			<xs:element name="max-session-per-user" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="session-management-type">
+		<xs:all>
+			<xs:element name="session-max-idle-time" minOccurs="0" maxOccurs="1" />
+			<xs:element name="session-max-waiting-time" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:simpleType name="codec-creator-type">
+		<xs:restriction base="class-type" />
+	</xs:simpleType>
+	
+	<xs:simpleType name="class-type">
+		<xs:restriction base="not-empty-type" />
+	</xs:simpleType>
+	
+	<xs:simpleType name="file-type">
+		<xs:restriction base="not-empty-type" />
+	</xs:simpleType>
+	
+	<xs:simpleType name="not-empty-type">
+		<xs:restriction base="xs:string">
+				<xs:minLength value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

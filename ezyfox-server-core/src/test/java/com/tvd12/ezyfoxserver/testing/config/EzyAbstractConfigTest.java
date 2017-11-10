@@ -1,0 +1,32 @@
+package com.tvd12.ezyfoxserver.testing.config;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.testng.annotations.Test;
+
+import com.tvd12.ezyfoxserver.setting.EzyAbstractSetting;
+import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
+
+public class EzyAbstractConfigTest extends BaseCoreTest {
+
+    @Test
+    public void test() {
+        Config config = new Config();
+        config.setName("config");
+        config.setEntryLoader("loader");
+        config.setWorkerPoolSize(100);
+    }
+    
+    
+    public static class Config extends EzyAbstractSetting {
+        @Override
+        protected AtomicInteger getIdCounter() {
+            return new AtomicInteger(0);
+        }
+        @Override
+        protected EzyEventControllers newEventControllers() {
+            return null;
+        }
+    }
+}

@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyServerReadyEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
@@ -56,7 +56,7 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected EzyEvent newServerReadyEvent() {
-		return EzyServerReadyEventImpl.builder().build();
+		return EzySimpleServerReadyEvent.builder().build();
 	}
 	
 }

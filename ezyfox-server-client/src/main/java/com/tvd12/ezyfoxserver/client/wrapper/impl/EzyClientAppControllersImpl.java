@@ -13,6 +13,9 @@ public class EzyClientAppControllersImpl implements EzyClientAppControllers {
 	@SuppressWarnings("rawtypes") 
 	protected Map<EzyConstant, EzyClientAppController> controllers = new ConcurrentHashMap<>();
 	
+	protected EzyClientAppControllersImpl(Builder builder) {
+	}
+	
 	@SuppressWarnings("rawtypes") 
 	@Override 
 	public EzyClientAppController getController(EzyConstant cmd) {
@@ -39,8 +42,7 @@ public class EzyClientAppControllersImpl implements EzyClientAppControllers {
 		
 		@Override
 		public EzyClientAppControllers build() {
-			EzyClientAppControllersImpl answer = new EzyClientAppControllersImpl();
-			return answer;
+			return new EzyClientAppControllersImpl(this);
 		}
 	}
 	

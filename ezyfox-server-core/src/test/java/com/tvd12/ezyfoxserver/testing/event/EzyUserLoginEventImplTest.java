@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserLoginEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyUserLoginEventImplTest extends BaseCoreTest {
@@ -14,18 +14,16 @@ public class EzyUserLoginEventImplTest extends BaseCoreTest {
     public void test() {
         EzyArray data = newArrayBuilder().build();
         data.add("123.abc");
-        EzyObject output = newObjectBuilder().append("1", "a").build();
         EzyObject output2 = newObjectBuilder().append("2", "b").build();
-        EzyUserLoginEvent event = EzyUserLoginEventImpl.builder()
+        EzyUserLoginEvent event = EzySimpleUserLoginEvent.builder()
                 .data(data)
-                .output(output)
                 .username("dungtv")
                 .password("123")
                 .build();
         assert event.getData() == data;
         assert event.getUsername().equals("dungtv");
         assert event.getPassword().equals("123");
-        assert event.getOutput() == output;
+        assert event.getOutput() == null;
         
         event.setUsername("new login name");
         event.setPassword("new password");

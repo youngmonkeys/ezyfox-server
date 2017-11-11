@@ -4,15 +4,18 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.event.EzyUserAddedEvent;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
-public class EzyUserAddedEventImpl 
+public class EzySimpleUserAddedEvent 
 		extends EzySimpleUserSessionEvent 
 		implements EzyUserAddedEvent {
     
     protected EzyArray loginData;
+    
+    protected EzySimpleUserAddedEvent(Builder builder) {
+        super(builder);
+        this.loginData = builder.loginData;
+    }
 
 	public static Builder builder() {
 		return new Builder();
@@ -26,13 +29,11 @@ public class EzyUserAddedEventImpl
 	        this.loginData = data;
 	        return this;
 	    }
-		
-		@Override
-		protected EzyUserAddedEventImpl newProduct() {
-		    EzyUserAddedEventImpl answer = new EzyUserAddedEventImpl();
-		    answer.setLoginData(loginData);
-		    return answer;
-		}
+	    
+	    @Override
+	    public EzyUserAddedEvent build() {
+	        return new EzySimpleUserAddedEvent(this);
+	    }
 	}
 	
 }

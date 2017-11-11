@@ -11,7 +11,6 @@ import com.mongodb.MongoClient;
 import com.tvd12.ezyfoxserver.hazelcast.EzyMongoDatastoreHazelcastFactory;
 import com.tvd12.ezyfoxserver.hazelcast.service.EzyMaxIdService;
 import com.tvd12.ezyfoxserver.hazelcast.service.EzySimpleMaxIdService;
-import com.tvd12.ezyfoxserver.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezyfoxserver.mongodb.loader.EzyInputStreamMongoClientLoader;
 import com.tvd12.test.base.BaseTest;
 

@@ -14,6 +14,11 @@ public class EzySimpleUserRequest<P>
 
     protected EzyUser user;
     
+    protected EzySimpleUserRequest(Builder<P, ?> builder) {
+        super(builder);
+        this.user = builder.user;
+    }
+    
     public abstract static class Builder<P,B extends Builder<P, B>>
             extends EzySimpleRequest.Builder<P, B> {
         
@@ -26,14 +31,7 @@ public class EzySimpleUserRequest<P>
         }
         
         @Override
-        public EzyUserRequest<P> build() {
-            EzySimpleUserRequest<P> answer = (EzySimpleUserRequest<P>) super.build();
-            answer.setUser(user);
-            return answer;
-        }
-        
-        @Override
-        protected abstract EzySimpleUserRequest<P> newProduct();
+        public abstract EzyUserRequest<P> build();
     }
     
 }

@@ -25,6 +25,10 @@ public class EzyClientControllersImpl implements EzyClientControllers {
 	
 	protected Map<EzyConstant, Object> controllers;
 	
+	protected EzyClientControllersImpl(Builder builder) {
+		this.controllers = builder.newControllers();
+	}
+	
 	@Override 
 	public Object getController(EzyConstant cmd) {
 		return controllers.get(cmd);
@@ -64,9 +68,7 @@ public class EzyClientControllersImpl implements EzyClientControllers {
 		
 		@Override
 		public EzyClientControllers build() {
-			EzyClientControllersImpl answer = new EzyClientControllersImpl();
-			answer.setControllers(newControllers());
-			return answer;
+			return new EzyClientControllersImpl(this);
 		}
 	}
 	

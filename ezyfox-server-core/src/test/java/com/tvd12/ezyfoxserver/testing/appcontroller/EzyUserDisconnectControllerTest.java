@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.appcontroller.EzyUserDisconnectController;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyUserDisconnectEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserDisconnectEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyUserDisconnectControllerTest extends BaseCoreTest {
@@ -15,7 +15,7 @@ public class EzyUserDisconnectControllerTest extends BaseCoreTest {
     public void test() {
         EzyUserDisconnectController ctrl = new EzyUserDisconnectController();
         EzyServerContext ctx = newServerContext();
-        EzyUserDisconnectEvent event = (EzyUserDisconnectEvent) EzyUserDisconnectEventImpl.builder()
+        EzyUserDisconnectEvent event = (EzyUserDisconnectEvent) EzySimpleUserDisconnectEvent.builder()
                 .reason(EzyDisconnectReason.IDLE)
                 .user(newUser())
                 .build();

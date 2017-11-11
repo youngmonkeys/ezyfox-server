@@ -24,6 +24,11 @@ public class EzyRequestFactory {
     @SuppressWarnings("rawtypes")
     protected Map<EzyConstant, Supplier<EzySimpleRequest.Builder>> suppliers;
     
+    protected EzyRequestFactory(Builder builder) {
+        this.suppliers = builder.newSuppliers();
+        this.sessionSupplier = builder.sessionSupplier;
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object newRequest(EzyConstant cmd, Object params) {
         EzySimpleRequest.Builder builder = suppliers.get(cmd).get();
@@ -53,10 +58,7 @@ public class EzyRequestFactory {
         
         @Override
         public EzyRequestFactory build() {
-            EzyRequestFactory answer = new EzyRequestFactory();
-            answer.sessionSupplier = sessionSupplier;
-            answer.suppliers = newSuppliers();
-            return answer;
+            return new EzyRequestFactory(this);
         }
         
         protected EzyUser getUser() {

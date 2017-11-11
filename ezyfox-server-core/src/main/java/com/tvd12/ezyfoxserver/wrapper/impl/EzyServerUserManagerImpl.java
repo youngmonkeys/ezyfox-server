@@ -23,7 +23,7 @@ public class EzyServerUserManagerImpl
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
-    public EzyServerUserManagerImpl() {
+    protected EzyServerUserManagerImpl(Builder builder) {
         this.idleValidationService = EzyExecutors.newScheduledThreadPool(3, "user-manager");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> idleValidationService.shutdown()));
     }
@@ -150,7 +150,7 @@ public class EzyServerUserManagerImpl
 		
 		@Override
 		public EzyServerUserManager build() {
-			return new EzyServerUserManagerImpl();
+			return new EzyServerUserManagerImpl(this);
 		}
 		
 	}

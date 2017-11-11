@@ -27,8 +27,8 @@ import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySessionLoginEventImpl;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserAddedEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionLoginEvent;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserAddedEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.function.EzyVoid;
 import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
@@ -44,13 +44,28 @@ public class EzyLoginProcessor
         extends EzyEntityBuilders 
         implements EzyVoid {
 
-    protected EzyUserLoginEvent event;
-    protected EzyServerContext context;
-    protected EzyServerUserManager userManager;
     protected boolean alreadyLoggedIn;
     protected boolean allowGuestLogin;
     protected String guestNamePrefix;
     protected String userNamePattern;
+
+    protected EzySettings settings;
+    protected EzyUserLoginEvent event;
+    protected EzyServerContext context;
+    protected EzyServerUserManager userManager;
+    protected EzyUserManagementSetting userManagementSetting;
+    
+    protected EzyLoginProcessor(Builder builder) {
+    	this.event = builder.event;
+    	this.context = builder.context;
+    	this.settings = getSettings(context);
+    	this.userManager = getUserManager(context);
+    	this.userManagementSetting = settings.getUserManagement();
+    	this.allowGuestLogin = userManagementSetting.isAllowGuestLogin();
+    	this.guestNamePrefix = userManagementSetting.getGuestNamePrefix();
+    	this.userNamePattern = userManagementSetting.getUserNamePattern();
+        this.alreadyLoggedIn = userManager.containsUser(event.getUsername());
+    }
     
     @Override
     public void apply() {
@@ -156,14 +171,14 @@ public class EzyLoginProcessor
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user) {
-        return EzySessionLoginEventImpl.builder()
+        return EzySimpleSessionLoginEvent.builder()
                 .session(getSession())
                 .user(user)
                 .build();
     }
     
     protected EzyEvent newUserAddedEvent(EzyUser user) {
-        return EzyUserAddedEventImpl.builder()
+        return EzySimpleUserAddedEvent.builder()
                 .user(user)
                 .session(getSession())
                 .loginData(getLoginData())
@@ -246,17 +261,7 @@ public class EzyLoginProcessor
         
         @Override
         public EzyLoginProcessor build() {
-            EzyServerUserManager userManager = getUserManager(context);
-            EzyUserManagementSetting setting = getSettings(context).getUserManagement();
-            EzyLoginProcessor answer = new EzyLoginProcessor();
-            answer.event = event;
-            answer.context = context;
-            answer.userManager = userManager;
-            answer.allowGuestLogin = setting.isAllowGuestLogin();
-            answer.guestNamePrefix = setting.getGuestNamePrefix();
-            answer.userNamePattern = setting.getUserNamePattern();
-            answer.alreadyLoggedIn = userManager.containsUser(event.getUsername());
-            return answer;
+            return new EzyLoginProcessor(this);
         }
     }
     

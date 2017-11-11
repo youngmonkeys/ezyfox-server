@@ -5,6 +5,10 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 
 public class EzyLoginErrorResponse extends EzyErrorResponse {
 
+    protected EzyLoginErrorResponse(Builder builder) {
+        super(builder);
+    }
+    
     @Override
     public EzyConstant getCommand() {
         return EzyCommand.LOGIN_ERROR;
@@ -17,12 +21,7 @@ public class EzyLoginErrorResponse extends EzyErrorResponse {
     public static class Builder extends EzyErrorResponse.Builder<Builder> {
         @Override
         public EzyLoginErrorResponse build() {
-            return (EzyLoginErrorResponse) super.build();
-        }
-        
-        @Override
-        protected EzyLoginErrorResponse newProduct() {
-            return new EzyLoginErrorResponse();
+            return new EzyLoginErrorResponse(this);
         }
     }
     

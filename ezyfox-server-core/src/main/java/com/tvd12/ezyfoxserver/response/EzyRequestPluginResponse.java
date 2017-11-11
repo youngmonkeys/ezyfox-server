@@ -4,13 +4,16 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 
-import lombok.Setter;
-
-@Setter
 public class EzyRequestPluginResponse extends EzyBaseResponse implements EzyResponse {
 
     protected EzyData data;
     protected String pluginName;
+    
+    protected EzyRequestPluginResponse(Builder builder) {
+        super(builder);
+        this.data = builder.data;
+        this.pluginName = builder.pluginName;
+    }
 	
 	@Override
 	public EzyConstant getCommand() {
@@ -29,7 +32,7 @@ public class EzyRequestPluginResponse extends EzyBaseResponse implements EzyResp
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyResponse.Builder {
+	public static class Builder extends EzyBaseResponse.Builder<Builder> {
 	    protected EzyData data;
 	    protected String pluginName;
 		
@@ -45,10 +48,7 @@ public class EzyRequestPluginResponse extends EzyBaseResponse implements EzyResp
 		
 		@Override
 		public EzyResponse build() {
-		    EzyRequestPluginResponse answer = new EzyRequestPluginResponse();
-		    answer.setData(data);
-		    answer.setPluginName(pluginName);
-		    return answer;
+		    return new EzyRequestPluginResponse(this);
 		}
 		
 	}

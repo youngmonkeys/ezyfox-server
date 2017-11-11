@@ -6,13 +6,17 @@ import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class EzyUserAccessAppEventImpl 
+public class EzySimpleUserAccessAppEvent 
 		extends EzySimpleUserEvent 
 		implements EzyUserAccessAppEvent {
 
+    @Setter
 	protected EzyData output;
+	
+	protected EzySimpleUserAccessAppEvent(Builder builder) {
+	    super(builder);
+	}
 	
 	public static Builder builder() {
 		return new Builder();
@@ -22,13 +26,8 @@ public class EzyUserAccessAppEventImpl
 	    
 	    @Override
 	    public EzyUserAccessAppEvent build() {
-	        return (EzyUserAccessAppEvent)super.build();
+	        return new EzySimpleUserAccessAppEvent(this);
 	    }
-	    
-		@Override
-		protected EzyUserAccessAppEventImpl newProduct() {
-		    return new EzyUserAccessAppEventImpl();
-		}
 	}
 	
 }

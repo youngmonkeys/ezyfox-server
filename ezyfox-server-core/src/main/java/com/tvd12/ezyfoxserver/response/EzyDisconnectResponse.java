@@ -3,12 +3,14 @@ package com.tvd12.ezyfoxserver.response;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 
-import lombok.Setter;
-
-@Setter
 public class EzyDisconnectResponse extends EzyBaseResponse implements EzyResponse {
 
 	protected EzyConstant reason;
+	
+	protected EzyDisconnectResponse(Builder builder) {
+	    super(builder);
+	    this.reason = builder.reason;
+	}
 	
 	@Override
 	public EzyConstant getCommand() {
@@ -26,7 +28,7 @@ public class EzyDisconnectResponse extends EzyBaseResponse implements EzyRespons
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyResponse.Builder {
+	public static class Builder extends EzyBaseResponse.Builder<Builder> {
 	    protected EzyConstant reason;
 		
 		public Builder reason(EzyConstant reason) {
@@ -35,9 +37,7 @@ public class EzyDisconnectResponse extends EzyBaseResponse implements EzyRespons
 		}
 		
 		public EzyDisconnectResponse build() {
-		    EzyDisconnectResponse answer = new EzyDisconnectResponse();
-		    answer.setReason(reason);
-		    return answer;
+		    return new EzyDisconnectResponse(this);
 		}
 	}
 

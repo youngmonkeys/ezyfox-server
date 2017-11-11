@@ -16,6 +16,10 @@ public class EzySimplePropertiesFileMapper
 	@SuppressWarnings("rawtypes")
 	protected Class context;
 	
+	protected EzySimplePropertiesFileMapper(Builder builder) {
+		this.context = builder.context;
+	}
+	
 	@Override
 	public <T> T read(String filePath, Class<T> valueType) {
 		return new PropertiesMapper()
@@ -35,6 +39,7 @@ public class EzySimplePropertiesFileMapper
 	}
 	
 	public static class Builder implements EzyBuilder<EzyPropertiesFileMapper> {
+		
 		@SuppressWarnings("rawtypes")
 		protected Class context = getClass();
 		
@@ -46,13 +51,7 @@ public class EzySimplePropertiesFileMapper
 		
 		@Override
 		public EzyPropertiesFileMapper build() {
-			EzySimplePropertiesFileMapper answer = newProduct();
-			answer.setContext(context);
-			return answer;
-		}
-		
-		protected EzySimplePropertiesFileMapper newProduct() {
-			return new EzySimplePropertiesFileMapper();
+			return new EzySimplePropertiesFileMapper(this);
 		}
 	}
 	

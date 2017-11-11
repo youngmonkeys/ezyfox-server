@@ -29,7 +29,8 @@ public class EzyRequestMappersImpl implements EzyRequestMappers {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T toObject(EzyConstant cmd, EzyData data) {
-        return (T) appliers.get(cmd).apply(data);
+        Function<EzyData,T> applier = appliers.get(cmd);
+        return applier.apply(data);
     }
     
     public static Builder builder() {

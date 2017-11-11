@@ -7,6 +7,10 @@ public class EzySimpleLoginRequest
         extends EzySimpleRequest<EzyLoginParams>
         implements EzyLoginRequest {
 
+    protected EzySimpleLoginRequest(Builder builder) {
+        super(builder);
+    }
+    
     public static Builder builder() {
         return new Builder();
     }
@@ -16,12 +20,7 @@ public class EzySimpleLoginRequest
         
         @Override
         public EzyLoginRequest build() {
-            return (EzyLoginRequest) super.build();
-        }
-        
-        @Override
-        protected EzySimpleLoginRequest newProduct() {
-            return new EzySimpleLoginRequest();
+            return new EzySimpleLoginRequest(this);
         }
     }
     

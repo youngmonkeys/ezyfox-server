@@ -6,6 +6,10 @@ import com.tvd12.ezyfoxserver.request.EzyPingRequest;
 public class EzySimplePingRequest
         extends EzySimpleRequest<EzyPingParams>
         implements EzyPingRequest {
+    
+    protected EzySimplePingRequest(Builder builder) {
+        super(builder);
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -16,12 +20,7 @@ public class EzySimplePingRequest
         
         @Override
         public EzyPingRequest build() {
-            return (EzyPingRequest) super.build();
-        }
-        
-        @Override
-        protected EzySimplePingRequest newProduct() {
-            return new EzySimplePingRequest();
+            return new EzySimplePingRequest(this);
         }
     }
     

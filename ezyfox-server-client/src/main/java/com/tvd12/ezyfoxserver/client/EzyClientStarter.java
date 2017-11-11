@@ -11,9 +11,7 @@ import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class EzyClientStarter 
 		extends EzyLoggable 
@@ -27,8 +25,12 @@ public class EzyClientStarter
 	
 	protected final ExecutorService startService;
 	
-	public EzyClientStarter() {
-		startService = EzyExecutors.newSingleThreadExecutor("client-starter");
+	protected EzyClientStarter(Builder builder) {
+		this.host = builder.host;
+		this.port = builder.port;
+		this.codecCreator = builder.codecCreator;
+		this.clientContext = builder.clientContext;
+		this.startService = EzyExecutors.newSingleThreadExecutor("client-starter");
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> startService.shutdown()));
 	}
 	
@@ -87,12 +89,7 @@ public class EzyClientStarter
 
 		@Override
 		public EzyClientStarter build() {
-			EzyClientStarter answer = new EzyClientStarter();
-			answer.setHost(host);
-			answer.setPort(port);
-			answer.setCodecCreator(codecCreator);
-			answer.setClientContext(clientContext);
-			return answer;
+			return new EzyClientStarter(this);
 		}
 		
 	}

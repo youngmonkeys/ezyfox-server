@@ -20,7 +20,7 @@ public abstract class EzyAbstractWriterBuilder
 		extends EzyAbstractBuilder<EzyGetterMethod>
 		implements EzyBuilder<EzyWriter> {
 
-	public EzyAbstractWriterBuilder(EzyClass clazz) {
+	protected EzyAbstractWriterBuilder(EzyClass clazz) {
 		super(clazz);
 	}
 	

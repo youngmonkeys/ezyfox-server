@@ -14,6 +14,10 @@ public class EzyReceiverDeterminer {
 	
 	protected Map<EzyConstant, Supplier<Object>> suppliers;
 	
+	protected EzyReceiverDeterminer(Builder builder) {
+		this.suppliers = builder.newSuppliers();
+	}
+	
 	public Object determine(EzyConstant cmd) {
 		return suppliers.get(cmd).get();
 	}
@@ -39,9 +43,7 @@ public class EzyReceiverDeterminer {
 		
 		@Override
 		public EzyReceiverDeterminer build() {
-			EzyReceiverDeterminer answer = new EzyReceiverDeterminer();
-			answer.suppliers = newSuppliers();
-			return answer;
+			return new EzyReceiverDeterminer(this);
 		}
 		
 		protected Map<EzyConstant, Supplier<Object>> newSuppliers() {

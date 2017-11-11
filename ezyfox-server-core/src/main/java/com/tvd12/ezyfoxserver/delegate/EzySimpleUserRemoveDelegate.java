@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserRemovedEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserRemovedEvent;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 import lombok.Setter;
@@ -20,6 +20,11 @@ public class EzySimpleUserRemoveDelegate
 
     protected EzyUser user;
     protected EzyContext context;
+    
+    protected EzySimpleUserRemoveDelegate(Builder builder) {
+        this.user = builder.user;
+        this.context = builder.context; 
+    }
     
     @Override
     public void onUserRemoved(EzyConstant reason) {
@@ -39,7 +44,7 @@ public class EzySimpleUserRemoveDelegate
     }
     
     protected EzyEvent newUserRemovedEvent(EzyConstant reason) {
-        return EzyUserRemovedEventImpl.builder()
+        return EzySimpleUserRemovedEvent.builder()
                 .user(user)
                 .reason(reason)
                 .build();
@@ -74,10 +79,7 @@ public class EzySimpleUserRemoveDelegate
         
         @Override
         public EzyUserRemoveDelegate build() {
-            EzySimpleUserRemoveDelegate answer = new EzySimpleUserRemoveDelegate();
-            answer.setContext(context);
-            answer.setUser(user);
-            return answer;
+            return new EzySimpleUserRemoveDelegate(this);
         }
     }
     

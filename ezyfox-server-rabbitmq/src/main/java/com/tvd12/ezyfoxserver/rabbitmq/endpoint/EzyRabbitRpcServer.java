@@ -11,17 +11,19 @@ import com.tvd12.ezyfoxserver.rabbitmq.codec.EzyRpcSimpleProcedureDeserializer;
 import com.tvd12.ezyfoxserver.rabbitmq.entity.EzyRpcProcedure;
 import com.tvd12.ezyfoxserver.rabbitmq.exception.EzyRpcException;
 
-import lombok.Setter;
-
 public class EzyRabbitRpcServer extends EzyRabbitEnpoint {
 
 	protected EzyRabbitRpcHandler server;
-	@Setter
 	protected Map<String, Object> queueArguments;
-	@Setter
 	protected EzyRpcProcedureCaller procedureCaller;
-	@Setter
 	protected EzyRpcProcedureDeserializer procedureDeserializer;
+	
+	protected EzyRabbitRpcServer(Builder builder) {
+		super(builder);
+		this.queueArguments = builder.queueArguments;
+		this.procedureCaller = builder.procedureCaller;
+		this.procedureDeserializer = builder.newProcedureDeserializer();
+	}
 	
 	@Override
 	public void start() throws Exception {
@@ -96,19 +98,9 @@ public class EzyRabbitRpcServer extends EzyRabbitEnpoint {
 		
 		@Override
 		public EzyRabbitRpcServer build() {
-			return (EzyRabbitRpcServer) super.build();
+			return new EzyRabbitRpcServer(this);
 		}
-		
 
-		@Override
-		protected EzyRabbitEnpoint newProduct() {
-			EzyRabbitRpcServer answer = new EzyRabbitRpcServer();
-			answer.setProcedureCaller(procedureCaller);
-			answer.setQueueArguments(getQueueArguments());
-			answer.setProcedureDeserializer(newProcedureDeserializer());
-			return answer;
-		}
-		
 		protected Map<String, Object> getQueueArguments() {
 			return queueArguments != null ? queueArguments : new HashMap<>();
 		}

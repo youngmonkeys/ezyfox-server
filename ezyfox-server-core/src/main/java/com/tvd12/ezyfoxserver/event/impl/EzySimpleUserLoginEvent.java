@@ -7,14 +7,26 @@ import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class EzyUserLoginEventImpl extends EzySimpleSessionEvent implements EzyUserLoginEvent {
+public class EzySimpleUserLoginEvent 
+        extends EzySimpleSessionEvent 
+        implements EzyUserLoginEvent {
 
 	protected EzyArray data;
+	@Setter
 	protected String username;
+	@Setter
 	protected String password;
+	@Setter
 	protected EzyData output;
+	
+	protected EzySimpleUserLoginEvent(Builder builder) {
+	    super(builder);
+	    this.data = builder.data;
+	    this.output = builder.output;
+	    this.username = builder.username;
+	    this.password = builder.password;
+	}
 	
 	public static Builder builder() {
 		return new Builder();
@@ -31,11 +43,6 @@ public class EzyUserLoginEventImpl extends EzySimpleSessionEvent implements EzyU
 			return this;
 		}
 		
-		public Builder output(EzyData output) {
-			this.output = output;
-			return this;
-		}
-		
 		public Builder username(String username) {
 			this.username = username;
 			return this;
@@ -48,17 +55,7 @@ public class EzyUserLoginEventImpl extends EzySimpleSessionEvent implements EzyU
 		
 		@Override
 		public EzyUserLoginEvent build() {
-		    return (EzyUserLoginEvent)super.build();
-		}
-		
-		@Override
-		protected EzyUserLoginEventImpl newProduct() {
-		    EzyUserLoginEventImpl answer = new EzyUserLoginEventImpl();
-		    answer.setData(data);
-		    answer.setOutput(output);
-		    answer.setUsername(username);
-		    answer.setPassword(password);
-		    return answer;
+		    return new EzySimpleUserLoginEvent(this);
 		}
 	}
 	

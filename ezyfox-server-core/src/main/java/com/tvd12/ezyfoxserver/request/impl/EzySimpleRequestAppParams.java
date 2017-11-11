@@ -5,16 +5,17 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
 @Getter
-@ToString
 public class EzySimpleRequestAppParams implements EzyRequestAppParams {
 
     protected int appId;
     protected EzyArray data;
+    
+    protected EzySimpleRequestAppParams(Builder builder) {
+        this.data = builder.data;
+        this.appId = builder.appId;
+    }
     
     public static Builder builder() {
         return new Builder();
@@ -37,10 +38,7 @@ public class EzySimpleRequestAppParams implements EzyRequestAppParams {
         
         @Override
         public EzyRequestAppParams build() {
-            EzySimpleRequestAppParams answer = new EzySimpleRequestAppParams();
-            answer.setData(data);
-            answer.setAppId(appId);
-            return answer;
+            return new EzySimpleRequestAppParams(this);
         }
     }
     

@@ -4,12 +4,8 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.request.EzyHandShakeParams;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
 @Getter
-@ToString
 public class EzySimpleHandShakeParams implements EzyHandShakeParams {
 
     protected String clientId;
@@ -17,6 +13,14 @@ public class EzySimpleHandShakeParams implements EzyHandShakeParams {
     protected String clientType;
     protected String clientVersion;
     protected String reconnectToken;
+    
+    public EzySimpleHandShakeParams(Builder builder) {
+        this.clientId = builder.clientId;
+        this.clientKey = builder.clientKey;
+        this.clientType = builder.clientType;
+        this.clientVersion = builder.clientVersion;
+        this.reconnectToken = builder.reconnectToken;
+    }
     
     public static Builder builder() {
         return new Builder();
@@ -57,13 +61,7 @@ public class EzySimpleHandShakeParams implements EzyHandShakeParams {
         
         @Override
         public EzyHandShakeParams build() {
-            EzySimpleHandShakeParams answer = new EzySimpleHandShakeParams();
-            answer.setClientId(clientId);
-            answer.setClientKey(clientKey);
-            answer.setClientType(clientType);
-            answer.setClientVersion(clientVersion);
-            answer.setReconnectToken(reconnectToken);
-            return answer;
+            return new EzySimpleHandShakeParams(this);
         }
     }
     

@@ -112,17 +112,14 @@ public abstract class EzyStarter
         return Paths.get(first, more).toString();
     }
     
+    @SuppressWarnings("unchecked")
     public abstract static class Builder<B extends Builder<B>> 
     		implements EzyBuilder<EzyStarter> {
+        
     	protected String configFile;
     	
-    	public B configFile(String configFile) {
+        public B configFile(String configFile) {
     		this.configFile = configFile;
-    		return getThis();
-    	}
-    	
-    	@SuppressWarnings("unchecked")
-		protected B getThis() {
     		return (B)this;
     	}
     	

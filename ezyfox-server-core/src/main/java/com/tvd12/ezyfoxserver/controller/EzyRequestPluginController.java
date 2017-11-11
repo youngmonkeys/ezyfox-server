@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserRequestPluginEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginRequest;
 
@@ -23,7 +23,7 @@ public class EzyRequestPluginController
 	}
 	
 	protected EzyEvent newRequestPluginEvent(EzyRequestPluginRequest request) {
-		return EzyUserRequestPluginEventImpl.builder()
+		return EzySimpleUserRequestPluginEvent.builder()
 		        .user(request.getUser())
 		        .session(request.getSession())
 		        .data(request.getParams().getData())

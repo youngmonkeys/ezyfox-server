@@ -12,6 +12,10 @@ public class EzySimpleSessionEvent implements EzySessionEvent {
 
     protected EzySession session;
     
+    protected EzySimpleSessionEvent(Builder<?> builder) {
+        this.session = builder.session;
+    }
+    
     public static class Builder<B extends Builder<B>> implements EzyBuilder<EzyEvent> {
     
         protected EzySession session;
@@ -24,14 +28,9 @@ public class EzySimpleSessionEvent implements EzySessionEvent {
         
         @Override
         public EzyEvent build() {
-            EzySimpleSessionEvent answer = newProduct();
-            answer.session = session;
-            return answer;
+            return new EzySimpleSessionEvent(this);
         }
         
-        protected EzySimpleSessionEvent newProduct() {
-            return new EzySimpleSessionEvent();
-        }
     }
     
 }

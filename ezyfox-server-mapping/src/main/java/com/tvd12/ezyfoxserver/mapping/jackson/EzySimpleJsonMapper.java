@@ -11,7 +11,7 @@ public class EzySimpleJsonMapper
 	private final ObjectMapper mapper;
 	
 	protected EzySimpleJsonMapper(Builder builder) {
-		this.mapper = EzyObjectMapperBuilder.newInstance().build();
+		this.mapper = EzyObjectMapperBuilder.objectMapperBuilder().build();
 		this.mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		this.mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 	}

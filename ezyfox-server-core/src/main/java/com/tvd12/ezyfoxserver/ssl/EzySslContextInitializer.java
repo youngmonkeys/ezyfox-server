@@ -58,6 +58,7 @@ public class EzySslContextInitializer {
     }
     
     public static class Builder implements EzyBuilder<EzySslContextInitializer> {
+        
         protected String homeFolderPath;
         protected EzySslConfigSetting sslConfig;
         

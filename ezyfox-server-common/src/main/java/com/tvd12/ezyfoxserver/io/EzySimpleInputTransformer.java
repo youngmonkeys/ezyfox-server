@@ -23,7 +23,7 @@ public class EzySimpleInputTransformer
 	private static final long serialVersionUID = 5436415615070699119L;
 	
 	@SuppressWarnings("rawtypes")
-	private final Map<Class, EzyToObject> transformers = defaultTransformers();
+	protected final Map<Class, EzyToObject> transformers = defaultTransformers();
 	
 	@Override
 	public Object transform(Object value) {

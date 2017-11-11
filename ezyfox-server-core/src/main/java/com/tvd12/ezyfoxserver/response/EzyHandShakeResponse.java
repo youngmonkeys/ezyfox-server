@@ -6,14 +6,18 @@ import com.tvd12.ezyfoxserver.sercurity.EzyAsyCrypt;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.util.EzyReturner;
 
-import lombok.Setter;
-
-@Setter
 public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse {
 
 	protected boolean reconnect;
 	protected String reconnectToken;
 	protected String serverPublicKey;
+	
+	protected EzyHandShakeResponse(Builder builder) {
+	    super(builder);
+	    this.reconnect = builder.reconnect;
+	    this.reconnectToken = builder.encryptReconnectToken();
+	    this.serverPublicKey = builder.encryptServerPublicKey();
+	}
 	
 	@Override
 	public EzyConstant getCommand() {
@@ -33,7 +37,7 @@ public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyResponse.Builder {
+	public static class Builder extends EzyBaseResponse.Builder<Builder> {
 	    protected byte[] clientKey;
 	    protected boolean reconnect;
 	    protected String reconnectToken;
@@ -61,11 +65,7 @@ public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse
 		
 		@Override
 		public EzyResponse build() {
-		    EzyHandShakeResponse answer = new EzyHandShakeResponse();
-		    answer.setReconnect(reconnect);
-		    answer.setReconnectToken(encryptReconnectToken());
-		    answer.setServerPublicKey(encryptServerPublicKey());
-		    return answer;
+		    return new EzyHandShakeResponse(this);
 		}
 		
 		protected String encryptServerPublicKey() {

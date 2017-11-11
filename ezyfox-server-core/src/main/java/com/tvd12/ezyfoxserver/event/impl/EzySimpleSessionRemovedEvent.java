@@ -4,15 +4,18 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.event.EzySessionRemovedEvent;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
-public class EzySessionRemovedEventImpl 
+public class EzySimpleSessionRemovedEvent 
 		extends EzySimpleUserSessionEvent 
 		implements EzySessionRemovedEvent {
 
     protected EzyConstant reason;
+    
+    protected EzySimpleSessionRemovedEvent(Builder builder) {
+        super(builder);
+        this.reason = builder.reason;
+    }
     
 	public static Builder builder() {
 		return new Builder();
@@ -27,13 +30,11 @@ public class EzySessionRemovedEventImpl
 	        return this;
 	    }
 	    
-		@Override
-		protected EzySessionRemovedEventImpl newProduct() {
-		    EzySessionRemovedEventImpl answer = new EzySessionRemovedEventImpl();
-		    answer.setReason(reason);
-		    return answer;
-		}
-		
+	    @Override
+	    public EzySessionRemovedEvent build() {
+	        return new EzySimpleSessionRemovedEvent(this);
+	    }
+	    
 	}
 	
 }

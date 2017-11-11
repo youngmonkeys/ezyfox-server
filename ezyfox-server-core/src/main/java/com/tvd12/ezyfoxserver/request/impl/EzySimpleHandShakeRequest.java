@@ -7,6 +7,10 @@ public class EzySimpleHandShakeRequest
         extends EzySimpleRequest<EzyHandShakeParams>
         implements EzyHandShakeRequest {
 
+    protected EzySimpleHandShakeRequest(Builder builder) {
+        super(builder);
+    }
+    
     public static Builder builder() {
         return new Builder();
     }
@@ -16,12 +20,7 @@ public class EzySimpleHandShakeRequest
         
         @Override
         public EzyHandShakeRequest build() {
-            return (EzyHandShakeRequest) super.build();
-        }
-        
-        @Override
-        protected EzySimpleHandShakeRequest newProduct() {
-            return new EzySimpleHandShakeRequest();
+            return new EzySimpleHandShakeRequest(this);
         }
     }
     

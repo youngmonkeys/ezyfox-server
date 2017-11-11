@@ -14,6 +14,11 @@ public class EzySimpleUserSessionEvent implements EzyUserSessionEvent {
     protected EzyUser user;
     protected EzySession session;
     
+    protected EzySimpleUserSessionEvent(Builder<?> builder) {
+        this.user = builder.user;
+        this.session = builder.session;
+    }
+    
     public static class Builder<B extends Builder<B>> implements EzyBuilder<EzyEvent> {
     
         protected EzyUser user;
@@ -33,14 +38,7 @@ public class EzySimpleUserSessionEvent implements EzyUserSessionEvent {
         
         @Override
         public EzyEvent build() {
-            EzySimpleUserSessionEvent answer = newProduct();
-            answer.user = user;
-            answer.session = session;
-            return answer;
-        }
-        
-        protected EzySimpleUserSessionEvent newProduct() {
-            return new EzySimpleUserSessionEvent();
+            return new EzySimpleUserSessionEvent(this);
         }
     }
     

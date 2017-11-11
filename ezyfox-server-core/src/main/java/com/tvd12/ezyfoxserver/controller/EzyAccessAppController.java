@@ -10,8 +10,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserAccessAppEventImpl;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserJoinedAppEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserAccessAppEvent;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserJoinedAppEvent;
 import com.tvd12.ezyfoxserver.request.EzyAccessAppParams;
 import com.tvd12.ezyfoxserver.request.EzyAccessAppRequest;
 import com.tvd12.ezyfoxserver.response.EzyAccessAppResponse;
@@ -47,11 +47,11 @@ public class EzyAccessAppController
 	}
 	
 	protected EzyEvent newJoinedAppEvent(EzyUser user, EzySession session) {
-        return EzyUserJoinedAppEventImpl.builder().user(user).session(session).build();
+        return EzySimpleUserJoinedAppEvent.builder().user(user).session(session).build();
     }
 	
 	protected EzyUserAccessAppEvent newAccessAppEvent(EzyUser user) {
-	    return EzyUserAccessAppEventImpl.builder().user(user).build();
+	    return EzySimpleUserAccessAppEvent.builder().user(user).build();
 	}
 	
 	protected EzyResponse newAccessAppResponse(EzyAppSetting app, EzyData out) {

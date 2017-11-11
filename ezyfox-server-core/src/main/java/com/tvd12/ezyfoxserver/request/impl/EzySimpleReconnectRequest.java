@@ -5,15 +5,18 @@ import com.tvd12.ezyfoxserver.request.EzyReconnectParams;
 import com.tvd12.ezyfoxserver.request.EzyReconnectRequest;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class EzySimpleReconnectRequest
         extends EzySimpleRequest<EzyReconnectParams>
         implements EzyReconnectRequest {
     
     protected EzySession oldSession;
+    
+    protected EzySimpleReconnectRequest(Builder builder) {
+        super(builder);
+        this.oldSession = builder.oldSession;
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -31,15 +34,9 @@ public class EzySimpleReconnectRequest
         
         @Override
         public EzyReconnectRequest build() {
-            return (EzyReconnectRequest) super.build();
+            return new EzySimpleReconnectRequest(this);
         }
         
-        @Override
-        protected EzySimpleReconnectRequest newProduct() {
-            EzySimpleReconnectRequest answer = new EzySimpleReconnectRequest();
-            answer.setOldSession(oldSession);
-            return answer;
-        }
     }
     
 }

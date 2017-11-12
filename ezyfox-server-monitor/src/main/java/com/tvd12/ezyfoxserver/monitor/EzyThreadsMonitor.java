@@ -32,6 +32,7 @@ public class EzyThreadsMonitor {
 		}
 		EzyThreadsDetail details = new EzyThreadsDetail();
 		details.setThreads(threads);
+		details.setThreadsSize(threads.size());
 		details.setTotalThreadsCpuTime(totalThreadsCpuTime);
 		return details;
 	}

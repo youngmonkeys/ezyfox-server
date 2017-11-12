@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 public class EzyThreadsDetail {
 
+	protected int threadsSize;
 	protected long totalThreadsCpuTime;
 	protected List<EzyThreadDetail> threads;
 	

@@ -14,6 +14,7 @@ import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -31,6 +32,8 @@ public abstract class EzyAbstractHandlerGroup
 	protected E encoder;
 	protected final EzyNioDataHandler handler;
 	
+	protected final EzyNetworkStats networkStats;
+	
 	protected final ExecutorService statsThreadPool;
 	protected final ExecutorService codecThreadPool;
 	protected final ExecutorService handlerThreadPool;
@@ -42,6 +45,7 @@ public abstract class EzyAbstractHandlerGroup
 	public EzyAbstractHandlerGroup(Builder builder) {
 		this.session = new AtomicReference<EzyNioSession>();
 		this.channel = builder.channel;
+		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
 		this.handlerThreadPool = builder.handlerThreadPool;
@@ -132,14 +136,24 @@ public abstract class EzyAbstractHandlerGroup
 	private void sendBytesToClient(Object bytes) {
 		try {
 			EzyChannel channel = getSession().getChannel();
-			if(bytes != null && channel != null && channel.isConnected()) {
+			if(canWriteBytes(channel, bytes)) {
 				int writeBytes = channel.write(bytes);
 				executeAddWrittenBytes(writeBytes);
 			}
 		}
 		catch(Exception e) {
+			networkStats.addWriteErrorPackets(1);
+			networkStats.addWriteErrorBytes(getWriteBytesSize(bytes));
 			getLogger().error("can't send bytes: " + bytes + " to session: " + getSession().getClientAddress(), e);
 		}
+	}
+	
+	protected long getWriteBytesSize(Object bytes) {
+		return ((byte[])bytes).length;
+	}
+	
+	private boolean canWriteBytes(EzyChannel channel, Object bytes) {
+		return bytes != null && channel != null && channel.isConnected();
 	}
 	
 	protected final void executeAddReadBytes(int bytes) {
@@ -152,10 +166,14 @@ public abstract class EzyAbstractHandlerGroup
 	
 	private synchronized void addReadBytes(int count) {
 		getSession().addReadBytes(count);
+		networkStats.addReadBytes(count);
+		networkStats.addReadPackets(1);
 	}
 	
 	private synchronized void addWrittenBytes(int count) {
 		getSession().addWrittenBytes(count);
+		networkStats.addWrittenBytes(count);
+		networkStats.addWrittenPackets(1);
 	}
 	
 	protected final EzyNioSession getSession() {
@@ -164,17 +182,19 @@ public abstract class EzyAbstractHandlerGroup
 	
 	public static abstract class Builder implements EzyBuilder<EzyHandlerGroup> {
 
-		private EzyChannel channel;
-		
-		private ExecutorService statsThreadPool;
-		private ExecutorService codecThreadPool;
-		private ExecutorService handlerThreadPool;
+		protected EzyChannel channel;
 
-		private Object decoder;
-		private EzyNioObjectToByteEncoder encoder;
-		private EzyServerContext serverContext;
-		private EzySocketChannelDelegate channelDelegate;
-		private EzySessionTicketsQueue sessionTicketsQueue;
+		protected EzyNetworkStats networkStats;
+		
+		protected ExecutorService statsThreadPool;
+		protected ExecutorService codecThreadPool;
+		protected ExecutorService handlerThreadPool;
+		
+		protected Object decoder;
+		protected EzyNioObjectToByteEncoder encoder;
+		protected EzyServerContext serverContext;
+		protected EzySocketChannelDelegate channelDelegate;
+		protected EzySessionTicketsQueue sessionTicketsQueue;
 		
 		public Builder channel(EzyChannel channel) {
 			this.channel = channel;
@@ -188,6 +208,11 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder encoder(Object encoder) {
 			this.encoder = (EzyNioObjectToByteEncoder) encoder;
+			return this;
+		}
+		
+		public Builder networkStats(EzyNetworkStats networkStats) {
+			this.networkStats = networkStats;
 			return this;
 		}
 		

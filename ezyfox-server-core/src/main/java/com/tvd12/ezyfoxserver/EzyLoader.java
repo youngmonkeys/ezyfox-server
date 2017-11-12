@@ -17,6 +17,8 @@ import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettingsReader;
+import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
@@ -42,8 +44,9 @@ public class EzyLoader extends EzyLoggable {
     	answer.setConfig(config);
     	answer.setSettings(settings);
     	answer.setManagers(newManagers());
-    	answer.setJsonMapper(newJsonMapper());
     	answer.setClassLoader(classLoader);
+    	answer.setJsonMapper(newJsonMapper());
+    	answer.setStatistics(newStatistics());
     	answer.setControllers(newControllers());
     	answer.setRequestMappers(newRequestMapper());
     	answer.setAppClassLoaders(newAppClassLoaders());
@@ -64,6 +67,10 @@ public class EzyLoader extends EzyLoggable {
     
     protected EzyJsonMapper newJsonMapper() {
         return EzySimpleJsonMapper.builder().build();
+    }
+    
+    protected EzyStatistics newStatistics() {
+        return new EzySimpleStatistics();
     }
     
     protected EzyManagers newManagers() {

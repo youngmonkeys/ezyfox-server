@@ -7,13 +7,19 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.websocket.EzySimpleWsHandlerGroup;
+import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
+import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
+import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
 
 public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilderFactory {
 
-	private EzySessionTicketsQueue socketSessionTicketsQueue;
-	private EzySessionTicketsQueue websocketSessionTicketsQueue;
+	protected EzyStatistics statistics;
+	protected EzySessionTicketsQueue socketSessionTicketsQueue;
+	protected EzySessionTicketsQueue websocketSessionTicketsQueue;
 	
 	public EzyHandlerGroupBuilderFactoryImpl(Builder builder) {
+		this.statistics = builder.statistics;
 		this.socketSessionTicketsQueue = builder.socketSessionTicketsQueue;
 		this.websocketSessionTicketsQueue = builder.websocketSessionTicketsQueue;
 	}
@@ -30,14 +36,32 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderBySocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleNioHandlerGroup.builder();
+		builder.networkStats(getSocketNetworkStats());
 		builder.sessionTicketsQueue(socketSessionTicketsQueue);
 		return builder;
 	}
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderByWebSocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleWsHandlerGroup.builder();
+		builder.networkStats(getWebSocketNetworkStats());
 		builder.sessionTicketsQueue(websocketSessionTicketsQueue);
 		return builder;
+	}
+	
+	private EzyNetworkStats getSocketNetworkStats() {
+		return (EzyNetworkStats) getSocketStatistics().getNetworkStats();
+	}
+	
+	private EzyNetworkStats getWebSocketNetworkStats() {
+		return (EzyNetworkStats) getWebSocketStatistics().getNetworkStats();
+	}
+	
+	private EzySocketStatistics getSocketStatistics() {
+		return statistics.getSocketStats();
+	}
+	
+	private EzyWebSocketStatistics getWebSocketStatistics() {
+		return statistics.getWebSocketStats();
 	}
 	
 	public static Builder builder() {
@@ -45,8 +69,14 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	}
 	
 	public static class Builder implements EzyBuilder<EzyHandlerGroupBuilderFactory> {
+		protected EzyStatistics statistics;
 		private EzySessionTicketsQueue socketSessionTicketsQueue;
 		private EzySessionTicketsQueue websocketSessionTicketsQueue;
+		
+		public Builder statistics(EzyStatistics statistics) {
+			this.statistics = statistics;
+			return this;
+		}
 		
 		public Builder socketSessionTicketsQueue(EzySessionTicketsQueue socketSessionTicketsQueue) {
 			this.socketSessionTicketsQueue = socketSessionTicketsQueue;

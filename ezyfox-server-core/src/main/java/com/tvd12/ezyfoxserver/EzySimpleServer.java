@@ -11,6 +11,7 @@ import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
@@ -37,6 +38,8 @@ public class EzySimpleServer implements EzyServer {
 	protected ClassLoader classLoader;
 	@JsonIgnore
 	protected EzyJsonMapper jsonMapper;
+	@JsonIgnore
+	protected EzyStatistics statistics;
 	@JsonIgnore
 	protected EzyServerControllers controllers;
 	@JsonIgnore

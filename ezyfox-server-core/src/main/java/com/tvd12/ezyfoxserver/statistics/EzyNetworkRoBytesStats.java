@@ -9,5 +9,17 @@ public interface EzyNetworkRoBytesStats {
     long getDroppedInBytes();
     
     long getWriteErrorBytes();
+
+    long getReadBytesPerHour();
+
+    long getReadBytesPerMinute();
+    
+    long getReadBytesPerSecond();
+    
+    long getWrittenBytesPerHour();
+
+    long getWrittenBytesPerMinute();
+    
+    long getWrittenBytesPerSecond();
     
 }

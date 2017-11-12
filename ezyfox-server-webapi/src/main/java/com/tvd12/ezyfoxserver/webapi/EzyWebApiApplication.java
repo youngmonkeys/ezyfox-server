@@ -9,11 +9,11 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import lombok.Setter;
 
 @Setter
-public class EzySpringApplication extends SpringApplication {
+public class EzyWebApiApplication extends SpringApplication {
 
 	protected EzyServerContext serverContext;
 	
-	public EzySpringApplication(Object... sources) {
+	public EzyWebApiApplication(Object... sources) {
 		super(sources);
 	}
 	

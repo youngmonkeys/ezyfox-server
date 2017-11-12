@@ -26,6 +26,10 @@ public class EzyDatesTest extends BaseTest {
 				2017, 05, 30, 12, 34, 56, 0),
 				"yyyy-MM-dd'T'HH:mm:ss"), 
 				"2017-05-30T12:34:56");
+		assertEquals(EzyDates.format(LocalDateTime.of(
+				2017, 05, 30, 12, 34, 56, 0),
+				"yyyy-MM-dd'T'HH:mm:ss"), 
+				"2017-05-30T12:34:56");
 		assertEquals(EzyDates.format((TemporalAccessor)null), null);
 		assertEquals(EzyDates.parseDate("2017-05-30T12:34:56:000"), 
 				LocalDate.of(2017, 05, 30));
@@ -35,6 +39,8 @@ public class EzyDatesTest extends BaseTest {
 				LocalDateTime.of(2017, 05, 30, 12, 34, 56, 0));
 		assertEquals(EzyDates.parseDateTime("2017-05-30T12:34:56", "yyyy-MM-dd'T'HH:mm:ss"), 
 				LocalDateTime.of(2017, 05, 30, 12, 34, 56, 0));
+		Date now = new Date();
+		EzyDates.format(now.getTime()).equals(now);
 	}
 	
 	@Test

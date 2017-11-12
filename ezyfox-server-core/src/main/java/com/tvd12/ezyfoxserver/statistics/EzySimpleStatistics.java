@@ -1,10 +1,13 @@
 package com.tvd12.ezyfoxserver.statistics;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 
 @Getter
-public class EzySimpleStatistics implements EzyStatistics {
-
+public class EzySimpleStatistics implements EzyStatistics, Serializable {
+    private static final long serialVersionUID = 5000816469696512888L;
+    
     protected EzySocketStatistics socketStats = newSocketStatistics();
     protected EzyWebSocketStatistics webSocketStats = newWebSocketStatistics();
     

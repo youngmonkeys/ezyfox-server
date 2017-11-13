@@ -17,6 +17,8 @@ public interface EzyServer extends
         EzyAppByIdFetcher, 
         EzyPluginIdsFetcher, 
         EzyPluginByIdFetcher {
+    
+    String getVersion();
 
     EzyConfig getConfig();
     

@@ -49,6 +49,11 @@ public class EzySimpleServer implements EzyServer {
 	@JsonIgnore
 	protected Map<String, EzyAppClassLoader> appClassLoaders;
 	
+	@Override
+	public String getVersion() {
+	    return "1.0.0";
+	}
+	
 	@JsonIgnore
 	@Override
 	public Set<Integer> getAppIds() {

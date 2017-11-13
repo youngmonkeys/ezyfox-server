@@ -61,6 +61,7 @@ public class EzyNioServerBootstrapBuilderImpl
 			EzySessionTicketsQueue websocketSessionTicketsQueue) {
 		
 		return EzyHandlerGroupBuilderFactoryImpl.builder()
+		        .statistics(server.getStatistics())
 				.socketSessionTicketsQueue(socketSessionTicketsQueue)
 				.websocketSessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();

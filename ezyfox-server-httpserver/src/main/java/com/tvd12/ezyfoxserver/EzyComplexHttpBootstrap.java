@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver;
 
-import com.tvd12.ezyfoxserver.webapi.EzySpringHttpBootstrap;
+import com.tvd12.ezyfoxserver.webapi.EzyWebApiHttpBootstrap;
 
-public class EzyComplexHttpBootstrap extends EzySpringHttpBootstrap {
+public class EzyComplexHttpBootstrap extends EzyWebApiHttpBootstrap {
 }

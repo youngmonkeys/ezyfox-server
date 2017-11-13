@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.webapi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.tvd12.ezyfoxserver.EzyHttpBootstrap;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -11,8 +12,12 @@ import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import lombok.Setter;
 
 @SpringBootApplication
-public class EzySpringHttpBootstrap 
-		extends EzyLoggable implements EzyHttpBootstrap {
+@ComponentScan(basePackages = {
+		"com.tvd12.ezyfoxserver.webapi"
+})
+public class EzyWebApiHttpBootstrap 
+		extends EzyLoggable 
+		implements EzyHttpBootstrap {
 
 	@Setter
 	protected EzyServerContext serverContext;
@@ -31,7 +36,7 @@ public class EzySpringHttpBootstrap
 	}
 	
 	protected SpringApplication newApplication() {
-		EzySpringApplication app = new EzySpringApplication(getClass());
+		EzyWebApiApplication app = new EzyWebApiApplication(getClass());
 		app.setServerContext(serverContext);
 		return app;
 	}

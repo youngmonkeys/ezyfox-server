@@ -36,7 +36,7 @@ public class EzyWsHandler extends EzyLoggable {
 
     @OnWebSocketError
     public void onError(Session session, Throwable throwable) {
-    	getLogger().debug("Error: session: " + session.getRemoteAddress(), throwable);
+    	getLogger().debug("error: session: " + session.getRemoteAddress(), throwable);
         EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
         if(throwable instanceof SocketTimeoutException) {
         	dataHandler.fireChannelInactive(EzyDisconnectReason.IDLE);

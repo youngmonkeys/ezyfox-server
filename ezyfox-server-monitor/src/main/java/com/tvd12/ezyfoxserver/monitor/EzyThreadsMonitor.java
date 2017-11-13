@@ -7,9 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tvd12.ezyfoxserver.monitor.data.EzyThreadDetail;
+import com.tvd12.ezyfoxserver.monitor.data.EzyThreadDetails;
 import com.tvd12.ezyfoxserver.monitor.data.EzyThreadsDetail;
 
 public class EzyThreadsMonitor {
+	
+	public EzyThreadDetails getThreadDetails(long threadId) {
+		ThreadMXBean tmxBean = getThreadMXBean();
+		ThreadInfo info = tmxBean.getThreadInfo(threadId);
+		if(info == null) return null;
+		return new EzyThreadDetails(info);
+	}
 
 	public EzyThreadsDetail getThreadsDetails() {
 		long totalThreadsCpuTime = 0L;
@@ -32,6 +40,7 @@ public class EzyThreadsMonitor {
 		}
 		EzyThreadsDetail details = new EzyThreadsDetail();
 		details.setThreads(threads);
+		details.setThreadsSize(threads.size());
 		details.setTotalThreadsCpuTime(totalThreadsCpuTime);
 		return details;
 	}
@@ -52,4 +61,12 @@ public class EzyThreadsMonitor {
 		return ManagementFactory.getThreadMXBean();
 	}
 
+	public static void main(String[] args) {
+		ThreadMXBean tmxBean = ManagementFactory.getThreadMXBean();
+		long[] threadIds = tmxBean.getAllThreadIds();
+		for (long threadId : threadIds) {
+			ThreadInfo threadInfo = tmxBean.getThreadInfo(threadId);
+			System.out.println(threadInfo);
+		}
+	}
 }

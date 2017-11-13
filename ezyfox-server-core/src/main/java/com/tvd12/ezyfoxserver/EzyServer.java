@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
@@ -16,6 +17,8 @@ public interface EzyServer extends
         EzyAppByIdFetcher, 
         EzyPluginIdsFetcher, 
         EzyPluginByIdFetcher {
+    
+    String getVersion();
 
     EzyConfig getConfig();
     
@@ -24,6 +27,8 @@ public interface EzyServer extends
     EzyManagers getManagers();
     
     ClassLoader getClassLoader();
+    
+    EzyStatistics getStatistics();
     
     EzyJsonMapper getJsonMapper();
     

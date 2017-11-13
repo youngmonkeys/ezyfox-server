@@ -5,22 +5,28 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
 
 import lombok.Setter;
 
 @Setter
-public class EzySpringApplication extends SpringApplication {
+public class EzyWebApiApplication extends SpringApplication {
 
 	protected EzyServerContext serverContext;
 	
-	public EzySpringApplication(Object... sources) {
+	public EzyWebApiApplication(Object... sources) {
 		super(sources);
+	}
+	
+	protected EzyMonitor newMonitor() {
+		return new EzyMonitor();
 	}
 	
 	@Override
 	protected ConfigurableApplicationContext createApplicationContext() {
 		ConfigurableApplicationContext ctx = super.createApplicationContext();
 		ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
+		beanFactory.registerSingleton("monitor", newMonitor());
 		beanFactory.registerSingleton("serverContext", serverContext);
 		return ctx;
 	}

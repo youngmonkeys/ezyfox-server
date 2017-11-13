@@ -66,12 +66,20 @@ public final class EzyDates {
 	
 	
 	// =================== java 7 ===============
+	public static String format(long millis) {
+		return format(millis, getPattern());
+	}
+	
 	public static String format(Date date) {
 		return format(date, getPattern());
 	}
 	
 	public static Date parse(String source) {
 		return parse(source, getPattern());
+	}
+	
+	public static String format(long millis, String pattern) {
+		return FastDateFormat.getInstance(pattern).format(millis);
 	}
 	
 	public static String format(Date date, String pattern) {

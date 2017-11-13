@@ -16,20 +16,26 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<ezy.mongodb.version>1.0.0</ezy.mongodb.version>
-		<ezy.hazelcast.version>1.0.0</ezy.hazelcast.version>
+		<ezy.util.version>1.0.0</ezy.util.version>
 		<spring.version>4.3.8.RELEASE</spring.version>
 		<struts.version>2.5.10.1</struts.version>
 		<hibernate.version>5.2.10.Final</hibernate.version>
 		<commons.dbcp2.version>2.1.1</commons.dbcp2.version>
 		<mysqlconnector.version>6.0.6</mysqlconnector.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
 		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-util</artifactId>
+			<version>${ezy.util.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.20</version>
+			<version>2.3.23</version>
 		</dependency>
 
 		<dependency>
@@ -44,6 +50,7 @@
 			</exclusions>
 		</dependency>
 
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
@@ -62,6 +69,7 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -72,6 +80,7 @@
 				<version>2.4</version>
 				<configuration>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+					<warName>${project.name}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>

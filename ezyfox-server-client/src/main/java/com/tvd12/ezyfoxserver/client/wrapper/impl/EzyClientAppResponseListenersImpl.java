@@ -14,6 +14,9 @@ public class EzyClientAppResponseListenersImpl
 	@SuppressWarnings("rawtypes")
 	protected Map<Object, EzyClientAppResponseListener> requests = new ConcurrentHashMap<>();
 	
+	protected EzyClientAppResponseListenersImpl(Builder builder) {
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public EzyClientAppResponseListener getListener(Object requestId) {
@@ -39,7 +42,7 @@ public class EzyClientAppResponseListenersImpl
 	public static class Builder implements EzyBuilder<EzyClientAppResponseListeners> {
 		@Override
 		public EzyClientAppResponseListeners build() {
-			return new EzyClientAppResponseListenersImpl();
+			return new EzyClientAppResponseListenersImpl(this);
 		}
 	}
 	

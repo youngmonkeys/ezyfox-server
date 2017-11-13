@@ -19,6 +19,7 @@ public abstract class EzyComponentStater extends EzyLoggable implements EzyStart
     @Override
     public abstract void start();
     
+    @SuppressWarnings("unchecked")
     public static abstract class Builder
             <T extends EzyComponentStater,B extends Builder<T,B>> 
             implements EzyBuilder<T> {
@@ -27,17 +28,13 @@ public abstract class EzyComponentStater extends EzyLoggable implements EzyStart
         
         public B settings(EzySettings settings) {
             this.settings = settings;
-            return getThis();
+            return (B)this;
         }
         public B serverContext(EzyServerContext serverContext) {
             this.serverContext = serverContext;
-            return getThis();
-        }
-        
-        @SuppressWarnings("unchecked")
-        protected B getThis() {
             return (B)this;
         }
+        
     }
     
 }

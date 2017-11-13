@@ -7,9 +7,6 @@ import com.tvd12.ezyfoxserver.codec.EzyMessageSerializer;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
-import lombok.Setter;
-
-@Setter
 public abstract class EzyRabbitEnpoint 
 		extends EzyLoggable 
 		implements EzyStartable {
@@ -19,6 +16,13 @@ public abstract class EzyRabbitEnpoint
 	protected EzyMessageSerializer messageSerializer;
 	protected EzyMessageDeserializer messageDeserializer;
 	
+	protected EzyRabbitEnpoint(Builder<?> builder) {
+        this.queue = builder.queue;
+        this.channel = builder.channel;
+        this.messageSerializer = builder.messageSerializer;
+        this.messageDeserializer = builder.messageDeserializer;
+	}
+	
 	protected byte[] serializeToBytes(Object value) {
 		return messageSerializer.serialize(value);
 	}
@@ -27,6 +31,7 @@ public abstract class EzyRabbitEnpoint
 		return messageDeserializer.deserialize(value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static abstract class Builder<B extends Builder<B>> 
 			implements EzyBuilder<EzyRabbitEnpoint> {
 		protected String queue;
@@ -36,40 +41,24 @@ public abstract class EzyRabbitEnpoint
 		
 		public B queue(String queue) {
 			this.queue = queue;
-			return getThis();
+			return (B)this;
 		}
 		
 		public B channel(Channel channel) {
 			this.channel = channel;
-			return getThis();
+			return (B)this;
 		}
 		
 		public B messageSerializer(EzyMessageSerializer messageSerializer) {
 			this.messageSerializer = messageSerializer;
-			return getThis();
+			return (B)this;
 		}
 		
 		public B messageDeserializer(EzyMessageDeserializer messageDeserializer) {
 			this.messageDeserializer = messageDeserializer;
-			return getThis();
-		}
-		
-		@Override
-		public EzyRabbitEnpoint build() {
-			EzyRabbitEnpoint answer = newProduct();
-			answer.setQueue(queue);
-			answer.setChannel(channel);
-			answer.setMessageSerializer(messageSerializer);
-			answer.setMessageDeserializer(messageDeserializer);
-			return answer;
-		}
-		
-		protected abstract EzyRabbitEnpoint newProduct();
-		
-		@SuppressWarnings("unchecked")
-		protected B getThis() {
 			return (B)this;
 		}
+		
 	}
 	
 }

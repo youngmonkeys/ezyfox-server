@@ -5,17 +5,19 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.request.EzyLoginParams;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
 @Getter
-@ToString
 public class EzySimpleLoginParams implements EzyLoginParams {
 
     private EzyArray data;
     private String username;
     private String password;
+    
+    protected EzySimpleLoginParams(Builder builder) {
+        this.data = builder.data;
+        this.username = builder.username;
+        this.password = builder.password;
+    }
     
     public static Builder builder() {
         return new Builder();
@@ -44,11 +46,7 @@ public class EzySimpleLoginParams implements EzyLoginParams {
         
         @Override
         public EzyLoginParams build() {
-            EzySimpleLoginParams answer = new EzySimpleLoginParams();
-            answer.setData(data);
-            answer.setUsername(username);
-            answer.setPassword(password);
-            return answer;
+            return new EzySimpleLoginParams(this);
         }
     }
     

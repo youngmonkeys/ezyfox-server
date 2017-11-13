@@ -71,7 +71,7 @@ public class EzyAppResponseImplTest extends BaseTest {
     public void test() throws Exception {
         EzyAppContext context = mock(EzyAppContext.class);
         EzyApplication application = mock(EzyApplication.class);
-        EzyAppUserManager userManager = new EzyAppUserManagerImpl();
+        EzyAppUserManager userManager = EzyAppUserManagerImpl.builder().build();
         when(context.getApp()).thenReturn(application);
         when(application.getUserManager()).thenReturn(userManager);
         EzyAppResponse response = new EzyAppResponseImpl(context);
@@ -171,7 +171,7 @@ public class EzyAppResponseImplTest extends BaseTest {
     private EzyAppResponse newResponse() {
         EzyAppContext context = mock(EzyAppContext.class);
         EzyApplication application = mock(EzyApplication.class);
-        EzyAppUserManager userManager = new EzyAppUserManagerImpl();
+        EzyAppUserManager userManager = EzyAppUserManagerImpl.builder().build();
         when(context.getApp()).thenReturn(application);
         when(application.getUserManager()).thenReturn(userManager);
         EzyAppResponse response = new EzyAppResponseImpl(context);

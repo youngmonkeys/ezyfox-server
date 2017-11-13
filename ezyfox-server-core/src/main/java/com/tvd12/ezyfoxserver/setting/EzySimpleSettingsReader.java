@@ -7,15 +7,17 @@ import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
-import lombok.Setter;
-
-@Setter
 public class EzySimpleSettingsReader
         extends EzyLoggable
         implements EzySettingsReader {
 
     protected String homePath;
     protected ClassLoader classLoader; 
+    
+    protected EzySimpleSettingsReader(Builder builder) {
+        this.homePath = builder.homePath;
+        this.classLoader = builder.classLoader;
+    }
     
     @Override
     public EzySettings read() {
@@ -84,15 +86,9 @@ public class EzySimpleSettingsReader
         
         @Override
         public EzySettingsReader build() {
-            EzySimpleSettingsReader reader = newProduct();
-            reader.setHomePath(homePath);
-            reader.setClassLoader(classLoader);
-            return reader;
+            return new EzySimpleSettingsReader(this);
         }
         
-        protected EzySimpleSettingsReader newProduct() {
-            return new EzySimpleSettingsReader();
-        }
     }
     
 }

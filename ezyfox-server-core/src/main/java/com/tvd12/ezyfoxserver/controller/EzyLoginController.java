@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserLoginEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.request.EzyLoginParams;
 import com.tvd12.ezyfoxserver.request.EzyLoginRequest;
@@ -50,7 +50,7 @@ public class EzyLoginController
     }
 	
 	protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {
-		return EzyUserLoginEventImpl.builder()
+		return EzySimpleUserLoginEvent.builder()
 		        .data(params.getData())
 				.username(params.getUsername())
 				.password(params.getPassword())

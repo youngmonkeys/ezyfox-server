@@ -4,15 +4,20 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 
-import lombok.Setter;
-
-@Setter
 public class EzyLoginResponse extends EzyBaseResponse implements EzyResponse {
 
 	protected long userId;
 	protected Object data;
 	protected String username;
 	protected EzyArray joinedApps;
+	
+	protected EzyLoginResponse(Builder builder) {
+	    super(builder);
+	    this.data = builder.data;
+	    this.userId = builder.userId;
+	    this.username = builder.username;
+	    this.joinedApps = builder.joinedApps;
+	}
 	
 	@Override
 	public EzyConstant getCommand() {
@@ -33,7 +38,7 @@ public class EzyLoginResponse extends EzyBaseResponse implements EzyResponse {
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyResponse.Builder {
+	public static class Builder extends EzyBaseResponse.Builder<Builder> {
 	    protected long userId;
 	    protected Object data;
 	    protected String username;
@@ -61,12 +66,7 @@ public class EzyLoginResponse extends EzyBaseResponse implements EzyResponse {
 		
 		@Override
 		public EzyResponse build() {
-		    EzyLoginResponse answer = new EzyLoginResponse();
-		    answer.setData(data);
-		    answer.setUserId(userId);
-		    answer.setUsername(username);
-		    answer.setJoinedApps(joinedApps);
-		    return answer;
+		    return new EzyLoginResponse(this);
 		}
 		
 	}

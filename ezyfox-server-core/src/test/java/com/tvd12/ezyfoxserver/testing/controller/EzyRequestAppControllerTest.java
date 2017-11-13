@@ -60,7 +60,7 @@ public class EzyRequestAppControllerTest extends BaseCoreContextTest {
         });
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(new EzySimpleAppSetting());
-        app.setUserManager(new EzyAppUserManagerImpl());
+        app.setUserManager(EzyAppUserManagerImpl.builder().build());
         app.getUserManager().addUser(user);
         
         when(appContext.getApp()).thenReturn(app);

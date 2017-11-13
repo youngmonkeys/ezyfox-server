@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserRequestAppEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
@@ -36,7 +36,7 @@ public class EzyRequestAppController
 	}
 	
 	protected EzyEvent newRequestAppEvent(EzyRequestAppRequest request) {
-		return EzyUserRequestAppEventImpl.builder()
+		return EzySimpleUserRequestAppEvent.builder()
 		        .user(request.getUser())
 		        .session(request.getSession())
 		        .data(request.getParams().getData())

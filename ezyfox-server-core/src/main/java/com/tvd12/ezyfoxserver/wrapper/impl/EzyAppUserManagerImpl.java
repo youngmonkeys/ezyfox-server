@@ -7,6 +7,9 @@ import com.tvd12.ezyfoxserver.wrapper.EzySimpleUserAddableManager;
 public class EzyAppUserManagerImpl
         extends EzySimpleUserAddableManager
         implements EzyAppUserManager {
+    
+    protected EzyAppUserManagerImpl(Builder builder) {
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -15,7 +18,7 @@ public class EzyAppUserManagerImpl
     public static class Builder implements EzyBuilder<EzyAppUserManager> {
         @Override
         public EzyAppUserManager build() {
-            return new EzyAppUserManagerImpl();
+            return new EzyAppUserManagerImpl(this);
         }
     }
     

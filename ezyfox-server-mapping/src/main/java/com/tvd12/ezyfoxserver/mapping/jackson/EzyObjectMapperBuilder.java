@@ -9,7 +9,7 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 
 public class EzyObjectMapperBuilder implements EzyBuilder<ObjectMapper> {
 
-	public static EzyObjectMapperBuilder newInstance() {
+	public static EzyObjectMapperBuilder objectMapperBuilder() {
 		return new EzyObjectMapperBuilder();
 	}
 	

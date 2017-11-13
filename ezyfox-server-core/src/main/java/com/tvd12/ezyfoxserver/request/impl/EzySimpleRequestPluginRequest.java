@@ -6,6 +6,10 @@ import com.tvd12.ezyfoxserver.request.EzyRequestPluginRequest;
 public class EzySimpleRequestPluginRequest
         extends EzySimpleUserRequest<EzyRequestPluginParams>
         implements EzyRequestPluginRequest {
+    
+    protected EzySimpleRequestPluginRequest(Builder builder) {
+        super(builder);
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -16,12 +20,7 @@ public class EzySimpleRequestPluginRequest
         
         @Override
         public EzyRequestPluginRequest build() {
-            return (EzyRequestPluginRequest) super.build();
-        }
-        
-        @Override
-        protected EzySimpleRequestPluginRequest newProduct() {
-            return new EzySimpleRequestPluginRequest();
+            return new EzySimpleRequestPluginRequest(this);
         }
     }
     

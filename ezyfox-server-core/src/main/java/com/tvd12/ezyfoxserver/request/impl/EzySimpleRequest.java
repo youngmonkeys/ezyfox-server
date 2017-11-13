@@ -5,14 +5,17 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class EzySimpleRequest<P> implements EzyRequest<P> {
 
     protected P params;
     protected EzySession session;
+    
+    protected EzySimpleRequest(Builder<P,?> builder) {
+        this.params = builder.params;
+        this.session = builder.session;
+    }
     
     public abstract static class Builder<P,B extends Builder<P,B>> 
             implements EzyBuilder<EzyRequest<P>> {
@@ -33,13 +36,8 @@ public class EzySimpleRequest<P> implements EzyRequest<P> {
         
         @Override
         public EzyRequest<P> build() {
-            EzySimpleRequest<P> answer = newProduct();
-            answer.setParams(params);
-            answer.setSession(session);
-            return answer;
+            return new EzySimpleRequest<>(this);
         }
-        
-        protected abstract EzySimpleRequest<P> newProduct();
         
     }
     

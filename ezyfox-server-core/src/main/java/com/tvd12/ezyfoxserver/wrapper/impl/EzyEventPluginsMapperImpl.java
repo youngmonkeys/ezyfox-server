@@ -15,8 +15,8 @@ public class EzyEventPluginsMapperImpl implements EzyEventPluginsMapper {
 
     protected final EzyMapSet<EzyConstant, EzyPluginSetting> eventsPluginss;
     
-    public EzyEventPluginsMapperImpl() {
-        this.eventsPluginss = new EzyHashMapSet<>();
+    protected EzyEventPluginsMapperImpl(Builder builder) {
+        this.eventsPluginss = builder.newEventsPluginss();
     }
     
     @Override
@@ -39,15 +39,19 @@ public class EzyEventPluginsMapperImpl implements EzyEventPluginsMapper {
         
         @Override
         public EzyEventPluginsMapper build() {
-            EzyEventPluginsMapperImpl answer = new EzyEventPluginsMapperImpl();
+            return new EzyEventPluginsMapperImpl(this);
+        }
+        
+        protected EzyMapSet<EzyConstant, EzyPluginSetting> newEventsPluginss() {
+            EzyMapSet<EzyConstant, EzyPluginSetting> eventsPluginss = new EzyHashMapSet<>();
             for(EzyPluginSetting p : plugins.getPlugins()) {
                 for(EzyConstant e : p.getListenEvents().getEvents()) {
-                    answer.eventsPluginss.addItems(e, p);
+                    eventsPluginss.addItems(e, p);
                 }
-                answer.eventsPluginss.addItems(EzyEventType.SERVER_READY, p);
-                answer.eventsPluginss.addItems(EzyEventType.USER_REQUEST, p);
+                eventsPluginss.addItems(EzyEventType.SERVER_READY, p);
+                eventsPluginss.addItems(EzyEventType.USER_REQUEST, p);
             }
-            return answer;
+            return eventsPluginss;
         }
     }
     

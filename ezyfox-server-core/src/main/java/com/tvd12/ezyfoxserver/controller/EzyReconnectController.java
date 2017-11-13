@@ -9,7 +9,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzyUserReconnectEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserReconnectEvent;
 import com.tvd12.ezyfoxserver.request.EzyReconnectRequest;
 import com.tvd12.ezyfoxserver.util.EzyIfElse;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
@@ -37,7 +37,7 @@ public class EzyReconnectController
     }
     
     protected EzyEvent newReconnectEvent(EzyUser user, EzySession session) {
-        return EzyUserReconnectEventImpl.builder().user(user).session(session).build();
+        return EzySimpleUserReconnectEvent.builder().user(user).session(session).build();
     }
     
 }

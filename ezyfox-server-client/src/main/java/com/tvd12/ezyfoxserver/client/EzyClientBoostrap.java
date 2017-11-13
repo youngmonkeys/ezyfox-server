@@ -13,11 +13,9 @@ import com.tvd12.ezyfoxserver.client.constants.EzyClientCommand;
 import com.tvd12.ezyfoxserver.client.constants.EzyConnectionError;
 import com.tvd12.ezyfoxserver.client.context.EzyClientContext;
 import com.tvd12.ezyfoxserver.client.controller.EzyConnectFailureController;
-import com.tvd12.ezyfoxserver.client.handler.EzyClientHandler;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.netty.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
@@ -25,14 +23,10 @@ import com.tvd12.ezyfoxserver.util.EzyStartable;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOutboundHandler;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import lombok.Builder;
 
 /**
  * @author tavandung12
@@ -46,6 +40,13 @@ public class EzyClientBoostrap
     protected String host;
     protected EzyCodecCreator codecCreator;
     protected EzyClientContext clientContext;
+    
+    protected EzyClientBoostrap(Builder builder) {
+    	this.host = builder.host;
+    	this.port = builder.port;
+        this.codecCreator = builder.codecCreator;
+        this.clientContext = builder.clientContext;
+    }
     
     @Override
     public void start() throws Exception {
@@ -128,7 +129,7 @@ public class EzyClientBoostrap
     }
     
     protected ChannelInitializer<Channel> newChannelInitializer() {
-    	return ClientChannelInitializer.builder()
+    	return EzyClientChannelInitializer.builder()
     			.codecCreator(codecCreator)
     			.context(clientContext)
     			.build();
@@ -174,36 +175,8 @@ public class EzyClientBoostrap
         
         @Override
         public EzyClientBoostrap build() {
-        	EzyClientBoostrap answer = new EzyClientBoostrap();
-        	answer.host = host;
-        	answer.port = port;
-        	answer.codecCreator = codecCreator;
-        	answer.clientContext = clientContext;
-        	return answer;
+        	return new EzyClientBoostrap(this);
         }
     }
     
-}
-
-@Builder
-class ClientChannelInitializer extends ChannelInitializer<Channel> {
-
-	private EzyClientContext context;
-	private EzyCodecCreator codecCreator;
-	
-	@Override
-	protected void initChannel(Channel ch) throws Exception {
-		ChannelPipeline pipeline = ch.pipeline();
-		ChannelOutboundHandler encoder = (ChannelOutboundHandler) codecCreator.newEncoder();
-		ChannelInboundHandlerAdapter decoder = (ChannelInboundHandlerAdapter) codecCreator.newDecoder(65536);
-		pipeline.addLast("codec-1", new EzyCombinedCodec(decoder, encoder));
-		pipeline.addLast("handler", newDataHandler());
-		pipeline.addLast("codec-2", new EzyCombinedCodec(decoder, encoder));
-	}
-	
-	protected EzyClientHandler newDataHandler() {
-		EzyClientHandler handler = new EzyClientHandler();
-		handler.setContext(context);
-		return handler;
-	}
 }

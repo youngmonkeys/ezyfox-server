@@ -4,12 +4,13 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class EzyServerReadyEventImpl implements EzyServerReadyEvent {
+public class EzySimpleServerReadyEvent implements EzyServerReadyEvent {
 	
+    protected EzySimpleServerReadyEvent(Builder builder) {
+    }
+    
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -18,8 +19,7 @@ public class EzyServerReadyEventImpl implements EzyServerReadyEvent {
 		
 		@Override
 		public EzyServerReadyEvent build() {
-		    EzyServerReadyEventImpl answer = new EzyServerReadyEventImpl();
-		    return answer;
+		    return new EzySimpleServerReadyEvent(this);
 		}
 	}
 	

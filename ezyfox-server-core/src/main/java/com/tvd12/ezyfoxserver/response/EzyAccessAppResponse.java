@@ -5,13 +5,16 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
-import lombok.Setter;
-
-@Setter
 public class EzyAccessAppResponse extends EzyBaseResponse implements EzyResponse {
 
 	protected EzyData data;
 	protected EzyAppSetting app;
+	
+	public EzyAccessAppResponse(Builder builder) {
+	    super(builder);
+	    this.app = builder.app;
+	    this.data = builder.data;
+	}
 	
 	@Override
 	public EzyConstant getCommand() {
@@ -31,7 +34,7 @@ public class EzyAccessAppResponse extends EzyBaseResponse implements EzyResponse
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyResponse.Builder {
+	public static class Builder extends EzyBaseResponse.Builder<Builder> {
 		protected EzyData data;
 		protected EzyAppSetting app;
 		
@@ -47,10 +50,7 @@ public class EzyAccessAppResponse extends EzyBaseResponse implements EzyResponse
 		
 		@Override
 		public EzyAccessAppResponse build() {
-		    EzyAccessAppResponse answer = new EzyAccessAppResponse();
-		    answer.setApp(app);
-		    answer.setData(data);
-		    return answer;
+		    return new EzyAccessAppResponse(this);
 		}
 
 	}

@@ -32,6 +32,16 @@ public class EzyRabbitRpcClient
 	
 	protected EzyRabbitRpcCaller client;
 	
+	protected EzyRabbitRpcClient(Builder builder) {
+		super(builder);
+		this.timeout = builder.timeout;
+		this.exchange = builder.exchange;
+		this.replyQueue = builder.replyQueue;
+		this.routingKey = builder.routingKey;
+		this.procedureSerializer = builder.getProcedureSeriazlier();
+		this.correlationIdFactory = builder.getCorrelationIdFactory();
+	}
+	
 	@Override
 	public void start() throws Exception {
 		this.client = newClient();
@@ -137,19 +147,7 @@ public class EzyRabbitRpcClient
 		
 		@Override
 		public EzyRabbitRpcClient build() {
-			return (EzyRabbitRpcClient) super.build();
-		}
-		
-		@Override
-		protected EzyRabbitEnpoint newProduct() {
-			EzyRabbitRpcClient answer = new EzyRabbitRpcClient();
-			answer.timeout = timeout;
-			answer.exchange = exchange;
-			answer.replyQueue = replyQueue;
-			answer.routingKey = routingKey;
-			answer.procedureSerializer = getProcedureSeriazlier();
-			answer.correlationIdFactory = getCorrelationIdFactory();
-			return answer;
+			return new EzyRabbitRpcClient(this);
 		}
 		
 		protected String getReplyQueue() {

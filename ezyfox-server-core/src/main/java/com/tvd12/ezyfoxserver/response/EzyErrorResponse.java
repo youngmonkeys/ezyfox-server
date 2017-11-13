@@ -4,14 +4,17 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 
-import lombok.Setter;
-
-@Setter
 public class EzyErrorResponse 
         extends EzyBaseResponse implements EzyResponse {
 
 	protected int code;
 	protected String message;
+	
+	protected EzyErrorResponse(Builder<?> builder) {
+	    super(builder);
+	    this.code = builder.code;
+	    this.message = builder.message;
+	}
 	
 	@Override
 	public Object getData() {
@@ -31,7 +34,7 @@ public class EzyErrorResponse
     }
 	
 	public static class Builder<B extends Builder<B>>
-	        implements EzyResponse.Builder {
+	        extends EzyBaseResponse.Builder<Builder<B>> {
 	    protected int code;
 	    protected String message;
 		
@@ -56,14 +59,7 @@ public class EzyErrorResponse
 		
 		@Override
 		public EzyResponse build() {
-		    EzyErrorResponse answer = newProduct();
-		    answer.setCode(code);
-		    answer.setMessage(message);
-		    return answer;
-		}
-		
-		protected EzyErrorResponse newProduct() {
-		    return new EzyErrorResponse();
+		    return new EzyErrorResponse(this);
 		}
 		
 	}

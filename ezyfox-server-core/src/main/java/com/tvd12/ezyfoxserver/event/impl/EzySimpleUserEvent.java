@@ -12,6 +12,10 @@ public class EzySimpleUserEvent implements EzyUserEvent {
 
     protected EzyUser user;
     
+    protected EzySimpleUserEvent(Builder<?> builder) {
+        this.user = builder.user;
+    }
+    
     public static class Builder<B extends Builder<B>> implements EzyBuilder<EzyEvent> {
     
         protected EzyUser user;
@@ -24,13 +28,7 @@ public class EzySimpleUserEvent implements EzyUserEvent {
         
         @Override
         public EzyEvent build() {
-            EzySimpleUserEvent answer = newProduct();
-            answer.user = user;
-            return answer;
-        }
-        
-        protected EzySimpleUserEvent newProduct() {
-            return new EzySimpleUserEvent();
+            return new EzySimpleUserEvent(this);
         }
     }
     

@@ -17,7 +17,7 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySessionRemovedEventImpl;
+import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.exception.EzyRequestHandleException;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
@@ -195,7 +195,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected EzyEvent newSessionRemovedEvent(EzyConstant reason) {
-        return EzySessionRemovedEventImpl.builder()
+        return EzySimpleSessionRemovedEvent.builder()
                 .user(user)
                 .session(session)
                 .reason(reason)

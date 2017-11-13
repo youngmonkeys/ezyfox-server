@@ -5,6 +5,9 @@ import com.tvd12.ezyfoxserver.request.EzyReconnectParams;
 
 public class EzySimpleReconnectParams implements EzyReconnectParams {
     
+    protected EzySimpleReconnectParams(Builder builder) {
+    }
+    
     public static Builder builder() {
         return new Builder();
     }
@@ -12,7 +15,7 @@ public class EzySimpleReconnectParams implements EzyReconnectParams {
     public static class Builder implements EzyBuilder<EzyReconnectParams> {
         @Override
         public EzyReconnectParams build() {
-            return new EzySimpleReconnectParams();
+            return new EzySimpleReconnectParams(this);
         }
     }
     

@@ -10,14 +10,29 @@ public class EzyLiteResponseTest extends BaseTest {
 
     @Test
     public void test() {
-        EzyLiteResponse response = new EzyLiteResponse();
-        response.setAppId(1);
-        response.setCommand(EzyCommand.APP_ACCESS);
-        response.setData(123);
+        EzyLiteResponse response = (EzyLiteResponse) new MyResponse.Builder()
+                .appId(1)
+                .command(EzyCommand.APP_ACCESS)
+                .data(new Integer(123))
+                .build();
         
         assert response.getAppId() == 1;
         assert response.getCommand() == EzyCommand.APP_ACCESS;
         assert response.getData().equals(new Integer(123));
     }
     
+ private static class MyResponse extends EzyLiteResponse {
+        
+        protected MyResponse(Builder builder) {
+            super(builder);
+        }
+        
+        public static class Builder extends EzyLiteResponse.Builder<Builder> {
+            @Override
+            public EzyLiteResponse build() {
+                return new MyResponse(this);
+            }
+        }
+        
+    }
 }

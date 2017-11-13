@@ -6,6 +6,10 @@ import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;
 public class EzySimpleRequestAppRequest
         extends EzySimpleUserRequest<EzyRequestAppParams>
         implements EzyRequestAppRequest {
+    
+    protected EzySimpleRequestAppRequest(Builder builder) {
+        super(builder);
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -16,12 +20,7 @@ public class EzySimpleRequestAppRequest
         
         @Override
         public EzyRequestAppRequest build() {
-            return (EzyRequestAppRequest) super.build();
-        }
-        
-        @Override
-        protected EzySimpleRequestAppRequest newProduct() {
-            return new EzySimpleRequestAppRequest();
+            return new EzySimpleRequestAppRequest(this);
         }
     }
     

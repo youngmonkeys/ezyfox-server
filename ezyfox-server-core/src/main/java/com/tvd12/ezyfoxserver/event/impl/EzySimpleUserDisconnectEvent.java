@@ -1,18 +1,21 @@
 package com.tvd12.ezyfoxserver.event.impl;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.event.EzyUserRemovedEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserDisconnectEvent;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
-public class EzyUserRemovedEventImpl 
+public class EzySimpleUserDisconnectEvent 
 		extends EzySimpleUserEvent 
-		implements EzyUserRemovedEvent {
+		implements EzyUserDisconnectEvent {
 
 	protected EzyConstant reason;
+	
+	protected EzySimpleUserDisconnectEvent(Builder builder) {
+	    super(builder);
+	    this.reason = builder.reason;
+	}
 	
 	public static Builder builder() {
 		return new Builder();
@@ -27,10 +30,8 @@ public class EzyUserRemovedEventImpl
 		}
 		
 		@Override
-		protected EzyUserRemovedEventImpl newProduct() {
-		    EzyUserRemovedEventImpl answer = new EzyUserRemovedEventImpl();
-		    answer.setReason(reason);
-		    return answer;
+		public EzyUserDisconnectEvent build() {
+		    return new EzySimpleUserDisconnectEvent(this);
 		}
 	}
 	

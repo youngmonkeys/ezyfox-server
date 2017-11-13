@@ -1,36 +1,18 @@
 <!DOCTYPE html>
-<#include "shared/navigator.ftl">
 <html>
 
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ezyfox Admintools</title>
+<title>Ezyfox Dashboard</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
- <!-- <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway' /> -->
- 
+
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
- <link href="https://d26b395fwzu5fz.cloudfront.net/keen-dataviz-1.0.4.css" rel="stylesheet" />
- <link rel="stylesheet" href="css/plugins/kenio/keen-static.css" />
- <link rel="stylesheet" href="css/plugins/kenio/keen-cohort-builder.css">
-<style type="text/css">
-	h4{
-		text-align: center;
-	}
-	#h5{
-		border: 1px solid black;
-		padding: 10px
-	}
-	#right{
-		background: transparent;
-		color: black;
-		font-size: 2.5rem;
-	}
-</style>
+<meta charset="UTF-8" />
 </head>
 
 <body>
@@ -50,7 +32,7 @@
 						</form>
 					</div>
 					<ul class="nav navbar-top-links navbar-right">
-						<li><@s.a href="%{logout}"><i class="fa fa-sign-out"></i>Logout</@s.a>
+						<li><a href="#"><i class="fa fa-sign-out"></i>Logout</a>
 						</li>
 					</ul>
 				</nav>
@@ -62,14 +44,9 @@
 							<span class="label label-primary pull-right">Account</span>
 							<h5>Tổng số tài khoản</h5>
 						</div>
-						<div class="ibox-title">
-							<span class="label label-primary pull-right" style="font-weight: bold;font-size: 13px;margin-top: 20px" id="countNewUser">10 tài khoản mới</span>
-							<h1 style="font-weight: bold;" id="totalLogin">100</h1>
-						</div>
 						<div class="ibox-content">
-							<div class="flot-chart">
-                            	<div class="flot-chart-content" id="flot-line-chart-login"></div>
-                        	</div>
+							<h1 id="totalLogin" class="no-margins" style="font-weight: bold;">10000</h1>
+							<small id="newUser">200 tài khoản mới</small>
 						</div>
 					</div>
 				</div>
@@ -79,14 +56,9 @@
 							<span class="label label-danger pull-right">Online</span>
 							<h5>Số tài khoản đang chơi</h5>
 						</div>
-						<div class="ibox-title">
-							<span class="label label-danger pull-right" style="font-weight: bold;font-size: 13px;margin-top: 20px" id="percentCCU7Days">Tăng 2%</span>
-							<h1 style="font-weight: bold;color: #3498DB" id="ccuCounts">2</h1>
-						</div>
 						<div class="ibox-content">
-							<div class="flot-chart">
-                            	<div class="flot-chart-content" id="flot-line-chart-ccu"></div>
-                        	</div>
+							<h1 id="ccu" class="no-margins" style="font-weight: bold; color: #3498DB">1000</h1>
+							<small>Thời gian tính trong 5 phút</small>
 						</div>
 					</div>
 				</div>
@@ -94,34 +66,91 @@
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
 							<span class="label label-success pull-right">Total</span>
-							<h5>Lợi nhuận</h5>
-						</div>
-						<div class="ibox-title">
-							<span class="label label-success pull-right" style="font-weight: bold;font-size: 13px;margin-top: 20px" id="percentFeeGame7Days">Tăng 5% </span>
-							<h1 style="font-weight: bold;color: #E74C3C" id="feeGameTotal">100,000,000</h1>
+							<h5>Giá trị game bank</h5>
 						</div>
 						<div class="ibox-content">
-								<div class="flot-chart">
-                            		<div class="flot-chart-content" id="flot-line-chart-fee"></div>
-                        		</div>
+							<h1 id="gamebank" class="no-margins" style="font-weight: bold; color: #E74C3C" >200,000,000</h1>
+							<small id="bankHistory"><i class="fa fa-sort-up"></i>10% so với 5 ngày
+								trước</small>
 						</div>
 					</div> 
 				</div>
-			</div>	
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>
+								Biểu đồ người chơi <small>Tính 5 ngày trở lại</small>
+							</h5>
+						</div>
+						<div class="ibox-content">
+							<div class="flot-chart">
+								<div class="flot-chart-content" id="flot-line-chart-player"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>
+								Biểu đồ doanh thu lợi nhuận <small>Tính 5 ngày trở lại</small>
+							</h5>
+						</div>
+						<div class="ibox-content">
+							<div class="flot-chart">
+								<div class="flot-chart-content" id="flot-line-chart-revenue"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<div>
+								<table class="table">
+									<tbody>
+										<tr>
+											<td>
+												<button type="button" class="btn btn-danger m-r-sm" style="background-color: #ff80bf">
+												</button> Doanh thu
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="btn btn-info m-r-sm" style="background-color: #cc6666">
+												</button> Trả thưởng
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<#include "shared/footer.ftl">
 		</div>
+
 		<!-- Mainly scripts --> <script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/bootstrap.min.js"></script> <script
 			src="js/plugins/metisMenu/jquery.metisMenu.js"></script> <script
 			src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script> <!-- Custom and plugin javascript -->
 		<script src="js/inspinia.js"></script> <script
-			src="js/plugins/pace/pace.min.js"></script>
+			src="js/plugins/pace/pace.min.js"></script> 
 			<script
 			src="js/plugins/flot/jquery.flot.js"></script> <script
-			src="js/plugins/flot/jquery.flot.tooltip.min.js"></script> 
-			<script src="js/plugins/flot/jquery.flot.resize.js"></script>
-			<script src="js/plugins/flot/jquery.flot.pie.js"></script>
-			<script src="js/plugins/flot/jquery.flot.time.js"></script>
-			  <!-- <script src="js/plugins/flot/flot-demo.js"></script> -->
+			src="js/plugins/flot/jquery.flot.tooltip.min.js"></script> <script
+			src="js/plugins/flot/jquery.flot.resize.js"></script>
+			<script
+			src="js/plugins/flot/jquery.flot.pie.js"></script>
+			<script
+			src="js/plugins/flot/jquery.flot.time.js"></script>
 </body>
 
 </html>

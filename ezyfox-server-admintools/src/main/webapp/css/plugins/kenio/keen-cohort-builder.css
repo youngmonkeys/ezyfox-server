@@ -1,0 +1,36 @@
+.keen-cohort-matrix table {
+  font-size: 12px;
+  width: 100%;
+}
+.keen-cohort-matrix th,
+.keen-cohort-matrix td {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  padding: 10px;
+  text-align: center;
+}
+.keen-cohort-matrix th {
+}
+.keen-cohort-matrix th:first-child,
+.keen-cohort-matrix td:first-child {
+  text-align: left;
+}
+
+
+.keen-cohort-table table {
+  font-size: 12px;
+  width: 100%;
+}
+.keen-cohort-table th,
+.keen-cohort-table td {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  padding: 10px;
+  text-align: center;
+}
+.keen-cohort-table th {
+}
+.keen-cohort-table th:first-child,
+.keen-cohort-table td:first-child {
+  text-align: left;
+}

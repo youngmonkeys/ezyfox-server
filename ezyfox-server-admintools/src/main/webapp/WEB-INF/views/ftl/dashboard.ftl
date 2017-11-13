@@ -1,0 +1,1 @@
+<h1>Ezyfox Server</h1>

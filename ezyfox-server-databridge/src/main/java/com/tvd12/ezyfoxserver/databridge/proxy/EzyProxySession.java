@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.proxydata;
+package com.tvd12.ezyfoxserver.databridge.proxy;
 
 import java.net.SocketAddress;
 import java.util.Collection;

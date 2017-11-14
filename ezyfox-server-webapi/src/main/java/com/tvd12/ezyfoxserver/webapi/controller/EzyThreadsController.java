@@ -19,6 +19,11 @@ public class EzyThreadsController extends EzyController {
 	@Autowired
 	protected EzyMonitor monitor;
 	
+	@GetMapping("/count")
+	public int getThreadCount() {
+		return getThreadsMonitor().getThreadCount();
+	}
+	
 	@GetMapping("/all")
 	public EzyThreadsDetail getThreads() {
 		return getThreadsMonitor().getThreadsDetails();

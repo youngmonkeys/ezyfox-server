@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tvd12.ezyfoxserver.databridge.proxy.EzyProxyUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.proxydata.EzyProxyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 @RestController

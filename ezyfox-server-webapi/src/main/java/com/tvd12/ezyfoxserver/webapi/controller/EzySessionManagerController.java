@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tvd12.ezyfoxserver.databridge.proxy.EzyProxySession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.proxydata.EzyProxySession;
 
 @RestController
 @RequestMapping("admin/sessions")

@@ -12,6 +12,11 @@ import com.tvd12.ezyfoxserver.monitor.data.EzyThreadsDetail;
 
 public class EzyThreadsMonitor {
 	
+	public int getThreadCount() {
+		ThreadMXBean tmxBean = getThreadMXBean();
+		return tmxBean.getThreadCount();
+	}
+	
 	public EzyThreadDetails getThreadDetails(long threadId) {
 		ThreadMXBean tmxBean = getThreadMXBean();
 		ThreadInfo info = tmxBean.getThreadInfo(threadId);
@@ -59,14 +64,5 @@ public class EzyThreadsMonitor {
 	
 	protected ThreadMXBean getThreadMXBean() {
 		return ManagementFactory.getThreadMXBean();
-	}
-
-	public static void main(String[] args) {
-		ThreadMXBean tmxBean = ManagementFactory.getThreadMXBean();
-		long[] threadIds = tmxBean.getAllThreadIds();
-		for (long threadId : threadIds) {
-			ThreadInfo threadInfo = tmxBean.getThreadInfo(threadId);
-			System.out.println(threadInfo);
-		}
 	}
 }

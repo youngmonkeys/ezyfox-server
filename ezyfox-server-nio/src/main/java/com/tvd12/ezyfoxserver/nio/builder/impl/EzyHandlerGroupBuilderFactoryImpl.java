@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.websocket.EzySimpleWsHandlerGroup;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
+import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
@@ -36,6 +37,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderBySocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleNioHandlerGroup.builder();
+		builder.sessionStats(getSocketSessionStats());
 		builder.networkStats(getSocketNetworkStats());
 		builder.sessionTicketsQueue(socketSessionTicketsQueue);
 		return builder;
@@ -43,9 +45,18 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderByWebSocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleWsHandlerGroup.builder();
+		builder.sessionStats(getWebSocketSessionStats());
 		builder.networkStats(getWebSocketNetworkStats());
 		builder.sessionTicketsQueue(websocketSessionTicketsQueue);
 		return builder;
+	}
+	
+	private EzySessionStats getSocketSessionStats() {
+		return (EzySessionStats) getSocketStatistics().getSessionStats();
+	}
+	
+	private EzySessionStats getWebSocketSessionStats() {
+		return (EzySessionStats) getWebSocketStatistics().getSessionStats();
 	}
 	
 	private EzyNetworkStats getSocketNetworkStats() {

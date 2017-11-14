@@ -5,6 +5,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
@@ -15,6 +16,7 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
+import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -31,7 +33,9 @@ public abstract class EzyAbstractHandlerGroup
 	protected D decoder;
 	protected E encoder;
 	protected final EzyNioDataHandler handler;
-	
+
+	protected final AtomicInteger sessionCount;
+	protected final EzySessionStats sessionStats;
 	protected final EzyNetworkStats networkStats;
 	
 	protected final ExecutorService statsThreadPool;
@@ -45,6 +49,8 @@ public abstract class EzyAbstractHandlerGroup
 	public EzyAbstractHandlerGroup(Builder builder) {
 		this.session = new AtomicReference<EzyNioSession>();
 		this.channel = builder.channel;
+		this.sessionCount = new AtomicInteger(0);
+		this.sessionStats = builder.sessionStats;
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
@@ -86,6 +92,9 @@ public abstract class EzyAbstractHandlerGroup
 		catch(Exception e) {
 			getLogger().error("handler inactive error", e);
 		}
+		finally {
+			sessionStats.setCurrentSessions(sessionCount.decrementAndGet());
+		}
 	}
 	
 	public final void fireExceptionCaught(Throwable throwable) {
@@ -105,6 +114,8 @@ public abstract class EzyAbstractHandlerGroup
 		EzyNioSession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
 		session.set(ss);
+		sessionStats.addSessions(1);
+		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());
 		return ss;
 	}
 	
@@ -184,6 +195,7 @@ public abstract class EzyAbstractHandlerGroup
 
 		protected EzyChannel channel;
 
+		protected EzySessionStats sessionStats;
 		protected EzyNetworkStats networkStats;
 		
 		protected ExecutorService statsThreadPool;
@@ -208,6 +220,11 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder encoder(Object encoder) {
 			this.encoder = (EzyNioObjectToByteEncoder) encoder;
+			return this;
+		}
+		
+		public Builder sessionStats(EzySessionStats sessionStats) {
+			this.sessionStats = sessionStats;
 			return this;
 		}
 		

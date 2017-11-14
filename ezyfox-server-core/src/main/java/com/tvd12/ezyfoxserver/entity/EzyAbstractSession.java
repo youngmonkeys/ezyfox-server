@@ -15,11 +15,9 @@ import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"privateKey", "publicKey", "clientKey", "fullReconnectToken"})
 public abstract class EzyAbstractSession 
         extends EzyEntity 
         implements EzySession, EzyHasSessionDelegate {
@@ -129,6 +127,17 @@ public abstract class EzyAbstractSession
 	@Override
 	public int hashCode() {
 	    return new EzyHashCodes().append(id).toHashCode();
+	}
+	
+	@Override
+	public String toString() {
+	    return new StringBuilder()
+	            .append("id: ").append(id)
+	            .append(", type: ").append(clientType)
+	            .append(", version: ").append(clientVersion)
+	            .append(", address: ").append(getClientAddress())
+	            .append(", reconnectToken: ").append(reconnectToken)
+	            .toString();
 	}
 	
 }

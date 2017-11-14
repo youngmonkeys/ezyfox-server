@@ -70,9 +70,9 @@ public class EzyNetworkStatsController extends EzyStatisticsController {
 	}
 	
 	protected long sumStatistics(Function<EzyNetworkRoStats, Long> function) {
-		EzyNetworkRoStats socketSetworkStats = getSocketNetworkStats();
+		EzyNetworkRoStats socketNetworkStats = getSocketNetworkStats();
 		EzyNetworkRoStats webSocketNetworkStats = getWebSocketNetworkStats();
-		long sum = function.apply(socketSetworkStats) + function.apply(webSocketNetworkStats);
+		long sum = function.apply(socketNetworkStats) + function.apply(webSocketNetworkStats);
 		return sum;
 	}
 	

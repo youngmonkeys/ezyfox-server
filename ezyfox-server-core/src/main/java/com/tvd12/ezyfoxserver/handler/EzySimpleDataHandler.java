@@ -26,10 +26,9 @@ import static com.tvd12.ezyfoxserver.constant.EzyCommand.*;
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
 
-    public void sessionActive() {
-        active = true;
-        getLogger().debug("active session: {}, reconnectToken: {}", 
-                session.getClientAddress(), session.getReconnectToken());
+    public final void sessionActive() {
+        setActive(true);
+        getLogger().debug("active session: {}", session);
     }
     
     public void channelInactive() throws Exception {

@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
@@ -36,6 +37,10 @@ public final class EzyContexts {
     
     public static EzyServerUserManager getUserManager(EzyServerContext context) {
         return getManagers(context).getManager(EzyServerUserManager.class);
+    }
+    
+    public static EzyStatistics getStatistics(EzyServerContext context) {
+        return context.getServer().getStatistics();
     }
     
     public static void forEachAppContexts(

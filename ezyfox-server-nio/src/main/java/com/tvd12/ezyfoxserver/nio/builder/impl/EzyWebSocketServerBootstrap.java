@@ -7,7 +7,7 @@ import org.eclipse.jetty.server.Server;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.nio.websocket.EzyWsSocketWriter;
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWriter;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -19,7 +19,7 @@ public class EzyWebSocketServerBootstrap
 		implements EzyStartable, EzyDestroyable {
 
 	private Server server;
-	private EzyWsSocketWriter socketWriter;
+	private EzyWsWriter socketWriter;
 	
 	private EzyServerContext serverContext;
 	private EzyHandlerGroupManager handlerGroupManager;
@@ -54,8 +54,8 @@ public class EzyWebSocketServerBootstrap
 				.create();
 	}
 	
-	private EzyWsSocketWriter newSocketWriter() {
-		return EzyWsSocketWriter.builder()
+	private EzyWsWriter newSocketWriter() {
+		return EzyWsWriter.builder()
 				.threadPoolSize(getWriterPoolSize())
 				.handlerGroupManager(handlerGroupManager)
 				.sessionTicketsQueue(sessionTicketsQueue)

@@ -7,11 +7,11 @@ import com.tvd12.ezyfoxserver.nio.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketHandler;
 
-public class EzyWsSocketWriter extends EzySocketHandler {
+public class EzyWsWriter extends EzySocketHandler {
 
 	private final EzySessionTicketsQueue sessionTicketsQueue;
 	
-	public EzyWsSocketWriter(Builder builder) {
+	public EzyWsWriter(Builder builder) {
 		super(builder);
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 	}
@@ -83,8 +83,8 @@ public class EzyWsSocketWriter extends EzySocketHandler {
 		}
 		
 		@Override
-		public EzyWsSocketWriter build() {
-			return new EzyWsSocketWriter(this);
+		public EzyWsWriter build() {
+			return new EzyWsWriter(this);
 		}
 		
 	}

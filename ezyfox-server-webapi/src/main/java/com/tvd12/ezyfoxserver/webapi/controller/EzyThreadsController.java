@@ -14,7 +14,7 @@ import com.tvd12.ezyfoxserver.webapi.exception.EzyThreadNotFoundException;
 
 @RestController
 @RequestMapping("admin/threads")
-public class EzyThreadsController extends EzyController {
+public class EzyThreadsController extends EzyAbstractController {
 
 	@Autowired
 	protected EzyMonitor monitor;

@@ -12,7 +12,7 @@ public class EzySessionNotFoundException extends RuntimeException {
 	}
 	
 	public static EzySessionNotFoundException notFound(long sessionId) {
-		return new EzySessionNotFoundException("session with id: " + sessionId + " is not found");
+		return new EzySessionNotFoundException("session with id: " + sessionId + " is not found or not activated");
 	}
 
 }

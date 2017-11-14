@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
 
-public class EzyStatisticsController extends EzyController {
+public class EzyStatisticsController extends EzyAbstractController {
 
 	protected final EzyStatistics getStatistics() {
 		return getServer().getStatistics();

@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 
 @RestController
 @RequestMapping("admin/server")
-public class EzyServerSettingController extends EzyController {
+public class EzyServerSettingController extends EzyAbstractController {
 
 	@GetMapping("/setting")
 	public EzyServer getSetverSetting() {

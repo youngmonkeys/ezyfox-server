@@ -14,7 +14,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 @RestController
 @RequestMapping("admin/users")
-public class EzyAppUserManagerController extends EzyController {
+public class EzyAppUserManagerController extends EzyAbstractController {
 
 	@GetMapping
 	protected Collection<EzyProxyUser> getUsers(@RequestParam String appName) {

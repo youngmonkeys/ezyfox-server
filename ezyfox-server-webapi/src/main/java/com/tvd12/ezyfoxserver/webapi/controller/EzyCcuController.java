@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("admin/ccu")
-public class EzyCcuController extends EzyController {
+public class EzyCcuController extends EzyAbstractController {
 
 	@GetMapping
 	public int getCcuCount() {

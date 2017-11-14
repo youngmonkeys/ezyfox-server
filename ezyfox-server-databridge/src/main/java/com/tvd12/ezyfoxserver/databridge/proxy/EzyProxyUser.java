@@ -12,12 +12,12 @@ public class EzyProxyUser {
 
 	private EzyUser real;
 	
-	public static EzyProxyUser newInstance(EzyUser real) {
+	public static EzyProxyUser proxyUser(EzyUser real) {
 		return new EzyProxyUser(real);
 	}
 	
 	public static Collection<EzyProxyUser> newCollection(Collection<EzyUser> reals) {
-		return EzyLists.newArrayList(reals, EzyProxyUser::new);
+		return EzyLists.newArrayList(reals, EzyProxyUser::proxyUser);
 	}
 	
 	public long getId() {

@@ -8,13 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tvd12.ezyfoxserver.databridge.statistics.EzyNetworkPoint;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkRoStats;
-import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
-import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
 
 @RestController
 @RequestMapping("admin/network-stats")
-public class EzyNetworkStatsController extends EzyController {
+public class EzyNetworkStatsController extends EzyStatisticsController {
 
 	@GetMapping("/total-read-bytes")
 	public long getTotalReadBytes() {
@@ -73,10 +70,8 @@ public class EzyNetworkStatsController extends EzyController {
 	}
 	
 	protected long sumStatistics(Function<EzyNetworkRoStats, Long> function) {
-		EzySocketStatistics socketStats = getSocketStatistics();
-		EzyWebSocketStatistics webSocketStats = getWebSocketStatistics();
-		EzyNetworkRoStats socketSetworkStats = socketStats.getNetworkStats();
-		EzyNetworkRoStats webSocketNetworkStats = webSocketStats.getNetworkStats();
+		EzyNetworkRoStats socketSetworkStats = getSocketNetworkStats();
+		EzyNetworkRoStats webSocketNetworkStats = getWebSocketNetworkStats();
 		long sum = function.apply(socketSetworkStats) + function.apply(webSocketNetworkStats);
 		return sum;
 	}
@@ -84,13 +79,11 @@ public class EzyNetworkStatsController extends EzyController {
 	protected EzyNetworkPoint getNetworkPoint(
 			Function<EzyNetworkRoStats, Long> readFunction,
 			Function<EzyNetworkRoStats, Long> writtenFunction) {
-		EzySocketStatistics socketStats = getSocketStatistics();
-		EzyWebSocketStatistics webSocketStats = getWebSocketStatistics();
-		EzyNetworkRoStats socketSetworkStats = socketStats.getNetworkStats();
-		EzyNetworkRoStats webSocketNetworkStats = webSocketStats.getNetworkStats();
-		long sumRead = readFunction.apply(socketSetworkStats) 
+		EzyNetworkRoStats socketNetworkStats = getSocketNetworkStats();
+		EzyNetworkRoStats webSocketNetworkStats = getWebSocketNetworkStats();
+		long sumRead = readFunction.apply(socketNetworkStats) 
 				+ readFunction.apply(webSocketNetworkStats);
-		long sumWritten = writtenFunction.apply(socketSetworkStats) 
+		long sumWritten = writtenFunction.apply(webSocketNetworkStats) 
 				+ writtenFunction.apply(webSocketNetworkStats);
 		EzyNetworkPoint point = new EzyNetworkPoint();
 		point.setInputBytes(sumRead);
@@ -98,15 +91,12 @@ public class EzyNetworkStatsController extends EzyController {
 		return point;
 	}
 	
-	protected EzyStatistics getStatistics() {
-		return getServer().getStatistics();
+	protected EzyNetworkRoStats getSocketNetworkStats() {
+		return getSocketStatistics().getNetworkStats();
 	}
 	
-	protected EzySocketStatistics getSocketStatistics() {
-		return getStatistics().getSocketStats();
+	protected EzyNetworkRoStats getWebSocketNetworkStats() {
+		return getWebSocketStatistics().getNetworkStats();
 	}
 	
-	protected EzyWebSocketStatistics getWebSocketStatistics() {
-		return getStatistics().getWebSocketStats();
-	}
 }

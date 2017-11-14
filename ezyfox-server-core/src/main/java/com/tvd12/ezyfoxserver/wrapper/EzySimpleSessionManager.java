@@ -35,6 +35,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected final EzySessionTokenGenerator tokenGenerator;
 	protected final ScheduledExecutorService idleValidationService;
 	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<String, S> sessionsByToken = new ConcurrentHashMap<>();
 	
 	protected static final AtomicInteger COUNTER = new AtomicInteger(0);
@@ -49,6 +50,11 @@ public class EzySimpleSessionManager<S extends EzySession>
 	@Override
 	public void addLoggedInSession(S session) {
 	    loggedInSession.put(session.getReconnectToken(), session);
+	}
+	
+	@Override
+	public boolean containsSession(long id) {
+	    return sessionsById.containsKey(id);
 	}
 	
 	@Override
@@ -89,6 +95,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected void unmapSession(S session) {
+	    sessionsById.remove(session.getId());
 		sessionsByToken.remove(session.getReconnectToken());
 		loggedInSession.remove(session.getReconnectToken());
 	}
@@ -130,9 +137,15 @@ public class EzySimpleSessionManager<S extends EzySession>
         session.setLastWriteTime(System.currentTimeMillis());
         session.setActivated(true);
         S complete = (S)session;
+        sessionsById.put(complete.getId(), complete);
 		sessionsByToken.put(complete.getReconnectToken(), complete);
 		getLogger().debug("borrow session, sessions size = {}", borrowedObjects.size());
 		return complete;
+	}
+	
+	@Override
+	public EzySession getSession(long id) {
+	    return sessionsById.get(id);
 	}
 	
 	@Override

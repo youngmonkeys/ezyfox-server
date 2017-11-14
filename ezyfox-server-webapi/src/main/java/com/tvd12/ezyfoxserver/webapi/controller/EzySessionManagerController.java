@@ -1,15 +1,16 @@
 package com.tvd12.ezyfoxserver.webapi.controller;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tvd12.ezyfoxserver.databridge.proxy.EzyProxySession;
+import com.tvd12.ezyfoxserver.databridge.proxy.EzyProxySessionDetails;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.statistics.EzySessionRoStats;
+import com.tvd12.ezyfoxserver.webapi.exception.EzySessionNotFoundException;
 
 @RestController
 @RequestMapping("admin/sessions")
@@ -37,19 +38,12 @@ public class EzySessionManagerController extends EzyStatisticsController {
 		return EzyProxySession.newCollection(sessions);
 	}
 	
-	protected long sumStatistics(Function<EzySessionRoStats, Long> function) {
-		EzySessionRoStats socketSessionStats = getSocketSessionStats();
-		EzySessionRoStats webSocketSessionStats = getWebSocketSessionStats();
-		long sum = function.apply(socketSessionStats) + function.apply(webSocketSessionStats);
-		return sum;
-	}
-	
-	protected EzySessionRoStats getSocketSessionStats() {
-		return getSocketStatistics().getSessionStats();
-	}
-	
-	protected EzySessionRoStats getWebSocketSessionStats() {
-		return getWebSocketStatistics().getSessionStats();
+	@GetMapping("/{id}")
+	public EzyProxySession getSession(@PathVariable long id) {
+		EzySession session = getServerSessionManger().getSession(id);
+		if(session == null)
+			throw EzySessionNotFoundException.notFound(id);
+		return EzyProxySessionDetails.proxySessionDetails(session);
 	}
 	
 }

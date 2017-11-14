@@ -15,12 +15,12 @@ public class EzyProxySession {
 
 	private final EzySession real;
 	
-	public static EzyProxySession newInstance(EzySession real) {
+	public static EzyProxySession proxySession(EzySession real) {
 		return new EzyProxySession(real);
 	}
 	
 	public static Collection<EzyProxySession> newCollection(Collection<EzySession> reals) {
-		return EzyLists.newArrayList(reals, EzyProxySession::new);
+		return EzyLists.newArrayList(reals, EzyProxySession::proxySession);
 	}
 	
 	public long getId() {
@@ -29,6 +29,10 @@ public class EzyProxySession {
 	
 	public String getClientId() {
 		return real.getClientId();
+	}
+	
+	public String getClientType() {
+		return real.getClientType();
 	}
 	
 	public String getReconnectToken() {

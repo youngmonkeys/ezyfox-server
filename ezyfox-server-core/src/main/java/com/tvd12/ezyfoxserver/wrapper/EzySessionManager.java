@@ -15,6 +15,14 @@ public interface EzySessionManager<S extends EzySession> {
      */
     void addLoggedInSession(S session);
     
+    /**
+     * Check contains session mapped to id or not
+     * 
+     * @param id the session id
+     * @return true or false
+     */
+    boolean containsSession(long id); 
+    
 	/**
 	 * Check contains session mapped to token or not
 	 * 
@@ -24,12 +32,20 @@ public interface EzySessionManager<S extends EzySession> {
 	boolean containsSession(String token); 
 	
 	/**
-	 * Get session by token
-	 * 
-	 * @param token the token
-	 * @return the session mapped to the token
-	 */
-	EzySession getSession(String token);
+     * Get session by id
+     * 
+     * @param id the id
+     * @return the session mapped to the id
+     */
+    EzySession getSession(long id);
+	
+	/**
+     * Get session by token
+     * 
+     * @param token the token
+     * @return the session mapped to the token
+     */
+    EzySession getSession(String token);
 	
 	/**
 	 * Return the session to pool

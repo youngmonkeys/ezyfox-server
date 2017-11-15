@@ -43,11 +43,11 @@ public class EzyTrafficDetails implements Serializable {
 		return socketTransferredOutputData + webSocketTransferredOutputData;
 	}
 	
-	public long getSocketCurrentInputDataTransferRate() {
+	public long getCurrentInputDataTransferRate() {
 		return socketCurrentInputDataTransferRate + webSocketCurrentInputDataTransferRate;
 	}
 	
-	public long getSocketCurrentOutputDataTransferRate() {
+	public long getCurrentOutputDataTransferRate() {
 		return socketCurrentOutputDataTransferRate + webSocketCurrentOutputDataTransferRate;
 	}
 

@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 
 public interface EzyNioDataHandler {
@@ -11,8 +11,8 @@ public interface EzyNioDataHandler {
     
 	public EzyNioSession channelActive() throws Exception;
 	
-    public void channelInactive(EzyDisconnectReason reason) throws Exception;
+    public void channelInactive(EzyConstant reason) throws Exception;
     
-    public void exceptionCaught(Throwable throwable, boolean close)  throws Exception;
+    public void exceptionCaught(Throwable throwable)  throws Exception;
 	
 }

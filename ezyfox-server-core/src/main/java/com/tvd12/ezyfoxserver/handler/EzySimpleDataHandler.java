@@ -6,6 +6,7 @@ import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.handleException;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
+import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
@@ -21,6 +22,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
+import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
@@ -35,7 +37,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             sessionManager.returnSession(session, EzyDisconnectReason.UNKNOWN);
     }
     
-    public void channelInactive(EzyDisconnectReason reason) throws Exception {
+    public void channelInactive(EzyConstant reason) throws Exception {
         sessionManager.returnSession(session, reason);
     }
     
@@ -141,8 +143,11 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         controller.handle(context, request);
     }
     
-    protected void exceptionCaught(Throwable cause, boolean close) throws Exception {
+    public void exceptionCaught(Throwable cause) throws Exception {
         getLogger().debug("exception caught at session: " + session, cause);
+        EzyExceptionHandler exceptionHandler = exceptionHandlers.get(cause.getClass());
+        if(exceptionHandler != null) 
+            exceptionHandler.handleException(Thread.currentThread(), cause);
     }
 
     @Override
@@ -184,7 +189,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void disconnectSession(EzyConstant reason) {
-        newDisconnectSession(reason).execute();
+        EzyDisconnectSession disconnect = newDisconnectSession(reason);
+        disconnect.execute();
     }
     
     protected EzyEvent newSessionRemovedEvent(EzyConstant reason) {

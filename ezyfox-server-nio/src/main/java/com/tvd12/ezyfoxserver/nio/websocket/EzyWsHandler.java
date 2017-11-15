@@ -42,7 +42,7 @@ public class EzyWsHandler extends EzyLoggable {
         	dataHandler.fireChannelInactive(EzyDisconnectReason.IDLE);
         }
         else {
-        	dataHandler.fireExceptionCaught(throwable, true);
+        	dataHandler.fireExceptionCaught(throwable);
         }
     }
 

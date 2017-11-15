@@ -39,8 +39,8 @@ public class EzySimpleNioHandlerGroup
 		try {
 			decoder.decode(bytes, decodeBytesCallback);
 		}
-		catch(Throwable throwable) {
-			fireExceptionCaught(throwable, true);
+		catch(Exception throwable) {
+			fireExceptionCaught(throwable);
 		}
 	}
 	

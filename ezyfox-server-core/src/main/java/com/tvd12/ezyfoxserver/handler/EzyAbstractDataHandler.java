@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.handler;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,6 +21,7 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
@@ -53,6 +56,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
     //=====  =====
     
     protected volatile boolean active = false;
+    protected Map<Class<?>, EzyExceptionHandler> exceptionHandlers = newExceptionHandlers();
     
     protected EzyAppContext getAppContext(int appId) {
         return context.getAppContext(appId);
@@ -107,6 +111,15 @@ public class EzyAbstractDataHandler<S extends EzySession>
     
     protected void responseError(EzyIError error) {
         response(EzyErrorResponse.builder().error(error).build());
+    }
+    
+    private Map<Class<?>, EzyExceptionHandler> newExceptionHandlers() {
+        Map<Class<?>, EzyExceptionHandler> handlers = new ConcurrentHashMap<>();
+        addExceptionHandlers(handlers);
+        return handlers;
+    }
+    
+    protected void addExceptionHandlers(Map<Class<?>, EzyExceptionHandler> handlers) {
     }
     
     @Override

@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.netty.handler;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
@@ -36,18 +35,14 @@ public class EzyDataHandler extends EzySimpleDataHandler<EzyNettySession> {
 	}
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable throwable) throws Exception {
-    	Throwable cause = throwable;
-    	if(throwable instanceof DecoderException) {
-    		cause = throwable.getCause();
-    	}
-    	if(cause instanceof EzyMaxRequestSizeException) {
-    		getLogger().warn("exception: {}", cause.getMessage());
-    		exceptionCaught(cause, false);
-    	}
-    	else {
-    		getLogger().debug("exception caught at session " + ctx.channel().remoteAddress(), cause);
-    		ctx.close();
-    	}
+    	Throwable cause = getCauseException(throwable);
+    	exceptionCaught(cause);
+    }
+    
+    private Throwable getCauseException(Throwable throwable) {
+    	if(throwable instanceof DecoderException)
+    		return throwable.getCause();
+    	return throwable;
     }
     
 	private void borrowSession(ChannelHandlerContext ctx, EzyConnectionType type) {

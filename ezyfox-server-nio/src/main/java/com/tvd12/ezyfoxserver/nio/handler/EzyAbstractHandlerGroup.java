@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
@@ -75,16 +76,10 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	public final void fireChannelInactive() {
-		try {
-			decoder.destroy();
-			handler.channelInactive();
-		}
-		catch(Exception e) {
-			getLogger().error("handler inactive error", e);
-		}
+		fireChannelInactive(EzyDisconnectReason.UNKNOWN);
 	}
 	
-	public final void fireChannelInactive(EzyDisconnectReason reason) {
+	public final void fireChannelInactive(EzyConstant reason) {
 		try {
 			decoder.destroy();
 			handler.channelInactive(reason);
@@ -97,12 +92,12 @@ public abstract class EzyAbstractHandlerGroup
 		}
 	}
 	
-	public final void fireExceptionCaught(Throwable throwable, boolean close) {
+	public final void fireExceptionCaught(Throwable throwable) {
 		try {
-			handler.exceptionCaught(throwable, close);
+			handler.exceptionCaught(throwable);
 		}
 		catch(Exception e) {
-			if(close) fireChannelInactive();
+			fireChannelInactive(EzyDisconnectReason.SERVER_ERROR);
 		}
 	}
 	
@@ -137,7 +132,7 @@ public abstract class EzyAbstractHandlerGroup
 			return encodeData(data);
 		}
 		catch(Exception e) {
-			getLogger().error("decode data error on session: " + getSession().getClientAddress(), e);
+			getLogger().error("encode data error on session: " + getSession().getClientAddress(), e);
 			return null;
 		}
 	}

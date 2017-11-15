@@ -61,7 +61,7 @@ public class EzySimpleWsHandlerGroup
 			decoder.decode(bytes, decodeBytesCallback);
 		}
 		catch(Throwable throwable) {
-			fireExceptionCaught(throwable, true);
+			fireExceptionCaught(throwable);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class EzySimpleWsHandlerGroup
 			decoder.decode(bytes, offset, len, decodeBytesCallback);
 		}
 		catch(Throwable throwable) {
-			fireExceptionCaught(throwable, true);
+			fireExceptionCaught(throwable);
 		}
 	}
 	

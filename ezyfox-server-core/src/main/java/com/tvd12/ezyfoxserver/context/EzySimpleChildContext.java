@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 
-public class EzySimpleChildContext extends EzyAbstractContext {
+public abstract class EzySimpleChildContext extends EzyAbstractContext {
 
 	@Setter 
 	@Getter

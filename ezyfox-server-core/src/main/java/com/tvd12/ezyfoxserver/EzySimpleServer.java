@@ -27,7 +27,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EzySimpleServer implements EzyServer {
+public class EzySimpleServer extends EzyComponent implements EzyServer {
 
 	protected EzyConfig config;
 	protected EzySettings settings;

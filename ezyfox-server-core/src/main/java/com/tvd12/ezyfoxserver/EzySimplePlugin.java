@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class EzySimplePlugin implements EzyPlugin {
+public class EzySimplePlugin extends EzyChildComponent implements EzyPlugin {
 
     protected EzyPluginSetting setting;
     

@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
+
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
@@ -44,6 +46,11 @@ public class EzyFirePluginEventImpl
 	}
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
-		ctx.get(EzyFireEvent.class).fire(type, event);
+	    try {
+	        ctx.get(EzyFireEvent.class).fire(type, event);
+	    }
+	    catch(Exception e) {
+	        handleException(ctx, Thread.currentThread(), e);
+	    }
 	}
 }

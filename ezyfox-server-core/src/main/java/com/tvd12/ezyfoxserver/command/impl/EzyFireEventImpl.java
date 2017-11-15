@@ -1,8 +1,10 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
+import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
+
 import java.util.Set;
 
-import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -33,7 +35,12 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 	}
 	
 	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event) {
-		ctx.get(EzyFireEvent.class).fire(type, event);
+	    try {
+	        ctx.get(EzyFireEvent.class).fire(type, event);
+	    }
+	    catch(Exception e) {
+	        handleException(ctx, Thread.currentThread(), e);
+	    }
 	}
 	
 	protected void firePluginsEvent(EzyConstant type, EzyEvent event) {
@@ -45,18 +52,20 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 	}
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
-		ctx.get(EzyFireEvent.class).fire(type, event);
+	    try {
+	        ctx.get(EzyFireEvent.class).fire(type, event);
+	    }
+	    catch(Exception e) {
+	        handleException(ctx, Thread.currentThread(), e);
+	    }
 	}
 	
 	protected Set<Integer> getAppIds() {
-		return getServer().getAppIds();
+		return context.getServer().getAppIds();
 	}
 	
 	protected Set<Integer> getPluginIds() {
-		return getServer().getPluginIds();
+		return context.getServer().getPluginIds();
 	}
 	
-	protected EzyServer getServer() {
-		return context.getServer();
-	}
 }

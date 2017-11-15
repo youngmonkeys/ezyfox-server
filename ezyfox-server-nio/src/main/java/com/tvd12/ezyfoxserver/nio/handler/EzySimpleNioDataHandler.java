@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.nio.handler;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
@@ -45,14 +44,8 @@ public class EzySimpleNioDataHandler
     
 	@Override
     public void exceptionCaught(Throwable cause) throws Exception {
-    	if(cause instanceof EzyMaxRequestSizeException) {
-    		getLogger().warn("exception: {}", cause.getMessage());
-    		super.exceptionCaught(cause);
-    	}
-    	else {
-    		getLogger().debug("exception caught at session " + channel, cause);
-    		channel.close();
-    	}
+    	getLogger().debug("exception caught at session: " + session, cause);
+    	channel.close();
     }
 	
 	private void borrowSession() {

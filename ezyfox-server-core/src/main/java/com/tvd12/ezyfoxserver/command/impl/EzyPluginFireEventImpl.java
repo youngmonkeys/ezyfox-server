@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
+
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
@@ -8,6 +10,7 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class EzyPluginFireEventImpl 
 		extends EzyAbstractCommand 
 		implements EzyFireEvent {
@@ -18,7 +21,6 @@ public class EzyPluginFireEventImpl
 		this.context = context;
 	}
 	
-	@SuppressWarnings("rawtypes")
     @Override
 	public void fire(EzyConstant type, EzyEvent event) {
 	    EzyEventController ctrl = getEventController(type);
@@ -26,13 +28,20 @@ public class EzyPluginFireEventImpl
 	    fire(ctrl, event);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
     protected void fire(EzyEventController ctrl, EzyEvent event) {
         if(ctrl != null)
-            ctrl.handle(context, event);
+            handle(ctrl, event);
     }
 	
-	@SuppressWarnings("rawtypes")
+	protected void handle(EzyEventController ctrl, EzyEvent event) {
+	    try {
+	        ctrl.handle(context, event);
+	    }
+	    catch(Exception e) {
+	        handleException(context, Thread.currentThread(), e);
+	    }
+	}
+	
     protected EzyEventController getEventController(EzyConstant type) {
 	    return getEventControllers().getController(type);
 	}

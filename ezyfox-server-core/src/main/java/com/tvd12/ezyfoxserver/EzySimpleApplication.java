@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class EzySimpleApplication implements EzyApplication {
+public class EzySimpleApplication extends EzyChildComponent implements EzyApplication {
 
     protected EzyAppSetting setting;
     protected EzyAppUserManager userManager;

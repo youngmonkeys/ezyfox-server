@@ -1,7 +1,10 @@
 package com.tvd12.ezyfoxserver.handler;
 
+import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
+import static com.tvd12.ezyfoxserver.context.EzyContexts.handleException;
+import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
@@ -14,14 +17,10 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
-import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
-import com.tvd12.ezyfoxserver.exception.EzyRequestHandleException;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
-import static com.tvd12.ezyfoxserver.constant.EzyCommand.*;
 
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
@@ -108,7 +107,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             tryHandleRequest(cmd, data);
         }
         catch(Exception e) {
-            throw new EzyRequestHandleException(newHandleRequestErrorMessage(cmd, data), e);
+            Throwable throwable = requestHandleException(cmd, data, e);
+            handleException(context, Thread.currentThread(), throwable);
         }
     }
     
@@ -142,15 +142,9 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void exceptionCaught(Throwable cause) throws Exception {
-        if(cause instanceof EzyMaxRequestSizeException)
-            exceptionCaught((EzyMaxRequestSizeException)cause);
+        getLogger().debug("exception caught at session: " + session, cause);
     }
-    
-    private void exceptionCaught(EzyMaxRequestSizeException cause) throws Exception {
-        if(sessionManager != null)
-            sessionManager.returnSession(session, EzySessionRemoveReason.MAX_REQUEST_SIZE);
-    }
-    
+
     @Override
     public void onSessionReturned(EzyConstant reason) {
         notifySessionRemoved(reason);
@@ -201,7 +195,4 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
                 .build();
     }
     
-    protected String newHandleRequestErrorMessage(EzyConstant cmd, EzyData data) {
-        return "error when handle request command: " + cmd + ", data: " + data;
-    }
 }

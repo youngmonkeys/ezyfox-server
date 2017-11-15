@@ -49,7 +49,7 @@ public abstract class EzyAbstractHandlerGroup
 	public EzyAbstractHandlerGroup(Builder builder) {
 		this.session = new AtomicReference<EzyNioSession>();
 		this.channel = builder.channel;
-		this.sessionCount = new AtomicInteger(0);
+		this.sessionCount = builder.sessionCount;
 		this.sessionStats = builder.sessionStats;
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
@@ -195,6 +195,7 @@ public abstract class EzyAbstractHandlerGroup
 
 		protected EzyChannel channel;
 
+		protected AtomicInteger sessionCount;
 		protected EzySessionStats sessionStats;
 		protected EzyNetworkStats networkStats;
 		
@@ -220,6 +221,11 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder encoder(Object encoder) {
 			this.encoder = (EzyNioObjectToByteEncoder) encoder;
+			return this;
+		}
+		
+		public Builder sessionCount(AtomicInteger sessionCount) {
+			this.sessionCount = sessionCount;
 			return this;
 		}
 		

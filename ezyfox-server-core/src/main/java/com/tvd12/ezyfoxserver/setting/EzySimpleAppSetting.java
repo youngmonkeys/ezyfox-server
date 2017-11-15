@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,6 +27,9 @@ import lombok.ToString;
 @JsonPropertyOrder({"id", "name", "entryLoader"})
 public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSetting {
 
+    @XmlElement(name = "max-users")
+    protected int maxUsers = 999999;
+    
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 	
 	protected EzyEventControllers newEventControllers() {

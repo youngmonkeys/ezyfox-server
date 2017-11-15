@@ -3,6 +3,8 @@
  */
 package com.tvd12.ezyfoxserver;
 
+import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.SETTINGS;
+
 import java.io.File;
 import java.nio.file.Paths;
 
@@ -13,10 +15,13 @@ import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
-import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
@@ -89,12 +94,19 @@ public abstract class EzyStarter
     }
     
     protected EzyLoader newLoader() {
-        return new EzyLoader();
+        return new EzyLoader() {
+            @Override
+            protected void addManagers(EzyManagers managers, EzySettings settings) {
+                EzySimpleSessionManager.Builder<?> sessionManagerBuilder 
+                        = newSessionManagerBuilder(settings);
+                sessionManagerBuilder.maxSessions(settings.getMaxSessions());
+                managers.addManager(EzySessionManager.class, sessionManagerBuilder.build());
+            }
+        };
     }
     
-    protected EzyConfig readConfig(String configFile) throws Exception {
-    	return getConfigLoader().load(configFile);
-    }
+    protected abstract EzySimpleSessionManager.Builder<?> 
+            newSessionManagerBuilder(EzySettings settings);
     
     protected EzyConfigLoader getConfigLoader() {
     	return new EzySimpleConfigLoader();
@@ -104,8 +116,12 @@ public abstract class EzyStarter
         return EzySimpleServer.class.getClassLoader();
     }
     
+    protected EzyConfig readConfig(String configFile) throws Exception {
+        return getConfigLoader().load(configFile);
+    }
+    
     protected String getLoggerConfigFile(EzyConfig config) {
-    	return getPath(config.getEzyfoxHome(), EzyFolderNamesSetting.SETTINGS, config.getLoggerConfigFile()); 
+    	return getPath(config.getEzyfoxHome(), SETTINGS, config.getLoggerConfigFile()); 
     }
     
     protected String getPath(String first, String... more) {

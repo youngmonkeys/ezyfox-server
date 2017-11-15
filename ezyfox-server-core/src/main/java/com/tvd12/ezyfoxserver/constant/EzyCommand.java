@@ -18,7 +18,8 @@ public enum EzyCommand implements EzyConstant {
 	APP_ACCESS(30),
 	APP_REQUEST(31),
 	APP_JOINED(32),
-	APP_EXIT(33);
+	APP_EXIT(33),
+	APP_ACCESS_ERROR(34);
 	
 	@Getter
 	private final int id;

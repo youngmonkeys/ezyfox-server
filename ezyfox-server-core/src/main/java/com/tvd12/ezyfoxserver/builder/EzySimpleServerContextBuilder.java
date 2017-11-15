@@ -18,6 +18,7 @@ import com.tvd12.ezyfoxserver.service.EzyResponseSerializer;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleResponseSerializer;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 
 public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuilder<B>> 
@@ -56,12 +57,18 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     protected EzyAppContext newAppContext(EzyServerContext parent, EzyAppSetting setting) {
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(setting);
-        app.setUserManager(EzyAppUserManagerImpl.builder().build());
+        app.setUserManager(newAppUserManager(setting));
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
         appContext.setParent(parent);
         appContext.setWorkerExecutor(newAppWorkerExecutor(setting));
         return appContext;
+    }
+    
+    protected EzyAppUserManager newAppUserManager(EzyAppSetting setting) {
+        return EzyAppUserManagerImpl.builder()
+                .maxUsers(setting.getMaxUsers())
+                .build();
     }
     
     protected Collection<EzyPluginContext> newPluginContexts(EzyServerContext parent) {

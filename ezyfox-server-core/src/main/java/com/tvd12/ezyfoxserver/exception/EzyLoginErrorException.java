@@ -20,4 +20,13 @@ public class EzyLoginErrorException extends IllegalStateException {
         this.error = error;
     }
     
+    public EzyLoginErrorException(EzyILoginError error, Exception e) {
+        super(error.getMessage(), e);
+        this.error = error;
+    }
+    
+    public static EzyLoginErrorException maximumUsers(Exception e) {
+        return new EzyLoginErrorException(EzyLoginError.MAXIMUM_USER, e);
+    }
+    
 }

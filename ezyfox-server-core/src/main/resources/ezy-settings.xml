@@ -5,6 +5,8 @@
 	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
+	<max-users>10000</max-users>
+	<max-sessions>30000</max-sessions>
 	<worker-pool-size>36</worker-pool-size>
 	
 	<http>
@@ -63,6 +65,7 @@
 		<application>
 			<name>ezyfox-chat</name>
 			<entry-loader>com.tvd12.ezyfoxserver.chat.EzyChatEntryLoader</entry-loader>
+			<max-users>10000</max-users>
 			<worker-pool-size>30</worker-pool-size>
 			<config-file>config.properties</config-file>
 		</application>

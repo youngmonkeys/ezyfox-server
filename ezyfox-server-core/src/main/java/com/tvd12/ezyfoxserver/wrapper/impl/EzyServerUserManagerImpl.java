@@ -4,7 +4,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
@@ -24,6 +23,7 @@ public class EzyServerUserManagerImpl
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
     protected EzyServerUserManagerImpl(Builder builder) {
+        super(builder);
         this.idleValidationService = EzyExecutors.newScheduledThreadPool(3, "user-manager");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> idleValidationService.shutdown()));
     }
@@ -146,7 +146,7 @@ public class EzyServerUserManagerImpl
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyBuilder<EzyServerUserManager> {
+	public static class Builder extends EzySimpleUserManager.Builder<Builder> {
 		
 		@Override
 		public EzyServerUserManager build() {

@@ -9,10 +9,12 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
+import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.request.EzyLoginParams;
 import com.tvd12.ezyfoxserver.request.EzyLoginRequest;
 import com.tvd12.ezyfoxserver.response.EzyLoginErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
+import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.*;
 
 public class EzyLoginController 
 		extends EzyAbstractServerController 
@@ -29,6 +31,10 @@ public class EzyLoginController
             processException(ctx, request.getSession(), e);
             throw e;
         }
+	    catch(EzyMaxUserException e) {
+	        processException(ctx, request.getSession(), maximumUsers(e));
+	        throw e;
+	    }
 	}
 	
 	protected void processException(

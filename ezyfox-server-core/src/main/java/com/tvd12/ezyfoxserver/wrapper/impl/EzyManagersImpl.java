@@ -7,7 +7,6 @@ import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 
 public class EzyManagersImpl extends EzyLoggable implements EzyManagers {
 
@@ -77,7 +76,6 @@ public class EzyManagersImpl extends EzyLoggable implements EzyManagers {
 		
 		protected Map<Object, Object> newManagers() {
 			Map<Object, Object> answer = new ConcurrentHashMap<>();
-			answer.put(EzyServerUserManager.class, EzyServerUserManagerImpl.builder().build());
 			return answer; 
 		}
 		

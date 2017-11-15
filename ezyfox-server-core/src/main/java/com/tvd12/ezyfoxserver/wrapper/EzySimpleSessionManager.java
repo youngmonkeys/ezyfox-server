@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
 import com.tvd12.ezyfoxserver.io.EzyLists;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectPool;
 import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
@@ -32,6 +33,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 		extends EzyObjectPool<S> 
 		implements EzySessionManager<S> {
 	
+    protected final int maxSessions;
 	protected final EzySessionTokenGenerator tokenGenerator;
 	protected final ScheduledExecutorService idleValidationService;
 	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
@@ -43,6 +45,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected EzySimpleSessionManager(Builder<S> builder) {
 		super(builder);
 		this.initializeObjects();
+		this.maxSessions = builder.maxSessions;
 		this.tokenGenerator = builder.getSessionTokenGenerator();
 		this.idleValidationService = EzyExecutors.newScheduledThreadPool(3, "session-manager");
 	}
@@ -121,6 +124,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@SuppressWarnings("unchecked")
     protected S borrowSession(EzyConnectionType type) {
+	    checkMaxSessions(type);
 		KeyPair keyPair = newKeyPair();
 		EzyAbstractSession session = (EzyAbstractSession)borrowObject();
 		session.setLoggedIn(false);
@@ -141,6 +145,12 @@ public class EzySimpleSessionManager<S extends EzySession>
 		sessionsByToken.put(complete.getReconnectToken(), complete);
 		getLogger().debug("borrow session, sessions size = {}", borrowedObjects.size());
 		return complete;
+	}
+	
+	protected void checkMaxSessions(EzyConnectionType type) {
+	    int current = getAliveSessionCountWithLock();
+	    if(current >= maxSessions)
+	        throw new EzyMaxSessionException(current, maxSessions);
 	}
 	
 	@Override
@@ -185,6 +195,10 @@ public class EzySimpleSessionManager<S extends EzySession>
 	public int getLoggedInSessionCount() {
 	    return loggedInSession.size();
 	}
+	
+	public int getAliveSessionCountWithLock() {
+        return returnWithLock(this::getAllSessionCount);
+    }
 	
 	@Override
 	public void start() throws Exception {
@@ -253,11 +267,17 @@ public class EzySimpleSessionManager<S extends EzySession>
 	public abstract static class Builder<S extends EzySession> 
 			extends EzyObjectPool.Builder<S, Builder<S>> {
 
+	    protected int maxSessions = 999999;
 	    protected EzySessionTokenGenerator tokenGenerator;
 	    
 		@Override
 		protected String getProductName() {
 			return "session-manager";
+		}
+		
+		public Builder<S> maxSessions(int maxSessions) {
+		    this.maxSessions = maxSessions;
+		    return this;
 		}
 
 		public Builder<S> tokenGenerator(EzySessionTokenGenerator generator) {

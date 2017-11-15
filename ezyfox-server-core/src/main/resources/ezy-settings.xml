@@ -9,6 +9,7 @@
 	
 	<http>
 		<port>8080</port>
+		<max-threads>8</max-threads>
 	</http>
 	
 	<socket>

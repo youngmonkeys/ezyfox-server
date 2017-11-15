@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
@@ -52,6 +53,10 @@ public final class EzyContexts {
     
     public static Collection<Integer> getAppIds(EzyServerContext context) {
         return context.getServer().getAppIds();
+    }
+    
+    public static EzyHttpSetting getHttpSetting(EzyServerContext context) {
+        return getSettings(context).getHttp();
     }
     
     public static void handleException(

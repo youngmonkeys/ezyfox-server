@@ -61,6 +61,7 @@
 	<xs:complexType name="http-type">
 		<xs:all>
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
 

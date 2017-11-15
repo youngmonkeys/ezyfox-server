@@ -19,7 +19,7 @@ public class EzyCpuMonitor {
 		long processCpuTime = osMxBean.getProcessCpuTime();
 		long offsetSystemTime = systemTime - lastSystemTime;
 		long offsetProcessCpuTime = processCpuTime - lastProcessCpuTime;
-		double cpuLoad = offsetProcessCpuTime / offsetSystemTime;
+		double cpuLoad = (1.0D * offsetProcessCpuTime) / offsetSystemTime;
 
 		this.lastSystemTime = systemTime;
 		this.lastProcessCpuTime = processCpuTime;

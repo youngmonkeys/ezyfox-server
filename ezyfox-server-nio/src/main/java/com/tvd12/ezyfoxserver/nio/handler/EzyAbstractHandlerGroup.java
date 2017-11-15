@@ -97,12 +97,12 @@ public abstract class EzyAbstractHandlerGroup
 		}
 	}
 	
-	public final void fireExceptionCaught(Throwable throwable) {
+	public final void fireExceptionCaught(Throwable throwable, boolean close) {
 		try {
-			handler.exceptionCaught(throwable);
+			handler.exceptionCaught(throwable, close);
 		}
 		catch(Exception e) {
-			fireChannelInactive();
+			if(close) fireChannelInactive();
 		}
 	}
 	

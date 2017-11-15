@@ -42,7 +42,7 @@ public class EzyDataHandler extends EzySimpleDataHandler<EzyNettySession> {
     	}
     	if(cause instanceof EzyMaxRequestSizeException) {
     		getLogger().warn("exception: {}", cause.getMessage());
-    		exceptionCaught(cause);
+    		exceptionCaught(cause, false);
     	}
     	else {
     		getLogger().debug("exception caught at session " + ctx.channel().remoteAddress(), cause);

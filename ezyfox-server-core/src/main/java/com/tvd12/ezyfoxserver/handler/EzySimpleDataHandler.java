@@ -141,7 +141,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         controller.handle(context, request);
     }
     
-    protected void exceptionCaught(Throwable cause) throws Exception {
+    protected void exceptionCaught(Throwable cause, boolean close) throws Exception {
         getLogger().debug("exception caught at session: " + session, cause);
     }
 

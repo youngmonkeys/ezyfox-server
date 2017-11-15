@@ -40,7 +40,7 @@ public class EzySimpleNioHandlerGroup
 			decoder.decode(bytes, decodeBytesCallback);
 		}
 		catch(Throwable throwable) {
-			fireExceptionCaught(throwable);
+			fireExceptionCaught(throwable, true);
 		}
 	}
 	

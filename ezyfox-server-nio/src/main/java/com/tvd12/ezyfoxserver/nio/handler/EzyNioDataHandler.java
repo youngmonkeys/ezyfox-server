@@ -11,8 +11,8 @@ public interface EzyNioDataHandler {
     
 	public EzyNioSession channelActive() throws Exception;
 	
-    public void exceptionCaught(Throwable throwable)  throws Exception;
-    
     public void channelInactive(EzyDisconnectReason reason) throws Exception;
+    
+    public void exceptionCaught(Throwable throwable, boolean close)  throws Exception;
 	
 }

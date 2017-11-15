@@ -43,9 +43,9 @@ public class EzySimpleNioDataHandler
 	}
     
 	@Override
-    public void exceptionCaught(Throwable cause) throws Exception {
+    public void exceptionCaught(Throwable cause, boolean close) throws Exception {
     	getLogger().debug("exception caught at session: " + session, cause);
-    	channel.close();
+    	if(close) channel.close();
     }
 	
 	private void borrowSession() {

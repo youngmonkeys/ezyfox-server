@@ -1,13 +1,16 @@
 package com.tvd12.ezyfoxserver.binding.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.tvd12.ezyfoxserver.asm.EzyFunction;
+import com.tvd12.ezyfoxserver.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfoxserver.asm.EzyInstruction;
 import com.tvd12.ezyfoxserver.binding.EzyReader;
 import com.tvd12.ezyfoxserver.binding.EzyUnmarshaller;
+import com.tvd12.ezyfoxserver.binding.annotation.EzyPostRead;
 import com.tvd12.ezyfoxserver.reflect.EzyClass;
 import com.tvd12.ezyfoxserver.reflect.EzyField;
 import com.tvd12.ezyfoxserver.reflect.EzyMethod;
@@ -23,8 +26,15 @@ import javassist.CtNewMethod;
 public abstract class EzyAbstractReaderBuilder
 		extends EzyAbstractBuilder<EzySetterMethod> {
 	
+	protected final List<EzyMethod> postReadMethods;
+	
 	public EzyAbstractReaderBuilder(EzyClass clazz) {
 		super(clazz);
+		this.postReadMethods = getPostReadMethods();
+	}
+	
+	private List<EzyMethod> getPostReadMethods() {
+		return clazz.getPublicMethods(m -> m.isAnnotated(EzyPostRead.class));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -98,6 +108,17 @@ public abstract class EzyAbstractReaderBuilder
 	
 	protected abstract String getImplClassName();
 	protected abstract String makeImplMethodContent(EzyMethod readMethod);
+	
+	protected void addPostReadMethods(EzyBody methodBody, String objectName) {
+		for(EzyMethod method : postReadMethods) {
+			EzyInstruction instruction = new EzyInstruction("\t", "\n")
+					.append(objectName)
+					.dot()
+					.append(method.getName())
+					.brackets("");
+			methodBody.append(instruction);
+		}
+	}
 	
 	protected EzyMethod getReadMethod() {
 		return EzyMethod.builder()

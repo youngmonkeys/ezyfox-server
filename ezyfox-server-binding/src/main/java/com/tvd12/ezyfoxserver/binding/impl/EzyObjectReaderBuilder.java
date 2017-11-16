@@ -64,6 +64,8 @@ public class EzyObjectReaderBuilder extends EzyAbstractReaderBuilder {
 				methodBody.append(checkNotNullInstruction((EzyReflectElement) element));
 				methodBody.append(newInstructionByElement(element));
 			}
+			
+			addPostReadMethods(methodBody, "object");
 
 			methodBody.append(new EzyInstruction("\t", "\n")
 					.answer()

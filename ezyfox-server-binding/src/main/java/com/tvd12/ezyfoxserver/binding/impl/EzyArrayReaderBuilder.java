@@ -93,6 +93,8 @@ public class EzyArrayReaderBuilder extends EzyAbstractReaderBuilder {
 				methodBody.append(instruction);
 			}
 			
+			addPostReadMethods(methodBody, "object");
+			
 			methodBody.append(new EzyInstruction("\t", "\n")
 					.answer()
 					.append("object"));

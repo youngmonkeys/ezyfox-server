@@ -21,6 +21,8 @@ public class EzyWebApiPropertySource extends PropertySource<Object> {
 	public Object getProperty(String name) {
 		if(name.equals("server.tomcat.max-threads"))
 			return httpSetting.getMaxThreads();
+		if(name.equals("jetty.threadPool.maxThreads"))
+			return httpSetting.getMaxThreads();
 		return null;
 	}
 	

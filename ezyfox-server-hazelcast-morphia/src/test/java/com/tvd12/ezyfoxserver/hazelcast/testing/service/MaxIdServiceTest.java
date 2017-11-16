@@ -2,8 +2,6 @@ package com.tvd12.ezyfoxserver.hazelcast.testing.service;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.hazelcast.testing.HazelcastBaseTest;
-
 public class MaxIdServiceTest extends HazelcastBaseTest {
 
 	@Test

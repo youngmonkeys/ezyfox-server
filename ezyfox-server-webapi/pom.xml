@@ -17,7 +17,7 @@
 		<ezy.core.version>1.0.0</ezy.core.version>
 		<ezy.monitor.version>1.0.0</ezy.monitor.version>
 		<ezy.databridge.version>1.0.0</ezy.databridge.version>
-		<springboot.version>1.5.4.RELEASE</springboot.version>
+		<springboot.version>1.5.8.RELEASE</springboot.version>
 	</properties>
 
 	<dependencyManagement>
@@ -33,31 +33,46 @@
 	</dependencyManagement>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-core</artifactId>
 			<version>${ezy.core.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-monitor</artifactId>
 			<version>${ezy.monitor.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-databridge</artifactId>
 			<version>${ezy.databridge.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 </project>

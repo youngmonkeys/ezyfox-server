@@ -59,14 +59,14 @@ public abstract class EzyStarter
     	startEzyFox(loadEzyFox(config));
     }
     
-    protected void startEzyFox(EzyServer ezyFox) throws Exception {
-    	getLogger().info("settings: \n{}", ezyFox.toString());
-    	newServerBoostrap(ezyFox).start();
+    protected void startEzyFox(EzyServer server) throws Exception {
+    	getLogger().info("settings: \n{}", server.toString());
+    	newServerBoostrap(server).start();
     }
     
-    protected EzyServerBootstrap newServerBoostrap(EzyServer ezyFox) {
+    protected EzyServerBootstrap newServerBoostrap(EzyServer server) {
     	return newServerBootstrapBuilder()
-    			.server(ezyFox)
+    			.server(server)
     			.build();
     }
     

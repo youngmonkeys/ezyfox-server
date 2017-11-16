@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
@@ -27,7 +28,9 @@ import lombok.Setter;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EzySimpleServer extends EzyComponent implements EzyServer {
+public class EzySimpleServer 
+        extends EzyComponent 
+        implements EzyServer, EzyDestroyable {
 
 	protected EzyConfig config;
 	protected EzySettings settings;
@@ -77,6 +80,11 @@ public class EzySimpleServer extends EzyComponent implements EzyServer {
 		return settings.getPluginById(id);
 	}
 	//=============================================//
+	
+	@Override
+	public void destroy() {
+	    managers.stopManagers();
+	}
 	
 	@Override
 	public String toString() {

@@ -59,6 +59,11 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
                 }
             };
         }
+
+        @Override
+        public void destroy() {
+            
+        }
      }
      
      public static class UnsafeCommand {

@@ -10,12 +10,13 @@ import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyRunWorkerImpl;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class EzyAbstractContext extends EzyEntity {
+public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroyable {
 
 	@Setter
 	@Getter

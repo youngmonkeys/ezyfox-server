@@ -8,9 +8,10 @@ import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
+import com.tvd12.ezyfoxserver.ext.EzyEntryAware;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
-public class EzyAppsStarter extends EzyComponentStater {
+public class EzyAppsStarter extends EzyComponentsStater {
 
     protected Map<String, EzyAppClassLoader> appClassLoaders;
     
@@ -33,7 +34,10 @@ public class EzyAppsStarter extends EzyComponentStater {
     protected void startApp(String appName) {
         try {
             getLogger().debug("app " + appName + " loading...");
-            startApp(appName, newAppEntryLoader(appName));
+            EzyAppContext context = serverContext.getAppContext(appName);
+            EzyApplication application = context.getApp();
+            EzyAppEntry entry = startApp(appName, newAppEntryLoader(appName));
+            ((EzyEntryAware)application).setEntry(entry);
             getLogger().debug("app " + appName + " loaded");
         }
         catch(Exception e) {
@@ -41,13 +45,11 @@ public class EzyAppsStarter extends EzyComponentStater {
         } 
     }
     
-    protected void startApp(String appName, EzyAppEntryLoader loader) throws Exception {
-        startApp(appName, loader.load());
-    }
-    
-    protected void startApp(String appName, EzyAppEntry entry) throws Exception {
+    protected EzyAppEntry startApp(String appName, EzyAppEntryLoader loader) throws Exception {
+        EzyAppEntry entry = loader.load();
         entry.config(getAppContext(appName));
         entry.start();
+        return entry;
     }
     
     @JsonIgnore
@@ -72,7 +74,8 @@ public class EzyAppsStarter extends EzyComponentStater {
     }
     
     public EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
-        return getAppEntryLoaderClass(appName).newInstance();
+         Class<EzyAppEntryLoader> entryLoaderClass = getAppEntryLoaderClass(appName);
+         return entryLoaderClass.newInstance();
     }
     
     public EzyAppClassLoader getClassLoader(String appName) {
@@ -89,7 +92,7 @@ public class EzyAppsStarter extends EzyComponentStater {
         return new Builder();
     }
     
-    public static class Builder extends EzyComponentStater.Builder<EzyAppsStarter, Builder> {
+    public static class Builder extends EzyComponentsStater.Builder<EzyAppsStarter, Builder> {
         protected Map<String, EzyAppClassLoader> appClassLoaders;
         
         public Builder appClassLoaders(Map<String, EzyAppClassLoader> appClassLoaders) {

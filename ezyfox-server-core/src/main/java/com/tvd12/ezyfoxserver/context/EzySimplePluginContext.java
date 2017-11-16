@@ -15,10 +15,13 @@ import com.tvd12.ezyfoxserver.command.impl.EzyPluginFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 import lombok.Getter;
 import lombok.Setter;
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
+
 
 public class EzySimplePluginContext 
 		extends EzySimpleChildContext 
@@ -53,5 +56,10 @@ public class EzySimplePluginContext
 	protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
 	    return (EzyExceptionHandlersFetcher) plugin;
 	}
+
+    @Override
+    public void destroy() {
+        processWithLogException(( )-> ((EzyDestroyable)plugin).destroy());
+    }
 	
 }

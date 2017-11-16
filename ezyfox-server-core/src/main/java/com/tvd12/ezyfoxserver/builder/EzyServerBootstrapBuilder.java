@@ -8,9 +8,9 @@ public interface EzyServerBootstrapBuilder extends EzyBuilder<EzyServerBootstrap
 	/**
 	 * set server
 	 * 
-	 * @param boss the server
+	 * @param server the server
 	 * @return this pointer
 	 */
-	EzyServerBootstrapBuilder server(EzyServer boss);
+	EzyServerBootstrapBuilder server(EzyServer server);
 	
 }

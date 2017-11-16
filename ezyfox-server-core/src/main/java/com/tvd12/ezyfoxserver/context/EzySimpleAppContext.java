@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.context;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -16,6 +18,7 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAppFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 import lombok.Getter;
@@ -54,6 +57,11 @@ public class EzySimpleAppContext
 	@Override
 	protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
 	    return (EzyExceptionHandlersFetcher) app;
+	}
+	
+	@Override
+	public void destroy() {
+	    processWithLogException(( )-> ((EzyDestroyable)app).destroy());
 	}
 	
 }

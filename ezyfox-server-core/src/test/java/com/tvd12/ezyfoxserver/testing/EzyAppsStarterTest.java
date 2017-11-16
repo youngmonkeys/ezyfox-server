@@ -20,10 +20,6 @@ public class EzyAppsStarterTest extends BaseTest {
             @Override
             public EzyAppsStarter build() {
                 return new EzyAppsStarter(this) {
-                    @Override
-                    protected void startApp(String appName, EzyAppEntryLoader loader) throws Exception {
-                        throw new RuntimeException();
-                    }
                     
                     public EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
                         throw new RuntimeException();

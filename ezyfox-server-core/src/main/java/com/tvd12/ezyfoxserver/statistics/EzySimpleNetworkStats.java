@@ -2,12 +2,10 @@ package com.tvd12.ezyfoxserver.statistics;
 
 import java.io.Serializable;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
-
 import lombok.Getter;
 
 @Getter
-public class EzySimpleNetworkStats extends EzyLoggable implements EzyNetworkStats, Serializable {
+public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     private static final long serialVersionUID = 6439136315133894536L;
     
     protected long readBytes;

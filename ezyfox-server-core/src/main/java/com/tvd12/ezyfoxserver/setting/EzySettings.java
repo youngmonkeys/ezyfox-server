@@ -4,6 +4,10 @@ import java.util.Set;
 
 public interface EzySettings {
 
+    int getMaxUsers();
+    
+    int getMaxSessions();
+    
     int getWorkerPoolSize();
     
     EzyHttpSetting getHttp();

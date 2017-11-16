@@ -3,6 +3,8 @@ package com.tvd12.ezyfoxserver.webapi;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
@@ -20,6 +22,13 @@ public class EzyWebApiApplication extends SpringApplication {
 	
 	protected EzyMonitor newMonitor() {
 		return new EzyMonitor();
+	}
+	
+	@Override
+	protected void configurePropertySources(ConfigurableEnvironment environment, String[] args) {
+		super.configurePropertySources(environment, args);
+		MutablePropertySources sources = environment.getPropertySources();
+		sources.addFirst(new EzyWebApiPropertySource(serverContext));
 	}
 	
 	@Override

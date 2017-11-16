@@ -26,7 +26,7 @@ public class EzyBootstrap
 	
 	@Override
 	public void destroy() {
-	    // TODO
+	    // do nothing
 	}
 	
 	protected void startManagers() {
@@ -36,7 +36,7 @@ public class EzyBootstrap
 	//====================== apps ===================
 	protected void startAllApps() {
 	    getLogger().info("start all apps ...");
-	    startComponent(newAppsStaterBuilder());
+	    startComponents(newAppsStaterBuilder());
 	}
 	
 	protected EzyAppsStarter.Builder newAppsStaterBuilder() {
@@ -48,7 +48,7 @@ public class EzyBootstrap
 	//===================== plugins ===================
 	protected void startAllPlugins() {
 	    getLogger().info("start all plugins ...");
-	    startComponent(newPluginsStaterBuilder());
+	    startComponents(newPluginsStaterBuilder());
 	}
 	
 	protected EzyPluginsStarter.Builder newPluginsStaterBuilder() {
@@ -57,14 +57,14 @@ public class EzyBootstrap
 	
 	//=================================================
 	
-	protected void startComponent(
-	        EzyComponentStater.Builder<?, ?> builder) {
-	    EzyComponentStater starter = newComponentStater(builder);
+	protected void startComponents(
+	        EzyComponentsStater.Builder<?, ?> builder) {
+	    EzyComponentsStater starter = newComponenstStater(builder);
 	    starter.start();
 	}
 	
-	protected EzyComponentStater newComponentStater(
-	        EzyComponentStater.Builder<?, ?> builder) {
+	protected EzyComponentsStater newComponenstStater(
+	        EzyComponentsStater.Builder<?, ?> builder) {
 	    return builder
 	            .serverContext(context)
 	            .settings(getServer().getSettings())

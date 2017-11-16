@@ -7,12 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tvd12.ezyfoxserver.EzyServer;
 
 @RestController
-@RequestMapping("admin/server-setting")
-public class EzyServerSettingController extends EzyController {
+@RequestMapping("admin/server")
+public class EzyServerSettingController extends EzyAbstractController {
 
-	@GetMapping
+	@GetMapping("/setting")
 	public EzyServer getSetverSetting() {
 		return getServerContext().getServer(); 
+	}
+	
+	@GetMapping("/version")
+	public String getServerVersion() {
+		return getServer().getVersion();
 	}
 	
 }

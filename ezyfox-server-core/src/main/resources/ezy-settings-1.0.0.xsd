@@ -5,6 +5,8 @@
 	<xs:element name="settings">
 		<xs:complexType>
 			<xs:all>
+				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="worker-pool-size" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
@@ -18,6 +20,8 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="max-users" type="xs:integer" />
+	<xs:element name="max-sessions" type="xs:integer" />
 	<xs:element name="worker-pool-size" type="xs:integer" />
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />
@@ -41,6 +45,7 @@
 
 	<xs:complexType name="web-socket-type">
 		<xs:all>
+			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="ssl-port" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
@@ -61,6 +66,7 @@
 	<xs:complexType name="http-type">
 		<xs:all>
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
 
@@ -109,6 +115,7 @@
 		<xs:all>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
 			<xs:element name="worker-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
 			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
 		</xs:all>

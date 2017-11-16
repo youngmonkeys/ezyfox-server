@@ -1,9 +1,10 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
+
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
@@ -43,7 +44,12 @@ public class EzyFireAppEventImpl extends EzyAbstractCommand implements EzyFireAp
 	}
 	
 	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event) {
-		ctx.get(EzyFireEvent.class).fire(type, event);
+	    try {
+	        ctx.get(EzyFireEvent.class).fire(type, event);
+	    }
+	    catch(Exception e) {
+	        handleException(ctx, Thread.currentThread(), e);
+	    }
 	}
 	
 	protected boolean shouldFireAppEvent(EzyAppContext appContext) {
@@ -51,10 +57,7 @@ public class EzyFireAppEventImpl extends EzyAbstractCommand implements EzyFireAp
 	}
 	
 	protected Set<Integer> getAppIds() {
-		return getServer().getAppIds();
+		return context.getServer().getAppIds();
 	}
 	
-	protected EzyServer getServer() {
-		return context.getServer();
-	}
 }

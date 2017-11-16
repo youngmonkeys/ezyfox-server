@@ -24,10 +24,12 @@ import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
+import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyRequestMappersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerUserManagerImpl;
 
 /**
  * @author tavandung12
@@ -43,11 +45,11 @@ public class EzyLoader extends EzyLoggable {
     	EzySimpleServer answer = new EzySimpleServer();
     	answer.setConfig(config);
     	answer.setSettings(settings);
-    	answer.setManagers(newManagers());
     	answer.setClassLoader(classLoader);
     	answer.setJsonMapper(newJsonMapper());
     	answer.setStatistics(newStatistics());
     	answer.setControllers(newControllers());
+    	answer.setManagers(newManagers(settings));
     	answer.setRequestMappers(newRequestMapper());
     	answer.setAppClassLoaders(newAppClassLoaders());
     	answer.setEventPluginsMapper(newEventPluginsMapper(settings));
@@ -73,13 +75,20 @@ public class EzyLoader extends EzyLoggable {
         return new EzySimpleStatistics();
     }
     
-    protected EzyManagers newManagers() {
+    protected EzyManagers newManagers(EzySettings settings) {
         EzyManagers managers = EzyManagersImpl.builder().build();
-        addManagers(managers);
+        managers.addManager(EzyServerUserManager.class, newServerUserManager(settings));
+        addManagers(managers, settings);
         return managers;
     }
     
-    protected void addManagers(EzyManagers managers) {
+    protected void addManagers(EzyManagers managers, EzySettings settings) {
+    }
+    
+    protected EzyServerUserManager newServerUserManager(EzySettings settings) {
+        return EzyServerUserManagerImpl.builder()
+                .maxUsers(settings.getMaxUsers())
+                .build();
     }
     
     protected EzyServerControllers newControllers() {

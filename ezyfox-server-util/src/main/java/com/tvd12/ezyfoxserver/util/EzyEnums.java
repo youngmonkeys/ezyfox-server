@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.util;
 
+import java.util.function.Function;
+
 import com.tvd12.ezyfoxserver.constant.EzyHasId;
 
 public final class EzyEnums {
@@ -8,9 +10,17 @@ public final class EzyEnums {
 	}
 	
 	public static <T extends EzyHasId> T valueOf(T[] values, int id) {
-		for(T v : values)
-            if(v.getId() == id)
+		return valueOf(values, id, v -> v.getId());
+	}
+	
+	public static <T> T valueOf(
+			T[] values, Object id, Function<T, Object> idFetcher) {
+		for(T v : values) {
+			Object vid = idFetcher.apply(v);
+            if(vid.equals(id)) {
                 return v;
+            }
+		}
         throw new IllegalArgumentException("has no enum value with id = " + id);
 	}
 }

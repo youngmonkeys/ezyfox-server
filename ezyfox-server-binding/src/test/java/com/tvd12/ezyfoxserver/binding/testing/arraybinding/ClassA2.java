@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.binding.EzyAccessType;
 import com.tvd12.ezyfoxserver.binding.annotation.EzyArrayBinding;
 import com.tvd12.ezyfoxserver.binding.annotation.EzyIndex;
+import com.tvd12.ezyfoxserver.binding.annotation.EzyPostRead;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,5 +37,10 @@ public class ClassA2 {
 	
 	@EzyIndex(7)
 	private List<?> h = Lists.newArrayList(1, 2, 3, 4, 5);
+	
+	@EzyPostRead
+	public void hello() {
+		System.out.println("\n\n\npostReadMethod: hello world\n\n");
+	}
 	
 }

@@ -63,7 +63,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		return EzyHandlerGroupBuilderFactoryImpl.builder()
 		        .statistics(server.getStatistics())
 				.socketSessionTicketsQueue(socketSessionTicketsQueue)
-				.websocketSessionTicketsQueue(websocketSessionTicketsQueue)
+				.webSocketSessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();
 	}
 

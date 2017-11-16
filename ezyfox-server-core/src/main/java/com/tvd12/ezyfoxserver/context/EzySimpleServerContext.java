@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.context;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,8 +13,10 @@ import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
+import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
+import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireAppEventImpl;
@@ -20,8 +24,12 @@ import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFirePluginEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdown;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -99,6 +107,7 @@ public class EzySimpleServerContext extends EzyAbstractContext implements EzySer
 	@Override
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
 		super.addCommandSuppliers(suppliers);
+		suppliers.put(EzyShutdown.class, ()-> new EzyServerShutdown(this));
 		suppliers.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		suppliers.put(EzySendResponse.class, () -> new EzySendResponseImpl(this));
 		suppliers.put(EzyFireEvent.class, () -> new EzyFireEventImpl(this));
@@ -106,6 +115,39 @@ public class EzySimpleServerContext extends EzyAbstractContext implements EzySer
 		suppliers.put(EzyFireAppEvent.class, ()-> new EzyFireAppEventImpl(this));
 		suppliers.put(EzyDisconnectUser.class, ()-> new EzyDisconnectUserImpl(this));
 		suppliers.put(EzyDisconnectSession.class, ()-> new EzyDisconnectSessionImpl(this));
+		suppliers.put(EzyHandleException.class, ()-> new EzyServerHandleExceptionImpl(getServer()));
+	}
+	
+	@Override
+	protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
+	    return (EzyExceptionHandlersFetcher) server;
+	}
+	
+	@Override
+	public void destroy() {
+	    destroyServer();
+	    destroyAppContexts();
+	    destroyPluginContexts();
+	}
+	
+	private void destroyServer() {
+	    processWithLogException(() -> ((EzyDestroyable)server).destroy());
+	}
+	
+	private void destroyAppContexts() {
+        appContextsById.values().forEach(this::destroyAppContext);
+    }
+	
+	private void destroyPluginContexts() {
+	    pluginContextsById.values().forEach(this::destroyPluginContext);
+	}
+	
+	private void destroyAppContext(EzyAppContext appContext) {
+        processWithLogException(() -> ((EzyDestroyable)appContext).destroy());
+    }
+	
+	private void destroyPluginContext(EzyPluginContext pluginContext) {
+	    processWithLogException(() -> ((EzyDestroyable)pluginContext).destroy());
 	}
 	
 }

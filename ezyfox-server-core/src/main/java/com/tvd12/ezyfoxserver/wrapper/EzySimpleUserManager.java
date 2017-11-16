@@ -6,14 +6,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
-public class EzySimpleUserManager extends EzyLoggable implements EzyUserManager {
+public abstract class EzySimpleUserManager extends EzyLoggable implements EzyUserManager {
 
+    protected final int maxUsers;
     protected final ConcurrentHashMap<String, Lock> locks = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Long, EzyUser> usersById = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<String, EzyUser> usersByName = new ConcurrentHashMap<>();
+    
+    protected EzySimpleUserManager(Builder<?> builder) {
+        this.maxUsers = builder.maxUsers;
+    }
     
     @Override
     public EzyUser getUser(long userId) {
@@ -64,5 +70,17 @@ public class EzySimpleUserManager extends EzyLoggable implements EzyUserManager 
     @Override
     public void removeLock(String username) {
         locks.remove(username);
+    }
+    
+    public abstract static class Builder<B extends Builder<B>> 
+            implements EzyBuilder<EzyUserManager> {
+        
+        protected int maxUsers = 999999;
+        
+        @SuppressWarnings("unchecked")
+        public B maxUsers(int maxUsers) {
+            this.maxUsers = maxUsers;
+            return (B)this;
+        }
     }
 }

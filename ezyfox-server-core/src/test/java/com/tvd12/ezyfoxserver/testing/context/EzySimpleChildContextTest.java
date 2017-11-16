@@ -7,6 +7,9 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleChildContext;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import com.tvd12.ezyfoxserver.util.EzyExceptionHandlers;
+import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfoxserver.util.EzyListExceptionHandlers;
 
 public class EzySimpleChildContextTest extends BaseCoreTest {
 
@@ -44,6 +47,22 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
         @Override
         protected void addUnsafeCommands(Set<Class> unsafeCommands) {
              unsafeCommands.add(UnsafeCommand.class);
+        }
+         
+        @Override
+        protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
+            return new EzyExceptionHandlersFetcher() {
+                
+                @Override
+                public EzyExceptionHandlers getExceptionHandlers() {
+                    return new EzyListExceptionHandlers();
+                }
+            };
+        }
+
+        @Override
+        public void destroy() {
+            
         }
      }
      

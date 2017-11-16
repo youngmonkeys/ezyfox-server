@@ -1,12 +1,11 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import com.tvd12.ezyfoxserver.EzyLoader;
 import com.tvd12.ezyfoxserver.EzyStarter;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyNioServerBootstrapBuilderImpl;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyNioSessionManagerImpl;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class EzyNioStarter extends EzyStarter {
 
@@ -20,14 +19,11 @@ public class EzyNioStarter extends EzyStarter {
 	}
 	
 	@Override
-	protected EzyLoader newLoader() {
-		return new EzyLoader() {
-			@Override
-			protected void addManagers(EzyManagers managers) {
-				managers.addManager(EzySessionManager.class, EzyNioSessionManagerImpl.builder().build());
-			}
-		};
+	protected EzySimpleSessionManager.Builder<?> 
+			newSessionManagerBuilder(EzySettings settings) {
+		return EzyNioSessionManagerImpl.builder();
 	}
+	
 	
 	public static Builder builder() {
     	return new Builder();

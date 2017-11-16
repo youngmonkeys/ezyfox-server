@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -11,6 +13,7 @@ import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 import lombok.Setter;
+
 
 public abstract class EzyServerBootstrap
         extends EzyLoggable
@@ -40,8 +43,8 @@ public abstract class EzyServerBootstrap
 	
 	@Override
 	public void destroy() {
-		localBootstrap.destroy();
-		httpBootstrap.destroy();
+		processWithLogException(localBootstrap::destroy);
+		processWithLogException(httpBootstrap::destroy);
 	}
 	
 	protected void startLocalBootstrap() throws Exception {

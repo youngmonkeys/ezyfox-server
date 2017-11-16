@@ -6,12 +6,12 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
-public abstract class EzyComponentStater extends EzyLoggable implements EzyStartable {
+public abstract class EzyComponentsStater extends EzyLoggable implements EzyStartable {
 
     protected EzySettings settings;
     protected EzyServerContext serverContext;
     
-    protected EzyComponentStater(Builder<?,?> builder) {
+    protected EzyComponentsStater(Builder<?,?> builder) {
         this.settings = builder.settings;
         this.serverContext = builder.serverContext;
     }
@@ -21,7 +21,7 @@ public abstract class EzyComponentStater extends EzyLoggable implements EzyStart
     
     @SuppressWarnings("unchecked")
     public static abstract class Builder
-            <T extends EzyComponentStater,B extends Builder<T,B>> 
+            <T extends EzyComponentsStater,B extends Builder<T,B>> 
             implements EzyBuilder<T> {
         protected EzySettings settings;
         protected EzyServerContext serverContext;

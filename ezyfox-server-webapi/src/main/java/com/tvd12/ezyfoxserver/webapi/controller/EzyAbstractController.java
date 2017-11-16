@@ -7,5 +7,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EzyController extends EzyServerContextUnpacker {
+public class EzyAbstractController extends EzyServerContextUnpacker {
 }

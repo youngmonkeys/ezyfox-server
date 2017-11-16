@@ -8,6 +8,9 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 
 import lombok.Setter;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
+
+
 public class EzyNioServerBootstrap extends EzyServerBootstrap {
 
 	private EzySocketServerBootstrap socketServerBootstrap;
@@ -60,8 +63,8 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	@Override
 	public void destroy() {
 		super.destroy();
-		socketServerBootstrap.destroy();
-		websocketServerBootstrap.destroy();
+		processWithLogException(socketServerBootstrap::destroy);
+		processWithLogException(websocketServerBootstrap::destroy);
 	}
 	
 }

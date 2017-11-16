@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.controller;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.forEachAppContexts;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.getSettings;
+import static com.tvd12.ezyfoxserver.context.EzyContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyContexts.getUserManager;
 
 import java.util.concurrent.locks.Lock;
@@ -36,6 +37,7 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
+import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
@@ -50,6 +52,7 @@ public class EzyLoginProcessor
     protected String userNamePattern;
 
     protected EzySettings settings;
+    protected EzyUserStatistics userStats;
     protected EzyUserLoginEvent event;
     protected EzyServerContext context;
     protected EzyServerUserManager userManager;
@@ -60,6 +63,7 @@ public class EzyLoginProcessor
     	this.context = builder.context;
     	this.settings = getSettings(context);
     	this.userManager = getUserManager(context);
+    	this.userStats = getStatistics(context).getUserStats();
     	this.userManagementSetting = settings.getUserManagement();
     	this.allowGuestLogin = userManagementSetting.isAllowGuestLogin();
     	this.guestNamePrefix = userManagementSetting.getGuestNamePrefix();
@@ -97,10 +101,14 @@ public class EzyLoginProcessor
     }
 
     protected void mapUserSession(EzyUser user, EzySession session) {
-        if(alreadyLoggedIn)
+        if(alreadyLoggedIn) {
             userManager.bind(session, user);
-        else
+        }
+        else {
             userManager.addUser(session, user);
+            userStats.addUsers(1);
+            userStats.setCurrentUsers(userManager.getUserCount());
+        }
     }
     
     protected EzyUser getUser() {

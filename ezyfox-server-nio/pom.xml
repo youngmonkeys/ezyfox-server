@@ -16,7 +16,7 @@
 	<properties>
 		<ezy.core.version>1.0.0</ezy.core.version>
 		<ezy.boot.version>1.0.0</ezy.boot.version>
-		<jetty.version>9.4.6.v20170531</jetty.version>
+		<jetty.version>9.4.7.v20170914</jetty.version>
 	</properties>
 
 	<dependencies>

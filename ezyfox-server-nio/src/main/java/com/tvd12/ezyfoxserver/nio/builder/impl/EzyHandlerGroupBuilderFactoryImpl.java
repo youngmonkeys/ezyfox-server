@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
@@ -8,6 +10,7 @@ import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.websocket.EzySimpleWsHandlerGroup;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
+import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
@@ -15,13 +18,17 @@ import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
 public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilderFactory {
 
 	protected EzyStatistics statistics;
+	protected AtomicInteger socketSessionCount;
+	protected AtomicInteger webSocketSessionCount;
 	protected EzySessionTicketsQueue socketSessionTicketsQueue;
-	protected EzySessionTicketsQueue websocketSessionTicketsQueue;
+	protected EzySessionTicketsQueue webSocketSessionTicketsQueue;
 	
 	public EzyHandlerGroupBuilderFactoryImpl(Builder builder) {
 		this.statistics = builder.statistics;
+		this.socketSessionCount = new AtomicInteger(0);
+		this.webSocketSessionCount = new AtomicInteger(0);
 		this.socketSessionTicketsQueue = builder.socketSessionTicketsQueue;
-		this.websocketSessionTicketsQueue = builder.websocketSessionTicketsQueue;
+		this.webSocketSessionTicketsQueue = builder.webSocketSessionTicketsQueue;
 	}
 	
 	@Override
@@ -36,6 +43,8 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderBySocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleNioHandlerGroup.builder();
+		builder.sessionCount(socketSessionCount);
+		builder.sessionStats(getSocketSessionStats());
 		builder.networkStats(getSocketNetworkStats());
 		builder.sessionTicketsQueue(socketSessionTicketsQueue);
 		return builder;
@@ -43,9 +52,19 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	
 	private EzyAbstractHandlerGroup.Builder newBuilderByWebSocketType() {
 		EzyAbstractHandlerGroup.Builder builder = EzySimpleWsHandlerGroup.builder();
+		builder.sessionCount(webSocketSessionCount);
+		builder.sessionStats(getWebSocketSessionStats());
 		builder.networkStats(getWebSocketNetworkStats());
-		builder.sessionTicketsQueue(websocketSessionTicketsQueue);
+		builder.sessionTicketsQueue(webSocketSessionTicketsQueue);
 		return builder;
+	}
+	
+	private EzySessionStats getSocketSessionStats() {
+		return (EzySessionStats) getSocketStatistics().getSessionStats();
+	}
+	
+	private EzySessionStats getWebSocketSessionStats() {
+		return (EzySessionStats) getWebSocketStatistics().getSessionStats();
 	}
 	
 	private EzyNetworkStats getSocketNetworkStats() {
@@ -71,7 +90,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 	public static class Builder implements EzyBuilder<EzyHandlerGroupBuilderFactory> {
 		protected EzyStatistics statistics;
 		private EzySessionTicketsQueue socketSessionTicketsQueue;
-		private EzySessionTicketsQueue websocketSessionTicketsQueue;
+		private EzySessionTicketsQueue webSocketSessionTicketsQueue;
 		
 		public Builder statistics(EzyStatistics statistics) {
 			this.statistics = statistics;
@@ -83,8 +102,8 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 			return this;
 		}
 		
-		public Builder websocketSessionTicketsQueue(EzySessionTicketsQueue websocketSessionTicketsQueue) {
-			this.websocketSessionTicketsQueue = websocketSessionTicketsQueue;
+		public Builder webSocketSessionTicketsQueue(EzySessionTicketsQueue webSocketSessionTicketsQueue) {
+			this.webSocketSessionTicketsQueue = webSocketSessionTicketsQueue;
 			return this;
 		}
 		

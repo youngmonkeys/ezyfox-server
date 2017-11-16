@@ -4,11 +4,12 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
+import com.tvd12.ezyfoxserver.ext.EzyEntryAware;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntryLoader;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
-public class EzyPluginsStarter extends EzyComponentStater {
+public class EzyPluginsStarter extends EzyComponentsStater {
 
     protected EzyPluginsStarter(Builder builder) {
         super(builder);
@@ -28,7 +29,10 @@ public class EzyPluginsStarter extends EzyComponentStater {
     protected void startPlugin(String pluginName) {
         try {
             getLogger().debug("plugin " + pluginName + " loading...");
-            startPlugin(pluginName, newPluginEntryLoader(pluginName));
+            EzyPluginContext context = serverContext.getPluginContext(pluginName);
+            EzyPlugin plugin = context.getPlugin();
+            EzyPluginEntry entry = startPlugin(pluginName, newPluginEntryLoader(pluginName));
+            ((EzyEntryAware)plugin).setEntry(entry);
             getLogger().debug("plugin " + pluginName + " loaded");
         }
         catch(Exception e) {
@@ -36,14 +40,12 @@ public class EzyPluginsStarter extends EzyComponentStater {
         } 
     }
     
-    protected void startPlugin(String pluginName, EzyPluginEntryLoader loader) 
+    protected EzyPluginEntry startPlugin(String pluginName, EzyPluginEntryLoader loader) 
             throws Exception {
-        startPlugin(pluginName, loader.load());
-    }
-    
-    protected void startPlugin(String pluginName, EzyPluginEntry entry) throws Exception {
+        EzyPluginEntry entry = loader.load();
         entry.config(getPluginContext(pluginName));
         entry.start();
+        return entry;
     }
     
     @JsonIgnore
@@ -78,7 +80,7 @@ public class EzyPluginsStarter extends EzyComponentStater {
         return new Builder();
     }
     
-    public static class Builder extends EzyComponentStater.Builder<EzyPluginsStarter, Builder> {
+    public static class Builder extends EzyComponentsStater.Builder<EzyPluginsStarter, Builder> {
         @Override
         public EzyPluginsStarter build() {
             return new EzyPluginsStarter(this);

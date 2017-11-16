@@ -67,13 +67,13 @@
 		<google.guava.version>21.0</google.guava.version>
 		<reflections.version>0.9.11</reflections.version>
 		<commons.codec.version>1.10</commons.codec.version>
-		<properties.file.version>1.0.3</properties.file.version>
+		<properties.file.version>1.0.4</properties.file.version>
 		
 		<commons.io.version>2.5</commons.io.version>
 		<lombok.version>1.16.10</lombok.version>
 		<logback.version>1.1.7</logback.version>
 		<groovy.version>2.4.6</groovy.version>
-		<jackson.version>2.8.6</jackson.version>
+		<jackson.version>2.8.10</jackson.version>
 		
 		<directory.lib>lib</directory.lib>
 		<deploy.path>${env.EZYFOX_SERVER_HOME}</deploy.path>

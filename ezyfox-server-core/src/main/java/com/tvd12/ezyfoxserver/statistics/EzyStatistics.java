@@ -4,6 +4,8 @@ public interface EzyStatistics {
 
     long getStartTime();
     
+    EzyUserStatistics getUserStats();
+    
     EzySocketStatistics getSocketStats();
     
     EzyWebSocketStatistics getWebSocketStats();

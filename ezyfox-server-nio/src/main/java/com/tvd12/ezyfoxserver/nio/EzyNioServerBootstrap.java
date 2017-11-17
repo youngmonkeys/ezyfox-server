@@ -10,12 +10,16 @@ import lombok.Setter;
 
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
+import javax.net.ssl.SSLContext;
+
 
 public class EzyNioServerBootstrap extends EzyServerBootstrap {
 
 	private EzySocketServerBootstrap socketServerBootstrap;
 	private EzyWebSocketServerBootstrap websocketServerBootstrap;
 	
+	@Setter
+	private SSLContext sslContext;
 	@Setter
 	private EzyHandlerGroupManager handlerGroupManager;
 	@Setter
@@ -55,6 +59,7 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	private EzyWebSocketServerBootstrap newWebSocketServerBootstrap() {
 		return EzyWebSocketServerBootstrap.builder()
 				.serverContext(context)
+				.sslContext(sslContext)
 				.handlerGroupManager(handlerGroupManager)
 				.sessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();

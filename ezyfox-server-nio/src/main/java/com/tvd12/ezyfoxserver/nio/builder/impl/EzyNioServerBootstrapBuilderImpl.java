@@ -37,6 +37,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
 		bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
+		bootstrap.setSslContext(newSslContext(getWebsocketSettings().getSslConfig()));
 		return bootstrap;
 	}
 	

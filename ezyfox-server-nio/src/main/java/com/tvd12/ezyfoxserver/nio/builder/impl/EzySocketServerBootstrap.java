@@ -20,8 +20,7 @@ import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
-public class EzySocketServerBootstrap
-		implements EzyStartable, EzyDestroyable {
+public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	private Selector readSelector;
 	private Selector acceptSelector;
@@ -55,7 +54,6 @@ public class EzySocketServerBootstrap
 		processWithLogException(socketAcceptor::destroy);
 		processWithLogException(socketWriter::destroy);
 		processWithLogException(socketReader::destroy);
-		processWithLogException(serverSocket::close);
 		processWithLogException(serverSocket::close);
 		processWithLogException(serverSocketChannel::close);
 	}

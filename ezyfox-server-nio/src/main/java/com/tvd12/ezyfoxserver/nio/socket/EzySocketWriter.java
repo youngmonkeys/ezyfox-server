@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.nio.channels.SocketChannel;
 
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -22,7 +24,7 @@ public class EzySocketWriter extends EzySocketHandler {
 	@Override
 	protected void tryDestroy() throws Exception {
 		super.tryDestroy();
-		this.sessionTicketsQueue.clear();
+		processWithLogException(sessionTicketsQueue::clear);
 	}
 	
 	@Override

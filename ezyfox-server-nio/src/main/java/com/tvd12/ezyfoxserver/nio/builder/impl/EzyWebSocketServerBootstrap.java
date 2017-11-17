@@ -41,6 +41,7 @@ public class EzyWebSocketServerBootstrap
 	
 	@Override
 	public void destroy() {
+		processWithLogException(socketWriter::destroy);
 		processWithLogException(server::stop);
 	}
 	

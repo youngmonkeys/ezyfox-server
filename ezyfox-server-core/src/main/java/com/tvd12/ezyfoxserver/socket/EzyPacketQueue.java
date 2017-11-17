@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.socket;
+package com.tvd12.ezyfoxserver.socket;
 
 public interface EzyPacketQueue {
 
@@ -10,6 +10,6 @@ public interface EzyPacketQueue {
 	
 	boolean isEmpty();
 
-	void add(EzyPacket packet);
+	boolean add(EzyPacket packet);
 	
 }

@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.socket;
+package com.tvd12.ezyfoxserver.socket;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -9,7 +9,7 @@ public class EzyNonBlockingPacketQueue implements EzyPacketQueue {
 	private final Queue<EzyPacket> queue = new ConcurrentLinkedQueue<>();
 	
 	public EzyNonBlockingPacketQueue() {
-		this(512);
+		this(1024);
 	}
 	
 	public EzyNonBlockingPacketQueue(int capacity) {
@@ -37,8 +37,8 @@ public class EzyNonBlockingPacketQueue implements EzyPacketQueue {
 	}
 	
 	@Override
-	public void add(EzyPacket packet) {
-		queue.add(packet);
+	public boolean add(EzyPacket packet) {
+		return queue.offer(packet);
 	}
 	
 }

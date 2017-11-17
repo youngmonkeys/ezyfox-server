@@ -6,6 +6,9 @@ import java.nio.channels.SocketChannel;
 
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
+import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 public class EzySocketWriter extends EzySocketHandler {
 

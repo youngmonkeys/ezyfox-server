@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.nio.entity;
 
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.nio.socket.EzyPacketQueue;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 public interface EzyNioSession extends EzySession {
 

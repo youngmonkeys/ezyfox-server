@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
-import com.tvd12.ezyfoxserver.nio.socket.EzyPacket;
-import com.tvd12.ezyfoxserver.nio.socket.EzyPacketQueue;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketHandler;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
+import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 public class EzyWsWriter extends EzySocketHandler {
 

@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.nio;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzySocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerBootstrap;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 import lombok.Setter;
 

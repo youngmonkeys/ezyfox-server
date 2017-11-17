@@ -8,13 +8,13 @@ import java.nio.channels.ServerSocketChannel;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketReader;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 

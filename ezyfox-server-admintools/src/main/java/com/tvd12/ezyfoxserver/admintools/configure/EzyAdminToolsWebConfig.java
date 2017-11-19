@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -15,8 +16,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = {
-		"com.tvd12.ezyfoxserver.admintools.controller"
+		"com.tvd12.ezyfoxserver.admintools"
 })
+@PropertySource("classpath:config.properties")
 public class EzyAdminToolsWebConfig extends WebMvcConfigurerAdapter {
 
 	
@@ -28,9 +30,14 @@ public class EzyAdminToolsWebConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**")
-				.addResourceLocations("/resources/");
+		registry.addResourceHandler("/css/**")
+				.addResourceLocations("/css/");
+		registry.addResourceHandler("/js/**")
+				.addResourceLocations("/js/");
+		registry.addResourceHandler("/font-awesome/**")
+				.addResourceLocations("/font-awesome/");
 	}
+	
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		registry.freeMarker();

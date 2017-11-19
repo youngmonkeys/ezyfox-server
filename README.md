@@ -72,7 +72,7 @@ public class EzyChatUserRequestHandler extends EzyClientRequestHandler implement
 }
 ```
 
-**5. Auto serialize **
+**5. Auto serialize**
 
 ```java
 @Getter

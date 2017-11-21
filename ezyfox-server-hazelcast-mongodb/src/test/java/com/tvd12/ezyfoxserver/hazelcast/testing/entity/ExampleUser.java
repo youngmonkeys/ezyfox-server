@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.hazelcast.testing.entity;
 
 import java.io.Serializable;
 
-import com.tvd12.ezyfoxserver.database.entity.EzyHasIdEntity;
+import com.tvd12.ezyfoxserver.util.EzyHasIdEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

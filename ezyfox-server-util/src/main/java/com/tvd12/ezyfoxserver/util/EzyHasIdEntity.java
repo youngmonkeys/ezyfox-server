@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.database.entity;
+package com.tvd12.ezyfoxserver.util;
 
 public interface EzyHasIdEntity<I> {
 

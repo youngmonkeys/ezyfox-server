@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.constant;
 
-public interface EzyHasId {
+public interface EzyHasIntId {
 
 	int getId();
 	

@@ -2,14 +2,14 @@ package com.tvd12.ezyfoxserver.util;
 
 import java.util.function.Function;
 
-import com.tvd12.ezyfoxserver.constant.EzyHasId;
+import com.tvd12.ezyfoxserver.constant.EzyHasIntId;
 
 public final class EzyEnums {
 
 	private EzyEnums() {
 	}
 	
-	public static <T extends EzyHasId> T valueOf(T[] values, int id) {
+	public static <T extends EzyHasIntId> T valueOf(T[] values, int id) {
 		return valueOf(values, id, v -> v.getId());
 	}
 	

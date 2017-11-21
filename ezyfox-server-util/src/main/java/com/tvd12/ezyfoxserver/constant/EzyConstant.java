@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
 
-public interface EzyConstant extends EzyHasId, EzyHasName {
+public interface EzyConstant extends EzyHasIntId, EzyHasName {
 
 	// the counter utility
 	AtomicInteger COUNTER = new AtomicInteger(0);

@@ -76,6 +76,14 @@ public class EzyInstructionTest extends BaseTest {
 		
 		instruction = new EzyInstruction("", "", true);
 		assertEquals(instruction.append((Object)"hello").toString(false), "hello");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.invoke("object", "hello");
+		assertEquals(instruction.toString(false), "hello.hello()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.invoke("object", "hello", "arg0", "arg1");
+		assertEquals(instruction.toString(false), "hello.hello(arg0, arg1)");
 	}
 	
 	public static class A {

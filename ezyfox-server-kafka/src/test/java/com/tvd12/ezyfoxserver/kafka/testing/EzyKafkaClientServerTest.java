@@ -24,7 +24,7 @@ import com.tvd12.ezyfoxserver.kafka.record.EzyKafkaSimpleConsumerRecordReader;
 import com.tvd12.ezyfoxserver.kafka.record.EzyKafkaSimpleProducerRecordCreator;
 import com.tvd12.ezyfoxserver.kafka.testing.entity.KafkaChatMessage;
 import com.tvd12.ezyfoxserver.message.EzyMessageIdFetchers;
-import com.tvd12.ezyfoxserver.message.handler.EzyMessageHandler;
+import com.tvd12.ezyfoxserver.util.EzyDataHandler;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.test.base.BaseTest;
 
@@ -59,9 +59,9 @@ public class EzyKafkaClientServerTest extends BaseTest {
 		server.setConsumer(consumer);
 		server.setRecordReader(recordReader);
 		server.setMessageConfig(messageConfig);
-		server.addMessagesHandler(new EzyMessageHandler<List<KafkaChatMessage>>() {
+		server.addDataHandler(new EzyDataHandler<List<KafkaChatMessage>>() {
 			@Override
-			public void handleMessage(List<KafkaChatMessage> messages) {
+			public void handleData(List<KafkaChatMessage> messages) {
 				System.out.println("GREAT! We have just received message: " + messages);
 			}
 		});

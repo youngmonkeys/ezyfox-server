@@ -11,11 +11,11 @@ import com.tvd12.ezyfoxserver.function.EzyApply;
 import com.tvd12.ezyfoxserver.kafka.message.EzyKafkaMessage;
 import com.tvd12.ezyfoxserver.kafka.message.EzyKafkaMessageConfig;
 import com.tvd12.ezyfoxserver.kafka.record.EzyKafkaConsumerRecordReader;
-import com.tvd12.ezyfoxserver.message.handler.EzyListMessageHandlers;
-import com.tvd12.ezyfoxserver.message.handler.EzyMessageHandler;
-import com.tvd12.ezyfoxserver.message.handler.EzyMessageHandlers;
+import com.tvd12.ezyfoxserver.util.EzyDataHandler;
+import com.tvd12.ezyfoxserver.util.EzyDataHandlers;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlers;
+import com.tvd12.ezyfoxserver.util.EzyListDataHandlers;
 import com.tvd12.ezyfoxserver.util.EzyListExceptionHandlers;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -39,7 +39,7 @@ public class EzyKafkaSimpleServer
 
 	protected volatile boolean loop = false;
 	
-	protected EzyMessageHandlers messageHandlers = new EzyListMessageHandlers();
+	protected EzyDataHandlers dataHandlers = new EzyListDataHandlers();
 	protected EzyExceptionHandlers exceptionHandlers = new EzyListExceptionHandlers(); 
 	
 	@Override
@@ -65,7 +65,7 @@ public class EzyKafkaSimpleServer
 			ConsumerRecords records = consumer.poll(poolTimeOut);
 			if(records.isEmpty()) return;
 			List<EzyKafkaMessage> messages = readRecords(records);
-			messageHandlers.handleMessage(messages);
+			dataHandlers.handleData(messages);
 			commitScript.apply(consumer);
 		}
 		catch(Exception e) {
@@ -90,8 +90,8 @@ public class EzyKafkaSimpleServer
 	}
 
 	@Override
-	public void addMessagesHandler(EzyMessageHandler messageHandler) {
-		messageHandlers.addMessageHandler(messageHandler);
+	public void addDataHandler(EzyDataHandler dataHandler) {
+		dataHandlers.addDataHandler(dataHandler);
 	}
 
 	@Override

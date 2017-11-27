@@ -1,7 +1,6 @@
-package com.tvd12.ezyfoxserver.nio.socket;
+package com.tvd12.ezyfoxserver.socket;
 
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
-import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 import lombok.Getter;
 import lombok.Setter;

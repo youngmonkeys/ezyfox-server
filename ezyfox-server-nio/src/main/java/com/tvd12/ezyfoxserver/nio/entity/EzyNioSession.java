@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.entity;
 
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 public interface EzyNioSession extends EzySession {
 
@@ -28,19 +26,5 @@ public interface EzyNioSession extends EzySession {
 	 * @return the connection
 	 */
 	<T> T getConnection();
-	
-	/**
-	 * Get packet queue
-	 * 
-	 * @return the packet queue
-	 */
-	EzyPacketQueue getPacketQueue();
-	
-	/**
-	 * set session tickets queue
-	 * 
-	 * @param queue the queue
-	 */
-	void setSessionTicketsQueue(EzySessionTicketsQueue queue);
 	
 }

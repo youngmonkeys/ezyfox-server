@@ -13,41 +13,32 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
+import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 
-public class EzySocketAcceptor extends EzySocketHandler {
+import lombok.Setter;
 
+public class EzyNioSocketAcceptor 
+		extends EzySocketAbstractEventHandler
+		implements EzyHandlerGroupManagerAware {
+
+	@Setter
 	private boolean tcpNoDelay;
+	@Setter
 	private Selector ownSelector;
+	@Setter
 	private Selector readSelector;
-	
-	public EzySocketAcceptor(Builder builder) {
-		super(builder);
-		this.tcpNoDelay = builder.tcpNoDelay;
-		this.ownSelector = builder.ownSelector;
-		this.readSelector = builder.readSelector;
-	}
-
-	@Override
-	protected String getThreadName() {
-		return "socket-acceptor";
-	}
+	@Setter
+	protected EzyHandlerGroupManager handlerGroupManager;
 	
 	@Override
-	protected void tryDestroy() throws Exception {
-		super.tryDestroy();
+	public void destroy() {
 		processWithLogException(ownSelector::close);
 	}
-	
+
 	@Override
-	protected void tryLoop() {
-		getLogger().info("socket-acceptor threadpool has started");
-		while(active) {
-			tryProcessReadyKeys();
-		}
-		getLogger().info("socket-acceptor threadpool shutting down");
-	}
-	
-	private void tryProcessReadyKeys() {
+	public void handleEvent() {
 		try {
 			processReadyKeys();
 		}
@@ -89,37 +80,6 @@ public class EzySocketAcceptor extends EzySocketHandler {
 
 		SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
 		session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
-	}
-	
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder extends EzySocketHandler.Builder<Builder> {
-		
-		private boolean tcpNoDelay;
-		private Selector ownSelector;
-		private Selector readSelector;
-		
-		public Builder tcpNoDelay(boolean tcpNoDelay) {
-			this.tcpNoDelay = tcpNoDelay;
-			return this;
-		}
-		
-		public Builder ownSelector(Selector ownSelector) {
-			this.ownSelector = ownSelector;
-			return this;
-		}
-		
-		public Builder readSelector(Selector readSelector) {
-			this.readSelector = readSelector;
-			return this;
-		}
-		
-		@Override
-		public EzySocketAcceptor build() {
-			return new EzySocketAcceptor(this);
-		}
 	}
 	
 }

@@ -34,7 +34,7 @@ public class EzySimpleSession extends EzyAbstractSession implements EzyNioSessio
 	
 	@Override
 	public <T> T getConnection() {
-		return channel.getConnection();
+		return channel != null ? channel.getConnection() : null;
 	}
 	
 	@Override
@@ -53,5 +53,4 @@ public class EzySimpleSession extends EzyAbstractSession implements EzyNioSessio
 		this.packetQueue.clear();
 		this.channel = null;
 	}
-	
 }

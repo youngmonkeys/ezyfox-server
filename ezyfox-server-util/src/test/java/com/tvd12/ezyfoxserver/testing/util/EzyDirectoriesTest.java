@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.util;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -9,7 +11,6 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.util.EzyDirectories;
 import com.tvd12.test.base.BaseTest;
-import static org.testng.Assert.*;
 
 public class EzyDirectoriesTest extends BaseTest {
 
@@ -67,4 +68,11 @@ public class EzyDirectoriesTest extends BaseTest {
 		assert directories.toString() != null;
 	}
 	
+	@Test
+	public void test2() {
+		String tree = new EzyDirectories()
+				.directory("tree-for-test/a.txt")
+				.printTree(true);
+		System.out.println(tree);
+	}
 }

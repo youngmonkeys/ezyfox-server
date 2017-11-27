@@ -42,6 +42,13 @@ public class EzyDirectories {
         return FileUtils.listFiles(directory, extensions, recursive);
     }
     
+    public String printTree( boolean printFile) {
+    	return EzyFolderTreePrinter.builder()
+    			.printFile(printFile)
+    			.build()
+    			.print(directory);
+    }
+    
     private URL[] getURLs(Collection<File> files) throws IOException {
         return FileUtils.toURLs(files.toArray(new File[files.size()]));
     }
@@ -49,6 +56,10 @@ public class EzyDirectories {
     public EzyDirectories directory(File directory) {
         this.directory = directory;
         return this;
+    }
+    
+    public EzyDirectories directory(String directoryPath) {
+        return directory(new File(directoryPath));
     }
     
     @Override

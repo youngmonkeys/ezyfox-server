@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.hazelcast.testing.service;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
-import com.tvd12.ezyfoxserver.hazelcast.impl.EzySimpleServiceImplementor;
+import com.tvd12.ezyfoxserver.hazelcast.impl.EzySimpleServiceImplementer;
 import com.tvd12.ezyfoxserver.hazelcast.service.EzySimpleHazelcastMapService;
 import com.tvd12.ezyfoxserver.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezyfoxserver.reflect.EzyClass;
@@ -13,9 +13,9 @@ public class TryTest extends HazelcastBaseTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
-		EzySimpleServiceImplementor implementor =
-				new EzySimpleServiceImplementor(new EzyClass(PersonMapService.class));
-		PersonMapService service = (PersonMapService)implementor.implement(HZ_INSTANCE);
+		EzySimpleServiceImplementer implementer =
+				new EzySimpleServiceImplementer(new EzyClass(PersonMapService.class));
+		PersonMapService service = (PersonMapService)implementer.implement(HZ_INSTANCE);
 		service.clear();
 		assert service.isEmpty();
 		service.put(new Person("dung", 25));

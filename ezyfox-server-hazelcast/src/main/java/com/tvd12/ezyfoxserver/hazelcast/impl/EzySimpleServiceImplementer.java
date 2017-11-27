@@ -18,13 +18,13 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtNewMethod;
 
-public class EzySimpleServiceImplementor {
+public class EzySimpleServiceImplementer {
 
 	private final EzyClass clazz;
 	
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
 	
-	public EzySimpleServiceImplementor(EzyClass clazz) {
+	public EzySimpleServiceImplementer(EzyClass clazz) {
 		this.clazz = clazz;
 		this.checkInterface(clazz);
 	}

@@ -15,17 +15,17 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtNewMethod;
 
-public abstract class EzySimpleRepositoryImplementor {
+public abstract class EzySimpleRepositoryImplementer {
 
 	private final EzyClass clazz;
 	
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
 	
-	public EzySimpleRepositoryImplementor(Class<?> clazz) {
+	public EzySimpleRepositoryImplementer(Class<?> clazz) {
 		this(new EzyClass(clazz));
 	}
 	
-	public EzySimpleRepositoryImplementor(EzyClass clazz) {
+	public EzySimpleRepositoryImplementer(EzyClass clazz) {
 		this.clazz = clazz;
 	}
 	

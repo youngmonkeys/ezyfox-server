@@ -3,23 +3,23 @@ package com.tvd12.ezyfoxserver.hazelcast.testing;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.hazelcast.annotation.EzyMapServiceAutoImpl;
-import com.tvd12.ezyfoxserver.hazelcast.impl.EzySimpleServiceImplementor;
+import com.tvd12.ezyfoxserver.hazelcast.impl.EzySimpleServiceImplementer;
 import com.tvd12.ezyfoxserver.reflect.EzyClass;
 
-public class EzySimpleServiceImplementorTest extends HazelcastBaseTest {
+public class EzySimpleServiceImplementerTest extends HazelcastBaseTest {
 
 	@Test(expectedExceptions = {IllegalArgumentException.class})
 	public void test() {
-		EzySimpleServiceImplementor implementor = 
-				new EzySimpleServiceImplementor(new EzyClass(ClassA.class));
-		implementor.implement(HZ_INSTANCE);
+		EzySimpleServiceImplementer implementer = 
+				new EzySimpleServiceImplementer(new EzyClass(ClassA.class));
+		implementer.implement(HZ_INSTANCE);
 	}
 	
 	@Test(expectedExceptions = {IllegalStateException.class})
 	public void test2() {
-		EzySimpleServiceImplementor implementor = 
-				new EzySimpleServiceImplementor(new EzyClass(InterfaceA.class));
-		implementor.implement(null);
+		EzySimpleServiceImplementer implementer = 
+				new EzySimpleServiceImplementer(new EzyClass(InterfaceA.class));
+		implementer.implement(null);
 	}
 	
 	@EzyMapServiceAutoImpl("a")

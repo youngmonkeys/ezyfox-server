@@ -14,32 +14,32 @@ import com.tvd12.ezyfoxserver.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfoxserver.reflect.EzyPackages;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
-public abstract class EzySimpleRepositoriesImplementor
+public abstract class EzySimpleRepositoriesImplementer
 		extends EzyLoggable
-		implements EzyRepositoriesImplementor {
+		implements EzyRepositoriesImplementer {
 
 	protected Set<Class<?>> autoImplInterfaces;
 	
-	public EzySimpleRepositoriesImplementor() {
+	public EzySimpleRepositoriesImplementer() {
 		this.autoImplInterfaces = new HashSet<>();
 	}
 	
-	public EzyRepositoriesImplementor scan(String packageName) {
+	public EzyRepositoriesImplementer scan(String packageName) {
 		autoImplInterfaces.addAll(getAutoImplRepoInterfaces(packageName));
 		return this;
 	}
 	
-	public EzyRepositoriesImplementor scan(String... packageNames) {
+	public EzyRepositoriesImplementer scan(String... packageNames) {
 		return scan(Sets.newHashSet(packageNames));
 	}
 	
-	public EzyRepositoriesImplementor scan(Iterable<String> packageNames) {
+	public EzyRepositoriesImplementer scan(Iterable<String> packageNames) {
 		packageNames.forEach(this::scan);
 		return this;	
 	}
 	
 	@Override
-	public EzyRepositoriesImplementor repositoryInterface(Class<?> itf) {
+	public EzyRepositoriesImplementer repositoryInterface(Class<?> itf) {
 		if(!Modifier.isInterface(itf.getModifiers())) {
 			getLogger().warn("class {} is not an interface, ignore its", itf.getSimpleName());
 		}
@@ -54,12 +54,12 @@ public abstract class EzySimpleRepositoriesImplementor
 	}
 	
 	@Override
-	public EzyRepositoriesImplementor repositoryInterfaces(Class<?>... itfs) {
+	public EzyRepositoriesImplementer repositoryInterfaces(Class<?>... itfs) {
 		return repositoryInterfaces(Sets.newHashSet(itfs));
 	}
 	
 	@Override
-	public EzyRepositoriesImplementor repositoryInterfaces(Iterable<Class<?>> itfs) {
+	public EzyRepositoriesImplementer repositoryInterfaces(Iterable<Class<?>> itfs) {
 		itfs.forEach(this::repositoryInterface);
 		return this;
 	}
@@ -75,11 +75,11 @@ public abstract class EzySimpleRepositoriesImplementor
 	}
 	
 	private Object implementRepoInterface(Class<?> itf, Object template) {
-		EzySimpleRepositoryImplementor implementor = newRepoImplementor(itf);
-		return implementor.implement(template);
+		EzySimpleRepositoryImplementer implementer = newRepoImplementer(itf);
+		return implementer.implement(template);
 	}
 	
-	protected abstract EzySimpleRepositoryImplementor newRepoImplementor(Class<?> itf);
+	protected abstract EzySimpleRepositoryImplementer newRepoImplementer(Class<?> itf);
 	
 	private Set<Class<?>> getRepoInterfaces(String packageName) {
 		return EzyPackages.getExtendsClasses(packageName, EzyMongoRepository.class);

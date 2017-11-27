@@ -25,7 +25,7 @@ public abstract class EzySocketHandler
 	public EzySocketHandler(Builder<?> builder) {
 		this.threadPoolSize = builder.threadPoolSize;
 		this.handlerGroupManager = builder.handlerGroupManager;
-		this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize, "socket-acceptor");
+		this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize, getThreadName());
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> threadPool.shutdown()));
 	}
 	

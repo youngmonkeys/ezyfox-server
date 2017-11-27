@@ -29,6 +29,9 @@ public class EzyClassTest extends BaseTest {
 		assertTrue(clazz.getSetterMethods(m -> !m.getName().contains("D")).size() == 4);
 		assertTrue(clazz.getGetterMethods(m -> !m.getName().contains("D")).size() == 4);
 		assertTrue(clazz.getGetterMethods(m -> !m.getName().contains("D")).size() == 4);
+		assertTrue(clazz.getField(f -> f.getName().equals("a")) != null);
+		assertTrue(clazz.getMethod(m -> m.getName().equals("getE")) != null);
+		assertTrue(clazz.getPublicMethod(m -> m.getName().equals("getE")) != null);
 		System.err.println("size = " + clazz.getMethods(m -> !m.getName().contains("D")).size());
 		assertEquals(clazz.getMethods(m -> !m.getName().contains("D")).size(), 9 + 2);
 		assertEquals(clazz.getFields().size(), 10 + 2);
@@ -57,6 +60,7 @@ public class EzyClassTest extends BaseTest {
 		clazz.getDeclaredConstructor();
 		
 		assert clazz.getModifiers() == clazz.getClazz().getModifiers();
+		
 	}
 	
 	public static class B {

@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
-import java.net.InetSocketAddress;
-
+import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
@@ -18,22 +18,9 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
 public class EzyWebSocketServerCreator {
 
-	private int port;
-	private String address;
-
-	private EzyWebSocketSetting settings;
-	private EzyHandlerGroupManager handlerGroupManager;
-	private EzySessionManagementSetting sessionSettings;
-	
-	public EzyWebSocketServerCreator port(int port) {
-		this.port = port;
-		return this;
-	}
-	
-	public EzyWebSocketServerCreator address(String address) {
-		this.address = address;
-		return this;
-	}
+	protected EzyWebSocketSetting settings;
+	protected EzyHandlerGroupManager handlerGroupManager;
+	protected EzySessionManagementSetting sessionSettings;
 	
 	public EzyWebSocketServerCreator settings(EzyWebSocketSetting settings) {
 		this.settings = settings;
@@ -55,9 +42,22 @@ public class EzyWebSocketServerCreator {
 		contextHandler.setAllowNullPathInfo(true);
 		EzyWsHandler wsHandler = newWsHandler();
 		contextHandler.setHandler(newWebSocketHandler(wsHandler));
-		Server server = new Server(newSocketAddress());
+		Server server = new Server();
 		server.setHandler(contextHandler);
+		HttpConfiguration httpConfig = new HttpConfiguration();
+		httpConfig.setSecureScheme("https");
+		httpConfig.setSecurePort(settings.getSslPort());
+		ServerConnector wsConnector = new ServerConnector(server);
+		wsConnector.setPort(settings.getPort());
+		wsConnector.setHost(settings.getAddress());
+		server.addConnector(wsConnector);
+		configServer(server, httpConfig, wsConnector);
 		return server;
+	}
+	
+	protected void configServer(
+			Server server, HttpConfiguration httpConfig, ServerConnector wsConnector) {
+		
 	}
 	
 	private EzyWsHandler newWsHandler() {
@@ -65,10 +65,6 @@ public class EzyWebSocketServerCreator {
 				.settings(sessionSettings)
 				.handlerGroupManager(handlerGroupManager)
 				.build();
-	}
-	
-	private InetSocketAddress newSocketAddress() {
-		return new InetSocketAddress(address, port);
 	}
 	
 	private WebSocketCreator newWebSocketCreator(EzyWsHandler handler) {

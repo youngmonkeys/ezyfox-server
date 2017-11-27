@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.hazelcast.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.tvd12.ezyfoxserver.database.entity.EzyHasIdEntity;
+import com.tvd12.ezyfoxserver.util.EzyHasIdEntity;
 
 public interface EzyAccount extends EzyHasIdEntity<Long>, Serializable {
 

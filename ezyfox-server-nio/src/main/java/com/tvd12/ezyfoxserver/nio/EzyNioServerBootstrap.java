@@ -3,12 +3,14 @@ package com.tvd12.ezyfoxserver.nio;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzySocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerBootstrap;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 import lombok.Setter;
 
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
+
+import javax.net.ssl.SSLContext;
 
 
 public class EzyNioServerBootstrap extends EzyServerBootstrap {
@@ -16,6 +18,8 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	private EzySocketServerBootstrap socketServerBootstrap;
 	private EzyWebSocketServerBootstrap websocketServerBootstrap;
 	
+	@Setter
+	private SSLContext sslContext;
 	@Setter
 	private EzyHandlerGroupManager handlerGroupManager;
 	@Setter
@@ -55,6 +59,7 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	private EzyWebSocketServerBootstrap newWebSocketServerBootstrap() {
 		return EzyWebSocketServerBootstrap.builder()
 				.serverContext(context)
+				.sslContext(sslContext)
 				.handlerGroupManager(handlerGroupManager)
 				.sessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();

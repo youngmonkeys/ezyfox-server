@@ -15,7 +15,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;

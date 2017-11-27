@@ -10,7 +10,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.query.EntryObject;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.PredicateBuilder;
-import com.tvd12.ezyfoxserver.database.entity.EzyHasIdEntity;
+import com.tvd12.ezyfoxserver.util.EzyHasIdEntity;
 
 public abstract class EzySimpleHazelcastMapService<K,V>
 		extends EzyAbstractMapService<K, V>

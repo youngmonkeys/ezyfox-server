@@ -9,10 +9,10 @@ import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
-import com.tvd12.ezyfoxserver.nio.socket.EzyBlockingSessionTicketsQueue;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
+import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 public class EzyNioServerBootstrapBuilderImpl
 		extends EzyHttpServerBootstrapBuilder 
@@ -37,6 +37,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
 		bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
+		bootstrap.setSslContext(newSslContext(getWebsocketSettings().getSslConfig()));
 		return bootstrap;
 	}
 	

@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.asm;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.reflect.EzyTypes;
 
@@ -124,6 +126,17 @@ public class EzyInstruction {
 				.append("(").append(expression).append(")")
 			.append(")");
 		return this;
+	}
+	
+	public EzyInstruction function(String method, String... args) {
+		return append(method)
+				.brackets(StringUtils.join(args, ", "));
+	}
+	
+	public EzyInstruction invoke(String object, String method, String... args) {
+		return append(method)
+				.dot()
+				.function(method, args);
 	}
 	
 	@SuppressWarnings("rawtypes")

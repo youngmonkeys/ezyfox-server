@@ -2,16 +2,18 @@ package com.tvd12.ezyfoxserver.nio.builder.impl;
 
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
+import javax.net.ssl.SSLContext;
+
 import org.eclipse.jetty.server.Server;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.nio.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWriter;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
@@ -19,6 +21,7 @@ public class EzyWebSocketServerBootstrap
 		implements EzyStartable, EzyDestroyable {
 
 	private Server server;
+	private SSLContext sslContext;
 	private EzyWsWriter socketWriter;
 	
 	private EzyServerContext serverContext;
@@ -26,6 +29,7 @@ public class EzyWebSocketServerBootstrap
 	private EzySessionTicketsQueue sessionTicketsQueue;
 	
 	public EzyWebSocketServerBootstrap(Builder builder) {
+		this.sslContext = builder.sslContext;
 		this.serverContext = builder.serverContext;
 		this.handlerGroupManager = builder.handlerGroupManager;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
@@ -41,13 +45,12 @@ public class EzyWebSocketServerBootstrap
 	
 	@Override
 	public void destroy() {
+		processWithLogException(socketWriter::destroy);
 		processWithLogException(server::stop);
 	}
 	
 	private Server newSocketServer() {
 		return newSocketServerCreator()
-				.port(getSocketPort())
-				.address(getSocketAddress())
 				.settings(getWsSettings())
 				.sessionSettings(getSessionSettings())
 				.handlerGroupManager(handlerGroupManager)
@@ -63,6 +66,8 @@ public class EzyWebSocketServerBootstrap
 	}
 	
 	private EzyWebSocketServerCreator newSocketServerCreator() {
+		if(isSslActive())
+			return new EzyWebSocketSecureServerCreator(sslContext);
 		return new EzyWebSocketServerCreator();
 	}
 	
@@ -70,12 +75,8 @@ public class EzyWebSocketServerBootstrap
 		return 3;
 	}
 	
-	private int getSocketPort() {
-		return getWsSettings().getPort();
-	}
-	
-	private String getSocketAddress() {
-		return getWsSettings().getAddress();
+	private boolean isSslActive() {
+		return getWsSettings().isSslActive();
 	}
 	
 	private EzyWebSocketSetting getWsSettings() {
@@ -96,9 +97,15 @@ public class EzyWebSocketServerBootstrap
 	
 	public static class Builder implements EzyBuilder<EzyWebSocketServerBootstrap> {
 
+		private SSLContext sslContext;
 		private EzyServerContext serverContext;
 		private EzyHandlerGroupManager handlerGroupManager;
 		private EzySessionTicketsQueue sessionTicketsQueue;
+		
+		public Builder sslContext(SSLContext sslContext) {
+			this.sslContext = sslContext;
+			return this;
+		}
 		
 		public Builder serverContext(EzyServerContext context) {
 			this.serverContext = context;

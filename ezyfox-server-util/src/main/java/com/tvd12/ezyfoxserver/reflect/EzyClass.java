@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -94,6 +95,11 @@ public class EzyClass implements EzyReflectElement {
 		return getMethods(m -> m.isGetter(), EzyGetterMethod::new);
 	}
 	
+	public Optional<EzyMethod> getPublicMethod(Predicate<EzyMethod> predicate) {
+		return methods.stream()
+				.filter(m -> m.isPublic() && predicate.test(m)).findFirst();
+	}
+	
 	public List<EzyMethod> getPublicMethods(Predicate<EzyMethod> predicate) {
 		return getMethods(m -> m.isPublic() && predicate.test(m));
 	}
@@ -124,8 +130,16 @@ public class EzyClass implements EzyReflectElement {
 		return getFields(f -> f.isPublic() && predicate.test(f));
 	}
 	
+	public Optional<EzyField> getField(Predicate<EzyField> predicate) {
+		return fields.stream().filter(predicate).findFirst();
+	}
+	
 	public List<EzyField> getFields(Predicate<EzyField> predicate) {
 		return fields.stream().filter(predicate).collect(Collectors.toList());
+	}
+	
+	public Optional<EzyMethod> getMethod(Predicate<EzyMethod> predicate) {
+		return methods.stream().filter(predicate).findFirst();
 	}
 	
 	public <T extends EzyMethod> List<T> getMethods(

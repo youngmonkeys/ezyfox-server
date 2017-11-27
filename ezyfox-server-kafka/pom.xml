@@ -10,4 +10,42 @@
 	<name>ezyfox-server-kafka</name>
 	<url>http://maven.apache.org</url>
 	<version>1.0.0</version>
+
+	<properties>
+		<ezy.binding.version>1.0.0</ezy.binding.version>
+		<ezy.codec.version>1.0.0</ezy.codec.version>
+		<ezy.msgpack.version>1.0.0</ezy.msgpack.version>
+		<ezy.message.version>1.0.0</ezy.message.version>
+		<kafka.version>1.0.0</kafka.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-binding</artifactId>
+			<version>${ezy.binding.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-codec</artifactId>
+			<version>${ezy.codec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-message</artifactId>
+			<version>${ezy.message.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.12</artifactId>
+			<version>${kafka.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-msgpack</artifactId>
+			<version>${ezy.msgpack.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 </project>

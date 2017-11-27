@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -33,7 +35,7 @@ public class EzySocketAcceptor extends EzySocketHandler {
 	@Override
 	protected void tryDestroy() throws Exception {
 		super.tryDestroy();
-		this.ownSelector.close();
+		processWithLogException(ownSelector::close);
 	}
 	
 	@Override

@@ -9,6 +9,9 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
+import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 
@@ -52,6 +55,9 @@ public abstract class EzyAbstractSession
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;
+	
+	protected EzyPacketQueue packetQueue;
+    protected EzySessionTicketsQueue sessionTicketsQueue;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -105,7 +111,13 @@ public abstract class EzyAbstractSession
         sendData(data, type);
 	}
 	
-	protected abstract void sendData(EzyData data, EzyTransportType type);
+    protected void sendData(EzyData data, EzyTransportType type) {
+        EzySimplePacket packet = new EzySimplePacket();
+        packet.setType(type);
+        packet.setData(data);
+        packetQueue.add(packet);
+        sessionTicketsQueue.add(this);
+    }
 	
 	@Override
 	public void destroy() {

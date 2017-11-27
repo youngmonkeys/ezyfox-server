@@ -5,6 +5,8 @@ import java.net.SocketAddress;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProperties;
 
@@ -330,5 +332,19 @@ public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Se
 	 * disconnect this session
 	 */
 	void disconnect();
+	
+	/**
+     * Get packet queue
+     * 
+     * @return the packet queue
+     */
+    EzyPacketQueue getPacketQueue();
+    
+    /**
+     * set session tickets queue
+     * 
+     * @param queue the queue
+     */
+    void setSessionTicketsQueue(EzySessionTicketsQueue queue);
 	
 }

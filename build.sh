@@ -31,3 +31,4 @@ mvn clean install -f ezyfox-server-monitor
 mvn clean install -f ezyfox-server-admintools
 mvn clean install -f ezyfox-server-nettyrunner
 mvn clean install -f ezyfox-server-niorunner
+mvn clean install -f ezyfox-server-message

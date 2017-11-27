@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -8,7 +10,6 @@ import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 public abstract class EzySocketHandler 
@@ -24,7 +25,7 @@ public abstract class EzySocketHandler
 	public EzySocketHandler(Builder<?> builder) {
 		this.threadPoolSize = builder.threadPoolSize;
 		this.handlerGroupManager = builder.handlerGroupManager;
-		this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize, "socket-acceptor");
+		this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize, getThreadName());
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> threadPool.shutdown()));
 	}
 	
@@ -54,7 +55,7 @@ public abstract class EzySocketHandler
 	
 	@Override
 	public void destroy() {
-		EzyProcessor.processWithLogException(this::tryDestroy);
+		processWithLogException(this::tryDestroy);
 	}
 	
 	protected void tryDestroy() throws Exception {

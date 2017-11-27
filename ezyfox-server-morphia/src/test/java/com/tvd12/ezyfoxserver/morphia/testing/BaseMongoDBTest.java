@@ -9,7 +9,7 @@ import com.mongodb.MongoClient;
 import com.tvd12.ezyfoxserver.bean.EzyBeanContext;
 import com.tvd12.ezyfoxserver.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfoxserver.io.EzyMaps;
-import com.tvd12.ezyfoxserver.mongodb.bean.EzyRepositoriesImplementor;
+import com.tvd12.ezyfoxserver.mongodb.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezyfoxserver.mongodb.loader.EzyInputStreamMongoClientLoader;
 import com.tvd12.ezyfoxserver.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezyfoxserver.morphia.EzyDataStoreBuilder;
@@ -33,9 +33,9 @@ public class BaseMongoDBTest extends BaseTest {
 				.addSingleton("datastore", DATASTORE)
 				.scan("com.tvd12.ezyfoxserver.morphia.testing.repo")
 				.scan("com.tvd12.ezyfoxserver.morphia.testing.service");
-		EzyRepositoriesImplementor implementor = EzyMorphiaRepositories.newRepositoriesImplementor()
+		EzyRepositoriesImplementer implementer = EzyMorphiaRepositories.newRepositoriesImplementer()
 				.scan("com.tvd12.ezyfoxserver.morphia.testing.repo", "com.tvd12.ezyfoxserver.morphia.testing.repo1");
-		Map<Class<?>, Object> repos = implementor.implement(DATASTORE);
+		Map<Class<?>, Object> repos = implementer.implement(DATASTORE);
 		for(Class<?> key : repos.keySet()) {
 			builder.addSingleton(EzyClasses.getVariableName(key), repos.get(key));
 		}

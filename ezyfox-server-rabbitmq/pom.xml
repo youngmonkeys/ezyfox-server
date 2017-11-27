@@ -12,26 +12,39 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
+		<ezy.binding.version>1.0.0</ezy.binding.version>
+		<ezy.codec.version>1.0.0</ezy.codec.version>
 		<ezy.msgpack.version>1.0.0</ezy.msgpack.version>
-		<ezy.common.version>1.0.0</ezy.common.version>
-		<rabbitmq.version>4.2.1</rabbitmq.version>
+		<ezy.message.version>1.0.0</ezy.message.version>
+		<rabbitmq.version>4.3.0</rabbitmq.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-msgpack</artifactId>
-			<version>${ezy.msgpack.version}</version>
+			<artifactId>ezyfox-server-binding</artifactId>
+			<version>${ezy.binding.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-common</artifactId>
-			<version>${ezy.common.version}</version>
+			<artifactId>ezyfox-server-codec</artifactId>
+			<version>${ezy.codec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-message</artifactId>
+			<version>${ezy.message.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>${rabbitmq.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-msgpack</artifactId>
+			<version>${ezy.msgpack.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

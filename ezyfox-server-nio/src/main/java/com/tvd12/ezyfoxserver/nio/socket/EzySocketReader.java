@@ -7,6 +7,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 
@@ -27,7 +28,7 @@ public class EzySocketReader extends EzySocketHandler {
 	@Override
 	protected void tryDestroy() throws Exception {
 		super.tryDestroy();
-		this.ownSelector.close();
+		processWithLogException(ownSelector::close);
 	}
 	
 	@Override

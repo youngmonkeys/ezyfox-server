@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.database.entity;
 
-public interface EzyLongIdEntity extends EzyEntity {
+import com.tvd12.ezyfoxserver.util.EzyHasIdEntity;
 
-	long getId();
-	
+public interface EzyLongIdEntity extends EzyHasIdEntity<Long>, EzyEntity {
 }

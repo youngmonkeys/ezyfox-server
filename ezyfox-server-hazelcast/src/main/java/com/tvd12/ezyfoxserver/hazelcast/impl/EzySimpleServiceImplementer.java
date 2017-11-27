@@ -20,7 +20,7 @@ import javassist.CtNewMethod;
 
 public class EzySimpleServiceImplementer {
 
-	private final EzyClass clazz;
+	protected final EzyClass clazz;
 	
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
 	

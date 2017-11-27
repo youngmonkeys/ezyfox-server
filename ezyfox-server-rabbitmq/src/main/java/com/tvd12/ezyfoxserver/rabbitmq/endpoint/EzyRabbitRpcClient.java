@@ -20,7 +20,7 @@ import com.tvd12.ezyfoxserver.rabbitmq.factory.EzyCorrelationIdFactory;
 import com.tvd12.ezyfoxserver.rabbitmq.factory.EzySimpleCorrelationIdFactory;
 
 public class EzyRabbitRpcClient 
-		extends EzyRabbitEnpoint implements EzyRpcClient {
+		extends EzyRabbitEndpoint implements EzyRpcClient {
 
 	protected int timeout;
 	protected String exchange;
@@ -116,7 +116,7 @@ public class EzyRabbitRpcClient
 		return new Builder();
 	}
 	
-	public static class Builder extends EzyRabbitEnpoint.Builder<Builder> {
+	public static class Builder extends EzyRabbitEndpoint.Builder<Builder> {
 		protected int timeout = 3000;
 		protected String replyQueue = "hello-queue";
 		protected String routingKey = "hola";

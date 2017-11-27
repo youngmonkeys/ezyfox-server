@@ -9,7 +9,7 @@ public class EzySimpleMapReturnTransaction<K,V,R>
 		extends EzySimpleTransaction
 		implements EzyMapReturnTransaction<K, V, R> {
 
-	private final String mapName;
+	protected final String mapName;
 	
 	public EzySimpleMapReturnTransaction(
 			TransactionContext context, String mapName) {

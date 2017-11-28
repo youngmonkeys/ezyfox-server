@@ -41,7 +41,7 @@ public class EzyDisconnectSessionImpl
     }
 	
 	protected void doSendToClient() {
-	    response(context, session, newResponse());
+	    responseNow(context, session, newResponse());
 	}
 	
 	protected EzyResponse newResponse() {

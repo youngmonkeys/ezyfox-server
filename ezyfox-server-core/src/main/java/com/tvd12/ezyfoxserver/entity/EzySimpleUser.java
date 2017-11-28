@@ -88,6 +88,12 @@ public class EzySimpleUser
 	}
 	
 	@Override
+	public void sendNow(EzyData data, EzyTransportType type) {
+	    for(EzySession session : getSessions())
+            session.sendNow(data, type);
+	}
+	
+	@Override
 	public void destroy() {
 	    this.removeDelegate = null;
 	    this.properties.clear();

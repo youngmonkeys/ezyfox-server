@@ -50,7 +50,6 @@ public class EzySimpleSession extends EzyAbstractSession implements EzyNioSessio
 	@Override
 	public void destroy() {
 		super.destroy();
-		this.packetQueue.clear();
 		this.channel = null;
 	}
 }

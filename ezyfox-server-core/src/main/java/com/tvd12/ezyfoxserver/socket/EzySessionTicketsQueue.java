@@ -8,6 +8,8 @@ public interface EzySessionTicketsQueue {
 	
 	boolean add(EzySession session);
 	
+	void remove(EzySession session);
+	
 	<T extends EzySession> T take() throws InterruptedException;
 	
 }

@@ -7,6 +7,8 @@ public interface EzySendResponse extends EzyCommand<Boolean> {
 
     EzySendResponse sender(EzySender sender);
     
+    EzySendResponse immediate(boolean immediate);
+    
     EzySendResponse response(EzyResponse response);
     
 }

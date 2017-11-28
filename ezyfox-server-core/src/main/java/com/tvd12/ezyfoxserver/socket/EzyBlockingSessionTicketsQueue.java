@@ -20,6 +20,11 @@ public class EzyBlockingSessionTicketsQueue implements EzySessionTicketsQueue {
 		return queue.offer(session);
 	}
 	
+	@Override
+	public void remove(EzySession session) {
+	    queue.remove(session);
+	}
+	
 	@SuppressWarnings("unchecked")
     @Override
 	public <T extends EzySession> T take() throws InterruptedException {

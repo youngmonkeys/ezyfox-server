@@ -8,8 +8,21 @@ import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 
 public class EzyMessageController extends EzyEntityBuilders {
 	
-	protected void response(EzyContext ctx, EzySender sender, EzyResponse response) {
-	    ctx.get(EzySendResponse.class).sender(sender).response(response).execute();
+	protected final void response(
+	        EzyContext ctx, EzySender sender, EzyResponse response) {
+	    ctx.get(EzySendResponse.class)
+	        .sender(sender)
+	        .response(response)
+	        .execute();
+    }
+	
+	protected final void responseNow(
+	        EzyContext ctx, EzySender sender, EzyResponse response) {
+        ctx.get(EzySendResponse.class)
+            .sender(sender)
+            .immediate(true)
+            .response(response)
+            .execute();
     }
 	
 }

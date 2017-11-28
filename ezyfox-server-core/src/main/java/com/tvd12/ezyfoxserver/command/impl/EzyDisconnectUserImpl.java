@@ -89,7 +89,7 @@ public class EzyDisconnectUserImpl
     }
 	
 	protected void doSendToClient(EzySession session) {
-	    response(context, session, newResponse());
+	    responseNow(context, session, newResponse());
 	}
 	
 	protected void destroyUser() {

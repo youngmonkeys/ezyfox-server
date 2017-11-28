@@ -11,10 +11,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
+import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
+import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
@@ -27,7 +30,7 @@ public abstract class EzyAbstractHandlerGroup
 			E extends EzyNioDataEncoder
 		>
 		extends EzyLoggable
-		implements EzySocketChannelDelegate {
+		implements EzyImmediateDataSender, EzySocketChannelDelegate {
 
 	protected final EzyChannel channel;
 	
@@ -102,12 +105,13 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	public final void fireDataSend(Object data) throws Exception {
-		executeHandleSendData(data);
+		executeSendingData(data);
 	}
 	
 	public final EzyNioSession fireChannelActive() throws Exception {
 		EzyNioSession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
+		((EzyImmediateDataSenderAware)ss).setImmediateDataSender(this);
 		session.set(ss);
 		sessionStats.addSessions(1);
 		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());
@@ -115,11 +119,16 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	@Override
+	public void sendDataNow(Object data, EzyTransportType type) {
+		executeSendingData(data);
+	}
+	
+	@Override
 	public final void onChannelInactivated(EzyChannel channel) {
 		channelDelegate.onChannelInactivated(channel);
 	}
 	
-	private void executeHandleSendData(Object data) {
+	private void executeSendingData(Object data) {
 		CompletableFuture<Object> encodeFuture =
 				supplyAsync(() -> encodeData0(data), codecThreadPool);
 		CompletableFuture<Void> sendBytesFuture = encodeFuture

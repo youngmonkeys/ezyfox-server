@@ -14,7 +14,6 @@ import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectSessionImpl;
@@ -22,7 +21,6 @@ import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireAppEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFirePluginEventImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdown;
@@ -108,7 +106,6 @@ public class EzySimpleServerContext extends EzyAbstractContext implements EzySer
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
 		super.addCommandSuppliers(suppliers);
 		suppliers.put(EzyShutdown.class, ()-> new EzyServerShutdown(this));
-		suppliers.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		suppliers.put(EzySendResponse.class, () -> new EzySendResponseImpl(this));
 		suppliers.put(EzyFireEvent.class, () -> new EzyFireEventImpl(this));
 		suppliers.put(EzyFirePluginEvent.class, () -> new EzyFirePluginEventImpl(this));

@@ -9,9 +9,9 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
-import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
 import lombok.Setter;

@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.codec.EzyMessageSerializer;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
-public abstract class EzyRabbitEnpoint 
+public abstract class EzyRabbitEndpoint 
 		extends EzyLoggable 
 		implements EzyStartable {
 
@@ -16,7 +16,7 @@ public abstract class EzyRabbitEnpoint
 	protected EzyMessageSerializer messageSerializer;
 	protected EzyMessageDeserializer messageDeserializer;
 	
-	protected EzyRabbitEnpoint(Builder<?> builder) {
+	protected EzyRabbitEndpoint(Builder<?> builder) {
         this.queue = builder.queue;
         this.channel = builder.channel;
         this.messageSerializer = builder.messageSerializer;
@@ -33,7 +33,7 @@ public abstract class EzyRabbitEnpoint
 	
 	@SuppressWarnings("unchecked")
 	public static abstract class Builder<B extends Builder<B>> 
-			implements EzyBuilder<EzyRabbitEnpoint> {
+			implements EzyBuilder<EzyRabbitEndpoint> {
 		protected String queue;
 		protected Channel channel;
 		protected EzyMessageSerializer messageSerializer;

@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.reflect.EzyClasses;
@@ -22,7 +21,6 @@ public class Performance3Test extends BaseTest {
 		ConcurrentHashMap<Object, Object> strs = new ConcurrentHashMap<>();
 		strs.put(EzyCommand.class, EzyObject.class);
 		strs.put(EzyRunWorker.class, EzyObject.class);
-		strs.put(EzySendMessage.class, EzyObject.class);
 		strs.put(EzyObject.class, EzyObject.class);
 		strs.put(EzyArray.class, EzyObject.class);
 		strs.put(EzySimpleAppSetting.class, EzyObject.class);

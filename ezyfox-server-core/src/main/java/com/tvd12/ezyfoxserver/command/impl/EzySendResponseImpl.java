@@ -13,6 +13,7 @@ public class EzySendResponseImpl
         extends EzyHasSenderCommand<EzySendResponseImpl> 
         implements EzySendResponse {
 
+    protected boolean immediate;
     protected EzyResponse response;
     
     protected final Set<EzyConstant> unloggableCommands;
@@ -27,14 +28,27 @@ public class EzySendResponseImpl
     @Override
     public Boolean execute() {
         EzyArray data = responseSerializer.serializeToArray(response);
+        sendData(data);
         debugLogResponse(data);
-        sender.send(data);
         return Boolean.TRUE;
+    }
+    
+    protected void sendData(EzyArray data) {
+        if(immediate) 
+            sender.sendNow(data);
+        else
+            sender.send(data);
     }
     
     protected void debugLogResponse(Object data) {
         if(!unloggableCommands.contains(response.getCommand()))
             getLogger().debug("send to {} data {}", getSenderName(), data);
+    }
+    
+    @Override
+    public EzySendResponse immediate(boolean immediate) {
+        this.immediate = immediate;
+        return this;
     }
     
     @Override

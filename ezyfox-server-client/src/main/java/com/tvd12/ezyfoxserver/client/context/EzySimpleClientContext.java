@@ -17,10 +17,8 @@ import com.tvd12.ezyfoxserver.client.entity.EzySimpleClientUser;
 import com.tvd12.ezyfoxserver.client.request.EzyRequest;
 import com.tvd12.ezyfoxserver.client.request.EzyRequestPluginRequest;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
-import com.tvd12.ezyfoxserver.command.EzySendMessage;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.command.impl.EzyRunWorkerImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzySendMessageImpl;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyEntity;
 
@@ -96,7 +94,6 @@ public class EzySimpleClientContext
 		EzyPingSchedule pingSchedule = new EzyPingScheduleImpl(this);
 		Map<Class, Supplier> answer = new HashMap<>();
 		answer.put(EzyPingSchedule.class, () -> pingSchedule);
-		answer.put(EzySendMessage.class, () -> new EzySendMessageImpl());
 		answer.put(EzySendRequest.class, () -> new EzySendRequestImpl(this));
 		answer.put(EzyShutdown.class, () -> new EzyClientShutdownImpl(this));
 		answer.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));

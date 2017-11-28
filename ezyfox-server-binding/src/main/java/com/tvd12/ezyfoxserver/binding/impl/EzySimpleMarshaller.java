@@ -70,6 +70,8 @@ public class EzySimpleMarshaller
 		EzyWriter writer = EzyMaps.getValue(writersByObjectType, objectType);
 		if(writer != null)
 			return (T) writer.write(this, object);
+		if(objectType.isEnum())
+			return (T) object.toString();
 		if(objectType.isArray())
 			return (T) writeArray((Object[])object);
 		throw new IllegalArgumentException("has no writer for " + object.getClass());

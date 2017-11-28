@@ -10,42 +10,30 @@ import java.util.Set;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
+import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 
-public class EzySocketReader extends EzySocketHandler {
+import lombok.Setter;
 
+public class EzyNioSocketReader 
+		extends EzySocketAbstractEventHandler
+		implements EzyHandlerGroupManagerAware {
+
+	@Setter
 	protected Selector ownSelector;
+	@Setter
+	protected EzyHandlerGroupManager handlerGroupManager;
 	
-	public EzySocketReader(Builder builder) {
-		super(builder);
-		this.ownSelector = builder.ownSelector;
-	}
-	
+	protected ByteBuffer buffer = ByteBuffer.allocateDirect(getMaxBufferSize());
+
 	@Override
-	protected String getThreadName() {
-		return "socket-reader";
-	}
-	
-	@Override
-	protected void tryDestroy() throws Exception {
-		super.tryDestroy();
+	public void destroy() {
 		processWithLogException(ownSelector::close);
 	}
 	
 	@Override
-	protected void tryLoop() {
-		getLogger().info("socket-reader threadpool has started");
-		ByteBuffer buffer = ByteBuffer.allocateDirect(getMaxBufferSize());
-		while(active) {
-			tryProcessReadyKeys(buffer);
-		}
-		getLogger().info("socket-reader threadpool shutting down");
-	}
-	
-	private int getMaxBufferSize() {
-		return 8192;
-	}
-	
-	private void tryProcessReadyKeys(ByteBuffer buffer) {
+	public void handleEvent() {
 		try {
 			processReadyKeys(buffer);
 			Thread.sleep(5L);
@@ -55,6 +43,10 @@ public class EzySocketReader extends EzySocketHandler {
 		}
 	}
 	
+	private int getMaxBufferSize() {
+		return 8192;
+	}
+
 	private synchronized void processReadyKeys(ByteBuffer buffer) throws Exception {
 		ownSelector.selectNow();
 		
@@ -80,7 +72,7 @@ public class EzySocketReader extends EzySocketHandler {
 	}
 	
 	private void processWritableKey(SelectionKey key, ByteBuffer buffer) throws Exception {
-		
+		key.interestOps(SelectionKey.OP_READ);
 	}
 	
 	private void processReadableKey(SelectionKey key, ByteBuffer buffer) throws Exception {
@@ -110,25 +102,6 @@ public class EzySocketReader extends EzySocketHandler {
 	
 	private void closeConnection(SelectableChannel channel) throws Exception {
 		handlerGroupManager.removeHandlerGroup((SocketChannel) channel);
-	}
-	
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder extends EzySocketHandler.Builder<Builder> {
-		
-		private Selector ownSelector;
-		
-		public Builder ownSelector(Selector ownSelector) {
-			this.ownSelector = ownSelector;
-			return this;
-		}
-		
-		@Override
-		public EzySocketReader build() {
-			return new EzySocketReader(this);
-		}
 	}
 	
 }

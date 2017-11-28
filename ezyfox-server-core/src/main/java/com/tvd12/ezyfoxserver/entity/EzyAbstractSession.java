@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -9,11 +10,15 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
+import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.util.EzyProcessor;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +28,7 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractSession 
         extends EzyEntity 
-        implements EzySession, EzyHasSessionDelegate {
+        implements EzySession, EzyImmediateDataSenderAware, EzyHasSessionDelegate {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
@@ -56,8 +61,10 @@ public abstract class EzyAbstractSession
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;
 	
+	protected EzyChannel channel;
 	protected EzyPacketQueue packetQueue;
     protected EzySessionTicketsQueue sessionTicketsQueue;
+    protected EzyImmediateDataSender immediateDataSender;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -111,12 +118,48 @@ public abstract class EzyAbstractSession
         sendData(data, type);
 	}
 	
+	@Override
+	public void sendNow(EzyData data, EzyTransportType type) {
+	    if(immediateDataSender != null)
+	        immediateDataSender.sendDataNow(data, type);
+	}
+	
     protected void sendData(EzyData data, EzyTransportType type) {
         EzySimplePacket packet = new EzySimplePacket();
         packet.setType(type);
         packet.setData(data);
         packetQueue.add(packet);
         sessionTicketsQueue.add(this);
+    }
+    
+    @Override
+    public void setChannel(EzyChannel channel) {
+        this.channel = channel;
+    }
+    
+    @Override
+    public void disconnect() {
+        EzyProcessor.processWithLogException(() -> channel.close()); 
+    }
+    
+    @Override
+    public void close() {
+        EzyProcessor.processWithLogException(() -> channel.close());
+    }
+    
+    @Override
+    public <T> T getConnection() {
+        return channel != null ? channel.getConnection() : null;
+    }
+    
+    @Override
+    public SocketAddress getServerAddress() {
+        return channel != null ? channel.getServerAddress() : null;
+    }
+    
+    @Override
+    public SocketAddress getClientAddress() {
+        return channel != null ? channel.getClientAddress() : null;
     }
 	
 	@Override
@@ -127,6 +170,13 @@ public abstract class EzyAbstractSession
 	    this.readBytes = 0L;
 	    this.writtenBytes = 0L;
 	    this.properties.clear();
+	    this.channel = null;
+	    if(packetQueue != null)
+	        this.packetQueue.clear();
+	    if(sessionTicketsQueue != null) 
+	        this.sessionTicketsQueue.remove(this);
+	    this.sessionTicketsQueue = null;
+	    this.immediateDataSender = null;
 	}
 	
 	@Override

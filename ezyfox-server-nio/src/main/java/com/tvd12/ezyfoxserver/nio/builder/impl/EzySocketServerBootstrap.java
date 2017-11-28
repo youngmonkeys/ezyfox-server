@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -8,17 +10,18 @@ import java.nio.channels.ServerSocketChannel;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketReader;
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketWriter;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptanceLoopHandler;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReadingLoopHandler;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
@@ -27,13 +30,13 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	private ServerSocket serverSocket;
 	private ServerSocketChannel serverSocketChannel;
 	
-	private EzySocketWriter socketWriter;
-	private EzySocketReader socketReader;
-	private EzySocketAcceptor socketAcceptor;
-	
 	private EzyServerContext serverContext;
 	private EzyHandlerGroupManager handlerGroupManager;
 	private EzySessionTicketsQueue sessionTicketsQueue;
+	
+	private EzySocketEventLoopHandler writingLoopHandler;
+	private EzySocketEventLoopHandler readingLoopHandler;
+	private EzySocketEventLoopHandler acceptanceLoopHandler;
 	
 	public EzySocketServerBootstrap(Builder builder) {
 		this.serverContext = builder.serverContext;
@@ -51,9 +54,9 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	@Override
 	public void destroy() {
-		processWithLogException(socketAcceptor::destroy);
-		processWithLogException(socketWriter::destroy);
-		processWithLogException(socketReader::destroy);
+		processWithLogException(writingLoopHandler::destroy);
+		processWithLogException(readingLoopHandler::destroy);
+		processWithLogException(acceptanceLoopHandler::destroy);
 		processWithLogException(serverSocket::close);
 		processWithLogException(serverSocketChannel::close);
 	}
@@ -76,39 +79,44 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private void startSocketHandlers() throws Exception {
-		socketWriter = newSocketWriter();
-		socketReader = newSocketReader();
-		socketAcceptor = newSocketAcceptor();
-		socketAcceptor.start();
-		socketReader.start();
-		socketWriter.start();
+		writingLoopHandler = newWritingLoopHandler();
+		readingLoopHandler = newReadingLoopHandler();
+		acceptanceLoopHandler = newAcceptanceLoopHandler();
+		acceptanceLoopHandler.start();
+		readingLoopHandler.start();
+		writingLoopHandler.start();
 	}
 	
-	private EzySocketAcceptor newSocketAcceptor() {
-		return newSocketHandler(EzySocketAcceptor.builder()
-				.tcpNoDelay(true)
-				.readSelector(readSelector)
-				.ownSelector(acceptSelector)
-				.threadPoolSize(getAcceptorPoolSize()));
+	private EzySocketEventLoopHandler newWritingLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzyNioSocketWritingLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
+		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
+		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
 	}
 	
-	private EzySocketReader newSocketReader() {
-		return newSocketHandler(EzySocketReader.builder()
-				.ownSelector(readSelector)
-				.threadPoolSize(getReaderPoolSize()));
+	private EzySocketEventLoopHandler newReadingLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzyNioSocketReadingLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
+		EzyNioSocketReader eventHandler = new EzyNioSocketReader();
+		eventHandler.setOwnSelector(readSelector);
+		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
 	}
 	
-	private EzySocketWriter newSocketWriter() {
-		return newSocketHandler(EzySocketWriter.builder()
-				.threadPoolSize(getWriterPoolSize())
-				.sessionTicketsQueue(sessionTicketsQueue));
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <T> T newSocketHandler(EzySocketHandler.Builder<?> builder) {
-		return (T)builder
-				.handlerGroupManager(handlerGroupManager)
-				.build();
+	private EzySocketEventLoopHandler newAcceptanceLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
+		EzyNioSocketAcceptor eventHandler = new EzyNioSocketAcceptor();
+		eventHandler.setTcpNoDelay(true);
+		eventHandler.setReadSelector(readSelector);
+		eventHandler.setOwnSelector(acceptSelector);
+		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
 	}
 	
  	
@@ -120,15 +128,15 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 		return ServerSocketChannel.open();
 	}
 	
-	private int getReaderPoolSize() {
+	private int getSocketReaderPoolSize() {
 		return 3;
 	}
 	
-	private int getWriterPoolSize() {
-		return 3;
+	private int getSocketWriterPoolSize() {
+		return 8;
 	}
 	
-	private int getAcceptorPoolSize() {
+	private int getSocketAcceptorPoolSize() {
 		return 3;
 	}
 	

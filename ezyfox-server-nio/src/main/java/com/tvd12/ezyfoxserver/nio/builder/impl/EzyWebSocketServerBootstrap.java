@@ -8,12 +8,14 @@ import org.eclipse.jetty.server.Server;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWriter;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
@@ -22,7 +24,7 @@ public class EzyWebSocketServerBootstrap
 
 	private Server server;
 	private SSLContext sslContext;
-	private EzyWsWriter socketWriter;
+	private EzySocketEventLoopHandler writingLoopHandler;
 	
 	private EzyServerContext serverContext;
 	private EzyHandlerGroupManager handlerGroupManager;
@@ -39,13 +41,13 @@ public class EzyWebSocketServerBootstrap
 	public void start() throws Exception {
 		server = newSocketServer();
 		server.start();
-		socketWriter = newSocketWriter();
-		socketWriter.start();
+		writingLoopHandler = newWritingLoopHandler();
+		writingLoopHandler.start();
 	}
 	
 	@Override
 	public void destroy() {
-		processWithLogException(socketWriter::destroy);
+		processWithLogException(writingLoopHandler::destroy);
 		processWithLogException(server::stop);
 	}
 	
@@ -57,12 +59,14 @@ public class EzyWebSocketServerBootstrap
 				.create();
 	}
 	
-	private EzyWsWriter newSocketWriter() {
-		return EzyWsWriter.builder()
-				.threadPoolSize(getWriterPoolSize())
-				.handlerGroupManager(handlerGroupManager)
-				.sessionTicketsQueue(sessionTicketsQueue)
-				.build();
+	private EzySocketEventLoopHandler newWritingLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzyNioSocketWritingLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
+		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
+		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
 	}
 	
 	private EzyWebSocketServerCreator newSocketServerCreator() {
@@ -71,8 +75,8 @@ public class EzyWebSocketServerBootstrap
 		return new EzyWebSocketServerCreator();
 	}
 	
-	private int getWriterPoolSize() {
-		return 3;
+	private int getSocketWriterPoolSize() {
+		return 8;
 	}
 	
 	private boolean isSslActive() {

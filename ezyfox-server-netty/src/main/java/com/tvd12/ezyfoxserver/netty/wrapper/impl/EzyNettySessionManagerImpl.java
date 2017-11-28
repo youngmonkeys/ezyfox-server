@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.netty.factory.EzyNettySessionFactory;
+import com.tvd12.ezyfoxserver.netty.socket.EzyNettyChannel;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
@@ -42,7 +43,7 @@ public class EzyNettySessionManagerImpl
 	@Override
 	public EzyNettySession borrowSession(Channel channel, EzyConnectionType type) {
 		EzyNettySession ss = borrowSession(type);
-		ss.setChannel(channel);
+		ss.setChannel(new EzyNettyChannel(channel, type));
 		sessionsByChannel.put(channel, ss);
 		return ss;
 	}

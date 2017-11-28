@@ -11,7 +11,7 @@ import com.tvd12.ezyfoxserver.rabbitmq.codec.EzyRpcSimpleProcedureDeserializer;
 import com.tvd12.ezyfoxserver.rabbitmq.entity.EzyRpcProcedure;
 import com.tvd12.ezyfoxserver.rabbitmq.exception.EzyRpcException;
 
-public class EzyRabbitRpcServer extends EzyRabbitEnpoint {
+public class EzyRabbitRpcServer extends EzyRabbitEndpoint {
 
 	protected EzyRabbitRpcHandler server;
 	protected Map<String, Object> queueArguments;
@@ -81,7 +81,7 @@ public class EzyRabbitRpcServer extends EzyRabbitEnpoint {
 		return new Builder();
 	}
 	
-	public static class Builder extends EzyRabbitEnpoint.Builder<Builder> {
+	public static class Builder extends EzyRabbitEndpoint.Builder<Builder> {
 		protected Map<String, Object> queueArguments;
 		protected EzyRpcProcedureCaller procedureCaller;
 		protected EzyRpcProcedureDeserializer procedureDeserializer;

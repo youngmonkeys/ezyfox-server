@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.entity;
+package com.tvd12.ezyfoxserver.socket;
 
 import java.net.SocketAddress;
 

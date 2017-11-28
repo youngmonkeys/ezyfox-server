@@ -7,7 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
+
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 import lombok.Getter;

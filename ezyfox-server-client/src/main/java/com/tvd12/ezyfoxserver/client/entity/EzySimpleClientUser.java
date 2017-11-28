@@ -24,6 +24,11 @@ public class EzySimpleClientUser extends EzyEntity implements EzyClientUser, Ser
 	}
 	
 	@Override
+	public void sendNow(EzyData data, EzyTransportType type) {
+		send(data, type);
+	}
+	
+	@Override
 	public void destroy() {
 		session.destroy();
 	}

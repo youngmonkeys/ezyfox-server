@@ -73,6 +73,11 @@ public class EzySimpleClientSession extends EzyEntity implements EzyClientSessio
 	}
 	
 	@Override
+	public void sendNow(EzyData data, EzyTransportType type) {
+		send(data, type);
+	}
+	
+	@Override
 	public void disconnect() {
 		channel.disconnect().syncUninterruptibly();
 	}

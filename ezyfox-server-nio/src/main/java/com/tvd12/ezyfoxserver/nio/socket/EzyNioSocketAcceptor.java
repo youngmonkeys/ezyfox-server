@@ -10,11 +10,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 
 import lombok.Setter;

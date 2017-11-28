@@ -8,7 +8,7 @@ import java.net.SocketAddress;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 import lombok.Getter;
 

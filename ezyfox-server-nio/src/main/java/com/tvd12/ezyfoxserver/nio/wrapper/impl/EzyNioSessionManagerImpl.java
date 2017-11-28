@@ -2,11 +2,11 @@ package com.tvd12.ezyfoxserver.nio.wrapper.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfoxserver.nio.entity.EzyChannel;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyNioSessionFactory;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class EzyNioSessionManagerImpl 

@@ -3,7 +3,7 @@
 # Synopsis
 
 Ezyfox server is a socket server. It supports both tcp socket and websocket. It also provides manipulation beans,
-auto bingding, auto implementation and more utilities.
+auto binding, auto implementation and more utilities.
 
 # Code Example
 

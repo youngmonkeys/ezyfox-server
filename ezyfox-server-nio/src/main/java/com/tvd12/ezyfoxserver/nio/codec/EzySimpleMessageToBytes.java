@@ -28,7 +28,7 @@ public class EzySimpleMessageToBytes implements EzyMessageToBytes {
 	
 	private void writeHeader(ByteBuffer answer, EzyMessageHeader header) {
 		byte headerByte = 0;
-		headerByte |= header.isBigSize() ? 1 : 0;
+		headerByte |= header.isBigSize() ? 1 << 0 : 0;
 		headerByte |= header.isEncrypted() ? 1 << 1 : 0;
 		headerByte |= header.isCompressed() ? 1 << 2 : 0;
 		headerByte |= header.isText() ? 1 << 3 : 0;

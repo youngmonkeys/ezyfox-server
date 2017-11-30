@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.Server;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWritingLoopHandler;
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
@@ -64,7 +64,7 @@ public class EzyWebSocketServerBootstrap
 	}
 	
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzyNioSocketWritingLoopHandler();
+		EzySocketEventLoopHandler loopHandler = new EzyWsWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
 		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
 		eventHandler.setHandlerGroupManager(handlerGroupManager);

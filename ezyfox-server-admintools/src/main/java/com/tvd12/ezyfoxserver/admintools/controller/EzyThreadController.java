@@ -24,6 +24,7 @@ public class EzyThreadController {
 	public EzyThreadsDetail getThreadsDetail() {
 		EzyThreadsDetail ezyThreadsDetail = threadsService.getThreadsDetail();
 		ezyThreadsDetail.sort();
+		
 		return ezyThreadsDetail;
 	}
 

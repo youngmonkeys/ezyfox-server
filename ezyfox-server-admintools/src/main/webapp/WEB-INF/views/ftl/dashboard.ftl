@@ -50,18 +50,20 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<div class="col-sm-8" id="title">
-									<h5>Global status</h5>
-								</div>
-								<div class="col-sm-2" id="title">
-									<h5>Interval</h5>
-								</div>
-								<div class="col-sm-2" id="interval">
-									<select name="interval">
-										<option value="2">2 sec</option>
-										<option value="4">4 sec</option>
-										<option value="6">6 sec</option>
-									</select>
+								<div class="row m-b-sm m-t-sm">
+									<div class="col-md-3">
+										<h5>Global server status</h5>
+									</div>
+									<div class="col-md-8" style="text-align:right;font-size: 12px">
+										Interval
+									</div>
+									<div class="col-md-1">
+										<select id="interval" name="interval">
+											<option value="2000" selected>2 sec</option>
+											<option value="4000">4 sec</option>
+											<option value="6000">6 sec</option>
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -71,14 +73,63 @@
 					<div class="col-lg-6">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Network traffic</h5>
-								<div class="pull-right" id="note">  Outgoing  <i class="fa fa-square" style="color:#FF0000"></i></div>
-								<div class="pull-right" id="note">  Incoming  <i class="fa fa-square" style="color:#00CC00"></i></div>
+								<span class="label label-danger pull-right" id="cpu">0.00%</span>
+								<h5>CPUs usage</h5>
 							</div>
 							<div class="ibox-content">
-								<div class="flot-chart" style="height: 200px !important">
-									<div class="flot-chart-content" id="cpu-chart"></div>
-									<span style="text-align: center" id="updated"></span>
+								<div class="flot-chart">
+									<div class="flot-chart-content" id="cpuUsage"></div>
+								</div>
+								<hr>
+								<div class="row m-b-sm m-t-sm">
+									<div class="col-md-3">
+										<h5>Memory usaged</h5>
+									</div>
+									<div class="col-md-2">
+										<small id="max">Max 0 GB</small>
+									</div>
+									<div class="col-md-3">
+										<small id="free">Free 0 MB</small>
+									</div>
+									<div class="col-md-2">
+										<small>Allocated
+											<i class="fa fa-square" style="color:#3399CC"></i>
+										</small>
+									</div>
+									<div class="col-md-2">
+										<small>Used
+											<i class="fa fa-square" style="color:#0033CC"></i>
+										</small>
+									</div>
+								</div>
+								<div class="flot-chart" style="height: 200px !important;text-align:center">
+									<div class="flot-chart-content" id="memoryChart" style="margin-top: 20px"></div>
+								</div>
+								<hr>
+								<div class="row m-b-sm m-t-sm" style="margin-top: 20px">
+									<div class="col-md-3">
+										<h5>Network traffic</h5>
+									</div>
+									<div class="col-md-2">
+										<small id="max"></small>
+									</div>
+									<div class="col-md-3">
+										<small id="free"></small>
+									</div>
+									<div class="col-md-2">
+										<small>Incoming
+											<i class="fa fa-square" style="color:#00CC00"></i>
+										</small>
+									</div>
+									<div class="col-md-2">
+										<small>Outgoing
+											<i class="fa fa-square" style="color:#FF0000"></i>
+										</small>
+									</div>
+								</div>
+								<div class="flot-chart" style="height: 200px !important;text-align:center">
+									<div class="flot-chart-content" id="networkTraffic"></div>
+									<small style="text-align: center" id="updatedNetwork"></small>
 								</div>
 							</div>
 						</div>
@@ -86,12 +137,12 @@
 					<div class="col-lg-6">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<span class="label label-danger pull-right" id="threadCount"></span>
+								<span class="label label-danger pull-right" id="threadCount">0</span>
 								<h5>Thread count</h5>
 							</div>
 							<div class="ibox-content">
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-line-chart-moving"></div>
+									<div class="flot-chart-content" id="threadChart"></div>
 								</div>
 								<div>
 									<div class="panel panel-default">
@@ -189,9 +240,6 @@
 				<script src="js/plugins/flot/jquery.flot.resize.js"></script>
 				<script src="js/plugins/flot/jquery.flot.pie.js"></script>
 				<script src="js/plugins/flot/jquery.flot.time.js"></script>
-				<!-- d3 and c3 charts -->
-				<script src="js/plugins/d3/d3.min.js"></script>
-				<script src="js/plugins/c3/c3.min.js"></script>
 </body>
 
 </html>

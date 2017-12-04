@@ -21,7 +21,7 @@ td{
 
 }
 .flot-chart{
-	height:100px;
+	height:120px;
 }
 .panel-heading{
 	padding:10px;
@@ -31,4 +31,18 @@ td{
 }
 #note{
   font-size: 12px;
+}
+.netWorkFlot{
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; 
+}
+#interval{
+  font-size: 10px;
+  text-align: right;
+  height: 20px;
+  width: 50px;
+}
+#interval option{
+  font-size: 10px;
 }

@@ -18,9 +18,9 @@ import javassist.CtClass;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
-public class EzySimpleIdFetcherImplementer 
+public class EzySimpleIdSetterImplementer 
 		extends EzyLoggable
-		implements EzyIdFetcherImplementer {
+		implements EzyIdSetterImplementer {
 
 	protected final EzyClass clazz;
 	protected final EzyReflectElement idElement; 
@@ -29,17 +29,17 @@ public class EzySimpleIdFetcherImplementer
 	protected static boolean debug = false;
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
 	
-	public EzySimpleIdFetcherImplementer(Class<?> clazz) {
+	public EzySimpleIdSetterImplementer(Class<?> clazz) {
 		this(new EzyClass(clazz));
 	}
 	
-	public EzySimpleIdFetcherImplementer(EzyClass clazz) {
+	public EzySimpleIdSetterImplementer(EzyClass clazz) {
 		this.clazz = clazz;
 		this.idElement = getIdElement0();
 	}
 	
 	@Override
-	public EzyIdFetcher implement() {
+	public EzyIdSetter implement() {
 		try {
 			return doimplement();
 		}
@@ -49,53 +49,59 @@ public class EzySimpleIdFetcherImplementer
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private EzyIdFetcher doimplement() throws Exception {
+	private EzyIdSetter doimplement() throws Exception {
 		ClassPool pool = ClassPool.getDefault();
 		String implClassName = getImplClassName();
 		CtClass implClass = pool.makeClass(implClassName);
-		EzyMethod getIdMethod = getGetIdMethod();
-		String implMethodContent = makeGetIdMethodContent(getIdMethod);
-		getIdMethod.setDisplayName("getId");
+		EzyMethod setIdMethod = getSetIdMethod();
+		String implMethodContent = makeSetIdMethodContent(setIdMethod);
+		setIdMethod.setDisplayName("setId");
 		printMethodContent(implMethodContent);
-		implClass.setInterfaces(new CtClass[] { pool.get(EzyIdFetcher.class.getName()) });
+		implClass.setInterfaces(new CtClass[] { pool.get(EzyIdSetter.class.getName()) });
 		implClass.addMethod(CtNewMethod.make(implMethodContent, implClass));
 		Class answerClass = implClass.toClass();
 		implClass.detach();
-		Object fetcher = answerClass.newInstance();
-		return (EzyIdFetcher)fetcher;
+		Object setter = answerClass.newInstance();
+		return (EzyIdSetter)setter;
 	}
 	
-	protected String makeGetIdMethodContent(EzyMethod getIdMethod) {
+	protected String makeSetIdMethodContent(EzyMethod setIdMethod) {
 		EzyInstruction instruction = new EzyInstruction("\t", "\n")
-				.answer();
-		EzyInstruction value = new EzyInstruction("", "", false)
-				.cast(clazz.getClazz(), "arg0")
-				.dot();
-		
+				.append("object.")
+				.append(idElement.getName());
 		Class<?> valueType = null;
-		
 		if(idElement instanceof EzyField) {
-			value.append(idElement.getName());
 			valueType = ((EzyField)idElement).getType();
+			instruction
+				.equal()
+				.append("id");
 		}
 		else {
-			value.function(idElement.getName());
-			valueType = ((EzyMethod)idElement).getReturnType();
+			valueType = ((EzyMethod)idElement).getParameterTypes()[0];
+			instruction
+				.brackets("id");
 		}
 		
-		instruction.valueOf(valueType, value.toString());
-		
-		return new EzyFunction(getIdMethod)
+		return new EzyFunction(setIdMethod)
 				.body()
+					.append(new EzyInstruction("\t", "\n")
+							.variable(clazz.getClazz(), "object")
+							.equal()
+							.cast(clazz.getClazz(), "arg0"))
+					.append(new EzyInstruction("\t", "\n")
+							.variable(valueType, "id")
+							.equal()
+							.cast(valueType, "arg1"))
 					.append(instruction)
 				.function()
 				.toString();
 	}
 	
-	protected EzyMethod getGetIdMethod() {
+	protected EzyMethod getSetIdMethod() {
 		return EzyMethod.builder()
-				.clazz(EzyIdFetcher.class)
-				.methodName("getId")
+				.clazz(EzyIdSetter.class)
+				.methodName("setId")
+				.parameterTypes(Object.class)
 				.parameterTypes(Object.class)
 				.build();
 	}
@@ -105,19 +111,19 @@ public class EzySimpleIdFetcherImplementer
 		if(element != null)
 			return element;
 		if(EzyHasIdEntity.class.isAssignableFrom(clazz.getClazz()))
-			return clazz.getMethod("getId");
+			return clazz.getSetterMethod("setId");
 		Optional<EzyField> foundField = 
 				clazz.getField(f -> f.isAnnotated(EzyId.class));
 		if(foundField.isPresent()) {
 			EzyField field = foundField.get();
 			if(field.isPublic())
 				return field;
-			EzyMethod method = clazz.getMethod(field.getGetterMethod());
+			EzyMethod method = clazz.getMethod(field.getSetterMethod());
 			if(method != null && method.isPublic())
 				return method;
 		}
 		Optional<EzyMethod> foundMethod = 
-				clazz.getGetterMethod(m -> m.isAnnotated(EzyId.class));
+				clazz.getSetterMethod(m -> m.isAnnotated(EzyId.class));
 		if(foundMethod.isPresent())
 			return foundMethod.get();
 		throw new IllegalStateException("use @EzyId to specific 'id' element on " + clazz);
@@ -128,7 +134,7 @@ public class EzySimpleIdFetcherImplementer
 	}
 	
 	protected String getImplClassName() {
-		return clazz.getName() + "$EzyIdFetcher$EzyAutoImpl$" + COUNT.incrementAndGet();
+		return clazz.getName() + "$EzyIdSetter$EzyAutoImpl$" + COUNT.incrementAndGet();
 	}
 	
 	protected void printMethodContent(String methodContent) {

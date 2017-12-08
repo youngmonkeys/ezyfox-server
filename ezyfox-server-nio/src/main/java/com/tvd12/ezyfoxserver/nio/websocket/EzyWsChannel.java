@@ -4,7 +4,9 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithException;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import java.net.SocketAddress;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -16,11 +18,13 @@ import lombok.Getter;
 public class EzyWsChannel implements EzyChannel {
 
 	private final Session session;
+	private final AtomicBoolean opened;
 	private final SocketAddress serverAddress;
 	private final SocketAddress clientAddress;
 	
 	public EzyWsChannel(Session session) {
 		this.session = session;
+		this.opened = new AtomicBoolean(true);
 		this.serverAddress = session.getLocalAddress();
 		this.clientAddress = session.getRemoteAddress();
 	}
@@ -29,7 +33,8 @@ public class EzyWsChannel implements EzyChannel {
 	public int write(Object data) throws Exception {
 		String bytes = (String)data;
 		int bytesSize = bytes.length();
-		session.getRemote().sendString(bytes);
+		RemoteEndpoint remote = session.getRemote();
+		remote.sendString(bytes);
 		return bytesSize;
 	}
 	
@@ -46,7 +51,11 @@ public class EzyWsChannel implements EzyChannel {
 	
 	@Override
 	public boolean isConnected() {
-		return session.isOpen();
+		return opened.get();
+	}
+	
+	public void setClosed() {
+		this.opened.set(false);
 	}
 	
 	@Override

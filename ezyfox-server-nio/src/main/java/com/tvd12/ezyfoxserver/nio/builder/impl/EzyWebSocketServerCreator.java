@@ -13,17 +13,24 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
 public class EzyWebSocketServerCreator {
 
 	protected EzyWebSocketSetting settings;
+	protected EzyNioSessionManager sessionManager;
 	protected EzyHandlerGroupManager handlerGroupManager;
 	protected EzySessionManagementSetting sessionSettings;
 	
 	public EzyWebSocketServerCreator settings(EzyWebSocketSetting settings) {
 		this.settings = settings;
+		return this;
+	}
+	
+	public EzyWebSocketServerCreator sessionManager(EzyNioSessionManager sessionManager) {
+		this.sessionManager = sessionManager;
 		return this;
 	}
 	

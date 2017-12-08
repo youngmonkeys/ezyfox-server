@@ -105,7 +105,7 @@ public class EzySimpleIdFetcherImplementer
 		if(element != null)
 			return element;
 		if(EzyHasIdEntity.class.isAssignableFrom(clazz.getClazz()))
-			return new EzyClass(EzyHasIdEntity.class).getMethod("getId");
+			return clazz.getMethod("getId");
 		Optional<EzyField> foundField = 
 				clazz.getField(f -> f.isAnnotated(EzyId.class));
 		if(foundField.isPresent()) {
@@ -117,7 +117,7 @@ public class EzySimpleIdFetcherImplementer
 				return method;
 		}
 		Optional<EzyMethod> foundMethod = 
-				clazz.getPublicMethod(m -> m.isAnnotated(EzyId.class));
+				clazz.getGetterMethod(m -> m.isAnnotated(EzyId.class));
 		if(foundMethod.isPresent())
 			return foundMethod.get();
 		throw new IllegalStateException("use @EzyId to specific 'id' element on " + clazz);

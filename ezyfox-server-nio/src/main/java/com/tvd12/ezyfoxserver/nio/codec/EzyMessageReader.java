@@ -85,11 +85,11 @@ class EzyMessageHeaderReader {
 	}
 	
 	protected boolean readCompressed(byte header) {
-		return (header & (2 << 1)) > 0;
+		return (header & (1 << 2)) > 0;
 	}
 	
 	protected boolean readText(byte header) {
-		return (header & (3 << 1)) > 0;
+		return (header & (1 << 3)) > 0;
 	}
 	
 	public EzyMessageHeader read(byte header) {

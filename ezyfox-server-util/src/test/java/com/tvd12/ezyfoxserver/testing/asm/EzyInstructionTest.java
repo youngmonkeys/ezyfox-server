@@ -84,6 +84,42 @@ public class EzyInstructionTest extends BaseTest {
 		instruction = new EzyInstruction("", "", true);
 		instruction.invoke("object", "hello", "arg0", "arg1");
 		assertEquals(instruction.toString(false), "hello.hello(arg0, arg1)");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(boolean.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Boolean)(arg0)).booleanValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(byte.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Byte)(arg0)).byteValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(char.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Character)(arg0)).charValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(double.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Double)(arg0)).doubleValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(float.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Float)(arg0)).floatValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(int.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Integer)(arg0)).intValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(long.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Long)(arg0)).longValue()");
+		
+		instruction = new EzyInstruction("", "", true);
+		instruction.cast(short.class, "arg0");
+		assertEquals(instruction.toString(false), "((java.lang.Short)(arg0)).shortValue()");
+		
+		instruction.append(instruction);
+		
+		
 	}
 	
 	public static class A {

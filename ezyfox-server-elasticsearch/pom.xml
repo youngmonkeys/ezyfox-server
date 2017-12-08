@@ -11,15 +11,28 @@
 	<version>1.0.0</version>
 
 	<properties>
-		<ezy.common.version>1.0.0</ezy.common.version>
-		<elasticsearch.version>5.6.3</elasticsearch.version>
+		<ezy.message.version>1.0.0</ezy.message.version>
+		<ezy.binding.version>1.0.0</ezy.binding.version>
+		<ezy.data.version>1.0.0</ezy.data.version>
+		<elasticsearch.version>6.0.0</elasticsearch.version>
+		<log4j.core.version>2.10.0</log4j.core.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-common</artifactId>
-			<version>${ezy.common.version}</version>
+			<artifactId>ezyfox-server-message</artifactId>
+			<version>${ezy.message.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-binding</artifactId>
+			<version>${ezy.binding.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-server-data</artifactId>
+			<version>${ezy.data.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
@@ -31,6 +44,24 @@
 			<artifactId>transport</artifactId>
 			<version>${elasticsearch.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-high-level-client</artifactId>
+			<version>${elasticsearch.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.core.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+		
 	</dependencies>
 
 </project>

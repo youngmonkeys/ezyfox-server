@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 import static com.tvd12.ezyfoxserver.util.EzyReturner.returnWithException;
 
 import java.net.SocketAddress;
@@ -9,18 +10,16 @@ import java.nio.channels.SocketChannel;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
-
 import lombok.Getter;
 
 @Getter
-public class EzySocketChannel implements EzyChannel {
+public class EzyNioSocketChannel implements EzyChannel {
 
 	private final SocketChannel channel;
 	private final SocketAddress serverAddress;
 	private final SocketAddress clientAddress;
 	
-	public EzySocketChannel(SocketChannel channel) {
+	public EzyNioSocketChannel(SocketChannel channel) {
 		this.channel = channel;
 		this.serverAddress = returnWithException(channel::getLocalAddress);
 		this.clientAddress = returnWithException(channel::getRemoteAddress);

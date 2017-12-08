@@ -31,11 +31,14 @@ public class EzyThreadsMonitor {
 		List<EzyThreadDetail> threads = new ArrayList<>();
 		for (long threadId : threadIds) {
 			ThreadInfo threadInfo = tmxBean.getThreadInfo(threadId);
+			if(threadInfo == null)
+				continue;
 			String threadName = threadInfo.getThreadName();
 			long cpuTime = 0L;
 			if (canGetThreadCpuTime()) {
 				cpuTime = tmxBean.getThreadCpuTime(threadId);
-				totalThreadsCpuTime += cpuTime;
+				if(cpuTime > 0)
+					totalThreadsCpuTime += cpuTime;
 			}
 			EzyThreadDetail detail = new EzyThreadDetail();
 			detail.setId(threadId);

@@ -72,7 +72,7 @@ public class EzyNioSocketAcceptor
 		clientChannel.configureBlocking(false);
 		clientChannel.socket().setTcpNoDelay(tcpNoDelay);
 		
-		EzyChannel channel = new EzySocketChannel(clientChannel);
+		EzyChannel channel = new EzyNioSocketChannel(clientChannel);
 		
 		EzyNioHandlerGroup dataHandler = handlerGroupManager
 				.newHandlerGroup(channel, EzyConnectionType.SOCKET);

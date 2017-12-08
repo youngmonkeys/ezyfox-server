@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.asm;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,13 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.reflect.EzyTypes;
 
+@SuppressWarnings("rawtypes")
 public class EzyInstruction {
 	
 	protected final String end;
 	protected final boolean semicolon;
 	protected final StringBuilder builder = new StringBuilder();
 	
-	@SuppressWarnings("rawtypes")
+	private static final Map<Class, String> FETCH_PRIMITIVE_METHODS = 
+			fetchPrimitiveMethods();
+	
 	protected static final Map<Class, Class> PRIMITIVE_WRAPPER_TYPES = 
 			EzyTypes.PRIMITIVE_WRAPPER_TYPES_MAP;
 	
@@ -45,7 +49,6 @@ public class EzyInstruction {
 		return this;
 	} 
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction constructor(Class clazz) {
 		return clazz(clazz).append("()");
 	}
@@ -65,12 +68,14 @@ public class EzyInstruction {
 		return this;
 	}
 	
-	@SuppressWarnings("rawtypes")
+	public EzyInstruction append(EzyInstruction instruction) {
+		return append(instruction.toString());
+	}
+	
 	public EzyInstruction clazz(Class clazz) {
 		return clazz(clazz, false);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction clazz(Class clazz, boolean extension) {
 		append(clazz.getTypeName());
 		return extension ? append(".class") : this;
@@ -92,7 +97,6 @@ public class EzyInstruction {
 		return append(")");
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction brackets(Class clazz) {
 		builder.append("(").append(clazz.getTypeName()).append(")");
 		return this;
@@ -107,24 +111,36 @@ public class EzyInstruction {
 		return append("return ");
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction variable(Class type) {
 		return variable(type, EzyClasses.getVariableName(type));
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction variable(Class type, String name) {
 		builder.append(type.getTypeName()).append(" ").append(name);
 		return this;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction cast(Class type, String expression) {
+		if(PRIMITIVE_WRAPPER_TYPES.containsKey(type))
+			return castPrimitive(type, expression);
+		return castNormal(type, expression);
+	}
+	
+	protected EzyInstruction castNormal(Class type, String expression) {
 		builder
 			.append("(")
 				.append("(").append(type.getTypeName()).append(")")
 				.append("(").append(expression).append(")")
 			.append(")");
+		return this;
+	}
+	
+	protected EzyInstruction castPrimitive(Class type, String expression) {
+		Class wrapperType = PRIMITIVE_WRAPPER_TYPES.get(type);
+		String primitiveValueMethod = FETCH_PRIMITIVE_METHODS.get(wrapperType);
+		castNormal(wrapperType, expression);
+		dot();
+		append(primitiveValueMethod);
 		return this;
 	}
 	
@@ -139,11 +155,23 @@ public class EzyInstruction {
 				.function(method, args);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public EzyInstruction valueOf(Class type, String expression) {
 		if(PRIMITIVE_WRAPPER_TYPES.containsKey(type))
 			return clazz(PRIMITIVE_WRAPPER_TYPES.get(type)).append(".valueOf").brackets(expression);
 		return append(expression);
+	}
+	
+	private static Map<Class, String> fetchPrimitiveMethods() {
+		Map<Class, String> map = new HashMap<>();
+		map.put(Boolean.class, "booleanValue()");
+		map.put(Byte.class, "byteValue()");
+		map.put(Character.class, "charValue()");
+		map.put(Double.class, "doubleValue()");
+		map.put(Float.class, "floatValue()");
+		map.put(Integer.class, "intValue()");
+		map.put(Long.class, "longValue()");
+		map.put(Short.class, "shortValue()");
+		return map;
 	}
 	
 	@Override

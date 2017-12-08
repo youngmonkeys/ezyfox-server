@@ -1,11 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.reflect;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfoxserver.annotation.EzyAutoImpl;
+import com.tvd12.ezyfoxserver.annotation.EzyId;
 import com.tvd12.ezyfoxserver.reflect.EzyClass;
 import com.tvd12.ezyfoxserver.reflect.EzyMethod;
 import com.tvd12.test.base.BaseTest;
@@ -60,6 +63,34 @@ public class EzyClassTest extends BaseTest {
 		clazz.getDeclaredConstructor();
 		
 		assert clazz.getModifiers() == clazz.getClazz().getModifiers();
+		
+	}
+	
+	@Test
+	public void test2() {
+		EzyClass clazz = new EzyClass(A2.class);
+		assertEquals(clazz.getGetterMethod(m -> m.isAnnotated(EzyId.class)).get().getName(), "getName");
+		assertEquals(clazz.getSetterMethod(m -> m.isAnnotated(EzyId.class)).get().getName(), "setName");
+		assertFalse(clazz.getGetterMethod(m -> m.isAnnotated(EzyAutoImpl.class)).isPresent());
+		assertFalse(clazz.getSetterMethod(m -> m.isAnnotated(EzyAutoImpl.class)).isPresent());
+		
+		assertEquals(clazz.getGetterMethod("getName").getName(), "getName");
+		assertEquals(clazz.getSetterMethod("setName").getName(), "setName");
+		
+		assertEquals(clazz.getGetterMethod("getName x"), null);
+		assertEquals(clazz.getSetterMethod("setName z"), null);
+	}
+	
+	public static class A2 {
+		
+		@EzyId
+		public String getName() {
+			return "name";
+		}
+		
+		@EzyId
+		public void setName(String name) {
+		}
 		
 	}
 	

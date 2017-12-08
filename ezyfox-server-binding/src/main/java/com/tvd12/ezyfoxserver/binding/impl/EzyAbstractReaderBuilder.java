@@ -151,25 +151,7 @@ public abstract class EzyAbstractReaderBuilder
 			EzyInstruction instruction, Class outType) {
 		String value = instruction.toString();
 		EzyInstruction answer = new EzyInstruction("", "", false);
-		if(outType == boolean.class)
-			answer.cast(Boolean.class, value).append(".booleanValue()");
-		else if(outType == byte.class)
-			answer.cast(Byte.class, value).append(".byteValue()");
-		else if(outType == char.class)
-			answer.cast(Character.class, value).append(".charValue()");
-		else if(outType == double.class)
-			answer.cast(Double.class, value).append(".doubleValue()");
-		else if(outType == float.class)
-			answer.cast(Float.class, value).append(".floatValue()");
-		else if(outType == int.class)
-			answer.cast(Integer.class, value).append(".intValue()");
-		else if(outType == long.class)
-			answer.cast(Long.class, value).append(".longValue()");
-		else if(outType == short.class)
-			answer.cast(Short.class, value).append(".shortValue()");
-		else
-			answer.cast(outType, value);
-		return answer;
+		return answer.cast(outType, value);
 	}
 	
 	protected Set<Class> getCommonGenericTypes() {

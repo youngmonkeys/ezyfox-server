@@ -9,8 +9,9 @@ import org.eclipse.jetty.server.Server;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWritingLoopHandler;
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
@@ -18,6 +19,8 @@ import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
+import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyWebSocketServerBootstrap 
 		implements EzyStartable, EzyDestroyable {
@@ -54,13 +57,14 @@ public class EzyWebSocketServerBootstrap
 	private Server newSocketServer() {
 		return newSocketServerCreator()
 				.settings(getWsSettings())
+				.sessionManager(getSessionManager())
 				.sessionSettings(getSessionSettings())
 				.handlerGroupManager(handlerGroupManager)
 				.create();
 	}
 	
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzyNioSocketWritingLoopHandler();
+		EzySocketEventLoopHandler loopHandler = new EzyWsWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
 		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
 		eventHandler.setHandlerGroupManager(handlerGroupManager);
@@ -93,6 +97,15 @@ public class EzyWebSocketServerBootstrap
 	
 	private EzySettings getServerSettings() {
 		return serverContext.getServer().getSettings();
+	}
+	
+	private EzyManagers getServerManagers() {
+		return serverContext.getServer().getManagers();
+	}
+	
+	private EzyNioSessionManager getSessionManager() {
+		return (EzyNioSessionManager) 
+				getServerManagers().getManager(EzySessionManager.class);
 	}
 	
 	public static Builder builder() {

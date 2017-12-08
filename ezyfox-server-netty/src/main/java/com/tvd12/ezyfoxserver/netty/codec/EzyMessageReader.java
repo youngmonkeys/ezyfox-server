@@ -77,7 +77,7 @@ class EzyMessageHeaderReader {
 	protected boolean compressed;
 	
 	protected boolean readBigSize(byte header) {
-		return (header & 1) > 0;
+		return (header & 1 << 0) > 0;
 	}
 	
 	protected boolean readEncrypted(byte header) {

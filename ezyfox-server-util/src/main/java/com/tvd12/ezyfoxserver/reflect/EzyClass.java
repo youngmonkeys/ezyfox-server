@@ -95,9 +95,31 @@ public class EzyClass implements EzyReflectElement {
 		return getMethods(m -> m.isGetter(), EzyGetterMethod::new);
 	}
 	
+	public EzyMethod getSetterMethod(String methodName) {
+		Optional<EzyMethod> optional = 
+				getSetterMethod(m -> m.getName().equals(methodName));
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
+	public EzyMethod getGetterMethod(String methodName) {
+		Optional<EzyMethod> optional = 
+				getGetterMethod(m -> m.getName().equals(methodName));
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
 	public Optional<EzyMethod> getPublicMethod(Predicate<EzyMethod> predicate) {
 		return methods.stream()
 				.filter(m -> m.isPublic() && predicate.test(m)).findFirst();
+	}
+	
+	public Optional<EzyMethod> getGetterMethod(Predicate<EzyMethod> predicate) {
+		return methods.stream()
+				.filter(m -> m.isGetter() && predicate.test(m)).findFirst();
+	}
+	
+	public Optional<EzyMethod> getSetterMethod(Predicate<EzyMethod> predicate) {
+		return methods.stream()
+				.filter(m -> m.isSetter() && predicate.test(m)).findFirst();
 	}
 	
 	public List<EzyMethod> getPublicMethods(Predicate<EzyMethod> predicate) {

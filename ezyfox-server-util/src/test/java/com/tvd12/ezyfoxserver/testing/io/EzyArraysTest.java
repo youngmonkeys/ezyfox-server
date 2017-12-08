@@ -30,4 +30,12 @@ public class EzyArraysTest extends BaseTest {
 		assert EzyArrays.min(new Long[] {3L,1L,2L}) == 1L;
 		assert EzyArrays.max(new Long[] {3L,1L,5L,6L,2L}) == 6L;
 	}
+	
+	@Test
+	public void test2() {
+		Collection<Long> coll = Lists.newArrayList(1L, 2L, 3L);
+		Long[] array = EzyArrays.newArray(coll, 
+				(s) -> new Long[s]);
+		Assert.assertEquals(array, new Long[] {1L, 2L, 3L});
+	}
 }

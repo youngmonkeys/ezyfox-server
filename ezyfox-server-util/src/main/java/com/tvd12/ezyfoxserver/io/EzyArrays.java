@@ -25,6 +25,11 @@ public final class EzyArrays {
 		return bytes;
 	}
 	
+	public static <I,O> O[] newArray(Collection<I> coll, 
+            IntFunction<O[]> generator) {
+		return coll.stream().toArray(generator);
+	}
+	
     public static <I,O> O[] newArray(Collection<I> coll, 
             IntFunction<O[]> generator, Function<I, O> applier) {
         int count = 0;

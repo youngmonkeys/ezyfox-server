@@ -19,6 +19,9 @@ public class EzySimpleHttpSetting implements EzyHttpSetting {
     @XmlElement(name = "port")
     protected int port = 8080;
     
+    @XmlElement(name = "active")
+    protected boolean active = true;
+    
     @XmlElement(name = "max-threads")
     protected int maxThreads = 8;
     

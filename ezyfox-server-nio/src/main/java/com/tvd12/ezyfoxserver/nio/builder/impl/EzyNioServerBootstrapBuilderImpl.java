@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.nio.builder.impl;
 
 import java.util.concurrent.ExecutorService;
 
-import com.tvd12.ezyfoxserver.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;

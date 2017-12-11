@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.netty.builder.impl;
 
-import com.tvd12.ezyfoxserver.EzyHttpServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.netty.EzyNettyServerBootstrap;

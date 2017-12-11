@@ -36,8 +36,9 @@
 
 	<xs:complexType name="socket-type">
 		<xs:all>
-			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
+			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="max-request-size" type="xs:int" maxOccurs="1" minOccurs="0" />
 		</xs:all>
@@ -45,8 +46,9 @@
 
 	<xs:complexType name="web-socket-type">
 		<xs:all>
-			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
+			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="ssl-port" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="ssl-config" type="ssl-config-type" maxOccurs="1" minOccurs="0" />
@@ -66,6 +68,7 @@
 	<xs:complexType name="http-type">
 		<xs:all>
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>

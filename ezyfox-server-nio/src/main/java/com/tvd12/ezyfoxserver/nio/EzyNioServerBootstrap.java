@@ -1,19 +1,21 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
+import javax.net.ssl.SSLContext;
+
+import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzySocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 import lombok.Setter;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
-import javax.net.ssl.SSLContext;
-
-
-public class EzyNioServerBootstrap extends EzyServerBootstrap {
+public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 
 	private EzySocketServerBootstrap socketServerBootstrap;
 	private EzyWebSocketServerBootstrap websocketServerBootstrap;
@@ -35,6 +37,8 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	}
 	
 	private void startSocketServerBootstrap() throws Exception {
+		EzySocketSetting socketSetting = getSocketSetting();
+		if(!socketSetting.isActive()) return;
 		getLogger().debug("starting tcp socket server bootstrap ....");
 		socketServerBootstrap = newSocketServerBootstrap();
 		socketServerBootstrap.start();
@@ -42,6 +46,8 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	}
 	
 	protected void startWebSocketServerBootstrap() throws Exception {
+		EzyWebSocketSetting socketSetting = getWebSocketSetting();
+		if(!socketSetting.isActive()) return;
 		getLogger().debug("starting websocket server bootstrap ....");
 		websocketServerBootstrap = newWebSocketServerBootstrap();
 		websocketServerBootstrap.start();
@@ -68,8 +74,10 @@ public class EzyNioServerBootstrap extends EzyServerBootstrap {
 	@Override
 	public void destroy() {
 		super.destroy();
-		processWithLogException(socketServerBootstrap::destroy);
-		processWithLogException(websocketServerBootstrap::destroy);
+		if(socketServerBootstrap != null)
+			processWithLogException(socketServerBootstrap::destroy);
+		if(websocketServerBootstrap != null)
+			processWithLogException(websocketServerBootstrap::destroy);
 	}
 	
 }

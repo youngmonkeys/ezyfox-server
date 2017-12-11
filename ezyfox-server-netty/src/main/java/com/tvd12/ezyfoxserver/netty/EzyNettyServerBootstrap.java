@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.netty;
 
-import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -8,7 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Setter;
 
-public class EzyNettyServerBootstrap extends EzyServerBootstrap {
+public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 
 	@Setter
 	protected EventLoopGroup childGroup;

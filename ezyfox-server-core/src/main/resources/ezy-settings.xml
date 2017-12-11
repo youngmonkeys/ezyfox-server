@@ -11,12 +11,14 @@
 	
 	<http>
 		<port>8080</port>
+		<active>true</active>
 		<max-threads>8</max-threads>
 	</http>
 	
 	<socket>
 		<port>3005</port>
 		<address>0.0.0.0</address>
+		<active>true</active>
 		<max-request-size>65536</max-request-size>
 		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
 	</socket>
@@ -24,6 +26,7 @@
 	<web-socket>
 		<port>2208</port>
 		<address>0.0.0.0</address>
+		<active>true</active>
 		<ssl-port>2812</ssl-port>
 		<max-frame-size>65536</max-frame-size>
 		<ssl-active>false</ssl-active>

@@ -4,9 +4,14 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.context.EzyContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
+import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
@@ -35,7 +40,9 @@ public abstract class EzyServerBootstrap
 	
 	protected void startHttpBootstrap() throws Exception {
 	    getLogger().debug("starting http server bootstrap ....");
-	    httpBootstrap.start();
+	    EzyHttpSetting setting = getHttpSetting();
+	    if(setting.isActive())
+	        httpBootstrap.start();
 	    getLogger().debug("http server bootstrap has started");
 	}
 	
@@ -61,5 +68,21 @@ public abstract class EzyServerBootstrap
 	protected EzyEvent newServerReadyEvent() {
 		return EzySimpleServerReadyEvent.builder().build();
 	}
+	
+	protected EzySettings getServerSettings() {
+	    return EzyContexts.getSettings(context);
+	}
+	
+	protected EzyHttpSetting getHttpSetting() {
+	    return getServerSettings().getHttp();
+	}
+	
+	protected EzySocketSetting getSocketSetting() {
+        return getServerSettings().getSocket();
+    }
+	
+	protected EzyWebSocketSetting getWebSocketSetting() {
+        return getServerSettings().getWebsocket();
+    }
 	
 }

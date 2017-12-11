@@ -6,6 +6,8 @@ public interface EzyBaseSocketSetting {
     
     String getAddress();
     
+    boolean isActive();
+    
     String getCodecCreator();
     
 }

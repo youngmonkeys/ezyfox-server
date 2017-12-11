@@ -18,10 +18,14 @@ public abstract class EzyAbstractSocketSetting implements EzyBaseSocketSetting {
     @XmlElement(name = "address")
     protected String address;
     
+    @XmlElement(name = "active")
+    protected boolean active;
+    
 	@XmlElement(name = "codec-creator")
 	protected String codecCreator;
 	
 	public EzyAbstractSocketSetting() {
+	    setActive(true);
 	    setAddress("0.0.0.0");
 	}
 	

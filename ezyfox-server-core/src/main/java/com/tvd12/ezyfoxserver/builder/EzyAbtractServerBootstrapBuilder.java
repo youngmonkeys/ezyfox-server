@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.builder;
 import javax.net.ssl.SSLContext;
 
 import com.tvd12.ezyfoxserver.EzyBootstrap;
-import com.tvd12.ezyfoxserver.EzyHttpBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
@@ -43,7 +42,6 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	protected EzyServerBootstrap doBuild() {
 	    EzyServerBootstrap answer = newServerBootstrap();
         answer.setContext(serverContext);
-        answer.setHttpBootstrap(newHttpBottstrap());
         answer.setLocalBootstrap(newLocalBoostrap());
         return answer;
 	}
@@ -84,8 +82,6 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	protected EzyServerContextBuilder<?> newServerContextBuilder() {
 	    return new EzySimpleServerContextBuilder<>();
 	}
-	
-	protected abstract EzyHttpBootstrap newHttpBottstrap();
 	
 	protected abstract EzyServerBootstrap newServerBootstrap();
 	

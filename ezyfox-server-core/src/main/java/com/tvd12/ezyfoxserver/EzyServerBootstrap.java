@@ -28,8 +28,6 @@ public abstract class EzyServerBootstrap
 	protected EzyServerContext context;
 	@Setter
 	protected EzyBootstrap localBootstrap;
-	@Setter
-	protected EzyHttpBootstrap httpBootstrap;
 	
 	@Override
 	public void start() throws Exception {
@@ -39,11 +37,6 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected void startHttpBootstrap() throws Exception {
-	    getLogger().debug("starting http server bootstrap ....");
-	    EzyHttpSetting setting = getHttpSetting();
-	    if(setting.isActive())
-	        httpBootstrap.start();
-	    getLogger().debug("http server bootstrap has started");
 	}
 	
 	protected abstract void startOtherBootstraps(Runnable callback) throws Exception;
@@ -51,7 +44,6 @@ public abstract class EzyServerBootstrap
 	@Override
 	public void destroy() {
 		processWithLogException(localBootstrap::destroy);
-		processWithLogException(httpBootstrap::destroy);
 	}
 	
 	protected void startLocalBootstrap() throws Exception {

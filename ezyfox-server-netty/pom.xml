@@ -15,7 +15,7 @@
 
 	<properties>
 		<ezy.boot.version>1.0.0</ezy.boot.version>
-		<netty.all.version>4.1.8.Final</netty.all.version>
+		<netty.all.version>4.1.18.Final</netty.all.version>
 	</properties>
 
 	<dependencies>

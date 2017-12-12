@@ -50,4 +50,9 @@ public class EzyNettyChannel implements EzyChannel {
 		channel.close().syncUninterruptibly();
 	}
 	
+	@Override
+	public String toString() {
+		return clientAddress.toString();
+	}
+	
 }

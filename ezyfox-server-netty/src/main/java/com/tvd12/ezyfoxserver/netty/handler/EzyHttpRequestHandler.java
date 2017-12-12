@@ -5,7 +5,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 public class EzyHttpRequestHandler
-    extends SimpleChannelInboundHandler<FullHttpRequest> {
+		extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 	protected final String wsUri;
 

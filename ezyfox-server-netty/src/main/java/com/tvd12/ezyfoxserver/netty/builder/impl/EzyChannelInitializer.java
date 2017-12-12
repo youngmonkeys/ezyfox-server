@@ -4,6 +4,7 @@ import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.netty.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.netty.creator.EzyDataHandlerCreator;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -17,11 +18,13 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 	protected int maxRequestSize;
 	protected EzyCodecCreator codecCreator;
 	protected EzyDataHandlerCreator dataHandlerCreator;
+	protected EzySessionTicketsQueue sessionTicketsQueue;
 	
 	protected EzyChannelInitializer(Builder builder) {
 		this.codecCreator = builder.codecCreator;
 		this.maxRequestSize = builder.maxRequestSize;
 		this.dataHandlerCreator = builder.dataHandlerCreator;
+		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 	}
 	
 	@Override
@@ -59,6 +62,7 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		protected int maxRequestSize;
 		private EzyCodecCreator codecCreator;
 		private EzyDataHandlerCreator dataHandlerCreator;
+		protected EzySessionTicketsQueue sessionTicketsQueue;
 		
 		public Builder maxRequestSize(int maxRequestSize) {
 			this.maxRequestSize = maxRequestSize;
@@ -72,6 +76,11 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		
 		public Builder dataHandlerCreator(EzyDataHandlerCreator dataHandlerCreator) {
 			this.dataHandlerCreator = dataHandlerCreator;
+			return this;
+		}
+		
+		public Builder sessionTicketsQueue(EzySessionTicketsQueue sessionTicketsQueue) {
+			this.sessionTicketsQueue = sessionTicketsQueue;
 			return this;
 		}
 		

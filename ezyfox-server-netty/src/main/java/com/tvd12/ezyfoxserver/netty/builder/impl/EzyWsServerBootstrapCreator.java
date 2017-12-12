@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.netty.builder.impl;
 
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyChannelInitializer.Builder;
 
+@SuppressWarnings({"unchecked"})
 public class EzyWsServerBootstrapCreator<C extends EzyWsServerBootstrapCreator<C>> 
 		extends EzyServerBootstrapCreator<C> {
 	
@@ -13,7 +14,7 @@ public class EzyWsServerBootstrapCreator<C extends EzyWsServerBootstrapCreator<C
 	
 	public C maxFrameSize(int maxFrameSize) {
 		this.maxFrameSize = maxFrameSize;
-		return getThis();
+		return (C)this;
 	}
 
 	@Override

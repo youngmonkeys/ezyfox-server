@@ -13,7 +13,7 @@
 	<version>1.0.0</version>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<hazelcast.version>3.9</hazelcast.version>
+		<hazelcast.version>3.9.1</hazelcast.version>
 		<ezy.common.version>1.0.0</ezy.common.version>
 		<ezy.database.version>1.0.0</ezy.database.version>
 	</properties>

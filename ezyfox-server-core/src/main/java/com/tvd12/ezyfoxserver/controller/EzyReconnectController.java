@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
 
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;

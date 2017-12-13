@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.webapi;
 
 import org.springframework.core.env.PropertySource;
 
-import com.tvd12.ezyfoxserver.context.EzyContexts;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 
@@ -14,7 +14,7 @@ public class EzyWebApiPropertySource extends PropertySource<Object> {
 	public EzyWebApiPropertySource(EzyServerContext context) {
 		super("ezyfox-server-webapi");
 		this.context = context;
-		this.httpSetting = EzyContexts.getHttpSetting(context);
+		this.httpSetting = EzyServerContexts.getHttpSetting(context);
 	}
 	
 	@Override

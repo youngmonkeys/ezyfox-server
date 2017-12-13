@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.forEachAppContexts;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.getSettings;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.getStatistics;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.getUserManager;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.forEachAppContexts;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSettings;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getUserManager;
 
 import java.util.concurrent.locks.Lock;
 

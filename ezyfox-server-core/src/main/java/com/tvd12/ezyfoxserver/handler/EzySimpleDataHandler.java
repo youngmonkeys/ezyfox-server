@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.handler;
 
 import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.containsUser;
-import static com.tvd12.ezyfoxserver.context.EzyContexts.handleException;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.handleException;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
 import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;

@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.netty;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.context.EzyContexts;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyServerBootstrapCreator;
 import com.tvd12.ezyfoxserver.netty.socket.EzyNettySocketWriter;
@@ -135,7 +135,7 @@ public class EzySocketServerBootstrap
     }
 	
 	protected EzySettings getSettings() {
-		return EzyContexts.getSettings(serverContext);
+		return EzyServerContexts.getSettings(serverContext);
 	}
 	
 	private EzySocketSetting getSocketSetting() {

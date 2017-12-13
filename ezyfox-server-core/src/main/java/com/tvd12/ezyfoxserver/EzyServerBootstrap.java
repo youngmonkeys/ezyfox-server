@@ -4,7 +4,7 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
-import com.tvd12.ezyfoxserver.context.EzyContexts;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
@@ -62,7 +62,7 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected EzySettings getServerSettings() {
-	    return EzyContexts.getSettings(context);
+	    return EzyServerContexts.getSettings(context);
 	}
 	
 	protected EzyHttpSetting getHttpSetting() {

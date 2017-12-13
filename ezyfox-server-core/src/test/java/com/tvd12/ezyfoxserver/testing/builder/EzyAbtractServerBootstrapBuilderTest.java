@@ -14,8 +14,7 @@ public class EzyAbtractServerBootstrapBuilderTest extends BaseCoreTest {
         MyTestServerBootstrapBuilder builder = 
                 (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
                 .server(server);
-        builder.getCodecCreatorClassName();
-        builder.getWsCodecCreatorClassName();
+        assert !builder.equals(null);
     }
     
 }

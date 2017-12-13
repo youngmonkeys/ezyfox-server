@@ -33,13 +33,13 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	@Override
 	public final EzyServerBootstrap build() {
 	    prebuild();
-        return doBuild();
+        return buildServerBootstrap();
 	}
 	
 	protected void prebuild() {
 	}
 	
-	protected EzyServerBootstrap doBuild() {
+	protected EzyServerBootstrap buildServerBootstrap() {
 	    EzyServerBootstrap answer = newServerBootstrap();
         answer.setContext(serverContext);
         answer.setLocalBootstrap(newLocalBoostrap());
@@ -69,14 +69,6 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	
     protected EzyBootstrap newLocalBoostrap() {
         return EzyBootstrap.builder().context(serverContext).build();
-    }
-	
-    protected String getCodecCreatorClassName() {
-        return getSocketSettings().getCodecCreator();
-    }
-    
-    protected String getWsCodecCreatorClassName() {
-        return getWebsocketSettings().getCodecCreator();
     }
 	
 	protected EzyServerContextBuilder<?> newServerContextBuilder() {

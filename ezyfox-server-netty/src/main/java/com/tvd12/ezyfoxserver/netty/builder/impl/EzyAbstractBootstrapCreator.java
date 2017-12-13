@@ -14,12 +14,18 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public abstract class EzyAbstractBootstrapCreator<C extends EzyAbstractBootstrapCreator<C>> {
 
 	protected int port;
+	protected String address;
 	protected EzyServerContext context;
 	protected EventLoopGroup childGroup;
 	protected EventLoopGroup parentGroup;
 	
 	public C port(int port) {
 		this.port = port;
+		return (C)this;
+	}
+	
+	public C address(String address) {
+		this.address = address;
 		return (C)this;
 	}
 	
@@ -43,7 +49,7 @@ public abstract class EzyAbstractBootstrapCreator<C extends EzyAbstractBootstrap
 		return newServerBootstrap()
 				.group(parentGroup, childGroup)
 				.channel(NioServerSocketChannel.class)
-				.localAddress(new InetSocketAddress(port))
+				.localAddress(new InetSocketAddress(address, port))
 				.childHandler(newChannelInitializer());
 	}
 	

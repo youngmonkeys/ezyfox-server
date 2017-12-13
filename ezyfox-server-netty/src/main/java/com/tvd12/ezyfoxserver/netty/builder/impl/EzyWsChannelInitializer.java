@@ -4,7 +4,6 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.netty.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.netty.handler.EzyHttpRequestHandler;
-import com.tvd12.ezyfoxserver.netty.handler.EzyWsFrameHandler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -37,7 +36,6 @@ class EzyWsChannelInitializer extends EzyChannelInitializer {
 		pipeline.addLast("chunked-write-andler", new ChunkedWriteHandler());
 		pipeline.addLast("http-request-handler", new EzyHttpRequestHandler("/ws"));
 		pipeline.addLast("ws-server-protocol-handler", newWebSocketServerProtocolHandler());
-		pipeline.addLast("ws-frame-handler", new EzyWsFrameHandler());
 		pipeline.addLast("codec-1", new EzyCombinedCodec(decoder, encoder));
 		pipeline.addLast("handler", newDataHandler());
 		pipeline.addLast("codec-2", new EzyCombinedCodec(decoder, encoder));

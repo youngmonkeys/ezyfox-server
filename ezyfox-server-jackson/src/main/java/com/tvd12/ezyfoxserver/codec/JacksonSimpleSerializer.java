@@ -11,8 +11,7 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 
 public class JacksonSimpleSerializer 
-		extends EzyAbstractByTypeSerializer 
-		implements EzyMessageSerializer {
+		extends EzyAbstractByTypeSerializer {
 
 	protected ObjectMapper objectMapper;
 	

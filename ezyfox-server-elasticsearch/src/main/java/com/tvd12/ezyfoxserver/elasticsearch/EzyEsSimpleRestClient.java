@@ -12,13 +12,14 @@ import com.tvd12.ezyfoxserver.elasticsearch.operation.EzyEsIndexUpdateOneOperati
 import com.tvd12.ezyfoxserver.elasticsearch.operation.EzyEsIndexUpdateOperation;
 import com.tvd12.ezyfoxserver.elasticsearch.operation.EzyEsOperation;
 import com.tvd12.ezyfoxserver.elasticsearch.operation.EzyEsSearchOperation;
+import com.tvd12.ezyfoxserver.elasticsearch.response.EzyEsSearchManyResponse;
 import com.tvd12.ezyfoxserver.elasticsearch.response.EzyEsSearchOneResponse;
 import com.tvd12.ezyfoxserver.elasticsearch.rest.EzyEsRestIndexUpdateManyOperation;
 import com.tvd12.ezyfoxserver.elasticsearch.rest.EzyEsRestIndexUpdateOneOperation;
 import com.tvd12.ezyfoxserver.elasticsearch.rest.EzyEsRestOperation;
+import com.tvd12.ezyfoxserver.elasticsearch.rest.EzyEsRestSearchManyOperation;
 import com.tvd12.ezyfoxserver.elasticsearch.rest.EzyEsRestSearchOneOperation;
 import com.tvd12.ezyfoxserver.identifier.EzyIdFetchers;
-import com.tvd12.ezyfoxserver.identifier.EzyIdSetters;
 
 import lombok.Setter;
 
@@ -26,7 +27,6 @@ import lombok.Setter;
 @SuppressWarnings({"rawtypes"})
 public class EzyEsSimpleRestClient implements EzyEsRestClient {
 
-	protected EzyIdSetters idSetters;
 	protected EzyMarshaller marshaller;
 	protected EzyIdFetchers idFetchers;
 	protected EzyUnmarshaller unmarshaller;
@@ -62,11 +62,15 @@ public class EzyEsSimpleRestClient implements EzyEsRestClient {
 	@Override
 	public <T> EzyEsSearchOneResponse<T> searchOne(
 			Object input, Class<T> responseType, Header... headers) {
-		SearchRequest searchRequest = (SearchRequest)input;
 		EzyEsRestSearchOneOperation operation = new EzyEsRestSearchOneOperation();
-		operation.setResponseType(responseType);
-		operation.setSearchRequest(searchRequest);
-		return executeSearchOperation(operation, searchRequest, responseType, headers);
+		return executeSearchOperation(operation, input, responseType, headers);
+	}
+	
+	@Override
+	public <T> EzyEsSearchManyResponse<T> searchMany(
+			Object input, Class<T> responseType, Header... headers) {
+		EzyEsRestSearchManyOperation operation = new EzyEsRestSearchManyOperation();
+		return executeSearchOperation(operation, input, responseType, headers);
 	}
 	
 	protected <T> T executeOperation(EzyEsOperation operation) {
@@ -78,12 +82,12 @@ public class EzyEsSimpleRestClient implements EzyEsRestClient {
 	
 	protected <T> T executeSearchOperation(
 			EzyEsSearchOperation operation, 
-			SearchRequest searchRequest, Class responseType, Header...headers) {
+			Object searchRequest, Class responseType, Header...headers) {
 		operation.setHeaders(headers);
-		operation.setIdSetters(idSetters);
 		operation.setUnmarshaller(unmarshaller);
 		operation.setResponseType(responseType);
 		operation.setIndexedDataClasses(indexedDataClasses);
+		operation.setSearchRequest((SearchRequest)searchRequest);
 		return executeOperation(operation);
 	}
 	

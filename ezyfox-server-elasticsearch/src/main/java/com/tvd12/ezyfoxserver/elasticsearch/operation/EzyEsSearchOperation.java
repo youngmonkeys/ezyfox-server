@@ -6,7 +6,6 @@ import org.elasticsearch.action.search.SearchRequest;
 import com.tvd12.ezyfoxserver.binding.EzyUnmarshaller;
 import com.tvd12.ezyfoxserver.elasticsearch.EzyIndexTypes;
 import com.tvd12.ezyfoxserver.elasticsearch.EzyIndexedDataClasses;
-import com.tvd12.ezyfoxserver.identifier.EzyIdSetters;
 
 @SuppressWarnings("rawtypes")
 public interface EzyEsSearchOperation extends EzyEsOperation {
@@ -15,8 +14,6 @@ public interface EzyEsSearchOperation extends EzyEsOperation {
 	
 	void setResponseType(Class responseType);
 
-	void setIdSetters(EzyIdSetters idSetters);
-	
 	void setIndexTypes(EzyIndexTypes indexTypes);
 	
 	void setUnmarshaller(EzyUnmarshaller unmarshaller);

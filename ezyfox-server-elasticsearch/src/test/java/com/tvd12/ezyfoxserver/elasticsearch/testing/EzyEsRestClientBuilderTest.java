@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.binding.EzyUnmarshaller;
 import com.tvd12.ezyfoxserver.data.EzyIndexedDataIdFetchers;
 import com.tvd12.ezyfoxserver.elasticsearch.EzyEsSimpleRestClient;
 import com.tvd12.ezyfoxserver.elasticsearch.EzyIndexedDataClasses;
+import com.tvd12.ezyfoxserver.elasticsearch.response.EzyEsSearchManyResponse;
 import com.tvd12.ezyfoxserver.elasticsearch.response.EzyEsSearchOneResponse;
 import com.tvd12.ezyfoxserver.elasticsearch.testing.data.One;
 import com.tvd12.ezyfoxserver.identifier.EzyIdFetchers;
@@ -38,11 +39,14 @@ public class EzyEsRestClientBuilderTest {
 		esClient.setHighLevelClient(highLevelClient);
 		esClient.setIndexedDataClasses(indexedDataClasses);
 		esClient.indexUpdateMany(new One(1, "hello", "world"));
+		esClient.indexUpdateMany(new One(2, "come in", "man"));
 		SearchRequest searchRequest = new SearchRequest();
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		searchRequest.source(sourceBuilder);
-		EzyEsSearchOneResponse<One> response = esClient.searchOne(searchRequest, One.class);
-		System.out.println(response);
+		EzyEsSearchOneResponse<One> responseOne = esClient.searchOne(searchRequest, One.class);
+		System.out.println(responseOne);
+		EzyEsSearchManyResponse<One> responseMany = esClient.searchMany(searchRequest, One.class);
+		System.out.println(responseMany);
 		try {
 			highLevelClient.close();
 		}

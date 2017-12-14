@@ -14,7 +14,6 @@ import com.tvd12.ezyfoxserver.elasticsearch.EzyIndexTypes;
 import com.tvd12.ezyfoxserver.elasticsearch.EzyIndexedDataClasses;
 import com.tvd12.ezyfoxserver.elasticsearch.operation.EzyEsSearchOperation;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.identifier.EzyIdSetters;
 import com.tvd12.ezyfoxserver.io.EzyArrays;
 import com.tvd12.ezyfoxserver.util.EzyEntityObjects;
 
@@ -28,7 +27,6 @@ public abstract class EzyEsRestAbstractSearchOperation
 
 	protected Header[] headers;
 	protected Class responseType;
-	protected EzyIdSetters idSetters;
 	protected EzyIndexTypes indexTypes;
 	protected SearchRequest searchRequest;
 	protected EzyUnmarshaller unmarshaller;

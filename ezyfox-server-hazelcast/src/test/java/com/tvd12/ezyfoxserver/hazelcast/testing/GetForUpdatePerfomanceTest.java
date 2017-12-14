@@ -21,6 +21,7 @@ public class GetForUpdatePerfomanceTest extends HazelcastBaseTest {
 		long start = System.currentTimeMillis();
 		for(int i = 0 ; i < 50000 ; i++) {
 			map.getForUpdate("" + i);
+			map.set("" + 1, i);
 		}
 		txCxt.commitTransaction();
 		long offset = System.currentTimeMillis() - start;

@@ -7,6 +7,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -21,7 +22,7 @@ import lombok.Setter;
 
 public class EzyNioSocketAcceptor 
 		extends EzySocketAbstractEventHandler
-		implements EzyHandlerGroupManagerAware {
+		implements EzyHandlerGroupManagerAware, EzyNioAcceptableConnectionsHandler {
 
 	@Setter
 	private boolean tcpNoDelay;
@@ -29,6 +30,8 @@ public class EzyNioSocketAcceptor
 	private Selector ownSelector;
 	@Setter
 	private Selector readSelector;
+	@Setter
+	private List<SocketChannel> acceptableConnections;
 	@Setter
 	protected EzyHandlerGroupManager handlerGroupManager;
 	
@@ -47,7 +50,16 @@ public class EzyNioSocketAcceptor
 		}
 	}
 	
-	private synchronized void processReadyKeys() throws Exception {
+	public void handleAcceptableConnections() {
+		if(acceptableConnections.isEmpty()) {
+			return;
+		}
+		synchronized (acceptableConnections) {
+			handleAcceptableConnections0();
+		}
+	}
+	
+	private void processReadyKeys() throws Exception {
 		ownSelector.select();
 		
 		Set<SelectionKey> readyKeys = ownSelector.selectedKeys();
@@ -64,11 +76,35 @@ public class EzyNioSocketAcceptor
 		ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
 		if(key.isAcceptable()) {
 			SocketChannel clientChannel = serverChannel.accept();
+			addConnection(clientChannel);
+		}
+	}
+	
+	private void addConnection(SocketChannel clientChannel) {
+		synchronized (acceptableConnections) {
+			acceptableConnections.add(clientChannel);
+		}
+	}
+	
+	private void handleAcceptableConnections0() {
+		Iterator<SocketChannel> iterator = acceptableConnections.iterator();
+		while(iterator.hasNext()) {
+			SocketChannel clientChannel = iterator.next();
+			iterator.remove();
 			acceptConnection(clientChannel);
 		}
 	}
 	
-	private void acceptConnection(SocketChannel clientChannel) throws Exception {
+	private void acceptConnection(SocketChannel clientChannel) {
+		try {
+			acceptConnection0(clientChannel);
+		}
+		catch(Exception e) {
+			getLogger().error("can't acception connection: " + clientChannel, e);
+		}
+	}
+	
+	private void acceptConnection0(SocketChannel clientChannel) throws Exception {
 		clientChannel.configureBlocking(false);
 		clientChannel.socket().setTcpNoDelay(tcpNoDelay);
 		

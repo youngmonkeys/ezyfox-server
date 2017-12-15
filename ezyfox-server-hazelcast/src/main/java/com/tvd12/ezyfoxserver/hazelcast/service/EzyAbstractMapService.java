@@ -5,6 +5,8 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.core.TransactionalMap;
 import com.tvd12.ezyfoxserver.function.EzyExceptionApply;
 import com.tvd12.ezyfoxserver.function.EzyExceptionFunction;
+import com.tvd12.ezyfoxserver.function.EzyExceptionVoid;
+import com.tvd12.ezyfoxserver.function.EzySupplier;
 import com.tvd12.ezyfoxserver.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezyfoxserver.hazelcast.factory.EzyMapTransactionFactoryAware;
 import com.tvd12.ezyfoxserver.hazelcast.transaction.EzyMapApplyTransaction;
@@ -35,6 +37,60 @@ public abstract class EzyAbstractMapService<K,V>
 	}
 	
 	protected abstract String getMapName();
+	
+	protected void mapLockUpdate(K key, EzyExceptionVoid applier) {
+		map.lock(key);
+		try {
+			applier.apply();
+		}
+		catch (Exception e) {
+			throw new IllegalStateException("lock to update with key " + key + " error", e);
+		}
+		finally {
+			map.unlock(key);
+		}
+	}
+	
+	protected <T> T mapLockUpdateAndGet(K key, EzySupplier<T> supplier) {
+		map.lock(key);
+		try {
+			return supplier.get();
+		}
+		catch (Exception e) {
+			throw new IllegalStateException("lock to update and get with key " + key + " error", e);
+		}
+		finally {
+			map.unlock(key);
+		}
+	}
+	
+	protected void mapLockUpdateWithException(
+			K key, EzyExceptionVoid applier) throws Exception {
+		map.lock(key);
+		try {
+			applier.apply();
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		finally {
+			map.unlock(key);
+		}
+	}
+	
+	protected <T> T mapLockUpdateAndGetWithException(
+			K key, EzySupplier<T> supplier) throws Exception {
+		map.lock(key);
+		try {
+			return supplier.get();
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		finally {
+			map.unlock(key);
+		}
+	}
 	
 	protected EzyMapApplyTransaction<K, V> newApplyTransaction() {
 		return mapTransactionFactory.newApplyTransaction(getMapName());
@@ -87,25 +143,25 @@ public abstract class EzyAbstractMapService<K,V>
 	private void transactionUpdate(
 			TransactionalMap<K, V> map, K key, EzyExceptionApply<V> applier, V defValue) throws Exception {
 		V value = map.getForUpdate(key);
-    	if(value == null)
-    		value = defValue;
-    	if(value != null) {
-    		applier.apply(value);
-    		map.set(key, value);
-    	}
+	    	if(value == null)
+	    		value = defValue;
+	    	if(value != null) {
+	    		applier.apply(value);
+	    		map.set(key, value);
+	    	}
 	}
 	
 	private <R> R transactionUpdateAndGet(
 			TransactionalMap<K, V> map, K key, EzyExceptionFunction<V, R> applier, V defValue) throws Exception {
 		V value = map.getForUpdate(key);
-    	if(value == null)
-    		value = defValue;
-    	R result = null;
-    	if(value != null) {
-    		result = applier.apply(value);
-    		map.set(key, value);
-    	}
-    	return result;
+	    	if(value == null)
+	    		value = defValue;
+	    	R result = null;
+	    	if(value != null) {
+	    		result = applier.apply(value);
+	    		map.set(key, value);
+	    	}
+	    	return result;
 	}
 	
 }

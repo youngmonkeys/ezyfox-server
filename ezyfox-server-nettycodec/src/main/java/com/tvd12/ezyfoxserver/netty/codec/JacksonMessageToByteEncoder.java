@@ -1,34 +1,29 @@
 package com.tvd12.ezyfoxserver.netty.codec;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessageSerializer;
+import com.tvd12.ezyfoxserver.codec.EzyMessageByTypeSerializer;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
-public class JacksonMessageToByteEncoder extends MessageToByteEncoder<EzyArray> {
+public class JacksonMessageToByteEncoder extends MessageToMessageEncoder<EzyArray> {
 
-	protected final Logger logger;
-	protected final EzyMessageSerializer serializer;
+	protected final EzyMessageByTypeSerializer serializer;
 	
-	public JacksonMessageToByteEncoder(EzyMessageSerializer serializer) {
+	public JacksonMessageToByteEncoder(EzyMessageByTypeSerializer serializer) {
 		this.serializer = serializer;
-		this.logger = LoggerFactory.getLogger(getClass());
 	}
 	
 	@Override
-	protected void encode(ChannelHandlerContext ctx, EzyArray msg, ByteBuf out) 
+	protected void encode(ChannelHandlerContext ctx, EzyArray msg, List<Object> out) 
 			throws Exception {
-		writeMessage(serializer.serialize(msg), out);
+		String text = serializer.serialize(msg, String.class);
+		TextWebSocketFrame frame = new TextWebSocketFrame(text);
+		out.add(frame);
 	}
 	
-	private void writeMessage(byte[] message, ByteBuf out) {
-		logger.debug("write message with size {}", message.length);
-		out.writeBytes(message);
-	}
 
 }

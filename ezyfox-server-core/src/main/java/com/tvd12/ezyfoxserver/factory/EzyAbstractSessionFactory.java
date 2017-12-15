@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.socket.EzyNonBlockingPacketQueue;
 
 public abstract class EzyAbstractSessionFactory<S extends EzySession> 
 		implements EzySessionFactory<S> {
@@ -20,6 +21,7 @@ public abstract class EzyAbstractSessionFactory<S extends EzySession>
 	protected void initSession(EzyAbstractSession session) {
 		session.setId(counter.incrementAndGet());
 		session.setCreationTime(System.currentTimeMillis());
+		session.setPacketQueue(new EzyNonBlockingPacketQueue());
 	}
 	
 	protected abstract S newSession();

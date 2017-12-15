@@ -155,7 +155,7 @@ public abstract class EzyArrayElementsFetcher extends EzyAbstractElementsFetcher
 			}
 			else {
 				elements.add(null);
-				getLogger().debug("nothing map to property {}, ignore it value to its", property);
+				getLogger().debug("nothing map to property {}, ignore it", property);
 			}
 			
 		}

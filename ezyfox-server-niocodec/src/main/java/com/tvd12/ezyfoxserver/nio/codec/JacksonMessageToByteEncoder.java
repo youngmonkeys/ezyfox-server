@@ -2,20 +2,15 @@ package com.tvd12.ezyfoxserver.nio.codec;
 
 import java.nio.ByteBuffer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.tvd12.ezyfoxserver.codec.EzyMessageByTypeSerializer;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsObjectToByteEncoder;
 
 public class JacksonMessageToByteEncoder implements EzyWsObjectToByteEncoder {
 
-	protected final Logger logger;
 	protected final EzyMessageByTypeSerializer serializer;
 	
 	public JacksonMessageToByteEncoder(EzyMessageByTypeSerializer serializer) {
 		this.serializer = serializer;
-		this.logger = LoggerFactory.getLogger(getClass());
 	}
 	
 	@Override

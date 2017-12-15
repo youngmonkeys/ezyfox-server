@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.netty;
 
 import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
+import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Setter;
@@ -15,12 +15,9 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 	@Setter
 	protected EventLoopGroup parentGroup;
 	@Setter
-	protected ServerBootstrap serverBootstrap;
+	protected EzySocketServerBootstrap socketServerBootstrap;
 	@Setter
-	protected ServerBootstrap wsServerBootstrap;
-	
-	protected ChannelFuture channelFuture;
-	protected ChannelFuture wsChannelFuture;
+	protected EzySocketServerBootstrap websocketServerBootstrap;
 	
 	@Override
 	protected void startOtherBootstraps(Runnable callback) throws Exception {
@@ -33,32 +30,25 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 	}
 	
 	protected void startServerBootstrap() throws Exception {
-		getLogger().debug("starting tcp socket server bootstrap ....");
-		channelFuture = serverBootstrap.bind().sync();
-		getLogger().debug("tcp socket server bootstrap has started");
+		EzySocketSetting setting = getSocketSetting();
+		if(setting.isActive())
+			socketServerBootstrap.start();
 	}
 	
 	protected void startWsServerBootstrap() throws Exception {
-		getLogger().debug("starting websocket server bootstrap ....");
-		wsChannelFuture = wsServerBootstrap.bind().sync();
-		getLogger().debug("websockt server bootstrap has started");
+		EzyWebSocketSetting setting = getWebSocketSetting();
+		if(setting.isActive())
+			websocketServerBootstrap.start();
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected void waitAndCloseChannelFuture() {
-		channelFuture.channel().closeFuture()
-			.addListener(newChannelFutureListener("socket")).syncUninterruptibly();
+		if(socketServerBootstrap != null)
+			socketServerBootstrap.waitAndCloseChannelFuture();
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected void waitAndCloseWsChannelFuture() {
-		wsChannelFuture.channel().closeFuture()
-			.addListener(newChannelFutureListener("websocket")).syncUninterruptibly();
-	}
-	
-	@SuppressWarnings("rawtypes")
-	protected GenericFutureListener newChannelFutureListener(String type) {
-		return (future) -> getLogger().info("{} channel future closed", type);
+		if(websocketServerBootstrap != null)
+			websocketServerBootstrap.waitAndCloseChannelFuture();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -69,7 +59,7 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 	
 	@SuppressWarnings("rawtypes")
 	protected GenericFutureListener newEventLoopGroupFutureListener(String type) {
-		return (future) -> getLogger().info("{} event loop group shutdown", type);
+		return future -> getLogger().info("{} event loop group shutdown", type);
 	}
 	
 	protected void waitAndShutdownEventLoopGroups() {

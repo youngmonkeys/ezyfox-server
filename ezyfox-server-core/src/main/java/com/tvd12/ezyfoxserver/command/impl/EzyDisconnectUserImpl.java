@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import static com.tvd12.ezyfoxserver.context.EzyContexts.*;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.*;
 
 import java.util.ArrayList;
 import java.util.List;

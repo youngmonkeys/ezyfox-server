@@ -5,8 +5,6 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 import javax.net.ssl.SSLContext;
 
 import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
-import com.tvd12.ezyfoxserver.nio.builder.impl.EzySocketServerBootstrap;
-import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;

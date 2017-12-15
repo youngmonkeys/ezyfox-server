@@ -12,9 +12,9 @@ import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
-public final class EzyContexts {
+public final class EzyServerContexts {
 
-    private EzyContexts() {
+    private EzyServerContexts() {
     }
     
     public static EzySettings getSettings(EzyServerContext context) {

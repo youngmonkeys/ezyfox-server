@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
 import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
-import com.tvd12.ezyfoxserver.context.EzyContexts;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.response.EzyRequestPluginResponse;
@@ -19,7 +19,7 @@ public class EzyPluginResponseImpl
     
     @Override
     protected EzyUserManager getUserManager(EzyPluginContext context) {
-        return EzyContexts.getUserManager(context.getParent());
+        return EzyServerContexts.getUserManager(context.getParent());
     }
      
     @Override

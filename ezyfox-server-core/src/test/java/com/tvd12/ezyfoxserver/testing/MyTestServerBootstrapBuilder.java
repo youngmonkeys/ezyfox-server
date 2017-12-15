@@ -9,15 +9,5 @@ public class MyTestServerBootstrapBuilder extends EzyAbtractServerBootstrapBuild
 	protected EzyServerBootstrap newServerBootstrap() {
 	    return new MyTestServerBootstrap();
 	}
-
-	@Override
-	public String getCodecCreatorClassName() {
-	    return super.getCodecCreatorClassName();
-	}
-	
-	@Override
-	public String getWsCodecCreatorClassName() {
-	    return super.getWsCodecCreatorClassName();
-	}
 	
 }

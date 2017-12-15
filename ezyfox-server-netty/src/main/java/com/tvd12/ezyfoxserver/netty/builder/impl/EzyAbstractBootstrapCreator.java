@@ -10,44 +10,46 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+@SuppressWarnings({"unchecked"})
 public abstract class EzyAbstractBootstrapCreator<C extends EzyAbstractBootstrapCreator<C>> {
 
 	protected int port;
+	protected String address;
 	protected EzyServerContext context;
 	protected EventLoopGroup childGroup;
 	protected EventLoopGroup parentGroup;
 	
 	public C port(int port) {
 		this.port = port;
-		return getThis();
+		return (C)this;
+	}
+	
+	public C address(String address) {
+		this.address = address;
+		return (C)this;
 	}
 	
 	public C context(EzyServerContext context) {
 		this.context = context;
-		return getThis();
+		return (C)this;
 	}
 	
 	public C childGroup(EventLoopGroup childGroup) {
 		this.childGroup = childGroup;
-		return getThis();
+		return (C)this;
 	}
 	
 	public C parentGroup(EventLoopGroup parentGroup) {
 		this.parentGroup = parentGroup;
-		return getThis();
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	protected C getThis() {
 		return (C)this;
 	}
+	
 	
 	public ServerBootstrap create() {
 		return newServerBootstrap()
 				.group(parentGroup, childGroup)
 				.channel(NioServerSocketChannel.class)
-				.localAddress(new InetSocketAddress(port))
+				.localAddress(new InetSocketAddress(address, port))
 				.childHandler(newChannelInitializer());
 	}
 	

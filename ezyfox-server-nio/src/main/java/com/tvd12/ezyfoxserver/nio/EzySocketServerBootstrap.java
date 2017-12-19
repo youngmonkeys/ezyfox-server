@@ -164,14 +164,14 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private int getSocketPort() {
-		return getSocketSettings().getPort();
+		return getSocketSetting().getPort();
 	}
 	
 	private String getSocketAddress() {
-		return getSocketSettings().getAddress();
+		return getSocketSetting().getAddress();
 	}
 	
-	private EzySocketSetting getSocketSettings() {
+	private EzySocketSetting getSocketSetting() {
 		return serverContext.getServer().getSettings().getSocket();
 	}
 	

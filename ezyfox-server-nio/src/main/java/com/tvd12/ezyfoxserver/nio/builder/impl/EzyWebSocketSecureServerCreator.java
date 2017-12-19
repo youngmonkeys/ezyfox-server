@@ -34,8 +34,8 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
 		            HttpVersion.HTTP_1_1.asString()),
 		        new HttpConnectionFactory(httpsConfig));
 		
-		wssConnector.setHost(settings.getAddress());
-	    wssConnector.setPort(settings.getSslPort());
+		wssConnector.setHost(setting.getAddress());
+	    wssConnector.setPort(setting.getSslPort());
 		
 		server.addConnector(wssConnector);
 	}

@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
@@ -19,13 +20,13 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
 public class EzyWebSocketServerCreator {
 
-	protected EzyWebSocketSetting settings;
+	protected EzyWebSocketSetting setting;
 	protected EzyNioSessionManager sessionManager;
 	protected EzyHandlerGroupManager handlerGroupManager;
-	protected EzySessionManagementSetting sessionSettings;
+	protected EzySessionManagementSetting sessionSetting;
 	
-	public EzyWebSocketServerCreator settings(EzyWebSocketSetting settings) {
-		this.settings = settings;
+	public EzyWebSocketServerCreator setting(EzyWebSocketSetting setting) {
+		this.setting = setting;
 		return this;
 	}
 	
@@ -34,8 +35,8 @@ public class EzyWebSocketServerCreator {
 		return this;
 	}
 	
-	public EzyWebSocketServerCreator sessionSettings(EzySessionManagementSetting sessionSettings) {
-		this.sessionSettings = sessionSettings;
+	public EzyWebSocketServerCreator sessionSetting(EzySessionManagementSetting sessionSetting) {
+		this.sessionSetting = sessionSetting;
 		return this;
 	}
 	
@@ -49,14 +50,16 @@ public class EzyWebSocketServerCreator {
 		contextHandler.setAllowNullPathInfo(true);
 		EzyWsHandler wsHandler = newWsHandler();
 		contextHandler.setHandler(newWebSocketHandler(wsHandler));
-		Server server = new Server();
+		QueuedThreadPool threadPool = new QueuedThreadPool();
+		threadPool.setName("ezyfox-ws-handler");
+		Server server = new Server(threadPool);
 		server.setHandler(contextHandler);
 		HttpConfiguration httpConfig = new HttpConfiguration();
 		httpConfig.setSecureScheme("https");
-		httpConfig.setSecurePort(settings.getSslPort());
+		httpConfig.setSecurePort(setting.getSslPort());
 		ServerConnector wsConnector = new ServerConnector(server);
-		wsConnector.setPort(settings.getPort());
-		wsConnector.setHost(settings.getAddress());
+		wsConnector.setPort(setting.getPort());
+		wsConnector.setHost(setting.getAddress());
 		server.addConnector(wsConnector);
 		configServer(server, httpConfig, wsConnector);
 		return server;
@@ -69,8 +72,9 @@ public class EzyWebSocketServerCreator {
 	
 	private EzyWsHandler newWsHandler() {
 		return EzyWsHandler.builder()
-				.settings(sessionSettings)
+				.settings(sessionSetting)
 				.handlerGroupManager(handlerGroupManager)
+				.sessionManager(sessionManager)
 				.build();
 	}
 	
@@ -88,10 +92,10 @@ public class EzyWebSocketServerCreator {
 			public void configure(WebSocketServletFactory factory) {
 				WebSocketPolicy policy = factory.getPolicy();
 				factory.setCreator(newWebSocketCreator(handler));
-				policy.setMaxTextMessageSize(settings.getMaxFrameSize());
-				policy.setMaxBinaryMessageSize(settings.getMaxFrameSize());
-				policy.setMaxTextMessageBufferSize(settings.getMaxFrameSize());
-				policy.setMaxBinaryMessageBufferSize(settings.getMaxFrameSize());
+				policy.setMaxTextMessageSize(setting.getMaxFrameSize());
+				policy.setMaxBinaryMessageSize(setting.getMaxFrameSize());
+				policy.setMaxTextMessageBufferSize(setting.getMaxFrameSize());
+				policy.setMaxBinaryMessageBufferSize(setting.getMaxFrameSize());
 			}
 		};
 	}

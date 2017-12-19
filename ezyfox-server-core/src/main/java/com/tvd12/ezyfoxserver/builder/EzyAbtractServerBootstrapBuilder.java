@@ -85,11 +85,11 @@ public abstract class EzyAbtractServerBootstrapBuilder
         return server.getSettings();
     }
     
-    protected EzySocketSetting getSocketSettings() {
+    protected EzySocketSetting getSocketSetting() {
         return getSettings().getSocket();
     }
     
-    protected EzyWebSocketSetting getWebsocketSettings() {
+    protected EzyWebSocketSetting getWebsocketSetting() {
         return getSettings().getWebsocket();
     }
 }

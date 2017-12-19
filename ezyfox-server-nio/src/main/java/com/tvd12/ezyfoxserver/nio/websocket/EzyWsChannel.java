@@ -8,14 +8,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketException;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 import lombok.Getter;
 
 @Getter
-public class EzyWsChannel implements EzyChannel {
+public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 
 	private final Session session;
 	private final AtomicBoolean opened;
@@ -31,6 +33,16 @@ public class EzyWsChannel implements EzyChannel {
 	
 	@Override
 	public int write(Object data) throws Exception {
+		try {
+			return write0(data);
+		}
+		catch(WebSocketException e) {
+			getLogger().debug("write data: " + data + ", to: " + clientAddress + " error", e);
+			return 0;
+		}
+	}
+	
+	private int write0(Object data) throws Exception {
 		String bytes = (String)data;
 		int bytesSize = bytes.length();
 		RemoteEndpoint remote = session.getRemote();

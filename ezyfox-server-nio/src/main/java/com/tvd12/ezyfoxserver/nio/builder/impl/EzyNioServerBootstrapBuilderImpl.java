@@ -37,7 +37,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
 		bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
-		bootstrap.setSslContext(newSslContext(getWebsocketSettings().getSslConfig()));
+		bootstrap.setSslContext(newSslContext(getWebsocketSetting().getSslConfig()));
 		return bootstrap;
 	}
 	
@@ -91,8 +91,8 @@ public class EzyNioServerBootstrapBuilderImpl
 
 	private EzyCodecFactory newCodecFactory() {
 		return EzyCodecFactoryImpl.builder()
-				.socketSettings(getSocketSettings())
-				.websocketSettings(getWebsocketSettings())
+				.socketSettings(getSocketSetting())
+				.websocketSettings(getWebsocketSetting())
 				.build();
     }
 	

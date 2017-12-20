@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Queue;
 
+import com.tvd12.ezyfoxserver.codec.EzyByteBufferMessageReader;
 import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
@@ -46,7 +47,7 @@ public class MsgPackByteToObjectDecoder implements EzyNioByteToObjectDecoder {
 abstract class AbstractHandler implements EzyDecodeHandler {
 
 	protected EzyDecodeHandler nextHandler;
-	protected EzyMessageReader messageReader;
+	protected EzyByteBufferMessageReader messageReader;
 	
 	@Override
 	public EzyDecodeHandler nextHandler() {
@@ -130,7 +131,7 @@ class Handlers extends EzyDecodeHandlers {
 	
 	public static class Builder extends AbstractBuilder {
 		protected int maxSize;
-		protected EzyMessageReader messageReader = new EzyMessageReader();
+		protected EzyByteBufferMessageReader messageReader = new EzyByteBufferMessageReader();
 		
 		public Builder maxSize(int maxSize) {
 			this.maxSize = maxSize;

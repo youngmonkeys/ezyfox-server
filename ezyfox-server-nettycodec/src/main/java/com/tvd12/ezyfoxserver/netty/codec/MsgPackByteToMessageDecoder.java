@@ -53,7 +53,7 @@ public class MsgPackByteToMessageDecoder extends ByteToMessageDecoder {
 abstract class AbstractHandler implements EzyDecodeHandler {
 
 	protected EzyDecodeHandler nextHandler;
-	protected EzyMessageReader messageReader;
+	protected EzyByteBufMessageReader messageReader;
 	
 	@Override
 	public EzyDecodeHandler nextHandler() {
@@ -127,7 +127,8 @@ class ReadMessageContent extends AbstractHandler {
 	}
 	
 	private void processMessage(EzyMessage msg, List<Object> out) {
-		out.add(readMessageContent(msg.getContent()));
+		Object contentBytes = readMessageContent(msg.getContent());
+		out.add(contentBytes);
 	}
 	
 	private Object readMessageContent(byte[] content) {
@@ -149,7 +150,7 @@ class Handlers extends EzyDecodeHandlers {
 	public static class Builder extends AbstractBuilder {
 		protected int maxSize;
 		protected EzyMessageDeserializer deserializer;
-		protected EzyMessageReader messageReader = new EzyMessageReader();
+		protected EzyByteBufMessageReader messageReader = new EzyByteBufMessageReader();
 		
 		public Builder maxSize(int maxSize) {
 			this.maxSize = maxSize;

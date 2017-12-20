@@ -58,9 +58,9 @@ public class EzyWebSocketServerBootstrap
 	
 	private Server newSocketServer() {
 		return newSocketServerCreator()
-				.settings(getWsSettings())
+				.setting(getWsSetting())
 				.sessionManager(getSessionManager())
-				.sessionSettings(getSessionSettings())
+				.sessionSetting(getSessionSetting())
 				.handlerGroupManager(handlerGroupManager)
 				.create();
 	}
@@ -86,14 +86,14 @@ public class EzyWebSocketServerBootstrap
 	}
 	
 	private boolean isSslActive() {
-		return getWsSettings().isSslActive();
+		return getWsSetting().isSslActive();
 	}
 	
-	private EzyWebSocketSetting getWsSettings() {
+	private EzyWebSocketSetting getWsSetting() {
 		return getServerSettings().getWebsocket();
 	}
 	
-	private EzySessionManagementSetting getSessionSettings() {
+	private EzySessionManagementSetting getSessionSetting() {
 		return getServerSettings().getSessionManagement();
 	}
 	

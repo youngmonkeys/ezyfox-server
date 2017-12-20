@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyReturner;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 public abstract class EzyObjectPool<T> 
 		extends EzyLoggable 
@@ -188,15 +189,15 @@ public abstract class EzyObjectPool<T>
 	@Override
 	public void destroy() {
 		try {
-			tryShutdown();
+			shutdownAll();
 		}
 		catch(Exception e) {
 			getLogger().error(getClass().getSimpleName() + " error", e);
 		}
 	}
 	
-	protected void tryShutdown() {
-		validationService.shutdown();
+	protected void shutdownAll() {
+		processWithLogException(validationService::shutdown);
 	}
 	
 	@SuppressWarnings("rawtypes")

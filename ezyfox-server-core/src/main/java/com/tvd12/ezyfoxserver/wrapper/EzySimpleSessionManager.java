@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -259,9 +261,9 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	@Override
-	protected void tryShutdown() {
-	    super.tryShutdown();
-	    this.idleValidationService.shutdown();
+	protected void shutdownAll() {
+	    super.shutdownAll();
+	    processWithLogException(idleValidationService::shutdown);
 	}
 
 	public abstract static class Builder<S extends EzySession> 

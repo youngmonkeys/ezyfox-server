@@ -23,7 +23,7 @@ public class MyTestObjectPool4 extends EzyObjectPool<MyTestObject> {
 	}
 	
 	@Override
-	protected void tryShutdown() {
+	protected void shutdownAll() {
 		throw new RuntimeException();
 	}
 	

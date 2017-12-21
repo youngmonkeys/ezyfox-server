@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.nio.handler;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+import java.nio.ByteBuffer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +31,7 @@ public abstract class EzyAbstractHandlerGroup
 			E extends EzyNioDataEncoder
 		>
 		extends EzyLoggable
-		implements EzyImmediateDataSender, EzySocketChannelDelegate {
+		implements EzyImmediateDataSender, EzySocketChannelDelegate, EzyDestroyable {
 
 	protected final EzyChannel channel;
 	
@@ -149,6 +150,12 @@ public abstract class EzyAbstractHandlerGroup
 	protected abstract Object encodeData(Object data) throws Exception;
 	
 	private void sendBytesToClient(Object bytes) {
+		if(isSessionConnected()) {
+			sendBytesToClient0(bytes);
+		}
+	}
+	
+	private void sendBytesToClient0(Object bytes) {
 		try {
 			EzyChannel channel = getSession().getChannel();
 			if(canWriteBytes(channel, bytes)) {
@@ -159,12 +166,14 @@ public abstract class EzyAbstractHandlerGroup
 		catch(Exception e) {
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(getWriteBytesSize(bytes));
-			getLogger().error("can't send bytes: " + bytes + " to session: " + getSession().getClientAddress(), e);
+			getLogger().warn("can't send bytes: " + bytes + " to session: " + getSession(), e);
 		}
 	}
 	
 	protected long getWriteBytesSize(Object bytes) {
-		return ((byte[])bytes).length;
+		if(bytes instanceof byte[])
+			return ((byte[])bytes).length;
+		return ((ByteBuffer)bytes).remaining();
 	}
 	
 	private boolean canWriteBytes(EzyChannel channel, Object bytes) {
@@ -193,6 +202,15 @@ public abstract class EzyAbstractHandlerGroup
 	
 	protected final EzyNioSession getSession() {
 		return session.get();
+	}
+	
+	protected final boolean isSessionConnected() {
+		return getSession() != null;
+	}
+	
+	@Override
+	public void destroy() {
+		session.set(null);
 	}
 	
 	public static abstract class Builder implements EzyBuilder<EzyHandlerGroup> {

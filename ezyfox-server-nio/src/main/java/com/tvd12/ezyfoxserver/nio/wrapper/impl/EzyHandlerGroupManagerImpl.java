@@ -79,7 +79,9 @@ public class EzyHandlerGroupManagerImpl
 	
 	@Override
 	public void onChannelInactivated(EzyChannel channel) {
-		groupsByConnection.remove(channel.getConnection());
+		EzyHandlerGroup group = groupsByConnection.remove(channel.getConnection());
+		group.destroy();
+		getLogger().debug("on channel {} inactive, remove handler group {}", channel, group);
 	}
 	
 	private Object newDataDecoder(EzyConnectionType type) {

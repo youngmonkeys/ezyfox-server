@@ -14,10 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyLockName;
 import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -111,13 +111,14 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected void notifySessionReturned(S session, EzyConstant reason) {
-		EzyIfElse.withIf(reason != null, () -> tryNotifySessionReturned(session, reason));
+		EzyIfElse.withIf(reason != null, () -> notifySessionReturned0(session, reason));
 	}
 	
-	protected void tryNotifySessionReturned(S session, EzyConstant reason) {
+	protected void notifySessionReturned0(S session, EzyConstant reason) {
 		try {
 		    EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)session;
-		    hasDelegate.getDelegate().onSessionReturned(reason);
+		    EzySessionDelegate delegate = hasDelegate.getDelegate();
+		    delegate.onSessionReturned(reason);
 		}
 		catch(Exception e) {
 			getLogger().debug("notify session returned error", e);
@@ -125,13 +126,13 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	@SuppressWarnings("unchecked")
-    protected S borrowSession(EzyConnectionType type) {
-	    checkMaxSessions(type);
+    protected S borrowSession(EzyConstant connectionType) {
+	    checkMaxSessions(connectionType);
 		KeyPair keyPair = newKeyPair();
 		EzyAbstractSession session = (EzyAbstractSession)borrowObject();
 		session.setLoggedIn(false);
 		session.setName("Session#" + COUNTER.incrementAndGet());
-		session.setConnectionType(type);
+		session.setConnectionType(connectionType);
 		session.setReconnectToken(newSessionToken());
 		session.setCreationTime(System.currentTimeMillis());
 		session.setPublicKey(keyPair.getPublic().getEncoded());
@@ -149,7 +150,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 		return complete;
 	}
 	
-	protected void checkMaxSessions(EzyConnectionType type) {
+	protected void checkMaxSessions(EzyConstant connectionType) {
 	    int current = getAliveSessionCountWithLock();
 	    if(current >= maxSessions)
 	        throw new EzyMaxSessionException(current, maxSessions);

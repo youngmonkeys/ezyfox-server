@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.util.List;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
@@ -19,7 +19,7 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
     }
     
     @Override
-    public MyTestSession borrowSession(EzyConnectionType type) {
+    public MyTestSession borrowSession(EzyConstant type) {
         return super.borrowSession(type);
     }
     

@@ -1,44 +1,68 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class EzyNonBlockingPacketQueue implements EzyPacketQueue {
+import com.tvd12.ezyfoxserver.util.EzyLoggable;
+
+public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQueue {
 
 	private final int capacity;
-	private final Queue<EzyPacket> queue = new ConcurrentLinkedQueue<>();
+	private final Queue<EzyPacket> queue ;
 	
 	public EzyNonBlockingPacketQueue() {
-		this(1024);
+		this(256);
 	}
 	
 	public EzyNonBlockingPacketQueue(int capacity) {
 		this.capacity = capacity;
+		this.queue = new LinkedList<>();
+	}
+	
+	@Override
+	public int size() {
+	    synchronized (queue) {
+	        return queue.size();
+        }
 	}
 	
 	@Override
 	public void clear() {
-		queue.clear();
+	    synchronized (queue) {
+	        queue.clear();
+	    }
 	}
 	
 	@Override
 	public EzyPacket take() {
-		return queue.poll();
+	    synchronized (queue) {
+	        EzyPacket packet = queue.poll();
+	        return packet;
+	    }
 	}
 	
 	@Override
 	public boolean isFull() {
-		return queue.size() == capacity; 
+	    synchronized (queue) {
+	        return queue.size() >= capacity;
+	    }
 	}
 	
 	@Override
 	public boolean isEmpty() {
-		return queue.isEmpty();
+	    synchronized (queue) {
+	        return queue.isEmpty();
+	    }
 	}
 	
 	@Override
 	public boolean add(EzyPacket packet) {
-		return queue.offer(packet);
+	    synchronized (queue) {
+	        if(queue.size() >= capacity) 
+	            return false;
+	        queue.offer(packet);
+	        return true;
+	    }
 	}
 	
 }

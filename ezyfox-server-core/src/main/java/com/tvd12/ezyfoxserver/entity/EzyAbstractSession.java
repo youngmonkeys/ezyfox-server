@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
@@ -56,7 +56,7 @@ public abstract class EzyAbstractSession
 	protected String clientVersion;
 	protected String reconnectToken;
 	protected String fullReconnectToken;
-	protected EzyConnectionType connectionType;
+	protected EzyConstant connectionType;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;
@@ -171,6 +171,7 @@ public abstract class EzyAbstractSession
 	    this.writtenBytes = 0L;
 	    this.properties.clear();
 	    this.channel = null;
+	    this.connectionType = null;
 	    if(packetQueue != null)
 	        this.packetQueue.clear();
 	    if(sessionTicketsQueue != null) 

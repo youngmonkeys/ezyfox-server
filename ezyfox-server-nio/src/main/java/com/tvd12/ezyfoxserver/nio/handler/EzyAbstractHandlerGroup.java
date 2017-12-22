@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -134,7 +134,11 @@ public abstract class EzyAbstractHandlerGroup
 				supplyAsync(() -> encodeData0(data), codecThreadPool);
 		CompletableFuture<Void> sendBytesFuture = encodeFuture
 				.thenAcceptAsync(bytes -> sendBytesToClient(bytes), handlerThreadPool);
-		processWithLogException(sendBytesFuture::get);
+		try {
+			sendBytesFuture.get(3, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			getLogger().warn("send data: " + data + ", to session: " + getSession() + " error", e);
+		}
 	}
 	
 	private Object encodeData0(Object data) {

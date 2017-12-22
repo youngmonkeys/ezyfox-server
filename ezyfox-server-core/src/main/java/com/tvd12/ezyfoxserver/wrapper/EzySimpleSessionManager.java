@@ -225,6 +225,11 @@ public class EzySimpleSessionManager<S extends EzySession>
 	    return session.getMaxIdleTime() 
 	            < (System.currentTimeMillis() - session.getLastReadTime());
 	}
+	
+	@Override
+	protected void releaseObject(S object) {
+	    object.release();
+	}
 
 	@Override
 	protected boolean isStaleObject(S session) {

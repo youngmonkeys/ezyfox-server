@@ -10,8 +10,9 @@ import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProperties;
+import com.tvd12.ezyfoxserver.util.EzyReleasable;
 
-public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Serializable {
+public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, EzyReleasable, Serializable {
 
 	/**
 	 * Get session id

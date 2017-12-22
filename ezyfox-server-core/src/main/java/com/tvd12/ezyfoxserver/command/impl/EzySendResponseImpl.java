@@ -30,6 +30,7 @@ public class EzySendResponseImpl
         EzyArray data = responseSerializer.serializeToArray(response);
         sendData(data);
         debugLogResponse(data);
+        destroy();
         return Boolean.TRUE;
     }
     
@@ -43,6 +44,11 @@ public class EzySendResponseImpl
     protected void debugLogResponse(Object data) {
         if(!unloggableCommands.contains(response.getCommand()))
             getLogger().debug("send to {} data {}", getSenderName(), data);
+    }
+    
+    protected void destroy() {
+        this.sender = null;
+        this.response = null;
     }
     
     @Override

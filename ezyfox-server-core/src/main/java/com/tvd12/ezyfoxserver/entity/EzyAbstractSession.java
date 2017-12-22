@@ -181,6 +181,11 @@ public abstract class EzyAbstractSession
 	}
 	
 	@Override
+	public void release() {
+	    this.packetQueue = null;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 	    return new EzyEquals<EzyAbstractSession>()
 	            .function(c -> c.id)

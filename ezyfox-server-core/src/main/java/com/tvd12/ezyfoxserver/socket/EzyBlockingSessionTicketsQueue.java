@@ -46,10 +46,8 @@ public class EzyBlockingSessionTicketsQueue
 	
 	@Override
 	public boolean add(EzySession session) {
-	    if(queue.size() >= capacity) {
-	        if(hasSessionInQueue(session))
-	            return false;
-	    }
+	    if(hasSessionInQueue(session))
+            return false;
 	    updateSessionCount(session, 1);
 		queue.offer(session);
 		return true;

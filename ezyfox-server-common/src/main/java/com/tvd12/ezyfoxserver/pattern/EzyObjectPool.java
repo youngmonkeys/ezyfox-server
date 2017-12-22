@@ -56,7 +56,11 @@ public abstract class EzyObjectPool<T>
 		return objectFactory.newProduct();
 	}
 	
-	protected void removeObject(T object) {
+	private void releaseObject0(T object) {
+		releaseObject(object);
+	}
+	
+	protected void releaseObject(T object) {
 	}
 	
 	protected List<T> getBorrowedObjects() {
@@ -106,7 +110,7 @@ public abstract class EzyObjectPool<T>
 			
 			private void removeUnusedObjects0(int size) {
 				for(int i = 0 ; i < size ; i++)
-					removeObject(pool.poll());
+					releaseObject0(pool.poll());
 				getLogger().info("object pool: remove {} excessive objects, remain {}", size, pool.size());
 			}
 		};

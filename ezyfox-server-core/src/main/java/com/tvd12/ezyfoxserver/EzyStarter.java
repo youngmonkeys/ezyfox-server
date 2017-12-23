@@ -8,7 +8,7 @@ import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.SETTINGS;
 import java.io.File;
 import java.nio.file.Paths;
 
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
@@ -17,14 +17,10 @@ import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
-
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.joran.JoranConfigurator;
 
 /**
  * @author tavandung12
@@ -48,7 +44,6 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected void startSystem(EzyConfig config) throws Exception {
-        customLoggerConfig(config);
         setSystemProperties(config);
         startEzyFox(config);
     }
@@ -68,17 +63,9 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     protected abstract EzyServerBootstrapBuilder newServerBootstrapBuilder();
 
-    protected void customLoggerConfig(EzyConfig config) {
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        loggerContext.reset();
-        JoranConfigurator cfg = new JoranConfigurator();
-        cfg.setContext(loggerContext);
-        String configFile = getLoggerConfigFile(config);
-        EzyProcessor.processWithLogException(() -> cfg.doConfigure(configFile));
-    }
-
     protected void setSystemProperties(EzyConfig config) {
-        System.setProperty("logback.configurationFile", getLoggerConfigFile(config));
+        PropertyConfigurator.configure(getLoggerConfigFile(config));
+        System.setProperty("log4j.configuration", getLoggerConfigFile(config));
         System.setProperty("logging.config", getLoggerConfigFile(config));
     }
 

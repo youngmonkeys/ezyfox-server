@@ -20,4 +20,13 @@ public class LinkedBlockingQueueTest extends BaseTest {
         assert queue.take().equals(object1);
     }
     
+    @Test
+    public void test1() {
+        LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>(3);
+        assert queue.offer(new Object());
+        assert queue.offer(new Object());
+        assert queue.offer(new Object());
+        assert !queue.offer(new Object());
+    }
+    
 }

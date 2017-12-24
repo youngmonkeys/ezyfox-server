@@ -41,9 +41,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         sessionManager.returnSession(session, reason);
     }
     
-    public void dataReceived(EzyArray msg) throws Exception {
-        int cmdId = msg.get(0, int.class);
-        EzyConstant cmd = EzyCommand.valueOf(cmdId);
+    public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
         if(!validateState()) return;
         if(!validateSession()) return;
         if(cmd != PING && checkMaxRequestPerSecond()) return;

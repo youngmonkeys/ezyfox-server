@@ -50,7 +50,7 @@ public class EzySimpleNioHandlerGroup
 	
 	private void handleReceivedMesssage(EzyMessage message) {
 		Object data = decodeMessage(message);
-		handlerThreadPool.execute(() -> handleReceivedData(data));
+		handleReceivedData(data);
 	}
 	
 	private Object decodeMessage(EzyMessage message) {
@@ -60,14 +60,6 @@ public class EzySimpleNioHandlerGroup
 		catch(Exception e) {
 			getLogger().error("decode message error", e);
 			return null;
-		}
-	}
-	
-	private void handleReceivedData(Object data) {
-		try {
-			handler.channelRead(data);
-		} catch (Exception e) {
-			getLogger().error("handle data error, data: " + data, e);
 		}
 	}
 	

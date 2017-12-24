@@ -1,10 +1,11 @@
 package com.tvd12.ezyfoxserver.pattern;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,6 @@ import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyReturner;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 public abstract class EzyObjectPool<T> 
 		extends EzyLoggable 
@@ -268,7 +268,7 @@ public abstract class EzyObjectPool<T>
 		}
 		
 		protected List<T> newBorrowedObjects() {
-			return new CopyOnWriteArrayList<>();
+			return new ArrayList<>();
 		}
 		
 	}

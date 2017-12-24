@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
+import static com.tvd12.ezyfoxserver.socket.EzySocketRequestBuilder.socketRequestBuilder;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import java.nio.ByteBuffer;
@@ -14,12 +15,15 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
@@ -45,8 +49,9 @@ public abstract class EzyAbstractHandlerGroup
 	
 	protected final ExecutorService statsThreadPool;
 	protected final ExecutorService codecThreadPool;
-	protected final ExecutorService handlerThreadPool;
-	
+	protected final ExecutorService bytesWriterThreadPool;
+
+	protected final EzySocketRequestQueues requestQueues;
 	protected final AtomicReference<EzyNioSession> session;
 	protected final EzySocketChannelDelegate channelDelegate;
 	protected final EzySessionTicketsQueue sessionTicketsQueue;
@@ -59,7 +64,8 @@ public abstract class EzyAbstractHandlerGroup
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
-		this.handlerThreadPool = builder.handlerThreadPool;
+		this.bytesWriterThreadPool = builder.bytesWriterThreadPool;
+		this.requestQueues = builder.requestQueues;
 		this.channelDelegate = builder.channelDelegate;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 		
@@ -129,11 +135,21 @@ public abstract class EzyAbstractHandlerGroup
 		channelDelegate.onChannelInactivated(channel);
 	}
 	
+	protected final void handleReceivedData(Object data) {
+		EzySocketRequest request = socketRequestBuilder()
+			.data((EzyArray) data)
+			.handler(handler)
+			.build();
+		boolean success = requestQueues.add(request);
+		if(!success)
+			getLogger().info("request queue is full, drop incomming request");
+	}
+	
 	private void executeSendingData(Object data) {
 		CompletableFuture<Object> encodeFuture =
 				supplyAsync(() -> encodeData0(data), codecThreadPool);
 		CompletableFuture<Void> sendBytesFuture = encodeFuture
-				.thenAcceptAsync(bytes -> sendBytesToClient(bytes), handlerThreadPool);
+				.thenAcceptAsync(bytes -> sendBytesToClient(bytes), bytesWriterThreadPool);
 		try {
 			sendBytesFuture.get(3, TimeUnit.SECONDS);
 		} catch (Exception e) {
@@ -227,11 +243,12 @@ public abstract class EzyAbstractHandlerGroup
 		
 		protected ExecutorService statsThreadPool;
 		protected ExecutorService codecThreadPool;
-		protected ExecutorService handlerThreadPool;
+		protected ExecutorService bytesWriterThreadPool;
 		
 		protected Object decoder;
 		protected EzyNioObjectToByteEncoder encoder;
 		protected EzyServerContext serverContext;
+		protected EzySocketRequestQueues requestQueues;
 		protected EzySocketChannelDelegate channelDelegate;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
 		
@@ -270,18 +287,23 @@ public abstract class EzyAbstractHandlerGroup
 			return this;
 		}
 		
-		public Builder handlerThreadPool(ExecutorService handlerThreadPool) {
-			this.handlerThreadPool = handlerThreadPool;
-			return this;
-		}
-		
 		public Builder statsThreadPool(ExecutorService statsThreadPool) {
 			this.statsThreadPool = statsThreadPool;
 			return this;
 		}
 		
+		public Builder bytesWriterThreadPool(ExecutorService bytesWriterThreadPool) {
+			this.bytesWriterThreadPool = bytesWriterThreadPool;
+			return this;
+		}
+		
 		public Builder serverContext(EzyServerContext serverContext) {
 			this.serverContext = serverContext;
+			return this;
+		}
+		
+		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
+			this.requestQueues = requestQueues;
 			return this;
 		}
 		
@@ -294,6 +316,7 @@ public abstract class EzyAbstractHandlerGroup
 			this.sessionTicketsQueue = queue;
 			return this;
 		}
+		
 	}
 	
 }

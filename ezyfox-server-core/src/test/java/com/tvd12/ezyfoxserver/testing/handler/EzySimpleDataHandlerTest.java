@@ -31,7 +31,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
                         .append(newArrayBuilder()))
                 .build();
         
-        handler.dataReceived(message);
+        handler.dataReceived(EzyCommand.LOGIN, message);
         handler.channelInactive();
         handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
     }
@@ -56,7 +56,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
                         .append("ezyfox-chat"))
                 .build();
         
-        handler.dataReceived(message);
+        handler.dataReceived(EzyCommand.APP_ACCESS, message);
         handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
     }
     
@@ -74,7 +74,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
                         .append(""))
                 .build();
         
-        handler.dataReceived(message);
+        handler.dataReceived(EzyCommand.LOGIN, message);
         handler.channelInactive();
         handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
     }

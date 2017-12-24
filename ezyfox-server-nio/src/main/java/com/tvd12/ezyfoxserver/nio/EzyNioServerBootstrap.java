@@ -9,6 +9,13 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandlingLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequestHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandlingLoopHandler;
 
 import lombok.Setter;
 
@@ -21,16 +28,23 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	@Setter
 	private SSLContext sslContext;
 	@Setter
+	private EzySocketRequestQueues requestQueues;
+	@Setter
 	private EzyHandlerGroupManager handlerGroupManager;
 	@Setter
 	private EzySessionTicketsQueue socketSessionTicketsQueue;
 	@Setter
 	private EzySessionTicketsQueue websocketSessionTicketsQueue;
 	
+	private EzySocketEventLoopHandler systemRequestHandlingLoopHandler;
+	
+	private EzySocketEventLoopHandler extensionRequestHandlingLoopHandler;
+	
 	@Override
 	protected void startOtherBootstraps(Runnable callback) throws Exception {
 		startSocketServerBootstrap();
 		startWebSocketServerBootstrap();
+		startRequestHandlingLoopHandlers();
 		callback.run();
 	}
 	
@@ -52,6 +66,13 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		getLogger().debug("websockt server bootstrap has started");
 	}
 	
+	private void startRequestHandlingLoopHandlers() throws Exception {
+		systemRequestHandlingLoopHandler = newSystemRequestHandlingLoopHandler();
+		extensionRequestHandlingLoopHandler = newExtensionRequestHandlingLoopHandler();
+		systemRequestHandlingLoopHandler.start();
+		extensionRequestHandlingLoopHandler.start();
+	}
+	
 	private EzySocketServerBootstrap newSocketServerBootstrap() {
 		return EzySocketServerBootstrap.builder()
 				.serverContext(context)
@@ -67,6 +88,32 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 				.handlerGroupManager(handlerGroupManager)
 				.sessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();
+	}
+	
+	private EzySocketEventLoopHandler newSystemRequestHandlingLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzySocketSystemRequestHandlingLoopHandler();
+		loopHandler.setThreadPoolSize(getSystemRequestHandlerPoolSize());
+		EzySocketRequestHandler eventHandler = new EzySocketSystemRequestHandler();
+		eventHandler.setRequestQueue(requestQueues.getSystemQueue());
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
+	}
+	
+	private EzySocketEventLoopHandler newExtensionRequestHandlingLoopHandler() {
+		EzySocketEventLoopHandler loopHandler = new EzySocketExtensionRequestHandlingLoopHandler();
+		loopHandler.setThreadPoolSize(getExtensionRequestHandlerPoolSize());
+		EzySocketRequestHandler eventHandler = new EzySocketExtensionRequestHandler();
+		eventHandler.setRequestQueue(requestQueues.getExtensionQueue());
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
+	}
+	
+	private int getSystemRequestHandlerPoolSize() {
+		return 3;
+	}
+	
+	private int getExtensionRequestHandlerPoolSize() {
+		return 3;
 	}
 	
 	@Override

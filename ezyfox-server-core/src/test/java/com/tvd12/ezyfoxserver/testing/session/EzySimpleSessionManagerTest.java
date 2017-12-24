@@ -19,12 +19,12 @@ public class EzySimpleSessionManagerTest {
         List<MySession> sessions = new ArrayList<>();
         System.out.println("add sessions");
         for(int i = 0 ; i < 500 ; i++) {
-            sessions.add(manager.borrowSession());
+            sessions.add(manager.provideSession());
         }
         Thread.sleep(30 * 1000);
         System.out.println("return sessions");
         for(MySession session : sessions) {
-            manager.returnSession(session);
+            manager.removeSession(session);
         }
         System.out.println("finish");
         Thread.sleep(300 * 1000);
@@ -50,8 +50,8 @@ public class EzySimpleSessionManagerTest {
             super(builder);
         }
         
-        public MySession borrowSession() {
-            return borrowSession(EzyConnectionType.SOCKET);
+        public MySession provideSession() {
+            return provideSession(EzyConnectionType.SOCKET);
         }
         
         public static Builder builder() {

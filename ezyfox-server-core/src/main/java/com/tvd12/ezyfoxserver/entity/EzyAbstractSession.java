@@ -105,6 +105,11 @@ public abstract class EzyAbstractSession
 	}
 	
 	@Override
+	public boolean isIdle() {
+	    return maxIdleTime < (System.currentTimeMillis() - lastReadTime);
+	}
+	
+	@Override
 	public Lock getLock(String name) {
 	    return locks.computeIfAbsent(name, k -> new ReentrantLock());
 	}
@@ -176,13 +181,9 @@ public abstract class EzyAbstractSession
 	        this.packetQueue.clear();
 	    if(sessionTicketsQueue != null) 
 	        this.sessionTicketsQueue.remove(this);
+	    this.packetQueue = null;
 	    this.sessionTicketsQueue = null;
 	    this.immediateDataSender = null;
-	}
-	
-	@Override
-	public void release() {
-	    this.packetQueue = null;
 	}
 	
 	@Override

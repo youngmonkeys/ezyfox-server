@@ -7,6 +7,7 @@ import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
@@ -77,15 +78,15 @@ public class EzyNioServerBootstrapBuilderImpl
 
 	
 	private ExecutorService newStatsThreadPool() {
-		return EzyExecutors.newFixedThreadPool(3, "statistics");
+		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.STATISTICS, "statistics");
 	}
 	
 	private ExecutorService newCodecThreadPool() {
-		return EzyExecutors.newFixedThreadPool(3, "codec");
+		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.CODEC, "codec");
 	}
 	
 	private ExecutorService newBytesWriterThreadPool() {
-		return EzyExecutors.newFixedThreadPool(3, "bytes-writer");
+		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.BYTES_WRITER, "bytes-writer");
 	}
 	
 	private EzySocketRequestQueues newRequestQueues() {

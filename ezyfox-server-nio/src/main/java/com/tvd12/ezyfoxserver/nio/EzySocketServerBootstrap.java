@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioAcceptableConnectionsHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioConnectionAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioConnectionAcceptorLoopHandler;
@@ -148,19 +149,19 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private int getSocketReaderPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.SOCKET_READER;
 	}
 	
 	private int getSocketWriterPoolSize() {
-		return 8;
+		return EzyNioThreadPoolSizes.SOCKET_WRITER;
 	}
 	
 	private int getSocketAcceptorPoolSize() {
-		return 1;
+		return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
 	}
 	
 	private int getConnectionAcceptorPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.CONNECTION_ACCEPTOR;
 	}
 	
 	private int getSocketPort() {

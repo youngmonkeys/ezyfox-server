@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.wrapper;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 import java.util.UUID;
 
@@ -23,36 +21,30 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
     public void test() {
         MyTestSessionManager manager = new MyTestSessionManager.Builder()
                 .build();
-        MyTestSession session = manager.borrowSession(EzyConnectionType.SOCKET);
-        manager.returnSession(session);
-        session = manager.borrowSession(EzyConnectionType.SOCKET);
+        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET);
+        manager.removeSession(session);
+        session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setDelegate(new EzyAbstractSessionDelegate() {
         });
-        manager.returnSession(session, EzySessionRemoveReason.IDLE);
-        manager.returnSession(null, EzySessionRemoveReason.IDLE);
+        manager.removeSession(session, EzySessionRemoveReason.IDLE);
+        manager.removeSession(null, EzySessionRemoveReason.IDLE);
         
-        session = manager.borrowSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setDelegate(new EzyAbstractSessionDelegate() {
         });
         session.setLoggedIn(true);
         manager.addLoggedInSession(session);
         assertEquals(manager.getLoggedInSessions(), Lists.newArrayList(session));
 
-        assertFalse(manager.isStaleObject(session));
-        
-        session = manager.borrowSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setLoggedIn(false);
         session.setCreationTime(System.currentTimeMillis() - 1000);
         session.setMaxWaitingTime(100);
-        assertTrue(manager.isStaleObject(session));
         
-        manager.removeStaleObject(session);
-        
-        session = manager.borrowSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setLoggedIn(false);
         session.setCreationTime(System.currentTimeMillis());
         session.setMaxWaitingTime(10000);
-        assertFalse(manager.isStaleObject(session));
         
         try {
             manager.start();
@@ -72,13 +64,12 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
                     }
                 })
                 .build();
-        MyTestSession session = manager.borrowSession(EzyConnectionType.SOCKET);
+        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setLoggedIn(true);
         manager.addLoggedInSession(session);
-        MyTestSession session2 = manager.borrowSession(EzyConnectionType.SOCKET);
+        MyTestSession session2 = manager.provideSession(EzyConnectionType.SOCKET);
         assert session.getId() != session2.getId();
-        assertEquals(manager.getBorrowedObjects(), Lists.newArrayList(session, session2));
-        assertEquals(manager.getCanBeStaleObjects(), Lists.newArrayList(session2));
+        assertEquals(manager.getAllSessions(), Lists.newArrayList(session, session2));
         
     }
     

@@ -7,12 +7,12 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 public interface EzyNioSessionManager extends EzySessionManager<EzyNioSession> {
 
 	/**
-	 * Borrow session from pool and map the session to channel 
+	 * Provide session from pool and map the session to channel 
 	 * 
 	 * @param channel the channel
 	 * @return the session mapped channel
 	 */
-	EzyNioSession borrowSession(EzyChannel channel);
+	EzyNioSession provideSession(EzyChannel channel);
 	
 	/**
 	 * Get session by connection

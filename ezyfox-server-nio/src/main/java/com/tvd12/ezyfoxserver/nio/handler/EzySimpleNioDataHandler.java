@@ -44,9 +44,9 @@ public class EzySimpleNioDataHandler
     }
 	
 	@Override
-	public void onSessionReturned(EzyConstant reason) {
+	public void onSessionRemoved(EzyConstant reason) {
 		this.channelDelegate.onChannelInactivated(channel);
-		super.onSessionReturned(reason);
+		super.onSessionRemoved(reason);
 	}
     
 	private void borrowSession() {
@@ -54,7 +54,7 @@ public class EzySimpleNioDataHandler
 	}
 	
 	private EzyNioSession newSession() {
-		return ((EzyNioSessionManager)sessionManager).borrowSession(channel);
+		return ((EzyNioSessionManager)sessionManager).provideSession(channel);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class EzySimpleNioDataHandler
 		super.addExceptionHandlers(handlers);
 		handlers.put(EzyMaxRequestSizeException.class, (thread, throwable) -> {
 			if(sessionManager != null) 
-	            sessionManager.returnSession(session, MAX_REQUEST_SIZE);
+	            sessionManager.removeSession(session, MAX_REQUEST_SIZE);
 		});
 	}
     

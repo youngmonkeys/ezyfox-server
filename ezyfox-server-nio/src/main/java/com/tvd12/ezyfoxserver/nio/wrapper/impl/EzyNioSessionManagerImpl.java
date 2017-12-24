@@ -37,8 +37,8 @@ public class EzyNioSessionManagerImpl
 	}
 	
 	@Override
-	public EzyNioSession borrowSession(EzyChannel channel) {
-		EzyNioSession ss = borrowSession(channel.getConnectionType());
+	public EzyNioSession provideSession(EzyChannel channel) {
+		EzyNioSession ss = provideSession(channel.getConnectionType());
 		ss.setChannel(channel);
 		sessionsByConnection.put(channel.getConnection(), ss);
 		return ss;

@@ -5,6 +5,7 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 import javax.net.ssl.SSLContext;
 
 import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
@@ -109,11 +110,11 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	}
 	
 	private int getSystemRequestHandlerPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.SYSTEM_REQUEST_HANDLER;
 	}
 	
 	private int getExtensionRequestHandlerPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.EXTENSION_REQUEST_HANDLER;
 	}
 	
 	@Override

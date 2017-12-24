@@ -33,7 +33,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         
         handler.dataReceived(EzyCommand.LOGIN, message);
         handler.channelInactive();
-        handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
+        handler.onSessionRemoved(EzyDisconnectReason.NOT_LOGGED_IN);
     }
     
     @Test
@@ -57,7 +57,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
                 .build();
         
         handler.dataReceived(EzyCommand.APP_ACCESS, message);
-        handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
+        handler.onSessionRemoved(EzyDisconnectReason.NOT_LOGGED_IN);
     }
     
     @Test
@@ -76,6 +76,6 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         
         handler.dataReceived(EzyCommand.LOGIN, message);
         handler.channelInactive();
-        handler.onSessionReturned(EzyDisconnectReason.NOT_LOGGED_IN);
+        handler.onSessionRemoved(EzyDisconnectReason.NOT_LOGGED_IN);
     }
 }

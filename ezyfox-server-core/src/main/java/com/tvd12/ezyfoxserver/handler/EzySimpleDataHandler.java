@@ -34,11 +34,11 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     public void channelInactive() throws Exception {
         if(disconnectReason == null)
-            sessionManager.returnSession(session, EzyDisconnectReason.UNKNOWN);
+            sessionManager.removeSession(session, EzyDisconnectReason.UNKNOWN);
     }
     
     public void channelInactive(EzyConstant reason) throws Exception {
-        sessionManager.returnSession(session, reason);
+        sessionManager.removeSession(session, reason);
     }
     
     public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
@@ -77,7 +77,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         responseError(EzyError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             if(sessionManager != null) {
-                sessionManager.returnSession(session, EzySessionRemoveReason.MAX_REQUEST_PER_SECOND);
+                sessionManager.removeSession(session, EzySessionRemoveReason.MAX_REQUEST_PER_SECOND);
             }
         }
     }
@@ -149,7 +149,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
 
     @Override
-    public void onSessionReturned(EzyConstant reason) {
+    public void onSessionRemoved(EzyConstant reason) {
         notifySessionRemoved(reason);
         setDisconnectReason(reason);
         chechToUnmapUser();

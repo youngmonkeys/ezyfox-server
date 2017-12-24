@@ -53,6 +53,8 @@ public class EzyNioSocketChannel implements EzyChannel {
 	
 	@Override
 	public void close() {
+		processWithLogException(channel::shutdownInput);
+		processWithLogException(channel::shutdownOutput);
 		processWithLogException(channel::close);
 	}
 	

@@ -14,7 +14,7 @@ public class EzySessionAdapterTest extends BaseTest {
     public void test() {
         EzySessionDelegate delegate = new EzyAbstractSessionDelegate() {
         };
-        delegate.onSessionReturned(EzySessionRemoveReason.ANOTHER_DEVICE_LOGIN);
+        delegate.onSessionRemoved(EzySessionRemoveReason.ANOTHER_DEVICE_LOGIN);
         delegate.onSessionLoggedIn(new EzySimpleUser());
     }
     

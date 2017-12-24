@@ -23,11 +23,11 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
     @Test
     public void test() {
         EzyServerContext ctx = newServerContext();
-        EzySession first = getSessionManager(ctx).borrowSession(EzyConnectionType.SOCKET);
+        EzySession first = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("first.token:    " + first);
         System.err.println("alive sessions: " + getSessionManager(ctx).getAliveSessions());
         assertEquals(getSessionManager(ctx).containsSession(first.getReconnectToken()), true);
-        EzySession session = getSessionManager(ctx).borrowSession(EzyConnectionType.SOCKET);
+        EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("session: " + session);
         EzyArray data = newHandShakeData(first.getReconnectToken());
         EzyHandShakeParams requestParams = mapDataToRequestParams(data);

@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.socket;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Setter;
 
@@ -12,6 +13,8 @@ public abstract class EzySocketRequestHandler
 
     @Setter
 	protected EzySocketRequestQueue requestQueue;
+    @Setter
+    protected EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher;
 	
 	@Override
     public void handleEvent() {
@@ -39,10 +42,26 @@ public abstract class EzySocketRequestHandler
 	protected abstract String getRequestType();
 	
 	private void processRequestQueue(EzySocketRequest request) throws Exception {
+	    try {
+	        processRequestQueue0(request);
+	    }
+	    finally {
+	        request.release();
+	    }
+	}
+	
+	private void processRequestQueue0(EzySocketRequest request) throws Exception {
 	    EzyArray data = request.getData();
-	    EzySocketDataHandler handler = request.getHandler();
-	    handler.channelRead(request.getCommand(), data);
-	    request.release();
+	    EzySession session = request.getSession();
+	    EzySocketDataHandlerGroup handlerGroup = getDataHandlerGroup(session);
+	    if(handlerGroup != null)
+	        handlerGroup.fireChannelRead(request.getCommand(), data);
+	    else 
+	        getLogger().warn("has no handler group with session: " + session + ", drop request: " + request);
+	}
+	
+	protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
+	    return dataHandlerGroupFetcher.getDataHandlerGroup(session);
 	}
 	
 }

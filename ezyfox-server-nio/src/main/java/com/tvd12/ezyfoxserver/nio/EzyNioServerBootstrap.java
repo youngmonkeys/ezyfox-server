@@ -96,6 +96,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		loopHandler.setThreadPoolSize(getSystemRequestHandlerPoolSize());
 		EzySocketRequestHandler eventHandler = new EzySocketSystemRequestHandler();
 		eventHandler.setRequestQueue(requestQueues.getSystemQueue());
+		eventHandler.setDataHandlerGroupFetcher(handlerGroupManager);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
@@ -105,6 +106,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		loopHandler.setThreadPoolSize(getExtensionRequestHandlerPoolSize());
 		EzySocketRequestHandler eventHandler = new EzySocketExtensionRequestHandler();
 		eventHandler.setRequestQueue(requestQueues.getExtensionQueue());
+		eventHandler.setDataHandlerGroupFetcher(handlerGroupManager);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}

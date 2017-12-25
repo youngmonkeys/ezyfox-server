@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.socket;
 
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
     private EzyCommand command;
     private boolean systemRequest;
     @Setter
-    private EzySocketDataHandler handler;
+    private EzySession session;
     
     public EzySimpleSocketRequest(EzyArray data) {
         this.data = data;
@@ -26,8 +27,9 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
     
     @Override
     public void release() {
+        this.data = null;
         this.command = null;
-        this.handler = null;
+        this.session = null;
     }
     
 }

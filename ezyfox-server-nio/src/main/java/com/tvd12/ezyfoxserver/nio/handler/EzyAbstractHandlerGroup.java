@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -114,6 +115,10 @@ public abstract class EzyAbstractHandlerGroup
 		executeSendingPacket(packet);
 	}
 	
+	public final void fireChannelRead(EzyCommand cmd, EzyArray msg) throws Exception {
+		handler.channelRead(cmd, msg);
+	}
+	
 	public final EzyNioSession fireChannelActive() throws Exception {
 		EzyNioSession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
@@ -138,7 +143,7 @@ public abstract class EzyAbstractHandlerGroup
 	protected final void handleReceivedData(Object data) {
 		EzySocketRequest request = socketRequestBuilder()
 			.data((EzyArray) data)
-			.handler(handler)
+			.session(getSession())
 			.build();
 		boolean success = requestQueues.add(request);
 		if(!success)
@@ -169,7 +174,7 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(getWriteBytesSize(bytes));
-			getLogger().warn("can't send bytes: " + bytes + " to session: " + getSession(), e);
+			getLogger().warn("can't send bytes: " + bytes + " to session: " + getSession() + ", error: " + e.getMessage());
 		}
 	}
 	

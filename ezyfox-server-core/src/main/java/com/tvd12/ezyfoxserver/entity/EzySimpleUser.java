@@ -82,7 +82,15 @@ public class EzySimpleUser
 	@Override
 	public void destroy() {
 	    this.removeDelegate = null;
-	    this.properties.clear();
+	    if(locks != null)
+	        locks.clear();
+	    if(properties != null)
+	        this.properties.clear();
+	    if(sessionMap != null)
+	        this.sessionMap.clear();
+	    this.locks = null;
+	    this.properties = null;
+	    this.sessionMap = null;
 	}
 	
 	@Override

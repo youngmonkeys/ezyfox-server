@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
@@ -14,7 +15,9 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -86,6 +89,26 @@ public class EzyHandlerGroupManagerImpl
 		EzyHandlerGroup group = groupsByConnection.remove(channel.getConnection());
 		group.destroy();
 		getLogger().debug("on channel {} inactive, remove handler group {}", channel, group);
+	}
+	
+	private EzyHandlerGroup getHandlerGroup(EzySession session) {
+		if(session == null)
+			return null;
+		if(session.getChannel() == null)
+			return null;
+		if(session.getChannel().getConnection() == null)
+			return null;
+		return groupsByConnection.get(session.getChannel().getConnection());
+	}
+	
+	@Override
+	public EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
+		return getHandlerGroup(session);
+	}
+	
+	@Override
+	public EzySocketWriterGroup getWriterGroup(EzySession session) {
+		return getHandlerGroup(session);
 	}
 	
 	private Object newDataDecoder(EzyConnectionType type) {

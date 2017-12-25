@@ -131,8 +131,6 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void sendNow(EzyData data, EzyTransportType type) {
-	    if(immediateDataSender == null)
-	        return;
 	    EzyPacket packet = createDataPacket(data, type);
         immediateDataSender.sendPacketNow(packet);
 	}
@@ -189,19 +187,25 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void destroy() {
+	    this.channel = null;
 	    this.delegate = null;
 	    this.activated = false;
 	    this.loggedIn = false;
 	    this.readBytes = 0L;
 	    this.writtenBytes = 0L;
-	    this.properties.clear();
-	    this.channel = null;
 	    this.connectionType = null;
+	    if(locks != null)
+	        this.locks.clear();
+	    if(properties != null)
+            this.properties.clear();
 	    if(packetQueue != null)
 	        this.packetQueue.clear();
 	    if(sessionTicketsQueue != null) 
 	        this.sessionTicketsQueue.remove(this);
+	    this.locks = null;
+	    this.properties = null;
 	    this.packetQueue = null;
+	    this.dataDecoderGroup = null;
 	    this.sessionTicketsQueue = null;
 	    this.immediateDataSender = null;
 	}

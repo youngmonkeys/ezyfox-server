@@ -2,10 +2,11 @@ package com.tvd12.ezyfoxserver.nio.handler;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 
-public interface EzyHandlerGroup extends EzySocketWriterGroup, EzyDestroyable {
+public interface EzyHandlerGroup extends EzySocketWriterGroup, EzySocketDataDecoderGroup, EzyDestroyable {
 
 	void fireChannelInactive();
 	

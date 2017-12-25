@@ -1,7 +1,11 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+
 import com.tvd12.ezyfoxserver.callback.EzyCallback;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
 		extends EzyAbstractHandlerGroup<EzyNioDataDecoder, EzyNioDataEncoder>
@@ -61,6 +65,26 @@ public class EzySimpleNioHandlerGroup
 			getLogger().error("decode message error", e);
 			return null;
 		}
+	}
+	
+	@Override
+	protected int writePacketToSocket(EzyPacket packet) throws Exception {
+		ByteBuffer buffer = (ByteBuffer)packet.getData();
+		int bytesToWrite = buffer.remaining();
+		int bytesWritten = channel.write(buffer);
+		if (bytesWritten < bytesToWrite) {
+			byte[] remainBytes = new byte[buffer.remaining()];
+			ByteBuffer remainBuffer = ByteBuffer.wrap(remainBytes);
+			SelectionKey selectionKey = getSession().getSelectionKey();
+			if(selectionKey != null && selectionKey.isValid())
+				selectionKey.interestOps(SelectionKey.OP_WRITE);
+			packet.setFragment(remainBuffer);
+			getLogger().debug("session {} write to socket has fragment, size = {}", getSession(), bytesToWrite - bytesWritten);
+		}
+		else {
+			packet.release();
+		}
+		return bytesWritten;
 	}
 	
 	public static Builder builder() {

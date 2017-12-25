@@ -1,11 +1,22 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
+import java.nio.ByteBuffer;
 
-public interface EzyPacket {
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
+import com.tvd12.ezyfoxserver.util.EzyReleasable;
+
+public interface EzyPacket extends EzyReleasable {
 
 	Object getData();
 	
+	boolean isReleased();
+	
+	boolean isFragmented();
+	
 	EzyTransportType getType();
+	
+	ByteBuffer getFragment();
+	
+	void setFragment(ByteBuffer fragment);
 	
 }

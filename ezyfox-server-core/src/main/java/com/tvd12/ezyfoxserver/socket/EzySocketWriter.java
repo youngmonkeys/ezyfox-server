@@ -53,10 +53,13 @@ public abstract class EzySocketWriter
 	private boolean processSessionQueue(EzySocketWriterGroup group, EzyPacketQueue queue)
 			throws Exception {
 		if(!queue.isEmpty()) {
-			EzyPacket packet = queue.take();
-			group.fireDataSend(packet.getData());
+			EzyPacket packet = queue.peek();
+			group.firePacketSend(packet);
+	        if(packet.isReleased())
+	            queue.take();
 			return queue.isEmpty();
 		}
 		return true;
 	}
+	
 }

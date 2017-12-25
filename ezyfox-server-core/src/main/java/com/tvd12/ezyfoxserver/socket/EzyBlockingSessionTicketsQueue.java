@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -12,16 +11,14 @@ public class EzyBlockingSessionTicketsQueue
 
     private final int capacity;
 	private final LinkedBlockingQueue<EzySession> queue;
-	private final ConcurrentHashMap<EzySession, Integer> sessionCounts;
 	
 	public EzyBlockingSessionTicketsQueue() {
-	    this(201800);
+	    this(100000);
 	}
 	
 	public EzyBlockingSessionTicketsQueue(int capacity) {
 	    this.capacity = capacity;
-	    this.sessionCounts = new ConcurrentHashMap<>();
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedBlockingQueue<>(capacity);
 	}
 
 	@Override
@@ -46,38 +43,18 @@ public class EzyBlockingSessionTicketsQueue
 	
 	@Override
 	public boolean add(EzySession session) {
-	    if(hasSessionInQueue(session))
-            return false;
-	    updateSessionCount(session, 1);
-		queue.offer(session);
-		return true;
-	}
-	
-	public boolean hasSessionInQueue(EzySession session) {
-	    synchronized (sessionCounts) {
-	        Integer count = sessionCounts.get(session);
-            return count != null && count > 0; 
-        }
-	}
-	
-	public void updateSessionCount(EzySession session, int offset) {
-	    synchronized (sessionCounts) {
-	        sessionCounts.compute(
-	                session, (k, v) -> v != null ? v + offset : offset);
-        }
+		return queue.offer(session);
 	}
 	
 	@Override
 	public void remove(EzySession session) {
 	    queue.remove(session);
-	    sessionCounts.remove(session);
 	}
 	
 	@SuppressWarnings("unchecked")
     @Override
 	public <T extends EzySession> T take() throws InterruptedException {
 		T session = (T) queue.take();
-		updateSessionCount(session, -1);
 		return session;
 	}
 	

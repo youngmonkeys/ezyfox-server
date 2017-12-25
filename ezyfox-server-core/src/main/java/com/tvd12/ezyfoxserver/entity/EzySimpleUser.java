@@ -67,14 +67,16 @@ public class EzySimpleUser
 	
 	@Override
 	public void send(EzyData data, EzyTransportType type) {
-	    for(EzySession session : getSessions())
+	    for(EzySession session : getSessions()) {
 	        session.send(data, type);
+	    }
 	}
 	
 	@Override
 	public void sendNow(EzyData data, EzyTransportType type) {
-	    for(EzySession session : getSessions())
+	    for(EzySession session : getSessions()) {
             session.sendNow(data, type);
+	    }
 	}
 	
 	@Override

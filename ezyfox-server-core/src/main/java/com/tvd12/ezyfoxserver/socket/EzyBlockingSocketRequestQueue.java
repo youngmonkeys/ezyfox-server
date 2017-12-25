@@ -44,7 +44,6 @@ public abstract class EzyBlockingSocketRequestQueue
 	
 	@Override
 	public boolean add(EzySocketRequest request) {
-	    getLogger().info("add request, size = {}, full = {}", queue.size(), isFull());
 	    if(queue.size() >= capacity)
 	        return false;
 		return queue.offer(request);

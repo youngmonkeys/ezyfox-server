@@ -13,9 +13,12 @@ import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroup;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroupAware;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
@@ -28,7 +31,7 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractSession 
         extends EzyEntity 
-        implements EzySession, EzyImmediateDataSenderAware, EzyHasSessionDelegate {
+        implements EzySession, EzyImmediateDataSenderAware, EzySocketDataDecoderGroupAware, EzyHasSessionDelegate {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
@@ -65,6 +68,7 @@ public abstract class EzyAbstractSession
 	protected EzyPacketQueue packetQueue;
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzyImmediateDataSender immediateDataSender;
+    protected EzySocketDataDecoderGroup dataDecoderGroup;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -106,6 +110,8 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public boolean isIdle() {
+	    if(!loggedIn)
+	        return false;
 	    return maxIdleTime < (System.currentTimeMillis() - lastReadTime);
 	}
 	
@@ -125,16 +131,30 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void sendNow(EzyData data, EzyTransportType type) {
-	    if(immediateDataSender != null)
-	        immediateDataSender.sendDataNow(data, type);
+	    if(immediateDataSender == null)
+	        return;
+	    EzyPacket packet = createDataPacket(data, type);
+        immediateDataSender.sendPacketNow(packet);
 	}
 	
     protected void sendData(EzyData data, EzyTransportType type) {
-        EzySimplePacket packet = new EzySimplePacket();
-        packet.setType(type);
-        packet.setData(data);
+        EzyPacket packet = createDataPacket(data, type);
         packetQueue.add(packet);
         sessionTicketsQueue.add(this);
+    }
+    
+    protected EzyPacket createDataPacket(EzyData data, EzyTransportType type) {
+        try {
+            Object bytes = dataDecoderGroup.fireDecodeData(data);
+            EzySimplePacket packet = new EzySimplePacket();
+            packet.setType(type);
+            packet.setData(bytes);
+            return packet;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("can't send data: " + data + " to client");
+        }
     }
     
     @Override

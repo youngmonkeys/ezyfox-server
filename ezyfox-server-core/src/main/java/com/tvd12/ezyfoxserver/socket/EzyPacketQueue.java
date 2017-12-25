@@ -8,6 +8,8 @@ public interface EzyPacketQueue {
 	
 	EzyPacket take();
 	
+	EzyPacket peek();
+	
 	boolean isFull();
 	
 	boolean isEmpty();

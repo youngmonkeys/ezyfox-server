@@ -35,10 +35,15 @@ public class EzySendResponseImpl
     }
     
     protected void sendData(EzyArray data) {
-        if(immediate) 
-            sender.sendNow(data);
-        else
-            sender.send(data);
+        try {
+            if(immediate) 
+                sender.sendNow(data);
+            else
+                sender.send(data);
+            }
+        catch(Exception e) {
+            getLogger().error("send data {} to clients error", data);
+        }
     }
     
     protected void debugLogResponse(Object data) {

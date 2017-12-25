@@ -40,7 +40,6 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
             queue.add(sessions.get(i));
         }
         
-        assert queue.add(sessions.get(11));
         assert !queue.add(sessions.get(0));
         
     }

@@ -42,6 +42,14 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
 	}
 	
 	@Override
+	public EzyPacket peek() {
+	    synchronized (queue) {
+            EzyPacket packet = queue.peek();
+            return packet;
+        }
+	}
+	
+	@Override
 	public boolean isFull() {
 	    synchronized (queue) {
 	        return queue.size() >= capacity;

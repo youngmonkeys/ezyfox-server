@@ -11,7 +11,7 @@ public class EzySimpleWsHandlerGroup
 	
 	public EzySimpleWsHandlerGroup(Builder builder) {
 		super(builder);
-		this.decodeBytesCallback = this::executeHandleReceivedData;
+		this.decodeBytesCallback = this::handleReceivedData;
 	}
 	
 	@Override
@@ -71,18 +71,6 @@ public class EzySimpleWsHandlerGroup
 		}
 		catch(Throwable throwable) {
 			fireExceptionCaught(throwable);
-		}
-	}
-	
-	private void executeHandleReceivedData(Object data) {
-		handlerThreadPool.execute(() -> handleReceivedData(data));
-	}
-	
-	private void handleReceivedData(Object data) {
-		try {
-			handler.channelRead(data);
-		} catch (Exception e) {
-			getLogger().error("handle data error, data: " + data, e);
 		}
 	}
 	

@@ -11,12 +11,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzyRunWorkerImpl extends EzyAbstractCommand implements EzyRunWorker {
 
-	private ExecutorService executor;
+	private final ExecutorService executor;
 	
 	@Override
 	public void run(EzyWorker worker) {
 		try {
-			executor.submit(worker).get(3, TimeUnit.SECONDS);
+			executor.submit(worker).get(30, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			getLogger().error("error when run worker " + worker, e);
 		}

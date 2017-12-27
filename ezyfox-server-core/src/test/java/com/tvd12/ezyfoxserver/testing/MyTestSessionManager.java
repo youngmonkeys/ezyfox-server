@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import java.util.List;
-
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
@@ -14,29 +12,10 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
     }
     
     @Override
-    public List<MyTestSession> getBorrowedObjects() {
-        return super.getBorrowedObjects();
+    public MyTestSession provideSession(EzyConstant type) {
+        return super.provideSession(type);
     }
     
-    @Override
-    public MyTestSession borrowSession(EzyConnectionType type) {
-        return super.borrowSession(type);
-    }
-    
-    @Override
-    public boolean isStaleObject(MyTestSession session) {
-        return super.isStaleObject(session);
-    }
-    
-    @Override
-    public void removeStaleObject(MyTestSession session) {
-        super.removeStaleObject(session);
-    }
-    
-    @Override
-    public List<MyTestSession> getCanBeStaleObjects() {
-        return super.getCanBeStaleObjects();
-    }
     
     public static Builder builder() {
         return new Builder();

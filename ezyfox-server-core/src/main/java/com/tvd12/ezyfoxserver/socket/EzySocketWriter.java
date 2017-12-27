@@ -6,12 +6,14 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Setter;
 
-public abstract class EzySocketWriter 
+public class EzySocketWriter 
         extends EzySocketAbstractEventHandler
         implements EzySessionTicketsQueueAware {
 
     @Setter
 	protected EzySessionTicketsQueue sessionTicketsQueue;
+    @Setter
+    protected EzySocketWriterGroupFetcher writerGroupFetcher;
 	
 	@Override
     public void handleEvent() {
@@ -48,15 +50,20 @@ public abstract class EzySocketWriter
         }
 	}
 	
-	protected abstract EzySocketWriterGroup getWriterGroup(EzySession session);
-	
 	private boolean processSessionQueue(EzySocketWriterGroup group, EzyPacketQueue queue)
 			throws Exception {
 		if(!queue.isEmpty()) {
-			EzyPacket packet = queue.take();
-			group.fireDataSend(packet.getData());
+			EzyPacket packet = queue.peek();
+			group.firePacketSend(packet);
+	        if(packet.isReleased())
+	            queue.take();
 			return queue.isEmpty();
 		}
 		return true;
 	}
+	
+	protected EzySocketWriterGroup getWriterGroup(EzySession session) {
+        return writerGroupFetcher.getWriterGroup(session);
+    }
+	
 }

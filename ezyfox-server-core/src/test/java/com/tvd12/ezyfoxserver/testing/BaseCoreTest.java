@@ -129,7 +129,7 @@ public class BaseCoreTest extends BaseTest {
     public static class SessionDelegate implements EzySessionDelegate {
 
         @Override
-        public void onSessionReturned(EzyConstant reason) {
+        public void onSessionRemoved(EzyConstant reason) {
         }
 
         @Override

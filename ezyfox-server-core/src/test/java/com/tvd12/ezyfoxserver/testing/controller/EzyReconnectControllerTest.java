@@ -30,7 +30,7 @@ public class EzyReconnectControllerTest extends EzyBaseControllerTest {
     
     @Test
     public void test1() {
-        EzyAbstractSession oldSession = getSessionManager(context).borrowSession(EzyConnectionType.SOCKET);
+        EzyAbstractSession oldSession = getSessionManager(context).provideSession(EzyConnectionType.SOCKET);
         oldSession.setDelegate(new EzyAbstractSessionDelegate() {
         });
         EzySession session = newSession();
@@ -47,7 +47,7 @@ public class EzyReconnectControllerTest extends EzyBaseControllerTest {
     public void test2() {
         MyTestUser user = new MyTestUser();
         user.setName("dungtv");
-        EzyAbstractSession oldSession = getSessionManager(context).borrowSession(EzyConnectionType.SOCKET);
+        EzyAbstractSession oldSession = getSessionManager(context).provideSession(EzyConnectionType.SOCKET);
         oldSession.setDelegate(new EzyAbstractSessionDelegate() {
         });
         user.addSession(oldSession);

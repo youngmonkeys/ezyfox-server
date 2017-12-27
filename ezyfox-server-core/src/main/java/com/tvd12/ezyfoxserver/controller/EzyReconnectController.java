@@ -26,7 +26,7 @@ public class EzyReconnectController
         EzyServerUserManager userManager = getUserManager(ctx);
         EzySessionManager<EzySession> sessionManager = getSessionManager(ctx);
         EzyUser user = userManager.findAndUpdateUser(oldsession, newsession);
-        sessionManager.returnSession(oldsession, EzyDisconnectReason.ANOTHER_SESSION_LOGIN);
+        sessionManager.removeSession(oldsession, EzyDisconnectReason.ANOTHER_SESSION_LOGIN);
         EzyIfElse.withIf(user != null, () -> processUser(ctx, user, newsession));
     }
     

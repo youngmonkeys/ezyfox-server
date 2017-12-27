@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.tvd12</groupId>
@@ -12,12 +13,12 @@
 	<description>
 		Common maven project configuration 
 	</description>
-	
+
 	<organization>
 		<name>Young Monkeys</name>
 		<url>http://www.tvd12.com</url>
 	</organization>
-	
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -25,13 +26,13 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<scm>
 		<connection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</connection>
 		<developerConnection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</developerConnection>
 		<url>https://github.com/youngmonkeys/ezyfox-server</url>
 	</scm>
-	
+
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/youngmonkeys/ezyfox-server/issues</url>
@@ -43,12 +44,12 @@
 	</ciManagement>
 
 	<pluginRepositories>
-        <pluginRepository>
-            <id>oss.sonatype.org</id>
-            <url>https://oss.sonatype.org/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
-    
+		<pluginRepository>
+			<id>oss.sonatype.org</id>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<developers>
 		<developer>
 			<name>Ta Van Dung</name>
@@ -60,7 +61,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<joda.time.version>2.9.9</joda.time.version>
@@ -68,22 +69,22 @@
 		<reflections.version>0.9.11</reflections.version>
 		<commons.codec.version>1.10</commons.codec.version>
 		<properties.file.version>1.0.4</properties.file.version>
-		
+
 		<commons.io.version>2.5</commons.io.version>
 		<lombok.version>1.16.10</lombok.version>
-		<logback.version>1.1.7</logback.version>
+		<slf4j.version>1.7.25</slf4j.version>
 		<groovy.version>2.4.6</groovy.version>
 		<jackson.version>2.8.10</jackson.version>
-		
+
 		<directory.lib>lib</directory.lib>
 		<deploy.path>${env.EZYFOX_SERVER_HOME}</deploy.path>
 	</properties>
 
 	<dependencies>
 		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>${commons.codec.version}</version>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons.codec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -115,24 +116,12 @@
 			<artifactId>reflections</artifactId>
 			<version>${reflections.version}</version>
 		</dependency>
-		
-		<!-- logback -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
 
-		<!-- Groovy -->
+		<!-- slf4j log -->
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy</artifactId>
-			<version>${groovy.version}</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -172,10 +161,12 @@
 						</goals>
 					</execution>
 					<execution>
-                        <id>default-report</id>
-                        <phase>prepare-package</phase>
-                        <goals><goal>report</goal></goals>
-                    </execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
@@ -236,11 +227,11 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<mkdir dir="${deploy.path}/${directory.lib}"/>
+										<mkdir dir="${deploy.path}/${directory.lib}" />
 										<copy todir="${deploy.path}/${directory.lib}">
-											<fileset dir="target/${project.name}-${project.version}-bin/lib"/>
+											<fileset dir="target/${project.name}-${project.version}-bin/lib" />
 										</copy>
-										<delete dir="${deploy.path}/${directory.lib}/classes"/>
+										<delete dir="${deploy.path}/${directory.lib}/classes" />
 									</tasks>
 								</configuration>
 								<goals>
@@ -256,127 +247,125 @@
 			<id>sonatype</id>
 			<distributionManagement>
 				<downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
-		        <repository>
-		            <id>oss.sonatype.org</id>
-		            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		        </repository>
-		        <snapshotRepository>
-		            <id>oss.sonatype.org</id>
-		            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		        </snapshotRepository>
-		        <site>
-		            <id>com.tvd12</id>
-		            <url>http://www.tvd12.com/</url>
-		        </site>
+				<repository>
+					<id>oss.sonatype.org</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+				</repository>
+				<snapshotRepository>
+					<id>oss.sonatype.org</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<site>
+					<id>com.tvd12</id>
+					<url>http://www.tvd12.com/</url>
+				</site>
 			</distributionManagement>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-deploy-plugin</artifactId>
-                            <version>2.8.2</version>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                        	<groupId>org.apache.maven.plugins</groupId>
-					        <artifactId>maven-release-plugin</artifactId>
-					        <version>2.5.3</version>
-                        </plugin>
-		                <plugin>
-		                    <artifactId>maven-install-plugin</artifactId>
-		                    <version>2.5.2</version>
-		                    <configuration>
-		                        <createChecksum>true</createChecksum>
-		                    </configuration>
-		                </plugin>
-		                <plugin>
-		                    <artifactId>maven-jar-plugin</artifactId>
-		                    <version>2.6</version>
-		                </plugin>
-		                <plugin>
-		                    <artifactId>maven-javadoc-plugin</artifactId>
-		                    <version>2.10.3</version>
-		                </plugin>
-                    	<plugin>
-		                    <artifactId>maven-source-plugin</artifactId>
-		                    <version>2.4</version>
-		                </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-deploy-plugin</artifactId>
+							<version>2.8.2</version>
+							<configuration>
+								<skip>true</skip>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-release-plugin</artifactId>
+							<version>2.5.3</version>
+						</plugin>
+						<plugin>
+							<artifactId>maven-install-plugin</artifactId>
+							<version>2.5.2</version>
+							<configuration>
+								<createChecksum>true</createChecksum>
+							</configuration>
+						</plugin>
+						<plugin>
+							<artifactId>maven-jar-plugin</artifactId>
+							<version>2.6</version>
+						</plugin>
+						<plugin>
+							<artifactId>maven-javadoc-plugin</artifactId>
+							<version>2.10.3</version>
+						</plugin>
+						<plugin>
+							<artifactId>maven-source-plugin</artifactId>
+							<version>2.4</version>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+				<plugins>
 					<plugin>
 						<artifactId>maven-gpg-plugin</artifactId>
-				        <version>1.5</version>
-				        <executions>
-				          <execution>
-				            <id>sign-artifacts</id>
-				            <phase>verify</phase>
-				            <goals>
-				              <goal>sign</goal>
-				            </goals>
-				          </execution>
-				        </executions>
-				    </plugin>
-				    <plugin>
-				        <groupId>org.codehaus.mojo</groupId>
-				        <artifactId>versions-maven-plugin</artifactId>
-				        <version>2.1</version>
-				        <configuration>
-				          <generateBackupPoms>false</generateBackupPoms>
-				        </configuration>
-				    </plugin>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>esa-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <!--
-                        Generate -javadoc.jar artifact, required by Maven Central.
-                        -->
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>esa-javadoc</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <!-- @see http://www.sonatype.com/books/nexus-book/reference/staging-sect-deployment.html -->
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>oss.sonatype.org</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <description>${project.version}</description>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>deploy-to-sonatype</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>deploy</goal>
-                                    <goal>release</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>versions-maven-plugin</artifactId>
+						<version>2.1</version>
+						<configuration>
+							<generateBackupPoms>false</generateBackupPoms>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>esa-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<!-- Generate -javadoc.jar artifact, required by Maven Central. -->
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>esa-javadoc</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<!-- @see http://www.sonatype.com/books/nexus-book/reference/staging-sect-deployment.html -->
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>oss.sonatype.org</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<description>${project.version}</description>
+						</configuration>
+						<executions>
+							<execution>
+								<id>deploy-to-sonatype</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>deploy</goal>
+									<goal>release</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

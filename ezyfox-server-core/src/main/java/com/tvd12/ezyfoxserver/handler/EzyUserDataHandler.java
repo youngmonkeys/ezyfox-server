@@ -13,6 +13,7 @@ public abstract class EzyUserDataHandler<S extends EzySession>
     protected void unmapUser() {
         userManager.unmapSessionUser(session);
         user.removeSession(session);
+        getLogger().debug("remove session {} from user {}, remain {} sessions", session.getClientAddress(), user.getName(), user.getSessionCount());
     }
     
     protected void chechToUnmapUser() {

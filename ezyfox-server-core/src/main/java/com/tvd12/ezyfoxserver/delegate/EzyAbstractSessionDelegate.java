@@ -8,7 +8,7 @@ public abstract class EzyAbstractSessionDelegate
         extends EzyLoggable implements EzySessionDelegate {
 
 	@Override
-	public void onSessionReturned(EzyConstant reason) {
+	public void onSessionRemoved(EzyConstant reason) {
 	}
 	
 	@Override

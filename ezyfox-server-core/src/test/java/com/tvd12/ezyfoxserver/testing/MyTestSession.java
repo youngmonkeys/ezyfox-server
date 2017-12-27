@@ -45,7 +45,7 @@ public class MyTestSession extends EzyAbstractSession {
             }
             
             @Override
-            public void onSessionReturned(EzyConstant reason) {
+            public void onSessionRemoved(EzyConstant reason) {
                 
             }
         };

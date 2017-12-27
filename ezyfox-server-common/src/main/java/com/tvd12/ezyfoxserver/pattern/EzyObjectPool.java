@@ -1,10 +1,11 @@
 package com.tvd12.ezyfoxserver.pattern;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,11 @@ public abstract class EzyObjectPool<T>
 		return objectFactory.newProduct();
 	}
 	
-	protected void removeObject(T object) {
+	private void releaseObject0(T object) {
+		releaseObject(object);
+	}
+	
+	protected void releaseObject(T object) {
 	}
 	
 	protected List<T> getBorrowedObjects() {
@@ -82,7 +87,7 @@ public abstract class EzyObjectPool<T>
 			@Override
 			public void run() {
 				try {
-					addOrRemoveObjects(pool.size());
+					removeObjects(pool.size());
 					removeStaleObjects();
 				}
 				catch(Exception e) {
@@ -90,46 +95,32 @@ public abstract class EzyObjectPool<T>
 				}
 			}
 			
-			private void addOrRemoveObjects(int poolSize) {
-				if(poolSize < minObjects)
-					addObjects(poolSize);
-				else if(poolSize > maxObjects)
-					removeObjects(poolSize);
-			}
-			
-			private void addObjects(int poolSize) {
-				addNewObjects(minObjects - poolSize);
-			}
-			
-			private void addNewObjects(int size) {
-				runWithLock(() -> tryAddNewObjects(size));
-			}
-			
-			private void tryAddNewObjects(int size) {
-				for(int i = 0 ; i < size ; i++)
-					pool.add(createObject());
-			}
-			
 			private void removeObjects(int poolSize) {
+				if(poolSize > maxObjects)
+					removeObjects0(poolSize);
+			}
+			
+			private void removeObjects0(int poolSize) {
 				removeUnusedObjects(poolSize - maxObjects);
 			}
 			
 			private void removeUnusedObjects(int size) {
-				runWithLock(() -> tryRemoveUnusedObjects(size));
+				runWithLock(() -> removeUnusedObjects0(size));
 			}
 			
-			private void tryRemoveUnusedObjects(int size) {
+			private void removeUnusedObjects0(int size) {
 				for(int i = 0 ; i < size ; i++)
-					removeObject(pool.poll());
+					releaseObject0(pool.poll());
+				getLogger().info("object pool: remove {} excessive objects, remain {}", size, pool.size());
 			}
 		};
 	}
 	
 	protected void removeStaleObjects() {
-		tryRemoveStaleObjects();
+		removeStaleObjects0();
 	}
 	
-	protected void tryRemoveStaleObjects() {
+	protected void removeStaleObjects0() {
 		removeStaleObjects(getCanBeStaleObjects());
 	}
 	
@@ -151,20 +142,20 @@ public abstract class EzyObjectPool<T>
 	}
 
 	protected final T borrowObject() {
-		return returnWithLock(() -> tryBorrowObject());
+		return returnWithLock(() -> borrowObject0());
 	}
 	
-	private final T tryBorrowObject() {
+	private final T borrowObject0() {
 		T obj = borrowOrNewObject();
 		borrowedObjects.add(obj);
 		return obj;
 	}
 	
 	protected final boolean returnObject(T object) {
-        return returnWithLock(() -> tryReturnObject(object));
+        return returnWithLock(() -> returnObject0(object));
     }
 	
-	private final boolean tryReturnObject(T object) {
+	private final boolean returnObject0(T object) {
 		return object != null ? doReturnObject(object) : false;
 	}
 	
@@ -188,15 +179,15 @@ public abstract class EzyObjectPool<T>
 	@Override
 	public void destroy() {
 		try {
-			tryShutdown();
+			shutdownAll();
 		}
 		catch(Exception e) {
 			getLogger().error(getClass().getSimpleName() + " error", e);
 		}
 	}
 	
-	protected void tryShutdown() {
-		validationService.shutdown();
+	protected void shutdownAll() {
+		processWithLogException(validationService::shutdown);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -205,7 +196,7 @@ public abstract class EzyObjectPool<T>
 		
 		private Queue<T> pool;
 		private int minObjects = 300;
-		private int maxObjects = 5000;
+		private int maxObjects = 300;
 		private long validationInterval = 3 * 1000;
 		protected EzyObjectFactory<T> objectFactory;
 		private ScheduledExecutorService validationService;
@@ -277,7 +268,7 @@ public abstract class EzyObjectPool<T>
 		}
 		
 		protected List<T> newBorrowedObjects() {
-			return new CopyOnWriteArrayList<>();
+			return new ArrayList<>();
 		}
 		
 	}

@@ -6,16 +6,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
 import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroup;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroupAware;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
@@ -28,7 +31,7 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractSession 
         extends EzyEntity 
-        implements EzySession, EzyImmediateDataSenderAware, EzyHasSessionDelegate {
+        implements EzySession, EzyImmediateDataSenderAware, EzySocketDataDecoderGroupAware, EzyHasSessionDelegate {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
@@ -56,7 +59,7 @@ public abstract class EzyAbstractSession
 	protected String clientVersion;
 	protected String reconnectToken;
 	protected String fullReconnectToken;
-	protected EzyConnectionType connectionType;
+	protected EzyConstant connectionType;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;
@@ -65,6 +68,7 @@ public abstract class EzyAbstractSession
 	protected EzyPacketQueue packetQueue;
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzyImmediateDataSender immediateDataSender;
+    protected EzySocketDataDecoderGroup dataDecoderGroup;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -105,6 +109,13 @@ public abstract class EzyAbstractSession
 	}
 	
 	@Override
+	public boolean isIdle() {
+	    if(!loggedIn)
+	        return false;
+	    return maxIdleTime < (System.currentTimeMillis() - lastReadTime);
+	}
+	
+	@Override
 	public Lock getLock(String name) {
 	    return locks.computeIfAbsent(name, k -> new ReentrantLock());
 	}
@@ -120,16 +131,32 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void sendNow(EzyData data, EzyTransportType type) {
-	    if(immediateDataSender != null)
-	        immediateDataSender.sendDataNow(data, type);
+	    EzyPacket packet = createDataPacket(data, type);
+        immediateDataSender.sendPacketNow(packet);
 	}
 	
     protected void sendData(EzyData data, EzyTransportType type) {
-        EzySimplePacket packet = new EzySimplePacket();
-        packet.setType(type);
-        packet.setData(data);
-        packetQueue.add(packet);
-        sessionTicketsQueue.add(this);
+        EzyPacket packet = createDataPacket(data, type);
+        synchronized (packetQueue) {
+            boolean empty = packetQueue.isEmpty();
+            boolean success = packetQueue.add(packet);
+            if(empty && success) {
+                sessionTicketsQueue.add(this);
+            }
+        }
+    }
+    
+    protected EzyPacket createDataPacket(EzyData data, EzyTransportType type) {
+        try {
+            Object bytes = dataDecoderGroup.fireDecodeData(data);
+            EzySimplePacket packet = new EzySimplePacket();
+            packet.setType(type);
+            packet.setData(bytes);
+            return packet;
+        }
+        catch(Exception e) {
+            throw new IllegalArgumentException("can't send data: " + data + " to client");
+        }
     }
     
     @Override
@@ -164,19 +191,30 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void destroy() {
+	    this.channel = null;
 	    this.delegate = null;
 	    this.activated = false;
 	    this.loggedIn = false;
 	    this.readBytes = 0L;
 	    this.writtenBytes = 0L;
-	    this.properties.clear();
-	    this.channel = null;
-	    if(packetQueue != null)
-	        this.packetQueue.clear();
-	    if(sessionTicketsQueue != null) 
-	        this.sessionTicketsQueue.remove(this);
-	    this.sessionTicketsQueue = null;
+	    this.connectionType = null;
+	    if(locks != null)
+	        this.locks.clear();
+	    if(properties != null)
+            this.properties.clear();
+	    this.locks = null;
+	    this.properties = null;
+	    this.dataDecoderGroup = null;
 	    this.immediateDataSender = null;
+	    if(packetQueue != null) {
+            synchronized (packetQueue) {
+                this.packetQueue.clear();
+                if(sessionTicketsQueue != null)
+                    this.sessionTicketsQueue.remove(this);
+            }
+        }
+	    this.packetQueue = null;
+	    this.sessionTicketsQueue = null;
 	}
 	
 	@Override
@@ -194,11 +232,13 @@ public abstract class EzyAbstractSession
 	@Override
 	public String toString() {
 	    return new StringBuilder()
+	            .append("(")
 	            .append("id: ").append(id)
 	            .append(", type: ").append(clientType)
 	            .append(", version: ").append(clientVersion)
 	            .append(", address: ").append(getClientAddress())
 	            .append(", reconnectToken: ").append(reconnectToken)
+	            .append(")")
 	            .toString();
 	}
 	

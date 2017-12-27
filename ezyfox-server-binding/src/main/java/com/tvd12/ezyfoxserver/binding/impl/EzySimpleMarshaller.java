@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -23,8 +24,6 @@ import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.io.EzyMaps;
 import com.tvd12.ezyfoxserver.reflect.EzyTypes;
 import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
-
-import groovyjarjarantlr.collections.List;
 
 public class EzySimpleMarshaller
 		extends EzyEntityBuilders

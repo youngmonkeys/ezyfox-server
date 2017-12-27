@@ -1,7 +1,11 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+
 import com.tvd12.ezyfoxserver.callback.EzyCallback;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
 		extends EzyAbstractHandlerGroup<EzyNioDataDecoder, EzyNioDataEncoder>
@@ -50,7 +54,7 @@ public class EzySimpleNioHandlerGroup
 	
 	private void handleReceivedMesssage(EzyMessage message) {
 		Object data = decodeMessage(message);
-		handlerThreadPool.execute(() -> handleReceivedData(data));
+		handleReceivedData(data);
 	}
 	
 	private Object decodeMessage(EzyMessage message) {
@@ -63,12 +67,38 @@ public class EzySimpleNioHandlerGroup
 		}
 	}
 	
-	private void handleReceivedData(Object data) {
-		try {
-			handler.channelRead(data);
-		} catch (Exception e) {
-			getLogger().error("handle data error, data: " + data, e);
+	@Override
+	protected int writePacketToSocket(EzyPacket packet) throws Exception {
+		ByteBuffer buffer = getBytesToWrite(packet);
+		int bytesToWrite = buffer.remaining();
+		int bytesWritten = channel.write(buffer);
+		if (bytesWritten < bytesToWrite) {
+			ByteBuffer remainBuffer = getPacketFragment(buffer);
+			packet.setFragment(remainBuffer);
+			SelectionKey selectionKey = getSession().getSelectionKey();
+			if(selectionKey != null && selectionKey.isValid()) {
+				selectionKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+			}
+			else {
+				getLogger().warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, getSession());
+			}
+			getLogger().debug("session: {} write to socket has fragment, size: ", getSession(), remainBuffer.remaining());
 		}
+		else {
+			packet.release();
+		}
+		return bytesWritten;
+	}
+	
+	private ByteBuffer getPacketFragment(ByteBuffer buffer) {
+		byte[] remainBytes = new byte[buffer.remaining()];
+		buffer.get(remainBytes);
+		ByteBuffer remainBuffer = ByteBuffer.wrap(remainBytes);
+		return remainBuffer;
+	}
+	
+	private ByteBuffer getBytesToWrite(EzyPacket packet) {
+		return (ByteBuffer)packet.getData();
 	}
 	
 	public static Builder builder() {
@@ -82,5 +112,5 @@ public class EzySimpleNioHandlerGroup
 			return new EzySimpleNioHandlerGroup(this);
 		}
 	}
-	
+
 }

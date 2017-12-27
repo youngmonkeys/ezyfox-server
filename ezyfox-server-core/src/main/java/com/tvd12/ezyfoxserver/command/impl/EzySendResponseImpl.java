@@ -30,19 +30,30 @@ public class EzySendResponseImpl
         EzyArray data = responseSerializer.serializeToArray(response);
         sendData(data);
         debugLogResponse(data);
+        destroy();
         return Boolean.TRUE;
     }
     
     protected void sendData(EzyArray data) {
-        if(immediate) 
-            sender.sendNow(data);
-        else
-            sender.send(data);
+        try {
+            if(immediate)
+                sender.sendNow(data);
+            else 
+                sender.send(data);
+        } 
+        catch(Exception e) {
+            getLogger().error("send data {} to clients error", data);
+        }
     }
     
     protected void debugLogResponse(Object data) {
         if(!unloggableCommands.contains(response.getCommand()))
-            getLogger().debug("send to {} data {}", getSenderName(), data);
+            getLogger().debug("send to: {} data: {}", getSenderName(), data);
+    }
+    
+    protected void destroy() {
+        this.sender = null;
+        this.response = null;
     }
     
     @Override

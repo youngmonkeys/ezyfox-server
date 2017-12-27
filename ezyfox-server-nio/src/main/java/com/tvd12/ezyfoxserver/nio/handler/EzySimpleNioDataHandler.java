@@ -4,6 +4,7 @@ import static com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason.MAX_REQUEST
 
 import java.util.Map;
 
+import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
@@ -38,14 +39,14 @@ public class EzySimpleNioDataHandler
 	}
 	
 	@Override
-	public void channelRead(Object msg)  throws Exception {
-    	dataReceived((EzyArray)msg);
+	public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
+    		dataReceived(cmd, msg);
     }
 	
 	@Override
-	public void onSessionReturned(EzyConstant reason) {
+	public void onSessionRemoved(EzyConstant reason) {
 		this.channelDelegate.onChannelInactivated(channel);
-		super.onSessionReturned(reason);
+		super.onSessionRemoved(reason);
 	}
     
 	private void borrowSession() {
@@ -53,7 +54,7 @@ public class EzySimpleNioDataHandler
 	}
 	
 	private EzyNioSession newSession() {
-		return ((EzyNioSessionManager)sessionManager).borrowSession(channel);
+		return ((EzyNioSessionManager)sessionManager).provideSession(channel);
 	}
 	
 	@Override
@@ -61,7 +62,7 @@ public class EzySimpleNioDataHandler
 		super.addExceptionHandlers(handlers);
 		handlers.put(EzyMaxRequestSizeException.class, (thread, throwable) -> {
 			if(sessionManager != null) 
-	            sessionManager.returnSession(session, MAX_REQUEST_SIZE);
+	            sessionManager.removeSession(session, MAX_REQUEST_SIZE);
 		});
 	}
     

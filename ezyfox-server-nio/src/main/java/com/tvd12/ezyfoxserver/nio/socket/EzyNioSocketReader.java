@@ -25,6 +25,8 @@ public class EzyNioSocketReader
 	protected Selector ownSelector;
 	@Setter
 	protected EzyHandlerGroupManager handlerGroupManager;
+	@Setter
+	protected EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler;
 	
 	protected ByteBuffer buffer = ByteBuffer.allocateDirect(getMaxBufferSize());
 
@@ -36,11 +38,12 @@ public class EzyNioSocketReader
 	@Override
 	public void handleEvent() {
 		try {
+			handleAcceptableConnections();
 			processReadyKeys0();
 			Thread.sleep(5L);
 		}
 		catch(Exception e) {
-			getLogger().info("I/O error at socket-reader", e);
+			getLogger().info("I/O error at socket-reader: " + e.getMessage());
 		}
 	}
 	
@@ -48,6 +51,10 @@ public class EzyNioSocketReader
 		return 8192;
 	}
 
+	private void handleAcceptableConnections() {
+		acceptableConnectionsHandler.handleAcceptableConnections();
+	}
+	
 	private synchronized void processReadyKeys0() throws Exception {
 		int readyKeyCount = ownSelector.selectNow();
 		if(readyKeyCount > 0) {

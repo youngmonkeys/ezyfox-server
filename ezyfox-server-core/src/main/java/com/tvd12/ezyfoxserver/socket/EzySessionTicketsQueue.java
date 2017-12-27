@@ -4,7 +4,11 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public interface EzySessionTicketsQueue {
 
+    int size();
+    
 	void clear();
+	
+	boolean isEmpty();
 	
 	boolean add(EzySession session);
 	

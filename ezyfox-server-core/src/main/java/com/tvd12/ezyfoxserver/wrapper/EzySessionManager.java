@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
 import java.util.List;
-import java.util.Set;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -52,7 +51,7 @@ public interface EzySessionManager<S extends EzySession> {
 	 * 
 	 * @param session the session
 	 */
-	void returnSession(S session);
+	void removeSession(S session);
 	
 	/**
 	 * Return the session to pool
@@ -60,14 +59,14 @@ public interface EzySessionManager<S extends EzySession> {
 	 * @param session the session
 	 * @param reason the reason
 	 */
-	void returnSession(S session, EzyConstant reason);
+	void removeSession(S session, EzyConstant reason);
 	
 	/**
      * Get all sessions
      * 
      * @return all sessions
      */
-    Set<S> getAllSessions();
+    List<S> getAllSessions();
 	
 	/**
 	 * Get all alive sessions

@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.delegate.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
@@ -14,6 +15,9 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
@@ -23,10 +27,10 @@ public class EzyHandlerGroupManagerImpl
 
 	private final ExecutorService statsThreadPool;
 	private final ExecutorService codecThreadPool;
-	private final ExecutorService handlerThreadPool;
 	
 	private final EzyCodecFactory codecFactory;
 	private final EzyServerContext serverContext;
+	private final EzySocketRequestQueues requestQueues;
 	
 	private final Map<Object, EzyHandlerGroup> groupsByConnection;
 	private final EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory;
@@ -34,7 +38,7 @@ public class EzyHandlerGroupManagerImpl
 	public EzyHandlerGroupManagerImpl(Builder builder) {
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
-		this.handlerThreadPool = builder.handlerThreadPool;
+		this.requestQueues = builder.requestQueues;
 		this.codecFactory = builder.codecFactory;
 		this.serverContext = builder.serverContext;
 		this.handlerGroupBuilderFactory = builder.handlerGroupBuilderFactory;
@@ -48,11 +52,11 @@ public class EzyHandlerGroupManagerImpl
 				.channel(channel)
 				.channelDelegate(this)
 				.serverContext(serverContext)
+				.requestQueues(requestQueues)
 				.decoder(newDataDecoder(type))
 				.encoder(newDataEncoder(type))
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
-				.handlerThreadPool(handlerThreadPool)
 				.build();
 		groupsByConnection.put(channel.getConnection(), group);
 		return (T) group;
@@ -79,7 +83,29 @@ public class EzyHandlerGroupManagerImpl
 	
 	@Override
 	public void onChannelInactivated(EzyChannel channel) {
-		groupsByConnection.remove(channel.getConnection());
+		EzyHandlerGroup group = groupsByConnection.remove(channel.getConnection());
+		group.destroy();
+		getLogger().debug("on channel {} inactive, remove handler group {}", channel, group);
+	}
+	
+	private EzyHandlerGroup getHandlerGroup(EzySession session) {
+		if(session == null)
+			return null;
+		if(session.getChannel() == null)
+			return null;
+		if(session.getChannel().getConnection() == null)
+			return null;
+		return groupsByConnection.get(session.getChannel().getConnection());
+	}
+	
+	@Override
+	public EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
+		return getHandlerGroup(session);
+	}
+	
+	@Override
+	public EzySocketWriterGroup getWriterGroup(EzySession session) {
+		return getHandlerGroup(session);
 	}
 	
 	private Object newDataDecoder(EzyConnectionType type) {
@@ -102,10 +128,10 @@ public class EzyHandlerGroupManagerImpl
 	public static class Builder implements EzyBuilder<EzyHandlerGroupManager> {
 		private ExecutorService statsThreadPool;
 		private ExecutorService codecThreadPool;
-		private ExecutorService handlerThreadPool;
-		
-		private EzyServerContext serverContext;
+
 		private EzyCodecFactory codecFactory;
+		private EzyServerContext serverContext;
+		private EzySocketRequestQueues requestQueues;
 		
 		private EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory;
 		
@@ -119,8 +145,8 @@ public class EzyHandlerGroupManagerImpl
 			return this;
 		}
 		
-		public Builder handlerThreadPool(ExecutorService handlerThreadPool) {
-			this.handlerThreadPool = handlerThreadPool;
+		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
+			this.requestQueues = requestQueues;
 			return this;
 		}
 		

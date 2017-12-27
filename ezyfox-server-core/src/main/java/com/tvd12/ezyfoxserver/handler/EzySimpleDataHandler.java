@@ -9,12 +9,11 @@ import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.request
 import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
-import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
-import com.tvd12.ezyfoxserver.constant.EzyError;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.constant.EzySessionError;
 import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
@@ -34,16 +33,14 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     public void channelInactive() throws Exception {
         if(disconnectReason == null)
-            sessionManager.returnSession(session, EzyDisconnectReason.UNKNOWN);
+            sessionManager.removeSession(session, EzyDisconnectReason.UNKNOWN);
     }
     
     public void channelInactive(EzyConstant reason) throws Exception {
-        sessionManager.returnSession(session, reason);
+        sessionManager.removeSession(session, reason);
     }
     
-    public void dataReceived(EzyArray msg) throws Exception {
-        int cmdId = msg.get(0, int.class);
-        EzyConstant cmd = EzyCommand.valueOf(cmdId);
+    public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
         if(!validateState()) return;
         if(!validateSession()) return;
         if(cmd != PING && checkMaxRequestPerSecond()) return;
@@ -76,10 +73,10 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void processMaxRequestPerSecond(int nrequests, int max) {
-        responseError(EzyError.MAX_REQUEST_PER_SECOND);
+        responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             if(sessionManager != null) {
-                sessionManager.returnSession(session, EzySessionRemoveReason.MAX_REQUEST_PER_SECOND);
+                sessionManager.removeSession(session, EzySessionRemoveReason.MAX_REQUEST_PER_SECOND);
             }
         }
     }
@@ -99,14 +96,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
-        context.get(EzyRunWorker.class).run(() ->
-            doHandleRequest(cmd, data)
-        );
-    }
-    
-    protected void doHandleRequest(EzyConstant cmd, EzyArray data) {
         try {
-            tryHandleRequest(cmd, data);
+            doHandleRequest(cmd, data);
         }
         catch(Exception e) {
             Throwable throwable = requestHandleException(cmd, data, e);
@@ -114,7 +105,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
     
-    protected void tryHandleRequest(EzyConstant cmd, EzyArray data) throws Exception {
+    protected void doHandleRequest(EzyConstant cmd, EzyArray data) throws Exception {
         Object requestParams = mapRequestParams(cmd, data);
         Object request = newRequest(cmd, requestParams);
         interceptRequest(controllers.getInterceptor(cmd), request);
@@ -151,7 +142,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
 
     @Override
-    public void onSessionReturned(EzyConstant reason) {
+    public void onSessionRemoved(EzyConstant reason) {
         notifySessionRemoved(reason);
         setDisconnectReason(reason);
         chechToUnmapUser();

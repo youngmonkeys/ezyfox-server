@@ -10,7 +10,6 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
@@ -19,6 +18,7 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
@@ -68,8 +68,8 @@ public class EzyWebSocketServerBootstrap
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
 		EzySocketEventLoopHandler loopHandler = new EzyWsWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
-		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		EzySocketWriter eventHandler = new EzySocketWriter();
+		eventHandler.setWriterGroupFetcher(handlerGroupManager);
 		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;

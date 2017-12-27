@@ -131,9 +131,14 @@
 			<package name="com.tvd12.ezyfoxserver.testing.ssl"></package>
 		</packages>
 	</test>
-	<test name="Plugincontroller">
+	<test name="PluginController">
 		<packages>
 			<package name="com.tvd12.ezyfoxserver.testing.plugincontroller"></package>
+		</packages>
+	</test>
+	<test name="Socket">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.socket"></package>
 		</packages>
 	</test>
 </suite>

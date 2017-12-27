@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
@@ -90,7 +90,7 @@ public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Se
 	 * 
 	 * @return the connection type
 	 */
-	EzyConnectionType getConnectionType();
+	EzyConstant getConnectionType();
 	
 	/**
 	 * Get session reconnect token
@@ -298,10 +298,14 @@ public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Se
 	void setActivated(boolean activated);
 	
 	/**
-	 * 
 	 * @return session is active or not
 	 */
 	boolean isActivated();
+	
+	/**
+	 * @return session is idle or not
+	 */
+	boolean isIdle();
 	
 	/**
 	 * 

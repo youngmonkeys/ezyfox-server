@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.response.EzyErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
@@ -28,7 +29,6 @@ import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
-import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 
 public class EzyAbstractDataHandler<S extends EzySession> 
         extends EzyLoggable

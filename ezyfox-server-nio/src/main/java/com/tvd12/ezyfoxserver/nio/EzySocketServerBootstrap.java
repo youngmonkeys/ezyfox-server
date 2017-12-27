@@ -11,19 +11,18 @@ import java.util.ArrayList;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioAcceptableConnectionsHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioConnectionAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioConnectionAcceptorLoopHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptanceLoopHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReadingLoopHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
+import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
@@ -41,7 +40,6 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	private EzySocketEventLoopHandler writingLoopHandler;
 	private EzySocketEventLoopHandler readingLoopHandler;
 	private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
-	private EzySocketEventLoopHandler connectionAcceptorLoopHandler;
 	
 	public EzySocketServerBootstrap(Builder builder) {
 		this.serverContext = builder.serverContext;
@@ -62,7 +60,6 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 		processWithLogException(writingLoopHandler::destroy);
 		processWithLogException(readingLoopHandler::destroy);
 		processWithLogException(socketAcceptanceLoopHandler::destroy);
-		processWithLogException(connectionAcceptorLoopHandler::destroy);
 		processWithLogException(serverSocket::close);
 		processWithLogException(serverSocketChannel::close);
 	}
@@ -87,31 +84,31 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	private void startSocketHandlers() throws Exception {
 		EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
 		writingLoopHandler = newWritingLoopHandler();
-		readingLoopHandler = newReadingLoopHandler();
+		readingLoopHandler = newReadingLoopHandler(socketAcceptor);
 		socketAcceptanceLoopHandler = newSocketAcceptanceLoopHandler(socketAcceptor);
-		connectionAcceptorLoopHandler = newConnectionAcceptanceLoopHandler(socketAcceptor);
 		socketAcceptanceLoopHandler.start();
-		connectionAcceptorLoopHandler.start();
 		readingLoopHandler.start();
 		writingLoopHandler.start();
 	}
 	
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzyNioSocketWritingLoopHandler();
+		EzySocketEventLoopHandler loopHandler = new EzySocketWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzyNioSocketWriter eventHandler = new EzyNioSocketWriter();
-		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		EzySocketWriter eventHandler = new EzySocketWriter();
+		eventHandler.setWriterGroupFetcher(handlerGroupManager);
 		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
 	
-	private EzySocketEventLoopHandler newReadingLoopHandler() {
+	private EzySocketEventLoopHandler newReadingLoopHandler(
+			EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
 		EzySocketEventLoopHandler loopHandler = new EzyNioSocketReadingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
 		EzyNioSocketReader eventHandler = new EzyNioSocketReader();
 		eventHandler.setOwnSelector(readSelector);
 		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		eventHandler.setAcceptableConnectionsHandler(acceptableConnectionsHandler);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
@@ -120,7 +117,7 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 			EzyNioSocketAcceptor socketAcceptor) {
 		EzySocketEventLoopHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
-		socketAcceptor.setTcpNoDelay(true);
+		socketAcceptor.setTcpNoDelay(false);
 		socketAcceptor.setReadSelector(readSelector);
 		socketAcceptor.setOwnSelector(acceptSelector);
 		socketAcceptor.setAcceptableConnections(new ArrayList<>());
@@ -129,16 +126,6 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 		return loopHandler;
 	}
 	
-	private EzySocketEventLoopHandler newConnectionAcceptanceLoopHandler(
-			EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
-		EzySocketEventLoopHandler loopHandler = new EzyNioConnectionAcceptorLoopHandler();
-		loopHandler.setThreadPoolSize(getConnectionAcceptorPoolSize());
-		EzyNioConnectionAcceptor eventHandler = new EzyNioConnectionAcceptor();
-		eventHandler.setAcceptableConnectionsHandler(acceptableConnectionsHandler);
-		loopHandler.setEventHandler(eventHandler);
-		return loopHandler;
-	}
- 	
 	private Selector openSelector() throws Exception {
 		return Selector.open();
 	}
@@ -148,19 +135,15 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private int getSocketReaderPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.SOCKET_READER;
 	}
 	
 	private int getSocketWriterPoolSize() {
-		return 8;
+		return EzyNioThreadPoolSizes.SOCKET_WRITER;
 	}
 	
 	private int getSocketAcceptorPoolSize() {
-		return 1;
-	}
-	
-	private int getConnectionAcceptorPoolSize() {
-		return 3;
+		return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
 	}
 	
 	private int getSocketPort() {

@@ -54,7 +54,8 @@ public class EzySimpleNioDataHandler
 	}
 	
 	private EzyNioSession newSession() {
-		return ((EzyNioSessionManager)sessionManager).provideSession(channel);
+		EzyNioSessionManager sessionManager = getNioSessionManager();
+		return sessionManager.provideSession(channel);
 	}
 	
 	@Override
@@ -64,6 +65,16 @@ public class EzySimpleNioDataHandler
 			if(sessionManager != null) 
 	            sessionManager.removeSession(session, MAX_REQUEST_SIZE);
 		});
+	}
+	
+	private EzyNioSessionManager getNioSessionManager() {
+		return (EzyNioSessionManager) sessionManager;
+	}
+	
+	@Override
+	public void destroy() {
+		super.destroy();
+		this.channelDelegate = null;
 	}
     
 }

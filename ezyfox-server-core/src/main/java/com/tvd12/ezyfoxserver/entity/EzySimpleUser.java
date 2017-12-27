@@ -104,5 +104,10 @@ public class EzySimpleUser
     public int hashCode() {
         return new EzyHashCodes().append(id).toHashCode();
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 	
 }

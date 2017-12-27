@@ -49,7 +49,6 @@ public abstract class EzyAbstractHandlerGroup
 	
 	protected final ExecutorService statsThreadPool;
 	protected final ExecutorService codecThreadPool;
-	protected final ExecutorService bytesWriterThreadPool;
 
 	protected final EzySocketRequestQueues requestQueues;
 	protected final AtomicReference<EzyNioSession> session;
@@ -64,7 +63,6 @@ public abstract class EzyAbstractHandlerGroup
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
-		this.bytesWriterThreadPool = builder.bytesWriterThreadPool;
 		this.requestQueues = builder.requestQueues;
 		this.channelDelegate = builder.channelDelegate;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
@@ -238,7 +236,6 @@ public abstract class EzyAbstractHandlerGroup
 		
 		protected ExecutorService statsThreadPool;
 		protected ExecutorService codecThreadPool;
-		protected ExecutorService bytesWriterThreadPool;
 		
 		protected Object decoder;
 		protected EzyNioObjectToByteEncoder encoder;
@@ -284,11 +281,6 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder statsThreadPool(ExecutorService statsThreadPool) {
 			this.statsThreadPool = statsThreadPool;
-			return this;
-		}
-		
-		public Builder bytesWriterThreadPool(ExecutorService bytesWriterThreadPool) {
-			this.bytesWriterThreadPool = bytesWriterThreadPool;
 			return this;
 		}
 		

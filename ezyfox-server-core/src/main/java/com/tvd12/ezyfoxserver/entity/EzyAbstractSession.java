@@ -137,8 +137,13 @@ public abstract class EzyAbstractSession
 	
     protected void sendData(EzyData data, EzyTransportType type) {
         EzyPacket packet = createDataPacket(data, type);
-        packetQueue.add(packet);
-        sessionTicketsQueue.add(this);
+        synchronized (packetQueue) {
+            boolean empty = packetQueue.isEmpty();
+            boolean success = packetQueue.add(packet);
+            if(empty && success) {
+                sessionTicketsQueue.add(this);
+            }
+        }
     }
     
     protected EzyPacket createDataPacket(EzyData data, EzyTransportType type) {
@@ -150,7 +155,6 @@ public abstract class EzyAbstractSession
             return packet;
         }
         catch(Exception e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("can't send data: " + data + " to client");
         }
     }
@@ -198,16 +202,19 @@ public abstract class EzyAbstractSession
 	        this.locks.clear();
 	    if(properties != null)
             this.properties.clear();
-	    if(packetQueue != null)
-	        this.packetQueue.clear();
-	    if(sessionTicketsQueue != null) 
-	        this.sessionTicketsQueue.remove(this);
 	    this.locks = null;
 	    this.properties = null;
-	    this.packetQueue = null;
 	    this.dataDecoderGroup = null;
-	    this.sessionTicketsQueue = null;
 	    this.immediateDataSender = null;
+	    if(packetQueue != null) {
+            synchronized (packetQueue) {
+                this.packetQueue.clear();
+                if(sessionTicketsQueue != null)
+                    this.sessionTicketsQueue.remove(this);
+            }
+        }
+	    this.packetQueue = null;
+	    this.sessionTicketsQueue = null;
 	}
 	
 	@Override
@@ -225,11 +232,13 @@ public abstract class EzyAbstractSession
 	@Override
 	public String toString() {
 	    return new StringBuilder()
+	            .append("(")
 	            .append("id: ").append(id)
 	            .append(", type: ").append(clientType)
 	            .append(", version: ").append(clientVersion)
 	            .append(", address: ").append(getClientAddress())
 	            .append(", reconnectToken: ").append(reconnectToken)
+	            .append(")")
 	            .toString();
 	}
 	

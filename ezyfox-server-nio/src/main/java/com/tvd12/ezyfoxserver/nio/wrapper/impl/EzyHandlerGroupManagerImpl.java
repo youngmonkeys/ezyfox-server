@@ -27,7 +27,6 @@ public class EzyHandlerGroupManagerImpl
 
 	private final ExecutorService statsThreadPool;
 	private final ExecutorService codecThreadPool;
-	private final ExecutorService bytesWriterThreadPool;
 	
 	private final EzyCodecFactory codecFactory;
 	private final EzyServerContext serverContext;
@@ -39,7 +38,6 @@ public class EzyHandlerGroupManagerImpl
 	public EzyHandlerGroupManagerImpl(Builder builder) {
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
-		this.bytesWriterThreadPool = builder.bytesWriterThreadPool;
 		this.requestQueues = builder.requestQueues;
 		this.codecFactory = builder.codecFactory;
 		this.serverContext = builder.serverContext;
@@ -59,7 +57,6 @@ public class EzyHandlerGroupManagerImpl
 				.encoder(newDataEncoder(type))
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
-				.bytesWriterThreadPool(bytesWriterThreadPool)
 				.build();
 		groupsByConnection.put(channel.getConnection(), group);
 		return (T) group;
@@ -131,7 +128,6 @@ public class EzyHandlerGroupManagerImpl
 	public static class Builder implements EzyBuilder<EzyHandlerGroupManager> {
 		private ExecutorService statsThreadPool;
 		private ExecutorService codecThreadPool;
-		private ExecutorService bytesWriterThreadPool;
 
 		private EzyCodecFactory codecFactory;
 		private EzyServerContext serverContext;
@@ -146,11 +142,6 @@ public class EzyHandlerGroupManagerImpl
 		
 		public Builder codecThreadPool(ExecutorService codecThreadPool) {
 			this.codecThreadPool = codecThreadPool;
-			return this;
-		}
-		
-		public Builder bytesWriterThreadPool(ExecutorService bytesWriterThreadPool) {
-			this.bytesWriterThreadPool = bytesWriterThreadPool;
 			return this;
 		}
 		

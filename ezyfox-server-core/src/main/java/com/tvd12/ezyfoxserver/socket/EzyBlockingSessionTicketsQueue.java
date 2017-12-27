@@ -9,18 +9,12 @@ public class EzyBlockingSessionTicketsQueue
         extends EzyLoggable 
         implements EzySessionTicketsQueue {
 
-    private final int capacity;
 	private final LinkedBlockingQueue<EzySession> queue;
 	
 	public EzyBlockingSessionTicketsQueue() {
-	    this(100000);
+	    this.queue = new LinkedBlockingQueue<>();
 	}
 	
-	public EzyBlockingSessionTicketsQueue(int capacity) {
-	    this.capacity = capacity;
-        this.queue = new LinkedBlockingQueue<>(capacity);
-	}
-
 	@Override
 	public int size() {
 	    return queue.size();
@@ -32,18 +26,14 @@ public class EzyBlockingSessionTicketsQueue
 	}
 	
 	@Override
-	public boolean isFull() {
-	    return queue.size() >= capacity;
-	}
-	
-	@Override
 	public boolean isEmpty() {
 	    return queue.isEmpty();
 	}
 	
 	@Override
 	public boolean add(EzySession session) {
-		return queue.offer(session);
+		boolean result = queue.offer(session);
+		return result;
 	}
 	
 	@Override

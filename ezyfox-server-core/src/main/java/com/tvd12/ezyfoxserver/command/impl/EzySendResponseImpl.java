@@ -36,11 +36,11 @@ public class EzySendResponseImpl
     
     protected void sendData(EzyArray data) {
         try {
-            if(immediate) 
+            if(immediate)
                 sender.sendNow(data);
-            else
+            else 
                 sender.send(data);
-            }
+        } 
         catch(Exception e) {
             getLogger().error("send data {} to clients error", data);
         }
@@ -48,7 +48,7 @@ public class EzySendResponseImpl
     
     protected void debugLogResponse(Object data) {
         if(!unloggableCommands.contains(response.getCommand()))
-            getLogger().debug("send to {} data {}", getSenderName(), data);
+            getLogger().debug("send to: {} data: {}", getSenderName(), data);
     }
     
     protected void destroy() {

@@ -8,8 +8,6 @@ public interface EzySessionTicketsQueue {
     
 	void clear();
 	
-	boolean isFull();
-	
 	boolean isEmpty();
 	
 	boolean add(EzySession session);

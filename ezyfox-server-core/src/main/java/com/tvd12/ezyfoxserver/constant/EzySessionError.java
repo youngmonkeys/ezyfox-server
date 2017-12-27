@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.util.EzyEnums;
 
 import lombok.Getter;
 
-public enum EzyError implements EzyIError {
+public enum EzySessionError implements EzyIError {
 
     MAX_REQUEST_PER_SECOND(0, "max request per second");
     
@@ -14,7 +14,7 @@ public enum EzyError implements EzyIError {
     @Getter
     private final String message;
     
-    private EzyError(int id, String message) {
+    private EzySessionError(int id, String message) {
         this.id = id;
         this.message = message;
     }
@@ -24,7 +24,7 @@ public enum EzyError implements EzyIError {
         return toString();
     }
     
-    public static EzyError valueOf(int id) {
+    public static EzySessionError valueOf(int id) {
         return EzyEnums.valueOf(values(), id);
     }
     

@@ -25,7 +25,6 @@ public class EzyNioServerBootstrapBuilderImpl
 	protected EzyServerBootstrap newServerBootstrap() {
 		ExecutorService statsThreadPool = newStatsThreadPool();
 		ExecutorService codecThreadPool = newCodecThreadPool();
-		ExecutorService bytesWriterThreadPool = newBytesWriterThreadPool();
 		EzySocketRequestQueues requestQueues = newRequestQueues();
 		EzySessionTicketsQueue socketSessionTicketsQueue = newSocketSessionTicketsQueue();
 		EzySessionTicketsQueue websocketSessionTicketsQueue = newWebSocketSessionTicketsQueue();
@@ -35,7 +34,6 @@ public class EzyNioServerBootstrapBuilderImpl
 		EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager(
 				statsThreadPool, 
 				codecThreadPool, 
-				bytesWriterThreadPool,
 				requestQueues,
 				handlerGroupBuilderFactory);
 		EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
@@ -50,7 +48,6 @@ public class EzyNioServerBootstrapBuilderImpl
 	private EzyHandlerGroupManager newHandlerGroupManager(
 			ExecutorService statsThreadPool,
 			ExecutorService codecThreadPool,
-			ExecutorService bytesWriterThreadPool,
 			EzySocketRequestQueues requestQueues,
 			EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory) {
 		
@@ -60,7 +57,6 @@ public class EzyNioServerBootstrapBuilderImpl
 				.codecFactory(newCodecFactory())
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
-				.bytesWriterThreadPool(bytesWriterThreadPool)
 				.handlerGroupBuilderFactory(handlerGroupBuilderFactory)
 				.build();
 	}
@@ -83,10 +79,6 @@ public class EzyNioServerBootstrapBuilderImpl
 	
 	private ExecutorService newCodecThreadPool() {
 		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.CODEC, "codec");
-	}
-	
-	private ExecutorService newBytesWriterThreadPool() {
-		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.BYTES_WRITER, "bytes-writer");
 	}
 	
 	private EzySocketRequestQueues newRequestQueues() {

@@ -11,7 +11,7 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
 	private final Queue<EzyPacket> queue ;
 	
 	public EzyNonBlockingPacketQueue() {
-		this(256);
+		this(128);
 	}
 	
 	public EzyNonBlockingPacketQueue(int capacity) {
@@ -21,56 +21,43 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
 	
 	@Override
 	public int size() {
-	    synchronized (queue) {
-	        return queue.size();
-        }
+	    return queue.size();
 	}
 	
 	@Override
 	public void clear() {
-	    synchronized (queue) {
-	        queue.clear();
-	    }
+	    queue.clear();
 	}
+	
 	
 	@Override
 	public EzyPacket take() {
-	    synchronized (queue) {
-	        EzyPacket packet = queue.poll();
-	        return packet;
-	    }
+	    EzyPacket packet = queue.poll();
+	    return packet;
 	}
 	
 	@Override
 	public EzyPacket peek() {
-	    synchronized (queue) {
-            EzyPacket packet = queue.peek();
-            return packet;
-        }
+	    EzyPacket packet = queue.peek();
+	    return packet;
 	}
 	
 	@Override
 	public boolean isFull() {
-	    synchronized (queue) {
-	        return queue.size() >= capacity;
-	    }
+	    return queue.size() >= capacity;
 	}
 	
 	@Override
 	public boolean isEmpty() {
-	    synchronized (queue) {
-	        return queue.isEmpty();
-	    }
+	    return queue.isEmpty();
 	}
 	
 	@Override
 	public boolean add(EzyPacket packet) {
-	    synchronized (queue) {
-	        if(queue.size() >= capacity) 
-	            return false;
-	        queue.offer(packet);
-	        return true;
-	    }
+	    if(isFull()) 
+	        return false;
+	    boolean answer = queue.offer(packet);
+	    return answer;
 	}
 	
 }

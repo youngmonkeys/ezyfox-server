@@ -32,10 +32,10 @@ public abstract class EzySocketRequestHandler
 			processRequestQueue(request);
 		} 
 		catch (InterruptedException e) {
-			getLogger().warn(getRequestType() + "socket-request-handler thread interrupted: " + Thread.currentThread());
+			getLogger().warn(getRequestType() + "-request-handler thread interrupted: " + Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			getLogger().warn("problems in " + getRequestType() + "-socket-request-handler main loop, thread: " + Thread.currentThread(), throwable);
+			getLogger().warn("problems in " + getRequestType() + "-request-handler main loop, thread: " + Thread.currentThread(), throwable);
 		}
 	}
 	

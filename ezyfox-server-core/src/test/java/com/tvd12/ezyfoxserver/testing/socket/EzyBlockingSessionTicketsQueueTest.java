@@ -14,7 +14,7 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
 
     @Test
     public void test() {
-        EzyBlockingSessionTicketsQueue queue = new EzyBlockingSessionTicketsQueue(10);
+        EzyBlockingSessionTicketsQueue queue = new EzyBlockingSessionTicketsQueue();
         List<MySession> sessions = new ArrayList<>();
         sessions.add(new MySession());
         sessions.add(new MySession());
@@ -29,7 +29,6 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         sessions.add(new MySession());
         sessions.add(new MySession());
         
-        assert !queue.isFull();
         assert queue.isEmpty();
         
         for(int i = 0 ; i < 10 ; i ++) {
@@ -40,7 +39,7 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
             queue.add(sessions.get(i));
         }
         
-        assert !queue.add(sessions.get(0));
+        assert queue.add(sessions.get(0));
         
     }
     

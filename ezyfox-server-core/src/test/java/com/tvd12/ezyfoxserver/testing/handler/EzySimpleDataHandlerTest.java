@@ -20,7 +20,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         MyTestDataHandler handler = new MyTestDataHandler();
         handler.setContext(context);
         handler.getAppContext(appContext.getApp().getSetting().getId());
-        handler.borrowSession();
+        handler.provideSession();
         handler.sessionActive();
         
         EzyArray message = newArrayBuilder()
@@ -46,7 +46,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServerContext context = newServerContext();
         MyTestDataHandler handler = new MyTestDataHandler(session);
         handler.setContext(context);
-        handler.borrowSession();
+        handler.provideSession();
         handler.sessionActive();
         handler.onSessionLoggedIn(user);
         
@@ -65,7 +65,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServerContext context = newServerContext();
         MyTestDataHandler handler = new MyTestDataHandler();
         handler.setContext(context);
-        handler.borrowSession();
+        handler.provideSession();
         handler.sessionActive();
         
         EzyArray message = newArrayBuilder()

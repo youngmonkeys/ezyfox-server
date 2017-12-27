@@ -33,7 +33,7 @@ public class EzySimpleNioDataHandler
 	@Override
 	public EzyNioSession channelActive() throws Exception {
 		getLogger().debug("channel actived, add session");
-		borrowSession();
+		provideSession();
 		sessionActive();
 		return session;
 	}
@@ -49,8 +49,8 @@ public class EzySimpleNioDataHandler
 		super.onSessionRemoved(reason);
 	}
     
-	private void borrowSession() {
-		borrowSession(this::newSession);
+	private void provideSession() {
+		provideSession(this::newSession);
 	}
 	
 	private EzyNioSession newSession() {

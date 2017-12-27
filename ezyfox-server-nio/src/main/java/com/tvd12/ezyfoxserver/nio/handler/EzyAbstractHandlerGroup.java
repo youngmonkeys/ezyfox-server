@@ -77,7 +77,8 @@ public abstract class EzyAbstractHandlerGroup
 	protected abstract E newEncoder(Object encoder);
 	
 	private EzyNioDataHandler newDataHandler(EzyServerContext context) {
-		EzySimpleNioDataHandler handler = new EzySimpleNioDataHandler(channel);
+		EzySimpleNioDataHandler handler = new EzySimpleNioDataHandler();
+		handler.setChannel(channel);
 		handler.setContext(context);
 		handler.setChannelDelegate(this);
 		return handler;

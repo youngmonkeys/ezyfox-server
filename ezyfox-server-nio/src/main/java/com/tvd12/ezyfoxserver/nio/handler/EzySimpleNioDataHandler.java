@@ -21,15 +21,11 @@ public class EzySimpleNioDataHandler
 		extends EzySimpleDataHandler<EzyNioSession>
 		implements EzyNioDataHandler {	
 	
-	protected final EzyChannel channel;
-
+	@Setter
+	protected EzyChannel channel;
 	@Setter
 	protected EzySocketChannelDelegate channelDelegate;
 	
-	public EzySimpleNioDataHandler(EzyChannel channel) {
-		this.channel = channel;
-	}
-
 	@Override
 	public EzyNioSession channelActive() throws Exception {
 		getLogger().debug("channel actived, add session");
@@ -74,6 +70,7 @@ public class EzySimpleNioDataHandler
 	@Override
 	public void destroy() {
 		super.destroy();
+		this.channel = null;
 		this.channelDelegate = null;
 	}
     

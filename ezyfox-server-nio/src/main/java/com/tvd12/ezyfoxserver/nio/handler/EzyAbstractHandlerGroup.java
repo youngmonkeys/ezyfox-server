@@ -130,7 +130,12 @@ public abstract class EzyAbstractHandlerGroup
 	
 	@Override
 	public void sendPacketNow(EzyPacket packet) {
-		executeSendingPacket(packet);
+		try {
+			executeSendingPacket(packet);
+		}
+		finally {
+			packet.release();
+		}
 	}
 	
 	@Override

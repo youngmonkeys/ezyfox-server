@@ -1,6 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.delegate;
-
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
+package com.tvd12.ezyfoxserver.socket;
 
 public interface EzySocketChannelDelegate {
 

@@ -11,8 +11,6 @@ import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSender;
-import com.tvd12.ezyfoxserver.socket.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;

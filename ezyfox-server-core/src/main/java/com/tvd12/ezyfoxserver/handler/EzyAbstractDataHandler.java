@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.handler;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,6 +20,8 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.statistics.EzyRequestFrame;
+import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
@@ -50,9 +51,8 @@ public class EzyAbstractDataHandler<S extends EzySession>
     protected EzySessionManagementSetting sessionManagementSetting;
     
     //===== for measure max request per second =====
+    protected EzyRequestFrame requestFrameInSecond;
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
-    protected long milestoneRequestTime = System.currentTimeMillis();
-    protected AtomicInteger requestInSecondCount = new AtomicInteger(0);
     //=====  =====
     
     protected volatile boolean active = false;
@@ -73,6 +73,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.sessionManagementSetting = settings.getSessionManagement();
         this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
+        this.requestFrameInSecond = new EzyRequestFrameSecond(maxRequestPerSecond.getValue());
     }
     
     protected void setActive(boolean value) {

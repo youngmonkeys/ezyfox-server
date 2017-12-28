@@ -141,4 +141,9 @@
 			<package name="com.tvd12.ezyfoxserver.testing.socket"></package>
 		</packages>
 	</test>
+	<test name="Statistics">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.statistics"></package>
+		</packages>
+	</test>
 </suite>

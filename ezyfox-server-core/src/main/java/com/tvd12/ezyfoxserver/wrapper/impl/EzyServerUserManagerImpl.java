@@ -10,24 +10,32 @@ import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyHasUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleUserManager;
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 public class EzyServerUserManagerImpl 
         extends EzySimpleUserManager 
-        implements EzyServerUserManager, EzyStartable {
+        implements EzyServerUserManager, EzyStartable, EzyDestroyable {
 
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
     protected EzyServerUserManagerImpl(Builder builder) {
         super(builder);
-        this.idleValidationService = EzyExecutors.newScheduledThreadPool(3, "user-manager");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> idleValidationService.shutdown()));
+        this.idleValidationService = newIdleValidationService(builder.maxIdleTime);
     }
-	
+    
+    protected ScheduledExecutorService newIdleValidationService(long maxIdleTime) {
+        if(maxIdleTime <= 0) return null;
+        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(3, "user-manager");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> answer.shutdown()));
+        return answer;
+    }
+    
 	/*
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyUserManager#addUser(com.tvd12.ezyfoxserver.mapping.entity.EzyUser)
@@ -69,7 +77,14 @@ public class EzyServerUserManagerImpl
 	 */
 	@Override
 	public void unmapSessionUser(EzySession session) {
-	    usersBySession.remove(session);
+	    EzyUser user = usersBySession.remove(session);
+	    if(user != null) {
+	        user.removeSession(session);
+	        getLogger().debug("remove session {} from user {}, remain {} sessions", session.getClientAddress(), user.getName(), user.getSessionCount());
+	        if(user.getSessionCount() == 0 && user.getMaxIdleTime() <= 0) {
+	            removeUser(user, EzyUserRemoveReason.DISCONNECT);
+	        }
+	    }
 	}
 	
 	/*
@@ -93,6 +108,7 @@ public class EzyServerUserManagerImpl
 	public void removeUser(EzyUser user, EzyUserRemoveReason reason) {
 	    EzyProcessor.processWithLock(
 	            () -> tryRemoveUser(user, reason), getLock(user.getName()));
+	    getLogger().info("server: remove user: {}, reason: {}, remain users = {}", user, reason, usersById.size());
 	}
 	
 	public void tryRemoveUser(EzyUser user, EzyUserRemoveReason reason) {
@@ -116,8 +132,10 @@ public class EzyServerUserManagerImpl
 	}
 	
 	protected void startIdleValidationService() {
-	    idleValidationService.scheduleAtFixedRate(
-	            this::validateIdleUsers, 3000, 1000, TimeUnit.MILLISECONDS);
+	    if(idleValidationService != null) {
+	        idleValidationService.scheduleAtFixedRate(
+	                this::validateIdleUsers, 3000, 100, TimeUnit.MILLISECONDS);
+	    }
 	}
 	
 	protected void validateIdleUsers() {
@@ -127,8 +145,7 @@ public class EzyServerUserManagerImpl
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
-	    return user.getSessionCount() == 0 &&
-	            user.getMaxIdleTime() < System.currentTimeMillis() - user.getStartIdleTime();
+	    return user.isIdle();
 	}
 	
 	protected void removeUserSessions(EzyUser user) {
@@ -142,12 +159,25 @@ public class EzyServerUserManagerImpl
 	    delegate.onUserRemoved(reason);
     }
 	
+	@Override
+	public void destroy() {
+	    if(idleValidationService != null)
+	        processWithLogException(idleValidationService::shutdown);
+	}
+	
 	public static Builder builder() {
 		return new Builder();
 	}
 	
 	public static class Builder extends EzySimpleUserManager.Builder<Builder> {
 		
+	    protected long maxIdleTime;
+	    
+	    public Builder maxIdleTime(long maxIdletime) {
+	        this.maxIdleTime = maxIdletime;
+	        return this;
+	    }
+	    
 		@Override
 		public EzyServerUserManager build() {
 			return new EzyServerUserManagerImpl(this);

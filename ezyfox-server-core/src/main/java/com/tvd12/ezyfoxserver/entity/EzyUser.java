@@ -78,6 +78,11 @@ public interface EzyUser extends EzySender, EzyProperties, EzyDestroyable {
      */
     void removeSession(EzySession session);
     
+    /**
+     * @return is idle or not
+     */
+    boolean isIdle();
+    
 	/**
 	 * @param name the lock name
 	 * @return the lock

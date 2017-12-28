@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.tvd12.ezyfoxserver.util.EzyInitable;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,10 +16,12 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "user-management")
-public class EzySimpleUserManagementSetting implements EzyUserManagementSetting {
+public class EzySimpleUserManagementSetting implements EzyUserManagementSetting, EzyInitable {
 
+    protected long userMaxIdleTime = 0;
+    
     @XmlElement(name = "user-max-idle-time")
-    protected long userMaxIdleTime = 30 * 1000;
+    protected long userMaxIdleTimeInSecond = 0;
     
     @XmlElement(name = "max-session-per-user")
     protected int maxSessionPerUser = 5;
@@ -30,5 +34,10 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting 
     
     @XmlElement(name = "user-name-pattern")
     protected String userNamePattern = "^[a-z0-9_.]{3,36}$";
+    
+    @Override
+    public void init() {
+        this.userMaxIdleTime = userMaxIdleTimeInSecond * 1000;
+    }
     
 }

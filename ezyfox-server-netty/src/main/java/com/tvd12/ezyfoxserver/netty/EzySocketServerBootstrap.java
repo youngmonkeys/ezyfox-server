@@ -2,18 +2,19 @@ package com.tvd12.ezyfoxserver.netty;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyServerBootstrapCreator;
-import com.tvd12.ezyfoxserver.netty.socket.EzyNettySocketWriter;
+import com.tvd12.ezyfoxserver.netty.constant.EzyNettyThreadPoolSizes;
 import com.tvd12.ezyfoxserver.netty.socket.EzyNettySocketWritingLoopHandler;
+import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.setting.EzyBaseSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
@@ -32,23 +33,21 @@ public class EzySocketServerBootstrap
 	protected ChannelFuture channelFuture;
 	protected EzyServerContext serverContext;
 	protected EzySessionTicketsQueue sessionTicketsQueue;
+	protected EzyHandlerGroupManager handlerGroupManager;
 	protected EzySocketEventLoopHandler writingLoopHandler;
 	
 	protected EzySocketServerBootstrap(Builder<?> builder) {
 		this.childGroup = builder.childGroup;
 		this.parentGroup = builder.parentGroup;
 		this.serverContext = builder.serverContext;
+		this.sessionTicketsQueue = builder.sessionTicketsQueue;
+		this.handlerGroupManager = builder.handlerGroupManager;
 	}
 	
 	@Override
 	public void start() throws Exception {
-		prestart();
 		startServerBootstrap();
 		startWritingLoopHandler();
-	}
-	
-	private void prestart() {
-		this.sessionTicketsQueue = newSessionTicketsQueue();
 	}
 	
 	private void startServerBootstrap() throws Exception {
@@ -78,21 +77,18 @@ public class EzySocketServerBootstrap
 		return "tcp socket";
 	}
 	
-	protected EzySessionTicketsQueue newSessionTicketsQueue() {
-		return new EzyBlockingSessionTicketsQueue();
-	}
-	
 	private EzySocketEventLoopHandler createSocketWritingLoopHandler() {
 		EzySocketEventLoopHandler loopHandler = newSocketWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzyNettySocketWriter eventHandler = newSocketWriter();
+		EzySocketWriter eventHandler = newSocketWriter();
 		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+		eventHandler.setWriterGroupFetcher(handlerGroupManager);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
 	
-	protected EzyNettySocketWriter newSocketWriter() {
-		return new EzyNettySocketWriter();
+	protected EzySocketWriter newSocketWriter() {
+		return new EzySocketWriter();
 	}
 	
 	protected EzySocketEventLoopHandler newSocketWritingLoopHandler() {
@@ -114,7 +110,7 @@ public class EzySocketServerBootstrap
 				.childGroup(childGroup)
 				.parentGroup(parentGroup)
 				.codecCreator(newCodecCreator())
-				.sessionTicketsQueue(sessionTicketsQueue)
+				.handlerGroupManager(handlerGroupManager)
 				.create();
 	}
 	
@@ -127,7 +123,7 @@ public class EzySocketServerBootstrap
 	}
 	
 	protected int getSocketWriterPoolSize() {
-		return 8;
+		return EzyNettyThreadPoolSizes.SOCKET_WRITER;
 	}
 	
 	protected final EzyCodecCreator newCodecCreator() {
@@ -162,6 +158,9 @@ public class EzySocketServerBootstrap
 		protected EventLoopGroup parentGroup;
 		protected EzyServerContext serverContext;
 		
+		protected EzySessionTicketsQueue sessionTicketsQueue;
+		protected EzyHandlerGroupManager handlerGroupManager;
+		
 		public B childGroup(EventLoopGroup childGroup) {
 			this.childGroup = childGroup;
 			return (B)this;
@@ -174,6 +173,16 @@ public class EzySocketServerBootstrap
 		
 		public B serverContext(EzyServerContext serverContext) {
 			this.serverContext = serverContext;
+			return (B)this;
+		}
+		
+		public B sessionTicketsQueue(EzySessionTicketsQueue sessionTicketsQueue) {
+			this.sessionTicketsQueue = sessionTicketsQueue;
+			return (B)this;
+		}
+		
+		public B handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
+			this.handlerGroupManager = handlerGroupManager;
 			return (B)this;
 		}
 		

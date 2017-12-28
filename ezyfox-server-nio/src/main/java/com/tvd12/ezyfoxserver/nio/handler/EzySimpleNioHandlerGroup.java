@@ -82,7 +82,6 @@ public class EzySimpleNioHandlerGroup
 			else {
 				getLogger().warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, getSession());
 			}
-			getLogger().debug("session: {} write to socket has fragment, size: {}", getSession(), remainBuffer.remaining());
 		}
 		else {
 			packet.release();

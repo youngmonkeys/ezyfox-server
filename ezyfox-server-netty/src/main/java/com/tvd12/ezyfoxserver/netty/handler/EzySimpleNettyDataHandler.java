@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.handler;
+package com.tvd12.ezyfoxserver.netty.handler;
 
 import static com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason.MAX_REQUEST_SIZE;
 
@@ -9,17 +9,18 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
-import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
+import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
+import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
+import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
 
-public class EzySimpleNioDataHandler
-		extends EzySimpleDataHandler<EzyNioSession>
-		implements EzyNioDataHandler {	
+public class EzySimpleNettyDataHandler 
+		extends EzySimpleDataHandler<EzyNettySession>
+		implements EzyNettyDataHandler {
 	
 	@Setter
 	protected EzyChannel channel;
@@ -27,13 +28,18 @@ public class EzySimpleNioDataHandler
 	protected EzySocketChannelDelegate channelDelegate;
 	
 	@Override
-	public EzyNioSession channelActive() throws Exception {
+	public EzyNettySession channelActive() throws Exception {
 		getLogger().debug("channel actived, add session");
 		provideSession();
 		sessionActive();
 		return session;
 	}
-	
+
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		getLogger().debug("channel {} inactive", ctx.channel().remoteAddress());
+		channelInactive();
+	}
+
 	@Override
 	public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
     		dataReceived(cmd, msg);
@@ -44,13 +50,13 @@ public class EzySimpleNioDataHandler
 		this.channelDelegate.onChannelInactivated(channel);
 		super.onSessionRemoved(reason);
 	}
-    
+
 	private void provideSession() {
 		provideSession(this::newSession);
 	}
 	
-	private EzyNioSession newSession() {
-		EzyNioSessionManager sessionManager = getNioSessionManager();
+	private EzyNettySession newSession() {
+		EzyNettySessionManager sessionManager = getNettySessionManager();
 		return sessionManager.provideSession(channel);
 	}
 	
@@ -62,9 +68,9 @@ public class EzySimpleNioDataHandler
 	            sessionManager.removeSession(session, MAX_REQUEST_SIZE);
 		});
 	}
-	
-	private EzyNioSessionManager getNioSessionManager() {
-		return (EzyNioSessionManager) sessionManager;
+
+	private EzyNettySessionManager getNettySessionManager() {
+		return (EzyNettySessionManager) sessionManager;
 	}
 	
 	@Override
@@ -73,5 +79,5 @@ public class EzySimpleNioDataHandler
 		this.channel = null;
 		this.channelDelegate = null;
 	}
-    
+	
 }

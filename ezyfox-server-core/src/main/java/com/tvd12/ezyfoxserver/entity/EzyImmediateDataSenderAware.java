@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.socket;
+package com.tvd12.ezyfoxserver.entity;
 
 public interface EzyImmediateDataSenderAware {
 

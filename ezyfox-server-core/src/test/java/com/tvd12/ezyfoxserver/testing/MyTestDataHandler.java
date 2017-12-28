@@ -17,10 +17,10 @@ public class MyTestDataHandler extends EzySimpleDataHandler<MyTestSession> {
         this((MyTestSession)session);
     }
 
-    public void borrowSession() {
+    public void provideSession() {
         MyTestSession session1 = session != null ? session : new MyTestSession();
         session1.setReconnectToken("abc");
-        borrowSession(() -> session1);
+        provideSession(() -> session1);
     }
     
     @Override

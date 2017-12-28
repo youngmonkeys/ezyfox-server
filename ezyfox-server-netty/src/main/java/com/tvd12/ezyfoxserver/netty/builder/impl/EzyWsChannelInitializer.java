@@ -37,13 +37,13 @@ class EzyWsChannelInitializer extends EzyChannelInitializer {
 		pipeline.addLast("http-request-handler", new EzyHttpRequestHandler("/ws"));
 		pipeline.addLast("ws-server-protocol-handler", newWebSocketServerProtocolHandler());
 		pipeline.addLast("codec-1", new EzyCombinedCodec(decoder, encoder));
-		pipeline.addLast("handler", newDataHandler());
+		pipeline.addLast("handler", newDataHandler(ch));
 		pipeline.addLast("codec-2", new EzyCombinedCodec(decoder, encoder));
 	}
 	
 	@Override
-	protected ChannelHandler newDataHandler() {
-		return dataHandlerCreator.newHandler(EzyConnectionType.WEBSOCKET);
+	protected ChannelHandler newDataHandler(Channel ch) {
+		return dataHandlerCreator.newHandler(ch, EzyConnectionType.WEBSOCKET);
 	}
 	
 	protected WebSocketServerProtocolHandler newWebSocketServerProtocolHandler() {

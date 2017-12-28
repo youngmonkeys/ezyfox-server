@@ -29,10 +29,10 @@ public class EzyNettyStarter extends EzyStarter {
     }
     
     public static class Builder extends EzyStarter.Builder<Builder> {
-    	@Override
-    	public EzyStarter build() {
-    		return new EzyNettyStarter(this);
-    	}
+	    	@Override
+	    	public EzyStarter build() {
+	    		return new EzyNettyStarter(this);
+	    	}
     }
 	
 }

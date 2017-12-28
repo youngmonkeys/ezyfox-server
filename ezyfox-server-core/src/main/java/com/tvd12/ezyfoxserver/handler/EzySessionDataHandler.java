@@ -11,12 +11,12 @@ public abstract class EzySessionDataHandler<S extends EzySession>
         extends EzyAbstractDataHandler<S>
         implements EzySessionDelegate {
 
-    protected void borrowSession(Supplier<S> sessionSupplier) {
-        doBorrowSession(sessionSupplier);
+    protected void provideSession(Supplier<S> sessionSupplier) {
+        provideSession0(sessionSupplier);
         updateSession();
     }
     
-    protected void doBorrowSession(Supplier<S> sessionSupplier) {
+    protected void provideSession0(Supplier<S> sessionSupplier) {
         session = sessionSupplier.get();
     }
     

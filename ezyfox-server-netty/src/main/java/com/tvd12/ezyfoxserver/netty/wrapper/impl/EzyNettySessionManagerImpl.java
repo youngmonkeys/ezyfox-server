@@ -2,21 +2,18 @@ package com.tvd12.ezyfoxserver.netty.wrapper.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.netty.factory.EzyNettySessionFactory;
-import com.tvd12.ezyfoxserver.netty.socket.EzyNettyChannel;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
-
-import io.netty.channel.Channel;
 
 public class EzyNettySessionManagerImpl 
 		extends EzySimpleSessionManager<EzyNettySession> 
 		implements EzyNettySessionManager {
 
-	protected ConcurrentHashMap<Channel, EzyNettySession> sessionsByChannel
+	protected ConcurrentHashMap<Object, EzyNettySession> sessionsByConnection
 			= new ConcurrentHashMap<>();
 	
 	protected EzyNettySessionManagerImpl(Builder builder) {
@@ -26,26 +23,23 @@ public class EzyNettySessionManagerImpl
 	@Override
 	protected void unmapSession(EzyNettySession session) {
 		super.unmapSession(session);
-		sessionsByChannel.remove(session.getChannel());
+		EzyChannel channel = session.getChannel();
+		Object connection = channel.getConnection();
+		sessionsByConnection.remove(connection);
 	}
 	
 	@Override
-	protected void clearSession(EzyNettySession session) {
-		super.clearSession(session);
-		session.setChannel(null);
-	}
-	
-	@Override
-	public EzyNettySession getSession(Channel channel) {
-		return sessionsByChannel.get(channel);
-	}
-	
-	@Override
-	public EzyNettySession borrowSession(Channel channel, EzyConnectionType type) {
-		EzyNettySession ss = borrowSession(type);
-		ss.setChannel(new EzyNettyChannel(channel, type));
-		sessionsByChannel.put(channel, ss);
+	public EzyNettySession provideSession(EzyChannel channel) {
+		EzyNettySession ss = provideSession(channel.getConnectionType());
+		ss.setChannel(channel);
+		sessionsByConnection.put(channel.getConnection(), ss);
 		return ss;
+	}
+	
+	@Override
+	public EzyNettySession getSession(EzyChannel channel) {
+		Object connection = channel.getConnection();
+		return connection != null ? sessionsByConnection.get(connection) : null;
 	}
 	
 	public static Builder builder() {

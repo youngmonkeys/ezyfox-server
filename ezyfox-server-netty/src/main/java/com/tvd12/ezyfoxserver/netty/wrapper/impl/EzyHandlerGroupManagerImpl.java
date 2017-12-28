@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.wrapper.impl;
+package com.tvd12.ezyfoxserver.netty.wrapper.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,11 +8,10 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
-import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
-import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
-import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.netty.factory.EzyHandlerGroupBuilderFactory;
+import com.tvd12.ezyfoxserver.netty.handler.EzyAbstractHandlerGroup;
+import com.tvd12.ezyfoxserver.netty.handler.EzyHandlerGroup;
+import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
@@ -26,9 +25,7 @@ public class EzyHandlerGroupManagerImpl
 		implements EzyHandlerGroupManager, EzySocketChannelDelegate, EzyDestroyable {
 
 	private final ExecutorService statsThreadPool;
-	private final ExecutorService codecThreadPool;
 	
-	private final EzyCodecFactory codecFactory;
 	private final EzyServerContext serverContext;
 	private final EzySocketRequestQueues requestQueues;
 	
@@ -37,48 +34,40 @@ public class EzyHandlerGroupManagerImpl
 	
 	public EzyHandlerGroupManagerImpl(Builder builder) {
 		this.statsThreadPool = builder.statsThreadPool;
-		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
-		this.codecFactory = builder.codecFactory;
 		this.serverContext = builder.serverContext;
 		this.handlerGroupBuilderFactory = builder.handlerGroupBuilderFactory;
 		this.groupsByConnection = new ConcurrentHashMap<>();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type) {
+	public EzyHandlerGroup newHandlerGroup(EzyChannel channel, EzyConnectionType type) {
 		EzyHandlerGroup group = newHandlerGroupBuilder(type)
 				.channel(channel)
 				.channelDelegate(this)
 				.serverContext(serverContext)
 				.requestQueues(requestQueues)
-				.decoder(newDataDecoder(type))
-				.encoder(newDataEncoder(type))
 				.statsThreadPool(statsThreadPool)
-				.codecThreadPool(codecThreadPool)
 				.build();
 		groupsByConnection.put(channel.getConnection(), group);
-		return (T) group;
+		return group;
 	}
 	
 	private EzyAbstractHandlerGroup.Builder newHandlerGroupBuilder(EzyConnectionType type) {
 		return handlerGroupBuilderFactory.newBuilder(type);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EzyHandlerGroup> T getHandlerGroup(Object connection) {
-		return (T) groupsByConnection.get(connection);
+	public EzyHandlerGroup getHandlerGroup(Object connection) {
+		return groupsByConnection.get(connection);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EzyHandlerGroup> T removeHandlerGroup(Object connection) {
+	public EzyHandlerGroup removeHandlerGroup(Object connection) {
 		EzyHandlerGroup group = groupsByConnection.get(connection);
 		if(group != null)
 			group.fireChannelInactive();
-		return (T)group;
+		return group;
 	}
 	
 	@Override
@@ -108,14 +97,6 @@ public class EzyHandlerGroupManagerImpl
 		return getHandlerGroup(session);
 	}
 	
-	private Object newDataDecoder(EzyConnectionType type) {
-		return codecFactory.newDecoder(type);
-	}
-	
-	private Object newDataEncoder(EzyConnectionType type) {
-		return codecFactory.newEncoder(type);
-	}
-	
 	@Override
 	public void destroy() {
 		groupsByConnection.clear();
@@ -126,10 +107,9 @@ public class EzyHandlerGroupManagerImpl
 	}
 	
 	public static class Builder implements EzyBuilder<EzyHandlerGroupManager> {
-		private ExecutorService statsThreadPool;
-		private ExecutorService codecThreadPool;
 
-		private EzyCodecFactory codecFactory;
+		private ExecutorService statsThreadPool;
+
 		private EzyServerContext serverContext;
 		private EzySocketRequestQueues requestQueues;
 		
@@ -140,18 +120,8 @@ public class EzyHandlerGroupManagerImpl
 			return this;
 		}
 		
-		public Builder codecThreadPool(ExecutorService codecThreadPool) {
-			this.codecThreadPool = codecThreadPool;
-			return this;
-		}
-		
 		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
 			this.requestQueues = requestQueues;
-			return this;
-		}
-		
-		public Builder codecFactory(EzyCodecFactory codecFactory) {
-			this.codecFactory = codecFactory;
 			return this;
 		}
 		

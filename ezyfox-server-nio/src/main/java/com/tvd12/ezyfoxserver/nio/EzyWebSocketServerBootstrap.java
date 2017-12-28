@@ -10,6 +10,7 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
@@ -82,7 +83,7 @@ public class EzyWebSocketServerBootstrap
 	}
 	
 	private int getSocketWriterPoolSize() {
-		return 8;
+		return EzyNioThreadPoolSizes.WEBSOCKET_WRITER;
 	}
 	
 	private boolean isSslActive() {

@@ -24,7 +24,6 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		this.codecCreator = builder.codecCreator;
 		this.maxRequestSize = builder.maxRequestSize;
 		this.dataHandlerCreator = builder.dataHandlerCreator;
-		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 	}
 	
 	@Override
@@ -37,12 +36,12 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 			ChannelInboundHandler decoder) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 		pipeline.addLast("codec-1", new EzyCombinedCodec(decoder, encoder));
-		pipeline.addLast("handler", newDataHandler());
+		pipeline.addLast("handler", newDataHandler(ch));
 		pipeline.addLast("codec-2", new EzyCombinedCodec(decoder, encoder));
 	}
 	
-	protected ChannelHandler newDataHandler() {
-		return dataHandlerCreator.newHandler(EzyConnectionType.SOCKET);
+	protected ChannelHandler newDataHandler(Channel ch) {
+		return dataHandlerCreator.newHandler(ch, EzyConnectionType.SOCKET);
 	}
 	
 	protected ChannelOutboundHandler newEncoder() {
@@ -62,7 +61,6 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		protected int maxRequestSize;
 		private EzyCodecCreator codecCreator;
 		private EzyDataHandlerCreator dataHandlerCreator;
-		protected EzySessionTicketsQueue sessionTicketsQueue;
 		
 		public Builder maxRequestSize(int maxRequestSize) {
 			this.maxRequestSize = maxRequestSize;
@@ -76,11 +74,6 @@ class EzyChannelInitializer extends ChannelInitializer<Channel> {
 		
 		public Builder dataHandlerCreator(EzyDataHandlerCreator dataHandlerCreator) {
 			this.dataHandlerCreator = dataHandlerCreator;
-			return this;
-		}
-		
-		public Builder sessionTicketsQueue(EzySessionTicketsQueue sessionTicketsQueue) {
-			this.sessionTicketsQueue = sessionTicketsQueue;
 			return this;
 		}
 		

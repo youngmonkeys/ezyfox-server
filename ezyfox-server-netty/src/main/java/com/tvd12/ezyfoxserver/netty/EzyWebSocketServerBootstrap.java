@@ -7,6 +7,7 @@ import javax.net.ssl.SSLContext;
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyServerBootstrapCreator;
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyWsServerBootstrapCreator;
 import com.tvd12.ezyfoxserver.netty.builder.impl.EzyWsServerBootstrapCreatorFactory;
+import com.tvd12.ezyfoxserver.netty.constant.EzyNettyThreadPoolSizes;
 import com.tvd12.ezyfoxserver.netty.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.setting.EzyBaseSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
@@ -29,7 +30,7 @@ public class EzyWebSocketServerBootstrap extends EzySocketServerBootstrap {
 	
 	@Override
 	protected int getSocketWriterPoolSize() {
-		return 8;
+		return EzyNettyThreadPoolSizes.WEBSOCKET_WRITER;
 	}
 	
 	private EzyWebSocketSetting getWebsocketSetting() {

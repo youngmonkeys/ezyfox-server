@@ -5,33 +5,26 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.netty.creator.EzyDataHandlerCreator;
 import com.tvd12.ezyfoxserver.netty.handler.EzyChannelDataHandler;
-import com.tvd12.ezyfoxserver.netty.handler.EzyDataHandler;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 
 public class EzyDataHandlerCreatorImpl implements EzyDataHandlerCreator {
 
-	protected EzyServerContext context;
-	protected EzySessionTicketsQueue sessionTicketsQueue;
+	protected final EzyServerContext context;
+	protected final EzyHandlerGroupManager handlerGroupManager;
 	
 	protected EzyDataHandlerCreatorImpl(Builder builder) {
 		this.context = builder.context;
-		this.sessionTicketsQueue = builder.sessionTicketsQueue;
+		this.handlerGroupManager = builder.handlerGroupManager;
 	}
 	
 	@Override
-	public ChannelHandler newHandler(EzyConnectionType type) {
+	public ChannelHandler newHandler(Channel channel, EzyConnectionType type) {
 		EzyChannelDataHandler handler = new EzyChannelDataHandler();
 		handler.setConnectionType(type);
-		handler.setDataHandler(newDataHandler());
-		return handler;
-	}
-	
-	protected EzyDataHandler newDataHandler() {
-		EzyDataHandler handler = new EzyDataHandler();
-		handler.setContext(context);
-		handler.setSessionTicketsQueue(sessionTicketsQueue);
+		handler.setHandlerGroupManager(handlerGroupManager);
 		return handler;
 	}
 	
@@ -42,15 +35,15 @@ public class EzyDataHandlerCreatorImpl implements EzyDataHandlerCreator {
 	public static class Builder implements EzyBuilder<EzyDataHandlerCreator> {
 		
 		protected EzyServerContext context;
-		protected EzySessionTicketsQueue sessionTicketsQueue;
+		protected EzyHandlerGroupManager handlerGroupManager;
 		
 		public Builder context(EzyServerContext context) {
 			this.context = context;
 			return this;
 		}
 		
-		public Builder sessionTicketsQueue(EzySessionTicketsQueue sessionTicketsQueue) {
-			this.sessionTicketsQueue = sessionTicketsQueue;
+		public Builder handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
+			this.handlerGroupManager = handlerGroupManager;
 			return this;
 		}
 		

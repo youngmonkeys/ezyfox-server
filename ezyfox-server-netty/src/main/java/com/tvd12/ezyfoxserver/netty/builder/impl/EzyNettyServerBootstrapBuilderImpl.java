@@ -123,16 +123,16 @@ public class EzyNettyServerBootstrapBuilderImpl
 		return new EzyBlockingSessionTicketsQueue();
 	}
 
+	private ExecutorService newStatsThreadPool() {
+		return EzyExecutors.newFixedThreadPool(EzyNettyThreadPoolSizes.STATISTICS, "statistics");
+	}
+	
 	protected EventLoopGroup newParentEventLoopGroup() {
-		return new NioEventLoopGroup(1, EzyExecutors.newThreadFactory("parent-event-loop-group"));
+		return new NioEventLoopGroup(EzyNettyThreadPoolSizes.PARENT_EVENT_LOOP_GROUP, EzyExecutors.newThreadFactory("parent-event-loop-group"));
 	}
 
 	protected EventLoopGroup newChildEventLoopGroup() {
-		return new NioEventLoopGroup(1, EzyExecutors.newThreadFactory("socket-event-loop-group"));
-	}
-
-	private ExecutorService newStatsThreadPool() {
-		return EzyExecutors.newFixedThreadPool(EzyNettyThreadPoolSizes.STATISTICS, "statistics");
+		return new NioEventLoopGroup(EzyNettyThreadPoolSizes.SOCKET_EVENT_LOOP_GROUP, EzyExecutors.newThreadFactory("socket-event-loop-group"));
 	}
 }
 	

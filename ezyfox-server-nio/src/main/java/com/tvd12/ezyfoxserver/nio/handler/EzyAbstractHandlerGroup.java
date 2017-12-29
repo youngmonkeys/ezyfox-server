@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.nio.handler;
 
 import static com.tvd12.ezyfoxserver.socket.EzySocketRequestBuilder.socketRequestBuilder;
 
-import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -13,6 +12,8 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPacketsAware;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSender;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -35,7 +36,12 @@ public abstract class EzyAbstractHandlerGroup
 			E extends EzyNioDataEncoder
 		>
 		extends EzyLoggable
-		implements EzyImmediateDataSender, EzySocketDataDecoderGroup, EzySocketChannelDelegate, EzyDestroyable {
+		implements 
+			EzyImmediateDataSender, 
+			EzySocketDataDecoderGroup, 
+			EzySocketChannelDelegate,
+			EzyDroppedPackets,
+			EzyDestroyable {
 
 	protected final EzyChannel channel;
 	
@@ -121,6 +127,7 @@ public abstract class EzyAbstractHandlerGroup
 	public final EzyNioSession fireChannelActive() throws Exception {
 		EzyNioSession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
+		((EzyDroppedPacketsAware)ss).setDroppedPackets(this);
 		((EzyImmediateDataSenderAware)ss).setImmediateDataSender(this);
 		((EzySocketDataDecoderGroupAware)ss).setDataDecoderGroup(this);
 		session.set(ss);
@@ -140,6 +147,12 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	@Override
+	public void addDroppedPacket(EzyPacket packet) {
+		networkStats.addDroppedOutPackets(1);
+		networkStats.addDroppedOutBytes(packet.getSize());
+	}
+	
+	@Override
 	public final void onChannelInactivated(EzyChannel channel) {
 		channelDelegate.onChannelInactivated(channel);
 	}
@@ -150,8 +163,10 @@ public abstract class EzyAbstractHandlerGroup
 			.session(getSession())
 			.build();
 		boolean success = requestQueues.add(request);
-		if(!success)
+		if(!success) {
+			networkStats.addDroppedInPackets(1);
 			getLogger().info("request queue is full, drop incomming request");
+		}
 	}
 	
 	private void executeSendingPacket(EzyPacket packet) {
@@ -177,7 +192,7 @@ public abstract class EzyAbstractHandlerGroup
 		catch(Exception e) {
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
-			networkStats.addWriteErrorBytes(getWriteBytesSize(bytes));
+			networkStats.addWriteErrorBytes(packet.getSize());
 			getLogger().warn("can't send bytes: " + bytes + " to session: " + getSession() + ", error: " + e.getMessage());
 		}
 	}
@@ -187,12 +202,6 @@ public abstract class EzyAbstractHandlerGroup
 		int writeBytes = channel.write(bytes);
 		packet.release();
 		return writeBytes;
-	}
-	
-	protected long getWriteBytesSize(Object bytes) {
-		if(bytes instanceof byte[])
-			return ((byte[])bytes).length;
-		return ((ByteBuffer)bytes).remaining();
 	}
 	
 	private boolean canWriteBytes(EzyChannel channel) {

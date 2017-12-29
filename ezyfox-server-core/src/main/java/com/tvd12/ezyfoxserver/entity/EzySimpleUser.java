@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,7 +53,7 @@ public class EzySimpleUser
 	
 	@Override
 	public Collection<EzySession> getSessions() {
-	    return sessionMap.values();
+	    return new ArrayList<>(sessionMap.values());
 	}
 	
 	@Override
@@ -77,6 +78,13 @@ public class EzySimpleUser
 	    for(EzySession session : getSessions()) {
             session.sendNow(data, type);
 	    }
+	}
+	
+	@Override
+	public boolean isIdle() {
+	    if(!sessionMap.isEmpty())
+	        return false;
+	    return maxIdleTime < System.currentTimeMillis() - startIdleTime;
 	}
 	
 	@Override

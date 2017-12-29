@@ -54,7 +54,7 @@ public abstract class EzyObjectProvider<T>
 	
 	protected void startValidationService() {
 		validationService.scheduleWithFixedDelay(newValidationTask(), 
-				validationInterval, validationInterval, TimeUnit.MILLISECONDS);
+				3 * 1000, validationInterval, TimeUnit.MILLISECONDS);
 	}
 	
 	protected Runnable newValidationTask() {
@@ -112,7 +112,7 @@ public abstract class EzyObjectProvider<T>
 	public static abstract class Builder<T, B extends Builder> 
 			implements EzyBuilder<EzyObjectProvider<T>> {
 		
-		private long validationInterval = 3 * 1000;
+		private long validationInterval = 100;
 		protected EzyObjectFactory<T> objectFactory;
 		private ScheduledExecutorService validationService;
 		

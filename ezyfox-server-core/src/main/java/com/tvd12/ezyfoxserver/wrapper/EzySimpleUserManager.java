@@ -52,7 +52,6 @@ public abstract class EzySimpleUserManager extends EzyLoggable implements EzyUse
             locks.remove(user.getName());
             usersById.remove(user.getId());
             usersByName.remove(user.getName());
-            getLogger().info("remove user {}, remain users = {}", user.getName(), usersById.size());
         }
         return user;
     }

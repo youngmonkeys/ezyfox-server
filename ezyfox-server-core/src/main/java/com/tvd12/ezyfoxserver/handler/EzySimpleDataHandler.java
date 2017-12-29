@@ -56,23 +56,18 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected boolean checkMaxRequestPerSecond() {
-        long current = System.currentTimeMillis();
-        long offset = current - milestoneRequestTime;
-        int count = requestInSecondCount.incrementAndGet();
-        int max = maxRequestPerSecond.getValue();
-        if(offset > 1000) {
-            requestInSecondCount.set(0);
-            milestoneRequestTime = current;
-        }
-        else if(count > max) { 
+        if(requestFrameInSecond.isExpired())
+            requestFrameInSecond = requestFrameInSecond.nextFrame();
+        boolean hasMaxRequest = requestFrameInSecond.addRequests(1);
+        if(hasMaxRequest) { 
             setActive(false);
-            processMaxRequestPerSecond(count, max);
+            processMaxRequestPerSecond();
             return true;
         }
         return false;
     }
     
-    protected void processMaxRequestPerSecond(int nrequests, int max) {
+    protected void processMaxRequestPerSecond() {
         responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             if(sessionManager != null) {

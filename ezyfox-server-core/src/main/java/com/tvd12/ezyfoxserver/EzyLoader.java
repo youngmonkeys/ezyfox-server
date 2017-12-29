@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettingsReader;
+import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
@@ -86,8 +87,10 @@ public class EzyLoader extends EzyLoggable {
     }
     
     protected EzyServerUserManager newServerUserManager(EzySettings settings) {
+        EzyUserManagementSetting ums = settings.getUserManagement();
         return EzyServerUserManagerImpl.builder()
                 .maxUsers(settings.getMaxUsers())
+                .maxIdleTime(ums.getUserMaxIdleTime())
                 .build();
     }
     

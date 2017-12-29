@@ -15,4 +15,6 @@ public interface EzyPacket extends EzyReleasable {
 	
 	void setFragment(Object fragment);
 	
+	int getSize();
+	
 }

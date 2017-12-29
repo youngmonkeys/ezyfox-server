@@ -67,6 +67,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     
     protected EzyAppUserManager newAppUserManager(EzyAppSetting setting) {
         return EzyAppUserManagerImpl.builder()
+                .appName(setting.getName())
                 .maxUsers(setting.getMaxUsers())
                 .build();
     }

@@ -29,7 +29,12 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractSession 
         extends EzyEntity 
-        implements EzySession, EzyImmediateDataSenderAware, EzySocketDataDecoderGroupAware, EzyHasSessionDelegate {
+        implements 
+            EzySession, 
+            EzyImmediateDataSenderAware, 
+            EzySocketDataDecoderGroupAware, 
+            EzyHasSessionDelegate,
+            EzyDroppedPacketsAware {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
@@ -64,6 +69,7 @@ public abstract class EzyAbstractSession
 	
 	protected EzyChannel channel;
 	protected EzyPacketQueue packetQueue;
+	protected EzyDroppedPackets droppedPackets;
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzyImmediateDataSender immediateDataSender;
     protected EzySocketDataDecoderGroup dataDecoderGroup;
@@ -138,8 +144,11 @@ public abstract class EzyAbstractSession
         synchronized (packetQueue) {
             boolean empty = packetQueue.isEmpty();
             boolean success = packetQueue.add(packet);
-            if(empty && success) {
-                sessionTicketsQueue.add(this);
+            if(success) {
+                droppedPackets.addDroppedPacket(packet);
+                if(empty) {
+                    sessionTicketsQueue.add(this);
+                }
             }
         }
     }
@@ -202,6 +211,7 @@ public abstract class EzyAbstractSession
             this.properties.clear();
 	    this.locks = null;
 	    this.properties = null;
+	    this.droppedPackets = null;
 	    this.dataDecoderGroup = null;
 	    this.immediateDataSender = null;
 	    if(packetQueue != null) {

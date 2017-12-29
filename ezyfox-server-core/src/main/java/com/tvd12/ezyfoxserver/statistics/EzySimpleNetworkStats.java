@@ -11,11 +11,13 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     protected long readBytes;
     protected long writtenBytes;
     protected long droppedInBytes;
+    protected long droppedOutBytes;
     protected long writeErrorBytes;
     
     protected long readPackets;
     protected long writtenPackets;
     protected long droppedInPackets;
+    protected long droppedOutPackets;
     protected long writeErrorPackets;
 
     protected EzyNetworkBytesFrame frameHour = new EzyNetworkBytesFrameHour();
@@ -66,7 +68,12 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     public void addDroppedInBytes(long bytes) {
         this.droppedInBytes += bytes;
     }
-
+    
+    @Override
+    public void addDroppedOutBytes(long bytes) {
+        this.droppedOutBytes += bytes;
+    }
+    
     @Override
     public void addWriteErrorBytes(long bytes) {
         this.writeErrorBytes += bytes;
@@ -118,12 +125,16 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     public void addDroppedInPackets(long packets) {
         this.droppedInPackets += packets;
     }
+    
+    @Override
+    public void addDroppedOutPackets(long packets) {
+        this.droppedOutPackets += packets;
+    }
 
     @Override
     public void addWriteErrorPackets(long packets) {
         this.writeErrorPackets += packets;
     }
 
-    
     
 }

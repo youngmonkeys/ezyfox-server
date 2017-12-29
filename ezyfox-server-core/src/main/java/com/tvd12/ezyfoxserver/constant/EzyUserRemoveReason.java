@@ -8,6 +8,7 @@ public enum EzyUserRemoveReason implements EzyConstant {
 
 	UNKNOWN(0),
 	IDLE(1),
+	DISCONNECT(2),
 	ADMIN_BAN(4),
 	ADMIN_KICK(5);
 	

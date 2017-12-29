@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
+import com.tvd12.ezyfoxserver.util.EzyInitable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 public class EzySimpleSettingsReader
@@ -34,6 +35,8 @@ public class EzySimpleSettingsReader
     protected void postReadSettings(EzySettings settings) {
         updatePluginsSetting(settings.getPlugins());
         updateAppsSetting(settings.getApplications());
+        updateUserManagementSetting(settings.getUserManagement());
+        updateSessionManagementSetting(settings.getSessionManagement());
     }
     
     protected void updateAppsSetting(EzyAppsSetting apps) {
@@ -44,6 +47,14 @@ public class EzySimpleSettingsReader
     protected void updatePluginsSetting(EzyPluginsSetting plugins) {
         for(EzyPluginSetting plugin : plugins.getPlugins())
             ((EzyHomePathAware)plugin).setHomePath(homePath);
+    }
+    
+    protected void updateUserManagementSetting(EzyUserManagementSetting setting) {
+        ((EzyInitable)setting).init();
+    }
+    
+    protected void updateSessionManagementSetting(EzySessionManagementSetting setting) {
+        ((EzyInitable)setting).init();
     }
     
     protected EzyXmlReader newXmlReader() {

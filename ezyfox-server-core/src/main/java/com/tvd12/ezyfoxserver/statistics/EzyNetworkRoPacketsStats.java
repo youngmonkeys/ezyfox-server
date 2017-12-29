@@ -8,6 +8,8 @@ public interface EzyNetworkRoPacketsStats {
 
     long getDroppedInPackets();
     
+    long getDroppedOutPackets();
+    
     long getWriteErrorPackets();
     
 }

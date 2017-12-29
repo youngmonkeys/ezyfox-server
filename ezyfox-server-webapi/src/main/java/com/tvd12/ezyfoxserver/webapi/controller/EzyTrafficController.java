@@ -25,6 +25,10 @@ public class EzyTrafficController extends EzyStatisticsController {
 		
 		details.setSocketMaxSession(socketStatistics.getSessionStats().getMaxSessions());
 		details.setSocketTotalSession(socketStatistics.getSessionStats().getTotalSessions());
+		details.setSocketTotalReadPackets(socketStatistics.getNetworkStats().getReadPackets());
+		details.setSocketTotalWrittenPackets(socketStatistics.getNetworkStats().getWrittenPackets());
+		details.setSocketTotalDroppedInPackets(socketStatistics.getNetworkStats().getDroppedInBytes());
+		details.setSocketTotalDroppedOutPackets(socketStatistics.getNetworkStats().getDroppedOutPackets());
 		details.setSocketTransferredInputData(socketStatistics.getNetworkStats().getReadBytes());
 		details.setSocketTransferredOutputData(socketStatistics.getNetworkStats().getWrittenBytes());
 		details.setSocketCurrentInputDataTransferRate(socketStatistics.getNetworkStats().getReadBytesPerSecond());
@@ -32,6 +36,10 @@ public class EzyTrafficController extends EzyStatisticsController {
 		
 		details.setWebSocketMaxSession(webSocketStatistics.getSessionStats().getMaxSessions());
 		details.setWebSocketTotalSession(webSocketStatistics.getSessionStats().getTotalSessions());
+		details.setWebSocketTotalReadPackets(webSocketStatistics.getNetworkStats().getReadPackets());
+		details.setWebSocketTotalWrittenPackets(webSocketStatistics.getNetworkStats().getWrittenPackets());
+		details.setWebSocketTotalDroppedInPackets(webSocketStatistics.getNetworkStats().getDroppedInBytes());
+		details.setWebSocketTotalDroppedOutPackets(webSocketStatistics.getNetworkStats().getDroppedOutPackets());
 		details.setWebSocketTransferredInputData(webSocketStatistics.getNetworkStats().getReadBytes());
 		details.setWebSocketTransferredOutputData(webSocketStatistics.getNetworkStats().getWrittenBytes());
 		details.setWebSocketCurrentInputDataTransferRate(webSocketStatistics.getNetworkStats().getReadBytesPerSecond());

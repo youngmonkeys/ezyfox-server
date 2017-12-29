@@ -33,7 +33,7 @@ class EzyWsChannelInitializer extends EzyChannelInitializer {
 		ChannelPipeline pipeline = ch.pipeline();
 		pipeline.addLast("http-server-codec", new HttpServerCodec());
 		pipeline.addLast("http-object-aggregator", new HttpObjectAggregator(64 * 1024));
-		pipeline.addLast("chunked-write-andler", new ChunkedWriteHandler());
+		pipeline.addLast("chunked-write-handler", new ChunkedWriteHandler());
 		pipeline.addLast("http-request-handler", new EzyHttpRequestHandler("/ws"));
 		pipeline.addLast("ws-server-protocol-handler", newWebSocketServerProtocolHandler());
 		pipeline.addLast("codec-1", new EzyCombinedCodec(decoder, encoder));

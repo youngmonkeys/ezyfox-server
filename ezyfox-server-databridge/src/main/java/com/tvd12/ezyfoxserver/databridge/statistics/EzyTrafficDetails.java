@@ -15,6 +15,10 @@ public class EzyTrafficDetails implements Serializable {
 	
 	private int socketMaxSession;
 	private int socketTotalSession;
+	private long socketTotalReadPackets;
+	private long socketTotalWrittenPackets;
+	private long socketTotalDroppedInPackets;
+	private long socketTotalDroppedOutPackets;
 	private long socketTransferredInputData;
 	private long socketTransferredOutputData;
 	private long socketCurrentInputDataTransferRate;
@@ -22,6 +26,10 @@ public class EzyTrafficDetails implements Serializable {
 	
 	private int webSocketMaxSession;
 	private int webSocketTotalSession;
+	private long webSocketTotalReadPackets;
+	private long webSocketTotalWrittenPackets;
+	private long webSocketTotalDroppedInPackets;
+	private long webSocketTotalDroppedOutPackets;
 	private long webSocketTransferredInputData;
 	private long webSocketTransferredOutputData;
 	private long webSocketCurrentInputDataTransferRate;
@@ -33,6 +41,22 @@ public class EzyTrafficDetails implements Serializable {
 	
 	public int getTotalSession() {
 		return socketTotalSession + webSocketTotalSession;
+	}
+	
+	public long getTotalReadPackets() {
+		return socketTotalReadPackets + webSocketTotalReadPackets;
+	}
+	
+	public long getTotalWrittenPackets() {
+		return socketTotalWrittenPackets + webSocketTotalWrittenPackets;
+	}
+	
+	public long getTotalDroppedInPackets() {
+		return socketTotalDroppedInPackets + webSocketTotalDroppedInPackets;
+	}
+	
+	public long getTotalDroppedOutPackets() {
+		return socketTotalDroppedOutPackets + webSocketTotalDroppedOutPackets;
 	}
 	
 	public long getTransferredInputData() {

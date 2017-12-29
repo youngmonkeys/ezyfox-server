@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import java.nio.ByteBuffer;
+
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 
 import lombok.Getter;
@@ -19,6 +21,15 @@ public class EzySimplePacket implements EzyPacket {
 	public void setFragment(Object fragment) {
 	    this.data = fragment;
 	    this.fragmented = true;
+	}
+	
+	@Override
+	public int getSize() {
+	    if(data instanceof ByteBuffer)
+            return ((ByteBuffer)data).remaining();
+	    if(data instanceof String)
+	        return ((String)data).length();
+	    return ((byte[])data).length;
 	}
 
 	@Override

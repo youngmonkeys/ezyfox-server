@@ -8,6 +8,8 @@ public interface EzyNetworkBytesStats extends EzyNetworkRoBytesStats {
     
     void addDroppedInBytes(long bytes);
     
+    void addDroppedOutBytes(long bytes);
+    
     void addWriteErrorBytes(long bytes);
     
 }

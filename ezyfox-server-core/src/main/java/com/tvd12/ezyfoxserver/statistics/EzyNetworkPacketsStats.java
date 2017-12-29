@@ -8,6 +8,8 @@ public interface EzyNetworkPacketsStats extends EzyNetworkRoPacketsStats {
 
     void addDroppedInPackets(long packets);
     
+    void addDroppedOutPackets(long packets);
+    
     void addWriteErrorPackets(long packets);
     
 }

@@ -41,13 +41,6 @@ public class EzySimpleWsHandlerGroup
 		executeAddReadBytes(len - offset);
 	}
 	
-	@Override
-	protected long getWriteBytesSize(Object bytes) {
-		if(bytes instanceof String)
-			return ((String)bytes).length();
-		return super.getWriteBytesSize(bytes);
-	}
-	
 	private void executeHandleReceivedBytes(String bytes) {
 		codecThreadPool.execute(() -> handleReceivedBytes(bytes));
 	}

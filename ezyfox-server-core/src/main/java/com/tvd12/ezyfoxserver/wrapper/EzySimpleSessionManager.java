@@ -62,27 +62,27 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@Override
 	public void removeSession(S session, EzyConstant reason) {
-	    checkToReturnSession(session, reason);
+	    checkToRemoveSession(session, reason);
 	}
 	
-    protected void doReturnSession(S session, EzyConstant reason) {
+    protected void doRemoveSession(S session, EzyConstant reason) {
         unmapSession(session);
         notifySessionRemoved(session, reason);
         clearSession(session);
-        getLogger().debug("return session, remain sessions = {}", providedObjects.size());
+        getLogger().info("remove session, remain sessions = {}", providedObjects.size());
     }
 	
-	protected void checkToReturnSession(S session, EzyConstant reason) {
-	    if(shouldReturnSession(session)) 
-	        returnSessionWithLock(session, reason);
+	protected void checkToRemoveSession(S session, EzyConstant reason) {
+	    if(shouldRemoveSession(session)) 
+	        removeSessionWithLock(session, reason);
 	}
 	
-	protected void returnSessionWithLock(S session, EzyConstant reason) {
+	protected void removeSessionWithLock(S session, EzyConstant reason) {
 	    Lock lock = session.getLock(EzyLockName.REMOVE);
-	    EzyProcessor.processWithTryLock(() -> doReturnSession(session, reason), lock);
+	    EzyProcessor.processWithTryLock(() -> doRemoveSession(session, reason), lock);
 	}
 	
-	protected boolean shouldReturnSession(S session) {
+	protected boolean shouldRemoveSession(S session) {
 	    return session != null && containsSession(session.getReconnectToken());
 	}
 	
@@ -131,7 +131,6 @@ public class EzySimpleSessionManager<S extends EzySession>
         session.setLastActivityTime(System.currentTimeMillis());
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastWriteTime(System.currentTimeMillis());
-        session.setActivated(true);
         S complete = (S)session;
         sessionsById.put(complete.getId(), complete);
 		sessionsByToken.put(complete.getReconnectToken(), complete);
@@ -222,7 +221,11 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected boolean isUnloggedInSession(EzySession session) {
-		return session.isLoggedIn() ? false : getSessionRemainWaitingTime(session) <= 0; 
+	    if(session.isLoggedIn())
+	        return false;
+	    if(!session.isActivated())
+	        return false;
+		return getSessionRemainWaitingTime(session) <= 0; 
 	}
 	
 	protected long getSessionRemainWaitingTime(EzySession session) {

@@ -50,7 +50,7 @@ public class EzyWebSocketServerCreator {
 		contextHandler.setAllowNullPathInfo(true);
 		EzyWsHandler wsHandler = newWsHandler();
 		contextHandler.setHandler(newWebSocketHandler(wsHandler));
-		QueuedThreadPool threadPool = new QueuedThreadPool();
+		QueuedThreadPool threadPool = new QueuedThreadPool(16, 8);
 		threadPool.setName("ezyfox-ws-handler");
 		Server server = new Server(threadPool);
 		server.setHandler(contextHandler);

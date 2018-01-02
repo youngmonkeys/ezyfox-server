@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.tvd12.ezyfoxserver.codec.EzyMessageByTypeSerializer;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.netty.handler.EzyBytesSent;
+import com.tvd12.ezyfoxserver.handler.EzyBytesSent;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;

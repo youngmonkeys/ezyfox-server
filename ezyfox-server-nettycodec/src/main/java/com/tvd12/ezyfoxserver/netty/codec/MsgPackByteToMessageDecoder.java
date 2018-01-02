@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
-import com.tvd12.ezyfoxserver.netty.handler.EzyBytesReceived;
+import com.tvd12.ezyfoxserver.handler.EzyBytesReceived;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

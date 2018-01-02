@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.netty.handler;
 
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.handler.EzyBytesReceived;
+import com.tvd12.ezyfoxserver.handler.EzyBytesSent;
 import com.tvd12.ezyfoxserver.netty.socket.EzyNettyChannel;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManagerAware;

@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.netty.handler;
+package com.tvd12.ezyfoxserver.handler;
 
 public interface EzyBytesReceived {
 

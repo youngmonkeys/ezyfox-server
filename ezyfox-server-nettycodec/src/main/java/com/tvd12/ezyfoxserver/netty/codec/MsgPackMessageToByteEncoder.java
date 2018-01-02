@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
 import com.tvd12.ezyfoxserver.codec.EzyObjectToMessage;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.netty.handler.EzyBytesSent;
+import com.tvd12.ezyfoxserver.handler.EzyBytesSent;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

@@ -13,6 +13,7 @@ import org.eclipse.jetty.websocket.api.WebSocketException;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.*;
 
 import lombok.Getter;
 
@@ -77,6 +78,6 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 	
 	@Override
 	public void close() {
-		processWithException(session::close);
+		processWithException(() -> session.close(CLOSE_BY_SERVER));
 	}
 }

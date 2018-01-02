@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
 import java.net.SocketTimeoutException;
+import java.util.Set;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -9,6 +10,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
+import com.google.common.collect.Sets;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
@@ -18,6 +20,7 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.*;
 
 @WebSocket
 public class EzyWsHandler extends EzyLoggable {
@@ -25,21 +28,31 @@ public class EzyWsHandler extends EzyLoggable {
 	private final EzyNioSessionManager sessionManager;
 	private final EzySessionManagementSetting settings;
 	private final EzyHandlerGroupManager handlerGroupManager;
+	
+	private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
+			CLOSE_BY_SERVER.getCode()
+	);
 
 	public EzyWsHandler(Builder builder) {
 		this.settings = builder.settings;
 		this.sessionManager = builder.sessionManager;
 		this.handlerGroupManager = builder.handlerGroupManager;
 	}
+	
+	private boolean isIgnoreStatusCode(int statusCode) {
+		return IGNORE_STATUS_CODES.contains(statusCode);
+	}
 
 	@OnWebSocketClose
 	public void onClose(Session session, int statusCode, String reason) {
 		getLogger().debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
+		if(isIgnoreStatusCode(statusCode)) 
+			return;
 		setChannelClosed(session);
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
 		dataHandler.fireChannelInactive();
 	}
-
+	
 	@OnWebSocketError
 	public void onError(Session session, Throwable throwable) {
 		getLogger().debug("error: session: " + session.getRemoteAddress(), throwable);

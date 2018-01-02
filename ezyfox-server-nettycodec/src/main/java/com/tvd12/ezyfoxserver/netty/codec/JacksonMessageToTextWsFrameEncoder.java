@@ -29,7 +29,6 @@ public class JacksonMessageToTextWsFrameEncoder extends MessageToMessageEncoder<
 	}
 	
 	private void writeMessage(byte[] message, List<Object> out) {
-		logger.debug("write message with size {}", message.length);
 		out.add(new TextWebSocketFrame(Unpooled.wrappedBuffer(message)));
 	}
 

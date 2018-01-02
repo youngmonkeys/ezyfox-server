@@ -12,6 +12,8 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPacketsAware;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSender;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSenderAware;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
@@ -29,7 +31,12 @@ import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 public abstract class EzyAbstractHandlerGroup 
 		extends EzyLoggable 
-		implements EzyHandlerGroup, EzyImmediateDataSender, EzySocketChannelDelegate, EzyDestroyable {
+		implements 
+			EzyHandlerGroup, 
+			EzyImmediateDataSender, 
+			EzySocketChannelDelegate,
+			EzyDroppedPackets,
+			EzyDestroyable {
 
 	protected final EzyChannel channel;
 	protected final EzyNettyDataHandler handler;
@@ -129,6 +136,7 @@ public abstract class EzyAbstractHandlerGroup
 	public EzyNettySession fireChannelActive() throws Exception {
 		EzyNettySession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
+		((EzyDroppedPacketsAware)ss).setDroppedPackets(this);
 		((EzyImmediateDataSenderAware)ss).setImmediateDataSender(this);
 		((EzySocketDataDecoderGroupAware)ss).setDataDecoderGroup(this);
 		session.set(ss);
@@ -147,6 +155,11 @@ public abstract class EzyAbstractHandlerGroup
 		finally {
 			packet.release();
 		}
+	}
+	
+	@Override
+	public void addDroppedPacket(EzyPacket packet) {
+		networkStats.addDroppedOutPackets(1);
 	}
 	
 	@Override

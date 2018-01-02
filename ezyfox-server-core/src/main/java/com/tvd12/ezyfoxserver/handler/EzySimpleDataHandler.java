@@ -27,7 +27,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         extends EzyUserDataHandler<S> {
 
     public final void sessionActive() {
-        setActive(true);
+        active = true;
+        session.setActivated(true);
         getLogger().debug("active session: {}", session);
     }
     
@@ -37,7 +38,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     public void channelInactive(EzyConstant reason) throws Exception {
-        sessionManager.removeSession(session, reason);
+        if(sessionManager != null)
+            sessionManager.removeSession(session, reason);
     }
     
     public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {

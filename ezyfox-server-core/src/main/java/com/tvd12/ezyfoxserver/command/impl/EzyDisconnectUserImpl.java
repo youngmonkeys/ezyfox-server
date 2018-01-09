@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
+import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
@@ -110,7 +111,9 @@ public class EzyDisconnectUserImpl
 	}
 	
 	protected EzyResponse newResponse() {
-        return EzyDisconnectResponse.builder().reason(reason).build();
+	    EzyDisconnectParams params = new EzyDisconnectParams();
+	    params.setReason(reason);
+        return new EzyDisconnectResponse(params);
     }
 
 	@Override

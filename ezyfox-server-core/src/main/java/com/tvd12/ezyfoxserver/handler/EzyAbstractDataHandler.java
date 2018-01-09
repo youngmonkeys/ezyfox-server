@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.response.EzyErrorResponse;
+import com.tvd12.ezyfoxserver.response.EzyErrorParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
@@ -103,7 +104,9 @@ public class EzyAbstractDataHandler<S extends EzySession>
     }
     
     protected void responseError(EzyIError error) {
-        response(EzyErrorResponse.builder().error(error).build());
+        EzyErrorParams params = new EzyErrorParams();
+        params.setError(error);
+        response(new EzyErrorResponse(params));
     }
     
     private Map<Class<?>, EzyExceptionHandler> newExceptionHandlers() {

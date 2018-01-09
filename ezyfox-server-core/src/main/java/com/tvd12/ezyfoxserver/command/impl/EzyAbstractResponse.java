@@ -110,23 +110,15 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
         return Boolean.TRUE;
     }
     
-    protected void response(EzySession session, 
+    protected final void response(EzySession session, 
             com.tvd12.ezyfoxserver.response.EzyResponse response) {
         response(context, session, response);
     }
     
-    protected com.tvd12.ezyfoxserver.response.EzyResponse newResponse() {
-        return newResponseBuilder(newData()).build();
+    protected final EzyData newResponseData() {
+        return newArrayBuilder().append(command).append(params).build();
     }
-
-    protected abstract com.tvd12.ezyfoxserver.response.EzyResponse.Builder 
-            newResponseBuilder(EzyData data);
-
-    protected EzyData newData() {
-        return newArrayBuilder()
-                .append(command)
-                .append(params)
-                .build();
-    }
+    
+    protected abstract com.tvd12.ezyfoxserver.response.EzyResponse newResponse();
 
 }

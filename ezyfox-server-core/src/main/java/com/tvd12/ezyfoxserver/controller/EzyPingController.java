@@ -15,7 +15,7 @@ public class EzyPingController
     }
 
     protected EzyResponse newPongResponse() {
-        return EzyPongResponse.builder().build();
+        return new EzyPongResponse();
     }
     
 }

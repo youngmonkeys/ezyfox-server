@@ -11,21 +11,20 @@ import com.tvd12.ezyfoxserver.entity.EzySender;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.service.EzyResponseSerializer;
+import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
 
 public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendResponse {
 
     protected EzySender sender;
     protected boolean immediate;
     protected EzyResponse response;
-    
+
+    protected final EzyLoggerSetting loggerSetting;
     protected final Set<EzyConstant> unloggableCommands;
-    protected final EzyResponseSerializer responseSerializer;
     
     public EzySendResponseImpl(EzyServerContext context) {
-        this.responseSerializer = context.get(EzyResponseSerializer.class);
-        this.unloggableCommands = context.getServer()
-                .getSettings().getLogger().getIgnoredCommands().getCommands(); 
+        this.loggerSetting = context.getServer().getSettings().getLogger();
+        this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands(); 
     }
     
     @Override
@@ -48,7 +47,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     
     @Override
     public Boolean execute() {
-        EzyArray data = responseSerializer.serializeToArray(response);
+        EzyArray data = response.serialize();
         sendData(data);
         debugLogResponse(data);
         destroy();
@@ -73,6 +72,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     protected void destroy() {
+        this.response.release();
         this.sender = null;
         this.response = null;
     }

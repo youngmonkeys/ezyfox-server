@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.request.EzyReconnectRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleReconnectRequest;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
+import com.tvd12.ezyfoxserver.response.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
@@ -69,11 +70,11 @@ public class EzyHandshakeController
 	}
 	
 	protected EzyResponse newHandShakeResponse(EzySession session, boolean reconnect) {
-	    return EzyHandShakeResponse.builder()
-	            .clientKey(session.getClientKey())
-	            .serverPublicKey(session.getPublicKey())
-	            .reconnectToken(session.getReconnectToken())
-	            .build();
+	    EzyHandShakeParams params = new EzyHandShakeParams();
+	    params.setClientKey(session.getClientKey());
+	    params.setServerPublicKey(session.getPublicKey());
+	    params.setReconnectToken(session.getReconnectToken());
+	    return new EzyHandShakeResponse(params);
 	}
 	
 	protected EzySessionManagementSetting getSessionManagementSetting(EzyServerContext context) {

@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.request.EzyLoginParams;
 import com.tvd12.ezyfoxserver.request.EzyLoginRequest;
+import com.tvd12.ezyfoxserver.response.EzyErrorParams;
 import com.tvd12.ezyfoxserver.response.EzyLoginErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.*;
@@ -69,7 +70,9 @@ public class EzyLoginController
     }
     
     protected EzyResponse newLoginErrorReponse(EzyILoginError error) {
-        return EzyLoginErrorResponse.builder().error(error).build();
+        EzyErrorParams params = new EzyErrorParams();
+        params.setError(error);
+        return new EzyLoginErrorResponse(params);
     }
     
 }

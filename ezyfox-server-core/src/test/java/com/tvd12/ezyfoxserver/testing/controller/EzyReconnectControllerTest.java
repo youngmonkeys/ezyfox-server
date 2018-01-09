@@ -13,9 +13,7 @@ import com.tvd12.ezyfoxserver.delegate.EzyAbstractSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.request.EzyReconnectRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleReconnectParams;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleReconnectRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleReconnectRequest;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.testing.MyTestUser;
 
@@ -34,11 +32,9 @@ public class EzyReconnectControllerTest extends EzyBaseControllerTest {
         oldSession.setDelegate(new EzyAbstractSessionDelegate() {
         });
         EzySession session = newSession();
-        EzyReconnectRequest request = EzySimpleReconnectRequest.builder()
-                .params(EzySimpleReconnectParams.builder().build())
-                .session(session)
-                .oldSession(oldSession)
-                .build();
+        EzySimpleReconnectRequest request = new EzySimpleReconnectRequest();
+        request.setSession(session);
+        request.setOldSession(oldSession);
         EzyReconnectController controller = new EzyReconnectController();
         controller.handle(context, request);
     }
@@ -55,11 +51,9 @@ public class EzyReconnectControllerTest extends EzyBaseControllerTest {
         EzySession session = newSession();
         EzyReconnectController controller = new EzyReconnectController();
         session.setReconnectToken("abcdef");
-        EzyReconnectRequest request = EzySimpleReconnectRequest.builder()
-                .params(EzySimpleReconnectParams.builder().build())
-                .session(session)
-                .oldSession(oldSession)
-                .build();
+        EzySimpleReconnectRequest request = new EzySimpleReconnectRequest();
+        request.setSession(session);
+        request.setOldSession(oldSession);
         controller.handle(context, request);
     }
 

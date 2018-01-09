@@ -9,7 +9,6 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 
 public interface EzyServer extends 
@@ -33,8 +32,6 @@ public interface EzyServer extends
     EzyJsonMapper getJsonMapper();
     
     EzyServerControllers getControllers();
-    
-    EzyRequestMappers getRequestMappers();
     
     EzyEventPluginsMapper getEventPluginsMapper();
     

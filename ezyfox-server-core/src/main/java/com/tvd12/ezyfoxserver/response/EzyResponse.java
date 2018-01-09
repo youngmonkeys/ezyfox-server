@@ -1,14 +1,13 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import java.io.Serializable;
+
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.io.EzyArraySerializable;
+import com.tvd12.ezyfoxserver.util.EzyReleasable;
 
-public interface EzyResponse {
+public interface EzyResponse extends EzyArraySerializable, EzyReleasable, Serializable {
 
-	Object getData();
-	
 	EzyConstant getCommand();
 	
-	interface Builder extends EzyBuilder<EzyResponse> {
-	}
 }

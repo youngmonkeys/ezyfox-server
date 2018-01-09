@@ -15,7 +15,6 @@ import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 
 import lombok.Getter;
@@ -45,8 +44,6 @@ public class EzySimpleServer
 	protected EzyStatistics statistics;
 	@JsonIgnore
 	protected EzyServerControllers controllers;
-	@JsonIgnore
-	protected EzyRequestMappers requestMappers;
 	@JsonIgnore
     protected EzyEventPluginsMapper eventPluginsMapper;
 	@JsonIgnore

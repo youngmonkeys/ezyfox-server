@@ -7,12 +7,12 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
+import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.request.EzyHandShakeRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleHandShakeRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
+import com.tvd12.test.performance.Performance;
 
 public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
 
@@ -21,12 +21,24 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzyServerContext ctx = newServerContext();
         EzySession session = newSession();
         EzyArray data = newHandShakeData();
-        EzyHandShakeController controller = new EzyHandShakeController();
-        EzyHandShakeRequest request = EzySimpleHandShakeRequest.builder()
-                .params(mapDataToRequestParams(data))
-                .session(session)
-                .build();
+        EzyHandshakeController controller = new EzyHandshakeController();
+        EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
         controller.handle(ctx, request);
+    }
+    
+    @Test
+    public void testDeserializeParamsPerformance() {
+        EzyArray data = newHandShakeData();
+        long time = Performance.create()
+                .test(() -> {
+                    EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
+                    request.deserializeParams(data);
+                })
+                .getTime();
+        System.out.println("testDeserializeParamsPerformance, time = " + time);
+                
     }
     
     private EzyArray newHandShakeData() {

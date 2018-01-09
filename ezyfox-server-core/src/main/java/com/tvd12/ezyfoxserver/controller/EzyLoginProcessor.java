@@ -22,6 +22,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -33,6 +34,7 @@ import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserAddedEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.function.EzyVoid;
 import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
+import com.tvd12.ezyfoxserver.response.EzyLoginParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -201,13 +203,12 @@ public class EzyLoginProcessor
     }
     
     protected EzyResponse newLoginReponse(EzyUser user) {
-        return EzyLoginResponse.builder()
-                .data(event.getOutput())
-                .userId(user.getId())
-                .username(user.getName())
-                .joinedApps(getJoinedAppsInfo())
-                .build();
-                
+        EzyLoginParams params = new EzyLoginParams();
+        params.setData(event.getOutput());
+        params.setUserId(user.getId());
+        params.setUsername(user.getName());
+        params.setJoinedApps(getJoinedAppsDetails());
+        return new EzyLoginResponse(params);
     }
     
     protected Lock getLock() {
@@ -222,7 +223,7 @@ public class EzyLoginProcessor
         return event.getSession();
     }
     
-    protected EzyArray getLoginData() {
+    protected EzyData getLoginData() {
         return event.getData();
     }
     
@@ -234,7 +235,7 @@ public class EzyLoginProcessor
                 .getMaxSessionPerUser();
     }
     
-    protected EzyArray getJoinedAppsInfo() {
+    protected EzyArray getJoinedAppsDetails() {
         EzyArrayBuilder builder = newArrayBuilder();
         forEachAppContexts(context, (appCtx) -> {
             if(containsUser(appCtx, getUsername()))

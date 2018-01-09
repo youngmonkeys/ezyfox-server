@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
+import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public class EzyDisconnectSessionImpl 
@@ -45,7 +46,9 @@ public class EzyDisconnectSessionImpl
 	}
 	
 	protected EzyResponse newResponse() {
-        return EzyDisconnectResponse.builder().reason(reason).build();
+	    EzyDisconnectParams params = new EzyDisconnectParams();
+	    params.setReason(reason);
+        return new EzyDisconnectResponse(params);
     }
 
 	@Override

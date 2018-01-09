@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.request.EzyAccessAppParams;
 import com.tvd12.ezyfoxserver.request.EzyAccessAppRequest;
 import com.tvd12.ezyfoxserver.response.EzyAccessAppErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyAccessAppResponse;
+import com.tvd12.ezyfoxserver.response.EzyErrorParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
@@ -75,11 +76,17 @@ public class EzyAccessAppController
 	}
 	
 	protected EzyResponse newAccessAppResponse(EzyAppSetting app, EzyData out) {
-	    return EzyAccessAppResponse.builder().app(app).data(out).build();
+	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
+	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
+	    params.setApp(app);
+	    params.setData(out);
+	    return new EzyAccessAppResponse(params);
 	}
 	
 	protected EzyResponse newAccessAppErrorReponse(EzyIAccessAppError error) {
-        return EzyAccessAppErrorResponse.builder().error(error).build();
+	    EzyErrorParams params = new EzyErrorParams();
+	    params.setError(error);
+        return new EzyAccessAppErrorResponse(params);
     }
 	
 	protected void responseAccessAppError(

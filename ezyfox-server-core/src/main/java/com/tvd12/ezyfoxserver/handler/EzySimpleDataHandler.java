@@ -21,6 +21,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
+import com.tvd12.ezyfoxserver.request.EzyRequest;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
 public abstract class EzySimpleDataHandler<S extends EzySession> 
@@ -102,9 +103,9 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
     
+    @SuppressWarnings("rawtypes")
     protected void doHandleRequest(EzyConstant cmd, EzyArray data) throws Exception {
-        Object requestParams = mapRequestParams(cmd, data);
-        Object request = newRequest(cmd, requestParams);
+        EzyRequest request = newRequest(cmd, data);
         interceptRequest(controllers.getInterceptor(cmd), request);
         handleRequest(controllers.getController(cmd), request);
     }

@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.event.impl;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.event.EzyUserAddedEvent;
 
 import lombok.Getter;
@@ -10,7 +10,7 @@ public class EzySimpleUserAddedEvent
 		extends EzySimpleUserSessionEvent 
 		implements EzyUserAddedEvent {
     
-    protected EzyArray loginData;
+    protected EzyData loginData;
     
     protected EzySimpleUserAddedEvent(Builder builder) {
         super(builder);
@@ -23,9 +23,9 @@ public class EzySimpleUserAddedEvent
 	
 	public static class Builder extends EzySimpleUserSessionEvent.Builder<Builder> {
 	    
-	    protected EzyArray loginData;
+	    protected EzyData loginData;
 	    
-	    public Builder loginData(EzyArray data) {
+	    public Builder loginData(EzyData data) {
 	        this.loginData = data;
 	        return this;
 	    }

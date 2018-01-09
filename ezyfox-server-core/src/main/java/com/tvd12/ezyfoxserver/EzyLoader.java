@@ -23,12 +23,10 @@ import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyRequestMappersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerUserManagerImpl;
 
@@ -51,7 +49,6 @@ public class EzyLoader extends EzyLoggable {
     	answer.setStatistics(newStatistics());
     	answer.setControllers(newControllers());
     	answer.setManagers(newManagers(settings));
-    	answer.setRequestMappers(newRequestMapper());
     	answer.setAppClassLoaders(newAppClassLoaders());
     	answer.setEventPluginsMapper(newEventPluginsMapper(settings));
     	return answer;
@@ -101,15 +98,6 @@ public class EzyLoader extends EzyLoggable {
     }
     
     protected void addControllers(EzyServerControllers controllers) {
-    }
-    
-    protected EzyRequestMappers newRequestMapper() {
-        EzyRequestMappers mappers = EzyRequestMappersImpl.builder().build();
-        addRequestMappers(mappers);
-        return mappers;
-    }
-    
-    protected void addRequestMappers(EzyRequestMappers mappers) {
     }
     
     protected EzyEventPluginsMapper newEventPluginsMapper(EzySettings settings) {

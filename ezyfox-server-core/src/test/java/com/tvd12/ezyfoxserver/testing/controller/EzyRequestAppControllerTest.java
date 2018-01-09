@@ -11,15 +11,14 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
-import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleRequestAppParams;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleRequestAppRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleRequestAppRequest;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreContextTest;
 import com.tvd12.ezyfoxserver.testing.MyTestUser;
+import com.tvd12.ezyfoxserver.util.EzyEntityArrays;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 
 public class EzyRequestAppControllerTest extends BaseCoreContextTest {
@@ -29,16 +28,12 @@ public class EzyRequestAppControllerTest extends BaseCoreContextTest {
     
     @Test
     public void test() {
-        EzyRequestAppParams data = EzySimpleRequestAppParams.builder()
-                .appId(1)
-                .data(newArrayBuilder().build())
-                .build();
+        EzyArray data = EzyEntityArrays.newArray(1, EzyEntityArrays.newArray());
         EzyRequestAppController controller = new EzyRequestAppController();
-        EzyRequestAppRequest request = EzySimpleRequestAppRequest.builder()
-                .params(data)
-                .user(user)
-                .session(session)
-                .build();
+        EzySimpleRequestAppRequest request = new EzySimpleRequestAppRequest();
+        request.deserializeParams(data);
+        request.setUser(user);
+        request.setSession(session);
         EzyServerContext ctx = newServerContext();
         controller.handle(ctx, request);
     }

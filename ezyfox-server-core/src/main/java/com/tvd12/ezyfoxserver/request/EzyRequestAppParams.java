@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.request;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 
-public interface EzyRequestAppParams {
+public interface EzyRequestAppParams extends EzyRequestParams {
 
     int getAppId();
 

@@ -14,17 +14,22 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
-import com.tvd12.ezyfoxserver.service.EzyResponseSerializer;
-import com.tvd12.ezyfoxserver.service.impl.EzySimpleResponseSerializer;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 
+@SuppressWarnings("unchecked")
 public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuilder<B>> 
         implements EzyServerContextBuilder<B> {
 
     protected EzyServer server;
+    
+    @Override
+    public B server(EzyServer server) {
+        this.server = server;
+        return (B)this;
+    }
     
     @Override
     public EzyServerContext build() {
@@ -33,7 +38,6 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         context.setWorkerExecutor(newWorkerExecutor());
         context.addAppContexts(newAppContexts(context));
         context.addPluginContexts(newPluginContexts(context));
-        context.setProperty(EzyResponseSerializer.class, newResponseSerializer());
         return context;
     }
     
@@ -99,21 +103,6 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         String threadName = "plugin-worker";
         int nthreads = plugin.getWorkerPoolSize();
         return EzyExecutors.newFixedThreadPool(nthreads, threadName);
-    }
-    
-    protected EzyResponseSerializer newResponseSerializer() {
-        return EzySimpleResponseSerializer.builder().build();
-    }
-
-    @Override
-    public B server(EzyServer server) {
-        this.server = server;
-        return getThis();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected B getThis() {
-        return (B)this;
     }
     
 }

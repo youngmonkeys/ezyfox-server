@@ -10,12 +10,11 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
+import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.request.EzyHandShakeParams;
-import com.tvd12.ezyfoxserver.request.EzyHandShakeRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleHandShakeRequest;
+import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
+import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 
 public class EzyHandShakeController2Test extends EzyBaseControllerTest {
@@ -30,13 +29,12 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("session: " + session);
         EzyArray data = newHandShakeData(first.getReconnectToken());
-        EzyHandShakeParams requestParams = mapDataToRequestParams(data);
-        EzyHandShakeRequest request = EzySimpleHandShakeRequest.builder()
-                .params(requestParams)
-                .session(session)
-                .build();
+        EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        EzyHandshakeParams requestParams = request.getParams();
         assertEquals(first.getReconnectToken(), requestParams.getReconnectToken());
-        EzyHandShakeController controller = new EzyHandShakeController();
+        EzyHandshakeController controller = new EzyHandshakeController();
         controller.handle(ctx, request);
     }
     

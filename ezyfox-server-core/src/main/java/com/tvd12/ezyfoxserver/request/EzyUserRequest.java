@@ -1,9 +1,7 @@
 package com.tvd12.ezyfoxserver.request;
 
-import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.entity.EzyUserFetcher;
 
-public interface EzyUserRequest<P> extends EzyRequest<P> {
-
-    EzyUser getUser();
-    
+public interface EzyUserRequest<P extends EzyRequestParams> 
+        extends EzyRequest<P>, EzyUserFetcher {
 }

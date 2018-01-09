@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.request;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 
-public interface EzyLoginParams {
+public interface EzyLoginParams extends EzyRequestParams {
 
     String getUsername();
     
     String getPassword();
     
-    EzyArray getData();
+    EzyData getData();
     
 }

@@ -12,9 +12,20 @@ public final class EzyEntityArrays {
 	private EzyEntityArrays() {
 	}
 	
+	public static EzyArray newArray() {
+		return EzyEntityFactory.create(EzyArrayBuilder.class)
+				.build();
+	}
+	
 	public static EzyArray newArray(List list) {
 		return EzyEntityFactory.create(EzyArrayBuilder.class)
 				.append(list)
+				.build();
+	}
+	
+	public static EzyArray newArray(Object... args) {
+		return EzyEntityFactory.create(EzyArrayBuilder.class)
+				.append(args)
 				.build();
 	}
 	

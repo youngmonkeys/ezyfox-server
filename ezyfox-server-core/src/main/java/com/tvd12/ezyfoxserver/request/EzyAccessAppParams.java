@@ -1,7 +1,11 @@
 package com.tvd12.ezyfoxserver.request;
 
-public interface EzyAccessAppParams {
+import com.tvd12.ezyfoxserver.entity.EzyData;
+
+public interface EzyAccessAppParams extends EzyRequestParams {
 
     String getAppName();
+    
+    EzyData getData();
     
 }

@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.event;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 
 public interface EzyUserAddedEvent extends EzyUserSessionEvent {
     
-    EzyArray getLoginData();
+    EzyData getLoginData();
     
 }

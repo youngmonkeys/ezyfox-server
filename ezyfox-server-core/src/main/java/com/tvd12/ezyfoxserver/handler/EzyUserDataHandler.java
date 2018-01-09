@@ -2,7 +2,12 @@ package com.tvd12.ezyfoxserver.handler;
 
 import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzySessionAware;
+import com.tvd12.ezyfoxserver.entity.EzyUserAware;
+import com.tvd12.ezyfoxserver.request.EzyRequest;
+import com.tvd12.ezyfoxserver.request.EzyRequestParamsDeserializable;
 import com.tvd12.ezyfoxserver.util.EzyIfElse;
 
 public abstract class EzyUserDataHandler<S extends EzySession> 
@@ -18,21 +23,25 @@ public abstract class EzyUserDataHandler<S extends EzySession>
         EzyIfElse.withIf(user != null, this::unmapUser);
     }
     
-    protected Object newRequest(EzyConstant cmd, Object params) {
-        return requestFactory.newRequest(cmd, params);
+    private EzyRequestFactory newRequestFactory() {
+        return new EzySimpleRequestFactory();
+    }
+    
+    @SuppressWarnings({ "rawtypes" })
+    protected EzyRequest newRequest(EzyConstant cmd, EzyArray data) {
+        EzyRequest request = requestFactory.newRequest(cmd);
+        ((EzySessionAware)request).setSession(session);
+        ((EzyRequestParamsDeserializable)request).deserializeParams(data);
+        if(request instanceof EzyUserAware) {
+            ((EzyUserAware)request).setUser(user);
+        }
+        return request;
     }
     
     protected EzyDisconnectSession newDisconnectSession(EzyConstant reason) {
         return context.get(EzyDisconnectSession.class)
                 .reason(reason)
                 .session(session);
-    }
-    
-    private EzyRequestFactory newRequestFactory() {
-        return EzyRequestFactory.builder()
-                .userSupplier(() -> user)
-                .sessionSupplier(() -> session)
-                .build();
     }
     
 }

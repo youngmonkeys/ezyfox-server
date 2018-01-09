@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.entity;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
@@ -56,13 +56,20 @@ public interface EzyUser extends EzySender, EzyProperties, EzyDestroyable {
      * @return the session count
      */
     int getSessionCount();
+    
+    /**
+     * Get the first session
+     * 
+     * @return the first session
+     */
+    EzySession getSession();
 	
 	/**
 	 * Get current session
 	 * 
 	 * @return the current session
 	 */
-	Collection<EzySession> getSessions();
+	List<EzySession> getSessions();
 	
 	/**
 	 * Add new session

@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,7 +52,13 @@ public class EzySimpleUser
 	}
 	
 	@Override
-	public Collection<EzySession> getSessions() {
+	public EzySession getSession() {
+	    List<EzySession> sessions = getSessions();
+	    return sessions.isEmpty() ? null : sessions.get(0);
+	}
+	
+	@Override
+	public List<EzySession> getSessions() {
 	    return new ArrayList<>(sessionMap.values());
 	}
 	

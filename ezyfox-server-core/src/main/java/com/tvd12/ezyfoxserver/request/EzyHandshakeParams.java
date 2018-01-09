@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.request;
 
-public interface EzyHandShakeParams {
+public interface EzyHandshakeParams extends EzyRequestParams {
 
     String getClientId();
     

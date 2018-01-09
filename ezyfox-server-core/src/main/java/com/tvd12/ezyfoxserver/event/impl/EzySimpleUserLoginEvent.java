@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.event.impl;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 
@@ -12,7 +11,7 @@ public class EzySimpleUserLoginEvent
         extends EzySimpleSessionEvent 
         implements EzyUserLoginEvent {
 
-	protected EzyArray data;
+	protected EzyData data;
 	@Setter
 	protected String username;
 	@Setter
@@ -33,12 +32,12 @@ public class EzySimpleUserLoginEvent
 	}
 	
 	public static class Builder extends EzySimpleSessionEvent.Builder<Builder> {
-	    protected EzyArray data;
+	    protected EzyData data;
 	    protected EzyData output;
 	    protected String username;
 	    protected String password;
 		
-		public Builder data(EzyArray data) {
+		public Builder data(EzyData data) {
 			this.data = data;
 			return this;
 		}

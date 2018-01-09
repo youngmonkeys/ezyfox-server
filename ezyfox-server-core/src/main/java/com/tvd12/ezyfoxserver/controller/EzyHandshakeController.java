@@ -3,19 +3,19 @@ package com.tvd12.ezyfoxserver.controller;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.request.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.request.EzyHandShakeRequest;
+import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.request.EzyReconnectRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleReconnectParams;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleReconnectRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleReconnectRequest;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
+import com.tvd12.ezyfoxserver.util.EzyEntityArrays;
 import com.tvd12.ezyfoxserver.util.EzyIfElse;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
-public class EzyHandShakeController 
+public class EzyHandshakeController 
 		extends EzyAbstractServerController 
 		implements EzyServerController<EzyHandShakeRequest> {
 
@@ -24,7 +24,7 @@ public class EzyHandShakeController
 	@Override
 	public void handle(EzyServerContext ctx, EzyHandShakeRequest request) {
 	    EzySession session = request.getSession();
-	    EzyHandShakeParams params = request.getParams();
+	    EzyHandshakeParams params = request.getParams();
 		updateSession(session, params);
 		process(ctx, request);
 	}
@@ -33,7 +33,7 @@ public class EzyHandShakeController
 	    EzySessionManagementSetting setting = getSessionManagementSetting(ctx);
 	    EzySessionManager<EzySession> sessionManager = getSessionManager(ctx);
 	    EzySession newsession = request.getSession();
-	    EzyHandShakeParams params = request.getParams();
+	    EzyHandshakeParams params = request.getParams();
 	    String reconnectToken = params.getReconnectToken();
 	    EzySession oldsession = sessionManager.getSession(reconnectToken);
 	    boolean allowReconnect = setting.isSessionAllowReconnect();
@@ -42,7 +42,7 @@ public class EzyHandShakeController
 	    response(ctx, newsession, isReconnect);
 	}
 	
-	protected void updateSession(EzySession session, EzyHandShakeParams params) {
+	protected void updateSession(EzySession session, EzyHandshakeParams params) {
 		session.setClientId(params.getClientId());
 		session.setClientKey(EzyBase64.decode(params.getClientKey()));
 		session.setClientType(params.getClientType());
@@ -57,11 +57,11 @@ public class EzyHandShakeController
 	
 	protected EzyReconnectRequest 
 	        newReconnectRequest(EzySession oldsession, EzySession newsession) {
-	    return EzySimpleReconnectRequest.builder()
-	            .session(newsession)
-                .oldSession(oldsession)
-                .params(EzySimpleReconnectParams.builder().build())
-                .build();
+	    EzySimpleReconnectRequest answer = new EzySimpleReconnectRequest();
+	    answer.setSession(newsession);
+	    answer.setOldSession(oldsession);
+	    answer.deserializeParams(EzyEntityArrays.newArray());
+	    return answer;
     }
 	
 	protected void response(EzyContext ctx, EzySession session, boolean reconnect) {
@@ -70,7 +70,6 @@ public class EzyHandShakeController
 	
 	protected EzyResponse newHandShakeResponse(EzySession session, boolean reconnect) {
 	    return EzyHandShakeResponse.builder()
-	            .reconnect(reconnect)
 	            .clientKey(session.getClientKey())
 	            .serverPublicKey(session.getPublicKey())
 	            .reconnectToken(session.getReconnectToken())

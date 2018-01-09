@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.request;
 
-import com.tvd12.ezyfoxserver.entity.EzySession;
+import java.io.Serializable;
 
-public interface EzyRequest<P> {
+import com.tvd12.ezyfoxserver.entity.EzySessionFetcher;
 
-    P getParams();
-    
-    EzySession getSession();
-    
+public interface EzyRequest<P extends EzyRequestParams> extends 
+        EzySessionFetcher,
+        EzyRequestParamsFetcher<P>,
+        Serializable {
 }

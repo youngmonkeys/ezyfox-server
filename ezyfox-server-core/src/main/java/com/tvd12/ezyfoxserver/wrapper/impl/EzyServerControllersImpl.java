@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
-import com.tvd12.ezyfoxserver.controller.EzyHandShakeController;
+import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.controller.EzyPingController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
@@ -49,7 +49,7 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 		protected Map<EzyConstant, EzyController> newControllers() {
 			Map<EzyConstant, EzyController> answer = new ConcurrentHashMap<>();
 			answer.put(EzyCommand.PING, new EzyPingController());
-			answer.put(EzyCommand.HANDSHAKE, new EzyHandShakeController());
+			answer.put(EzyCommand.HANDSHAKE, new EzyHandshakeController());
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
 			answer.put(EzyCommand.APP_ACCESS, new EzyAccessAppController());
 			answer.put(EzyCommand.APP_REQUEST, new EzyRequestAppController());

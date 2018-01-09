@@ -1,4 +1,4 @@
 package com.tvd12.ezyfoxserver.request;
 
-public interface EzyReconnectParams {
+public interface EzyReconnectParams extends EzyRequestParams {
 }

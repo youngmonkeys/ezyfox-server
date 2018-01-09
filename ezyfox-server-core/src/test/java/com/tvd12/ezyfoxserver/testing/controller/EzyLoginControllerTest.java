@@ -10,8 +10,7 @@ import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
-import com.tvd12.ezyfoxserver.request.EzyLoginRequest;
-import com.tvd12.ezyfoxserver.request.impl.EzySimpleLoginRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
 
@@ -22,10 +21,9 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         session.setReconnectToken("abcdef");
         EzyArray data = newLoginData();
         EzyLoginController controller = new EzyLoginController();
-        EzyLoginRequest request = EzySimpleLoginRequest.builder()
-                .params(mapDataToRequestParams(data))
-                .session(session)
-                .build();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
         controller.handle(ctx, request);
     }
     
@@ -41,10 +39,9 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
                 throw new EzyLoginErrorException();
             }
         };
-        EzyLoginRequest request = EzySimpleLoginRequest.builder()
-                .params(mapDataToRequestParams(data))
-                .session(session)
-                .build();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
         controller.handle(ctx, request);
     }
     
@@ -60,10 +57,9 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
                 throw new EzyLoginErrorException();
             }
         };
-        EzyLoginRequest request = EzySimpleLoginRequest.builder()
-                .params(mapDataToRequestParams(data))
-                .session(session)
-                .build();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
         controller.handle(ctx, request);
     }
     

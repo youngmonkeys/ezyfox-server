@@ -12,7 +12,6 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.response.EzyErrorResponse;
@@ -26,7 +25,6 @@ import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzyRequestMappers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -40,7 +38,6 @@ public class EzyAbstractDataHandler<S extends EzySession>
     protected EzyServerContext context;
     protected EzyServerControllers controllers;
     protected EzyServerUserManager userManager;
-    protected EzyRequestMappers requestMappers;
     protected EzySessionManager<S> sessionManager;
     protected Lock lock = new ReentrantLock();
     
@@ -67,7 +64,6 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.userManager = getUserManager();
         this.sessionManager = getSessionManager();
         this.controllers = getServer().getControllers();
-        this.requestMappers = getServer().getRequestMappers();
         
         this.settings = getServer().getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
@@ -82,10 +78,6 @@ public class EzyAbstractDataHandler<S extends EzySession>
     
     protected void setDisconnectReason(EzyConstant reason) {
         this.disconnectReason = reason;
-    }
-    
-    protected Object mapRequestParams(EzyConstant cmd, EzyData data) {
-        return requestMappers.toObject(cmd, data);
     }
     
     protected EzyServer getServer() {
@@ -130,7 +122,6 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.context = null;
         this.controllers = null;
         this.userManager = null;
-        this.requestMappers = null;
         this.sessionManager = null;
     }
     

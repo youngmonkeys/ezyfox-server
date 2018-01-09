@@ -22,6 +22,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -222,7 +223,7 @@ public class EzyLoginProcessor
         return event.getSession();
     }
     
-    protected EzyArray getLoginData() {
+    protected EzyData getLoginData() {
         return event.getData();
     }
     

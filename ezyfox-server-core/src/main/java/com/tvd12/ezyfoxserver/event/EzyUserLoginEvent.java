@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.event;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 
 public interface EzyUserLoginEvent extends EzySessionEvent {
@@ -11,7 +10,7 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
 	
 	String getPassword();
 	
-	EzyArray getData();
+	EzyData getData();
 
 	void setOutput(EzyData output);
 	

@@ -8,13 +8,11 @@ import com.tvd12.ezyfoxserver.util.EzyReturner;
 
 public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse {
 
-	protected boolean reconnect;
 	protected String reconnectToken;
 	protected String serverPublicKey;
 	
 	protected EzyHandShakeResponse(Builder builder) {
 	    super(builder);
-	    this.reconnect = builder.reconnect;
 	    this.reconnectToken = builder.encryptReconnectToken();
 	    this.serverPublicKey = builder.encryptServerPublicKey();
 	}
@@ -29,7 +27,6 @@ public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse
 		return newArrayBuilder()
 				.append(serverPublicKey)
 				.append(reconnectToken)
-				.append(reconnect)
 				.build();
 	}
 	
@@ -47,11 +44,6 @@ public class EzyHandShakeResponse extends EzyBaseResponse implements EzyResponse
 	        this.clientKey = clientKey;
 	        return this;
 	    }
-		
-		public Builder reconnect(boolean value) {
-		    this.reconnect = value;
-		    return this;
-		}
 		
 		public Builder reconnectToken(String reconnectToken) {
 			this.reconnectToken = reconnectToken;

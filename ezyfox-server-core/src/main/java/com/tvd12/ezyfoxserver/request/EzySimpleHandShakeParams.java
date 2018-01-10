@@ -1,12 +1,13 @@
 package com.tvd12.ezyfoxserver.request;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.io.EzyArrayDeserializable;
 
 import lombok.Getter;
 
 @Getter
-public class EzySimpleHandShakeParams implements EzyHandshakeParams, EzyArrayDeserializable {
+public class EzySimpleHandShakeParams 
+        extends EzySimpleRequestParams 
+        implements EzyHandshakeParams {
     private static final long serialVersionUID = 8042927639638762414L;
     
     protected String clientId;

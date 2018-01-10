@@ -28,4 +28,11 @@ public abstract class EzySimpleRequest<P extends EzyRequestParams> implements
     
     protected abstract P newParams();
     
+    @Override
+    public void release() {
+        this.params.release();
+        this.session = null;
+        this.params = null;
+    }
+    
 }

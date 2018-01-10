@@ -10,4 +10,7 @@ public class EzySimpleRequestParams implements EzyRequestParams, EzyArrayDeseria
     public void deserialize(EzyArray t) {
     }
     
+    @Override
+    public void release() {
+    }
 }

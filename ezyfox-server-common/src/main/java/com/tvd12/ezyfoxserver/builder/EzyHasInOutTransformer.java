@@ -1,15 +1,15 @@
-package com.tvd12.ezyfoxserver.builder.impl;
+package com.tvd12.ezyfoxserver.builder;
 
 import com.tvd12.ezyfoxserver.function.EzyCreation;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
-public class EzyInOutTransformerNeeder {
+public class EzyHasInOutTransformer {
 
 	protected final EzyInputTransformer inputTransformer;
 	protected final EzyOutputTransformer outputTransformer;
 	
-	public EzyInOutTransformerNeeder(
+	public EzyHasInOutTransformer(
 			EzyInputTransformer inputTransformer, 
 			EzyOutputTransformer outputTransformer) {
 		this.inputTransformer = inputTransformer;
@@ -17,7 +17,7 @@ public class EzyInOutTransformerNeeder {
 	}
 	
 	public static abstract class AbstractCreator<
-			P extends EzyInOutTransformerNeeder,
+			P extends EzyHasInOutTransformer,
 			C extends AbstractCreator<P, C>
 			> 
 			implements EzyCreation<P> {

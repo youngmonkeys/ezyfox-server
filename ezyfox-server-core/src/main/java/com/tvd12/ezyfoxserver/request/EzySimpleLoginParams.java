@@ -2,12 +2,13 @@ package com.tvd12.ezyfoxserver.request;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyData;
-import com.tvd12.ezyfoxserver.io.EzyArrayDeserializable;
 
 import lombok.Getter;
 
 @Getter
-public class EzySimpleLoginParams implements EzyLoginParams, EzyArrayDeserializable {
+public class EzySimpleLoginParams
+        extends EzySimpleRequestParams
+        implements EzyLoginParams {
     private static final long serialVersionUID = -2983750912126505224L;
     
     private String username;
@@ -19,6 +20,12 @@ public class EzySimpleLoginParams implements EzyLoginParams, EzyArrayDeserializa
         this.username = t.get(0, String.class);
         this.password = t.get(1, String.class);
         this.data = t.get(2, EzyData.class);
+    }
+    
+    @Override
+    public void release() {
+        super.release();
+        this.data = null;
     }
     
 }

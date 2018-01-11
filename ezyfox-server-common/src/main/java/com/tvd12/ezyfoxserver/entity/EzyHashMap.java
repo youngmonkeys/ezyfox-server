@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.entity.impl;
+package com.tvd12.ezyfoxserver.entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import com.tvd12.ezyfoxserver.entity.EzyObject;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 

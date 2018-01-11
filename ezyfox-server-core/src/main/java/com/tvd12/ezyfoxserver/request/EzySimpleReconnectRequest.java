@@ -19,4 +19,10 @@ public class EzySimpleReconnectRequest
         return new EzySimpleReconnectParams();
     }
     
+    @Override
+    public void release() {
+        super.release();
+        this.oldSession = null;
+    }
+    
 }

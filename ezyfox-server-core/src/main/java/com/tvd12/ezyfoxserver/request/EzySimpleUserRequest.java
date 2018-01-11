@@ -16,4 +16,10 @@ public abstract class EzySimpleUserRequest<P extends EzyRequestParams>
 
     protected EzyUser user;
     
+    @Override
+    public void release() {
+        super.release();
+        this.user = null;
+    }
+    
 }

@@ -1,9 +1,10 @@
 package com.tvd12.ezyfoxserver.request;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.io.EzyArrayDeserializable;
 
-public class EzySimpleReconnectParams implements EzyReconnectParams, EzyArrayDeserializable {
+public class EzySimpleReconnectParams
+            extends EzySimpleRequestParams
+            implements EzyReconnectParams {
     private static final long serialVersionUID = -6616194452667114634L;
 
     @Override

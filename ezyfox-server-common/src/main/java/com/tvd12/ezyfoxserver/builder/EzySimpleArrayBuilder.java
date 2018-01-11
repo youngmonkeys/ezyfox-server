@@ -1,20 +1,19 @@
-package com.tvd12.ezyfoxserver.builder.impl;
+package com.tvd12.ezyfoxserver.builder;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
+import com.tvd12.ezyfoxserver.entity.EzyArrayList;
 import com.tvd12.ezyfoxserver.io.EzyCollectionConverter;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
-public class EzyArrayBuilderImpl
-		extends EzyInOutTransformerNeeder
+public class EzySimpleArrayBuilder
+		extends EzyHasInOutTransformer
 		implements EzyArrayBuilder {
 
 	protected EzyArray product;
 	protected EzyCollectionConverter collectionConverter;
 	
-	public EzyArrayBuilderImpl(
+	public EzySimpleArrayBuilder(
 			EzyInputTransformer inputTransformer, 
 			EzyOutputTransformer outputTransformer,
 			EzyCollectionConverter collectionConverter) {
@@ -68,7 +67,7 @@ public class EzyArrayBuilderImpl
 		return product;
 	}
 	
-	public static class Creator extends AbstractCreator<EzyArrayBuilderImpl, Creator> {
+	public static class Creator extends AbstractCreator<EzySimpleArrayBuilder, Creator> {
 		
 		protected EzyCollectionConverter collectionConverter;
 		
@@ -78,8 +77,8 @@ public class EzyArrayBuilderImpl
 		}
 		
 		@Override
-		public EzyArrayBuilderImpl create() {
-			return new EzyArrayBuilderImpl(
+		public EzySimpleArrayBuilder create() {
+			return new EzySimpleArrayBuilder(
 					inputTransformer, outputTransformer, collectionConverter);
 		}
 	}

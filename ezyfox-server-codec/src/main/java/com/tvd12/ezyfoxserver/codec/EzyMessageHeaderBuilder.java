@@ -11,6 +11,10 @@ public class EzyMessageHeaderBuilder {
 		return new EzyMessageHeaderBuilder();
 	}
 	
+	public static EzyMessageHeaderBuilder messageHeaderBuilder() {
+		return new EzyMessageHeaderBuilder();
+	}
+	
 	public EzyMessageHeaderBuilder bigSize(boolean bigSize) {
 		this.bigSize = bigSize;
 		return this;

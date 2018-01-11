@@ -1,20 +1,19 @@
-package com.tvd12.ezyfoxserver.builder.impl;
+package com.tvd12.ezyfoxserver.builder;
 
 import java.util.Map;
 
-import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
+import com.tvd12.ezyfoxserver.entity.EzyHashMap;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.entity.impl.EzyHashMap;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
 import com.tvd12.ezyfoxserver.io.EzyOutputTransformer;
 
-public class EzyObjectBuilderImpl 
-		extends EzyInOutTransformerNeeder 
+public class EzySimpleObjectBuilder 
+		extends EzyHasInOutTransformer 
 		implements EzyObjectBuilder {
 
 	protected EzyObject product;
 	
-	public EzyObjectBuilderImpl(
+	public EzySimpleObjectBuilder(
 			EzyInputTransformer inputTransformer, 
 			EzyOutputTransformer outputTransformer) {
 		super(inputTransformer, outputTransformer);
@@ -58,10 +57,10 @@ public class EzyObjectBuilderImpl
 		return this.product;
 	}
 	
-	public static class Creator extends AbstractCreator<EzyObjectBuilderImpl, Creator> {
+	public static class Creator extends AbstractCreator<EzySimpleObjectBuilder, Creator> {
 		@Override
-		public EzyObjectBuilderImpl create() {
-			return new EzyObjectBuilderImpl(inputTransformer, outputTransformer);
+		public EzySimpleObjectBuilder create() {
+			return new EzySimpleObjectBuilder(inputTransformer, outputTransformer);
 		}
 	}
 	

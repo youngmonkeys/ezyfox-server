@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
+import com.tvd12.ezyfoxserver.entity.EzyHashMap;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.entity.impl.EzyHashMap;
 
 import static org.testng.Assert.*;
 

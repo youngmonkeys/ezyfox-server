@@ -6,8 +6,8 @@ import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
-import com.tvd12.ezyfoxserver.builder.impl.EzyArrayBuilderImpl;
-import com.tvd12.ezyfoxserver.builder.impl.EzyObjectBuilderImpl;
+import com.tvd12.ezyfoxserver.builder.EzySimpleArrayBuilder;
+import com.tvd12.ezyfoxserver.builder.EzySimpleObjectBuilder;
 import com.tvd12.ezyfoxserver.concurrent.EzyLazyInitializer;
 import com.tvd12.ezyfoxserver.io.EzyCollectionConverter;
 import com.tvd12.ezyfoxserver.io.EzyInputTransformer;
@@ -56,13 +56,13 @@ public class EzySimpleEntityBuilderCreator implements EzyEntityBuilderCreator {
 	private final Map<Class, Supplier> defaultSuppliers() {
 		Map<Class, Supplier> answer = new ConcurrentHashMap<>();
 		answer.put(EzyObjectBuilder.class, () -> {
-			return new EzyObjectBuilderImpl.Creator()
+			return new EzySimpleObjectBuilder.Creator()
 					.inputTransformer(getInputTransformer())
 					.outputTransformer(getOutputTransformer())
 					.create();
 		});
 		answer.put(EzyArrayBuilder.class, () -> {
-			return new EzyArrayBuilderImpl.Creator()
+			return new EzySimpleArrayBuilder.Creator()
 				.inputTransformer(getInputTransformer())
 				.outputTransformer(getOutputTransformer())
 				.collectionConverter(getCollectionConverter())

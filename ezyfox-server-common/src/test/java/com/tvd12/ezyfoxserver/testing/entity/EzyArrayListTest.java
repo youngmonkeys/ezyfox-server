@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.testing.entity;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
+import com.tvd12.ezyfoxserver.entity.EzyArrayList;
 import com.tvd12.test.base.BaseTest;
 
 public class EzyArrayListTest extends BaseTest {

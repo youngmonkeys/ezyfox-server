@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.impl.EzyArrayList;
+import com.tvd12.ezyfoxserver.entity.EzyArrayList;
 import com.tvd12.ezyfoxserver.io.EzyDates;
 
 public class EzyArray1Test extends EzyEntityTest {

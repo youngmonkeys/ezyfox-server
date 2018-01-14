@@ -19,4 +19,11 @@ public abstract class EzyHashMapCollection<K,E,V extends Collection<E>>
 
 	protected abstract V newCollection();
 	
+	@Override
+	public void deepClear() {
+		for(V value : values())
+			value.clear();
+		this.clear();
+	}
+	
 }

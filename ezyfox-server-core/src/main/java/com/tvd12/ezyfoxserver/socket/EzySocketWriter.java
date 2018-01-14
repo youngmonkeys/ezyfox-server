@@ -54,12 +54,17 @@ public class EzySocketWriter
 			throws Exception {
 		if(!queue.isEmpty()) {
 			EzyPacket packet = queue.peek();
-			group.firePacketSend(packet);
+			Object writeBuffer = getWriteBuffer();
+			group.firePacketSend(packet, writeBuffer);
 	        if(packet.isReleased())
 	            queue.take();
 			return queue.isEmpty();
 		}
 		return true;
+	}
+	
+	protected Object getWriteBuffer() {
+	    return null;
 	}
 	
 	protected EzySocketWriterGroup getWriterGroup(EzySession session) {

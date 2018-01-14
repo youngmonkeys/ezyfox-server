@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
-		extends EzyAbstractHandlerGroup<EzyNioDataDecoder, EzyNioDataEncoder>
+		extends EzyAbstractHandlerGroup<EzyNioDataDecoder>
 		implements EzyNioHandlerGroup {
 	
 	private final EzyCallback<EzyMessage> decodeBytesCallback;
@@ -21,16 +21,6 @@ public class EzySimpleNioHandlerGroup
 	@Override
 	protected EzyNioDataDecoder newDecoder(Object decoder) {
 		return new EzySimpleNioDataDecoder((EzyNioByteToObjectDecoder)decoder);
-	}
-	
-	@Override
-	protected EzyNioDataEncoder newEncoder(Object encoder) {
-		return new EzySimpleNioDataEncoder((EzyNioObjectToByteEncoder)encoder);
-	}
-	
-	@Override
-	protected Object encodeData(Object data) throws Exception {
-		return encoder.encode(data);
 	}
 	
 	@Override
@@ -68,9 +58,19 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	@Override
-	protected int writePacketToSocket(EzyPacket packet) throws Exception {
-		ByteBuffer buffer = getBytesToWrite(packet);
-		int bytesToWrite = buffer.remaining();
+	protected void sendPacketNow0(EzyPacket packet) {
+		ByteBuffer writeBuffer = ByteBuffer.allocate(packet.getSize());
+		executeSendingPacket(packet, writeBuffer);
+	}
+	
+	@Override
+	protected int writePacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
+		byte[] bytes = getBytesToWrite(packet);
+		int bytesToWrite = bytes.length;
+		ByteBuffer buffer = getWriteBuffer((ByteBuffer)writeBuffer, bytesToWrite);
+		buffer.clear();
+		buffer.put(bytes);
+		buffer.flip();
 		int bytesWritten = channel.write(buffer);
 		if (bytesWritten < bytesToWrite) {
 			ByteBuffer remainBuffer = getPacketFragment(buffer);
@@ -89,6 +89,10 @@ public class EzySimpleNioHandlerGroup
 		return bytesWritten;
 	}
 	
+	private ByteBuffer getWriteBuffer(ByteBuffer fixed, int bytesToWrite) {
+		return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
+	}
+	
 	private ByteBuffer getPacketFragment(ByteBuffer buffer) {
 		byte[] remainBytes = new byte[buffer.remaining()];
 		buffer.get(remainBytes);
@@ -96,8 +100,8 @@ public class EzySimpleNioHandlerGroup
 		return remainBuffer;
 	}
 	
-	private ByteBuffer getBytesToWrite(EzyPacket packet) {
-		return (ByteBuffer)packet.getData();
+	private byte[] getBytesToWrite(EzyPacket packet) {
+		return (byte[])packet.getData();
 	}
 	
 	public static Builder builder() {

@@ -100,7 +100,11 @@ public class EzyAbstractDataHandler<S extends EzySession>
     
     protected void response(EzyResponse response) {
         if(context != null)
-            context.get(EzySendResponse.class).sender(session).response(response).execute();
+            newSendResponse().recipient(session).response(response).execute();
+    }
+    
+    protected EzySendResponse newSendResponse() {
+        return context.get(EzySendResponse.class);
     }
     
     protected void responseError(EzyIError error) {

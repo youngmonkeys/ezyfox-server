@@ -4,9 +4,7 @@ import java.net.SocketAddress;
 
 import com.tvd12.ezyfoxserver.EzyStarter;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
@@ -84,10 +82,6 @@ public class MyTestStarter extends EzyStarter {
 
         @Override
         public void disconnect() {
-        }
-
-        @Override
-        protected void sendData(EzyData data, EzyTransportType type) {
         }
 	    
 	}

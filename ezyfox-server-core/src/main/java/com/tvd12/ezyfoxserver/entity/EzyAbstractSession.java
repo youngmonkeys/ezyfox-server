@@ -7,16 +7,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
-import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroup;
-import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroupAware;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
@@ -31,8 +27,7 @@ public abstract class EzyAbstractSession
         extends EzyEntity 
         implements 
             EzySession, 
-            EzyImmediateDataSenderAware, 
-            EzySocketDataDecoderGroupAware, 
+            EzyImmediateDeliverAware, 
             EzyHasSessionDelegate,
             EzyDroppedPacketsAware {
     private static final long serialVersionUID = -4112736666616219904L;
@@ -70,9 +65,8 @@ public abstract class EzyAbstractSession
 	protected EzyChannel channel;
 	protected EzyPacketQueue packetQueue;
 	protected EzyDroppedPackets droppedPackets;
+	protected EzyImmediateDeliver immediateDeliver;
     protected EzySessionTicketsQueue sessionTicketsQueue;
-    protected EzyImmediateDataSender immediateDataSender;
-    protected EzySocketDataDecoderGroup dataDecoderGroup;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -125,44 +119,32 @@ public abstract class EzyAbstractSession
 	}
 	
 	@Override
-	public final void send(EzyData data, EzyTransportType type) {
+	public final void send(EzyPacket packet) {
 	    if(!activated) return;
 	    addWrittenResponses(1);
 	    setLastWriteTime(System.currentTimeMillis());
         setLastActivityTime(System.currentTimeMillis());
-        sendData(data, type);
+        addPacketToSessionQueue(packet);
 	}
 	
 	@Override
-	public void sendNow(EzyData data, EzyTransportType type) {
-	    EzyPacket packet = createDataPacket(data, type);
-        immediateDataSender.sendPacketNow(packet);
+	public void sendNow(EzyPacket packet) {
+        immediateDeliver.sendPacketNow(packet);
 	}
 	
-    protected void sendData(EzyData data, EzyTransportType type) {
-        EzyPacket packet = createDataPacket(data, type);
+    private void addPacketToSessionQueue(EzyPacket packet) {
+        boolean empty = false;
+        boolean success = false;
         synchronized (packetQueue) {
-            boolean empty = packetQueue.isEmpty();
-            boolean success = packetQueue.add(packet);
-            if(success) {
-                droppedPackets.addDroppedPacket(packet);
-                if(empty) {
+            empty = packetQueue.isEmpty();
+            success = packetQueue.add(packet);
+            if(success && empty) {
                     sessionTicketsQueue.add(this);
-                }
             }
         }
-    }
-    
-    protected EzyPacket createDataPacket(EzyData data, EzyTransportType type) {
-        try {
-            Object bytes = dataDecoderGroup.fireDecodeData(data);
-            EzySimplePacket packet = new EzySimplePacket();
-            packet.setType(type);
-            packet.setData(bytes);
-            return packet;
-        }
-        catch(Exception e) {
-            throw new IllegalArgumentException("can't send data: " + data + " to client");
+        if(!success) {
+            droppedPackets.addDroppedPacket(packet);
+            packet.release();
         }
     }
     
@@ -195,6 +177,16 @@ public abstract class EzyAbstractSession
     public SocketAddress getClientAddress() {
         return channel != null ? channel.getClientAddress() : null;
     }
+    
+    @Override
+    public String getName() {
+        return new StringBuilder()
+                .append(name)
+                .append("(")
+                    .append(getClientAddress())
+                .append(")")
+                .toString();
+    }
 	
 	@Override
 	public void destroy() {
@@ -212,8 +204,7 @@ public abstract class EzyAbstractSession
 	    this.locks = null;
 	    this.properties = null;
 	    this.droppedPackets = null;
-	    this.dataDecoderGroup = null;
-	    this.immediateDataSender = null;
+	    this.immediateDeliver = null;
 	    if(packetQueue != null) {
             synchronized (packetQueue) {
                 this.packetQueue.clear();

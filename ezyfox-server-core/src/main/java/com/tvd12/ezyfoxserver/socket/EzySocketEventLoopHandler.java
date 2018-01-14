@@ -15,52 +15,28 @@ public abstract class EzySocketEventLoopHandler
     @Setter
     protected int threadPoolSize;
     protected EzySocketEventLoop eventLoop;
-    @Setter
-    protected EzySocketEventHandler eventHandler;
     
-	protected abstract String getThreadName();
-
 	@Override
 	public void start() throws Exception {
-	    this.eventLoop = newEventLoop();
+	    this.eventLoop = newEventLoop0();
 	    this.eventLoop.start();
 	}
 	
-	private EzySocketEventLoop newEventLoop() {
-	    return new EzySocketEventLoop() {
-            
-	        @Override
-            protected void eventLoop() {
-	            getLogger().info("{} event loop has started", currentThreadName());
-                while(active) {
-                    eventHandler.handleEvent();
-                }
-                getLogger().info("{} event loop has stopped", currentThreadName());
-            }
-	        
-	        @Override
-            protected String threadName() {
-                return getThreadName();
-            }
-	        
-            @Override
-            protected int threadPoolSize() {
-                return threadPoolSize;
-            }
-            
-            private String currentThreadName() {
-                return Thread.currentThread().getName();
-            }
-            
-        };
+	private EzySimpleSocketEventLoop newEventLoop0() {
+	    EzySimpleSocketEventLoop eventLoop = newEventLoop();
+	    eventLoop.setThreadName(getThreadName());
+	    eventLoop.setThreadPoolSize(threadPoolSize);
+	    return eventLoop;
 	}
+	
+	protected abstract String getThreadName();
+	
+	protected abstract EzySimpleSocketEventLoop newEventLoop();
 	
 	@Override
 	public void destroy() {
 		if(eventLoop != null)
 		    processWithLogException(eventLoop::destroy);
-		if(eventHandler != null)
-		    processWithLogException(eventHandler::destroy);
 	}
 	
 }

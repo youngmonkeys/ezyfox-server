@@ -22,6 +22,7 @@ public class EzyHashMapListTest extends BaseTest {
 		assert map.getItems("abc").size() == 0;
 		map.addItems("a", Lists.newArrayList("a", "b", "c"));
 		assert map.getItems("a").size() == 3;
+		map.deepClear();
 	}
 	
 }

@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.util.EzyNameAware;
@@ -73,17 +73,15 @@ public class EzySimpleUser
     }
 	
 	@Override
-	public void send(EzyData data, EzyTransportType type) {
-	    for(EzySession session : getSessions()) {
-	        session.send(data, type);
-	    }
+	public void send(EzyPacket packet) {
+	    for(EzySession session : getSessions())
+	        session.send(packet);
 	}
 	
 	@Override
-	public void sendNow(EzyData data, EzyTransportType type) {
-	    for(EzySession session : getSessions()) {
-            session.sendNow(data, type);
-	    }
+	public void sendNow(EzyPacket packet) {
+	    for(EzySession session : getSessions())
+            session.sendNow(packet);
 	}
 	
 	@Override

@@ -4,7 +4,6 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
-import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
@@ -31,9 +30,13 @@ public abstract class EzyServerBootstrap
 	
 	@Override
 	public void start() throws Exception {
+	    setupServer();
 		startLocalBootstrap();
 		startHttpBootstrap();
 		startOtherBootstraps(this::notifyServerReady);
+	}
+	
+	protected void setupServer() {
 	}
 	
 	protected void startHttpBootstrap() throws Exception {
@@ -61,8 +64,12 @@ public abstract class EzyServerBootstrap
 		return EzySimpleServerReadyEvent.builder().build();
 	}
 	
+	protected EzyServer getServer() {
+	    return context.getServer();
+	}
+	
 	protected EzySettings getServerSettings() {
-	    return EzyServerContexts.getSettings(context);
+	    return getServer().getSettings();
 	}
 	
 	protected EzyHttpSetting getHttpSetting() {

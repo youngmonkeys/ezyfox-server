@@ -14,14 +14,13 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
 import com.tvd12.ezyfoxserver.entity.EzyDroppedPacketsAware;
-import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSender;
-import com.tvd12.ezyfoxserver.entity.EzyImmediateDataSenderAware;
+import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
+import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliverAware;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
-import com.tvd12.ezyfoxserver.socket.EzySocketDataDecoderGroupAware;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
@@ -33,7 +32,7 @@ public abstract class EzyAbstractHandlerGroup
 		extends EzyLoggable 
 		implements 
 			EzyHandlerGroup, 
-			EzyImmediateDataSender, 
+			EzyImmediateDeliver, 
 			EzySocketChannelDelegate,
 			EzyDroppedPackets,
 			EzyDestroyable {
@@ -102,7 +101,7 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	@Override
-	public void firePacketSend(EzyPacket packet) throws Exception {
+	public void firePacketSend(EzyPacket packet, Object writeBuffer) throws Exception {
 		try {
 			channel.write(packet.getData());
 		}
@@ -128,17 +127,11 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	@Override
-	public Object fireDecodeData(Object data) throws Exception {
-		return data;
-	}
-	
-	@Override
 	public EzyNettySession fireChannelActive() throws Exception {
 		EzyNettySession ss = handler.channelActive();
 		ss.setSessionTicketsQueue(sessionTicketsQueue);
 		((EzyDroppedPacketsAware)ss).setDroppedPackets(this);
-		((EzyImmediateDataSenderAware)ss).setImmediateDataSender(this);
-		((EzySocketDataDecoderGroupAware)ss).setDataDecoderGroup(this);
+		((EzyImmediateDeliverAware)ss).setImmediateDeliver(this);
 		session.set(ss);
 		sessionStats.addSessions(1);
 		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());

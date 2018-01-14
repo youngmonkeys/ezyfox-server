@@ -24,6 +24,13 @@ public interface EzyMessage {
 	EzyMessageHeader getHeader();
 	
 	/**
+	 * Get count of bytes
+	 * 
+	 * @return the count of bytes
+	 */
+	int getByteCount();
+	
+	/**
 	 * Get length of message's size, 2 or 4
 	 * 
 	 * @return the length of message's size

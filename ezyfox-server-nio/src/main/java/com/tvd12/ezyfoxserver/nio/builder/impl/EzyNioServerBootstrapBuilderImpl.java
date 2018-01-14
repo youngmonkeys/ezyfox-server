@@ -3,12 +3,15 @@ package com.tvd12.ezyfoxserver.nio.builder.impl;
 import java.util.concurrent.ExecutorService;
 
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
+import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.nio.builder.api.EzyNioResponseApi;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
-import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
@@ -25,6 +28,8 @@ public class EzyNioServerBootstrapBuilderImpl
 	protected EzyServerBootstrap newServerBootstrap() {
 		ExecutorService statsThreadPool = newStatsThreadPool();
 		ExecutorService codecThreadPool = newCodecThreadPool();
+		EzyCodecFactory codecFactory = newCodecFactory();
+		EzyResponseApi responseApi = newResponseApi(codecFactory);
 		EzySocketRequestQueues requestQueues = newRequestQueues();
 		EzySessionTicketsQueue socketSessionTicketsQueue = newSocketSessionTicketsQueue();
 		EzySessionTicketsQueue websocketSessionTicketsQueue = newWebSocketSessionTicketsQueue();
@@ -34,9 +39,11 @@ public class EzyNioServerBootstrapBuilderImpl
 		EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager(
 				statsThreadPool, 
 				codecThreadPool, 
+				codecFactory,
 				requestQueues,
 				handlerGroupBuilderFactory);
 		EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
+		bootstrap.setResponseApi(responseApi);
 		bootstrap.setRequestQueues(requestQueues);
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
@@ -48,13 +55,14 @@ public class EzyNioServerBootstrapBuilderImpl
 	private EzyHandlerGroupManager newHandlerGroupManager(
 			ExecutorService statsThreadPool,
 			ExecutorService codecThreadPool,
+			EzyCodecFactory codecFactory,
 			EzySocketRequestQueues requestQueues,
 			EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory) {
 		
 		return EzyHandlerGroupManagerImpl.builder()
 				.serverContext(serverContext)
 				.requestQueues(requestQueues)
-				.codecFactory(newCodecFactory())
+				.codecFactory(codecFactory)
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
 				.handlerGroupBuilderFactory(handlerGroupBuilderFactory)
@@ -71,8 +79,13 @@ public class EzyNioServerBootstrapBuilderImpl
 				.webSocketSessionTicketsQueue(websocketSessionTicketsQueue)
 				.build();
 	}
-
 	
+	protected EzyResponseApi newResponseApi(EzyCodecFactory codecFactory) {
+		return EzyNioResponseApi.builder()
+				.codecFactory(codecFactory)
+				.build();
+	}
+
 	private ExecutorService newStatsThreadPool() {
 		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.STATISTICS, "statistics");
 	}
@@ -94,7 +107,7 @@ public class EzyNioServerBootstrapBuilderImpl
 	}
 
 	private EzyCodecFactory newCodecFactory() {
-		return EzyCodecFactoryImpl.builder()
+		return EzySimpleCodecFactory.builder()
 				.socketSettings(getSocketSetting())
 				.websocketSettings(getWebsocketSetting())
 				.build();

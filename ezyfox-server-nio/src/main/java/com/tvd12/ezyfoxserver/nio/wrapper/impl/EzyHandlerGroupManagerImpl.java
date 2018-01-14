@@ -5,10 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
@@ -54,7 +54,6 @@ public class EzyHandlerGroupManagerImpl
 				.serverContext(serverContext)
 				.requestQueues(requestQueues)
 				.decoder(newDataDecoder(type))
-				.encoder(newDataEncoder(type))
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
 				.build();
@@ -110,10 +109,6 @@ public class EzyHandlerGroupManagerImpl
 	
 	private Object newDataDecoder(EzyConnectionType type) {
 		return codecFactory.newDecoder(type);
-	}
-	
-	private Object newDataEncoder(EzyConnectionType type) {
-		return codecFactory.newEncoder(type);
 	}
 	
 	@Override

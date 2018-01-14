@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver;
 
 import java.util.Map;
 
+import com.tvd12.ezyfoxserver.api.EzyApis;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
@@ -22,6 +23,8 @@ public interface EzyServer extends
     EzyConfig getConfig();
     
     EzySettings getSettings();
+    
+    EzyApis getApis();
     
     EzyManagers getManagers();
     

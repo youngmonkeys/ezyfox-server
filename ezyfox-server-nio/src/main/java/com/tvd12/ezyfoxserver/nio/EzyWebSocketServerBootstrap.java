@@ -67,12 +67,14 @@ public class EzyWebSocketServerBootstrap
 	}
 	
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzyWsWritingLoopHandler();
+		EzyWsWritingLoopHandler loopHandler = new EzyWsWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzySocketWriter eventHandler = new EzySocketWriter();
-		eventHandler.setWriterGroupFetcher(handlerGroupManager);
-		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
-		loopHandler.setEventHandler(eventHandler);
+		loopHandler.setEventHandlerSupplier(() -> {
+			EzySocketWriter eventHandler = new EzySocketWriter();
+			eventHandler.setWriterGroupFetcher(handlerGroupManager);
+			eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+			return eventHandler;
+		});
 		return loopHandler;
 	}
 	

@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.codec;
 
-public final class EzyMessageBuilder {
+public class EzyMessageBuilder {
 
 	private int size;
 	private byte[] content;
@@ -34,6 +34,7 @@ public final class EzyMessageBuilder {
 		answer.setSize(size);
 		answer.setHeader(header);
 		answer.setContent(content);
+		answer.countBytes();
 		return answer;
 	}
 	

@@ -1,14 +1,18 @@
 package com.tvd12.ezyfoxserver.command;
 
-import com.tvd12.ezyfoxserver.entity.EzySender;
+import java.util.Collection;
+
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public interface EzySendResponse extends EzyCommand<Boolean> {
 
-    EzySendResponse sender(EzySender sender);
-    
     EzySendResponse immediate(boolean immediate);
     
     EzySendResponse response(EzyResponse response);
+    
+    EzySendResponse recipient(EzySession recipient);
+    
+    EzySendResponse recipients(Collection<EzySession> recipients);
     
 }

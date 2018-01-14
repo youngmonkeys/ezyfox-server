@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
+@SuppressWarnings("rawtypes")
 public interface EzyManagers {
 
     /**
@@ -26,7 +27,6 @@ public interface EzyManagers {
 	 * @param clazz the manager interface clazz
 	 * @param instance the manager instance
 	 */
-	@SuppressWarnings("rawtypes")
     void addManager(Class clazz, Object instance);
 	
 }

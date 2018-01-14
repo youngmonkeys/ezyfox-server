@@ -17,10 +17,12 @@ import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptanceLoopHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReadingLoopHandler;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
@@ -92,18 +94,20 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private EzySocketEventLoopHandler newWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzySocketWritingLoopHandler();
+		EzySocketWritingLoopHandler loopHandler = new EzySocketWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzySocketWriter eventHandler = new EzySocketWriter();
-		eventHandler.setWriterGroupFetcher(handlerGroupManager);
-		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
-		loopHandler.setEventHandler(eventHandler);
+		loopHandler.setEventHandlerSupplier(() -> {
+			EzySocketWriter eventHandler = new EzyNioSocketWriter();
+			eventHandler.setWriterGroupFetcher(handlerGroupManager);
+			eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+			return eventHandler;
+		});
 		return loopHandler;
 	}
 	
 	private EzySocketEventLoopHandler newReadingLoopHandler(
 			EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
-		EzySocketEventLoopHandler loopHandler = new EzyNioSocketReadingLoopHandler();
+		EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketReadingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
 		EzyNioSocketReader eventHandler = new EzyNioSocketReader();
 		eventHandler.setOwnSelector(readSelector);
@@ -115,7 +119,7 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private EzySocketEventLoopHandler newSocketAcceptanceLoopHandler(
 			EzyNioSocketAcceptor socketAcceptor) {
-		EzySocketEventLoopHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
+		EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
 		socketAcceptor.setTcpNoDelay(false);
 		socketAcceptor.setReadSelector(readSelector);

@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import java.nio.ByteBuffer;
-
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 
 import lombok.Getter;
@@ -15,7 +14,7 @@ public class EzySimplePacket implements EzyPacket {
 	private boolean released;
 	private boolean fragmented;
 	@Setter
-	private EzyTransportType type = EzyTransportType.TCP;
+	private EzyConstant transportType = EzyTransportType.TCP;
 	
 	@Override
 	public void setFragment(Object fragment) {
@@ -25,8 +24,6 @@ public class EzySimplePacket implements EzyPacket {
 	
 	@Override
 	public int getSize() {
-	    if(data instanceof ByteBuffer)
-            return ((ByteBuffer)data).remaining();
 	    if(data instanceof String)
 	        return ((String)data).length();
 	    return ((byte[])data).length;
@@ -42,8 +39,10 @@ public class EzySimplePacket implements EzyPacket {
 	public String toString() {
 	    return new StringBuilder()
 	            .append("(")
-	            .append("transportType: ").append(type)
-	            .append(", data: ").append(data)
+	            .append("transportType: ")
+	                .append(transportType)
+	            .append(", data: ")
+	                .append(data)
 	            .append(")")
 	            .toString();
 	}

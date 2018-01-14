@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.netty.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.setting.EzyBaseSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
-import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
 public class EzyWebSocketServerBootstrap extends EzySocketServerBootstrap {
 
@@ -43,7 +43,7 @@ public class EzyWebSocketServerBootstrap extends EzySocketServerBootstrap {
 	}
 	
 	@Override
-	protected EzySocketEventLoopHandler newSocketWritingLoopHandler() {
+	protected EzySocketWritingLoopHandler newSocketWritingLoopHandler() {
 		return new EzyWsWritingLoopHandler();
 	}
 	

@@ -88,7 +88,7 @@ public class EzyLoginProcessor
         user.addSession(session);
         notifyLoggedIn(user, session);
         fireUserAddedEvent(user);
-        response(user, newLoginReponse(user));
+        response(session, newLoginReponse(user));
         fireSessionLoginEvent(user);
     }
     
@@ -195,9 +195,9 @@ public class EzyLoginProcessor
                 .build();
     }
     
-    protected void response(EzyUser user, EzyResponse response) {
+    protected void response(EzySession session, EzyResponse response) {
         context.get(EzySendResponse.class)
-            .sender(user)
+            .recipient(session)
             .response(response)
             .execute();
     }

@@ -15,10 +15,8 @@ import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.impl.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -214,10 +212,6 @@ public class EzyAppResponseImplTest extends BaseTest {
     
         @Override
         public void disconnect() {
-        }
-    
-        @Override
-        protected void sendData(EzyData data, EzyTransportType type) {
         }
         
     }

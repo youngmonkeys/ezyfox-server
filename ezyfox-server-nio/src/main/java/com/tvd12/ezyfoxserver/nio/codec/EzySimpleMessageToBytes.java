@@ -13,37 +13,39 @@ public class EzySimpleMessageToBytes implements EzyMessageToBytes {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ByteBuffer convert(EzyMessage message) {
-		ByteBuffer answer = newByteBuffer(message);
-		writeHeader(answer, message);
-		writeSize(answer, message);
-		writeContent(answer, message);
-		answer.flip();
+	public byte[] convert(EzyMessage message) {
+		ByteBuffer buffer = newByteBuffer(message);
+		writeHeader(buffer, message);
+		writeSize(buffer, message);
+		writeContent(buffer, message);
+		byte[] answer = new byte[buffer.position()];
+		buffer.flip();
+		buffer.get(answer);
 		return answer;
 	}
 	
-	private void writeHeader(ByteBuffer answer, EzyMessage message) {
-		writeHeader(answer, message.getHeader());
+	private void writeHeader(ByteBuffer buffer, EzyMessage message) {
+		writeHeader(buffer, message.getHeader());
 	}
 	
-	private void writeHeader(ByteBuffer answer, EzyMessageHeader header) {
+	private void writeHeader(ByteBuffer buffer, EzyMessageHeader header) {
 		byte headerByte = 0;
 		headerByte |= header.isBigSize() ? 1 << 0 : 0;
 		headerByte |= header.isEncrypted() ? 1 << 1 : 0;
 		headerByte |= header.isCompressed() ? 1 << 2 : 0;
 		headerByte |= header.isText() ? 1 << 3 : 0;
-		answer.put(headerByte);
+		buffer.put(headerByte);
 	}
 	
-	private void writeSize(ByteBuffer answer, EzyMessage message) {
+	private void writeSize(ByteBuffer buffer, EzyMessage message) {
 		if(message.hasBigSize())
-			answer.putInt(message.getSize());
+			buffer.putInt(message.getSize());
 		else
-			answer.putShort((short)message.getSize());
+			buffer.putShort((short)message.getSize());
 	}
 	
-	private void writeContent(ByteBuffer answer, EzyMessage message) {
-		answer.put(message.getContent());
+	private void writeContent(ByteBuffer buffer, EzyMessage message) {
+		buffer.put(message.getContent());
 	}
 	
 	private ByteBuffer newByteBuffer(EzyMessage message) {
@@ -52,7 +54,7 @@ public class EzySimpleMessageToBytes implements EzyMessageToBytes {
 	}
 	
 	private int getCapacity(EzyMessage message){
-		return 1 + message.getSizeLength() + message.getContent().length;
+		return message.getByteCount();
 	}
 	
 }

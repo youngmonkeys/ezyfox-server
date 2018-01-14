@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
+import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
 
@@ -78,12 +79,14 @@ public class EzySocketServerBootstrap
 	}
 	
 	private EzySocketEventLoopHandler createSocketWritingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = newSocketWritingLoopHandler();
+		EzySocketWritingLoopHandler loopHandler = newSocketWritingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
-		EzySocketWriter eventHandler = newSocketWriter();
-		eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
-		eventHandler.setWriterGroupFetcher(handlerGroupManager);
-		loopHandler.setEventHandler(eventHandler);
+		loopHandler.setEventHandlerSupplier(() -> {
+			EzySocketWriter eventHandler = newSocketWriter();
+			eventHandler.setSessionTicketsQueue(sessionTicketsQueue);
+			eventHandler.setWriterGroupFetcher(handlerGroupManager);
+			return eventHandler;
+		});
 		return loopHandler;
 	}
 	
@@ -91,7 +94,7 @@ public class EzySocketServerBootstrap
 		return new EzySocketWriter();
 	}
 	
-	protected EzySocketEventLoopHandler newSocketWritingLoopHandler() {
+	protected EzySocketWritingLoopHandler newSocketWritingLoopHandler() {
 		return new EzyNettySocketWritingLoopHandler();
 	}
 	

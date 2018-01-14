@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.command.EzyResponse;
+import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzyData;
@@ -106,15 +107,13 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
     public Boolean execute() {
         com.tvd12.ezyfoxserver.response.EzyResponse response = newResponse();
         recipients.removeAll(exrecipients);
-        recipients.forEach(s -> response(s, response));
+        context.get(EzySendResponse.class)
+            .recipients(recipients)
+            .response(response)
+            .execute();
         return Boolean.TRUE;
     }
-    
-    protected final void response(EzySession session, 
-            com.tvd12.ezyfoxserver.response.EzyResponse response) {
-        response(context, session, response);
-    }
-    
+
     protected final EzyData newResponseData() {
         return newArrayBuilder().append(command).append(params).build();
     }

@@ -4,10 +4,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public class MyTestSession extends EzyAbstractSession {
@@ -30,11 +28,7 @@ public class MyTestSession extends EzyAbstractSession {
     @Override
     public void disconnect() {
     }
-
-    @Override
-    protected void sendData(EzyData data, EzyTransportType type) {
-    }
-
+    
     @Override
     public EzySessionDelegate getDelegate() {
         return new EzySessionDelegate() {

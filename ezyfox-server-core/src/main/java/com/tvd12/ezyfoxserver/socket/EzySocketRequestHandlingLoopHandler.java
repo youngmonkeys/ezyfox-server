@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.socket;
 
-public abstract class EzySocketRequestHandlingLoopHandler extends EzySocketEventLoopHandler {
+public abstract class EzySocketRequestHandlingLoopHandler extends EzySocketEventLoopOneHandler {
 
 	@Override
 	protected final String getThreadName() {

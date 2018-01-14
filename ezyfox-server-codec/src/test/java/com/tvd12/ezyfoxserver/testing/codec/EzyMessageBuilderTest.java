@@ -51,8 +51,8 @@ public class EzyMessageBuilderTest extends BaseTest {
 		assert message.getSizeLength() == 2;
 		assert message.getContent().length == 5;
 		
-		message.toString();
-		header.toString();
+		System.out.println(message.toString());
+		System.out.println(header.toString());
 	}
 	
 }

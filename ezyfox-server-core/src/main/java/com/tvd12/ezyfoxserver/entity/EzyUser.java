@@ -3,10 +3,11 @@ package com.tvd12.ezyfoxserver.entity;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.tvd12.ezyfoxserver.constant.EzyHasName;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProperties;
 
-public interface EzyUser extends EzySender, EzyProperties, EzyDestroyable {
+public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable {
 
 	/**
 	 * Get user id
@@ -14,13 +15,6 @@ public interface EzyUser extends EzySender, EzyProperties, EzyDestroyable {
 	 * @return the user id
 	 */
 	long getId();
-	
-	/**
-	 * Get user name
-	 * 
-	 * @eturn the user name
-	 */
-	String getName();
 	
 	/**
 	 * Get max session

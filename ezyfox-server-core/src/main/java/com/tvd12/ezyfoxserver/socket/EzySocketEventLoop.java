@@ -19,8 +19,6 @@ public abstract class EzySocketEventLoop
 	protected volatile boolean active;
 	
 	public EzySocketEventLoop() {
-		this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize(), threadName());
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> threadPool.shutdown()));
 	}
 	
 	protected abstract String threadName();
@@ -28,6 +26,7 @@ public abstract class EzySocketEventLoop
 	
 	@Override
 	public void start() throws Exception {
+	    initThreadPool();
 		setActive(true);
 		startLoopService();
 	}
@@ -49,6 +48,11 @@ public abstract class EzySocketEventLoop
 	
 	protected abstract void eventLoop();
 	
+	protected void initThreadPool() {
+	    this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize(), threadName());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> threadPool.shutdown()));
+	}
+	
 	@Override
 	public void destroy() {
 		processWithLogException(this::destroy0);
@@ -56,8 +60,10 @@ public abstract class EzySocketEventLoop
 	
 	protected void destroy0() throws Exception {
 		setActive(false);
-		List<Runnable> remainTasks = threadPool.shutdownNow();
-		getLogger().info("{} stopped. Never commenced execution task: " + remainTasks.size());
+		if(threadPool != null) {
+		    List<Runnable> remainTasks = threadPool.shutdownNow();
+		    getLogger().info("{} stopped. Never commenced execution task: " + remainTasks.size());
+		}
 	}
 	
 }

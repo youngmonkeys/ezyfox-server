@@ -1,36 +1,41 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
+import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyHasName;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzySender;
+import com.tvd12.ezyfoxserver.entity.EzyDeliver;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
+import com.tvd12.ezyfoxserver.response.EzySimplePackage;
 import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
 
 public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendResponse {
 
-    protected EzySender sender;
     protected boolean immediate;
     protected EzyResponse response;
+    protected List<EzySession> recipients;
 
+    protected final EzyServer server;
+    protected final EzyResponseApi responseApi;
     protected final EzyLoggerSetting loggerSetting;
     protected final Set<EzyConstant> unloggableCommands;
     
     public EzySendResponseImpl(EzyServerContext context) {
-        this.loggerSetting = context.getServer().getSettings().getLogger();
+        this.recipients = new ArrayList<>();
+        this.server = context.getServer();
+        this.responseApi = server.getApis().getApi(EzyResponseApi.class);
+        this.loggerSetting = server.getSettings().getLogger();
         this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands(); 
-    }
-    
-    @Override
-    public EzySendResponse sender(EzySender sender) {
-        this.sender = sender;
-        return this;
     }
     
     @Override
@@ -46,43 +51,63 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     @Override
+    public EzySendResponse recipient(EzySession recipient) {
+        this.recipients.add(recipient);
+        return this;
+    }
+    
+    @Override
+    public EzySendResponse recipients(Collection<EzySession> recipients) {
+        this.recipients.addAll(recipients);
+        return this;
+    }
+    
+    @Override
     public Boolean execute() {
         EzyArray data = response.serialize();
-        sendData(data);
+        EzyPackage pack = newPackage(data);
+        response(pack);
         debugLogResponse(data);
         destroy();
         return Boolean.TRUE;
     }
     
-    protected void sendData(EzyArray data) {
+    protected EzyPackage newPackage(EzyArray data) {
+        EzySimplePackage pack = new EzySimplePackage();
+        pack.setData(data);
+        pack.addRecipients(recipients);
+        return pack;
+    }
+    
+    protected void response(EzyPackage pack) {
         try {
-            if(immediate)
-                sender.sendNow(data);
-            else 
-                sender.send(data);
+            responseApi.response(pack, immediate);
         } 
         catch(Exception e) {
-            getLogger().error("send data {} to clients error", data);
+            getLogger().error("send data: " + pack.getData() + ", to clients: " + getRecipientsNames() + " error");
+        }
+        finally {
+            pack.release();
         }
     }
     
     protected void debugLogResponse(Object data) {
         if(!unloggableCommands.contains(response.getCommand()))
-            getLogger().debug("send to: {} data: {}", getSenderName(), data);
+            getLogger().debug("send to: {} data: {}", getRecipientsNames(), data);
     }
     
     protected void destroy() {
+        this.recipients.clear();
         this.response.release();
-        this.sender = null;
         this.response = null;
+        this.recipients = null;
     }
     
-    protected String getSenderName() {
-        if(sender instanceof EzyUser)
-            return ((EzyUser)sender).getName();
-        EzySession session = ((EzySession)sender);
-        SocketAddress socketAddress = session.getClientAddress();
-        return socketAddress != null ? socketAddress.toString() : session.getName();
+    protected String getRecipientsNames() {
+        StringBuilder builder = new StringBuilder();
+        for(EzyDeliver recv : recipients)
+            builder.append(((EzyHasName)recv).getName());
+        return builder.toString();
     }
     
 }

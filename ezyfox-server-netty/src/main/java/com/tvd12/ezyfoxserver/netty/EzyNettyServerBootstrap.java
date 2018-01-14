@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.netty.constant.EzyNettyThreadPoolSizes;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
-import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandlingLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestHandler;
@@ -32,9 +32,9 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 	@Setter
 	protected EzySocketServerBootstrap websocketServerBootstrap;
 	
-	private EzySocketEventLoopHandler systemRequestHandlingLoopHandler;
+	private EzySocketEventLoopOneHandler systemRequestHandlingLoopHandler;
 	
-	private EzySocketEventLoopHandler extensionRequestHandlingLoopHandler;
+	private EzySocketEventLoopOneHandler extensionRequestHandlingLoopHandler;
 	
 	@Override
 	protected void startOtherBootstraps(Runnable callback) throws Exception {
@@ -92,8 +92,8 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 		waitAndShutdownEventLoopGroup(parentGroup, "parent");
 	}
 	
-	private EzySocketEventLoopHandler newSystemRequestHandlingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzySocketSystemRequestHandlingLoopHandler();
+	private EzySocketEventLoopOneHandler newSystemRequestHandlingLoopHandler() {
+		EzySocketEventLoopOneHandler loopHandler = new EzySocketSystemRequestHandlingLoopHandler();
 		loopHandler.setThreadPoolSize(getSystemRequestHandlerPoolSize());
 		EzySocketRequestHandler eventHandler = new EzySocketSystemRequestHandler();
 		eventHandler.setRequestQueue(requestQueues.getSystemQueue());
@@ -102,8 +102,8 @@ public class EzyNettyServerBootstrap extends EzyHttpServerBootstrap {
 		return loopHandler;
 	}
 	
-	private EzySocketEventLoopHandler newExtensionRequestHandlingLoopHandler() {
-		EzySocketEventLoopHandler loopHandler = new EzySocketExtensionRequestHandlingLoopHandler();
+	private EzySocketEventLoopOneHandler newExtensionRequestHandlingLoopHandler() {
+		EzySocketEventLoopOneHandler loopHandler = new EzySocketExtensionRequestHandlingLoopHandler();
 		loopHandler.setThreadPoolSize(getExtensionRequestHandlerPoolSize());
 		EzySocketRequestHandler eventHandler = new EzySocketExtensionRequestHandler();
 		eventHandler.setRequestQueue(requestQueues.getExtensionQueue());

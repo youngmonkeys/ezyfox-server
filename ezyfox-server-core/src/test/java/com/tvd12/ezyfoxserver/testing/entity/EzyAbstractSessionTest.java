@@ -7,9 +7,7 @@ import java.net.SocketAddress;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSession;
 
@@ -68,10 +66,6 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         @Override
         public void disconnect() {
             
-        }
-
-        @Override
-        protected void sendData(EzyData data, EzyTransportType type) {
         }
         
     }

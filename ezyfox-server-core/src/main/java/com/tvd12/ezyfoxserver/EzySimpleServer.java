@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tvd12.ezyfoxserver.api.EzyApis;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
@@ -34,6 +35,8 @@ public class EzySimpleServer
 	protected EzyConfig config;
 	protected EzySettings settings;
 	
+	@JsonIgnore
+	protected EzyApis apis;
 	@JsonIgnore
 	protected EzyManagers managers;
 	@JsonIgnore

@@ -1,17 +1,13 @@
-package com.tvd12.ezyfoxserver.nio.builder.impl;
-
-import static com.tvd12.ezyfoxserver.constant.EzyConnectionType.SOCKET;
+package com.tvd12.ezyfoxserver.codec;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.factory.EzyCodecFactory;
-import com.tvd12.ezyfoxserver.nio.handler.EzyNioObjectToByteEncoder;
+import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
-public class EzyCodecFactoryImpl implements EzyCodecFactory {
+public class EzySimpleCodecFactory implements EzyCodecFactory {
 
 	private final EzySocketSetting socketSettings;
 	private final EzyWebSocketSetting websocketSettings;
@@ -19,7 +15,7 @@ public class EzyCodecFactoryImpl implements EzyCodecFactory {
 	private final EzyCodecCreator socketCodecCreator;
 	private final EzyCodecCreator websocketCodecCreator;
 	
-	public EzyCodecFactoryImpl(Builder builder) {
+	public EzySimpleCodecFactory(Builder builder) {
 		this.socketSettings = builder.socketSettings;
 		this.websocketSettings = builder.websocketSettings;
 		this.socketCodecCreator = newSocketCodecCreator();
@@ -27,19 +23,17 @@ public class EzyCodecFactoryImpl implements EzyCodecFactory {
 	}
 	
 	@Override
-	public Object newDecoder(EzyConnectionType type) {
-		if(type == SOCKET) {
-			return socketCodecCreator.newDecoder(socketSettings.getMaxRequestSize());
-		}
-		return websocketCodecCreator.newDecoder(websocketSettings.getMaxFrameSize());
-	}
+    public Object newEncoder(EzyConstant type) {
+        return type == EzyConnectionType.SOCKET
+                ? socketCodecCreator.newEncoder()
+                : websocketCodecCreator.newEncoder();
+    }
 	
 	@Override
-	public Object newEncoder(EzyConnectionType type) {
-		if(type == SOCKET) {
-			return (EzyNioObjectToByteEncoder) socketCodecCreator.newEncoder();
-		}
-		return (EzyNioObjectToByteEncoder) websocketCodecCreator.newEncoder();
+	public Object newDecoder(EzyConstant type) {
+		return type == EzyConnectionType.SOCKET
+		        ? socketCodecCreator.newDecoder(socketSettings.getMaxRequestSize())
+		        : websocketCodecCreator.newDecoder(websocketSettings.getMaxFrameSize());
 	}
 	
 	private EzyCodecCreator newSocketCodecCreator() {
@@ -70,7 +64,7 @@ public class EzyCodecFactoryImpl implements EzyCodecFactory {
 		
 		@Override
 		public EzyCodecFactory build() {
-			return new EzyCodecFactoryImpl(this);
+			return new EzySimpleCodecFactory(this);
 		}
 	}
 	

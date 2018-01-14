@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.codec;
 
-import java.nio.ByteBuffer;
-
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
 import com.tvd12.ezyfoxserver.codec.EzyObjectToMessage;
@@ -20,11 +18,11 @@ public class MsgPackObjectToByteEncoder implements EzyNioObjectToByteEncoder {
 	}
 	
 	@Override
-	public ByteBuffer encode(Object msg) throws Exception {
+	public byte[] encode(Object msg) throws Exception {
 		return convertObjectToBytes(msg);
 	}
 	
-	protected ByteBuffer convertObjectToBytes(Object object) {
+	protected byte[] convertObjectToBytes(Object object) {
 		return convertMessageToBytes(convertObjectToMessage(object));
 	}
 	
@@ -32,7 +30,7 @@ public class MsgPackObjectToByteEncoder implements EzyNioObjectToByteEncoder {
 		return objectToMessage.convert(object);
 	}
 	
-	protected ByteBuffer convertMessageToBytes(EzyMessage message) {
+	protected byte[] convertMessageToBytes(EzyMessage message) {
 		return messageToBytes.convert(message);
 	}
 	

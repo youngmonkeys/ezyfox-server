@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.callback.EzyCallback;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 
 public class EzySimpleWsHandlerGroup
-		extends EzyAbstractHandlerGroup<EzyWsDataDecoder, EzyWsDataEncoder>
+		extends EzyAbstractHandlerGroup<EzyWsDataDecoder>
 		implements EzyWsHandlerGroup {
 
 	private final EzyCallback<Object> decodeBytesCallback;
@@ -17,16 +17,6 @@ public class EzySimpleWsHandlerGroup
 	@Override
 	protected EzyWsDataDecoder newDecoder(Object decoder) {
 		return new EzySimpleWsDataDecoder((EzyWsByteToObjectDecoder)decoder);
-	}
-	
-	@Override
-	protected EzyWsDataEncoder newEncoder(Object encoder) {
-		return new EzySimpleWsDataEncoder((EzyWsObjectToByteEncoder)encoder);
-	}
-	
-	@Override
-	protected Object encodeData(Object data) throws Exception {
-		return encoder.encode(data, String.class);
 	}
 	
 	@Override

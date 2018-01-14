@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfoxserver.api.EzyApis;
+import com.tvd12.ezyfoxserver.api.EzySimpleApis;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
@@ -41,21 +43,22 @@ public class EzyLoader extends EzyLoggable {
     
     public EzyServer load() {
         EzySettings settings = readSettings();
-    	EzySimpleServer answer = new EzySimpleServer();
-    	answer.setConfig(config);
-    	answer.setSettings(settings);
-    	answer.setClassLoader(classLoader);
-    	answer.setJsonMapper(newJsonMapper());
-    	answer.setStatistics(newStatistics());
-    	answer.setControllers(newControllers());
-    	answer.setManagers(newManagers(settings));
-    	answer.setAppClassLoaders(newAppClassLoaders());
-    	answer.setEventPluginsMapper(newEventPluginsMapper(settings));
-    	return answer;
+        	EzySimpleServer answer = new EzySimpleServer();
+        	answer.setConfig(config);
+        	answer.setSettings(settings);
+        	answer.setClassLoader(classLoader);
+        	answer.setJsonMapper(newJsonMapper());
+        	answer.setStatistics(newStatistics());
+        	answer.setControllers(newControllers());
+        	answer.setApis(newApis(settings));
+        	answer.setManagers(newManagers(settings));
+        	answer.setAppClassLoaders(newAppClassLoaders());
+        	answer.setEventPluginsMapper(newEventPluginsMapper(settings));
+        	return answer;
     }
     
     protected EzySettings readSettings() {
-    	return newSettingsReader().read();
+        return newSettingsReader().read();
     }
     
     protected EzySettingsReader newSettingsReader() {
@@ -71,6 +74,15 @@ public class EzyLoader extends EzyLoggable {
     
     protected EzyStatistics newStatistics() {
         return new EzySimpleStatistics();
+    }
+    
+    protected EzyApis newApis(EzySettings settings) {
+        EzyApis apis = new EzySimpleApis();
+        addApis(apis, settings);
+        return apis;
+    }
+    
+    protected void addApis(EzyApis apis, EzySettings settings) {
     }
     
     protected EzyManagers newManagers(EzySettings settings) {
@@ -113,7 +125,7 @@ public class EzyLoader extends EzyLoggable {
     }
     
     protected EzyAppClassLoader newAppClassLoader(File dir) {
-    	getLogger().info("load " + dir);
+    	    getLogger().info("load " + dir);
         return new EzyAppClassLoader(dir, classLoader);
     }
     
@@ -138,11 +150,11 @@ public class EzyLoader extends EzyLoggable {
     }
     
     protected String getAppsPath() {
-    	return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
+    	    return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
     }
     
     protected String getSettingsPath() {
-    	return getPath(getHomePath(), EzyFolderNamesSetting.SETTINGS);
+        return getPath(getHomePath(), EzyFolderNamesSetting.SETTINGS);
     }
     
     protected String getPath(String first, String... more) {
@@ -150,7 +162,7 @@ public class EzyLoader extends EzyLoggable {
     }
     
     protected String getHomePath() {
-    	return config.getEzyfoxHome();
+    	    return config.getEzyfoxHome();
     }
     
     public EzyLoader classLoader(ClassLoader classLoader) {
@@ -159,8 +171,8 @@ public class EzyLoader extends EzyLoggable {
     }
     
     public EzyLoader config(EzyConfig config) {
-    	this.config = config;
-    	return this;
+    	    this.config = config;
+    	    return this;
     }
     
     

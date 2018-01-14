@@ -5,13 +5,14 @@ import java.net.SocketAddress;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyHasName;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProperties;
 
-public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Serializable {
+public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
 
 	/**
 	 * Get session id
@@ -19,13 +20,6 @@ public interface EzySession extends EzySender, EzyProperties, EzyDestroyable, Se
 	 * @return the session id
 	 */
 	long getId();
-	
-	/**
-	 * Get session name
-	 * 
-	 * @return the name
-	 */
-	String getName();
 	
 	/**
 	 * Get client id

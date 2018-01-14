@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
-import java.nio.ByteBuffer;
-
 public class EzySimpleWsDataEncoder implements EzyWsDataEncoder {
 
 	private EzyWsObjectToByteEncoder encoder;
@@ -11,7 +9,7 @@ public class EzySimpleWsDataEncoder implements EzyWsDataEncoder {
 	}
 	
 	@Override
-	public ByteBuffer encode(Object data) throws Exception {
+	public byte[] encode(Object data) throws Exception {
 		return encoder.encode(data);
 	}
 	

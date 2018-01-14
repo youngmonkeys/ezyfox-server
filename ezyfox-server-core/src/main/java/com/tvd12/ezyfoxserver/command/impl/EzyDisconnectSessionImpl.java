@@ -32,7 +32,7 @@ public class EzyDisconnectSessionImpl
 	
 	protected void sendToClients() {
 		if(fireClientEvent)
-			doSendToClient();
+		    sendToClients0();
 	}
 	
 	protected void disconnectSession() {
@@ -41,7 +41,7 @@ public class EzyDisconnectSessionImpl
         session.close();
     }
 	
-	protected void doSendToClient() {
+	protected void sendToClients0() {
 	    responseNow(context, session, newResponse());
 	}
 	

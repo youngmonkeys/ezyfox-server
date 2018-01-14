@@ -73,8 +73,8 @@ public class EzySimpleNioHandlerGroup
 		buffer.flip();
 		int bytesWritten = channel.write(buffer);
 		if (bytesWritten < bytesToWrite) {
-			ByteBuffer remainBuffer = getPacketFragment(buffer);
-			packet.setFragment(remainBuffer);
+			byte[] remainBytes = getPacketFragment(buffer);
+			packet.setFragment(remainBytes);
 			SelectionKey selectionKey = getSession().getSelectionKey();
 			if(selectionKey != null && selectionKey.isValid()) {
 				selectionKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -93,11 +93,10 @@ public class EzySimpleNioHandlerGroup
 		return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
 	}
 	
-	private ByteBuffer getPacketFragment(ByteBuffer buffer) {
+	private byte[] getPacketFragment(ByteBuffer buffer) {
 		byte[] remainBytes = new byte[buffer.remaining()];
 		buffer.get(remainBytes);
-		ByteBuffer remainBuffer = ByteBuffer.wrap(remainBytes);
-		return remainBuffer;
+		return remainBytes;
 	}
 	
 	private byte[] getBytesToWrite(EzyPacket packet) {

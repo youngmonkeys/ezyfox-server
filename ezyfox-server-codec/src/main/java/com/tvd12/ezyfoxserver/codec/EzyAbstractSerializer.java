@@ -6,45 +6,38 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.tvd12.ezyfoxserver.function.EzyParser; 
 import com.tvd12.ezyfoxserver.io.EzyMaps; 
  
-public abstract class EzyAbstractSerializer implements EzyMessageSerializer { 
+public abstract class EzyAbstractSerializer<T> implements EzyMessageSerializer { 
  
-	protected Map<Class<?>, EzyParser<Object, byte[]>> parsers = defaultParsers();
+	protected Map<Class<?>, EzyParser<Object, T>> parsers = defaultParsers();
 	 
-	@Override 
-	public byte[] serialize(Object value) {
-		return value == null
-				? parseNil() 
-				: parseNotNull(value);
-	} 
-	 
-	protected byte[] parseNotNull(Object value) {
-		EzyParser<Object, byte[]> parser = getParser(value.getClass());
+	protected T parseNotNull(Object value) {
+		EzyParser<Object, T> parser = getParser(value.getClass());
 		if(parser != null)
 			return parseWithParser(parser, value);
 		return parseWithNoParser(value);
 		 
 	} 
 	 
-	protected byte[] parseWithParser(EzyParser<Object, byte[]> parser, Object value) {
+	protected T parseWithParser(EzyParser<Object, T> parser, Object value) {
 		return parser.parse(value);
 	} 
 	 
-	protected byte[] parseWithNoParser(Object value) {
+	protected T parseWithNoParser(Object value) {
 		throw new IllegalArgumentException("has no parse for " + value.getClass());
 	} 
 	 
-	protected abstract byte[] parseNil(); 
+	protected abstract T parseNil(); 
 	 
-	protected EzyParser<Object, byte[]> getParser(Class<?> type) {
+	protected EzyParser<Object, T> getParser(Class<?> type) {
 		return EzyMaps.getValue(parsers, type);
 	} 
 	 
-	protected Map<Class<?>, EzyParser<Object, byte[]>> defaultParsers() {
-		Map<Class<?>, EzyParser<Object, byte[]>> parsers = new ConcurrentHashMap<>();
+	protected Map<Class<?>, EzyParser<Object, T>> defaultParsers() {
+		Map<Class<?>, EzyParser<Object, T>> parsers = new ConcurrentHashMap<>();
 		addParsers(parsers);
 		return parsers;
 	} 
 	 
-	protected abstract void addParsers(Map<Class<?>, EzyParser<Object, byte[]>> parsers);
+	protected abstract void addParsers(Map<Class<?>, EzyParser<Object, T>> parsers);
 	 
 } 

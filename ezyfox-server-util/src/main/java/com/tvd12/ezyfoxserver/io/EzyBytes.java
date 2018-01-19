@@ -24,15 +24,15 @@ public final class EzyBytes {
 	}
 	
 	public static byte[] getBytes(byte first, long value, int size) {
-		return EzyArrays.merge(first, getBytes(value, size));
+		return merge(first, getBytes(value, size));
 	}
 	
 	public static byte[] getBytes(byte first, double value) {
-		return EzyArrays.merge(first, getBytes(value));
+		return merge(first, getBytes(value));
 	}
 	
 	public static byte[] getBytes(byte first, float value) {
-		return EzyArrays.merge(first, getBytes(value));
+		return merge(first, getBytes(value));
 	}
 	
 	public static byte[] getBytes(double value) {
@@ -55,16 +55,19 @@ public final class EzyBytes {
 		return getBytes(value, 2);
 	}
 	
-	public static byte[] getBytes(byte first, byte[] value) {
-		return EzyArrays.merge(first, value);
+	public static byte[] merge(byte first, byte[] other) {
+		byte[] bytes = new byte[other.length + 1];
+		bytes[0] = first;
+		System.arraycopy(other, 0, bytes, 1, other.length);
+		return bytes;
 	}
 	
-	public static byte[] copy(byte[][] bytess) {
-		int index = 0;
+	public static byte[] merge(byte[][] bytess) {
+		int position = 0;
 		byte[] answer = new byte[totalBytes(bytess)];
 		for(byte[] bytes : bytess) {
-			EzyArrays.copy(bytes, answer, index);
-			index += bytes.length;
+			System.arraycopy(bytes, 0, answer, position, bytes.length);
+			position += bytes.length;
 		}
 		return answer;
 	}

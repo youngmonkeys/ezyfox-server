@@ -44,7 +44,7 @@ import com.tvd12.ezyfoxserver.util.EzyStringsIterator;
 import com.tvd12.ezyfoxserver.util.EzyWrapperIterator;
 
 public class MsgPackSimpleSerializer 
-		extends EzyAbstractSerializer 
+		extends EzyAbstractToBytesSerializer 
 		implements EzyCastIntToByte {
 
 	protected IntSerializer intSerializer = new IntSerializer();
@@ -340,7 +340,7 @@ public class MsgPackSimpleSerializer
 		byte[][] bytess = new byte[2][];
 		bytess[0] = parseBinSize(bin.length);
 		bytess[1] = bin;
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseBinSize(int size) {
@@ -351,7 +351,7 @@ public class MsgPackSimpleSerializer
 		byte[][] bytess = new byte[2][];
 		bytess[1] = EzyStrings.getUtfBytes(string);
 		bytess[0] = parseStringSize(bytess[1].length);
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseStringSize(int size) {
@@ -370,7 +370,7 @@ public class MsgPackSimpleSerializer
 		bytess[0] = parseArraySize(size);
 		while(iterator.hasNext())
 			bytess[index ++] = serialize(iterator.next());
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseArraySize(int size) {
@@ -386,7 +386,7 @@ public class MsgPackSimpleSerializer
 			bytess[index++] = serialize(e.getKey());
 			bytess[index++] = serialize(e.getValue());
 		}
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseMapSize(int size) {

@@ -17,14 +17,6 @@ public final class EzyArrays {
 			to[toPos + i] = from[i];
 	}
 	
-	public static byte[] merge(byte first, byte[] other) {
-		byte[] bytes = new byte[other.length + 1];
-		bytes[0] = first;
-		for(int i = 0 ; i < other.length ; i++)
-			bytes[i + 1] = other[i];
-		return bytes;
-	}
-	
 	public static <I,O> O[] newArray(Collection<I> coll, 
             IntFunction<O[]> generator) {
 		return coll.stream().toArray(generator);

@@ -31,7 +31,7 @@ public class DeserializeArrayTest extends BaseTest {
 			deserializer.deserialize(bytes);
 		})
 		.getTime();
-		System.out.println("test1 elapsed time = " + time);
+		System.out.println("DeserializeArrayTest::test1 elapsed time = " + time);
 	}
 	
 }

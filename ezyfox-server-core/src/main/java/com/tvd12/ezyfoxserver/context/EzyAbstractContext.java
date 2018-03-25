@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.context;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.command.EzyAddExceptionHandler;
@@ -20,7 +20,7 @@ public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroy
 
 	@Setter
 	@Getter
-	protected ExecutorService workerExecutor;
+	protected ScheduledExecutorService executorService;
 	
 	@SuppressWarnings("rawtypes")
 	protected Map<Class, Supplier> commandSuppliers = defaultCommandSuppliers();
@@ -36,7 +36,7 @@ public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroy
 	
 	@SuppressWarnings("rawtypes")
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		suppliers.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getWorkerExecutor()));
+		suppliers.put(EzyRunWorker.class, () -> new EzyRunWorkerImpl(getExecutorService()));
 		suppliers.put(EzyAddExceptionHandler.class, () -> new EzyAddExceptionHandlerImpl(getExceptionHandlersFetcher()));
 	}
 	

@@ -27,14 +27,14 @@ public class EzyLoaderTest extends BaseCoreTest {
         app = settings.getAppById(app.getId());
         assertEquals(app.getName(), "ezyfox-chat");
         assertEquals(app.getId() > 0, true);
-        assertEquals(app.getWorkerPoolSize() > 0, true);
+//        assertEquals(app.getThreadPoolSize() > 0, true);
         assertEquals(app.getEntryLoader(), "com.tvd12.ezyfoxserver.chat.EzyChatEntryLoader");
         assertEquals(app.getEventControllers().getController(EzyEventType.SERVER_READY) != null, true);
         
         EzyPluginSetting plugin = settings.getPluginByName("ezyfox-auth-plugin");
         plugin = settings.getPluginById(plugin.getId());
         assertEquals(plugin.getId() > 0, true);
-        assertEquals(plugin.getWorkerPoolSize() > 0, true);
+//        assertEquals(plugin.getThreadPoolSize() > 0, true);
         assertEquals(plugin.getPriority(), -1);
         assertEquals(plugin.getName(), "ezyfox-auth-plugin");
         assertEquals(plugin.getEventControllers().getController(EzyEventType.SERVER_READY) != null, true);

@@ -50,6 +50,12 @@ public class EzyExecutors {
 			ThreadFactory threadFactory) {
 		return Executors.newSingleThreadScheduledExecutor(threadFactory);
 	}
+	
+	public static ScheduledExecutorService newErrorScheduledExecutor(
+			String errorMessage) {
+		return new EzyErrorScheduledExecutorService(errorMessage);
+	}
+	
 	// ===================================
 	
 	public static EzyThreadFactory newThreadFactory(String poolName) {

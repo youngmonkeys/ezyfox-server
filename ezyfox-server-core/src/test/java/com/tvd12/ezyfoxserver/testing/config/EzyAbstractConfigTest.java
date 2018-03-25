@@ -15,7 +15,7 @@ public class EzyAbstractConfigTest extends BaseCoreTest {
         Config config = new Config();
         config.setName("config");
         config.setEntryLoader("loader");
-        config.setWorkerPoolSize(100);
+        config.setThreadPoolSize(100);
     }
     
     

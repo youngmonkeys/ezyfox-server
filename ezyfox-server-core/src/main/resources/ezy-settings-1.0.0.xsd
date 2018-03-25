@@ -7,7 +7,7 @@
 			<xs:all>
 				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="worker-pool-size" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="thread-pool-size" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
@@ -22,7 +22,7 @@
 
 	<xs:element name="max-users" type="xs:integer" />
 	<xs:element name="max-sessions" type="xs:integer" />
-	<xs:element name="worker-pool-size" type="xs:integer" />
+	<xs:element name="thread-pool-size" type="xs:integer" />
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />
 	<xs:element name="web-socket" type="web-socket-type" />
@@ -84,7 +84,7 @@
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
-			<xs:element name="worker-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
 			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="listen-events" type="plugin-listen-events" minOccurs="0" maxOccurs="1" />
 		</xs:all>
@@ -119,7 +119,7 @@
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="worker-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
 			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
 		</xs:all>
 	</xs:complexType>

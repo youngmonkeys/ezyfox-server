@@ -8,7 +8,7 @@ public interface EzySettings {
     
     int getMaxSessions();
     
-    int getWorkerPoolSize();
+    int getThreadPoolSize();
     
     EzyHttpSetting getHttp();
     

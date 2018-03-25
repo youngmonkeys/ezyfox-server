@@ -28,8 +28,8 @@ public class EzySimpleSettings implements EzySettings {
     @XmlElement(name = "max-sessions")
     protected int maxSessions = 999999;
     
-    @XmlElement(name = "worker-pool-size")
-	protected int workerPoolSize = 30;
+    @XmlElement(name = "thread-pool-size")
+	protected int threadPoolSize = 0;
 	
 	@XmlElement(name = "http")
 	protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();

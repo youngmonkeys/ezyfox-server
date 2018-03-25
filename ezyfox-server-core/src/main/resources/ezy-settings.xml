@@ -7,7 +7,7 @@
 	
 	<max-users>10000</max-users>
 	<max-sessions>30000</max-sessions>
-	<worker-pool-size>36</worker-pool-size>
+	<thread-pool-size>36</thread-pool-size>
 	
 	<http>
 		<port>8080</port>
@@ -69,7 +69,7 @@
 			<name>ezyfox-chat</name>
 			<entry-loader>com.tvd12.ezyfoxserver.chat.EzyChatEntryLoader</entry-loader>
 			<max-users>10000</max-users>
-			<worker-pool-size>30</worker-pool-size>
+			<thread-pool-size>30</thread-pool-size>
 			<config-file>config.properties</config-file>
 		</application>
 	</applications>
@@ -79,7 +79,7 @@
 			<name>ezyfox-auth-plugin</name>
 			<priority>-1</priority>
 			<entry-loader>com.tvd12.ezyfoxserver.plugin.auth.EzyAuthPluginEntryLoader</entry-loader>
-			<worker-pool-size>30</worker-pool-size>
+			<thread-pool-size>30</thread-pool-size>
 			<config-file>config.properties</config-file>
 			<listen-events>
 				<event>USER_LOGIN</event>

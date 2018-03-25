@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
@@ -35,7 +35,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     public EzyServerContext build() {
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
-        context.setWorkerExecutor(newWorkerExecutor());
+        context.setExecutorService(newExecutorService());
         context.addAppContexts(newAppContexts(context));
         context.addPluginContexts(newPluginContexts(context));
         return context;
@@ -45,10 +45,12 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return new EzySimpleServerContext();
     }
     
-    protected ExecutorService newWorkerExecutor() {
-        String threadName = "worker";
-        int nthreads = server.getSettings().getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+    protected ScheduledExecutorService newExecutorService() {
+        String threadName = "server-thread";
+        int nthreads = server.getSettings().getThreadPoolSize();
+        if(nthreads > 0)
+            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        return EzyExecutors.newErrorScheduledExecutor("must set server's 'thread-pool-size'");
     }
     
     protected Collection<EzyAppContext> newAppContexts(EzyServerContext parent) {
@@ -65,7 +67,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
         appContext.setParent(parent);
-        appContext.setWorkerExecutor(newAppWorkerExecutor(setting));
+        appContext.setExecutorService(newAppExecutorService(setting));
         return appContext;
     }
     
@@ -89,20 +91,24 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimplePluginContext pluginContext = new EzySimplePluginContext();
         pluginContext.setPlugin(plugin);
         pluginContext.setParent(parent);
-        pluginContext.setWorkerExecutor(newPluginWorkerExecutor(setting));
+        pluginContext.setExecutorService(newPluginExecutorService(setting));
         return pluginContext;
     }
     
-    protected ExecutorService newAppWorkerExecutor(EzyAppSetting app) {
-        String threadName = "app-worker";
-        int nthreads = app.getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+    protected ScheduledExecutorService newAppExecutorService(EzyAppSetting app) {
+        String threadName = "app-" + app.getName() + "-thread";
+        int nthreads = app.getThreadPoolSize();
+        if(nthreads > 0)
+            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        return EzyExecutors.newErrorScheduledExecutor("must set app " + app.getName() + "'s 'thread-pool-size'");
     }
     
-    protected ExecutorService newPluginWorkerExecutor(EzyPluginSetting plugin) {
-        String threadName = "plugin-worker";
-        int nthreads = plugin.getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+    protected ScheduledExecutorService newPluginExecutorService(EzyPluginSetting plugin) {
+        String threadName = "plugin-" + plugin.getName() + "-thread";
+        int nthreads = plugin.getThreadPoolSize();
+        if(nthreads > 0)
+            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        return EzyExecutors.newErrorScheduledExecutor("must set plugin " + plugin.getName() + "'s 'thread-pool-size'");
     }
     
 }

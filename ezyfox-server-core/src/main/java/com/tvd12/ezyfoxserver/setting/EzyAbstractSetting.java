@@ -29,8 +29,8 @@ public abstract class EzyAbstractSetting
 	@XmlElement(name = "entry-loader")
 	protected String entryLoader;
 	
-	@XmlElement(name = "worker-pool-size")
-	protected int workerPoolSize = 16;
+	@XmlElement(name = "thread-pool-size")
+	protected int threadPoolSize = 0;
 	
 	@XmlElement(name = "config-file")
 	protected String configFile = "config.properties";

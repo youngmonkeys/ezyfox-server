@@ -12,7 +12,7 @@ public interface EzyBaseSetting extends EzyEventControllerAdder {
     
     String getEntryLoader();
     
-    int getWorkerPoolSize();
+    int getThreadPoolSize();
     
     String getConfigFile();
     

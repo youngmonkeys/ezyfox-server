@@ -12,7 +12,7 @@ public class EzySettingsTest extends BaseCoreTest {
     @Test
     public void test() {
         EzySimpleSettings settings = new EzySimpleSettings();
-        settings.setWorkerPoolSize(100);
+        settings.setThreadPoolSize(100);
         settings.setApplications(new EzySimpleAppsSetting());
         settings.setPlugins(new EzySimplePluginsSetting());
     }

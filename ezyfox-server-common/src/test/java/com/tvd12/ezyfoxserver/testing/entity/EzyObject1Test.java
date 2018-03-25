@@ -32,7 +32,7 @@ public class EzyObject1Test extends EzyEntityTest {
 				.append("5", "e")
 				.build();
 		assertEquals(object.get("1"), "a");
-		assertEquals(object.get("1", "b"), "a");
+		assertEquals(object.getWithDefault("1", "b"), "a");
 		assertEquals(object.get("3", String.class), "c");
 		assertEquals(object.remove("4"), "d");
 		assertEquals(object.compute("6", (k,v) -> v != null ? v : "f"), "f");
@@ -47,7 +47,7 @@ public class EzyObject1Test extends EzyEntityTest {
 		assertNotEquals(object, clone);
 		assertTrue(clone.keySet().containsAll(Sets.newHashSet("1", "2", "3", "5", "6")));
 		object.clear();
-		assertEquals(object.get("1", "b"), "b");
+		assertEquals(object.getWithDefault("1", "b"), "b");
 	}
 	
 	@Test(expectedExceptions = IllegalStateException.class)

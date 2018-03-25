@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Queue;
 
 import com.tvd12.ezyfoxserver.codec.EzyByteBufferMessageReader;
-import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
@@ -73,7 +72,7 @@ class ReadMessageHeader extends AbstractHandler {
 
 	@Override
 	public EzyIDecodeState nextState() {
-		return EzyDecodeState.READ_MESSAGE_SIZE;
+		return READ_MESSAGE_SIZE;
 	}
 
 	@Override
@@ -129,7 +128,7 @@ class Handlers extends EzyDecodeHandlers {
 		return new Builder();
 	}
 	
-	public static class Builder extends AbstractBuilder {
+	public static class Builder extends EzyDecodeHandlers.Builder {
 		protected int maxSize;
 		protected EzyByteBufferMessageReader messageReader = new EzyByteBufferMessageReader();
 		

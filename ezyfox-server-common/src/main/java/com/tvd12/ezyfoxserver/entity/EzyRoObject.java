@@ -26,7 +26,7 @@ public interface EzyRoObject extends EzyData {
      * @return true or false
      */
     default boolean isEmpty() {
-    	return size() == 0;
+    		return size() == 0;
     }
     
     /**
@@ -104,10 +104,39 @@ public interface EzyRoObject extends EzyData {
      * 
      * @param <V> type of value
      * @param key the key 
-     * @param defValue the default value
+     * @param def the default value
      * @return the value mapped to key 
      */
-    default <V> V get(Object key, V defValue) {
-    	return containsKey(key) ? get(key) : defValue;
+    default <V> V getWithDefault(Object key, V def) {
+    		return containsKey(key) ? get(key) : def;
+    }
+    
+    /**
+     * 
+     * returns the value to which the specified key is mapped, 
+     * or null if contains no mapping for the key and cast 
+     * the value to specific type.
+     * 
+     * @param <V> the type
+     * @param key key
+     * @param type type of value
+     * @param def the default value
+     * @return a value
+     */
+    default <V> V get(Object key, Class<V> type, V def) {
+    		return containsKey(key) ? get(key, type) : def;
+    }
+    
+    /**
+     * get but not cast
+     * 
+     * @param key the key
+     * @param type the value type
+     * @param def the default value
+     * @return object value
+     */
+    @SuppressWarnings("rawtypes")
+	default Object getValue(Object key, Class type, Object def) {
+    		return containsKey(key) ? getValue(key, type) : def;
     }
 }

@@ -2,10 +2,6 @@ package com.tvd12.ezyfoxserver.codec;
 
 public class EzyMessageHeaderReader {
 	
-	protected boolean bigSize;
-	protected boolean encrypted;
-	protected boolean compressed;
-	
 	protected boolean readBigSize(byte header) {
 		return (header & 1 << 0) != 0;
 	}

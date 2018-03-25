@@ -49,7 +49,7 @@ public interface EzyRoArray extends EzyData {
 	 * @param toIndex the to index
 	 * @return the new array
 	 */
-	EzyArray sub(int fromIndex, int toIndex);
+	EzyRoArray sub(int fromIndex, int toIndex);
 	
 	/**
 	 * @return the size of array
@@ -84,4 +84,42 @@ public interface EzyRoArray extends EzyData {
 	 */
 	<T,A> A toArray(Class<T> type);
 	
+	/**
+	 * Get value by index
+	 * 
+	 * @param <T> the value type
+	 * @param index the index
+	 * @param def the default value
+	 * @return the value
+	 */
+	default <T> T getWithDefault(int index, T def) {
+		return size() > index ? get(index) : def;
+	}
+	
+	/**
+	 * Get and cast value by index
+	 * 
+	 * @param <T> the value
+	 * @param index the index
+	 * @param type the value type
+	 * @param def the default value
+	 * @return the value
+	 */
+	default <T> T get(int index, Class<T> type, T def) {
+		return size() > index ? get(index, type) : def;
+	}
+	
+	/**
+	 * Get value by index but not cast
+	 * 
+	 * @param <T> the value
+	 * @param index the index
+	 * @param type the value type
+	 * @param def the default value
+	 * @return the object value
+	 */
+	@SuppressWarnings("rawtypes")
+	default Object getValue(int index, Class type, Object def) {
+		return size() > index ? getValue(index, type) : def;
+	}
 }

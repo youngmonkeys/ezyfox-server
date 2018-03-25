@@ -65,16 +65,15 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<joda.time.version>2.9.9</joda.time.version>
-		<google.guava.version>21.0</google.guava.version>
+		<google.guava.version>23.0</google.guava.version>
 		<reflections.version>0.9.11</reflections.version>
-		<commons.codec.version>1.10</commons.codec.version>
+		<commons.codec.version>1.11</commons.codec.version>
 		<properties.file.version>1.0.4</properties.file.version>
 
 		<commons.io.version>2.5</commons.io.version>
-		<lombok.version>1.16.10</lombok.version>
+		<lombok.version>1.16.20</lombok.version>
 		<slf4j.version>1.7.25</slf4j.version>
-		<groovy.version>2.4.6</groovy.version>
-		<jackson.version>2.8.10</jackson.version>
+		<jackson.version>2.9.4</jackson.version>
 
 		<directory.lib>lib</directory.lib>
 		<deploy.path>${env.EZYFOX_SERVER_HOME}</deploy.path>

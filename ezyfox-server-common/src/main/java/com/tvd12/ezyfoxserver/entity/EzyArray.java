@@ -48,6 +48,13 @@ public interface EzyArray extends EzyRoArray {
 	 */
 	<T> T remove(int index);
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyRoArray#sub(int, int)
+	 */
+	@Override
+	EzyArray sub(int fromIndex, int toIndex);
+	
 	/**
 	 * For each
 	 * 

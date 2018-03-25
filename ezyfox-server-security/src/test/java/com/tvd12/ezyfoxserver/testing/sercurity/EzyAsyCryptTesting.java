@@ -30,6 +30,9 @@ public class EzyAsyCryptTesting extends BaseTest {
 				.publicKey(keyPair.getPublic().getEncoded())
 				.build();
 		
+		System.out.println("public: " + EzyBase64.encode2utf(keyPair.getPublic().getEncoded()));
+		System.out.println("private: " + EzyBase64.encode2utf(keyPair.getPrivate().getEncoded()));
+		
 		String text = "i'm dzung";
 		String encryptedText = asyCrypt.encrypt(text, String.class);
 		

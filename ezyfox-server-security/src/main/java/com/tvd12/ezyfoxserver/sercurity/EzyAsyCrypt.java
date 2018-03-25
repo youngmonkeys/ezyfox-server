@@ -116,6 +116,7 @@ public class EzyAsyCrypt {
 		return new Builder<>();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static class Builder<B extends Builder<B>> {
 		
 		protected String algorithm;
@@ -124,17 +125,17 @@ public class EzyAsyCrypt {
 		
 		public B algorithm(String algorithm) {
 			this.algorithm = algorithm;
-			return getThis();
+			return (B)this;
 		}
 		
 		public B publicKey(byte[] publicKey) {
 			this.publicKey = publicKey;
-			return getThis();
+			return (B)this;
 		}
 		
 		public B privateKey(byte[] privateKey) {
 			this.privateKey = privateKey;
-			return getThis();
+			return (B)this;
 		}
 		
 		protected byte[] getPublicKey() {
@@ -155,11 +156,6 @@ public class EzyAsyCrypt {
 		
 		protected KeyFactory newKeyFactory() throws Exception {
 			return KeyFactory.getInstance(algorithm);
-		}
-		
-		@SuppressWarnings("unchecked")
-		protected B getThis() {
-			return (B)this;
 		}
 	}
 

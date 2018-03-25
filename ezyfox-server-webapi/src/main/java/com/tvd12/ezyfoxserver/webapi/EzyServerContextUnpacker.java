@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.webapi;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -20,7 +18,6 @@ import lombok.Setter;
 @Setter
 public class EzyServerContextUnpacker extends EzyLoggable {
 
-	@Autowired
 	protected EzyServerContext serverContext;
 	
 	protected EzyServer getServer() {

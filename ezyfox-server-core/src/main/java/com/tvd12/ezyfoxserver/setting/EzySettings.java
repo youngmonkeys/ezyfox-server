@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface EzySettings {
 
+    boolean isDebug();
+    
     int getMaxUsers();
     
     int getMaxSessions();

@@ -5,6 +5,7 @@
 	<xs:element name="settings">
 		<xs:complexType>
 			<xs:all>
+				<xs:element ref="debug" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="thread-pool-size" minOccurs="0" maxOccurs="1" />
@@ -20,6 +21,7 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="debug" type="xs:boolean" />
 	<xs:element name="max-users" type="xs:integer" />
 	<xs:element name="max-sessions" type="xs:integer" />
 	<xs:element name="thread-pool-size" type="xs:integer" />

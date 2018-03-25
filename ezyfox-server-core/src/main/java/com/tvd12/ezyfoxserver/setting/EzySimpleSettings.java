@@ -22,6 +22,9 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EzySimpleSettings implements EzySettings {
 
+    @XmlElement(name = "debug")
+    protected boolean debug;
+    
     @XmlElement(name = "max-users")
     protected int maxUsers = 999999;
     

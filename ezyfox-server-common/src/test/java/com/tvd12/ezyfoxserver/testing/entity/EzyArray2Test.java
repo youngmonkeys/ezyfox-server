@@ -83,16 +83,16 @@ public class EzyArray2Test extends CommonBaseTest {
 		}
 
 		@Override
-		public <T> void add(T item) {
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public <T> void add(T... items) {
+		public void add(Object item) {
 		}
 
 		@Override
-		public void add(Collection<? extends Object> items) {
+		public void add(Object... items) {
+		}
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		public void add(Collection items) {
 		}
 
 		@Override

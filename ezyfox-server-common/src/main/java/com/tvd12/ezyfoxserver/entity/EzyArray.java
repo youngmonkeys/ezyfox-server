@@ -9,26 +9,24 @@ public interface EzyArray extends EzyRoArray {
 	/**
 	 * Add item to array
 	 * 
-	 * @param <T> the value type
 	 * @param item the item to add
 	 */
-	<T> void add(T item);
-	
-	/**
-	 * Add items to array
-	 * 
-	 * @param <T> the value type
-	 * @param items the items to add
-	 */
-	@SuppressWarnings("unchecked")
-	<T> void add(T... items);
+	void add(Object item);
 	
 	/**
 	 * Add items to array
 	 * 
 	 * @param items the items to add
 	 */
-	void add(Collection<? extends Object> items);
+	void add(Object... items);
+	
+	/**
+	 * Add items to array
+	 * 
+	 * @param items the items to add
+	 */
+	@SuppressWarnings("rawtypes")
+	void add(Collection items);
 	
 	/**
 	 * Set value at the index

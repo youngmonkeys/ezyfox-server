@@ -85,6 +85,13 @@ public interface EzyRoArray extends EzyData {
 	<T,A> A toArray(Class<T> type);
 	
 	/**
+	 * (non-Javadoc)
+	 * @see com.tvd12.ezyfoxserver.entity.EzyData#duplicate()
+	 */
+	@Override
+	EzyRoArray duplicate();
+	
+	/**
 	 * Get value by index
 	 * 
 	 * @param <T> the value type

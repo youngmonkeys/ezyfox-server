@@ -100,6 +100,13 @@ public interface EzyRoObject extends EzyData {
 	Map toMap();
     
     /**
+     * (non-Javadoc)
+     * @see com.tvd12.ezyfoxserver.entity.EzyData#duplicate()
+     */
+    @Override
+    EzyRoObject duplicate();
+    
+    /**
      * @see java.util.Map#get(java.lang.Object)
      * 
      * @param <V> type of value

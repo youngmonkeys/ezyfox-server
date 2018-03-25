@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyRoObject;
 import com.tvd12.test.base.BaseTest;
 
@@ -35,7 +34,7 @@ public class EzyObject6Test extends BaseTest {
 		}
 
 		@Override
-		public EzyData duplicate() {
+		public XObject duplicate() {
 			return null;
 		}
 

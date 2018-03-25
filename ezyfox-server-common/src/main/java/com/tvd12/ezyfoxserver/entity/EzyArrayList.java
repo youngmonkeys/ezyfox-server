@@ -184,7 +184,6 @@ public class EzyArrayList implements EzyArray {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		super.clone();
 		EzyArrayList clone = new EzyArrayList((Collection) list.clone());
 		clone.setInputTransformer(inputTransformer);
 		clone.setOutputTransformer(outputTransformer);

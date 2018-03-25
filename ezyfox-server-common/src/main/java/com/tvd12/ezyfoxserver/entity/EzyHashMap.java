@@ -175,7 +175,6 @@ public class EzyHashMap implements EzyObject {
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		super.clone();
 		EzyHashMap clone = new EzyHashMap(map);
 		clone.setInputTransformer(inputTransformer);
 		clone.setOutputTransformer(outputTransformer);

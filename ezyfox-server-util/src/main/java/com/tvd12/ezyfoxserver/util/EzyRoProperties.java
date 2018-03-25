@@ -46,7 +46,7 @@ public interface EzyRoProperties {
      * @return a value
      */
     default <T> T getProperty(Class<T> key) {
-    	return getProperty((Object)key);
+    		return getProperty((Object)key);
     }
 	
 }

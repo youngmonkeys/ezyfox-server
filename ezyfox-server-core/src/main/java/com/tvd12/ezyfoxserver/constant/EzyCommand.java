@@ -1,9 +1,10 @@
 package com.tvd12.ezyfoxserver.constant;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.collect.Sets;
-import com.tvd12.ezyfoxserver.util.EzyEnums;
 
 import lombok.Getter;
 
@@ -30,6 +31,7 @@ public enum EzyCommand implements EzyConstant {
 	private final int priority;
 	
 	private static final Set<EzyCommand> SYSTEM_COMMANDS = systemCommands();
+	private static final Map<Integer, EzyCommand> COMMANDS_BY_ID = commandsById();
 	
 	private EzyCommand(int id) {
 	    this(id, 10);
@@ -54,11 +56,18 @@ public enum EzyCommand implements EzyConstant {
 	}
 	
 	public static EzyCommand valueOf(int id) {
-		return EzyEnums.valueOf(values(), id);
+		return COMMANDS_BY_ID.get(id);
 	}
 	
 	private static final Set<EzyCommand> systemCommands() {
 	    return Sets.newHashSet(HANDSHAKE, LOGIN, LOGOUT, APP_ACCESS, APP_EXIT, DISCONNECT);
+	}
+	
+	private static final Map<Integer, EzyCommand> commandsById() {
+	    Map<Integer, EzyCommand> map = new ConcurrentHashMap<>();
+	    for(EzyCommand cmd : values())
+	        map.put(cmd.getId(), cmd);
+	    return map;
 	}
 	
 }

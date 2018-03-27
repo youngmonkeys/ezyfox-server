@@ -87,12 +87,12 @@ public final class EzyMaps {
     }
     
     public static <K,V> Map<K, V> newHashMap(K key, V value) {
-    	return newMap(key, value, new HashMap<>());
+    		return newMap(key, value, new HashMap<>());
     }
     
     public static <K,V,M extends Map<K, V>> M newMap(K key, V value, M map) {
-    	map.put(key, value);
-    	return map;
+    		map.put(key, value);
+    		return map;
     }
 
     //=================================================================
@@ -110,7 +110,7 @@ public final class EzyMaps {
     }
     
     public static <K,V> V putIfAbsent(Map<K, V> map, K key, V value) {
-    	return EzyLazyInitHelper.init(map, 
+    		return EzyLazyInitHelper.init(map, 
     			() -> map.get(key), 
     			() -> map.computeIfAbsent(key, (k) -> value));
     }
@@ -122,36 +122,36 @@ public final class EzyMaps {
     
     @SuppressWarnings("unchecked")
 	public static <K,E> void addItemsToList(Map<K, List<E>> map, K key, E... items) {
-    	addItemsToList(map, key, Lists.newArrayList(items));
+    		addItemsToList(map, key, Lists.newArrayList(items));
     }
     
     public static <K,E> void addItemsToSet(Map<K, Set<E>> map, K key, Collection<E> items) {
-    	putIfAbsent(map, key, new HashSet<>()).addAll(items);
+    		putIfAbsent(map, key, new HashSet<>()).addAll(items);
     }
     
     public static <K,E> void addItemsToList(Map<K, List<E>> map, K key, Collection<E> items) {
-    	putIfAbsent(map, key, new ArrayList<>()).addAll(items);
+    		putIfAbsent(map, key, new ArrayList<>()).addAll(items);
     }
     
     @SuppressWarnings("unchecked")
 	public static <K,E> void removeItems(Map<K, ? extends Collection<E>> map, K key, E... items) {
-    	removeItems(map, key, Lists.newArrayList(items));
+    		removeItems(map, key, Lists.newArrayList(items));
     }
     
     public static <K,E> void removeItems(Map<K, ? extends Collection<E>> map, K key, Collection<E> items) {
-    	if(map.containsKey(key))
+    		if(map.containsKey(key))
             map.get(key).removeAll(items);
     }
     
 	// =============================================
     @SuppressWarnings("rawtypes")
 	public static boolean containsAll(Map map1, Map map2) {
-    	for(Object key : map2.keySet()) {
-    		if(!map1.containsKey(key))
-    			return false;
-    		if(!EzyObjects.equals(map2.get(key), map1.get(key)))
-    			return false;
-    	}
-    	return true;
+    		for(Object key : map2.keySet()) {
+	    		if(!map1.containsKey(key))
+	    			return false;
+	    		if(!EzyObjects.equals(map2.get(key), map1.get(key)))
+	    			return false;
+    		}
+    		return true;
     }
 }

@@ -1,6 +1,6 @@
-package com.tvd12.ezyfoxserver.function;
+package com.tvd12.ezyfoxserver.io;
 
-public interface EzyCastIntToByte {
+public interface EzyCastToByte {
 
 	default byte cast(int value) {
 		return (byte)value;

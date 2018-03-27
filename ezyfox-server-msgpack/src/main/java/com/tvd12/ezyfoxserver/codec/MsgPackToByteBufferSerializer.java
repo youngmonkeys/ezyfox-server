@@ -13,9 +13,9 @@ import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.function.EzyCastIntToByte;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyByteBuffers;
+import com.tvd12.ezyfoxserver.io.EzyCastToByte;
 import com.tvd12.ezyfoxserver.io.EzyDataConverter;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 import com.tvd12.ezyfoxserver.util.EzyBoolsIterator;
@@ -29,7 +29,7 @@ import com.tvd12.ezyfoxserver.util.EzyWrapperIterator;
 
 public class MsgPackToByteBufferSerializer 
 		extends EzyAbstractToByteBufferSerializer 
-		implements EzyCastIntToByte {
+		implements EzyCastToByte {
 
 	protected IntSerializer intSerializer = new IntSerializer();
 	protected FloatSerializer floatSerializer = new FloatSerializer();

@@ -12,6 +12,10 @@ public interface EzyObjectDeserializer {
 		return deserialize(buffer);
 	}
 	
+	default <T> T read(byte[] buffer) {
+		return read(ByteBuffer.wrap(buffer));
+	}
+	
 	default <T> T deserialize(byte[] data) {
 		return deserialize(ByteBuffer.wrap(data));
 	}

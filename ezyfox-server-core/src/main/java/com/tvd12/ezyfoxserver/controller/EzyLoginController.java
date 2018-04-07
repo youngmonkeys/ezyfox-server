@@ -49,7 +49,9 @@ public class EzyLoginController
 	}
 	
 	protected void process(EzyServerContext ctx, EzyUserLoginEvent event) {
-	    EzyLoginProcessor.builder().context(ctx).event(event).build().apply();
+	    EzyLoginProcessor processor = 
+	            EzyLoginProcessor.builder().context(ctx).event(event).build();
+	    processor.apply();
 	}
 	
 	protected void firePluginEvent(EzyServerContext ctx, EzyUserLoginEvent event) {

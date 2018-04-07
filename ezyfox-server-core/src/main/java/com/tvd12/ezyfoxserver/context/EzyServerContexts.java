@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public final class EzyServerContexts {
@@ -43,6 +45,11 @@ public final class EzyServerContexts {
     
     public static EzyStatistics getStatistics(EzyServerContext context) {
         return context.getServer().getStatistics();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
+        return getManagers(ctx).getManager(EzySessionManager.class);
     }
     
     public static void forEachAppContexts(

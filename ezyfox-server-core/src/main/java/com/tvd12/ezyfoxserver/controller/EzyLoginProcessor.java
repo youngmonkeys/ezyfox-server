@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.controller;
 
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.forEachAppContexts;
+import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSessionManager;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSettings;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getUserManager;
@@ -15,6 +16,7 @@ import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -33,43 +35,49 @@ import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionLoginEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserAddedEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.function.EzyVoid;
-import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 import com.tvd12.ezyfoxserver.response.EzyLoginParams;
+import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyLoginProcessor 
         extends EzyEntityBuilders 
         implements EzyVoid {
 
-    protected boolean alreadyLoggedIn;
-    protected boolean allowGuestLogin;
-    protected String guestNamePrefix;
-    protected String userNamePattern;
+    protected final boolean alreadyLoggedIn;
+    protected final boolean allowGuestLogin;
+    protected final String guestNamePrefix;
+    protected final String userNamePattern;
 
-    protected EzySettings settings;
-    protected EzyUserStatistics userStats;
-    protected EzyUserLoginEvent event;
-    protected EzyServerContext context;
-    protected EzyServerUserManager userManager;
-    protected EzyUserManagementSetting userManagementSetting;
+    protected final EzySettings settings;
+    protected final EzyUserStatistics userStats;
+    protected final EzyUserLoginEvent event;
+    protected final EzyServerContext context;
+    protected final EzyServerUserManager userManager;
+    protected final EzySessionManager<EzySession> sessionManager;
+    protected final EzyUserManagementSetting userManagementSetting;
+    protected final EzySessionManagementSetting sessionManagementSetting;
     
     protected EzyLoginProcessor(Builder builder) {
-    	this.event = builder.event;
-    	this.context = builder.context;
-    	this.settings = getSettings(context);
-    	this.userManager = getUserManager(context);
-    	this.userStats = getStatistics(context).getUserStats();
-    	this.userManagementSetting = settings.getUserManagement();
-    	this.allowGuestLogin = userManagementSetting.isAllowGuestLogin();
-    	this.guestNamePrefix = userManagementSetting.getGuestNamePrefix();
-    	this.userNamePattern = userManagementSetting.getUserNamePattern();
+        	this.event = builder.event;
+        	this.context = builder.context;
+        	this.settings = getSettings(context);
+        	this.userManager = getUserManager(context);
+        	this.sessionManager = getSessionManager(context);
+        	this.userStats = getStatistics(context).getUserStats();
+        	this.userManagementSetting = settings.getUserManagement();
+        	this.sessionManagementSetting = settings.getSessionManagement();
+        	this.allowGuestLogin = userManagementSetting.isAllowGuestLogin();
+        	this.guestNamePrefix = userManagementSetting.getGuestNamePrefix();
+        	this.userNamePattern = userManagementSetting.getUserNamePattern();
         this.alreadyLoggedIn = userManager.containsUser(event.getUsername());
     }
     
@@ -84,6 +92,7 @@ public class EzyLoginProcessor
         checkMaximumSessions(user);
         EzySession session = getSession();
         updateSession(session);
+        processReconnect(session);
         mapUserSession(user, session);
         user.addSession(session);
         notifyLoggedIn(user, session);
@@ -100,6 +109,17 @@ public class EzyLoginProcessor
     protected void checkMaximumSessions(EzyUser user) {
         if(user.getSessionCount() >= getMaxSession())
             throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
+    }
+    
+    protected void processReconnect(EzySession session) {
+        String beforeReconnectToken = session.getBeforeReconnectToken();
+        if(beforeReconnectToken == null)
+            return;
+        EzySession oldsession = sessionManager.getSession(beforeReconnectToken);
+        boolean allowReconnect = sessionManagementSetting.isSessionAllowReconnect();
+        boolean reconnect = oldsession != null && allowReconnect;
+        if(reconnect)
+            sessionManager.removeSession(oldsession, EzyDisconnectReason.ANOTHER_SESSION_LOGIN);
     }
 
     protected void mapUserSession(EzyUser user, EzySession session) {

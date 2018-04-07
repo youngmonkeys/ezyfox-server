@@ -4,6 +4,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
@@ -18,20 +19,19 @@ public class EzyAbstractServerController extends EzyAbstractController {
 	}
 	
 	protected EzySettings getSettings(EzyServerContext ctx) {
-	    return getServer(ctx).getSettings();
+	    return EzyServerContexts.getSettings(ctx);
 	}
 	
 	protected EzyManagers getManagers(EzyServerContext ctx) {
-		return getServer(ctx).getManagers();
+		return EzyServerContexts.getManagers(ctx);
 	}
 	
 	protected EzyServerUserManager getUserManager(EzyServerContext ctx) {
-		return getManagers(ctx).getManager(EzyServerUserManager.class);
+		return EzyServerContexts.getUserManager(ctx);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
-		return getManagers(ctx).getManager(EzySessionManager.class);
+		return EzyServerContexts.getSessionManager(ctx);
 	}
 	
 	protected EzyAppContext getAppContext(EzyServerContext ctx, int appId) {

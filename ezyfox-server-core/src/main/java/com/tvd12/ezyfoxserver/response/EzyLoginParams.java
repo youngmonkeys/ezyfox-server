@@ -11,7 +11,7 @@ import lombok.Setter;
 public class EzyLoginParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = 3437241102772473580L;
     
-    protected long zoneId;
+    protected int zoneId;
     protected long userId;
 	protected Object data;
 	protected String username;

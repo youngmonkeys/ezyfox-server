@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventAppControllersImpl;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "application")
+@JsonIgnoreProperties(value = {"zoneId"}, ignoreUnknown = true)
 @JsonPropertyOrder({"id", "name", "entryLoader"})
 public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSetting {
 

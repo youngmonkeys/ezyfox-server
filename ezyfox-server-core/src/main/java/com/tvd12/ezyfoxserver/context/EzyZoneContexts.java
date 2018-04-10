@@ -37,7 +37,7 @@ public final class EzyZoneContexts {
     }
     
     public static Collection<Integer> getAppIds(EzyZoneContext context) {
-        return context.getZone().getAppIds();
+        return getZoneSetting(context).getAppIds();
     }
 
     public static EzyZoneUserManager getUserManager(EzyZoneContext context) {

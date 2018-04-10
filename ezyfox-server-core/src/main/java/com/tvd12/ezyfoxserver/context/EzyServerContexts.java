@@ -6,10 +6,8 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
-import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public final class EzyServerContexts {
 
@@ -28,16 +26,8 @@ public final class EzyServerContexts {
         return EzyAppContexts.containsUser(context, username);
     }
     
-    public static EzyManagers getManagers(EzyServerContext context) {
-        return context.getServer().getManagers();
-    }
-    
     public static EzyUserManager getUserManager(EzyAppContext context) {
         return EzyAppContexts.getUserManager(context);
-    }
-    
-    public static EzyZoneUserManager getUserManager(EzyServerContext context) {
-        return getManagers(context).getManager(EzyZoneUserManager.class);
     }
     
     public static EzyStatistics getStatistics(EzyServerContext context) {
@@ -46,7 +36,7 @@ public final class EzyServerContexts {
     
     @SuppressWarnings("unchecked")
     public static EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
-        return getManagers(ctx).getManager(EzySessionManager.class);
+        return ctx.getServer().getSessionManager();
     }
     
     public static EzyHttpSetting getHttpSetting(EzyServerContext context) {

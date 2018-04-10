@@ -6,8 +6,8 @@ import javax.net.ssl.SSLContext;
 
 import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
-import com.tvd12.ezyfoxserver.api.EzyApis;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
+import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
@@ -49,8 +49,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	@Override
 	protected void setupServer() {
 		EzyServer server = getServer();
-		EzyApis apis = server.getApis();
-		apis.addApi(EzyResponseApi.class, responseApi);
+		((EzyResponseApiAware)server).setResponseApi(responseApi);
 	}
 	
 	@Override

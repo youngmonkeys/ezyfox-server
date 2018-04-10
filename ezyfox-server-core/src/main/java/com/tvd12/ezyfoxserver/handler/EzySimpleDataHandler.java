@@ -24,6 +24,7 @@ import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
+@SuppressWarnings("unchecked")
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
 
@@ -123,7 +124,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         interceptServerRequest(interceptor, request);
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
     protected void interceptServerRequest(
             EzyInterceptor interceptor, Object request) throws Exception {
         interceptor.intercept(context, request);
@@ -134,7 +135,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         handleServerRequest(controller, request);
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("rawtypes")
     protected void handleServerRequest(EzyController controller, Object request) {
         controller.handle(context, request);
     }

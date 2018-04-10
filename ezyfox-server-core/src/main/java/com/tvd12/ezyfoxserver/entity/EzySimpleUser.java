@@ -10,6 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
+import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
@@ -23,12 +24,13 @@ import lombok.Setter;
 @Getter
 public class EzySimpleUser 
         extends EzyEntity 
-        implements EzyUser, EzyNameAware, EzyHasUserRemoveDelegate, Serializable {
+        implements EzyUser, EzyNameAware, EzyZoneIdAware, EzyHasUserRemoveDelegate, Serializable {
 	private static final long serialVersionUID = -7846882289922504595L;
 	
 	protected long id = COUNTER.incrementAndGet();
 	protected String name = "";
 	protected String password = "";
+	protected int zoneId = 0;
 	protected int maxSessions = 30;
 	protected long maxIdleTime = 3 * 60 * 1000;
 	protected long startIdleTime = System.currentTimeMillis();

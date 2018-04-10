@@ -17,6 +17,13 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
 	long getId();
 	
 	/**
+	 * Get zone id
+	 * 
+	 * @return the zone id
+	 */
+	int getZoneId();
+	
+	/**
 	 * Get max session
 	 * 
 	 * @return the max session

@@ -44,6 +44,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         user.setName("dungtv");
         user.addSession(session);
         EzyServerContext context = newServerContext();
+        user.setZoneId(context.getServer().getSettings().getZoneIds().iterator().next());
         MyTestDataHandler handler = new MyTestDataHandler(session);
         handler.setContext(context);
         handler.provideSession();

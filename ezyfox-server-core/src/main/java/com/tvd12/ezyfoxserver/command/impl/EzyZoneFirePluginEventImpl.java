@@ -22,7 +22,7 @@ public class EzyZoneFirePluginEventImpl
 	
 	public EzyZoneFirePluginEventImpl(EzyZoneContext context) {
 	    this.context = context;
-	    this.eventPluginsMapper = context.getZone().getEventPluginsMapper();
+	    this.eventPluginsMapper = context.getZone().getSetting().getEventPluginsMapper();
 	}
 	
 	@Override

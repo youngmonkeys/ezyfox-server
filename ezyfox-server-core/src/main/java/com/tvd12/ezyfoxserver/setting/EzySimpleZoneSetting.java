@@ -10,9 +10,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.util.EzyInitable;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +25,8 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "zone")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"eventPluginsMapper"}, ignoreUnknown = true)
+@JsonPropertyOrder({"id", "name", "configFile", "maxUsers", "userManagement", "plugins", "applications"})
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
     protected int id = COUNTER.incrementAndGet();
@@ -35,14 +38,16 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     @XmlElement(name = "max-users")
     protected int maxUsers = 999999;
 	
-	@XmlElement(name = "user-management")
-	protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
-	
 	@XmlElement(name = "plugins")
     protected EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
     
     @XmlElement(name = "applications")
     protected EzySimpleAppsSetting applications = new EzySimpleAppsSetting();
+    
+    @XmlElement(name = "user-management")
+    protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
+    
+    protected EzyEventPluginsMapper eventPluginsMapper;
     
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
     

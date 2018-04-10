@@ -60,6 +60,7 @@ public class EzySimpleNettyDataHandler
 		return sessionManager.provideSession(channel);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void addExceptionHandlers(Map<Class<?>, EzyExceptionHandler> handlers) {
 		super.addExceptionHandlers(handlers);

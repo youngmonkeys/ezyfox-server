@@ -7,6 +7,8 @@ import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.util.EzyInitable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 
 public class EzySimpleSettingsReader
         extends EzyLoggable
@@ -38,6 +40,7 @@ public class EzySimpleSettingsReader
             postReadZoneSettings(zoneSetting);
             zoneSetting.setName(zf.getName());
             zoneSetting.setConfigFile(zf.getConfigFile());
+            zoneSetting.setEventPluginsMapper(newEventPluginsMapper(zoneSetting.getPlugins()));
             zoneSetting.init();
             settings.addZone(zoneSetting);
         });
@@ -78,6 +81,12 @@ public class EzySimpleSettingsReader
     
     protected void updateSessionManagementSetting(EzySessionManagementSetting setting) {
         ((EzyInitable)setting).init();
+    }
+    
+    protected EzyEventPluginsMapper newEventPluginsMapper(EzyPluginsSetting pluginsSetting) {
+        return EzyEventPluginsMapperImpl.builder()
+                .plugins(pluginsSetting)
+                .build();
     }
     
     protected EzyXmlReader newXmlReader() {

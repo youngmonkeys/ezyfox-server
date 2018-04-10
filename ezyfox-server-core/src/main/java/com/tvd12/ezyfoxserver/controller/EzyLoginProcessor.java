@@ -13,6 +13,7 @@ import java.util.concurrent.locks.Lock;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
@@ -45,6 +46,7 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
@@ -66,10 +68,12 @@ public class EzyLoginProcessor
     protected final String guestNamePrefix;
     protected final String userNamePattern;
 
+    protected final EzyZone zone;
+    protected final EzyZoneSetting zoneSetting;
     protected final EzySettings settings;
     protected final EzyUserStatistics userStats;
-    protected final EzyZoneContext zoneContext;
     protected final EzyServerContext serverContext;
+    protected final EzyZoneContext zoneContext;
     protected final EzyZoneUserManager userManager;
     protected final EzySessionManager<EzySession> sessionManager;
     protected final EzyUserManagementSetting userManagementSetting;
@@ -82,6 +86,8 @@ public class EzyLoginProcessor
         this.loginData = builder.getLoginData();
         this.loginOuputData = builder.getLoginOuputData();
         	this.zoneContext = builder.zoneContext;
+        	this.zone = zoneContext.getZone();
+        	this.zoneSetting = zone.getSetting();
         	this.serverContext = builder.serverContext;
         	this.settings = getSettings(serverContext);
         	this.userManager = getUserManager(zoneContext);
@@ -190,6 +196,7 @@ public class EzyLoginProcessor
         EzySimpleUser user = new EzySimpleUser();
         user.setName(getNewUsername(user.getId(), username));
         user.setPassword(password);
+        user.setZoneId(zoneSetting.getId());
         user.setMaxIdleTime(userManagementSetting.getUserMaxIdleTime());
         user.setMaxSessions(userManagementSetting.getMaxSessionPerUser());
         user.setRemoveDelegate(newUserRemoveDelegate(user));

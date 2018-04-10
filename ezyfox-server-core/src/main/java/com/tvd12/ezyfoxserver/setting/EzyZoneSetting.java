@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.setting;
 
 import java.util.Set;
 
+import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
+
 public interface EzyZoneSetting {
 
     int getId();
@@ -11,8 +13,6 @@ public interface EzyZoneSetting {
     String getConfigFile();
 
     int getMaxUsers();
-
-    EzyUserManagementSetting getUserManagement();
 
     EzyPluginsSetting getPlugins();
 
@@ -33,5 +33,9 @@ public interface EzyZoneSetting {
     EzyPluginSetting getPluginById(Integer id);
 
     EzyPluginSetting getPluginByName(String name);
+    
+    EzyUserManagementSetting getUserManagement();
+    
+    EzyEventPluginsMapper getEventPluginsMapper();
 
 }

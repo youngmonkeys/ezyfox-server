@@ -12,8 +12,6 @@ import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
@@ -41,13 +39,9 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 		return serverContext.getServer().getSettings();
 	}
 	
-	protected final EzyManagers getServerManagers() {
-		return serverContext.getServer().getManagers();
-	}
-	
 	protected final EzyNioSessionManager getSessionManager() {
 		return (EzyNioSessionManager) 
-				getServerManagers().getManager(EzySessionManager.class);
+				serverContext.getServer().getSessionManager();
 	}
 	
 	@SuppressWarnings("unchecked")

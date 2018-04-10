@@ -18,14 +18,13 @@ import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 /**
  * @author tavandung12
  *
  */
+@SuppressWarnings("rawtypes")
 public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     private String configFile;
@@ -77,15 +76,15 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     protected EzyLoader newLoader() {
         return new EzyLoader() {
             @Override
-            protected void addManagers(EzyManagers managers, EzySettings settings) {
-                EzySimpleSessionManager.Builder<?> sessionManagerBuilder = newSessionManagerBuilder(settings);
-                sessionManagerBuilder.maxSessions(settings.getMaxSessions());
-                managers.addManager(EzySessionManager.class, sessionManagerBuilder.build());
+            protected EzySimpleSessionManager.Builder 
+                    createSessionManagerBuilder(EzySettings settings) {
+                return newSessionManagerBuilder(settings);
             }
         };
     }
 
-    protected abstract EzySimpleSessionManager.Builder<?> newSessionManagerBuilder(EzySettings settings);
+    protected abstract EzySimpleSessionManager.Builder 
+            newSessionManagerBuilder(EzySettings settings);
 
     protected EzyConfigLoader getConfigLoader() {
         return new EzySimpleConfigLoader();

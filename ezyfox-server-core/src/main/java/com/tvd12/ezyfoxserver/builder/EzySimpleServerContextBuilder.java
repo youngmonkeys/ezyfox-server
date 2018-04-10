@@ -25,10 +25,8 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 
 @SuppressWarnings("unchecked")
@@ -63,7 +61,6 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             EzySimpleZone zone = new EzySimpleZone();
             zone.setSetting(zoneSetting);
             zone.setUserManager(newZoneUserManager(zoneSetting));
-            zone.setEventPluginsMapper(newEventPluginsMapper(zoneSetting));
             EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
             zoneContext.setParent(parent);
             zoneContext.setZone(zone);
@@ -82,16 +79,12 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
                 .build();
     }
     
-    protected EzyEventPluginsMapper newEventPluginsMapper(EzyZoneSetting zoneSetting) {
-        return EzyEventPluginsMapperImpl.builder()
-                .plugins(zoneSetting.getPlugins()).build();
-    }
-    
     protected Collection<EzyAppContext> newAppContexts(EzyZoneContext parent) {
         EzyZone zone = parent.getZone();
+        EzyZoneSetting zoneSetting = zone.getSetting();
         Collection<EzyAppContext> contexts = new ArrayList<>();
-        for(Integer appId : zone.getAppIds())
-            contexts.add(newAppContext(parent, zone.getAppById(appId)));
+        for(Integer appId : zoneSetting.getAppIds())
+            contexts.add(newAppContext(parent, zoneSetting.getAppById(appId)));
         return contexts;
     }
     
@@ -115,9 +108,10 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     
     protected Collection<EzyPluginContext> newPluginContexts(EzySimpleZoneContext parent) {
         EzyZone zone = parent.getZone();
+        EzyZoneSetting zoneSetting = zone.getSetting();
         Collection<EzyPluginContext> contexts = new ArrayList<>();
-        for(Integer appId : zone.getPluginIds())
-            contexts.add(newPluginContext(parent, zone.getPluginById(appId)));
+        for(Integer appId : zoneSetting.getPluginIds())
+            contexts.add(newPluginContext(parent, zoneSetting.getPluginById(appId)));
         return contexts;
     }
     

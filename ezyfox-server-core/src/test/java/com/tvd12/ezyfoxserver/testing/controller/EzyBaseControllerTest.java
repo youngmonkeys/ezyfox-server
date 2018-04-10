@@ -4,13 +4,13 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSessionManager;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public abstract class EzyBaseControllerTest extends BaseCoreTest {
 
@@ -20,16 +20,13 @@ public abstract class EzyBaseControllerTest extends BaseCoreTest {
         return ctx.getServer();
     }
     
-    protected EzyManagers getManagers(EzyServerContext ctx) {
-        return getServer(ctx).getManagers();
+    protected EzyZoneUserManager getUserManager(EzyZoneContext ctx) {
+        return ctx.getZone().getUserManager();
     }
     
-    protected EzyZoneUserManager getUserManager(EzyServerContext ctx) {
-        return getManagers(ctx).getManager(EzyZoneUserManager.class);
-    }
-    
+    @SuppressWarnings("rawtypes")
     protected MyTestSessionManager getSessionManager(EzyServerContext ctx) {
-        return (MyTestSessionManager) getManagers(ctx).getManager(EzySessionManager.class);
+        return (MyTestSessionManager)(EzySessionManager) ctx.getServer().getSessionManager();
     }
     
     protected EzyAppContext getAppContext(EzyServerContext ctx, int appId) {

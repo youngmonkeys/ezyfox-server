@@ -57,7 +57,7 @@ public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFi
 	}
 	
 	protected Set<Integer> getAppIds() {
-		return context.getZone().getAppIds();
+		return context.getZone().getSetting().getAppIds();
 	}
 	
 }

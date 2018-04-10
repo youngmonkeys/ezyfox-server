@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyBootstrap 
         extends EzyLoggable 
@@ -20,7 +20,7 @@ public class EzyBootstrap
 	@Override
 	public void start() throws Exception {
 		startAllZones();
-		startManagers();
+		startSessionManager();
 	}
 	
     @Override
@@ -39,16 +39,15 @@ public class EzyBootstrap
         return new EzyZonesStarter.Builder();
     }
 	
-	protected void startManagers() {
-		getManagers().startManagers();
+	@SuppressWarnings("rawtypes")
+    protected void startSessionManager() throws Exception {
+		EzySessionManager sessionManager 
+		        = context.getServer().getSessionManager();
+		((EzyStartable)sessionManager).start();
 	}
 	
 	protected EzyServer getServer() {
 		return context.getServer();
-	}
-	
-	protected EzyManagers getManagers() {
-		return getServer().getManagers();
 	}
 	
 	public static Builder builder() {

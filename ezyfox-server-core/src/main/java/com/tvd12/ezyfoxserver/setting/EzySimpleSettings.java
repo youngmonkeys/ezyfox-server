@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "settings")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"zoneFiles"}, ignoreUnknown = true)
 public class EzySimpleSettings implements EzySettings {
 
     @XmlElement(name = "debug")

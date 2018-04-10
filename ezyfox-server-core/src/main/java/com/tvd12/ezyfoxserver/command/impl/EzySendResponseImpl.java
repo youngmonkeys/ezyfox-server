@@ -33,7 +33,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     public EzySendResponseImpl(EzyServerContext context) {
         this.recipients = new ArrayList<>();
         this.server = context.getServer();
-        this.responseApi = server.getApis().getApi(EzyResponseApi.class);
+        this.responseApi = server.getResponseApi();
         this.loggerSetting = server.getSettings().getLogger();
         this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands(); 
     }

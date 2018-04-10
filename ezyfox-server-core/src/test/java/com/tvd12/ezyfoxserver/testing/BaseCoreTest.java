@@ -25,7 +25,7 @@ import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
@@ -46,7 +46,7 @@ public class BaseCoreTest extends BaseTest {
         try {
             EzySimpleServer answer = (EzySimpleServer) loadEzyFox(readConfig("test-data/settings/config.properties"));
             answer.getManagers().addManager(EzySessionManager.class, MyTestSessionManager.builder().build());
-            answer.getManagers().addManager(EzyServerUserManager.class, MyTestUserManager.builder().build());
+            answer.getManagers().addManager(EzyZoneUserManager.class, MyTestUserManager.builder().build());
             return answer;
         }
         catch(Exception e) {

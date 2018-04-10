@@ -29,4 +29,8 @@ public class EzyLoginErrorException extends IllegalStateException {
         return new EzyLoginErrorException(EzyLoginError.MAXIMUM_USER, e);
     }
     
+    public static EzyLoginErrorException zoneNotFound(Exception e) {
+        return new EzyLoginErrorException(EzyLoginError.ZONE_NOT_FOUND, e);
+    }
+    
 }

@@ -2,9 +2,6 @@ package com.tvd12.ezyfoxserver.testing.command;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
-import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
@@ -19,13 +16,13 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         EzySimpleUser user = newUser();
         user.setName("abc");
         user.addSession(session);
-        EzyServerContext context = newServerContext();
-        new EzyDisconnectUserImpl(context)
-            .user(user)
-            .fireClientEvent(true)
-            .fireServerEvent(true)
-            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-            .execute();
+//        EzyServerContext context = newServerContext();
+//        new EzyDisconnectUserImpl(context)
+//            .user(user)
+//            .fireClientEvent(true)
+//            .fireServerEvent(true)
+//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+//            .execute();
     }
     
     @Test
@@ -35,13 +32,13 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         session.setReconnectToken("abc");
         user.setName("abc");
         user.addSession(session);
-        EzyServerContext context = newServerContext();
-        new EzyDisconnectUserImpl(context)
-            .user(user)
-            .fireClientEvent(false)
-            .fireServerEvent(true)
-            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-            .execute();
+//        EzyServerContext context = newServerContext();
+//        new EzyDisconnectUserImpl(context)
+//            .user(user)
+//            .fireClientEvent(false)
+//            .fireServerEvent(true)
+//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+//            .execute();
     }
     
     @Test
@@ -51,13 +48,13 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         EzySession session = newSession();
         session.setReconnectToken("abc");
         user.addSession(session);
-        EzyServerContext context = newServerContext();
-        new EzyDisconnectUserImpl(context)
-            .user(user)
-            .fireClientEvent(false)
-            .fireServerEvent(false)
-            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-            .execute();
+//        EzyServerContext context = newServerContext();
+//        new EzyDisconnectUserImpl(context)
+//            .user(user)
+//            .fireClientEvent(false)
+//            .fireServerEvent(false)
+//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+//            .execute();
     }
     
     @Test
@@ -67,13 +64,13 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         EzySession session = newSession();
         session.setReconnectToken("abc");
         user.addSession(session);
-        EzyServerContext context = newServerContext();
-        new EzyDisconnectUserImpl(context)
-            .user(user)
-            .fireClientEvent(false)
-            .fireServerEvent(true)
-            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-            .execute();
+//        EzyServerContext context = newServerContext();
+//        new EzyDisconnectUserImpl(context)
+//            .user(user)
+//            .fireClientEvent(false)
+//            .fireServerEvent(true)
+//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+//            .execute();
     }
     
 }

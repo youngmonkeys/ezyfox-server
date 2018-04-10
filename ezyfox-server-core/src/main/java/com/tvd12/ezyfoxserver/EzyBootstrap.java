@@ -19,56 +19,28 @@ public class EzyBootstrap
 	
 	@Override
 	public void start() throws Exception {
-		startAllPlugins();
-		startAllApps();
+		startAllZones();
 		startManagers();
 	}
 	
-	@Override
+    @Override
 	public void destroy() {
 	    // do nothing
 	}
 	
+    private void startAllZones() {
+        EzyZonesStarter.Builder builder = newZonesStarterBuilder()
+                .serverContext(context);
+        EzyZonesStarter starter = builder.build();
+        starter.start();
+    }
+    
+    protected EzyZonesStarter.Builder newZonesStarterBuilder() {
+        return new EzyZonesStarter.Builder();
+    }
+	
 	protected void startManagers() {
 		getManagers().startManagers();
-	}
-	
-	//====================== apps ===================
-	protected void startAllApps() {
-	    getLogger().info("start all apps ...");
-	    startComponents(newAppsStaterBuilder());
-	}
-	
-	protected EzyAppsStarter.Builder newAppsStaterBuilder() {
-	    return EzyAppsStarter.builder()
-                .appClassLoaders(getServer().getAppClassLoaders());
-	}
-	//=================================================
-	
-	//===================== plugins ===================
-	protected void startAllPlugins() {
-	    getLogger().info("start all plugins ...");
-	    startComponents(newPluginsStaterBuilder());
-	}
-	
-	protected EzyPluginsStarter.Builder newPluginsStaterBuilder() {
-	    return EzyPluginsStarter.builder();
-	}
-	
-	//=================================================
-	
-	protected void startComponents(
-	        EzyComponentsStater.Builder<?, ?> builder) {
-	    EzyComponentsStater starter = newComponenstStater(builder);
-	    starter.start();
-	}
-	
-	protected EzyComponentsStater newComponenstStater(
-	        EzyComponentsStater.Builder<?, ?> builder) {
-	    return builder
-	            .serverContext(context)
-	            .settings(getServer().getSettings())
-	            .build();
 	}
 	
 	protected EzyServer getServer() {

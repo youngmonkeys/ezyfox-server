@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings
+	xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
+  		ezy-zone-settings-1.0.0.xsd"
+	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<max-users>10000</max-users>
+	
+	<user-management>
+		<allow-guest-login>true</allow-guest-login>
+		<guest-name-prefix>Guest#</guest-name-prefix>
+		<user-max-idle-time>15000</user-max-idle-time>
+		<max-session-per-user>15</max-session-per-user>
+		<user-name-pattern>^[a-z0-9_.]{3,36}$</user-name-pattern>
+	</user-management>
+	
+	<applications>
+		<application>
+			<name>ezyfox-chat</name>
+			<entry-loader>com.tvd12.ezyfoxserver.chat.EzyChatEntryLoader</entry-loader>
+			<max-users>10000</max-users>
+			<thread-pool-size>30</thread-pool-size>
+			<config-file>config.properties</config-file>
+		</application>
+	</applications>
+	
+	<plugins>
+		<plugin>
+			<name>ezyfox-auth-plugin</name>
+			<priority>-1</priority>
+			<entry-loader>com.tvd12.ezyfoxserver.plugin.auth.EzyAuthPluginEntryLoader</entry-loader>
+			<thread-pool-size>30</thread-pool-size>
+			<config-file>config.properties</config-file>
+			<listen-events>
+				<event>USER_LOGIN</event>
+				<event>USER_ADDED</event>
+				<event>USER_REMOVED</event>
+			</listen-events>
+		</plugin>
+	</plugins>
+</settings>
+
+<!-- http://localhost:8080/schema/ezyfox/settings/ -->

@@ -12,6 +12,7 @@ public class EzySimpleUserLoginEvent
         implements EzyUserLoginEvent {
 
 	protected EzyData data;
+	protected String zoneName;
 	@Setter
 	protected String username;
 	@Setter
@@ -21,6 +22,7 @@ public class EzySimpleUserLoginEvent
 	
 	protected EzySimpleUserLoginEvent(Builder builder) {
 	    super(builder);
+	    this.zoneName = builder.zoneName;
 	    this.data = builder.data;
 	    this.output = builder.output;
 	    this.username = builder.username;
@@ -34,6 +36,7 @@ public class EzySimpleUserLoginEvent
 	public static class Builder extends EzySimpleSessionEvent.Builder<Builder> {
 	    protected EzyData data;
 	    protected EzyData output;
+	    protected String zoneName;
 	    protected String username;
 	    protected String password;
 		
@@ -41,6 +44,11 @@ public class EzySimpleUserLoginEvent
 			this.data = data;
 			return this;
 		}
+		
+		public Builder zoneName(String zoneName) {
+            this.zoneName = zoneName;
+            return this;
+        }
 		
 		public Builder username(String username) {
 			this.username = username;

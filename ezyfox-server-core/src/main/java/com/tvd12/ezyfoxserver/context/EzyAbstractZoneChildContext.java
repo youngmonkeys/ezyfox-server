@@ -1,19 +1,24 @@
 package com.tvd12.ezyfoxserver.context;
 
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 
 import com.google.common.collect.Sets;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class EzySimpleChildContext extends EzyAbstractContext {
+@SuppressWarnings("rawtypes")
+public abstract class EzyAbstractZoneChildContext extends EzyAbstractContext {
 
 	@Setter 
 	@Getter
-	protected EzyServerContext parent;
+	protected EzyZoneContext parent;
 	
-	@SuppressWarnings("rawtypes")
+	@Setter
+    @Getter
+    protected ScheduledExecutorService executorService;
+	
 	protected Set<Class> unsafeCommands = defaultUnsafeCommands();
 	
 	@SuppressWarnings("unchecked")
@@ -27,19 +32,15 @@ public abstract class EzySimpleChildContext extends EzyAbstractContext {
 		return parent.get(clazz);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected Set<Class> defaultUnsafeCommands() {
 		Set<Class> answer = Sets.newConcurrentHashSet();
 		addUnsafeCommands(answer);
 		return answer;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected void addUnsafeCommands(Set<Class> unsafeCommands) {
-		//TODO add some commands
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected RuntimeException newUnsafeCommandException(Class command) {
 		return new IllegalArgumentException("can not execute command " + command + " at app context");
 	}

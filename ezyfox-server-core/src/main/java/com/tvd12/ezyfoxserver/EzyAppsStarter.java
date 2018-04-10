@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
@@ -11,7 +10,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyEntryAware;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
-public class EzyAppsStarter extends EzyComponentsStater {
+public class EzyAppsStarter extends EzyZoneComponentsStater {
 
     protected Map<String, EzyAppClassLoader> appClassLoaders;
     
@@ -34,7 +33,7 @@ public class EzyAppsStarter extends EzyComponentsStater {
     protected void startApp(String appName) {
         try {
             getLogger().debug("app " + appName + " loading...");
-            EzyAppContext context = serverContext.getAppContext(appName);
+            EzyAppContext context = zoneContext.getAppContext(appName);
             EzyApplication application = context.getApp();
             EzyAppEntry entry = startApp(appName, newAppEntryLoader(appName));
             ((EzyEntryAware)application).setEntry(entry);
@@ -52,13 +51,12 @@ public class EzyAppsStarter extends EzyComponentsStater {
         return entry;
     }
     
-    @JsonIgnore
     public Set<String> getAppNames() {
-        return settings.getAppNames();
+        return zoneSetting.getAppNames();
     }
     
     public EzyAppSetting getAppByName(String name) {
-        return settings.getAppByName(name);
+        return zoneSetting.getAppByName(name);
     }
     
     public Class<EzyAppEntryLoader> 
@@ -85,14 +83,14 @@ public class EzyAppsStarter extends EzyComponentsStater {
     }
     
     protected EzyAppContext getAppContext(String appName) {
-        return serverContext.getAppContext(appName);
+        return zoneContext.getAppContext(appName);
     }
     
     public static Builder builder() {
         return new Builder();
     }
     
-    public static class Builder extends EzyComponentsStater.Builder<EzyAppsStarter, Builder> {
+    public static class Builder extends EzyZoneComponentsStater.Builder<EzyAppsStarter, Builder> {
         protected Map<String, EzyAppClassLoader> appClassLoaders;
         
         public Builder appClassLoaders(Map<String, EzyAppClassLoader> appClassLoaders) {

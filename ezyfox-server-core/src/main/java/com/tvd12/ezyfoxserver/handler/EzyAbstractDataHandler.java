@@ -27,7 +27,7 @@ import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyAbstractDataHandler<S extends EzySession> 
@@ -38,7 +38,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
     protected EzyUser user;
     protected EzyServerContext context;
     protected EzyServerControllers controllers;
-    protected EzyServerUserManager userManager;
+    protected EzyZoneUserManager userManager;
     protected EzySessionManager<S> sessionManager;
     protected Lock lock = new ReentrantLock();
     
@@ -94,8 +94,8 @@ public class EzyAbstractDataHandler<S extends EzySession>
         return getManagers().getManager(EzySessionManager.class);
     }
     
-    protected EzyServerUserManager getUserManager() {
-        return getManagers().getManager(EzyServerUserManager.class);
+    protected EzyZoneUserManager getUserManager() {
+        return getManagers().getManager(EzyZoneUserManager.class);
     }
     
     protected void response(EzyResponse response) {

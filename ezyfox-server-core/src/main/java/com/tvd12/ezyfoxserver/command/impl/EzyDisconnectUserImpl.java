@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.*;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.containsUser;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +11,14 @@ import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
-import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
+import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
@@ -31,9 +32,9 @@ public class EzyDisconnectUserImpl
 	private boolean fireServerEvent = true;
 	private List<EzySession> sessions = new ArrayList<>();
 	
-	private EzyServerContext context;
+	private EzyZoneContext context;
 	
-	public EzyDisconnectUserImpl(EzyServerContext ctx) {
+	public EzyDisconnectUserImpl(EzyZoneContext ctx) {
 		this.context = ctx;
 	}
 	

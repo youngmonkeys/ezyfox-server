@@ -4,7 +4,7 @@ import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
-public interface EzyServerUserManager extends EzyUserManager {
+public interface EzyZoneUserManager extends EzyUserManager {
     
 	/**
 	 * Add user

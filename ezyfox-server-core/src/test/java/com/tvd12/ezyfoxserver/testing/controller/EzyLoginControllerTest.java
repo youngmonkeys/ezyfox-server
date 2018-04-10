@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -35,7 +36,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         EzyArray data = newLoginData1();
         EzyLoginController controller = new EzyLoginController() {
             @Override
-            protected void process(EzyServerContext ctx, EzyUserLoginEvent event) {
+            protected void process(EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
                 throw new EzyLoginErrorException();
             }
         };
@@ -53,7 +54,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         EzyArray data = newLoginData();
         EzyLoginController controller = new EzyLoginController() {
             @Override
-            protected void firePluginEvent(EzyServerContext ctx, EzyUserLoginEvent event) {
+            protected void firePluginEvent(EzyZoneContext zoneContext, EzyUserLoginEvent event) {
                 throw new EzyLoginErrorException();
             }
         };
@@ -65,6 +66,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     
     private EzyArray newLoginData() {
         return newArrayBuilder()
+                .append("example")
                 .append("dungtv")
                 .append("123456")
                 .append(newArrayBuilder()
@@ -74,6 +76,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     
     private EzyArray newLoginData1() {
         return newArrayBuilder()
+                .append("example")
                 .append("dungtv")
                 .append("123456")
                 .append(newArrayBuilder())

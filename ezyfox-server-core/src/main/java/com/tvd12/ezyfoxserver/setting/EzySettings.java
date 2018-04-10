@@ -6,11 +6,7 @@ public interface EzySettings {
 
     boolean isDebug();
     
-    int getMaxUsers();
-    
     int getMaxSessions();
-    
-    int getThreadPoolSize();
     
     EzyHttpSetting getHttp();
     
@@ -22,28 +18,15 @@ public interface EzySettings {
     
     EzyLoggerSetting getLogger();
     
-    EzyUserManagementSetting getUserManagement();
-    
     EzySessionManagementSetting getSessionManagement();
     
-    EzyPluginsSetting getPlugins();
+    EzyZonesSetting getZones();
     
-    EzyAppsSetting getApplications();
-    
-    Set<Integer> getAppIds();
-    
-    Set<String> getAppNames();
-    
-    EzyAppSetting getAppById(Integer id);
-    
-    EzyAppSetting getAppByName(String name);
-    
-    Set<Integer> getPluginIds();
-    
-    Set<String> getPluginNames();
-    
-    EzyPluginSetting getPluginById(Integer id);
-    
-    EzyPluginSetting getPluginByName(String name);
-    
+    Set<Integer> getZoneIds();
+
+    Set<String> getZoneNames();
+
+    EzyZoneSetting getZoneById(Integer id);
+
+    EzyZoneSetting getZoneByName(String name);
 }

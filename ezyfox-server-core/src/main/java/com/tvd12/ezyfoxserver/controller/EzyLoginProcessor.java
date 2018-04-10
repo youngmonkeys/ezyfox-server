@@ -1,11 +1,13 @@
 package com.tvd12.ezyfoxserver.controller;
 
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.forEachAppContexts;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSessionManager;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSettings;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getUserManager;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManagementSetting;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManager;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneId;
 
 import java.util.concurrent.locks.Lock;
 
@@ -21,6 +23,7 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
@@ -45,13 +48,19 @@ import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public class EzyLoginProcessor 
         extends EzyEntityBuilders 
         implements EzyVoid {
 
+    protected String username;
+    protected String password;
+    protected EzySession session;
+    protected EzyData loginData;
+    protected EzyData loginOuputData;
+    
     protected final boolean alreadyLoggedIn;
     protected final boolean allowGuestLogin;
     protected final String guestNamePrefix;
@@ -59,26 +68,31 @@ public class EzyLoginProcessor
 
     protected final EzySettings settings;
     protected final EzyUserStatistics userStats;
-    protected final EzyUserLoginEvent event;
-    protected final EzyServerContext context;
-    protected final EzyServerUserManager userManager;
+    protected final EzyZoneContext zoneContext;
+    protected final EzyServerContext serverContext;
+    protected final EzyZoneUserManager userManager;
     protected final EzySessionManager<EzySession> sessionManager;
     protected final EzyUserManagementSetting userManagementSetting;
     protected final EzySessionManagementSetting sessionManagementSetting;
     
     protected EzyLoginProcessor(Builder builder) {
-        	this.event = builder.event;
-        	this.context = builder.context;
-        	this.settings = getSettings(context);
-        	this.userManager = getUserManager(context);
-        	this.sessionManager = getSessionManager(context);
-        	this.userStats = getStatistics(context).getUserStats();
-        	this.userManagementSetting = settings.getUserManagement();
+        this.username = builder.getUsername();
+        this.password = builder.getPassword();
+        this.session = builder.getSession();
+        this.loginData = builder.getLoginData();
+        this.loginOuputData = builder.getLoginOuputData();
+        	this.zoneContext = builder.zoneContext;
+        	this.serverContext = builder.serverContext;
+        	this.settings = getSettings(serverContext);
+        	this.userManager = getUserManager(zoneContext);
+        	this.sessionManager = getSessionManager(serverContext);
+        	this.userStats = getStatistics(serverContext).getUserStats();
+        	this.userManagementSetting = getUserManagementSetting(zoneContext);
         	this.sessionManagementSetting = settings.getSessionManagement();
         	this.allowGuestLogin = userManagementSetting.isAllowGuestLogin();
         	this.guestNamePrefix = userManagementSetting.getGuestNamePrefix();
         	this.userNamePattern = userManagementSetting.getUserNamePattern();
-        this.alreadyLoggedIn = userManager.containsUser(event.getUsername());
+        this.alreadyLoggedIn = userManager.containsUser(username);
     }
     
     @Override
@@ -90,7 +104,6 @@ public class EzyLoginProcessor
         checkUsername();
         EzyUser user = getUser();
         checkMaximumSessions(user);
-        EzySession session = getSession();
         updateSession(session);
         processReconnect(session);
         mapUserSession(user, session);
@@ -102,7 +115,7 @@ public class EzyLoginProcessor
     }
     
     protected void checkUsername() {
-        if(!getUsername().matches(userNamePattern))
+        if(!username.matches(userNamePattern))
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
     
@@ -134,7 +147,7 @@ public class EzyLoginProcessor
     }
     
     protected EzyUser getUser() {
-        return alreadyLoggedIn ? userManager.getUser(getUsername()) : newUser();
+        return alreadyLoggedIn ? userManager.getUser(username) : newUser();
     }
     
     protected void updateSession(EzySession session) {
@@ -143,7 +156,7 @@ public class EzyLoginProcessor
     }
     
     protected void notifyLoggedIn(EzyUser user, EzySession session) {
-        EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)getSession();
+        EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)session;
         hasDelegate.getDelegate().onSessionLoggedIn(user);
     }
     
@@ -153,8 +166,8 @@ public class EzyLoginProcessor
     }
     
     protected void doFireSessionLoginEvent(EzyEvent event) {
-        context.get(EzyFireAppEvent.class)
-            .filter(appCtx -> containsUser(appCtx, getUsername()))
+        zoneContext.get(EzyFireAppEvent.class)
+            .filter(appCtx -> containsUser(appCtx, username))
             .fire(EzyEventType.USER_SESSION_LOGIN, event);
     }
     
@@ -165,7 +178,7 @@ public class EzyLoginProcessor
     
     protected void doFireUserAddedEvent(EzyEvent event) {
         try {
-            context.get(EzyFirePluginEvent.class)
+            zoneContext.get(EzyFirePluginEvent.class)
                 .fire(EzyEventType.USER_ADDED, event);
         }
         catch(Exception e) {
@@ -174,13 +187,11 @@ public class EzyLoginProcessor
     }
     
     protected EzyUser newUser() {
-        EzySettings settings = getSettings(context);
-        EzyUserManagementSetting ust = settings.getUserManagement();
         EzySimpleUser user = new EzySimpleUser();
-        user.setName(getNewUsername(user.getId(), event.getUsername()));
-        user.setPassword(event.getPassword());
-        user.setMaxIdleTime(ust.getUserMaxIdleTime());
-        user.setMaxSessions(ust.getMaxSessionPerUser());
+        user.setName(getNewUsername(user.getId(), username));
+        user.setPassword(password);
+        user.setMaxIdleTime(userManagementSetting.getUserMaxIdleTime());
+        user.setMaxSessions(userManagementSetting.getMaxSessionPerUser());
         user.setRemoveDelegate(newUserRemoveDelegate(user));
         return user;
     }
@@ -195,14 +206,14 @@ public class EzyLoginProcessor
     
     protected EzyUserRemoveDelegate newUserRemoveDelegate(EzyUser user) {
         return EzySimpleUserRemoveDelegate.builder()
-                .context(context)
+                .context(serverContext)
                 .user(user)
                 .build();
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user) {
         return EzySimpleSessionLoginEvent.builder()
-                .session(getSession())
+                .session(session)
                 .user(user)
                 .build();
     }
@@ -210,13 +221,13 @@ public class EzyLoginProcessor
     protected EzyEvent newUserAddedEvent(EzyUser user) {
         return EzySimpleUserAddedEvent.builder()
                 .user(user)
-                .session(getSession())
-                .loginData(getLoginData())
+                .session(session)
+                .loginData(loginData)
                 .build();
     }
     
     protected void response(EzySession session, EzyResponse response) {
-        context.get(EzySendResponse.class)
+        serverContext.get(EzySendResponse.class)
             .recipient(session)
             .response(response)
             .execute();
@@ -224,41 +235,26 @@ public class EzyLoginProcessor
     
     protected EzyResponse newLoginReponse(EzyUser user) {
         EzyLoginParams params = new EzyLoginParams();
-        params.setData(event.getOutput());
+        params.setData(loginOuputData);
         params.setUserId(user.getId());
         params.setUsername(user.getName());
         params.setJoinedApps(getJoinedAppsDetails());
+        params.setZoneId(getZoneId(zoneContext));
         return new EzyLoginResponse(params);
     }
     
     protected Lock getLock() {
-        return userManager.getLock(getUsername());
-    }
-    
-    protected String getUsername() {
-        return event.getUsername();
-    }
-    
-    protected EzySession getSession() {
-        return event.getSession();
-    }
-    
-    protected EzyData getLoginData() {
-        return event.getData();
+        return userManager.getLock(username);
     }
     
     protected int getMaxSession() {
-        return context
-                .getServer()
-                .getSettings()
-                .getUserManagement()
-                .getMaxSessionPerUser();
+        return userManagementSetting.getMaxSessionPerUser();
     }
     
     protected EzyArray getJoinedAppsDetails() {
         EzyArrayBuilder builder = newArrayBuilder();
-        forEachAppContexts(context, (appCtx) -> {
-            if(containsUser(appCtx, getUsername()))
+        forEachAppContexts(zoneContext, appCtx -> {
+            if(containsUser(appCtx, username))
                 builder.append(newJoinedAppInfo(appCtx));
         });
         return builder.build();
@@ -276,21 +272,47 @@ public class EzyLoginProcessor
     
     public static class Builder implements EzyBuilder<EzyLoginProcessor> {
         protected EzyUserLoginEvent event;
-        protected EzyServerContext context;
+        protected EzyZoneContext zoneContext;
+        protected EzyServerContext serverContext;
         
         public Builder event(EzyUserLoginEvent event) {
             this.event = event;
             return this;
         }
         
-        public Builder context(EzyServerContext context) {
-            this.context = context;
+        public Builder zoneContext(EzyZoneContext zoneContext) {
+            this.zoneContext = zoneContext;
+            return this;
+        }
+        
+        public Builder serverContext(EzyServerContext serverContext) {
+            this.serverContext = serverContext;
             return this;
         }
         
         @Override
         public EzyLoginProcessor build() {
             return new EzyLoginProcessor(this);
+        }
+        
+        protected String getUsername() {
+            return event.getUsername();
+        }
+        
+        protected String getPassword() {
+            return event.getPassword();
+        }
+        
+        protected EzySession getSession() {
+            return event.getSession();
+        }
+        
+        protected EzyData getLoginData() {
+            return event.getData();
+        }
+        
+        protected EzyData getLoginOuputData() {
+            return event.getOutput();
         }
     }
     

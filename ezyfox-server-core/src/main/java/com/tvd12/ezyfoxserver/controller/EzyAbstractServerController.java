@@ -10,7 +10,7 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public class EzyAbstractServerController extends EzyAbstractController {
 
@@ -26,7 +26,7 @@ public class EzyAbstractServerController extends EzyAbstractController {
 		return EzyServerContexts.getManagers(ctx);
 	}
 	
-	protected EzyServerUserManager getUserManager(EzyServerContext ctx) {
+	protected EzyZoneUserManager getUserManager(EzyServerContext ctx) {
 		return EzyServerContexts.getUserManager(ctx);
 	}
 	

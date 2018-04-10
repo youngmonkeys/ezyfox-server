@@ -4,6 +4,8 @@ import com.tvd12.ezyfoxserver.entity.EzyData;
 
 public interface EzyUserLoginEvent extends EzySessionEvent {
 
+    String getZoneName();
+    
 	EzyData getOutput();
 	
 	String getUsername();

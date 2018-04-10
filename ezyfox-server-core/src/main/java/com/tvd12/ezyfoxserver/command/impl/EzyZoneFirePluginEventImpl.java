@@ -8,21 +8,21 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
-public class EzyFirePluginEventImpl 
+public class EzyZoneFirePluginEventImpl 
 		extends EzyAbstractCommand 
 		implements EzyFirePluginEvent {
 
-	private final EzyServerContext context;
+	private final EzyZoneContext context;
 	private final EzyEventPluginsMapper eventPluginsMapper;
 	
-	public EzyFirePluginEventImpl(EzyServerContext context) {
+	public EzyZoneFirePluginEventImpl(EzyZoneContext context) {
 	    this.context = context;
-	    this.eventPluginsMapper = context.getServer().getEventPluginsMapper();
+	    this.eventPluginsMapper = context.getZone().getEventPluginsMapper();
 	}
 	
 	@Override

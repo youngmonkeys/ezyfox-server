@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,15 +26,9 @@ public class EzySimpleSettings implements EzySettings {
     @XmlElement(name = "debug")
     protected boolean debug;
     
-    @XmlElement(name = "max-users")
-    protected int maxUsers = 999999;
-    
     @XmlElement(name = "max-sessions")
     protected int maxSessions = 999999;
     
-    @XmlElement(name = "thread-pool-size")
-	protected int threadPoolSize = 0;
-	
 	@XmlElement(name = "http")
 	protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
 	
@@ -49,55 +44,40 @@ public class EzySimpleSettings implements EzySettings {
 	@XmlElement(name = "web-socket")
 	protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
 	
-	@XmlElement(name = "user-management")
-	protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
-	
 	@XmlElement(name = "session-management")
 	protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
 	
-	@XmlElement(name = "plugins")
-    protected EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
+	@Setter(AccessLevel.NONE)
+    protected EzySimpleZonesSetting zones = new EzySimpleZonesSetting();
     
-    @XmlElement(name = "applications")
-    protected EzySimpleAppsSetting applications = new EzySimpleAppsSetting();
-	
-	//==================== apps ================//
+    @XmlElement(name = "zones")
+    protected EzySimpleZoneFilesSetting zoneFiles = new EzySimpleZoneFilesSetting();
+
+    //==================== apps ================//
+    public void addZone(EzySimpleZoneSetting zone) {
+        this.zones.setItem(zone);
+    }
+    
 	@JsonIgnore
-	public Set<String> getAppNames() {
-		return applications.getAppNames();
-	}
-	
-	@JsonIgnore
-	public Set<Integer> getAppIds() {
-		return applications.getAppIds();
-	}
-	
-	public EzySimpleAppSetting getAppByName(String name) {
-		return applications.getAppByName(name);
-	}
-	
-	public EzySimpleAppSetting getAppById(Integer id) {
-		return applications.getAppById(id);
-	}
-	//=============================================//
-	
-	//==================== plugins ================//
-	@JsonIgnore
-	public Set<String> getPluginNames() {
-		return plugins.getPluginNames();
+	@Override
+	public Set<String> getZoneNames() {
+		return zones.getZoneNames();
 	}
 	
 	@JsonIgnore
-	public Set<Integer> getPluginIds() {
-		return plugins.getPluginIds();
+	@Override
+	public Set<Integer> getZoneIds() {
+		return zones.getZoneIds();
 	}
 	
-	public EzySimplePluginSetting getPluginByName(String name) {
-		return plugins.getPluginByName(name);
+	@Override
+	public EzySimpleZoneSetting getZoneByName(String name) {
+		return zones.getZoneByName(name);
 	}
 	
-	public EzySimplePluginSetting getPluginById(Integer id) {
-		return plugins.getPluginById(id);
+	@Override
+	public EzySimpleZoneSetting getZoneById(Integer id) {
+		return zones.getZoneById(id);
 	}
 	//=============================================//
 	

@@ -31,6 +31,7 @@ public class EzyPluginsStarterTest extends BaseTest {
                 };
             }
         }
+        .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
         .build();
         starter.start();
     }
@@ -39,8 +40,9 @@ public class EzyPluginsStarterTest extends BaseTest {
     public void test2() {
         Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-        .appClassLoaders(loaders)
-        .build();
+                .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
+                .appClassLoaders(loaders)
+                .build();
         starter.getClassLoader("zzz");
     }
 }

@@ -11,6 +11,7 @@ import lombok.Setter;
 public class EzyLoginParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = 3437241102772473580L;
     
+    protected long zoneId;
     protected long userId;
 	protected Object data;
 	protected String username;
@@ -19,6 +20,7 @@ public class EzyLoginParams extends EzySimpleResponseParams {
 	@Override
 	protected EzyArrayBuilder serialize0() {
 	    return newArrayBuilder()
+	            .append(zoneId)
                 .append(userId)
                 .append(username)
                 .append(joinedApps)

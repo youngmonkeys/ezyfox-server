@@ -8,15 +8,10 @@ import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 
-public interface EzyServer extends 
-        EzyAppIdsFetcher, 
-        EzyAppByIdFetcher, 
-        EzyPluginIdsFetcher, 
-        EzyPluginByIdFetcher {
+public interface EzyServer {
     
     String getVersion();
 
@@ -35,8 +30,6 @@ public interface EzyServer extends
     EzyJsonMapper getJsonMapper();
     
     EzyServerControllers getControllers();
-    
-    EzyEventPluginsMapper getEventPluginsMapper();
     
     Map<String, EzyAppClassLoader> getAppClassLoaders();
     

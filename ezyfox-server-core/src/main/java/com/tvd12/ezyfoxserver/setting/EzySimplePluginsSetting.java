@@ -67,4 +67,8 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
 		return plugins.size();
 	}
 	
+	public void setZoneId(int zoneId) {
+	    plugins.forEach(p -> ((EzyZoneIdAware)p).setZoneId(zoneId));
+	}
+	
 }

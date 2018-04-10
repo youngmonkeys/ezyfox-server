@@ -68,4 +68,8 @@ public class EzySimpleAppsSetting implements EzyAppsSetting {
 		return apps.size();
 	}
 	
+	public void setZoneId(int zoneId) {
+        apps.forEach(a -> ((EzyZoneIdAware)a).setZoneId(zoneId));
+    }
+	
 }

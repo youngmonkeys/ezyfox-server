@@ -19,18 +19,13 @@ import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettingsReader;
-import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerUserManagerImpl;
 
 /**
  * @author tavandung12
@@ -53,7 +48,6 @@ public class EzyLoader extends EzyLoggable {
         	answer.setApis(newApis(settings));
         	answer.setManagers(newManagers(settings));
         	answer.setAppClassLoaders(newAppClassLoaders());
-        	answer.setEventPluginsMapper(newEventPluginsMapper(settings));
         	return answer;
     }
     
@@ -87,20 +81,11 @@ public class EzyLoader extends EzyLoggable {
     
     protected EzyManagers newManagers(EzySettings settings) {
         EzyManagers managers = EzyManagersImpl.builder().build();
-        managers.addManager(EzyServerUserManager.class, newServerUserManager(settings));
         addManagers(managers, settings);
         return managers;
     }
     
     protected void addManagers(EzyManagers managers, EzySettings settings) {
-    }
-    
-    protected EzyServerUserManager newServerUserManager(EzySettings settings) {
-        EzyUserManagementSetting ums = settings.getUserManagement();
-        return EzyServerUserManagerImpl.builder()
-                .maxUsers(settings.getMaxUsers())
-                .maxIdleTime(ums.getUserMaxIdleTime())
-                .build();
     }
     
     protected EzyServerControllers newControllers() {
@@ -112,15 +97,10 @@ public class EzyLoader extends EzyLoggable {
     protected void addControllers(EzyServerControllers controllers) {
     }
     
-    protected EzyEventPluginsMapper newEventPluginsMapper(EzySettings settings) {
-        return EzyEventPluginsMapperImpl.builder()
-                .plugins(settings.getPlugins()).build();
-    }
-    
     protected Map<String, EzyAppClassLoader> newAppClassLoaders() {
         Map<String, EzyAppClassLoader> answer = new ConcurrentHashMap<>();
         for(File dir : getEntryFolders())
-        	answer.put(dir.getName(), newAppClassLoader(dir));
+            answer.put(dir.getName(), newAppClassLoader(dir));
         return answer;
     }
     

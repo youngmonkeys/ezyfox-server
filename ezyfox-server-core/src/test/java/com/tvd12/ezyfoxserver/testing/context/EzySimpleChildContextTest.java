@@ -5,7 +5,7 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.context.EzySimpleChildContext;
+import com.tvd12.ezyfoxserver.context.EzyAbstractZoneChildContext;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlers;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
@@ -14,14 +14,13 @@ import com.tvd12.ezyfoxserver.util.EzyListExceptionHandlers;
 public class EzySimpleChildContextTest extends BaseCoreTest {
 
     private EzyServerContext context;
-    private EzySimpleChildContext ctx;
+    private EzyAbstractZoneChildContext ctx;
 
      public EzySimpleChildContextTest() {
          super();
          context = newServerContext();
          context.setProperty(Integer.class, 1);
          ctx = new ChildContext();
-         ctx.setParent(context);
          ctx.setProperty(String.class, "a");
      }
      
@@ -41,7 +40,7 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
          assert ctx.get(Integer.class).equals(1);
      }
      
-     public static class ChildContext extends EzySimpleChildContext {
+     public static class ChildContext extends EzyAbstractZoneChildContext {
          
          @SuppressWarnings("rawtypes")
         @Override

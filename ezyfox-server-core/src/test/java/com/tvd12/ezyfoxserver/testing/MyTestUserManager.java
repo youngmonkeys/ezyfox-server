@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerUserManagerImpl;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 
-public class MyTestUserManager extends EzyServerUserManagerImpl {
+public class MyTestUserManager extends EzyZoneUserManagerImpl {
 
     protected MyTestUserManager(Builder builder) {
         super(builder);
@@ -12,7 +12,7 @@ public class MyTestUserManager extends EzyServerUserManagerImpl {
         return new Builder();
     }
     
-    public static class Builder extends EzyServerUserManagerImpl.Builder {
+    public static class Builder extends EzyZoneUserManagerImpl.Builder {
         @Override
         public MyTestUserManager build() {
             return new MyTestUserManager(this);

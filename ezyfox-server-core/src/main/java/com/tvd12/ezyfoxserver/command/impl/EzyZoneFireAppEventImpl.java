@@ -9,15 +9,15 @@ import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 
-public class EzyFireAppEventImpl extends EzyAbstractCommand implements EzyFireAppEvent {
+public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFireAppEvent {
 
-	protected EzyServerContext context;
+	protected EzyZoneContext context;
 	protected Predicate<EzyAppContext> filter;
 	
-	public EzyFireAppEventImpl(EzyServerContext context) {
+	public EzyZoneFireAppEventImpl(EzyZoneContext context) {
 	    this.context = context;
 	}
 	
@@ -57,7 +57,7 @@ public class EzyFireAppEventImpl extends EzyAbstractCommand implements EzyFireAp
 	}
 	
 	protected Set<Integer> getAppIds() {
-		return context.getServer().getAppIds();
+		return context.getZone().getAppIds();
 	}
 	
 }

@@ -13,18 +13,18 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleUserManager;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
-public class EzyServerUserManagerImpl 
+public class EzyZoneUserManagerImpl 
         extends EzySimpleUserManager 
-        implements EzyServerUserManager, EzyStartable, EzyDestroyable {
+        implements EzyZoneUserManager, EzyStartable, EzyDestroyable {
 
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
-    protected EzyServerUserManagerImpl(Builder builder) {
+    protected EzyZoneUserManagerImpl(Builder builder) {
         super(builder);
         this.idleValidationService = newIdleValidationService(builder.maxIdleTime);
     }
@@ -179,8 +179,8 @@ public class EzyServerUserManagerImpl
 	    }
 	    
 		@Override
-		public EzyServerUserManager build() {
-			return new EzyServerUserManagerImpl(this);
+		public EzyZoneUserManager build() {
+			return new EzyZoneUserManagerImpl(this);
 		}
 		
 	}

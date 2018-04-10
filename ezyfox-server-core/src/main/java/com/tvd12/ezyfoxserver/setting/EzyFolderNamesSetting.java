@@ -7,6 +7,7 @@ public final class EzyFolderNamesSetting {
     public static final String LIB      = "lib";
     public static final String LOGS     = "logs";
     public static final String SETTINGS = "settings";
+    public static final String ZONES    = "zones";
     public static final String PLUGINS  = "plugins";
     public static final String ENTRIES  = "entries";
 

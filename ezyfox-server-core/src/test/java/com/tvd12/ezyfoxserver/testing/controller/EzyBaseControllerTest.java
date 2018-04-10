@@ -9,7 +9,7 @@ import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public abstract class EzyBaseControllerTest extends BaseCoreTest {
@@ -24,8 +24,8 @@ public abstract class EzyBaseControllerTest extends BaseCoreTest {
         return getServer(ctx).getManagers();
     }
     
-    protected EzyServerUserManager getUserManager(EzyServerContext ctx) {
-        return getManagers(ctx).getManager(EzyServerUserManager.class);
+    protected EzyZoneUserManager getUserManager(EzyServerContext ctx) {
+        return getManagers(ctx).getManager(EzyZoneUserManager.class);
     }
     
     protected MyTestSessionManager getSessionManager(EzyServerContext ctx) {

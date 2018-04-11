@@ -4,6 +4,8 @@ import com.tvd12.ezyfoxserver.entity.EzyData;
 
 public interface EzyAccessAppParams extends EzyRequestParams {
 
+    int getZoneId();
+    
     String getAppName();
     
     EzyData getData();

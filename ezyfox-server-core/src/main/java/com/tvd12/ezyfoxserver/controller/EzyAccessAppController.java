@@ -7,6 +7,7 @@ import com.tvd12.ezyfoxserver.constant.EzyIAccessAppError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -32,7 +33,8 @@ public class EzyAccessAppController
 	@Override
 	public void handle(EzyServerContext ctx, EzyAccessAppRequest request) {
 	    EzyAccessAppParams params = request.getParams();
-	    EzyAppContext appContext = ctx.getAppContext(params.getAppName());
+	    EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneId());
+	    EzyAppContext appContext = zoneContext.getAppContext(params.getAppName());
 	    EzyApplication app = appContext.getApp();
 	    EzyAppSetting appSetting = app.getSetting();
 	    EzyAppUserManager appUserManger = app.getUserManager();

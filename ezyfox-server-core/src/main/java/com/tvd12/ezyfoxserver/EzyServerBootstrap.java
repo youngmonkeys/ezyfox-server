@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;

@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserRemovedEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserRemovedEvent;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 import lombok.Setter;

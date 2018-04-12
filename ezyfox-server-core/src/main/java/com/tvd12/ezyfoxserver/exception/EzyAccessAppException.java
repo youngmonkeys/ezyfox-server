@@ -31,4 +31,8 @@ public class EzyAccessAppException extends IllegalStateException {
         return new EzyAccessAppException(message, EzyAccessAppError.MAXIMUM_USER, e);
     }
     
+    public static EzyAccessAppException maximumUser(String appName, int current, int max) {
+        return maximumUser(appName, new EzyMaxUserException(current, max));
+    }
+    
 }

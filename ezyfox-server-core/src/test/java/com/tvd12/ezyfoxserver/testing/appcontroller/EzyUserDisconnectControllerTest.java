@@ -5,8 +5,9 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.appcontroller.EzyUserDisconnectController;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserDisconnectEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyUserDisconnectControllerTest extends BaseCoreTest {
@@ -19,7 +20,8 @@ public class EzyUserDisconnectControllerTest extends BaseCoreTest {
                 .reason(EzyDisconnectReason.IDLE)
                 .user(newUser())
                 .build();
-        ctrl.handle(ctx.getAppContext("ezyfox-chat"), event);
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        ctrl.handle(zoneContext.getAppContext("ezyfox-chat"), event);
     }
     
 }

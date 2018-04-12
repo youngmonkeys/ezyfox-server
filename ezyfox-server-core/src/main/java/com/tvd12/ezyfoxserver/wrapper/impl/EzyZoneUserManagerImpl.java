@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
+import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,12 +15,11 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
+import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
-import com.tvd12.ezyfoxserver.wrapper.EzySimpleUserManager;
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 public class EzyZoneUserManagerImpl 
-        extends EzySimpleUserManager 
+        extends EzyAbstractByMaxUserManager 
         implements EzyZoneUserManager, EzyStartable, EzyDestroyable {
 
     protected final ScheduledExecutorService idleValidationService;
@@ -169,7 +170,7 @@ public class EzyZoneUserManagerImpl
 		return new Builder();
 	}
 	
-	public static class Builder extends EzySimpleUserManager.Builder<Builder> {
+	public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
 		
 	    protected long maxIdleTime;
 	    

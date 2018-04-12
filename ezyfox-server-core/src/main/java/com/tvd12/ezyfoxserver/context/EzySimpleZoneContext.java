@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.context;
 import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.EzyZone;
@@ -14,6 +15,8 @@ import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireAppEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFirePluginEventImpl;
+import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
@@ -33,6 +36,35 @@ public class EzySimpleZoneContext
 	@Setter
     @Getter
 	protected EzyServerContext parent;
+	
+	protected Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
+	protected Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+
+	@Override
+	public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
+	    super.addAppContext(app, appContext);
+	    appContextsByName.put(app.getName(), appContext);
+	}
+	
+	@Override
+	public void addPluginContext(EzyPluginSetting plugin, EzyPluginContext pluginContext) {
+	    super.addPluginContext(plugin, pluginContext);
+	    pluginContextsByName.put(plugin.getName(), pluginContext);
+	}
+	
+	@Override
+    public EzyAppContext getAppContext(String appName) {
+        if(appContextsByName.containsKey(appName))
+            return appContextsByName.get(appName);
+        throw new IllegalArgumentException("has not app with name = " + appName);
+    }
+	
+	@Override
+    public EzyPluginContext getPluginContext(String pluginName) {
+        if(pluginContextsByName.containsKey(pluginName))
+            return pluginContextsByName.get(pluginName);
+        throw new IllegalArgumentException("has not plugin with name = " + pluginName);
+    }
 	
 	@SuppressWarnings("unchecked")
 	@Override

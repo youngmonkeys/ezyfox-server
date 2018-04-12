@@ -19,7 +19,7 @@ import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;

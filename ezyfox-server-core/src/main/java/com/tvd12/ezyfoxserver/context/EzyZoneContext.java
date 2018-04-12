@@ -8,4 +8,8 @@ public interface EzyZoneContext extends EzyComplexContext {
 	
 	EzyServerContext getParent();
 	
+	EzyAppContext getAppContext(String appName);
+	
+	EzyPluginContext getPluginContext(String pluginName);
+	
 }

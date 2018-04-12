@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
@@ -62,11 +63,13 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
     
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test4() {
-        context.getAppContext("noone");
+        EzyZoneContext zoneContext = context.getZoneContext("example");
+        zoneContext.getAppContext("noone");
     }
     
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test5() {
-        context.getPluginContext("noone");
+        EzyZoneContext zoneContext = context.getZoneContext("example");
+        zoneContext.getPluginContext("noone");
     }
 }

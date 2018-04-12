@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.webapi;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -28,10 +27,6 @@ public class EzyServerContextUnpacker extends EzyLoggable {
 	
 	protected EzySettings getSettings() {
 		return getServer().getSettings();
-	}
-	
-	protected EzyAppContext getAppContext(String appName) {
-		return serverContext.getAppContext(appName);
 	}
 	
 	@SuppressWarnings("unchecked")

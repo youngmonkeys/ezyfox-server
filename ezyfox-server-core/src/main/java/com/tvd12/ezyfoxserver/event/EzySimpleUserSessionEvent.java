@@ -1,24 +1,26 @@
-package com.tvd12.ezyfoxserver.event.impl;
+package com.tvd12.ezyfoxserver.event;
 
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.EzyUserEvent;
 
 import lombok.Getter;
 
 @Getter
-public class EzySimpleUserEvent implements EzyUserEvent {
+public class EzySimpleUserSessionEvent implements EzyUserSessionEvent {
 
     protected EzyUser user;
+    protected EzySession session;
     
-    protected EzySimpleUserEvent(Builder<?> builder) {
+    protected EzySimpleUserSessionEvent(Builder<?> builder) {
         this.user = builder.user;
+        this.session = builder.session;
     }
     
     public static class Builder<B extends Builder<B>> implements EzyBuilder<EzyEvent> {
     
         protected EzyUser user;
+        protected EzySession session;
         
         @SuppressWarnings("unchecked")
         public B user(EzyUser user) {
@@ -26,9 +28,15 @@ public class EzySimpleUserEvent implements EzyUserEvent {
             return (B)this;
         }
         
+        @SuppressWarnings("unchecked")
+        public B session(EzySession session) {
+            this.session = session;
+            return (B)this;
+        }
+        
         @Override
         public EzyEvent build() {
-            return new EzySimpleUserEvent(this);
+            return new EzySimpleUserSessionEvent(this);
         }
     }
     

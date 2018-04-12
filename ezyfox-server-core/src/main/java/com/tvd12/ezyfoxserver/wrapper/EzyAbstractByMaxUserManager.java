@@ -3,11 +3,11 @@ package com.tvd12.ezyfoxserver.wrapper;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 
-public class EzySimpleUserAddableManager 
-        extends EzySimpleUserManager 
+public class EzyAbstractByMaxUserManager 
+        extends EzyAbstractUserManager 
         implements EzyUserAddable {
 
-    protected EzySimpleUserAddableManager(Builder<?> builder) {
+    protected EzyAbstractByMaxUserManager(Builder<?> builder) {
         super(builder);
     }
     
@@ -31,7 +31,7 @@ public class EzySimpleUserAddableManager
     }
     
     public static abstract class Builder<B extends Builder<B>>
-            extends EzySimpleUserManager.Builder<B> {
+            extends EzyAbstractUserManager.Builder<B> {
     }
     
 }

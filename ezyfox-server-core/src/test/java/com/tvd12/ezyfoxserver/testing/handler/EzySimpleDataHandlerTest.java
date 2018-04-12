@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -16,7 +17,8 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     @Test
     public void test1() throws Exception {
         EzyServerContext context = newServerContext();
-        EzyAppContext appContext = context.getAppContext("ezyfox-chat");
+        EzyZoneContext zoneContext = context.getZoneContext("example");
+        EzyAppContext appContext = zoneContext.getAppContext("ezyfox-chat");
         MyTestDataHandler handler = new MyTestDataHandler();
         handler.setContext(context);
         handler.getAppContext(appContext.getApp().getSetting().getId());

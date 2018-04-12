@@ -1,7 +1,6 @@
-package com.tvd12.ezyfoxserver.event.impl;
+package com.tvd12.ezyfoxserver.event;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 
 import lombok.Getter;
 

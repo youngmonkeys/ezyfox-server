@@ -74,7 +74,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     protected EzyZoneUserManager newZoneUserManager(EzyZoneSetting zoneSetting) {
         EzyUserManagementSetting setting = zoneSetting.getUserManagement();
         return EzyZoneUserManagerImpl.builder()
-                .maxUsers(setting.getMaxSessionPerUser())
+                .maxUsers(zoneSetting.getMaxUsers())
                 .maxIdleTime(setting.getUserMaxIdleTime())
                 .build();
     }

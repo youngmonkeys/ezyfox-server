@@ -16,7 +16,7 @@ import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;

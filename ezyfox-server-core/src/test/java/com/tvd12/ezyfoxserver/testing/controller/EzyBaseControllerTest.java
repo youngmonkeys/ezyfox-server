@@ -33,10 +33,6 @@ public abstract class EzyBaseControllerTest extends BaseCoreTest {
         return ctx.getAppContext(appId);
     }
     
-    protected EzyAppContext getAppContext(EzyServerContext ctx, String appName) {
-        return ctx.getAppContext(appName);
-    }
-    
     protected EzyServerControllers getControllers(EzyServerContext ctx) {
         return getServer(ctx).getControllers();
     }

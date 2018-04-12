@@ -36,13 +36,13 @@ public class EzyPluginsStarterTest extends BaseTest {
         starter.start();
     }
     
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test
     public void test2() {
         Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
                 .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
                 .appClassLoaders(loaders)
                 .build();
-        starter.getClassLoader("zzz");
+        starter.start();
     }
 }

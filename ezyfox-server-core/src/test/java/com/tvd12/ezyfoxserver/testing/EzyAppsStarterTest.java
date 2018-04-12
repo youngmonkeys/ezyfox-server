@@ -7,8 +7,14 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
 import com.tvd12.ezyfoxserver.EzyAppsStarter;
+import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
+import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
+import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
+import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.base.BaseTest;
 
 public class EzyAppsStarterTest extends BaseTest {
@@ -37,13 +43,25 @@ public class EzyAppsStarterTest extends BaseTest {
         starter.start();
     }
     
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test
     public void test2() {
         Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
+        EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
+        EzySimpleApplication app = new EzySimpleApplication();
+        EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
+        appSetting.setName("abc");
+        app.setSetting(appSetting);
+        EzySimpleAppContext appContext = new EzySimpleAppContext();
+        appContext.setApp(app);
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleAppsSetting appsSetting = new EzySimpleAppsSetting();
+        appsSetting.setItem(appSetting);
+        zoneSetting.setApplications(appsSetting);
+        zoneContext.addAppContext(appSetting, appContext);
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-                .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
+                .zoneContext(zoneContext)
                 .appClassLoaders(loaders)
                 .build();
-        starter.getClassLoader("zzz");
+        starter.start();
     }
 }

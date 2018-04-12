@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
@@ -27,6 +29,9 @@ public abstract class EzyAbstractSetting
 	
 	@XmlElement(name = "name")
 	protected String name;
+	
+	@XmlElement(name = "folder")
+    protected String folder;
 	
 	protected int zoneId;
 	
@@ -50,6 +55,11 @@ public abstract class EzyAbstractSetting
 	
 	protected int newId() {
 	    return getIdCounter().incrementAndGet();
+	}
+	
+	@Override
+	public String getFolder() {
+	    return StringUtils.isEmpty(folder) ? name : folder;
 	}
 	
 	@Override

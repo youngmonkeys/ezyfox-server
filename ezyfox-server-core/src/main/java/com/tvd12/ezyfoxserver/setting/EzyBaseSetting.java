@@ -8,6 +8,8 @@ public interface EzyBaseSetting extends EzyEventControllerAdder {
     
     String getName();
     
+    String getFolder();
+    
     int getZoneId();
 
     String getLocation();

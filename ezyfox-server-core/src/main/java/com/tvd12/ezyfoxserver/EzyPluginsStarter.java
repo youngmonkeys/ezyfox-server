@@ -27,12 +27,12 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
     
     protected void startPlugin(String pluginName) {
         try {
-            getLogger().debug("plugin " + pluginName + " loading...");
+            getLogger().debug("plugin: " + pluginName + " loading...");
             EzyPluginContext context = zoneContext.getPluginContext(pluginName);
             EzyPlugin plugin = context.getPlugin();
             EzyPluginEntry entry = startPlugin(pluginName, newPluginEntryLoader(pluginName));
             ((EzyEntryAware)plugin).setEntry(entry);
-            getLogger().debug("plugin " + pluginName + " loaded");
+            getLogger().debug("plugin: " + pluginName + " loaded");
         }
         catch(Exception e) {
             getLogger().error("can not start plugin " + pluginName, e);
@@ -47,26 +47,26 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
         return entry;
     }
     
-    public Set<String> getPluginNames() {
+    protected Set<String> getPluginNames() {
         return zoneSetting.getPluginNames();
     }
     
-    public EzyPluginSetting getPluginByName(String name) {
+    protected EzyPluginSetting getPluginByName(String name) {
         return zoneSetting.getPluginByName(name);
     }
     
-    public Class<EzyPluginEntryLoader> 
+    protected Class<EzyPluginEntryLoader> 
             getPluginEntryLoaderClass(String pluginName) throws Exception {
         return getPluginEntryLoaderClass(getPluginByName(pluginName));
     }
     
     @SuppressWarnings("unchecked")
-    public Class<EzyPluginEntryLoader> 
+    protected Class<EzyPluginEntryLoader> 
             getPluginEntryLoaderClass(EzyPluginSetting plugin) throws Exception {
         return (Class<EzyPluginEntryLoader>) Class.forName(plugin.getEntryLoader());
     }
     
-    public EzyPluginEntryLoader newPluginEntryLoader(String pluginName) throws Exception {
+    protected EzyPluginEntryLoader newPluginEntryLoader(String pluginName) throws Exception {
         return getPluginEntryLoaderClass(pluginName).newInstance();
     }
     

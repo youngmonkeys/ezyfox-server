@@ -26,18 +26,18 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     
     protected void startAllApps() {
         Set<String> appNames = getAppNames();
-        getLogger().info("start apps: {}" + appNames);
+        getLogger().info("start apps: {}", appNames);
         appNames.forEach(this::startApp);
     }
     
     protected void startApp(String appName) {
         try {
-            getLogger().debug("app " + appName + " loading...");
+            getLogger().debug("app: " + appName + " loading...");
             EzyAppContext context = zoneContext.getAppContext(appName);
             EzyApplication application = context.getApp();
             EzyAppEntry entry = startApp(appName, newAppEntryLoader(appName));
             ((EzyEntryAware)application).setEntry(entry);
-            getLogger().debug("app " + appName + " loaded");
+            getLogger().debug("app: " + appName + " loaded");
         }
         catch(Exception e) {
             getLogger().error("can not start app " + appName, e);
@@ -51,35 +51,37 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
         return entry;
     }
     
-    public Set<String> getAppNames() {
+    protected Set<String> getAppNames() {
         return zoneSetting.getAppNames();
     }
     
-    public EzyAppSetting getAppByName(String name) {
+    protected EzyAppSetting getAppByName(String name) {
         return zoneSetting.getAppByName(name);
     }
     
-    public Class<EzyAppEntryLoader> 
+    protected Class<EzyAppEntryLoader> 
             getAppEntryLoaderClass(String appName) throws Exception {
         return getAppEntryLoaderClass(getAppByName(appName));
     }
     
     @SuppressWarnings("unchecked")
-    public Class<EzyAppEntryLoader> 
+    protected Class<EzyAppEntryLoader> 
             getAppEntryLoaderClass(EzyAppSetting app) throws Exception {
+        EzyAppClassLoader classLoader = getClassLoader(app.getName(), app.getFolder());
         return (Class<EzyAppEntryLoader>) 
-                Class.forName(app.getEntryLoader(), true, getClassLoader(app.getName()));
+                Class.forName(app.getEntryLoader(), true, classLoader);
     }
     
-    public EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
+    protected EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
          Class<EzyAppEntryLoader> entryLoaderClass = getAppEntryLoaderClass(appName);
          return entryLoaderClass.newInstance();
     }
     
-    public EzyAppClassLoader getClassLoader(String appName) {
-        if(appClassLoaders.containsKey(appName)) 
-            return appClassLoaders.get(appName);
-        throw new IllegalArgumentException("has no class loader for app " + appName);
+    protected EzyAppClassLoader getClassLoader(String appName, String appFolder) {
+        if(appClassLoaders.containsKey(appFolder)) 
+            return appClassLoaders.get(appFolder);
+        throw new IllegalArgumentException(
+                "folder: " + appFolder + " for app: " + appName + " doesn't exist");
     }
     
     protected EzyAppContext getAppContext(String appName) {

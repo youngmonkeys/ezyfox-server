@@ -149,15 +149,16 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     @Override
     public void onSessionRemoved(EzyConstant reason) {
-        notifySessionRemoved(reason);
         setDisconnectReason(reason);
+        notifySessionRemoved(reason);
         chechToUnmapUser();
         disconnectSession(reason);
         destroy();
     }
     
     protected void notifySessionRemoved(EzyConstant reason) {
-        if(context == null) return;
+        if(zoneContext == null) 
+            return;
         EzyEvent event = newSessionRemovedEvent(reason);
         if(user != null)
             notifyAppsSessionRemoved(event);
@@ -166,7 +167,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyAppsSessionRemoved(EzyEvent event) {
         try {
-            context.get(EzyFireAppEvent.class)
+            zoneContext.get(EzyFireAppEvent.class)
                 .filter(appCtxt -> containsUser(appCtxt, user))
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
@@ -177,7 +178,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyPluginsSessionRemoved(EzyEvent event) {
         try {
-            context.get(EzyFirePluginEvent.class)
+            zoneContext.get(EzyFirePluginEvent.class)
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {

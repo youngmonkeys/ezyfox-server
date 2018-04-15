@@ -10,8 +10,10 @@ import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.controller.EzyPingController;
+import com.tvd12.ezyfoxserver.controller.EzyPluginInfoController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
-import com.tvd12.ezyfoxserver.controller.EzyRequestPluginController;
+import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByIdController;
+import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByNameController;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
@@ -53,7 +55,9 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 			answer.put(EzyCommand.LOGIN, new EzyLoginController());
 			answer.put(EzyCommand.APP_ACCESS, new EzyAccessAppController());
 			answer.put(EzyCommand.APP_REQUEST, new EzyRequestAppController());
-			answer.put(EzyCommand.PLUGIN_REQUEST, new EzyRequestPluginController());
+			answer.put(EzyCommand.PLUGIN_INFO, new EzyPluginInfoController());
+			answer.put(EzyCommand.PLUGIN_REQUEST_BY_ID, new EzyRequestPluginByIdController());
+			answer.put(EzyCommand.PLUGIN_REQUEST_BY_NAME, new EzyRequestPluginByNameController());
 			return answer;
 		}
 		
@@ -65,7 +69,9 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 			answer.put(EzyCommand.LOGIN, EzyInterceptor.ALWAYS_PASS);
 			answer.put(EzyCommand.APP_ACCESS, new EzyServerUserInterceptor<>());
 			answer.put(EzyCommand.APP_REQUEST, new EzyServerUserInterceptor<>());
-			answer.put(EzyCommand.PLUGIN_REQUEST, new EzyServerUserInterceptor<>());
+			answer.put(EzyCommand.PLUGIN_INFO, new EzyServerUserInterceptor<>());
+			answer.put(EzyCommand.PLUGIN_REQUEST_BY_ID, new EzyServerUserInterceptor<>());
+			answer.put(EzyCommand.PLUGIN_REQUEST_BY_NAME, new EzyServerUserInterceptor<>());
 			return answer;
 		}
 		

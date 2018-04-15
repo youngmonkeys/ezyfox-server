@@ -6,6 +6,4 @@ public interface EzyRequestPluginParams extends EzyRequestParams {
 
     EzyArray getData();
     
-    String getPluginName();
-    
 }

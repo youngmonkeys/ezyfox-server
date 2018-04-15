@@ -8,18 +8,20 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class EzyRequestPluginParams extends EzySimpleResponseParams {
+public abstract class EzyRequestPluginResponseParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = -851367467100512738L;
     
     protected EzyData data;
-    protected String pluginName;
     
     @Override
     public EzyArrayBuilder serialize0() {
-        return newArrayBuilder()
-                .append(pluginName)
-                .append(data);
+        EzyArrayBuilder builder = newArrayBuilder();
+        firstSerialize(builder);
+        builder.append(data);
+        return builder;
     }
+    
+    protected abstract void firstSerialize(EzyArrayBuilder builder);
     
     @Override
     public void release() {

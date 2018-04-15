@@ -39,6 +39,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
     protected EzyUser user;
     protected EzyServer server;
     protected EzyServerContext context;
+    protected EzyZoneContext zoneContext;
     protected EzyServerControllers controllers;
     protected EzyZoneUserManager userManager;
     protected EzySessionManager sessionManager;
@@ -117,6 +118,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.user = null;
         this.session = null;
         this.context = null;
+        this.zoneContext = null;
         this.controllers = null;
         this.userManager = null;
         this.sessionManager = null;

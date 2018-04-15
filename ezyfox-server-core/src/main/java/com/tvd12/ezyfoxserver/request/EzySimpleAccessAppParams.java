@@ -11,15 +11,13 @@ public class EzySimpleAccessAppParams
         implements EzyAccessAppParams {
     private static final long serialVersionUID = 2608977146720735187L;
     
-    protected int zoneId;
     protected String appName;
     protected EzyData data;
     
     @Override
     public void deserialize(EzyArray t) {
-        this.zoneId = t.get(0, int.class);
-        this.appName = t.get(1, String.class);
-        this.data = t.get(2, EzyData.class);
+        this.appName = t.get(0, String.class);
+        this.data = t.get(1, EzyData.class);
     }
     
 }

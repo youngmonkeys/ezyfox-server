@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.response.EzyRequestAppResponse;
-import com.tvd12.ezyfoxserver.response.EzyRequestAppParams;
+import com.tvd12.ezyfoxserver.response.EzyRequestAppResponseParams;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
@@ -24,7 +24,7 @@ public class EzyAppResponseImpl
     @Override
     protected EzyResponse newResponse() {
         EzyAppSetting setting = context.getApp().getSetting();
-        EzyRequestAppParams params = new EzyRequestAppParams();
+        EzyRequestAppResponseParams params = new EzyRequestAppResponseParams();
         params.setAppId(setting.getId());
         params.setData(newResponseData());
         return new EzyRequestAppResponse(params);

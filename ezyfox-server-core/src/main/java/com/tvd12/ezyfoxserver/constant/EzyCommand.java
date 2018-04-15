@@ -15,7 +15,6 @@ public enum EzyCommand implements EzyConstant {
 	PING(12, 10),
     PONG(13, 10),
     DISCONNECT(14, 10),
-    PLUGIN_REQUEST(15, 10),
 	LOGIN(20, 1),
 	LOGIN_ERROR(21, 10),
 	LOGOUT(22, 10),
@@ -23,7 +22,10 @@ public enum EzyCommand implements EzyConstant {
 	APP_REQUEST(31, 10),
 	APP_JOINED(32, 10),
 	APP_EXIT(33, 10),
-	APP_ACCESS_ERROR(34, 10);
+	APP_ACCESS_ERROR(34, 10),
+	PLUGIN_INFO(40, 10),
+    PLUGIN_REQUEST_BY_NAME(41, 10),
+    PLUGIN_REQUEST_BY_ID(42, 10);
 	
 	@Getter
 	private final int id;

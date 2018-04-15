@@ -40,13 +40,13 @@ public class EzyAccessAppController
 	}
 	
 	protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
+	    EzyUser user = request.getUser();
         EzyAccessAppParams params = request.getParams();
-        EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneId());
+        EzyZoneContext zoneContext = ctx.getZoneContext(user.getZoneId());
         EzyAppContext appContext = zoneContext.getAppContext(params.getAppName());
         EzyApplication app = appContext.getApp();
         EzyAppSetting appSetting = app.getSetting();
         EzyAppUserManager appUserManger = app.getUserManager();
-        EzyUser user = request.getUser();
         EzySession session = request.getSession();
         checkAppUserMangerAvailable(appUserManger);
         EzyFireEvent fireEvent = appContext.get(EzyFireEvent.class);

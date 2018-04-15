@@ -73,7 +73,7 @@ public class EzySimpleZoneContext
 			return (T) commandSuppliers.get(clazz).get();
 		if(containsKey(clazz))
 			return getProperty(clazz);
-		throw new IllegalArgumentException("has no instance of " + clazz);
+		return parent.get(clazz);
 	}
 	
 	@SuppressWarnings("rawtypes")

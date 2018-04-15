@@ -29,7 +29,7 @@ public abstract class EzyEntity implements EzyProperties {
     
     @Override
     public void setProperties(Map<? extends Object, ? extends Object> map) {
-    	properties.putAll(map);
+    		properties.putAll(map);
     }
     
     /*
@@ -70,14 +70,14 @@ public abstract class EzyEntity implements EzyProperties {
      */
     @Override
     public boolean containsKey(Object key) {
-    	return properties.containsKey(key);
+    		return properties.containsKey(key);
     }
     
     @Override
     public Properties getProperties() {
-    	Properties prop = new Properties();
-    	prop.putAll(properties);
-    	return prop;
+	    	Properties prop = new Properties();
+	    	prop.putAll(properties);
+	    	return prop;
     }
     
 }

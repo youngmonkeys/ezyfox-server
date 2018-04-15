@@ -26,10 +26,13 @@ public abstract class EzySessionDataHandler<S extends EzySession>
         ((EzyHasSessionDelegate)session).setDelegate(this);
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public void onSessionLoggedIn(EzyUser user) {
         this.user = user;
         this.sessionManager.addLoggedInSession(session);
+        this.userManager = getUserManager(user.getZoneId());
+        this.zoneContext = context.getZoneContext(user.getZoneId());
     }
     
 }

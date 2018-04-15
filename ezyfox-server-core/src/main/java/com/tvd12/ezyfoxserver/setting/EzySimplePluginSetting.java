@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
@@ -27,6 +28,7 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "plugin")
+@JsonIgnoreProperties(value = {"zoneId"}, ignoreUnknown = true)
 @JsonPropertyOrder({"id", "name", "entryLoader", "priority", "listenEvents"})
 public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPluginSetting {
 

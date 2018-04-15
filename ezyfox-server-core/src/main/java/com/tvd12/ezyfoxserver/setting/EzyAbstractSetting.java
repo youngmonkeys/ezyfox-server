@@ -7,9 +7,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
+import com.tvd12.ezyfoxserver.util.EzyEquals;
+import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 import lombok.Getter;
@@ -19,18 +23,23 @@ import lombok.Setter;
 @Setter
 @XmlAccessorType(XmlAccessType.NONE)
 public abstract class EzyAbstractSetting 
-        implements EzyBaseSetting, EzyHomePathAware {
+        implements EzyBaseSetting, EzyZoneIdAware, EzyHomePathAware {
 
 	protected final int id = newId();
 	
 	@XmlElement(name = "name")
 	protected String name;
 	
+	@XmlElement(name = "folder")
+    protected String folder;
+	
+	protected int zoneId;
+	
 	@XmlElement(name = "entry-loader")
 	protected String entryLoader;
 	
-	@XmlElement(name = "worker-pool-size")
-	protected int workerPoolSize = 16;
+	@XmlElement(name = "thread-pool-size")
+	protected int threadPoolSize = 0;
 	
 	@XmlElement(name = "config-file")
 	protected String configFile = "config.properties";
@@ -49,6 +58,11 @@ public abstract class EzyAbstractSetting
 	}
 	
 	@Override
+	public String getFolder() {
+	    return StringUtils.isEmpty(folder) ? name : folder;
+	}
+	
+	@Override
     public String getConfigFile() {
         return Paths.get(getLocation(), configFile).toString();
     }
@@ -61,5 +75,17 @@ public abstract class EzyAbstractSetting
 	
 	protected abstract AtomicInteger getIdCounter();
 	protected abstract EzyEventControllers newEventControllers();
+	
+	@Override
+    public boolean equals(Object obj) {
+        return new EzyEquals<EzyAbstractSetting>()
+                .function(t -> t.id)
+                .isEquals(this, obj);
+    }
+	
+	@Override
+	public int hashCode() {
+	    return new EzyHashCodes().append(id).toHashCode();
+	}
 	
 }

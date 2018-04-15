@@ -2,16 +2,12 @@ package com.tvd12.ezyfoxserver.context;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 
-public interface EzyServerContext extends EzyContext {
+public interface EzyServerContext extends EzyComplexContext {
 
 	EzyServer getServer();
 	
-	EzyAppContext getAppContext(int appId);
+	EzyZoneContext getZoneContext(int zoneId);
 	
-	EzyAppContext getAppContext(String appName);
-	
-	EzyPluginContext getPluginContext(int pluginId);
-	
-	EzyPluginContext getPluginContext(String pluginName);
+	EzyZoneContext getZoneContext(String zoneName);
 	
 }

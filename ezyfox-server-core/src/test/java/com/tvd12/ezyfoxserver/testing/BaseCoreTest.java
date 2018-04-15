@@ -23,11 +23,9 @@ import com.tvd12.ezyfoxserver.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
-import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyManagersImpl;
+import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager.Builder;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 import com.tvd12.test.base.BaseTest;
 
@@ -45,8 +43,6 @@ public class BaseCoreTest extends BaseTest {
     protected EzySimpleServer newServer() {
         try {
             EzySimpleServer answer = (EzySimpleServer) loadEzyFox(readConfig("test-data/settings/config.properties"));
-            answer.getManagers().addManager(EzySessionManager.class, MyTestSessionManager.builder().build());
-            answer.getManagers().addManager(EzyServerUserManager.class, MyTestUserManager.builder().build());
             return answer;
         }
         catch(Exception e) {
@@ -63,7 +59,15 @@ public class BaseCoreTest extends BaseTest {
     }
     
     protected EzyServer loadEzyFox(EzyConfig config) {
-        return new EzyLoader()
+        return new EzyLoader() {
+
+                    @SuppressWarnings({ "rawtypes" })
+                    @Override
+                    protected Builder createSessionManagerBuilder(EzySettings settings) {
+                        return MyTestSessionManager.builder();
+                    }
+            
+                }
                 .config(config)
                 .classLoader(getClassLoader())
                 .load();
@@ -78,10 +82,6 @@ public class BaseCoreTest extends BaseTest {
     
     protected EzyJsonMapper getJsonMapper() {
         return EzySimpleJsonMapper.builder().build();
-    }
-    
-    public EzyManagers newManagers() {
-        return EzyManagersImpl.builder().build();
     }
     
     public EzyServerControllers newControllers() {

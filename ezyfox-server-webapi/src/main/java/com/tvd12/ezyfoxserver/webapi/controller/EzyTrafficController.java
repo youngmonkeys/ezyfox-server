@@ -1,19 +1,12 @@
 package com.tvd12.ezyfoxserver.webapi.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.tvd12.ezyfoxserver.databridge.statistics.EzyTrafficDetails;
 import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
 
-@RestController
-@RequestMapping("admin/traffic")
 public class EzyTrafficController extends EzyStatisticsController {
 
-	@GetMapping("/details")
 	public EzyTrafficDetails getTrafficDetails() {
 		EzyTrafficDetails details = new EzyTrafficDetails();
 		EzyUserStatistics userStatistics = getUserStatistics();

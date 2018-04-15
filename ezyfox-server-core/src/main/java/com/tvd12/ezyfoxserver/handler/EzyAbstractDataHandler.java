@@ -12,10 +12,11 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.response.EzyErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyErrorParams;
+import com.tvd12.ezyfoxserver.response.EzyErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
@@ -25,21 +26,23 @@ import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
+@SuppressWarnings("rawtypes")
 public class EzyAbstractDataHandler<S extends EzySession> 
         extends EzyLoggable
         implements EzyDestroyable {
 
     protected S session;
     protected EzyUser user;
+    protected EzyServer server;
     protected EzyServerContext context;
+    protected EzyZoneContext zoneContext;
     protected EzyServerControllers controllers;
-    protected EzyServerUserManager userManager;
-    protected EzySessionManager<S> sessionManager;
+    protected EzyZoneUserManager userManager;
+    protected EzySessionManager sessionManager;
     protected Lock lock = new ReentrantLock();
     
     protected EzyConstant disconnectReason;
@@ -62,11 +65,11 @@ public class EzyAbstractDataHandler<S extends EzySession>
     
     public void setContext(EzyServerContext ctx) {
         this.context = ctx;
-        this.userManager = getUserManager();
-        this.sessionManager = getSessionManager();
-        this.controllers = getServer().getControllers();
+        this.server = context.getServer();
+        this.controllers = server.getControllers();
+        this.sessionManager = server.getSessionManager();
         
-        this.settings = getServer().getSettings();
+        this.settings = server.getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
         this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
@@ -81,21 +84,9 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.disconnectReason = reason;
     }
     
-    protected EzyServer getServer() {
-        return context.getServer();
-    }
-    
-    protected EzyManagers getManagers() {
-        return getServer().getManagers();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected EzySessionManager<S> getSessionManager() {
-        return getManagers().getManager(EzySessionManager.class);
-    }
-    
-    protected EzyServerUserManager getUserManager() {
-        return getManagers().getManager(EzyServerUserManager.class);
+    protected EzyZoneUserManager getUserManager(int zoneId) {
+        EzyZoneContext zoneContext = context.getZoneContext(zoneId);
+        return zoneContext.getZone().getUserManager();
     }
     
     protected void response(EzyResponse response) {
@@ -127,6 +118,7 @@ public class EzyAbstractDataHandler<S extends EzySession>
         this.user = null;
         this.session = null;
         this.context = null;
+        this.zoneContext = null;
         this.controllers = null;
         this.userManager = null;
         this.sessionManager = null;

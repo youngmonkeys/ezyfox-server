@@ -20,8 +20,9 @@ public class MyTestStarter extends EzyStarter {
 		return new MyTestServerBootstrapBuilder();
 	}
 	
-	@Override
-    protected EzySimpleSessionManager.Builder<?> 
+	@SuppressWarnings({ "rawtypes" })
+    @Override
+    protected EzySimpleSessionManager.Builder 
             newSessionManagerBuilder(EzySettings settings) {
         return new ExSessionManager.SBuilder();
     }

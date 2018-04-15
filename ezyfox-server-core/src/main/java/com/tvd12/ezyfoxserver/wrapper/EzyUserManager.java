@@ -38,6 +38,20 @@ public interface EzyUserManager {
 	int getUserCount();
 	
 	/**
+	 * Get max users count
+	 * 
+	 * @return the max users count
+	 */
+	int getMaxUsers();
+	
+	/**
+	 * available to add user or not
+	 * 
+	 * @return available to add user or not
+	 */
+	boolean available();
+	
+	/**
 	 * Check whether contains user or not
 	 * 
 	 * @param userId the user id

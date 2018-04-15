@@ -92,6 +92,13 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	 * @return the session reconnect token
 	 */
 	String getReconnectToken();
+
+	/**
+	 * Get before reconnect token
+	 * 
+	 * @return before reconnect token
+	 */
+	String getBeforeReconnectToken();
 	
 	/**
 	 * Set reconnect token
@@ -300,6 +307,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	 * @return session is idle or not
 	 */
 	boolean isIdle();
+	
+	/**
+	 * @return session is reconnect or not
+	 */
+	boolean isReconnect();
 	
 	/**
 	 * 

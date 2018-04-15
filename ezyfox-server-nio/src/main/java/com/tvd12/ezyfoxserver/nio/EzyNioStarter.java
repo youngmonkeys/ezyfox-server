@@ -18,8 +18,9 @@ public class EzyNioStarter extends EzyStarter {
 		return new EzyNioServerBootstrapBuilderImpl();
 	}
 
+	@SuppressWarnings({ "rawtypes" })
 	@Override
-	protected EzySimpleSessionManager.Builder<?> newSessionManagerBuilder(EzySettings settings) {
+	protected EzySimpleSessionManager.Builder newSessionManagerBuilder(EzySettings settings) {
 		return EzyNioSessionManagerImpl.builder();
 	}
 

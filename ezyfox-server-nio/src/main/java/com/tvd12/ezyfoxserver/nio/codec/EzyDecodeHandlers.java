@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
+import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
 import com.tvd12.ezyfoxserver.codec.EzyMessage;
@@ -12,15 +13,15 @@ import com.tvd12.ezyfoxserver.codec.EzyMessage;
 public abstract class EzyDecodeHandlers {
 
 	protected EzyIDecodeState state;
-	protected Map<EzyIDecodeState, EzyDecodeHandler> handers;
+	protected Map<EzyIDecodeState, EzyDecodeHandler> handlers;
 	
-	protected EzyDecodeHandlers(AbstractBuilder builder) {
+	protected EzyDecodeHandlers(Builder builder) {
 		this.state = firstState();
-		this.handers = builder.newHandlers();
+		this.handlers = builder.newHandlers();
 	}
 	
 	protected void handle(ByteBuffer in, Queue<EzyMessage> out) {
-		EzyDecodeHandler handler = handers.get(state);
+		EzyDecodeHandler handler = handlers.get(state);
 		while(handler != null && handler.handle(in, out)) {
 			state = handler.nextState();
 			handler = handler.nextHandler();
@@ -31,7 +32,8 @@ public abstract class EzyDecodeHandlers {
 		return EzyDecodeState.PREPARE_MESSAGE;
 	}
 	
-	public abstract static class AbstractBuilder {
+	public abstract static class Builder implements EzyBuilder<EzyDecodeHandlers> {
+		
 		protected Map<EzyIDecodeState, EzyDecodeHandler> newHandlers() {
 			Map<EzyIDecodeState, EzyDecodeHandler> answer = new HashMap<>();
 			addHandlers(answer);

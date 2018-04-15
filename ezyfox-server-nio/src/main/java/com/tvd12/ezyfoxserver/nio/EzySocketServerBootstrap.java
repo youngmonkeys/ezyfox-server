@@ -9,8 +9,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioAcceptableConnectionsHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptanceLoopHandler;
@@ -18,35 +16,24 @@ import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReadingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyStartable;
 
-public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
+public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
 	private Selector readSelector;
 	private Selector acceptSelector;
 	private ServerSocket serverSocket;
 	private ServerSocketChannel serverSocketChannel;
 	
-	private EzyServerContext serverContext;
-	private EzyHandlerGroupManager handlerGroupManager;
-	private EzySessionTicketsQueue sessionTicketsQueue;
-	
-	private EzySocketEventLoopHandler writingLoopHandler;
 	private EzySocketEventLoopHandler readingLoopHandler;
 	private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
 	
 	public EzySocketServerBootstrap(Builder builder) {
-		this.serverContext = builder.serverContext;
-		this.handlerGroupManager = builder.handlerGroupManager;
-		this.sessionTicketsQueue = builder.sessionTicketsQueue;
+		super(builder);
 	}
 	
 	@Override
@@ -159,37 +146,20 @@ public class EzySocketServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private EzySocketSetting getSocketSetting() {
-		return serverContext.getServer().getSettings().getSocket();
+		return getServerSettings().getSocket();
 	}
 	
 	public static Builder builder() {
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyBuilder<EzySocketServerBootstrap> {
+	public static class Builder 
+			extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
 
-		private EzyServerContext serverContext;
-		private EzyHandlerGroupManager handlerGroupManager;
-		private EzySessionTicketsQueue sessionTicketsQueue;
-		
-		public Builder serverContext(EzyServerContext context) {
-			this.serverContext = context;
-			return this;
-		}
-		
-		public Builder handlerGroupManager(EzyHandlerGroupManager manager) {
-			this.handlerGroupManager = manager;
-			return this;
-		}
-		
-		public Builder sessionTicketsQueue(EzySessionTicketsQueue queue) {
-			this.sessionTicketsQueue = queue;
-			return this;
-		}
-		
 		@Override
 		public EzySocketServerBootstrap build() {
 			return new EzySocketServerBootstrap(this);
 		}
+		
 	}
 }

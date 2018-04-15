@@ -5,34 +5,27 @@
 	<xs:element name="settings">
 		<xs:complexType>
 			<xs:all>
-				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="debug" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="worker-pool-size" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="administrators" minOccurs="1" maxOccurs="1" />
-				<xs:element ref="user-management" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="session-management" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="zones" minOccurs="0" maxOccurs="1" />
 			</xs:all>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="max-users" type="xs:integer" />
+	<xs:element name="debug" type="xs:boolean" />
 	<xs:element name="max-sessions" type="xs:integer" />
-	<xs:element name="worker-pool-size" type="xs:integer" />
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />
 	<xs:element name="web-socket" type="web-socket-type" />
-	<xs:element name="applications" type="applications-type" />
-	<xs:element name="application" type="application-type" />
-	<xs:element name="plugins" type="plugins-type" />
-	<xs:element name="plugin" type="plugin-type" />
 	<xs:element name="administrators" type="administrators-type" />
-	<xs:element name="user-management" type="user-management-type" />
 	<xs:element name="session-management" type="session-management-type" />
+	<xs:element name="zone" type="zone-type" />
+	<xs:element name="zones" type="zones-type" />
 
 	<xs:complexType name="socket-type">
 		<xs:all>
@@ -72,57 +65,6 @@
 			<xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
-
-	<xs:complexType name="plugins-type">
-		<xs:all>
-			<xs:element ref="plugin" minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
-
-	<xs:complexType name="plugin-type">
-		<xs:all>
-			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
-			<xs:element name="worker-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="listen-events" type="plugin-listen-events" minOccurs="0" maxOccurs="1" />
-		</xs:all>
-	</xs:complexType>
-
-	<xs:complexType name="plugin-listen-events">
-		<xs:sequence>
-			<xs:element name="event" type="plugin-listen-event-type" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
-
-	<xs:simpleType name="plugin-listen-event-type">
-		<xs:list>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="USER_LOGIN" />
-					<xs:enumeration value="USER_ADDED" />
-					<xs:enumeration value="USER_REMOVED" />
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:list>
-	</xs:simpleType>
-
-	<xs:complexType name="applications-type">
-		<xs:all>
-			<xs:element ref="application" minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
-
-	<xs:complexType name="application-type">
-		<xs:all>
-			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="worker-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
-		</xs:all>
-	</xs:complexType>
 	
 	<xs:complexType name="administrators-type">
 		<xs:sequence>
@@ -135,16 +77,6 @@
 			<xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="api-access-token" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-		</xs:all>
-	</xs:complexType>
-
-	<xs:complexType name="user-management-type">
-		<xs:all>
-			<xs:element name="allow-guest-login" type="xs:boolean" minOccurs="0" maxOccurs="1" />
-			<xs:element name="guest-name-prefix" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="user-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1" />
-			<xs:element name="user-name-pattern" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="max-session-per-user" type="xs:int" minOccurs="0" maxOccurs="1" />
 		</xs:all>
 	</xs:complexType>
 
@@ -174,6 +106,20 @@
 			</xs:simpleType>
 		</xs:list>
 	</xs:simpleType>
+	
+	<xs:complexType name="zones-type">
+		<xs:all>
+			<xs:element ref="zone" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+
+	<xs:complexType name="zone-type">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="config-file" type="xs:anyURI" minOccurs="1" maxOccurs="1" />
+			<xs:element name="active" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
 
 	<xs:simpleType name="codec-creator-type">
 		<xs:restriction base="class-type" />

@@ -4,8 +4,8 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyRequestAppEventImplTest extends BaseCoreTest {

@@ -4,8 +4,8 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserDisconnectEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserDisconnectEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyDisconnectEventImplTest extends BaseCoreTest {

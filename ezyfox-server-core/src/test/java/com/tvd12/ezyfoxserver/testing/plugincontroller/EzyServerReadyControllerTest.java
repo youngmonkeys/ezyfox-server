@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.plugincontroller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 

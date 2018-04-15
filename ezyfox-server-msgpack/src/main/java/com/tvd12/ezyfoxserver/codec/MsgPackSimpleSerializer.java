@@ -29,9 +29,9 @@ import java.util.Set;
 
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.function.EzyCastIntToByte;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
+import com.tvd12.ezyfoxserver.io.EzyCastToByte;
 import com.tvd12.ezyfoxserver.io.EzyDataConverter;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 import com.tvd12.ezyfoxserver.util.EzyBoolsIterator;
@@ -44,8 +44,8 @@ import com.tvd12.ezyfoxserver.util.EzyStringsIterator;
 import com.tvd12.ezyfoxserver.util.EzyWrapperIterator;
 
 public class MsgPackSimpleSerializer 
-		extends EzyAbstractSerializer 
-		implements EzyCastIntToByte {
+		extends EzyAbstractToBytesSerializer 
+		implements EzyCastToByte {
 
 	protected IntSerializer intSerializer = new IntSerializer();
 	protected FloatSerializer floatSerializer = new FloatSerializer();
@@ -340,7 +340,7 @@ public class MsgPackSimpleSerializer
 		byte[][] bytess = new byte[2][];
 		bytess[0] = parseBinSize(bin.length);
 		bytess[1] = bin;
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseBinSize(int size) {
@@ -351,7 +351,7 @@ public class MsgPackSimpleSerializer
 		byte[][] bytess = new byte[2][];
 		bytess[1] = EzyStrings.getUtfBytes(string);
 		bytess[0] = parseStringSize(bytess[1].length);
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseStringSize(int size) {
@@ -370,7 +370,7 @@ public class MsgPackSimpleSerializer
 		bytess[0] = parseArraySize(size);
 		while(iterator.hasNext())
 			bytess[index ++] = serialize(iterator.next());
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseArraySize(int size) {
@@ -386,7 +386,7 @@ public class MsgPackSimpleSerializer
 			bytess[index++] = serialize(e.getKey());
 			bytess[index++] = serialize(e.getValue());
 		}
-		return EzyBytes.copy(bytess);
+		return EzyBytes.merge(bytess);
 	}
 	
 	protected byte[] parseMapSize(int size) {
@@ -395,7 +395,7 @@ public class MsgPackSimpleSerializer
 	
 }
 
-class BinSizeSerializer implements EzyCastIntToByte {
+class BinSizeSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_BIN8_SIZE)
@@ -420,7 +420,7 @@ class BinSizeSerializer implements EzyCastIntToByte {
 	}
 }
 
-class StringSizeSerializer implements EzyCastIntToByte {
+class StringSizeSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXSTR_SIZE)
@@ -451,7 +451,7 @@ class StringSizeSerializer implements EzyCastIntToByte {
 	}
 }
 
-class ArraySizeSerializer implements EzyCastIntToByte {
+class ArraySizeSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXARRAY_SIZE)
@@ -476,7 +476,7 @@ class ArraySizeSerializer implements EzyCastIntToByte {
 	}
 }
 
-class MapSizeSerializer implements EzyCastIntToByte {
+class MapSizeSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(int size) {
 		if(size <= MAX_FIXMAP_SIZE)
@@ -501,7 +501,7 @@ class MapSizeSerializer implements EzyCastIntToByte {
 	}
 }
 
-class IntSerializer implements EzyCastIntToByte {
+class IntSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(long value) {
 		return value >= 0 
@@ -574,7 +574,7 @@ class IntSerializer implements EzyCastIntToByte {
 	}
 }
 
-class DoubleSerializer implements EzyCastIntToByte {
+class DoubleSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(double value) {
 		return EzyBytes.getBytes(cast(0xcb), value);
@@ -582,7 +582,7 @@ class DoubleSerializer implements EzyCastIntToByte {
 	
 }
 
-class FloatSerializer implements EzyCastIntToByte {
+class FloatSerializer implements EzyCastToByte {
 	
 	public byte[] serialize(float value) {
 		return EzyBytes.getBytes(cast(0xca), value);

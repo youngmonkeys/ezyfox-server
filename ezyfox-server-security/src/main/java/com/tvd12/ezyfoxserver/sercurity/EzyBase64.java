@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.sercurity;
 
+import static com.tvd12.ezyfoxserver.io.EzyDoubleArrays.toByteArray;
+import static com.tvd12.ezyfoxserver.io.EzyDoubleArrays.toDoubleArray;
+
 import org.apache.commons.codec.binary.Base64;
 
 import com.tvd12.ezyfoxserver.io.EzyStrings;
@@ -39,6 +42,16 @@ public final class EzyBase64 {
 	
 	public static String decode2utf(byte[] input) {
 		return EzyStrings.newUtf(decode(input));
+	}
+	
+	public static String encode(double[] doubleArray) {
+		byte[] bytes = toByteArray(doubleArray);
+		return encode2utf(bytes);
+	}
+
+	public static double[] decode2doubles(String base64Encoded) {
+		byte[] bytes = decode(base64Encoded);
+		return toDoubleArray(bytes);
 	}
 	
 }

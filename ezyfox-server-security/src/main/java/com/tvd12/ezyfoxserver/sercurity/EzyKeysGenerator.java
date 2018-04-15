@@ -20,7 +20,8 @@ public class EzyKeysGenerator {
 	
 	protected KeyPair generate(KeyPairGenerator generator) {
 		generator.initialize(keysize);
-		return generator.generateKeyPair();
+		KeyPair keyPair = generator.generateKeyPair();
+		return keyPair;
 	}
 	
 	protected KeyPairGenerator newKeyPairGenerator() {
@@ -35,27 +36,23 @@ public class EzyKeysGenerator {
 	public static Builder builder() {
 		return new Builder<>();
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public static class Builder<B extends Builder<B>> {
 		protected int keysize = 512;
 		protected String algorithm = "RSA";
 		
 		public B keysize(int keysize) {
 			this.keysize = keysize;
-			return getThis();
+			return (B)this;
 		}
 		public B algorithm(String algorithm) {
 			this.algorithm = algorithm;
-			return getThis();
+			return (B)this;
 		}
 		
 		public EzyKeysGenerator build() {
 			return new EzyKeysGenerator(this);
-		}
-		
-		@SuppressWarnings("unchecked")
-		protected B getThis() {
-			return (B)this;
 		}
 	}
 }

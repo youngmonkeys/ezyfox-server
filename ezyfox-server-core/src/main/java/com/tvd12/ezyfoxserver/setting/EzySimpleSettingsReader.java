@@ -7,6 +7,8 @@ import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.util.EzyInitable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 
 public class EzySimpleSettingsReader
         extends EzyLoggable
@@ -29,14 +31,38 @@ public class EzySimpleSettingsReader
     
     protected EzySettings readSettings() {
         getLogger().info("read setting file: " + getSettingsFilePath());
-        return newXmlReader().read(getSettingsFilePath(), EzySimpleSettings.class);
+        EzyXmlReader xmlReader = newXmlReader();
+        EzySimpleSettings settings = readSettingsFile(xmlReader);
+        EzySimpleZoneFilesSetting zoneFiles = settings.getZoneFiles();
+        zoneFiles.forEach(zf -> {
+            if(!zf.isActive()) return;
+            EzySimpleZoneSetting zoneSetting = readZoneConfigFile(xmlReader, zf.getConfigFile());
+            postReadZoneSettings(zoneSetting);
+            zoneSetting.setName(zf.getName());
+            zoneSetting.setConfigFile(zf.getConfigFile());
+            zoneSetting.setEventPluginsMapper(newEventPluginsMapper(zoneSetting.getPlugins()));
+            zoneSetting.init();
+            settings.addZone(zoneSetting);
+        });
+        return settings;
+    }
+    
+    protected EzySimpleSettings readSettingsFile(EzyXmlReader xmlReader) {
+        return xmlReader.read(getSettingsFilePath(), EzySimpleSettings.class);
+    }
+    
+    protected EzySimpleZoneSetting readZoneConfigFile(EzyXmlReader xmlReader, String configFile) {
+        return xmlReader.read(getZoneConfigFilePath(configFile), EzySimpleZoneSetting.class);
     }
     
     protected void postReadSettings(EzySettings settings) {
-        updatePluginsSetting(settings.getPlugins());
-        updateAppsSetting(settings.getApplications());
-        updateUserManagementSetting(settings.getUserManagement());
         updateSessionManagementSetting(settings.getSessionManagement());
+    }
+    
+    protected void postReadZoneSettings(EzyZoneSetting zoneSetting) {
+        updatePluginsSetting(zoneSetting.getPlugins());
+        updateAppsSetting(zoneSetting.getApplications());
+        updateUserManagementSetting(zoneSetting.getUserManagement());
     }
     
     protected void updateAppsSetting(EzyAppsSetting apps) {
@@ -57,6 +83,12 @@ public class EzySimpleSettingsReader
         ((EzyInitable)setting).init();
     }
     
+    protected EzyEventPluginsMapper newEventPluginsMapper(EzyPluginsSetting pluginsSetting) {
+        return EzyEventPluginsMapperImpl.builder()
+                .plugins(pluginsSetting)
+                .build();
+    }
+    
     protected EzyXmlReader newXmlReader() {
         return EzySimplXmlMapper.builder()
                 .classLoader(classLoader)
@@ -70,6 +102,10 @@ public class EzySimpleSettingsReader
     
     protected String getSettingsFilePath() {
         return getPath(getSettingsPath(), EzyFileNames.SETTINGS);
+    }
+    
+    protected String getZoneConfigFilePath(String configFile) {
+        return getPath(getSettingsPath(), EzyFolderNamesSetting.ZONES, configFile);
     }
     
     protected String getPath(String first, String... more) {

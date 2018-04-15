@@ -4,7 +4,7 @@ import java.util.Map;
  
 import org.testng.annotations.Test; 
  
-import com.tvd12.ezyfoxserver.codec.EzyAbstractSerializer; 
+import com.tvd12.ezyfoxserver.codec.EzyAbstractToBytesSerializer; 
 import com.tvd12.ezyfoxserver.function.EzyParser; 
 import com.tvd12.test.base.BaseTest; 
  
@@ -12,24 +12,24 @@ public class EzyAbstractSerializerTest extends BaseTest {
  
 	@Test
 	public void test() { 
-		EzyAbstractSerializer serializer = new Serializer();
+		EzyAbstractToBytesSerializer serializer = new Serializer();
 		assert serializer.serialize(null) == null;
 		assert serializer.serialize(new String("abc")) != null;
 	} 
 	 
 	@Test(expectedExceptions = {IllegalArgumentException.class})
 	public void test1() { 
-		EzyAbstractSerializer serializer = new Serializer();
+		EzyAbstractToBytesSerializer serializer = new Serializer();
 		serializer.serialize(new EzyAbstractSerializerTest());
 	} 
 	 
 	@Test
 	public void test2() { 
-		EzyAbstractSerializer serializer = new Serializer1();
+		EzyAbstractToBytesSerializer serializer = new Serializer1();
 		serializer.serialize(new EzyAbstractSerializerTest());
 	} 
 	 
-	public static class Serializer extends EzyAbstractSerializer { 
+	public static class Serializer extends EzyAbstractToBytesSerializer { 
  
 		@Override 
 		protected byte[] parseNil() { 
@@ -48,7 +48,7 @@ public class EzyAbstractSerializerTest extends BaseTest {
 		 
 	} 
 	 
-	public static class Serializer1 extends EzyAbstractSerializer { 
+	public static class Serializer1 extends EzyAbstractToBytesSerializer { 
  
 		@Override 
 		protected byte[] parseNil() { 

@@ -19,13 +19,15 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class EzySimpleAppContext 
-		extends EzySimpleChildContext 
+		extends EzyAbstractZoneChildContext 
 		implements EzyAppContext {
 
 	@Setter
@@ -63,5 +65,17 @@ public class EzySimpleAppContext
 	public void destroy() {
 	    processWithLogException(( )-> ((EzyDestroyable)app).destroy());
 	}
+	
+	@Override
+    public boolean equals(Object obj) {
+        return new EzyEquals<EzySimpleAppContext>()
+                .function(t -> t.app)
+                .isEquals(this, obj);
+    }
+    
+    @Override
+    public int hashCode() {
+        return new EzyHashCodes().append(app).hashCode();
+    }
 	
 }

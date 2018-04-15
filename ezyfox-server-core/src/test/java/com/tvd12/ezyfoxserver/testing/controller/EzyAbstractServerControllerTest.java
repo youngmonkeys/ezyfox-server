@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyAbstractServerController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
@@ -22,12 +23,16 @@ public class EzyAbstractServerControllerTest extends BaseCoreTest {
     public void test() {
         EzySimpleServer server = mock(EzySimpleServer.class);
         EzyAppContext appContext = mock(EzyAppContext.class);
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         ServerController controller = new ServerController();
         EzyServerContext serverContext = mock(EzyServerContext.class);
+        when(serverContext.getZoneContext("example")).thenReturn(zoneContext);
+        when(serverContext.getZoneContext(1)).thenReturn(zoneContext);
         when(serverContext.getAppContext(1)).thenReturn(appContext);
+        when(zoneContext.getAppContext("abc")).thenReturn(appContext);
+        when(zoneContext.getAppContext(1)).thenReturn(appContext);
         assertEquals(controller.getAppContext(serverContext, 1), appContext);
-        when(serverContext.getAppContext("abc")).thenReturn(appContext);
-        assertEquals(controller.getAppContext(serverContext, "abc"), appContext);
+        when(zoneContext.getAppContext("abc")).thenReturn(appContext);
         
         EzyServerControllers controllers = mock(EzyServerControllers.class);
         
@@ -44,11 +49,6 @@ public class EzyAbstractServerControllerTest extends BaseCoreTest {
         @Override
         public EzyAppContext getAppContext(EzyServerContext ctx, int appId) {
             return super.getAppContext(ctx, appId);
-        }
-        
-        @Override
-        public EzyAppContext getAppContext(EzyServerContext ctx, String appName) {
-            return super.getAppContext(ctx, appName);
         }
         
         @Override

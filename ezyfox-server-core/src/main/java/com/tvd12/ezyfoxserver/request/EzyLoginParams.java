@@ -4,6 +4,8 @@ import com.tvd12.ezyfoxserver.entity.EzyData;
 
 public interface EzyLoginParams extends EzyRequestParams {
 
+    String getZoneName();
+    
     String getUsername();
     
     String getPassword();

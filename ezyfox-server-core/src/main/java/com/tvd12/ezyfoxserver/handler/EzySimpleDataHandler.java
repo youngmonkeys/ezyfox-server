@@ -19,11 +19,12 @@ import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleSessionRemovedEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
+@SuppressWarnings("unchecked")
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
 
@@ -123,7 +124,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         interceptServerRequest(interceptor, request);
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
     protected void interceptServerRequest(
             EzyInterceptor interceptor, Object request) throws Exception {
         interceptor.intercept(context, request);
@@ -134,7 +135,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         handleServerRequest(controller, request);
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("rawtypes")
     protected void handleServerRequest(EzyController controller, Object request) {
         controller.handle(context, request);
     }
@@ -148,15 +149,16 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     @Override
     public void onSessionRemoved(EzyConstant reason) {
-        notifySessionRemoved(reason);
         setDisconnectReason(reason);
+        notifySessionRemoved(reason);
         chechToUnmapUser();
         disconnectSession(reason);
         destroy();
     }
     
     protected void notifySessionRemoved(EzyConstant reason) {
-        if(context == null) return;
+        if(zoneContext == null) 
+            return;
         EzyEvent event = newSessionRemovedEvent(reason);
         if(user != null)
             notifyAppsSessionRemoved(event);
@@ -165,7 +167,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyAppsSessionRemoved(EzyEvent event) {
         try {
-            context.get(EzyFireAppEvent.class)
+            zoneContext.get(EzyFireAppEvent.class)
                 .filter(appCtxt -> containsUser(appCtxt, user))
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
@@ -176,7 +178,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyPluginsSessionRemoved(EzyEvent event) {
         try {
-            context.get(EzyFirePluginEvent.class)
+            zoneContext.get(EzyFirePluginEvent.class)
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {

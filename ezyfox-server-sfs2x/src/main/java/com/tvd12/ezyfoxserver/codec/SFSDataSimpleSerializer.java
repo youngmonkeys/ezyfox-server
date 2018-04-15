@@ -2,14 +2,14 @@ package com.tvd12.ezyfoxserver.codec;
 
 import java.util.Map;
 
-import com.tvd12.ezyfoxserver.function.EzyCastIntToByte;
 import com.tvd12.ezyfoxserver.function.EzyParser;
 import com.tvd12.ezyfoxserver.io.EzyBytes;
+import com.tvd12.ezyfoxserver.io.EzyCastToByte;
 import com.tvd12.ezyfoxserver.io.EzyStrings;
 
 public class SFSDataSimpleSerializer 
-	extends EzyAbstractSerializer 
-	implements EzyCastIntToByte {
+	extends EzyAbstractToBytesSerializer 
+	implements EzyCastToByte {
 
 	@Override
 	protected byte[] parseNil() {
@@ -78,7 +78,7 @@ public class SFSDataSimpleSerializer
 	}
 	
 	protected byte[] toBytes(SFSDataType type, byte[] value) {
-		return EzyBytes.getBytes(toByte(type), value);
+		return EzyBytes.merge(toByte(type), value);
 	}
 	
 }

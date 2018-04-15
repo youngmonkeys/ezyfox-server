@@ -26,7 +26,7 @@ import lombok.Setter;
 public abstract class EzyAbstractSession 
         extends EzyEntity 
         implements 
-            EzySession, 
+            EzySession,
             EzyImmediateDeliverAware, 
             EzyHasSessionDelegate,
             EzyDroppedPacketsAware {
@@ -41,6 +41,7 @@ public abstract class EzyAbstractSession
 	protected long readBytes;
 	protected long writtenBytes;
 	protected long lastActivityTime;
+	protected long loggedInTime;
 	protected int readRequests;
 	protected int writtenResponses;
 	
@@ -48,14 +49,15 @@ public abstract class EzyAbstractSession
 	protected byte[] publicKey;
 	protected byte[] clientKey;
 	
-	protected long loggedInTime;
+	protected boolean reconnect;
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
-	
+    
 	protected String clientType;
 	protected String clientVersion;
 	protected String reconnectToken;
+	protected String beforeReconnectToken;
 	protected String fullReconnectToken;
 	protected EzyConstant connectionType;
 

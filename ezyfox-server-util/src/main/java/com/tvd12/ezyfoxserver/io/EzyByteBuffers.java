@@ -19,4 +19,29 @@ public final class EzyByteBuffers {
 		return bytes;
 	}
 
+	public static ByteBuffer merge(ByteBuffer[] buffers) {
+		ByteBuffer answer = ByteBuffer.allocate(totalBytes(buffers));
+		for(ByteBuffer buffer : buffers) {
+			answer.put(buffer);
+		}
+		answer.flip();
+		return answer;
+	}
+	
+	public static int totalBytes(ByteBuffer[] buffers) {
+		int size = 0;
+		for(ByteBuffer buffer : buffers)
+			size += buffer.remaining();
+		return size;
+	}
+	
+	public static byte[] merge2bytes(byte first, byte[] other) {
+		ByteBuffer buffer = ByteBuffer.allocate(other.length + 1);
+		buffer.put(first);
+		buffer.put(other);
+		byte[] bytes = new byte[buffer.position()];
+		buffer.flip();
+		buffer.get(bytes);
+		return bytes;
+	}
 }

@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.util.EzyStartable;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyBootstrap 
         extends EzyLoggable 
@@ -19,64 +19,35 @@ public class EzyBootstrap
 	
 	@Override
 	public void start() throws Exception {
-		startAllPlugins();
-		startAllApps();
-		startManagers();
+		startAllZones();
+		startSessionManager();
 	}
 	
-	@Override
+    @Override
 	public void destroy() {
 	    // do nothing
 	}
 	
-	protected void startManagers() {
-		getManagers().startManagers();
-	}
+    private void startAllZones() {
+        EzyZonesStarter.Builder builder = newZonesStarterBuilder()
+                .serverContext(context);
+        EzyZonesStarter starter = builder.build();
+        starter.start();
+    }
+    
+    protected EzyZonesStarter.Builder newZonesStarterBuilder() {
+        return new EzyZonesStarter.Builder();
+    }
 	
-	//====================== apps ===================
-	protected void startAllApps() {
-	    getLogger().info("start all apps ...");
-	    startComponents(newAppsStaterBuilder());
-	}
-	
-	protected EzyAppsStarter.Builder newAppsStaterBuilder() {
-	    return EzyAppsStarter.builder()
-                .appClassLoaders(getServer().getAppClassLoaders());
-	}
-	//=================================================
-	
-	//===================== plugins ===================
-	protected void startAllPlugins() {
-	    getLogger().info("start all plugins ...");
-	    startComponents(newPluginsStaterBuilder());
-	}
-	
-	protected EzyPluginsStarter.Builder newPluginsStaterBuilder() {
-	    return EzyPluginsStarter.builder();
-	}
-	
-	//=================================================
-	
-	protected void startComponents(
-	        EzyComponentsStater.Builder<?, ?> builder) {
-	    EzyComponentsStater starter = newComponenstStater(builder);
-	    starter.start();
-	}
-	
-	protected EzyComponentsStater newComponenstStater(
-	        EzyComponentsStater.Builder<?, ?> builder) {
-	    return builder
-	            .serverContext(context)
-	            .settings(getServer().getSettings())
-	            .build();
+	@SuppressWarnings("rawtypes")
+    protected void startSessionManager() throws Exception {
+		EzySessionManager sessionManager 
+		        = context.getServer().getSessionManager();
+		((EzyStartable)sessionManager).start();
 	}
 	
 	protected EzyServer getServer() {
 		return context.getServer();
-	}
-	
-	protected EzyManagers getManagers() {
-		return getServer().getManagers();
 	}
 	
 	public static Builder builder() {

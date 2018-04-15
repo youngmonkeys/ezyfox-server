@@ -12,11 +12,9 @@ public enum EzyEventType implements EzyConstant {
 	USER_SESSION_LOGIN(22),
 	USER_REQUEST(23),
 	USER_DISCONNECT(24),
-    USER_RECONNECT(25),
-    USER_ACCESS_APP(26),
-    USER_JOINED_APP(27),
-    USER_ADDED(28),
-    USER_REMOVED(29),
+    USER_ACCESS_APP(25),
+    USER_ADDED(26),
+    USER_REMOVED(27),
     SESSION_REMOVED(35);
     
 	@Getter

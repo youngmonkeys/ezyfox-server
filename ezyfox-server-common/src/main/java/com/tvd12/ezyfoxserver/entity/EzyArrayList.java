@@ -81,7 +81,7 @@ public class EzyArrayList implements EzyArray {
 	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.lang.Object[])
 	 */
 	@Override
-	public <T> void add(T... items) {
+	public void add(Object... items) {
 		add(Arrays.asList(items));
 	}
 
@@ -89,8 +89,9 @@ public class EzyArrayList implements EzyArray {
 	 * (non-Javadoc)
 	 * @see com.tvd12.ezyfoxserver.entity.EzyArray#add(java.util.Collection)
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void add(Collection<? extends Object> items) {
+	public void add(Collection items) {
 		items.forEach(this::add);
 	}
 	
@@ -183,7 +184,6 @@ public class EzyArrayList implements EzyArray {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		super.clone();
 		EzyArrayList clone = new EzyArrayList((Collection) list.clone());
 		clone.setInputTransformer(inputTransformer);
 		clone.setOutputTransformer(outputTransformer);

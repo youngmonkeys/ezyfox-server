@@ -4,8 +4,9 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.appcontroller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleServerReadyEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyServerReadyControllerTest extends BaseCoreTest {
@@ -16,7 +17,8 @@ public class EzyServerReadyControllerTest extends BaseCoreTest {
         EzyServerContext ctx = newServerContext();
         EzyServerReadyEvent event = EzySimpleServerReadyEvent.builder()
                 .build();
-        ctrl.handle(ctx.getAppContext("ezyfox-chat"), event);
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        ctrl.handle(zoneContext.getAppContext("ezyfox-chat"), event);
     }
     
 }

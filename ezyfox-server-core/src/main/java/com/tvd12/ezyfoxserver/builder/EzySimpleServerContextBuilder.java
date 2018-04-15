@@ -2,22 +2,32 @@ package com.tvd12.ezyfoxserver.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
+import com.tvd12.ezyfoxserver.EzySimpleZone;
+import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyServerContexts;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
+import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 
 @SuppressWarnings("unchecked")
 public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuilder<B>> 
@@ -35,9 +45,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     public EzyServerContext build() {
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
-        context.setWorkerExecutor(newWorkerExecutor());
-        context.addAppContexts(newAppContexts(context));
-        context.addPluginContexts(newPluginContexts(context));
+        context.addZoneContexts(newZoneContexts(context));
         return context;
     }
     
@@ -45,27 +53,49 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return new EzySimpleServerContext();
     }
     
-    protected ExecutorService newWorkerExecutor() {
-        String threadName = "worker";
-        int nthreads = server.getSettings().getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
-    }
-    
-    protected Collection<EzyAppContext> newAppContexts(EzyServerContext parent) {
-        Collection<EzyAppContext> contexts = new ArrayList<>();
-        for(Integer appId : server.getAppIds())
-            contexts.add(newAppContext(parent, server.getAppById(appId)));
+    protected Collection<EzyZoneContext> newZoneContexts(EzyServerContext parent) {
+        Collection<EzyZoneContext> contexts = new ArrayList<>();
+        EzySettings settings = EzyServerContexts.getSettings(parent);
+        for(Integer zoneId : settings.getZoneIds()) {
+            EzyZoneSetting zoneSetting = settings.getZoneById(zoneId);
+            EzySimpleZone zone = new EzySimpleZone();
+            zone.setSetting(zoneSetting);
+            zone.setUserManager(newZoneUserManager(zoneSetting));
+            EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
+            zoneContext.setParent(parent);
+            zoneContext.setZone(zone);
+            zoneContext.addAppContexts(newAppContexts(zoneContext));
+            zoneContext.addPluginContexts(newPluginContexts(zoneContext));
+            contexts.add(zoneContext);
+        }
         return contexts;
     }
     
-    protected EzyAppContext newAppContext(EzyServerContext parent, EzyAppSetting setting) {
+    protected EzyZoneUserManager newZoneUserManager(EzyZoneSetting zoneSetting) {
+        EzyUserManagementSetting setting = zoneSetting.getUserManagement();
+        return EzyZoneUserManagerImpl.builder()
+                .maxUsers(zoneSetting.getMaxUsers())
+                .maxIdleTime(setting.getUserMaxIdleTime())
+                .build();
+    }
+    
+    protected Collection<EzyAppContext> newAppContexts(EzyZoneContext parent) {
+        EzyZone zone = parent.getZone();
+        EzyZoneSetting zoneSetting = zone.getSetting();
+        Collection<EzyAppContext> contexts = new ArrayList<>();
+        for(Integer appId : zoneSetting.getAppIds())
+            contexts.add(newAppContext(parent, zoneSetting.getAppById(appId)));
+        return contexts;
+    }
+    
+    protected EzyAppContext newAppContext(EzyZoneContext parent, EzyAppSetting setting) {
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(setting);
         app.setUserManager(newAppUserManager(setting));
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
         appContext.setParent(parent);
-        appContext.setWorkerExecutor(newAppWorkerExecutor(setting));
+        appContext.setExecutorService(newAppExecutorService(setting));
         return appContext;
     }
     
@@ -76,33 +106,39 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
                 .build();
     }
     
-    protected Collection<EzyPluginContext> newPluginContexts(EzyServerContext parent) {
+    protected Collection<EzyPluginContext> newPluginContexts(EzySimpleZoneContext parent) {
+        EzyZone zone = parent.getZone();
+        EzyZoneSetting zoneSetting = zone.getSetting();
         Collection<EzyPluginContext> contexts = new ArrayList<>();
-        for(Integer appId : server.getPluginIds())
-            contexts.add(newPluginContext(parent, server.getPluginById(appId)));
+        for(Integer appId : zoneSetting.getPluginIds())
+            contexts.add(newPluginContext(parent, zoneSetting.getPluginById(appId)));
         return contexts;
     }
     
-    protected EzyPluginContext newPluginContext(EzyServerContext parent, EzyPluginSetting setting) {
+    protected EzyPluginContext newPluginContext(EzySimpleZoneContext parent, EzyPluginSetting setting) {
         EzySimplePlugin plugin = new EzySimplePlugin();
         plugin.setSetting(setting);
         EzySimplePluginContext pluginContext = new EzySimplePluginContext();
         pluginContext.setPlugin(plugin);
         pluginContext.setParent(parent);
-        pluginContext.setWorkerExecutor(newPluginWorkerExecutor(setting));
+        pluginContext.setExecutorService(newPluginExecutorService(setting));
         return pluginContext;
     }
     
-    protected ExecutorService newAppWorkerExecutor(EzyAppSetting app) {
-        String threadName = "app-worker";
-        int nthreads = app.getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+    protected ScheduledExecutorService newAppExecutorService(EzyAppSetting app) {
+        String threadName = "app-" + app.getName() + "-thread";
+        int nthreads = app.getThreadPoolSize();
+        if(nthreads > 0)
+            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        return EzyExecutors.newErrorScheduledExecutor("must set app " + app.getName() + "'s 'thread-pool-size'");
     }
     
-    protected ExecutorService newPluginWorkerExecutor(EzyPluginSetting plugin) {
-        String threadName = "plugin-worker";
-        int nthreads = plugin.getWorkerPoolSize();
-        return EzyExecutors.newFixedThreadPool(nthreads, threadName);
+    protected ScheduledExecutorService newPluginExecutorService(EzyPluginSetting plugin) {
+        String threadName = "plugin-" + plugin.getName() + "-thread";
+        int nthreads = plugin.getThreadPoolSize();
+        if(nthreads > 0)
+            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        return EzyExecutors.newErrorScheduledExecutor("must set plugin " + plugin.getName() + "'s 'thread-pool-size'");
     }
     
 }

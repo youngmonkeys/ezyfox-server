@@ -1,22 +1,20 @@
 package com.tvd12.ezyfoxserver;
 
 import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tvd12.ezyfoxserver.api.EzyApis;
+import com.tvd12.ezyfoxserver.api.EzyResponseApi;
+import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
-import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
-import com.tvd12.ezyfoxserver.wrapper.EzyManagers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManagerAware;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,17 +26,14 @@ import lombok.Setter;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@SuppressWarnings("rawtypes")
 public class EzySimpleServer 
         extends EzyComponent 
-        implements EzyServer, EzyDestroyable {
+        implements EzyServer, EzyResponseApiAware, EzySessionManagerAware, EzyDestroyable {
 
 	protected EzyConfig config;
 	protected EzySettings settings;
 	
-	@JsonIgnore
-	protected EzyApis apis;
-	@JsonIgnore
-	protected EzyManagers managers;
 	@JsonIgnore
 	protected ClassLoader classLoader;
 	@JsonIgnore
@@ -48,42 +43,20 @@ public class EzySimpleServer
 	@JsonIgnore
 	protected EzyServerControllers controllers;
 	@JsonIgnore
-    protected EzyEventPluginsMapper eventPluginsMapper;
+    protected EzyResponseApi responseApi;
+    @JsonIgnore
+	protected EzySessionManager sessionManager;
 	@JsonIgnore
-	protected Map<String, EzyAppClassLoader> appClassLoaders;
+    protected Map<String, EzyAppClassLoader> appClassLoaders;
 	
 	@Override
 	public String getVersion() {
 	    return "1.0.0";
 	}
 	
-	@JsonIgnore
-	@Override
-	public Set<Integer> getAppIds() {
-		return settings.getAppIds();
-	}
-	
-	@Override
-	public EzyAppSetting getAppById(Integer id) {
-		return settings.getAppById(id);
-	}
-	
-	//==================== plugins ================//
-	@JsonIgnore
-	@Override
-	public Set<Integer> getPluginIds() {
-		return settings.getPluginIds();
-	}
-	
-	@Override
-	public EzyPluginSetting getPluginById(Integer id) {
-		return settings.getPluginById(id);
-	}
-	//=============================================//
-	
 	@Override
 	public void destroy() {
-	    managers.stopManagers();
+	    ((EzyDestroyable)sessionManager).destroy();
 	}
 	
 	@Override

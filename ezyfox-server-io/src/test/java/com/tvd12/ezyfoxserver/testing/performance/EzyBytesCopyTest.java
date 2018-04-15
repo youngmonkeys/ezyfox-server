@@ -19,7 +19,7 @@ public class EzyBytesCopyTest {
 		long time = Performance.create()
 		.loop(1000000)
 		.test(()-> {
-			EzyBytes.copy(bytess);
+			EzyBytes.merge(bytess);
 		})
 		.getTime();
 		System.out.println("test1 elapsed time = " + time);

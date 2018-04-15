@@ -97,7 +97,7 @@ public class EzyNioSocketReader
 		if(readBytes == -1L) {
 			closeConnection(channel);
 		}
-		else {
+		else if(readBytes > 0) {
 			processReadBytes(channel);
 		}
 	}

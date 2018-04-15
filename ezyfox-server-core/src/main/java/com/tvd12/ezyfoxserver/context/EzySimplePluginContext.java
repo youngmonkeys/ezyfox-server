@@ -16,7 +16,9 @@ import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.util.EzyEquals;
 import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +26,7 @@ import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 
 public class EzySimplePluginContext 
-		extends EzySimpleChildContext 
+		extends EzyAbstractZoneChildContext 
 		implements EzyPluginContext {
 
 	@Setter
@@ -60,6 +62,18 @@ public class EzySimplePluginContext
     @Override
     public void destroy() {
         processWithLogException(( )-> ((EzyDestroyable)plugin).destroy());
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        return new EzyEquals<EzySimplePluginContext>()
+                .function(t -> t.plugin)
+                .isEquals(this, obj);
+    }
+    
+    @Override
+    public int hashCode() {
+        return new EzyHashCodes().append(plugin).hashCode();
     }
 	
 }

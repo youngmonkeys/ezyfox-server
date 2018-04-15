@@ -7,13 +7,12 @@ import com.tvd12.ezyfoxserver.constant.EzyIAccessAppError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserAccessAppEvent;
-import com.tvd12.ezyfoxserver.event.impl.EzySimpleUserJoinedAppEvent;
 import com.tvd12.ezyfoxserver.exception.EzyAccessAppException;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.request.EzyAccessAppParams;
@@ -31,26 +30,40 @@ public class EzyAccessAppController
 
 	@Override
 	public void handle(EzyServerContext ctx, EzyAccessAppRequest request) {
-	    EzyAccessAppParams params = request.getParams();
-	    EzyAppContext appContext = ctx.getAppContext(params.getAppName());
-	    EzyApplication app = appContext.getApp();
-	    EzyAppSetting appSetting = app.getSetting();
-	    EzyAppUserManager appUserManger = app.getUserManager();
+	   try {
+	       handle0(ctx, request);
+	   }
+	   catch(EzyAccessAppException e) {
+           responseAccessAppError(ctx, request.getSession(), e);
+           throw e;
+       }
+	}
+	
+	protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
 	    EzyUser user = request.getUser();
-	    EzySession session = request.getSession();
-	    try {
-	        addUser(appUserManger, user, appSetting);
-	    }
-	    catch(EzyAccessAppException e) {
-	        responseAccessAppError(ctx, session, e);
-	        throw e;
-	    }
-	    EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
-	    appContext.get(EzyFireEvent.class).fire(EzyEventType.USER_ACCESS_APP, accessAppEvent);
+        EzyAccessAppParams params = request.getParams();
+        EzyZoneContext zoneContext = ctx.getZoneContext(user.getZoneId());
+        EzyAppContext appContext = zoneContext.getAppContext(params.getAppName());
+        EzyApplication app = appContext.getApp();
+        EzyAppSetting appSetting = app.getSetting();
+        EzyAppUserManager appUserManger = app.getUserManager();
+        EzySession session = request.getSession();
+        checkAppUserMangerAvailable(appUserManger);
+        EzyFireEvent fireEvent = appContext.get(EzyFireEvent.class);
+        EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
+        fireEvent.fire(EzyEventType.USER_ACCESS_APP, accessAppEvent);
+        addUser(appUserManger, user, appSetting);
         EzyData ouput = accessAppEvent.getOutput();
-        response(ctx, session, newAccessAppResponse(appSetting, ouput));
-        EzyEvent joinedAppEvent = newJoinedAppEvent(user, session);
-        appContext.get(EzyFireEvent.class).fire(EzyEventType.USER_JOINED_APP, joinedAppEvent);
+        EzyResponse accessAppResponse = newAccessAppResponse(appSetting, ouput);
+        response(ctx, session, accessAppResponse);
+    }
+	
+	protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {
+	    int current = appUserManger.getUserCount();
+	    int max = appUserManger.getMaxUsers();
+	    String appName = appUserManger.getAppName();
+	    if(current >= max)
+	        throw EzyAccessAppException.maximumUser(appName, current, max);
 	}
 	
 	protected void addUser(EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
@@ -65,10 +78,6 @@ public class EzyAccessAppController
 	protected void addUser0(EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
         if(appUserManger.addUser(user) != null)
             throw EzyAccessAppException.hasJoinedApp(user.getName(), setting.getName());
-    }
-	
-	protected EzyEvent newJoinedAppEvent(EzyUser user, EzySession session) {
-        return EzySimpleUserJoinedAppEvent.builder().user(user).session(session).build();
     }
 	
 	protected EzyUserAccessAppEvent newAccessAppEvent(EzyUser user) {

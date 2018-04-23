@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.handler;
 
 import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
+import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.handleException;
@@ -14,7 +15,6 @@ import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionError;
-import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -35,13 +35,12 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     public void channelInactive() throws Exception {
-        if(disconnectReason == null)
-            sessionManager.removeSession(session, EzyDisconnectReason.UNKNOWN);
+        channelInactive(EzyDisconnectReason.UNKNOWN);
     }
     
     public void channelInactive(EzyConstant reason) throws Exception {
-        if(sessionManager != null)
-            sessionManager.removeSession(session, reason);
+        if(sessionManager != null && disconnectReason == null)
+            sessionManager.addDisconnectedSession(session, reason);
     }
     
     public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
@@ -75,7 +74,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             if(sessionManager != null) {
-                sessionManager.removeSession(session, EzySessionRemoveReason.MAX_REQUEST_PER_SECOND);
+                sessionManager.removeSession(session, MAX_REQUEST_PER_SECOND);
             }
         }
     }

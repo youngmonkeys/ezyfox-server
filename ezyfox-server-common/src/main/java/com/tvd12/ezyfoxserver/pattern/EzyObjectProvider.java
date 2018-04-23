@@ -97,11 +97,16 @@ public abstract class EzyObjectProvider<T>
 	@Override
 	public void destroy() {
 		try {
+			clearAll();
 			shutdownAll();
 		}
 		catch(Exception e) {
 			getLogger().error(getClass().getSimpleName() + " error", e);
 		}
+	}
+	
+	protected void clearAll() {
+		providedObjects.clear();
 	}
 	
 	protected void shutdownAll() {

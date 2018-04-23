@@ -2,16 +2,21 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyLockName;
-import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzyDisconnectReasonAware;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
@@ -19,6 +24,7 @@ import com.tvd12.ezyfoxserver.pattern.EzyObjectProvider;
 import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
+import com.tvd12.ezyfoxserver.util.EzyEntry;
 import com.tvd12.ezyfoxserver.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.util.EzyTimes;
 
@@ -31,6 +37,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<String, S> sessionsByToken = new ConcurrentHashMap<>();
+	protected final ConcurrentLinkedQueue<Entry<S, EzyConstant>> disconnectedSessions = new ConcurrentLinkedQueue<>();
 	
 	protected static final AtomicInteger COUNTER = new AtomicInteger(0);
 	
@@ -56,8 +63,15 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	@Override
+	public void addDisconnectedSession(S session, EzyConstant reason) {
+	    synchronized (disconnectedSessions) {
+	        disconnectedSessions.add(EzyEntry.of(session, reason));
+        }
+	}
+	
+	@Override
 	public void removeSession(S session) {
-	    removeSession(session, null);
+	    removeSession(session, EzyDisconnectReason.UNKNOWN);
 	}
 	
 	@Override
@@ -78,6 +92,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected void removeSessionWithLock(S session, EzyConstant reason) {
+	    ((EzyDisconnectReasonAware)session).setDisconnectReason(reason);
 	    Lock lock = session.getLock(EzyLockName.REMOVE);
 	    EzyProcessor.processWithTryLock(() -> doRemoveSession(session, reason), lock);
 	}
@@ -188,6 +203,16 @@ public class EzySimpleSessionManager<S extends EzySession>
         return returnWithLock(this::getAllSessionCount);
     }
 	
+	protected Queue<Entry<S, EzyConstant>> getDisconnectedSessions() {
+	    Queue<Entry<S, EzyConstant>> queue = new LinkedList<>();
+	    synchronized (disconnectedSessions) {
+            while (!disconnectedSessions.isEmpty()) {
+                queue.add(disconnectedSessions.poll());
+            }
+        }
+	    return queue;
+	}
+	
 	@Override
 	public void start() throws Exception {
 		super.start();
@@ -196,24 +221,36 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@Override
 	protected void removeStaleObjects() {
+	    checkAndRemoveSessions();
+	    removeDisconnectedSesions();
+	}
+	
+	protected void checkAndRemoveSessions() {
 	    List<S> idleSessions = new ArrayList<>();
-	    List<S> unloggedInSessions = new ArrayList<>();
-	    for(S session : getAllSessions()) {
-	        if(isUnloggedInSession(session)) {
-	            unloggedInSessions.add(session);
-	        }
-	        else if(isIdleSession(session)) {
-	            idleSessions.add(session);
-	        }
-	    }
-	    
-	    for(S session : idleSessions) {
-	        removeSession(session, EzySessionRemoveReason.IDLE);
-	    }
-	    
-	    for(S session : unloggedInSessions) {
-	        removeSession(session, EzySessionRemoveReason.NOT_LOGGED_IN);
-	    }
+        List<S> unloggedInSessions = new ArrayList<>();
+        for(S session : getAllSessions()) {
+            if(isUnloggedInSession(session)) {
+                unloggedInSessions.add(session);
+            }
+            else if(isIdleSession(session)) {
+                idleSessions.add(session);
+            }
+        }
+        for(S session : idleSessions) {
+            removeSession(session, EzyDisconnectReason.IDLE);
+        }
+        
+        for(S session : unloggedInSessions) {
+            removeSession(session, EzyDisconnectReason.NOT_LOGGED_IN);
+        }
+	}
+	
+	protected void removeDisconnectedSesions() {
+	    Queue<Entry<S, EzyConstant>> sessions = getDisconnectedSessions();
+        while(!sessions.isEmpty()) {
+            Entry<S, EzyConstant> entry = sessions.poll();
+            removeSession(entry.getKey(), entry.getValue());
+        }
 	}
 	
 	protected boolean isIdleSession(S session) {
@@ -242,6 +279,15 @@ public class EzySimpleSessionManager<S extends EzySession>
 				.keysize(512)
 				.algorithm("RSA")
 				.build().generate();
+	}
+	
+	@Override
+	public void destroy() {
+	    super.destroy();
+	    this.loggedInSession.clear();
+	    this.sessionsById.clear();
+	    this.sessionsByToken.clear();
+	    this.disconnectedSessions.clear();
 	}
 	
 	public abstract static class Builder<S extends EzySession> 

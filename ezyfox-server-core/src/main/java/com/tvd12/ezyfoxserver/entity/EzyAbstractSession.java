@@ -27,6 +27,7 @@ public abstract class EzyAbstractSession
         extends EzyEntity 
         implements 
             EzySession,
+            EzyDisconnectReasonAware,
             EzyImmediateDeliverAware, 
             EzyHasSessionDelegate,
             EzyDroppedPacketsAware {
@@ -49,8 +50,6 @@ public abstract class EzyAbstractSession
 	protected byte[] publicKey;
 	protected byte[] clientKey;
 	
-	protected boolean reconnect;
-	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
     
@@ -60,6 +59,7 @@ public abstract class EzyAbstractSession
 	protected String beforeReconnectToken;
 	protected String fullReconnectToken;
 	protected EzyConstant connectionType;
+	protected EzyConstant disconnectReason;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;

@@ -309,9 +309,9 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	boolean isIdle();
 	
 	/**
-	 * @return session is reconnect or not
+	 * @return the disconnect reason
 	 */
-	boolean isReconnect();
+	EzyConstant getDisconnectReason();
 	
 	/**
 	 * 

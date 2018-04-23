@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.netty.handler;
 
-import static com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason.MAX_REQUEST_SIZE;
+import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SIZE;
 
 import java.util.Map;
 

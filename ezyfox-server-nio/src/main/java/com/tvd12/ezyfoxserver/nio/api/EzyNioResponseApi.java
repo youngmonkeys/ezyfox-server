@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.builder.api;
+package com.tvd12.ezyfoxserver.nio.api;
 
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.builder.EzyBuilder;

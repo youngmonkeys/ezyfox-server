@@ -18,8 +18,8 @@ public class EzyMongoMaxIdMapstore extends EzyMongoCollectionMapstore<String, Lo
 	
     @Override
     public Long load(String key) {
-    	Bson filter = getFilter(key);
-    	Document first = collection.find(filter).first();
+    		Bson filter = getFilter(key);
+    		Document first = collection.find(filter).first();
         Long answer = first != null ? first.getLong("maxId") : 0L;
         getLogger().info("load maxId of: {} max: {}", key, answer);
         return answer;

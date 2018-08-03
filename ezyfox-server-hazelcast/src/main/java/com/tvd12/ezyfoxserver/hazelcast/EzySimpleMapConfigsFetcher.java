@@ -26,12 +26,12 @@ public class EzySimpleMapConfigsFetcher
     protected Map<String, EzyApply<MapStoreConfig>> mapstoreConfigApplies;
     
     protected EzySimpleMapConfigsFetcher(Builder builder) {
-    	this.mapNames = builder.mapNames;
-    	this.mapstoreFactory = builder.mapstoreFactory;
-    	this.mapConfigApplies = builder.mapConfigApplies;
-    	this.mapAllConfigApply = builder.mapAllConfigApply;
-    	this.mapstoreConfigApplies = builder.mapstoreConfigApplies;
-    	this.mapstoreAllConfigApply = builder.mapstoreAllConfigApply;
+	    	this.mapNames = builder.mapNames;
+	    	this.mapstoreFactory = builder.mapstoreFactory;
+	    	this.mapConfigApplies = builder.mapConfigApplies;
+	    	this.mapAllConfigApply = builder.mapAllConfigApply;
+	    	this.mapstoreConfigApplies = builder.mapstoreConfigApplies;
+	    	this.mapstoreAllConfigApply = builder.mapstoreAllConfigApply;
     }
 	
 	@Override
@@ -41,13 +41,13 @@ public class EzySimpleMapConfigsFetcher
 	}
 
 	protected MapConfig newMapConfig(String name) {
-    	MapConfig mapCfg = new MapConfig();
-    	mapCfg.setName(name);
-    	mapCfg.setMapStoreConfig(newMapStoreConfig(name));
-    	applyCommonConfig(mapCfg);
-    	applyConfig(name, mapCfg);
-    	getLogger().debug("config map: {}", name);
-    	return mapCfg;
+	    	MapConfig mapCfg = new MapConfig();
+	    	mapCfg.setName(name);
+	    	mapCfg.setMapStoreConfig(newMapStoreConfig(name));
+	    	applyCommonConfig(mapCfg);
+	    	applyConfig(name, mapCfg);
+	    	getLogger().debug("config map: {}", name);
+	    	return mapCfg;
     }
 	
 	protected void applyConfig(String mapName, MapConfig config) {
@@ -61,18 +61,18 @@ public class EzySimpleMapConfigsFetcher
 	}
     
     protected MapStoreConfig newMapStoreConfig(String mapName) {
-    	MapStoreConfig config = new MapStoreConfig();
-    	config.setEnabled(true);
-    	config.setInitialLoadMode(InitialLoadMode.EAGER);
-    	applyCommonConfig(config);
-    	applyConfig(mapName, config);
-    	config.setFactoryImplementation(mapstoreFactory);
-    	return config;
+	    	MapStoreConfig config = new MapStoreConfig();
+	    	config.setEnabled(true);
+	    	config.setInitialLoadMode(InitialLoadMode.EAGER);
+	    	applyCommonConfig(config);
+	    	applyConfig(mapName, config);
+	    	config.setFactoryImplementation(mapstoreFactory);
+	    	return config;
     }
     
     protected void applyConfig(String mapName, MapStoreConfig config) {
-    	if(mapstoreConfigApplies.containsKey(mapName))
-    		mapstoreConfigApplies.get(mapName).apply(config);
+    		if(mapstoreConfigApplies.containsKey(mapName))
+    			mapstoreConfigApplies.get(mapName).apply(config);
     }
     
     protected void applyCommonConfig(MapStoreConfig config) {
@@ -85,25 +85,25 @@ public class EzySimpleMapConfigsFetcher
     }
     
     public static Builder builder() {
-    	return new Builder();
+    		return new Builder();
     }
     
     public static class Builder implements EzyBuilder<EzyMapConfigsFetcher> {
-    	protected Set<String> mapNames;
-    	protected MapStoreFactory mapstoreFactory;
-    	protected EzyApply<MapConfig> mapAllConfigApply;
-    	protected EzyApply<MapStoreConfig> mapstoreAllConfigApply;
-    	protected Map<String, EzyApply<MapConfig>> mapConfigApplies = new HashMap<>();
-    	protected Map<String, EzyApply<MapStoreConfig>> mapstoreConfigApplies = new HashMap<>();
-    	
-    	public Builder mapNames(Set<String> mapNames) {
-    		this.mapNames = mapNames;
-    		return this;
-    	}
+	    	protected Set<String> mapNames;
+	    	protected MapStoreFactory mapstoreFactory;
+	    	protected EzyApply<MapConfig> mapAllConfigApply;
+	    	protected EzyApply<MapStoreConfig> mapstoreAllConfigApply;
+	    	protected Map<String, EzyApply<MapConfig>> mapConfigApplies = new HashMap<>();
+	    	protected Map<String, EzyApply<MapStoreConfig>> mapstoreConfigApplies = new HashMap<>();
+	    	
+	    	public Builder mapNames(Set<String> mapNames) {
+	    		this.mapNames = mapNames;
+	    		return this;
+	    	}
         
         public Builder mapstoreFactory(MapStoreFactory mapStoreFactory) {
-        	this.mapstoreFactory = mapStoreFactory;
-        	return this;
+        		this.mapstoreFactory = mapStoreFactory;
+        		return this;
         }
         
         public Builder mapConfigApply(
@@ -114,8 +114,8 @@ public class EzySimpleMapConfigsFetcher
         
         public Builder mapstoreConfigApply(
         		String mapName, EzyApply<MapStoreConfig> apply) {
-        	this.mapstoreConfigApplies.put(mapName, apply);
-        	return this;
+	        	this.mapstoreConfigApplies.put(mapName, apply);
+	        	return this;
         }
         
         public Builder mapConfigApplies(
@@ -126,8 +126,8 @@ public class EzySimpleMapConfigsFetcher
         
         public Builder mapstoreConfigApplies(
         		Map<String, EzyApply<MapStoreConfig>> mapStoreConfigApplies) {
-        	this.mapstoreConfigApplies.putAll(mapStoreConfigApplies);
-        	return this;
+	        	this.mapstoreConfigApplies.putAll(mapStoreConfigApplies);
+	        	return this;
         }
         
         public Builder mapAllConfigApply(EzyApply<MapConfig> mapAllConfigApply) {

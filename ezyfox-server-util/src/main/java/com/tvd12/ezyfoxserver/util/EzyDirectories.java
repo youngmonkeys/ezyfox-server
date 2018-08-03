@@ -23,19 +23,19 @@ public class EzyDirectories {
     }
     
     public URL[] getURLs(String[] extensions) throws IOException {
-    	return getURLs(extensions, true);
+    		return getURLs(extensions, true);
     }
     
     public URL[] getURLs(String[] extensions, boolean recursive) throws IOException {
-    	return getURLs(getFiles(extensions, recursive));
+    		return getURLs(getFiles(extensions, recursive));
     }
     
     public Collection<File> getFiles() {
-    	return getFiles(null);
-    }
+    		return getFiles(null);
+    	}
     
     public Collection<File> getFiles(String[] extensions) {
-    	return getFiles(extensions, true);
+    		return getFiles(extensions, true);
     }
     
     public Collection<File> getFiles(String[] extensions, boolean recursive) {
@@ -43,7 +43,7 @@ public class EzyDirectories {
     }
     
     public String printTree( boolean printFile) {
-    	return EzyFolderTreePrinter.builder()
+    		return EzyFolderTreePrinter.builder()
     			.printFile(printFile)
     			.build()
     			.print(directory);
@@ -64,7 +64,7 @@ public class EzyDirectories {
     
     @Override
     public String toString() {
-    	return directory.toString();
+    		return directory.toString();
     }
     
 }

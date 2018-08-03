@@ -158,4 +158,28 @@ public class EzyLists {
         return answer;
     }
     
+    /**
+     * Resizes the container so that it contains n elements.
+     * 
+     * @param list the list to resize
+     * @param n new container size, expressed in number of elements.
+     * @param defValue value whose content is copied to the added elements in case that n is greater than the current container size
+     */
+    public static <T> void resize(List<T> list, int n, T defValue) {
+		int size = list.size();
+		if(size == n)
+			return;
+		if(size > n) {
+			int offset = size - n;
+			while((offset --) > 0)
+				list.remove(list.size() - 1);
+		}
+		else {
+			int offset = n - size;
+			while((offset --) > 0)
+				list.add(defValue);
+		}
+			
+	}
+    
 }

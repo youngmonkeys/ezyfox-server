@@ -34,26 +34,26 @@ public abstract class EzyAbstractHazelcastFactory
 	}
 	
 	protected void customizeConfig(Config config) {
-    	EzyConfigCustomizer customizer = getConfigCustomizer();
-    	customizer.customize(config);
+	    	EzyConfigCustomizer customizer = getConfigCustomizer();
+	    	customizer.customize(config);
     }
     
     protected void addMapConfigs(Config config, Iterable<MapConfig> mapConfigs) {
-    	Iterator<MapConfig> iterator = mapConfigs.iterator();
-    	while(iterator.hasNext())
-    		config.addMapConfig(iterator.next());
+	    	Iterator<MapConfig> iterator = mapConfigs.iterator();
+	    	while(iterator.hasNext())
+	    		config.addMapConfig(iterator.next());
     }
 	
 	protected Iterable<MapConfig> getMapConfigs() {
-    	EzyMapConfigsFetcher fetcher = getMapConfigsFetcher();
-    	return fetcher.get();
+    		EzyMapConfigsFetcher fetcher = getMapConfigsFetcher();
+    		return fetcher.get();
     }
     
     protected EzyConfigCustomizer getConfigCustomizer() {
-    	return newConfigCustomizer();
+    		return newConfigCustomizer();
     }
     protected EzyMapConfigsFetcher getMapConfigsFetcher() {
-    	return newMapConfigsFetcher();
+    		return newMapConfigsFetcher();
     }
     
     protected EzyConfigCustomizer newConfigCustomizer() {

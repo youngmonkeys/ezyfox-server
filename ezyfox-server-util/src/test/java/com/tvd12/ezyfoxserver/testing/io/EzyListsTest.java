@@ -54,6 +54,16 @@ public class EzyListsTest extends BaseTest {
 		
 		List<String> set7 = EzyLists.addElementsToNewList(new ArrayList<>(), "1", "2", "3");
 		assertEquals(set7, Lists.newArrayList("1", "2", "3"));
+		
+		List<String> list8 = Lists.newArrayList("1", "2", "3");
+		EzyLists.resize(list8, 10, "def");
+		assert list8.size() == 10;
+		System.out.println(list8);
+		EzyLists.resize(list8, 5, "def");
+		System.out.println(list8);
+		assert list8.size() == 5;
+		EzyLists.resize(list8, 5, "def");
+		assert list8.size() == 5;
 	}
 	
 	private Collection<Character> stringtoChars(String str) {

@@ -1,9 +1,15 @@
 package com.tvd12.ezyfoxserver.context;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.*;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.EzyPlugin;
 import com.tvd12.ezyfoxserver.command.EzyAddEventController;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
@@ -15,14 +21,9 @@ import com.tvd12.ezyfoxserver.command.impl.EzyPluginFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 
 import lombok.Getter;
 import lombok.Setter;
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.*;
 
 
 public class EzySimplePluginContext 

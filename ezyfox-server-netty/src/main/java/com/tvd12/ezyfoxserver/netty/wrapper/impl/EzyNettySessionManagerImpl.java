@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.netty.wrapper.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.netty.factory.EzyNettySessionFactory;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
-import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 

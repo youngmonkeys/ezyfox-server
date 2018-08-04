@@ -10,11 +10,11 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
-import com.tvd12.ezyfoxserver.stream.EzyAnywayInputStreamLoader;
-import com.tvd12.ezyfoxserver.stream.EzyInputStreamLoader;
-import com.tvd12.ezyfoxserver.stream.EzyInputStreamReader;
-import com.tvd12.ezyfoxserver.stream.EzySimpleInputStreamReader;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
+import com.tvd12.ezyfox.stream.EzyInputStreamLoader;
+import com.tvd12.ezyfox.stream.EzyInputStreamReader;
+import com.tvd12.ezyfox.stream.EzySimpleInputStreamReader;
+import com.tvd12.ezyfox.util.EzyLoggable;
 
 import lombok.Setter;
 

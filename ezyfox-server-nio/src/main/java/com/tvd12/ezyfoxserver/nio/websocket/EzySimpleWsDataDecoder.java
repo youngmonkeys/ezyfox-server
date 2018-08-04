@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 
 import java.nio.ByteBuffer;
 
-import com.tvd12.ezyfoxserver.callback.EzyCallback;
+import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractDataDecoder;
 
 public class EzySimpleWsDataDecoder

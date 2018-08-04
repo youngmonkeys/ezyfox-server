@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.net.SocketAddress;
 
+import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.EzyStarter;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
-import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 

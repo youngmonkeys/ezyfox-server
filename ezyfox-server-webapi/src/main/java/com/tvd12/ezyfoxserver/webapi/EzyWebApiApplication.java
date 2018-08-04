@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.webapi;
 
+import com.tvd12.ezyfox.monitor.EzyMonitor;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
 
 import lombok.Setter;
 

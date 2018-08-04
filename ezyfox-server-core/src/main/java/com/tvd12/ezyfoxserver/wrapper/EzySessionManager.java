@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import java.util.List;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public interface EzySessionManager<S extends EzySession> extends EzySessionDisconnectionManager<S> {

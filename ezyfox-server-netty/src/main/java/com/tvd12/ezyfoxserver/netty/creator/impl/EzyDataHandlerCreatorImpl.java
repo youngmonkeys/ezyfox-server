@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.netty.creator.impl;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.netty.creator.EzyDataHandlerCreator;

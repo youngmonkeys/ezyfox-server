@@ -2,12 +2,12 @@ package com.tvd12.ezyfoxserver.nio.builder.impl;
 
 import java.util.concurrent.ExecutorService;
 
+import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
-import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.api.EzyNioResponseApi;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;

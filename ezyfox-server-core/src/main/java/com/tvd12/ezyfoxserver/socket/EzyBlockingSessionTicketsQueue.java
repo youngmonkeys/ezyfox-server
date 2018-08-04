@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.socket;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 public class EzyBlockingSessionTicketsQueue 
         extends EzyLoggable 

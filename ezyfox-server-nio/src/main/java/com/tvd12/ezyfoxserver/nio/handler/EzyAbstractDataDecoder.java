@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.nio.handler;
 
 import java.nio.ByteBuffer;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzyAbstractDataDecoder<D>
 		extends EzyLoggable {

@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.webapi.controller;
 
-import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
-import com.tvd12.ezyfoxserver.monitor.EzyThreadsMonitor;
-import com.tvd12.ezyfoxserver.monitor.data.EzyThreadDetails;
-import com.tvd12.ezyfoxserver.monitor.data.EzyThreadsDetail;
+import com.tvd12.ezyfox.monitor.EzyMonitor;
+import com.tvd12.ezyfox.monitor.EzyThreadsMonitor;
+import com.tvd12.ezyfox.monitor.data.EzyThreadDetails;
+import com.tvd12.ezyfox.monitor.data.EzyThreadsDetail;
 import com.tvd12.ezyfoxserver.webapi.exception.EzyThreadNotFoundException;
 
 public class EzyThreadsController extends EzyAbstractController {

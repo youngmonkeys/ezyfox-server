@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.testing.event;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;

@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.nio.handler;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
-import com.tvd12.ezyfoxserver.callback.EzyCallback;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfox.callback.EzyCallback;
+import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup

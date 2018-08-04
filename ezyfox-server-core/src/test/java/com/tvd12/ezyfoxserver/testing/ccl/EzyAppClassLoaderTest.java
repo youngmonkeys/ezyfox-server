@@ -8,8 +8,8 @@ import java.net.URL;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.util.EzyDirectories;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
-import com.tvd12.ezyfoxserver.util.EzyDirectories;
 import com.tvd12.test.base.BaseTest;
 
 public class EzyAppClassLoaderTest extends BaseTest {

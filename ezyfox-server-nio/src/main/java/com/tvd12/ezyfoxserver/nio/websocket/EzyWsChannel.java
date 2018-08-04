@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithException;
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
-
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -10,9 +7,12 @@ import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.*;
 
 import lombok.Getter;

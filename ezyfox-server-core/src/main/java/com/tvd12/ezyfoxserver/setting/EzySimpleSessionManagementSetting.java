@@ -5,8 +5,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
-import com.tvd12.ezyfoxserver.util.EzyInitable;
 
 import lombok.Getter;
 import lombok.Setter;

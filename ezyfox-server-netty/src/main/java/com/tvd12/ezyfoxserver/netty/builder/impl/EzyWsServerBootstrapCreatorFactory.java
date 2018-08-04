@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.netty.builder.impl;
 
 import javax.net.ssl.SSLContext;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.codec.EzyCodecCreator;
 
 public class EzyWsServerBootstrapCreatorFactory {
 

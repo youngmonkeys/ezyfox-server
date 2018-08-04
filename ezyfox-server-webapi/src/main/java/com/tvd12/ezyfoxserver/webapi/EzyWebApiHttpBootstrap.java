@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.webapi;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzyHttpBootstrap;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 import lombok.Setter;
 

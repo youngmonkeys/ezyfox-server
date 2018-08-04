@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.statistics;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.tvd12.ezyfoxserver.io.EzyDates;
+import com.tvd12.ezyfox.io.EzyDates;
 
 import lombok.Getter;
 

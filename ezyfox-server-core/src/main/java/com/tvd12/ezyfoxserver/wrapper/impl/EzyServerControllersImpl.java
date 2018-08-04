@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;

@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.netty.builder.impl;
 
+import com.tvd12.ezyfox.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.netty.codec.EzyCombinedCodec;
 import com.tvd12.ezyfoxserver.netty.handler.EzyHttpRequestHandler;
 

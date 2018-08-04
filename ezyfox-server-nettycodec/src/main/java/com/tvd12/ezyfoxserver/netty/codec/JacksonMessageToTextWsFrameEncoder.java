@@ -5,8 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessageSerializer;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfox.codec.EzyMessageSerializer;
+import com.tvd12.ezyfox.entity.EzyArray;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

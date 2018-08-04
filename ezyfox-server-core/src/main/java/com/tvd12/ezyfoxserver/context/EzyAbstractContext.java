@@ -4,11 +4,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfoxserver.command.EzyAddExceptionHandler;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
-import com.tvd12.ezyfoxserver.entity.EzyEntity;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroyable {
 

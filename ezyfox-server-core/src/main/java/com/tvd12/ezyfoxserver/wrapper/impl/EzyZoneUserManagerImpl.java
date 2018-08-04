@@ -1,20 +1,20 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
+import com.tvd12.ezyfox.concurrent.EzyExecutors;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyProcessor;
+import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyHasUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyProcessor;
-import com.tvd12.ezyfoxserver.util.EzyStartable;
 import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 

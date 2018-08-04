@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.handler;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 
 @SuppressWarnings("rawtypes")

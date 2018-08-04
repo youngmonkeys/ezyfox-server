@@ -2,13 +2,13 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 
 import java.util.Set;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyHashMapSet;
+import com.tvd12.ezyfox.util.EzyMapSet;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginsSetting;
-import com.tvd12.ezyfoxserver.util.EzyHashMapSet;
-import com.tvd12.ezyfoxserver.util.EzyMapSet;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
 public class EzyEventPluginsMapperImpl implements EzyEventPluginsMapper {

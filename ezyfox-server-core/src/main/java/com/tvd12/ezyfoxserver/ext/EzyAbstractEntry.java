@@ -3,7 +3,7 @@
  */
 package com.tvd12.ezyfoxserver.ext;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 
 /**
  * @author tavandung12

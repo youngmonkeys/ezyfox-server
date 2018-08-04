@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.netty.codec;
 
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
-import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
-import com.tvd12.ezyfoxserver.codec.EzyObjectToMessage;
-import com.tvd12.ezyfoxserver.codec.MsgPackObjectToMessage;
-import com.tvd12.ezyfoxserver.codec.MsgPackSimpleDeserializer;
+import com.tvd12.ezyfox.codec.EzyCodecCreator;
+import com.tvd12.ezyfox.codec.EzyMessageDeserializer;
+import com.tvd12.ezyfox.codec.EzyMessageToBytes;
+import com.tvd12.ezyfox.codec.EzyObjectToMessage;
+import com.tvd12.ezyfox.codec.MsgPackObjectToMessage;
+import com.tvd12.ezyfox.codec.MsgPackSimpleDeserializer;
 import com.tvd12.ezyfoxserver.netty.codec.EzySimpleMessageToBytes;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;

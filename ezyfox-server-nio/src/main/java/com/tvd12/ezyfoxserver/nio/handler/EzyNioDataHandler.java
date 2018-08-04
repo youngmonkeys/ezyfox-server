@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandler;
 

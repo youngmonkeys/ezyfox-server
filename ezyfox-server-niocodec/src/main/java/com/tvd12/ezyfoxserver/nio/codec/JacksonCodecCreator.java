@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.nio.codec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
-import com.tvd12.ezyfoxserver.codec.EzyMessageByTypeSerializer;
-import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
-import com.tvd12.ezyfoxserver.codec.JacksonObjectMapperBuilder;
-import com.tvd12.ezyfoxserver.codec.JacksonSimpleDeserializer;
-import com.tvd12.ezyfoxserver.codec.JacksonSimpleSerializer;
+import com.tvd12.ezyfox.codec.EzyCodecCreator;
+import com.tvd12.ezyfox.codec.EzyMessageByTypeSerializer;
+import com.tvd12.ezyfox.codec.EzyMessageDeserializer;
+import com.tvd12.ezyfox.codec.JacksonObjectMapperBuilder;
+import com.tvd12.ezyfox.codec.JacksonSimpleDeserializer;
+import com.tvd12.ezyfox.codec.JacksonSimpleSerializer;
 
 public class JacksonCodecCreator implements EzyCodecCreator {
 

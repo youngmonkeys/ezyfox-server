@@ -3,10 +3,10 @@ package com.tvd12.ezyfoxserver.testing.session;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
-import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class EzySimpleSessionManagerTest {

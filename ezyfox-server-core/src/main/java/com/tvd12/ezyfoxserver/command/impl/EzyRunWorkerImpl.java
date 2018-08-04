@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.command.impl;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.tvd12.ezyfox.concurrent.EzyWorker;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
-import com.tvd12.ezyfoxserver.concurrent.EzyWorker;
 
 import lombok.AllArgsConstructor;
 

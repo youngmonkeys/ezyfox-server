@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
-import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
+import com.tvd12.ezyfox.codec.EzyDecodeState;
+import com.tvd12.ezyfox.codec.EzyIDecodeState;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

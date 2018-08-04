@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.netty.builder.impl;
 
-import com.tvd12.ezyfoxserver.codec.EzyCodecCreator;
+import com.tvd12.ezyfox.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.netty.creator.EzyDataHandlerCreator;
 import com.tvd12.ezyfoxserver.netty.creator.impl.EzyDataHandlerCreatorImpl;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyHandlerGroupManager;

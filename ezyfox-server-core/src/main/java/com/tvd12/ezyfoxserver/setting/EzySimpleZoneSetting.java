@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
-import com.tvd12.ezyfoxserver.util.EzyInitable;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
 import lombok.Getter;

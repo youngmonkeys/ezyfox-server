@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import com.tvd12.ezyfoxserver.stream.EzyClassPathInputStreamLoader;
+import com.tvd12.ezyfox.stream.EzyClassPathInputStreamLoader;
 
 public class EzyBannerPrinter {
 

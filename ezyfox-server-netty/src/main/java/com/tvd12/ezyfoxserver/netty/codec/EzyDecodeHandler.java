@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.netty.codec;
 
 import java.util.List;
 
-import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
+import com.tvd12.ezyfox.codec.EzyIDecodeState;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

@@ -4,11 +4,11 @@ import java.nio.file.Paths;
 
 import javax.net.ssl.SSLContext;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.reflect.EzyClasses;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.reflect.EzyClasses;
+import com.tvd12.ezyfox.util.EzyReturner;
 import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
-import com.tvd12.ezyfoxserver.util.EzyReturner;
 
 public class EzySslContextInitializer {
     

@@ -7,9 +7,9 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
+import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
-import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
 
 public class EzyRequestAppController 
 		extends EzyAbstractServerController 

@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public class EzySocketRequestBuilder implements EzyBuilder<EzySocketRequest> {

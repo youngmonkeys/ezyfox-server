@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.constant;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 
 import lombok.Getter;
 

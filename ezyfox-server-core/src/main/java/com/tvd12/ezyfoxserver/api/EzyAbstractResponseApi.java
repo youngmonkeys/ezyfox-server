@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.api;
 
 import java.util.Collection;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;

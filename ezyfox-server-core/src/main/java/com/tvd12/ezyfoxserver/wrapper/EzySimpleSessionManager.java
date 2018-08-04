@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyLockName;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
@@ -20,13 +20,13 @@ import com.tvd12.ezyfoxserver.entity.EzyDisconnectReasonAware;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
-import com.tvd12.ezyfoxserver.pattern.EzyObjectProvider;
-import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
+import com.tvd12.ezyfox.pattern.EzyObjectProvider;
+import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
-import com.tvd12.ezyfoxserver.util.EzyEntry;
-import com.tvd12.ezyfoxserver.util.EzyProcessor;
-import com.tvd12.ezyfoxserver.util.EzyTimes;
+import com.tvd12.ezyfox.util.EzyEntry;
+import com.tvd12.ezyfox.util.EzyProcessor;
+import com.tvd12.ezyfox.util.EzyTimes;
 
 public class EzySimpleSessionManager<S extends EzySession> 
 		extends EzyObjectProvider<S> 

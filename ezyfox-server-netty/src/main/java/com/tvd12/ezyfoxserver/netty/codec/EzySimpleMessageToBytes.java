@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.netty.codec;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
-import com.tvd12.ezyfoxserver.codec.EzyMessageHeader;
-import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
+import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyMessageHeader;
+import com.tvd12.ezyfox.codec.EzyMessageToBytes;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

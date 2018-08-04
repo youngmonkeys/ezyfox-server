@@ -4,16 +4,16 @@ import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SI
 
 import java.util.Map;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.exception.EzyMaxRequestSizeException;
+import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.netty.entity.EzyNettySession;
 import com.tvd12.ezyfoxserver.netty.wrapper.EzyNettySessionManager;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandler;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;

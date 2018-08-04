@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleAccessAppRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;

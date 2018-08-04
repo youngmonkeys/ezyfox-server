@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.codec;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessageByTypeSerializer;
+import com.tvd12.ezyfox.codec.EzyMessageByTypeSerializer;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsObjectToByteEncoder;
 
 public class JacksonMessageToByteEncoder implements EzyWsObjectToByteEncoder {

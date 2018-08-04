@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.service.impl;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
-import com.tvd12.ezyfoxserver.sercurity.EzyUuid;
+import com.tvd12.ezyfox.sercurity.EzyBase64;
+import com.tvd12.ezyfox.sercurity.EzyUuid;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 
 public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator {

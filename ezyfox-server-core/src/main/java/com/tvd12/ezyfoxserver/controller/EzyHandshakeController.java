@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.controller;
 
+import com.tvd12.ezyfox.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -8,7 +9,6 @@ import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 
 public class EzyHandshakeController 
 		extends EzyAbstractServerController 

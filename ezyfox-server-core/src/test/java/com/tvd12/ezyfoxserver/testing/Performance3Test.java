@@ -2,14 +2,14 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.entity.EzyObject;
+import com.tvd12.ezyfox.reflect.EzyClasses;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyObject;
-import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 import com.tvd12.test.base.BaseTest;
 
 public class Performance3Test extends BaseTest {

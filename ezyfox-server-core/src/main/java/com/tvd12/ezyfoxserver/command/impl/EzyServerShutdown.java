@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
 
 public class EzyServerShutdown 
         extends EzyAbstractCommand

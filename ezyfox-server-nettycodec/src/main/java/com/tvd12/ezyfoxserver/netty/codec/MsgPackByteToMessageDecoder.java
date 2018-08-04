@@ -1,17 +1,17 @@
 package com.tvd12.ezyfoxserver.netty.codec;
 
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.PREPARE_MESSAGE;
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_CONTENT;
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_HEADER;
-import static com.tvd12.ezyfoxserver.codec.EzyDecodeState.READ_MESSAGE_SIZE;
+import static com.tvd12.ezyfox.codec.EzyDecodeState.PREPARE_MESSAGE;
+import static com.tvd12.ezyfox.codec.EzyDecodeState.READ_MESSAGE_CONTENT;
+import static com.tvd12.ezyfox.codec.EzyDecodeState.READ_MESSAGE_HEADER;
+import static com.tvd12.ezyfox.codec.EzyDecodeState.READ_MESSAGE_SIZE;
 
 import java.util.List;
 import java.util.Map;
 
-import com.tvd12.ezyfoxserver.codec.EzyDecodeState;
-import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
-import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
+import com.tvd12.ezyfox.codec.EzyDecodeState;
+import com.tvd12.ezyfox.codec.EzyIDecodeState;
+import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyMessageDeserializer;
 import com.tvd12.ezyfoxserver.handler.EzyBytesReceived;
 
 import io.netty.buffer.ByteBuf;

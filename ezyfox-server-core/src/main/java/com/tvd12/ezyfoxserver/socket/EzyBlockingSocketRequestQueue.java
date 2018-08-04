@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.socket;
 
 import java.util.concurrent.BlockingQueue;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 
 public abstract class EzyBlockingSocketRequestQueue 
         extends EzyLoggable 

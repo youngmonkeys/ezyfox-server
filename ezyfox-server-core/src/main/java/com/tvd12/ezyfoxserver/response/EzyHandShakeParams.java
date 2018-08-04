@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
-import com.tvd12.ezyfoxserver.sercurity.EzyAsyCrypt;
-import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
-import com.tvd12.ezyfoxserver.util.EzyInitable;
-import com.tvd12.ezyfoxserver.util.EzyReturner;
+import com.tvd12.ezyfox.builder.EzyArrayBuilder;
+import com.tvd12.ezyfox.sercurity.EzyAsyCrypt;
+import com.tvd12.ezyfox.sercurity.EzyBase64;
+import com.tvd12.ezyfox.util.EzyInitable;
+import com.tvd12.ezyfox.util.EzyReturner;
 
 import lombok.AccessLevel;
 import lombok.Getter;

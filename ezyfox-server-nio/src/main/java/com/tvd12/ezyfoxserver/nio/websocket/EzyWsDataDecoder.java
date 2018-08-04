@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
-import com.tvd12.ezyfoxserver.callback.EzyCallback;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
+import com.tvd12.ezyfox.callback.EzyCallback;
+import com.tvd12.ezyfox.util.EzyDestroyable;
 
 public interface EzyWsDataDecoder extends EzyDestroyable {
 	

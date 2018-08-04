@@ -10,10 +10,10 @@ import javax.xml.bind.annotation.XmlElement;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 import lombok.Getter;

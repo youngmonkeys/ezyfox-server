@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.netty.builder.impl;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.netty.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.netty.handler.EzyAbstractHandlerGroup;

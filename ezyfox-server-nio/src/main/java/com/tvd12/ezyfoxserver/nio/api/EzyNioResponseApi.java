@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.api;
 
+import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketResponseApi;

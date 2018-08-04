@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 import lombok.Getter;

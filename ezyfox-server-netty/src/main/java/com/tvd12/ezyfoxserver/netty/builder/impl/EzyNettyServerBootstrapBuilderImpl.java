@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.netty.builder.impl;
 
 import java.util.concurrent.ExecutorService;
 
+import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
-import com.tvd12.ezyfoxserver.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.netty.EzyNettyServerBootstrap;
 import com.tvd12.ezyfoxserver.netty.EzySocketServerBootstrap;
 import com.tvd12.ezyfoxserver.netty.EzyWebSocketServerBootstrap;

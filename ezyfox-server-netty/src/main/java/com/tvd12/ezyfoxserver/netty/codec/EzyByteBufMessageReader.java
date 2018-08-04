@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.netty.codec;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessageReader;
-import com.tvd12.ezyfoxserver.io.EzyInts;
+import com.tvd12.ezyfox.codec.EzyMessageReader;
+import com.tvd12.ezyfox.io.EzyInts;
 import com.tvd12.ezyfoxserver.netty.io.EzyByteBufs;
 
 import io.netty.buffer.ByteBuf;

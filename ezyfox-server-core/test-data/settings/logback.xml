@@ -9,9 +9,9 @@
     </appender>
     
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/ezyfox-server.log</file>
+        <file>logs/ezyfox.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/ezyfox-server.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <fileNamePattern>logs/ezyfox.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>

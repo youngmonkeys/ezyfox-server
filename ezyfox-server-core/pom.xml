@@ -20,12 +20,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-codec</artifactId>
+			<artifactId>ezyfox-codec</artifactId>
 			<version>${ezy.codec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-mapping</artifactId>
+			<artifactId>ezyfox-mapping</artifactId>
 			<version>${ezy.mapping.version}</version>
 		</dependency>
 	</dependencies>

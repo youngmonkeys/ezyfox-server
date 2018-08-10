@@ -5,6 +5,7 @@ import com.tvd12.ezyfox.sercurity.EzyAsyCrypt;
 import com.tvd12.ezyfox.sercurity.EzyBase64;
 import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfox.util.EzyReturner;
+import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -59,7 +60,7 @@ public class EzyHandShakeParams
     protected String encryptReconnectToken0(byte[] key, String token) 
             throws Exception {
         return EzyAsyCrypt.builder() 
-                .algorithm("RSA") 
+                .algorithm(EzyCoreConstants.DATA_ENCRYPTION_ALGORITHM) 
                 .publicKey(key)
                 .build().encrypt(token, String.class);
     } 

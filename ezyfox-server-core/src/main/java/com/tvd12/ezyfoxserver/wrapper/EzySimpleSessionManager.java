@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyLockName;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
@@ -276,8 +277,8 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	protected KeyPair newKeyPair() {
 		return EzyKeysGenerator.builder()
-				.keysize(512)
-				.algorithm("RSA")
+				.keysize(EzyCoreConstants.SESSION_KEY_SIZE)
+				.algorithm(EzyCoreConstants.DATA_ENCRYPTION_ALGORITHM)
 				.build().generate();
 	}
 	

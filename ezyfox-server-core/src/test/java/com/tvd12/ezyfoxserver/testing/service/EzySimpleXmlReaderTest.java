@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.mapping.jackson.EzySimpleJsonMapper;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
+import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.testing.jaxberror.ClassA;
 import com.tvd12.test.base.BaseTest;

@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 
 import java.util.Map;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.appcontroller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.appcontroller.EzyUserDisconnectController;
 import com.tvd12.ezyfoxserver.appcontroller.EzyUserRequestAppController;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.wrapper.EzyAbstractEventControllers;

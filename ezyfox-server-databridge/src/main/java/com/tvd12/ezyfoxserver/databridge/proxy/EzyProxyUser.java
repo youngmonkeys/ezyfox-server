@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.databridge.proxy;
 
 import java.util.Collection;
 
+import com.tvd12.ezyfox.io.EzyLists;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.io.EzyLists;
 
 import lombok.AllArgsConstructor;
 

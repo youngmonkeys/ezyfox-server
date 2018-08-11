@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.testing.interceptor;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.exception.EzyNotAuthorizedException;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;

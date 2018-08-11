@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.ssl;
 
 import java.nio.file.Paths;
 
-import com.tvd12.ezyfoxserver.mapping.properties.EzyPropertiesFileReader;
-import com.tvd12.ezyfoxserver.mapping.properties.EzySimplePropertiesFileMapper;
+import com.tvd12.ezyfox.mapping.properties.EzyPropertiesFileReader;
+import com.tvd12.ezyfox.mapping.properties.EzySimplePropertiesFileMapper;
 
 public class EzySimpleSslConfigLoader implements EzySslConfigLoader {
     

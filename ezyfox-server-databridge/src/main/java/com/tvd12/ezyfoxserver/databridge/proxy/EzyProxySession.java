@@ -4,9 +4,9 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Date;
 
+import com.tvd12.ezyfox.io.EzyDates;
+import com.tvd12.ezyfox.io.EzyLists;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.io.EzyDates;
-import com.tvd12.ezyfoxserver.io.EzyLists;
 
 import lombok.AllArgsConstructor;
 

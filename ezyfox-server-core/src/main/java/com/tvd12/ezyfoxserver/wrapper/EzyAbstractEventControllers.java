@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.wrapper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
 public abstract class EzyAbstractEventControllers implements EzyEventControllers {

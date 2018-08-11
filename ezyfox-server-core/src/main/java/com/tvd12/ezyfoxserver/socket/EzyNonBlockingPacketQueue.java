@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.socket;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQueue {
 

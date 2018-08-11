@@ -1,15 +1,15 @@
 package com.tvd12.ezyfoxserver.delegate;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRemovedEvent;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 import lombok.Setter;
 

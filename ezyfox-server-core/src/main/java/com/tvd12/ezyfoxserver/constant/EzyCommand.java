@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.collect.Sets;
+import com.tvd12.ezyfox.constant.EzyConstant;
 
 import lombok.Getter;
 
@@ -20,7 +21,6 @@ public enum EzyCommand implements EzyConstant {
 	LOGOUT(22, 10),
 	APP_ACCESS(30, 2),
 	APP_REQUEST(31, 10),
-	APP_JOINED(32, 10),
 	APP_EXIT(33, 10),
 	APP_ACCESS_ERROR(34, 10),
 	PLUGIN_INFO(40, 10),

@@ -1,12 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -14,7 +16,6 @@ import com.tvd12.ezyfoxserver.controller.EzyAbstractServerController;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-import static org.mockito.Mockito.*;
 
 public class EzyAbstractServerControllerTest extends BaseCoreTest {
     

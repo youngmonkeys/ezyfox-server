@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.nio.codec;
 
 import java.nio.ByteBuffer;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessageDeserializer;
+import com.tvd12.ezyfox.codec.EzyMessageDeserializer;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsByteToObjectDecoder;
 
 public class JacksonByteToMessageDecoder implements EzyWsByteToObjectDecoder {

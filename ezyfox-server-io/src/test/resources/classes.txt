@@ -1,1 +1,0 @@
-com.tvd12.ezyfoxserver.io.EzyClassesFetcher

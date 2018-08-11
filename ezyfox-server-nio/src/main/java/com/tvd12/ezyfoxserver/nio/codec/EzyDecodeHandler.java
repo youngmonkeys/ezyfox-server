@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.nio.codec;
 import java.nio.ByteBuffer;
 import java.util.Queue;
 
-import com.tvd12.ezyfoxserver.codec.EzyIDecodeState;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyIDecodeState;
+import com.tvd12.ezyfox.codec.EzyMessage;
 
 public interface EzyDecodeHandler {
 

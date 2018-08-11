@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.testing.event;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
-import com.tvd12.ezyfoxserver.entity.EzyObject;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.entity.EzyObject;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;

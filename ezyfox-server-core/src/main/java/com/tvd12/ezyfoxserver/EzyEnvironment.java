@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver;
 
-import com.tvd12.ezyfoxserver.entity.EzyEntity;
+import com.tvd12.ezyfox.entity.EzyEntity;
 
 public class EzyEnvironment extends EzyEntity {
 

@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContexts;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.util.EzyStartable;
+import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyStartable;
 
 public abstract class EzyZoneComponentsStater extends EzyLoggable implements EzyStartable {
 

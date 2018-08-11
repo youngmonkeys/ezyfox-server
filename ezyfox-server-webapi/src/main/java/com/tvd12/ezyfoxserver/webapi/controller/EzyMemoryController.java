@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.webapi.controller;
 
+import com.tvd12.ezyfox.monitor.EzyMemoryMonitor;
+import com.tvd12.ezyfox.monitor.EzyMonitor;
 import com.tvd12.ezyfoxserver.databridge.statistics.EzyMemoryPoint;
-import com.tvd12.ezyfoxserver.monitor.EzyMemoryMonitor;
-import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
 
 public class EzyMemoryController {
 

@@ -3,9 +3,9 @@ package com.tvd12.ezyfoxserver.entity;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfoxserver.constant.EzyHasName;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyProperties;
+import com.tvd12.ezyfox.constant.EzyHasName;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyProperties;
 
 public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable {
 

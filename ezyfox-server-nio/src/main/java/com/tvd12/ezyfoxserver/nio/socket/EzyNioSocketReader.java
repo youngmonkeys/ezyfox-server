@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
@@ -114,7 +114,15 @@ public class EzyNioSocketReader
 	}
 	
 	private void closeConnection(SelectableChannel channel) throws Exception {
-		handlerGroupManager.removeHandlerGroup((SocketChannel) channel);
+		closeConnection0(channel);
+		removeHandlerGroup(channel);
 	}
 	
+	private void closeConnection0(SelectableChannel channel) throws Exception {
+		channel.close();
+	}
+	
+	private void removeHandlerGroup(SelectableChannel channel) {
+		handlerGroupManager.removeHandlerGroup((SocketChannel) channel);
+	}
 }

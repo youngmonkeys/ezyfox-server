@@ -1,7 +1,10 @@
 package com.tvd12.ezyfoxserver;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -12,9 +15,6 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.util.EzyStartable;
 
 import lombok.Setter;
 

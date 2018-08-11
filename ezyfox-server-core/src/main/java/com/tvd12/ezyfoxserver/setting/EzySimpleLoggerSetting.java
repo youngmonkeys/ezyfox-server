@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.collect.Sets;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 
 import lombok.Getter;
 import lombok.Setter;

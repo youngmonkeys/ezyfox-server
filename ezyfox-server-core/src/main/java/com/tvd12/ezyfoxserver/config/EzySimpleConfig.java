@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.config;
 
-import com.tvd12.ezyfoxserver.util.EzyReturner;
+import com.tvd12.ezyfox.util.EzyReturner;
 import com.tvd12.properties.file.annotation.Property;
 
 import lombok.Getter;

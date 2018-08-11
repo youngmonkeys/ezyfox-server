@@ -13,7 +13,7 @@ public class EzyRunnerTest extends BaseTest {
 		runner.run(new String[0]);
 	}
 	
-	@Test
+//	@Test
 	public void test1() throws Exception {
 	    EzyRunner runner = new MyTestRunner();
         runner.run(new String[] {"test-data/settings/config.properties"});

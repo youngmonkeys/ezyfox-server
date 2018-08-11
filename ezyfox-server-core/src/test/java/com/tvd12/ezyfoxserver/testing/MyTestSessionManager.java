@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
-import com.tvd12.ezyfoxserver.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession> {

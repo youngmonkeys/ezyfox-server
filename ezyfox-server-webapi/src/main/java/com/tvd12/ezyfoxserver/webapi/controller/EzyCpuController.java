@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.webapi.controller;
 
+import com.tvd12.ezyfox.monitor.EzyCpuMonitor;
+import com.tvd12.ezyfox.monitor.EzyMonitor;
 import com.tvd12.ezyfoxserver.databridge.statistics.EzyCpuPoint;
-import com.tvd12.ezyfoxserver.monitor.EzyCpuMonitor;
-import com.tvd12.ezyfoxserver.monitor.EzyMonitor;
 
 public class EzyCpuController {
 

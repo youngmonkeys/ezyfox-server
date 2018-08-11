@@ -4,8 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.tvd12.ezyfoxserver.callback.EzyCallback;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfox.callback.EzyCallback;
+import com.tvd12.ezyfox.codec.EzyMessage;
 
 public class EzySimpleNioDataDecoder
 		extends EzyAbstractDataDecoder<EzyNioByteToObjectDecoder>

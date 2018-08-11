@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import com.tvd12.ezyfox.util.EzyExceptionHandlers;
+import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandlers;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
 
 public class EzyAppHandleExceptionImpl 
         extends EzyAbstractCommand 

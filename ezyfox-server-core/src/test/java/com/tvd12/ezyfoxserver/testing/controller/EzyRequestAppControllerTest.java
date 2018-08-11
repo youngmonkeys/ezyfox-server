@@ -5,20 +5,20 @@ import static org.mockito.Mockito.when;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.util.EzyEntityArrays;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.request.EzySimpleRequestAppRequest;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreContextTest;
 import com.tvd12.ezyfoxserver.testing.MyTestUser;
-import com.tvd12.ezyfoxserver.util.EzyEntityArrays;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 
 public class EzyRequestAppControllerTest extends BaseCoreContextTest {

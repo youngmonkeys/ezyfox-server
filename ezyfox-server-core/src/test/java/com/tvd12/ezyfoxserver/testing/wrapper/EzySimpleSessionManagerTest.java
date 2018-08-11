@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Lists;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzySessionRemoveReason;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyAbstractSessionDelegate;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
@@ -26,8 +26,8 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
         session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setDelegate(new EzyAbstractSessionDelegate() {
         });
-        manager.removeSession(session, EzySessionRemoveReason.IDLE);
-        manager.removeSession(null, EzySessionRemoveReason.IDLE);
+        manager.removeSession(session, EzyDisconnectReason.IDLE);
+        manager.removeSession(null, EzyDisconnectReason.IDLE);
         
         session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setDelegate(new EzyAbstractSessionDelegate() {

@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.config;
 
-import com.tvd12.ezyfoxserver.mapping.properties.EzyPropertiesFileReader;
-import com.tvd12.ezyfoxserver.mapping.properties.EzySimplePropertiesFileMapper;
+import com.tvd12.ezyfox.mapping.properties.EzyPropertiesFileReader;
+import com.tvd12.ezyfox.mapping.properties.EzySimplePropertiesFileMapper;
 
 public class EzySimpleConfigLoader implements EzyConfigLoader {
     

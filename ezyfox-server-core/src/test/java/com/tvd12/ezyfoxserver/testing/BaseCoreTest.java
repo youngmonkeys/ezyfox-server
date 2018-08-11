@@ -2,27 +2,27 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.security.KeyPair;
 
+import com.tvd12.ezyfox.builder.EzyArrayBuilder;
+import com.tvd12.ezyfox.builder.EzyObjectBuilder;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.factory.EzyEntityFactory;
+import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
+import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
+import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.EzyLoader;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
-import com.tvd12.ezyfoxserver.builder.EzyObjectBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyServerContextBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.factory.EzyEntityFactory;
-import com.tvd12.ezyfoxserver.mapping.jackson.EzyJsonMapper;
-import com.tvd12.ezyfoxserver.mapping.jackson.EzySimpleJsonMapper;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
-import com.tvd12.ezyfoxserver.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager.Builder;
@@ -37,7 +37,7 @@ public class BaseCoreTest extends BaseTest {
 
     protected EzyServerContextBuilder<?> newServerContextBuilder() {
         return new MyTestServerContextBuilder()
-                .server(newServer());
+                .server(newServer()); 
     }
     
     protected EzySimpleServer newServer() {

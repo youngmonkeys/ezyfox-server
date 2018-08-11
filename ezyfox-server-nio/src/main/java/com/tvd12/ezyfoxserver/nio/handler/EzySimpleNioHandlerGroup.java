@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.nio.handler;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
-import com.tvd12.ezyfoxserver.callback.EzyCallback;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
+import com.tvd12.ezyfox.callback.EzyCallback;
+import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
@@ -26,7 +26,6 @@ public class EzySimpleNioHandlerGroup
 	@Override
 	public void fireBytesReceived(byte[] bytes) throws Exception {
 		handleReceivedBytes(bytes);
-		executeAddReadBytes(bytes.length);
 	}
 	
 	private synchronized void handleReceivedBytes(byte[] bytes) {
@@ -45,6 +44,7 @@ public class EzySimpleNioHandlerGroup
 	private void handleReceivedMesssage(EzyMessage message) {
 		Object data = decodeMessage(message);
 		handleReceivedData(data);
+		executeAddReadBytes(message.getByteCount());
 	}
 	
 	private Object decodeMessage(EzyMessage message) {

@@ -3,8 +3,8 @@
  */
 package com.tvd12.ezyfoxserver.ext;
 
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyStartable;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyStartable;
 
 /**
  * @author tavandung12

@@ -6,9 +6,9 @@ import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;

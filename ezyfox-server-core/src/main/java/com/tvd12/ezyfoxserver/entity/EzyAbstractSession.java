@@ -6,16 +6,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.sercurity.EzyMD5;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
-import com.tvd12.ezyfoxserver.sercurity.EzyMD5;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
-import com.tvd12.ezyfoxserver.util.EzyProcessor;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public abstract class EzyAbstractSession
         extends EzyEntity 
         implements 
             EzySession,
+            EzyDisconnectReasonAware,
             EzyImmediateDeliverAware, 
             EzyHasSessionDelegate,
             EzyDroppedPacketsAware {
@@ -49,8 +51,6 @@ public abstract class EzyAbstractSession
 	protected byte[] publicKey;
 	protected byte[] clientKey;
 	
-	protected boolean reconnect;
-	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
     
@@ -60,6 +60,7 @@ public abstract class EzyAbstractSession
 	protected String beforeReconnectToken;
 	protected String fullReconnectToken;
 	protected EzyConstant connectionType;
+	protected EzyConstant disconnectReason;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;

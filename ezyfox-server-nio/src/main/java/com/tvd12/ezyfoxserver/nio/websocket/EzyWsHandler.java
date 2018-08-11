@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
+import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
+
 import java.net.SocketTimeoutException;
 import java.util.Set;
 
@@ -11,16 +13,14 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import com.google.common.collect.Sets;
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
-import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.*;
 
 @WebSocket
 public class EzyWsHandler extends EzyLoggable {
@@ -55,11 +55,12 @@ public class EzyWsHandler extends EzyLoggable {
 	
 	@OnWebSocketError
 	public void onError(Session session, Throwable throwable) {
-		getLogger().debug("error: session: " + session.getRemoteAddress(), throwable);
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
 		if (throwable instanceof SocketTimeoutException) {
-			dataHandler.fireChannelInactive(EzyDisconnectReason.IDLE);
-		} else {
+			getLogger().debug("session " + session.getRemoteAddress() + ": Timeout on Read");
+		}
+		else {
+			getLogger().debug("error on session: " + session.getRemoteAddress(), throwable);
 			dataHandler.fireExceptionCaught(throwable);
 		}
 	}

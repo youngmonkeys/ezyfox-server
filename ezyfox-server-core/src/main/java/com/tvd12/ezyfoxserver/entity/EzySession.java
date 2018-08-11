@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.constant.EzyHasName;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyHasName;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyProperties;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyProperties;
 
 public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
 
@@ -309,9 +309,9 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	boolean isIdle();
 	
 	/**
-	 * @return session is reconnect or not
+	 * @return the disconnect reason
 	 */
-	boolean isReconnect();
+	EzyConstant getDisconnectReason();
 	
 	/**
 	 * 

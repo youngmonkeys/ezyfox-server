@@ -1,9 +1,9 @@
 package com.tvd12.ezyfoxserver.request;
 
-import com.tvd12.ezyfoxserver.entity.EzyArray;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.io.EzyDataDeserializable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
-import com.tvd12.ezyfoxserver.io.EzyDataDeserializable;
 
 import lombok.Getter;
 import lombok.Setter;

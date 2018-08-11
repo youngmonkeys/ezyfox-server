@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.*;
+import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.PLUGINS;
 
 import java.nio.file.Paths;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginControllersImpl;

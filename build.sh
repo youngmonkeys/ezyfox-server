@@ -1,13 +1,4 @@
 mvn clean install
-mvn clean install -f ezyfox-server-util
-mvn clean install -f ezyfox-server-io
-mvn clean install -f ezyfox-server-concurrent
-mvn clean install -f ezyfox-server-security
-mvn clean install -f ezyfox-server-common
-mvn clean install -f ezyfox-server-binding
-mvn clean install -f ezyfox-server-bean
-mvn clean install -f ezyfox-server-mapping
-mvn clean install -f ezyfox-server-codec
 mvn clean install -f ezyfox-server-core
 mvn clean install -f ezyfox-server-databridge
 mvn clean install -f ezyfox-server-webapi
@@ -15,20 +6,8 @@ mvn clean install -f ezyfox-server-httpserver
 mvn clean install -f ezyfox-server-boot
 mvn clean install -f ezyfox-server-netty
 mvn clean install -f ezyfox-server-nio
-mvn clean install -f ezyfox-server-jackson
-mvn clean install -f ezyfox-server-msgpack
-mvn clean install -f ezyfox-server-sfs2x
 mvn clean install -f ezyfox-server-nettycodec
 mvn clean install -f ezyfox-server-niocodec
-mvn clean install -f ezyfox-server-database
-mvn clean install -f ezyfox-server-mongodb
-mvn clean install -f ezyfox-server-morphia
-mvn clean install -f ezyfox-server-hazelcast
-mvn clean install -f ezyfox-server-hazelcast-mongodb
-mvn clean install -f ezyfox-server-hazelcast-morphia
-mvn clean install -f ezyfox-server-hazelcast-bean
-mvn clean install -f ezyfox-server-monitor
 mvn clean install -f ezyfox-server-admintools
 mvn clean install -f ezyfox-server-nettyrunner
 mvn clean install -f ezyfox-server-niorunner
-mvn clean install -f ezyfox-server-message

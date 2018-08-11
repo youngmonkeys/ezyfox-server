@@ -9,12 +9,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfox.util.EzyNameAware;
 import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
-import com.tvd12.ezyfoxserver.util.EzyNameAware;
 
 import lombok.AccessLevel;
 import lombok.Getter;

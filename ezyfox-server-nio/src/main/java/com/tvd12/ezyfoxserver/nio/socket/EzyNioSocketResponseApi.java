@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.api.EzyAbstractResponseApi;
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioDataEncoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioObjectToByteEncoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioDataEncoder;

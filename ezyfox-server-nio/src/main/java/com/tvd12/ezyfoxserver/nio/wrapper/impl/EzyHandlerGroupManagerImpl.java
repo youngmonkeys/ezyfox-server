@@ -4,7 +4,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -18,8 +20,6 @@ import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 public class EzyHandlerGroupManagerImpl
 		extends EzyLoggable

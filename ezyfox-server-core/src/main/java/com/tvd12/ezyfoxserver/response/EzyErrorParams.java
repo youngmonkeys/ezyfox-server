@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
+import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 
 import lombok.Getter;

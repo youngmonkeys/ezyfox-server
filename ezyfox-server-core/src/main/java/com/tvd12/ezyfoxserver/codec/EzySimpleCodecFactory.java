@@ -1,9 +1,10 @@
 package com.tvd12.ezyfoxserver.codec;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.codec.EzyCodecCreator;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.reflect.EzyClasses;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 

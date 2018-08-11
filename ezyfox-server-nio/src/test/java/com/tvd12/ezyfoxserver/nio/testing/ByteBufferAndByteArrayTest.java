@@ -4,8 +4,8 @@ import java.nio.ByteBuffer;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.io.EzyArrays;
-import com.tvd12.ezyfoxserver.io.EzyBytes;
+import com.tvd12.ezyfox.io.EzyArrays;
+import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.performance.Performance;
 

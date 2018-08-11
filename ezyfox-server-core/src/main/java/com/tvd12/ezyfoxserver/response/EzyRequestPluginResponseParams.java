@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.response;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
-import com.tvd12.ezyfoxserver.entity.EzyData;
+import com.tvd12.ezyfox.builder.EzyArrayBuilder;
+import com.tvd12.ezyfox.entity.EzyData;
 
 import lombok.Getter;
 import lombok.Setter;

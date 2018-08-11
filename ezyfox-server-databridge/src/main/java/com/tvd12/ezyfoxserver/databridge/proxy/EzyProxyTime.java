@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.databridge.proxy;
 
 import java.util.Date;
 
-import com.tvd12.ezyfoxserver.io.EzyDates;
+import com.tvd12.ezyfox.io.EzyDates;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

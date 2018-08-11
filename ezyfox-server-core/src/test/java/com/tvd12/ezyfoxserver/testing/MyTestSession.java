@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.testing;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;

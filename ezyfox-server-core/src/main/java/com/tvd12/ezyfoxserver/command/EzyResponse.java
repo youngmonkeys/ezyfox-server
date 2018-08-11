@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.command;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.entity.EzyData;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 

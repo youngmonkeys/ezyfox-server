@@ -2,11 +2,11 @@ package com.tvd12.ezyfoxserver.setting;
 
 import java.nio.file.Paths;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzySimplXmlMapper;
-import com.tvd12.ezyfoxserver.mapping.jaxb.EzyXmlReader;
-import com.tvd12.ezyfoxserver.util.EzyInitable;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
+import com.tvd12.ezyfox.util.EzyInitable;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginsMapperImpl;
 

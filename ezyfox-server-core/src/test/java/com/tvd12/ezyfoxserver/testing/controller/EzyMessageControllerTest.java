@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.testing.controller;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.builder.EzyArrayBuilder;
+import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 

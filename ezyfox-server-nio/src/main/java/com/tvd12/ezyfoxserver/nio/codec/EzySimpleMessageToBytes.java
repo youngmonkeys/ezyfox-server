@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.nio.codec;
 
 import java.nio.ByteBuffer;
 
-import com.tvd12.ezyfoxserver.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
-import com.tvd12.ezyfoxserver.codec.EzyMessageHeader;
-import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyMessageHeader;
+import com.tvd12.ezyfox.codec.EzyMessageToBytes;
 
 public class EzySimpleMessageToBytes implements EzyMessageToBytes {
 

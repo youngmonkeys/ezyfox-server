@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.statistics;
 
-import com.tvd12.ezyfoxserver.util.EzyTimes;
+import com.tvd12.ezyfox.util.EzyTimes;
 
 public class EzyNetworkBytesFrameMinute extends EzyNetworkBytesFrame {
     private static final long serialVersionUID = 540300681186980725L;

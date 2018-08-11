@@ -29,7 +29,7 @@
 		
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-monitor</artifactId>
+			<artifactId>ezyfox-monitor</artifactId>
 			<version>${ezy.monitor.version}</version>
 		</dependency>
 		

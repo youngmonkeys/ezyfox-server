@@ -1,11 +1,12 @@
 package com.tvd12.ezyfoxserver.delegate;
 
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.util.EzyLoggable;
 
 public abstract class EzyAbstractSessionDelegate 
-        extends EzyLoggable implements EzySessionDelegate {
+        extends EzyLoggable 
+        implements EzySessionDelegate {
 
 	@Override
 	public void onSessionRemoved(EzyConstant reason) {

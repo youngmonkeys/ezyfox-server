@@ -1,11 +1,15 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
@@ -17,10 +21,6 @@ import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFirePluginEventImpl;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
-import com.tvd12.ezyfoxserver.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.util.EzyEquals;
-import com.tvd12.ezyfoxserver.util.EzyExceptionHandlersFetcher;
-import com.tvd12.ezyfoxserver.util.EzyHashCodes;
 
 import lombok.Getter;
 import lombok.Setter;

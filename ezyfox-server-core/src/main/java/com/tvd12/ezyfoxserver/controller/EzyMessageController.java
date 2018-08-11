@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.controller;
 
+import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.util.EzyEntityBuilders;
 
 public class EzyMessageController extends EzyEntityBuilders {
 	

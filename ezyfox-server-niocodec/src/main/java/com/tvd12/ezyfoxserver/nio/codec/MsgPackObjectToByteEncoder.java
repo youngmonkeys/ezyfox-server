@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.nio.codec;
 
-import com.tvd12.ezyfoxserver.codec.EzyMessage;
-import com.tvd12.ezyfoxserver.codec.EzyMessageToBytes;
-import com.tvd12.ezyfoxserver.codec.EzyObjectToMessage;
+import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyMessageToBytes;
+import com.tvd12.ezyfox.codec.EzyObjectToMessage;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioObjectToByteEncoder;
 
 public class MsgPackObjectToByteEncoder implements EzyNioObjectToByteEncoder {

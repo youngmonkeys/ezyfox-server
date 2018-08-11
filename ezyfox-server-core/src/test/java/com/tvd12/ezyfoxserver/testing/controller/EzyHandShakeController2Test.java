@@ -6,16 +6,16 @@ import java.security.KeyPair;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.sercurity.EzyBase64;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
-import com.tvd12.ezyfoxserver.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;
-import com.tvd12.ezyfoxserver.sercurity.EzyBase64;
 
 public class EzyHandShakeController2Test extends EzyBaseControllerTest {
 

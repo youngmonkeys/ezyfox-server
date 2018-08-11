@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver;
 
-import static com.tvd12.ezyfoxserver.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 

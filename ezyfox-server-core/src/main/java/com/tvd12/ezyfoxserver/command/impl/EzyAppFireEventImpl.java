@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.command.impl;
 
 import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;

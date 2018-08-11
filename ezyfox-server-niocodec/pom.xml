@@ -27,12 +27,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-msgpack</artifactId>
+			<artifactId>ezyfox-msgpack</artifactId>
 			<version>${ezy.msgpack.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-jackson</artifactId>
+			<artifactId>ezyfox-jackson</artifactId>
 			<version>${ezy.jackson.version}</version>
 		</dependency>
 	</dependencies>

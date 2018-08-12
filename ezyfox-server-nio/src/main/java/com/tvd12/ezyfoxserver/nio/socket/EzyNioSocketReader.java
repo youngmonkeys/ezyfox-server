@@ -10,6 +10,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
@@ -48,7 +49,7 @@ public class EzyNioSocketReader
 	}
 	
 	private int getMaxBufferSize() {
-		return 8192;
+		return EzyCoreConstants.MAX_READ_BUFFER_SIZE;
 	}
 
 	private void handleAcceptableConnections() {

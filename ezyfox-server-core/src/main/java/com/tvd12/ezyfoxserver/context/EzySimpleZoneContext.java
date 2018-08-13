@@ -11,11 +11,9 @@ import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.EzyZone;
-import com.tvd12.ezyfoxserver.command.EzyDisconnectUser;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
-import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectUserImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireAppEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFirePluginEventImpl;
@@ -83,7 +81,6 @@ public class EzySimpleZoneContext
 		suppliers.put(EzyFireEvent.class, () -> new EzyZoneFireEventImpl(this));
 		suppliers.put(EzyFirePluginEvent.class, () -> new EzyZoneFirePluginEventImpl(this));
 		suppliers.put(EzyFireAppEvent.class, ()-> new EzyZoneFireAppEventImpl(this));
-		suppliers.put(EzyDisconnectUser.class, ()-> new EzyDisconnectUserImpl(this));
 	}
 	
 	@Override

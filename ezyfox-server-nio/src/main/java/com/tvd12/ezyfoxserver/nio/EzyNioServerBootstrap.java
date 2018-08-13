@@ -13,6 +13,9 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionHandlingLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandlingLoopHandler;
@@ -41,10 +44,14 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	private EzySessionTicketsQueue socketSessionTicketsQueue;
 	@Setter
 	private EzySessionTicketsQueue websocketSessionTicketsQueue;
+	@Setter
+	private EzySocketDisconnectionQueue socketDisconnectionQueue;
 	
 	private EzySocketEventLoopOneHandler systemRequestHandlingLoopHandler;
 	
 	private EzySocketEventLoopOneHandler extensionRequestHandlingLoopHandler;
+	
+	private EzySocketEventLoopOneHandler socketDisconnectionHandlingLoopHandler;
 	
 	@Override
 	protected void setupServer() {
@@ -57,6 +64,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		startSocketServerBootstrap();
 		startWebSocketServerBootstrap();
 		startRequestHandlingLoopHandlers();
+		startDisconnectionHandlingLoopHandlers();
 		callback.run();
 	}
 	
@@ -83,6 +91,11 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		extensionRequestHandlingLoopHandler = newExtensionRequestHandlingLoopHandler();
 		systemRequestHandlingLoopHandler.start();
 		extensionRequestHandlingLoopHandler.start();
+	}
+	
+	private void startDisconnectionHandlingLoopHandlers() throws Exception {
+		socketDisconnectionHandlingLoopHandler = newSocketDisconnectionHandlingLoopHandler();
+		socketDisconnectionHandlingLoopHandler.start();
 	}
 	
 	private EzySocketServerBootstrap newSocketServerBootstrap() {
@@ -122,12 +135,26 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		return loopHandler;
 	}
 	
+	private EzySocketEventLoopOneHandler newSocketDisconnectionHandlingLoopHandler() {
+		EzySocketEventLoopOneHandler loopHandler = new EzySocketDisconnectionHandlingLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketDisconnectionHandlerPoolSize());
+		EzySocketDisconnectionHandler eventHandler = new EzySocketDisconnectionHandler();
+		eventHandler.setDataHandlerGroupRemover(handlerGroupManager);
+		eventHandler.setDisconnectionQueue(socketDisconnectionQueue);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
+	}
+	
 	private int getSystemRequestHandlerPoolSize() {
 		return EzyNioThreadPoolSizes.SYSTEM_REQUEST_HANDLER;
 	}
 	
 	private int getExtensionRequestHandlerPoolSize() {
 		return EzyNioThreadPoolSizes.EXTENSION_REQUEST_HANDLER;
+	}
+	
+	private int getSocketDisconnectionHandlerPoolSize() {
+		return EzyNioThreadPoolSizes.SOCKET_DISCONNECTION_HANDLER;
 	}
 	
 	@Override
@@ -137,6 +164,14 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 			processWithLogException(socketServerBootstrap::destroy);
 		if(websocketServerBootstrap != null)
 			processWithLogException(websocketServerBootstrap::destroy);
+		if(handlerGroupManager != null)
+			processWithLogException(handlerGroupManager::destroy);
+		if(systemRequestHandlingLoopHandler != null)
+			processWithLogException(systemRequestHandlingLoopHandler::destroy);
+		if(extensionRequestHandlingLoopHandler != null)
+			processWithLogException(extensionRequestHandlingLoopHandler::destroy);
+		if(socketDisconnectionHandlingLoopHandler != null)
+			processWithLogException(socketDisconnectionHandlingLoopHandler::destroy);
 	}
 	
 }

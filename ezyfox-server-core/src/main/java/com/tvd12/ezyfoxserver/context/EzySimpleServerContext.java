@@ -10,12 +10,12 @@ import java.util.function.Supplier;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfoxserver.EzyServer;
-import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
+import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
-import com.tvd12.ezyfoxserver.command.impl.EzyDisconnectSessionImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
@@ -79,7 +79,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 		suppliers.put(EzyFireEvent.class, ()-> new EzyFireEventImpl(this));
 		suppliers.put(EzyShutdown.class, ()-> new EzyServerShutdown(this));
 		suppliers.put(EzySendResponse.class, ()-> new EzySendResponseImpl(this));
-		suppliers.put(EzyDisconnectSession.class, ()-> new EzyDisconnectSessionImpl(this));
+		suppliers.put(EzyCloseSession.class, ()-> new EzyCloseSessionImpl(this));
 		suppliers.put(EzyHandleException.class, ()-> new EzyServerHandleExceptionImpl(getServer()));
 	}
 	

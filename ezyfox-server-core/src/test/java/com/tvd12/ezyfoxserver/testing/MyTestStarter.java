@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.net.SocketAddress;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.EzyStarter;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
@@ -82,7 +83,7 @@ public class MyTestStarter extends EzyStarter {
         }
 
         @Override
-        public void disconnect() {
+        public void disconnect(EzyConstant disconnectReason) {
         }
 	    
 	}

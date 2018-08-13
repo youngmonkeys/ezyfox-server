@@ -11,8 +11,7 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
-import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
-import com.tvd12.ezyfoxserver.entity.EzyHasUserRemoveDelegate;
+import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
@@ -22,11 +21,13 @@ public class EzyZoneUserManagerImpl
         extends EzyAbstractByMaxUserManager 
         implements EzyZoneUserManager, EzyStartable, EzyDestroyable {
 
+    protected final EzyUserDelegate userDelegate;
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
     protected EzyZoneUserManagerImpl(Builder builder) {
         super(builder);
+        this.userDelegate = builder.userDelegate;
         this.idleValidationService = newIdleValidationService(builder.maxIdleTime);
     }
     
@@ -155,9 +156,7 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected void delegateUserRemove(EzyUser user, EzyUserRemoveReason reason) {
-	    EzyHasUserRemoveDelegate hasDelegate = (EzyHasUserRemoveDelegate)user;
-	    EzyUserRemoveDelegate delegate = hasDelegate.getRemoveDelegate();
-	    delegate.onUserRemoved(reason);
+	    userDelegate.onUserRemoved(user, reason);
     }
 	
 	@Override
@@ -173,9 +172,15 @@ public class EzyZoneUserManagerImpl
 	public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
 		
 	    protected long maxIdleTime;
+	    protected EzyUserDelegate userDelegate;
 	    
 	    public Builder maxIdleTime(long maxIdletime) {
 	        this.maxIdleTime = maxIdletime;
+	        return this;
+	    }
+	    
+	    public Builder userDelegate(EzyUserDelegate userDelegate) {
+	        this.userDelegate = userDelegate;
 	        return this;
 	    }
 	    

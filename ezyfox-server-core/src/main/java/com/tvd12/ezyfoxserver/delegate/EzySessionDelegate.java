@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.delegate;
 
-public interface EzySessionDelegate 
-        extends EzySessionRemoveDelegate, EzySessionLoginDelegate {
+public interface EzySessionDelegate extends EzySessionLoginDelegate {
 
 }

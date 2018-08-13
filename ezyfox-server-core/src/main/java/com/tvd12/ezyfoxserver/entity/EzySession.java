@@ -8,9 +8,11 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProperties;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 
 public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
 
@@ -341,8 +343,10 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	
 	/**
 	 * disconnect this session
+	 * 
+	 * @param reason the reason
 	 */
-	void disconnect();
+	void disconnect(EzyConstant reason);
 	
 	/**
      * Get the channel mapped to this session
@@ -378,5 +382,19 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @param queue the queue
      */
     void setSessionTicketsQueue(EzySessionTicketsQueue queue);
+    
+    /**
+     * set disconnection queue
+     * 
+     * @param queue the disconnection queue
+     */
+    void setDisconnectionQueue(EzySocketDisconnectionQueue queue);
+    
+    /**
+     * disconnect
+     */
+    default void disconnect() {
+        disconnect(EzyDisconnectReason.UNKNOWN);
+    }
 	
 }

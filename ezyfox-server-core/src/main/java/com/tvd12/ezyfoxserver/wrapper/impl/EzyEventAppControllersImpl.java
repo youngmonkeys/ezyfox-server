@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.appcontroller.EzyServerReadyController;
-import com.tvd12.ezyfoxserver.appcontroller.EzyUserDisconnectController;
+import com.tvd12.ezyfoxserver.appcontroller.EzyUserRemovedController;
 import com.tvd12.ezyfoxserver.appcontroller.EzyUserRequestAppController;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
@@ -29,7 +29,7 @@ public class EzyEventAppControllersImpl extends EzyAbstractEventControllers {
 			super.addControllers(answer);
 			answer.put(EzyEventType.SERVER_READY, new EzyServerReadyController());
 			answer.put(EzyEventType.USER_REQUEST, new EzyUserRequestAppController());
-			answer.put(EzyEventType.USER_DISCONNECT, new EzyUserDisconnectController());
+			answer.put(EzyEventType.USER_REMOVED, new EzyUserRemovedController());
 		}
 		
 		@Override

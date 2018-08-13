@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyNameAware;
-import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
 import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 public class EzySimpleUser 
         extends EzyEntity 
-        implements EzyUser, EzyNameAware, EzyZoneIdAware, EzyHasUserRemoveDelegate, Serializable {
+        implements EzyUser, EzyNameAware, EzyZoneIdAware, Serializable {
 	private static final long serialVersionUID = -7846882289922504595L;
 	
 	protected long id = COUNTER.incrementAndGet();
@@ -35,7 +35,6 @@ public class EzySimpleUser
 	protected int maxSessions = 30;
 	protected long maxIdleTime = 3 * 60 * 1000;
 	protected long startIdleTime = System.currentTimeMillis();
-	protected transient EzyUserRemoveDelegate removeDelegate;
 	@Setter(AccessLevel.NONE)
     protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	@Setter(AccessLevel.NONE)
@@ -95,8 +94,13 @@ public class EzySimpleUser
 	}
 	
 	@Override
+	public void disconnect(EzyConstant reason) {
+	    for(EzySession session : getSessions())
+	        session.disconnect(reason);
+	}
+	
+	@Override
 	public void destroy() {
-	    this.removeDelegate = null;
 	    if(locks != null)
 	        locks.clear();
 	    if(properties != null)

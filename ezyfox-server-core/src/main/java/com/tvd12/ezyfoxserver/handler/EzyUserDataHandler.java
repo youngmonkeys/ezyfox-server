@@ -1,9 +1,11 @@
 package com.tvd12.ezyfoxserver.handler;
 
+import static com.tvd12.ezyfox.util.EzyIfElse.withIf;
+
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfox.util.EzyIfElse;
-import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
+import com.tvd12.ezyfoxserver.command.EzyCloseSession;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
@@ -13,6 +15,10 @@ import com.tvd12.ezyfoxserver.request.EzyRequestParamsDeserializable;
 public abstract class EzyUserDataHandler<S extends EzySession> 
         extends EzySessionDataHandler<S> {
 
+    public EzyUserDataHandler(EzyServerContext ctx, S session) {
+        super(ctx, session);
+    }
+
     private EzyRequestFactory requestFactory = newRequestFactory();
     
     protected void unmapUser() {
@@ -20,7 +26,7 @@ public abstract class EzyUserDataHandler<S extends EzySession>
     }
     
     protected void chechToUnmapUser() {
-        EzyIfElse.withIf(user != null, this::unmapUser);
+        withIf(user != null, this::unmapUser);
     }
     
     private EzyRequestFactory newRequestFactory() {
@@ -38,8 +44,8 @@ public abstract class EzyUserDataHandler<S extends EzySession>
         return request;
     }
     
-    protected EzyDisconnectSession newDisconnectSession(EzyConstant reason) {
-        return context.get(EzyDisconnectSession.class)
+    protected EzyCloseSession newDisconnectSession(EzyConstant reason) {
+        return context.get(EzyCloseSession.class)
                 .reason(reason)
                 .session(session);
     }

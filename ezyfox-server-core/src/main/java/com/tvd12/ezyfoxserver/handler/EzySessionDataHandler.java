@@ -1,29 +1,14 @@
 package com.tvd12.ezyfoxserver.handler;
 
-import java.util.function.Supplier;
-
-import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
-import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public abstract class EzySessionDataHandler<S extends EzySession> 
-        extends EzyAbstractDataHandler<S>
-        implements EzySessionDelegate {
+        extends EzyAbstractDataHandler<S> {
 
-    protected void provideSession(Supplier<S> sessionSupplier) {
-        provideSession0(sessionSupplier);
-        updateSession();
-    }
-    
-    protected void provideSession0(Supplier<S> sessionSupplier) {
-        session = sessionSupplier.get();
-    }
-    
-    protected void updateSession() {
-        session.setMaxIdleTime(sessionManagementSetting.getSessionMaxIdleTime());
-        session.setMaxWaitingTime(sessionManagementSetting.getSessionMaxWaitingTime());
-        ((EzyHasSessionDelegate)session).setDelegate(this);
+    public EzySessionDataHandler(EzyServerContext ctx, S session) {
+        super(ctx, session);
     }
     
     @SuppressWarnings("unchecked")

@@ -10,6 +10,8 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
+import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
@@ -48,7 +50,7 @@ public class EzyNioSocketReader
 	}
 	
 	private int getMaxBufferSize() {
-		return 8192;
+		return EzyCoreConstants.MAX_READ_BUFFER_SIZE;
 	}
 
 	private void handleAcceptableConnections() {
@@ -115,14 +117,15 @@ public class EzyNioSocketReader
 	
 	private void closeConnection(SelectableChannel channel) throws Exception {
 		closeConnection0(channel);
-		removeHandlerGroup(channel);
+		processHandlerGroup(channel);
 	}
 	
 	private void closeConnection0(SelectableChannel channel) throws Exception {
 		channel.close();
 	}
 	
-	private void removeHandlerGroup(SelectableChannel channel) {
-		handlerGroupManager.removeHandlerGroup((SocketChannel) channel);
+	private void processHandlerGroup(SelectableChannel channel) {
+		EzyHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup((SocketChannel) channel);
+		handlerGroup.enqueueDisconnection();
 	}
 }

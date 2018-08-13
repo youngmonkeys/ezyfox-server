@@ -17,8 +17,9 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
     @Setter
     private EzySession session;
     
-    public EzySimpleSocketRequest(EzyArray data) {
+    public EzySimpleSocketRequest(EzySession session, EzyArray data) {
         this.data = data;
+        this.session = session;
         int cmdId = data.get(0, int.class);
         this.command = EzyCommand.valueOf(cmdId);
         this.timestamp = System.currentTimeMillis();

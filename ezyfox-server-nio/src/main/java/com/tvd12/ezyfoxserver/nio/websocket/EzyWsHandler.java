@@ -50,7 +50,7 @@ public class EzyWsHandler extends EzyLoggable {
 			return;
 		setChannelClosed(session);
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		dataHandler.fireChannelInactive();
+		dataHandler.enqueueDisconnection();
 	}
 	
 	@OnWebSocketError
@@ -69,8 +69,7 @@ public class EzyWsHandler extends EzyLoggable {
 	public void onConnect(Session session) throws Exception {
 		session.setIdleTimeout(settings.getSessionMaxIdleTime());
 		EzyChannel channel = new EzyWsChannel(session);
-		EzyWsHandlerGroup dataHandler = handlerGroupManager.newHandlerGroup(channel, EzyConnectionType.WEBSOCKET);
-		dataHandler.fireChannelActive();
+		handlerGroupManager.newHandlerGroup(channel, EzyConnectionType.WEBSOCKET);
 	}
 
 	@OnWebSocketMessage

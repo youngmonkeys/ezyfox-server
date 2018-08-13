@@ -19,6 +19,8 @@ import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.delegate.EzySimpleUserDelegate;
+import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -60,7 +62,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             EzyZoneSetting zoneSetting = settings.getZoneById(zoneId);
             EzySimpleZone zone = new EzySimpleZone();
             zone.setSetting(zoneSetting);
-            zone.setUserManager(newZoneUserManager(zoneSetting));
+            EzyUserDelegate userDelegate = newUserDelegate(parent);
+            EzyZoneUserManager userManager = newZoneUserManager(zoneSetting, userDelegate);
+            zone.setUserManager(userManager);
             EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
             zoneContext.setParent(parent);
             zoneContext.setZone(zone);
@@ -71,9 +75,15 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return contexts;
     }
     
-    protected EzyZoneUserManager newZoneUserManager(EzyZoneSetting zoneSetting) {
+    protected EzyUserDelegate newUserDelegate(EzyServerContext context) {
+        return new EzySimpleUserDelegate(context);
+    }
+    
+    protected EzyZoneUserManager newZoneUserManager(
+            EzyZoneSetting zoneSetting, EzyUserDelegate userDelegate) {
         EzyUserManagementSetting setting = zoneSetting.getUserManagement();
         return EzyZoneUserManagerImpl.builder()
+                .userDelegate(userDelegate)
                 .maxUsers(zoneSetting.getMaxUsers())
                 .maxIdleTime(setting.getUserMaxIdleTime())
                 .build();

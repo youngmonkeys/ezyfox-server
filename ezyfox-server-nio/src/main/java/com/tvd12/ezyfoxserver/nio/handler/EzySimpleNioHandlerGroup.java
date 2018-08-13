@@ -75,12 +75,12 @@ public class EzySimpleNioHandlerGroup
 		if (bytesWritten < bytesToWrite) {
 			byte[] remainBytes = getPacketFragment(buffer);
 			packet.setFragment(remainBytes);
-			SelectionKey selectionKey = getSession().getSelectionKey();
+			SelectionKey selectionKey = session.getSelectionKey();
 			if(selectionKey != null && selectionKey.isValid()) {
 				selectionKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 			}
 			else {
-				getLogger().warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, getSession());
+				getLogger().warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, session);
 			}
 		}
 		else {

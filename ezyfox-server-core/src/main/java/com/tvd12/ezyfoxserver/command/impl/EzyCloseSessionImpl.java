@@ -1,7 +1,8 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
+import com.tvd12.ezyfoxserver.command.EzyCloseSession;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -9,17 +10,16 @@ import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
-public class EzyDisconnectSessionImpl 
+public class EzyCloseSessionImpl 
 		extends EzyMessageController 
-		implements EzyDisconnectSession {
+		implements EzyCloseSession {
 
     private EzySession session;
 	private EzyConstant reason;
-	private boolean fireClientEvent = true;
 	
 	private EzyServerContext context;
 	
-	public EzyDisconnectSessionImpl(EzyServerContext ctx) {
+	public EzyCloseSessionImpl(EzyServerContext ctx) {
 		this.context = ctx;
 	}
 	
@@ -31,13 +31,16 @@ public class EzyDisconnectSessionImpl
 	}
 	
 	protected void sendToClients() {
-		if(fireClientEvent)
+		if(shouldSendToClient())
 		    sendToClients0();
 	}
 	
+	protected boolean shouldSendToClient() {
+	    return reason != EzyDisconnectReason.UNKNOWN;
+	}
+	
 	protected void disconnectSession() {
-        getLogger().info("disconnect session: {}, reason: {}", session.getClientAddress(), reason);
-        session.disconnect();
+        getLogger().info("close session: {}, reason: {}", session.getClientAddress(), reason);
         session.close();
     }
 	
@@ -52,20 +55,14 @@ public class EzyDisconnectSessionImpl
     }
 
 	@Override
-	public EzyDisconnectSession session(EzySession session) {
+	public EzyCloseSession session(EzySession session) {
 		this.session = session;
 		return this;
 	}
 
 	@Override
-	public EzyDisconnectSession reason(EzyConstant reason) {
+	public EzyCloseSession reason(EzyConstant reason) {
 		this.reason = reason;
-		return this;
-	}
-
-	@Override
-	public EzyDisconnectSession fireClientEvent(boolean value) {
-		this.fireClientEvent = value;
 		return this;
 	}
 

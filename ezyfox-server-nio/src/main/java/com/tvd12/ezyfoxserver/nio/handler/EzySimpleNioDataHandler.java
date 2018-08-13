@@ -1,78 +1,22 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SIZE;
-
-import java.util.Map;
-
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfox.exception.EzyMaxRequestSizeException;
-import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
-
-import lombok.Setter;
 
 public class EzySimpleNioDataHandler
 		extends EzySimpleDataHandler<EzyNioSession>
 		implements EzyNioDataHandler {	
 	
-	@Setter
-	protected EzyChannel channel;
-	@Setter
-	protected EzySocketChannelDelegate channelDelegate;
-	
-	@Override
-	public EzyNioSession channelActive() throws Exception {
-		getLogger().debug("channel actived, add session");
-		provideSession();
-		sessionActive();
-		return session;
+	public EzySimpleNioDataHandler(EzyServerContext ctx, EzyNioSession session) {
+		super(ctx, session);
 	}
 	
 	@Override
 	public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
     		dataReceived(cmd, msg);
     }
-	
-	@Override
-	public void onSessionRemoved(EzyConstant reason) {
-		this.channelDelegate.onChannelInactivated(channel);
-		super.onSessionRemoved(reason);
-	}
-    
-	private void provideSession() {
-		provideSession(this::newSession);
-	}
-	
-	private EzyNioSession newSession() {
-		EzyNioSessionManager sessionManager = getNioSessionManager();
-		return sessionManager.provideSession(channel);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void addExceptionHandlers(Map<Class<?>, EzyExceptionHandler> handlers) {
-		super.addExceptionHandlers(handlers);
-		handlers.put(EzyMaxRequestSizeException.class, (thread, throwable) -> {
-			if(sessionManager != null) 
-	            sessionManager.removeSession(session, MAX_REQUEST_SIZE);
-		});
-	}
-	
-	private EzyNioSessionManager getNioSessionManager() {
-		return (EzyNioSessionManager) sessionManager;
-	}
-	
-	@Override
-	public void destroy() {
-		super.destroy();
-		this.channel = null;
-		this.channelDelegate = null;
-	}
     
 }

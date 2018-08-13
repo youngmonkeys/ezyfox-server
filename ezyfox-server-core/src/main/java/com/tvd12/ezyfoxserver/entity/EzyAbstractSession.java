@@ -17,6 +17,9 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketDisconnection;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -70,9 +73,14 @@ public abstract class EzyAbstractSession
 	protected EzyDroppedPackets droppedPackets;
 	protected EzyImmediateDeliver immediateDeliver;
     protected EzySessionTicketsQueue sessionTicketsQueue;
+    protected EzySocketDisconnectionQueue disconnectionQueue;
 	
 	protected transient EzySessionDelegate delegate;
 	
+	@Setter(AccessLevel.NONE)
+	protected boolean disconnectionRegistered;
+	@Setter(AccessLevel.NONE)
+	protected Object disconnectionLock = new Object();
 	@Setter(AccessLevel.NONE)
 	protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	
@@ -157,13 +165,23 @@ public abstract class EzyAbstractSession
     }
     
     @Override
-    public void disconnect() {
-        EzyProcessor.processWithLogException(() -> channel.close()); 
+    public void disconnect(EzyConstant disconnectReason) {
+        synchronized (disconnectionLock) {
+            if(!disconnectionRegistered) {
+                this.disconnectReason = disconnectReason;
+                this.disconnectionQueue.add(newDisconnection(disconnectReason));
+                this.disconnectionRegistered = true;
+            }
+        } 
     }
     
     @Override
     public void close() {
         EzyProcessor.processWithLogException(() -> channel.close());
+    }
+    
+    private EzySocketDisconnection newDisconnection(EzyConstant reason) {
+        return new EzySimpleSocketDisconnection(this, disconnectReason);
     }
     
     @Override
@@ -200,6 +218,7 @@ public abstract class EzyAbstractSession
 	    this.readBytes = 0L;
 	    this.writtenBytes = 0L;
 	    this.connectionType = null;
+	    this.disconnectionLock = null;
 	    if(locks != null)
 	        this.locks.clear();
 	    if(properties != null)

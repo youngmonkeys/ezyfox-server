@@ -5,32 +5,38 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.creator.EzySessionCreator;
+import com.tvd12.ezyfoxserver.creator.EzySimpleSessionCreator;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 
 public class EzyHandlerGroupManagerImpl
 		extends EzyLoggable
-		implements EzyHandlerGroupManager, EzySocketChannelDelegate, EzyDestroyable {
+		implements EzyHandlerGroupManager {
 
 	private final ExecutorService statsThreadPool;
 	private final ExecutorService codecThreadPool;
 	
 	private final EzyCodecFactory codecFactory;
 	private final EzyServerContext serverContext;
+	private final EzySessionCreator sessionCreator;
 	private final EzySocketRequestQueues requestQueues;
+	private final EzySocketDisconnectionQueue disconnectionQueue;
 	
 	private final Map<Object, EzyHandlerGroup> groupsByConnection;
 	private final EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory;
@@ -39,8 +45,10 @@ public class EzyHandlerGroupManagerImpl
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
+		this.disconnectionQueue = builder.disconnectionQueue;
 		this.codecFactory = builder.codecFactory;
 		this.serverContext = builder.serverContext;
+		this.sessionCreator = builder.sessionCreator;
 		this.handlerGroupBuilderFactory = builder.handlerGroupBuilderFactory;
 		this.groupsByConnection = new ConcurrentHashMap<>();
 	}
@@ -48,11 +56,12 @@ public class EzyHandlerGroupManagerImpl
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type) {
+		EzyNioSession session = sessionCreator.create(channel);
 		EzyHandlerGroup group = newHandlerGroupBuilder(type)
-				.channel(channel)
-				.channelDelegate(this)
+				.session(session)
 				.serverContext(serverContext)
 				.requestQueues(requestQueues)
+				.disconnectionQueue(disconnectionQueue)
 				.decoder(newDataDecoder(type))
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
@@ -71,20 +80,18 @@ public class EzyHandlerGroupManagerImpl
 		return (T) groupsByConnection.get(connection);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EzyHandlerGroup> T removeHandlerGroup(Object connection) {
-		EzyHandlerGroup group = groupsByConnection.get(connection);
-		if(group != null)
-			group.fireChannelInactive();
-		return (T)group;
-	}
-	
-	@Override
-	public void onChannelInactivated(EzyChannel channel) {
-		EzyHandlerGroup group = groupsByConnection.remove(channel.getConnection());
-		group.destroy();
-		getLogger().debug("on channel {} inactive, remove handler group {}", channel, group);
+	public EzySocketDataHandlerGroup removeHandlerGroup(EzySession session) {
+		if(session == null)
+			return null;
+		if(session.getChannel() == null)
+			return null;
+		if(session.getChannel().getConnection() == null)
+			return null;
+		Object connection = session.getChannel().getConnection();
+		EzyHandlerGroup group = groupsByConnection.remove(connection);
+		getLogger().debug("remove handler group: {} with connection: {}", group, connection);
+		return group;
 	}
 	
 	private EzyHandlerGroup getHandlerGroup(EzySession session) {
@@ -126,8 +133,9 @@ public class EzyHandlerGroupManagerImpl
 
 		private EzyCodecFactory codecFactory;
 		private EzyServerContext serverContext;
+		private EzySessionCreator sessionCreator;
 		private EzySocketRequestQueues requestQueues;
-		
+		private EzySocketDisconnectionQueue disconnectionQueue;
 		private EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory;
 		
 		public Builder statsThreadPool(ExecutorService statsThreadPool) {
@@ -145,6 +153,11 @@ public class EzyHandlerGroupManagerImpl
 			return this;
 		}
 		
+		public Builder disconnectionQueue(EzySocketDisconnectionQueue disconnectionQueue) {
+			this.disconnectionQueue = disconnectionQueue;
+			return this;
+		}
+		
 		public Builder codecFactory(EzyCodecFactory codecFactory) {
 			this.codecFactory = codecFactory;
 			return this;
@@ -152,6 +165,7 @@ public class EzyHandlerGroupManagerImpl
 		
 		public Builder serverContext(EzyServerContext serverContext) {
 			this.serverContext = serverContext;
+			this.sessionCreator = newSessionCreator(serverContext);
 			return this;
 		}
 		
@@ -163,6 +177,15 @@ public class EzyHandlerGroupManagerImpl
 		@Override
 		public EzyHandlerGroupManager build() {
 			return new EzyHandlerGroupManagerImpl(this);
+		}
+		
+		protected EzySessionCreator newSessionCreator(EzyServerContext serverContext) {
+			EzyServer server = serverContext.getServer();
+			EzySettings settings = server.getSettings();
+			return EzySimpleSessionCreator.builder()
+					.sessionManager(server.getSessionManager())
+					.sessionSetting(settings.getSessionManagement())
+					.build();
 		}
 		
 	}

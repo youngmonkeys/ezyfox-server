@@ -4,7 +4,6 @@ import java.security.KeyPair;
 
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyObjectBuilder;
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
@@ -125,10 +124,6 @@ public class BaseCoreTest extends BaseTest {
     }
     
     public static class SessionDelegate implements EzySessionDelegate {
-
-        @Override
-        public void onSessionRemoved(EzyConstant reason) {
-        }
 
         @Override
         public void onSessionLoggedIn(EzyUser user) {

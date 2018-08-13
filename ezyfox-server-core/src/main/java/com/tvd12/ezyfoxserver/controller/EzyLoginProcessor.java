@@ -13,9 +13,14 @@ import java.util.concurrent.locks.Lock;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfox.function.EzyVoid;
+import com.tvd12.ezyfox.util.EzyEntityBuilders;
+import com.tvd12.ezyfox.util.EzyProcessor;
+import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
@@ -25,10 +30,6 @@ import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
-import com.tvd12.ezyfoxserver.delegate.EzySimpleUserRemoveDelegate;
-import com.tvd12.ezyfoxserver.delegate.EzyUserRemoveDelegate;
-import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -38,7 +39,6 @@ import com.tvd12.ezyfoxserver.event.EzySimpleSessionLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAddedEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
-import com.tvd12.ezyfox.function.EzyVoid;
 import com.tvd12.ezyfoxserver.response.EzyLoginParams;
 import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
@@ -48,8 +48,6 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
-import com.tvd12.ezyfox.util.EzyEntityBuilders;
-import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
@@ -199,7 +197,6 @@ public class EzyLoginProcessor
         user.setZoneId(zoneSetting.getId());
         user.setMaxIdleTime(userManagementSetting.getUserMaxIdleTime());
         user.setMaxSessions(userManagementSetting.getMaxSessionPerUser());
-        user.setRemoveDelegate(newUserRemoveDelegate(user));
         return user;
     }
     
@@ -209,13 +206,6 @@ public class EzyLoginProcessor
         if(allowGuestLogin)
             return guestNamePrefix + userId;
         throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
-    }
-    
-    protected EzyUserRemoveDelegate newUserRemoveDelegate(EzyUser user) {
-        return EzySimpleUserRemoveDelegate.builder()
-                .context(serverContext)
-                .user(user)
-                .build();
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user) {

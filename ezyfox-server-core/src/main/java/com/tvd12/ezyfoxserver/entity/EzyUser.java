@@ -3,9 +3,11 @@ package com.tvd12.ezyfoxserver.entity;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProperties;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 
 public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable {
 
@@ -96,5 +98,19 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
 	 * @return the lock
 	 */
 	Lock getLock(String name);
+	
+	/**
+	 * disconnect
+	 * 
+	 * @param reason the reason
+	 */
+	void disconnect(EzyConstant reason);
+	
+	/**
+     * disconnect
+     */
+    default void disconnect() {
+        disconnect(EzyDisconnectReason.UNKNOWN);
+    }
 	
 }

@@ -24,4 +24,12 @@ public class EzySimpleSocketDisconnection implements EzySocketDisconnection {
         this.disconnectReason = null;
     }
     
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("session: ").append(session)
+                .append(", disconnection reason: ").append(disconnectReason)
+                .toString();
+    }
+    
 }

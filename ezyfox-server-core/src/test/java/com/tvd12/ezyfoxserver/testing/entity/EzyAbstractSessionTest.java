@@ -7,12 +7,14 @@ import java.net.SocketAddress;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSession;
 
 public class EzyAbstractSessionTest extends BaseCoreTest {
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void test() {
         MyTestSession session = new MyTestSession();
@@ -40,12 +42,12 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         assert session.equals(session);
         assert !session.equals(new Object());
         assert !session.equals(session2);
-        assert !session.equals(new Session());
+        assert !session.equals(new PrivateSession());
         assert session.equals(session3);
         assert session.hashCode() != session2.hashCode();
     }
     
-    private static class Session extends EzyAbstractSession {
+    private static class PrivateSession extends EzyAbstractSession {
         private static final long serialVersionUID = -3656335144134244222L;
 
         @Override
@@ -64,8 +66,7 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         }
 
         @Override
-        public void disconnect() {
-            
+        public void disconnect(EzyConstant disconnectReason) {
         }
         
     }

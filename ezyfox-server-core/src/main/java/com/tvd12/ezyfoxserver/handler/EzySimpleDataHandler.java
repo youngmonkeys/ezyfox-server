@@ -10,13 +10,13 @@ import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.request
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
-import com.tvd12.ezyfoxserver.command.EzyDisconnectSession;
+import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionError;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -28,21 +28,10 @@ import com.tvd12.ezyfoxserver.request.EzyRequest;
 public abstract class EzySimpleDataHandler<S extends EzySession> 
         extends EzyUserDataHandler<S> {
 
-    public final void sessionActive() {
-        active = true;
-        session.setActivated(true);
-        getLogger().debug("active session: {}", session);
+    public EzySimpleDataHandler(EzyServerContext ctx, S session) {
+        super(ctx, session);
     }
-    
-    public void channelInactive() throws Exception {
-        channelInactive(EzyDisconnectReason.UNKNOWN);
-    }
-    
-    public void channelInactive(EzyConstant reason) throws Exception {
-        if(sessionManager != null && disconnectReason == null)
-            sessionManager.addDisconnectedSession(session, reason);
-    }
-    
+
     public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
         if(!validateState()) return;
         if(!validateSession()) return;
@@ -73,9 +62,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     protected void processMaxRequestPerSecond() {
         responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
-            if(sessionManager != null) {
+            if(sessionManager != null)
                 sessionManager.removeSession(session, MAX_REQUEST_PER_SECOND);
-            }
         }
     }
     
@@ -146,32 +134,39 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             exceptionHandler.handleException(Thread.currentThread(), cause);
     }
 
-    @Override
-    public void onSessionRemoved(EzyConstant reason) {
-        setDisconnectReason(reason);
+    public void channelInactive(EzyConstant reason) {
+        removeSession();
         notifySessionRemoved(reason);
+        closeSession(reason);
         chechToUnmapUser();
-        disconnectSession(reason);
         destroy();
     }
     
+    protected void removeSession() {
+        sessionManager.clearSession(session);
+    }
+    
     protected void notifySessionRemoved(EzyConstant reason) {
-        if(zoneContext == null) 
-            return;
-        EzyEvent event = newSessionRemovedEvent(reason);
-        if(user != null)
+        if(zoneContext != null) { 
+            EzyEvent event = newSessionRemovedEvent(reason);
             notifyAppsSessionRemoved(event);
-        notifyPluginsSessionRemoved(event);
+            notifyPluginsSessionRemoved(event);
+        }
     }
     
     protected void notifyAppsSessionRemoved(EzyEvent event) {
+        if(user != null)
+            notifyAppsSessionRemoved0(event);
+    }
+    
+    protected void notifyAppsSessionRemoved0(EzyEvent event) {
         try {
             zoneContext.get(EzyFireAppEvent.class)
                 .filter(appCtxt -> containsUser(appCtxt, user))
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify session removed to apps error", e);
+            getLogger().error("notify session: " + session + " removed to apps error", e);
         }
     }
     
@@ -181,13 +176,18 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
                 .fire(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify session removed to apps error", e);
+            getLogger().error("notify session: " + session + " removed to apps error", e);
         }
     }
     
-    protected void disconnectSession(EzyConstant reason) {
-        EzyDisconnectSession disconnect = newDisconnectSession(reason);
-        disconnect.execute();
+    protected void closeSession(EzyConstant reason) {
+        try {
+            EzyCloseSession disconnect = newDisconnectSession(reason);
+            disconnect.execute();
+        }
+        catch(Exception ex) {
+            getLogger().error("close session: " + session + " with reason: " + reason + " error", ex);
+        }
     }
     
     protected EzyEvent newSessionRemovedEvent(EzyConstant reason) {

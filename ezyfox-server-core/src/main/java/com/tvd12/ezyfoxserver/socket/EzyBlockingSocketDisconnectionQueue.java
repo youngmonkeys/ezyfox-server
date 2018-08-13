@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-public abstract class EzyBlockingSocketDisconnectionQueue 
+public class EzyBlockingSocketDisconnectionQueue 
         extends EzyLoggable 
         implements EzySocketDisconnectionQueue {
 

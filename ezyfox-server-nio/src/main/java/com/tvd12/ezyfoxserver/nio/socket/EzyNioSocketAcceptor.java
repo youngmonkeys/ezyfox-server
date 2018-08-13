@@ -112,7 +112,7 @@ public class EzyNioSocketAcceptor
 		
 		EzyNioHandlerGroup dataHandler = handlerGroupManager
 				.newHandlerGroup(channel, EzyConnectionType.SOCKET);
-		EzyNioSession session = dataHandler.fireChannelActive();
+		EzyNioSession session = dataHandler.getSession();
 
 		SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
 		session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);

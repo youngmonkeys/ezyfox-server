@@ -8,9 +8,9 @@ public interface EzySocketDisconnectionQueue {
 	
 	boolean isEmpty();
 	
-	boolean add(EzySocketDisconnection request);
+	boolean add(EzySocketDisconnection disconnection);
 	
-	void remove(EzySocketDisconnection request);
+	void remove(EzySocketDisconnection disconnection);
 	
 	EzySocketDisconnection take() throws InterruptedException;
 	

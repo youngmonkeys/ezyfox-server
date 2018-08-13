@@ -26,7 +26,7 @@ public class MyTestSession extends EzyAbstractSession {
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect(EzyConstant disconnectReason) {
     }
     
     @Override
@@ -35,11 +35,6 @@ public class MyTestSession extends EzyAbstractSession {
             
             @Override
             public void onSessionLoggedIn(EzyUser user) {
-                
-            }
-            
-            @Override
-            public void onSessionRemoved(EzyConstant reason) {
                 
             }
         };

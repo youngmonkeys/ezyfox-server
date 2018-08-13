@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import static com.tvd12.ezyfoxserver.socket.EzySocketRequestBuilder.socketRequestBuilder;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -22,7 +21,8 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketChannelDelegate;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequest;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
@@ -35,13 +35,12 @@ public abstract class EzyAbstractHandlerGroup
 		extends EzyLoggable
 		implements 
 			EzyImmediateDeliver, 
-			EzySocketChannelDelegate,
 			EzyDroppedPackets,
 			EzyDestroyable {
 
 	protected final EzyChannel channel;
 	
-	protected D decoder;
+	protected final D decoder;
 	protected final EzyNioDataHandler handler;
 
 	protected final AtomicInteger sessionCount;
@@ -51,35 +50,47 @@ public abstract class EzyAbstractHandlerGroup
 	protected final ExecutorService statsThreadPool;
 	protected final ExecutorService codecThreadPool;
 
+	protected final EzyNioSession session;
 	protected final EzySocketRequestQueues requestQueues;
-	protected final AtomicReference<EzyNioSession> session;
-	protected final EzySocketChannelDelegate channelDelegate;
 	protected final EzySessionTicketsQueue sessionTicketsQueue;
+	protected final EzySocketDisconnectionQueue disconnectionQueue;
 	
 	public EzyAbstractHandlerGroup(Builder builder) {
-		this.session = new AtomicReference<EzyNioSession>();
-		this.channel = builder.channel;
+		this.session = builder.session;
 		this.sessionCount = builder.sessionCount;
 		this.sessionStats = builder.sessionStats;
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
-		this.channelDelegate = builder.channelDelegate;
+		this.disconnectionQueue = builder.disconnectionQueue;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
+
+		this.channel = session.getChannel();
 		
 		this.decoder = newDecoder(builder.decoder);
-		this.handler = newDataHandler(builder.serverContext);
+		this.handler = newDataHandler(builder);
+
+		session.setDisconnectionQueue(disconnectionQueue);
+		session.setSessionTicketsQueue(sessionTicketsQueue);
+		((EzyDroppedPacketsAware)session).setDroppedPackets(this);
+		((EzyImmediateDeliverAware)session).setImmediateDeliver(this);
+		sessionStats.addSessions(1);
+		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());
 	}
 	
 	protected abstract D newDecoder(Object decoder);
 	
-	private EzyNioDataHandler newDataHandler(EzyServerContext context) {
-		EzySimpleNioDataHandler handler = new EzySimpleNioDataHandler();
-		handler.setChannel(channel);
-		handler.setContext(context);
-		handler.setChannelDelegate(this);
+	private EzyNioDataHandler newDataHandler(Builder builder) {
+		EzySimpleNioDataHandler handler = new EzySimpleNioDataHandler(
+				builder.serverContext,
+				builder.session);
 		return handler;
+	}
+	
+	public final void enqueueDisconnection(EzyConstant reason) {
+		if(session != null)
+			session.disconnect(reason);
 	}
 	
 	public final void fireChannelInactive() {
@@ -88,7 +99,6 @@ public abstract class EzyAbstractHandlerGroup
 	
 	public final void fireChannelInactive(EzyConstant reason) {
 		try {
-			decoder.destroy();
 			handler.channelInactive(reason);
 		}
 		catch(Exception e) {
@@ -116,17 +126,6 @@ public abstract class EzyAbstractHandlerGroup
 		handler.channelRead(cmd, msg);
 	}
 	
-	public final EzyNioSession fireChannelActive() throws Exception {
-		EzyNioSession ss = handler.channelActive();
-		ss.setSessionTicketsQueue(sessionTicketsQueue);
-		((EzyDroppedPacketsAware)ss).setDroppedPackets(this);
-		((EzyImmediateDeliverAware)ss).setImmediateDeliver(this);
-		session.set(ss);
-		sessionStats.addSessions(1);
-		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());
-		return ss;
-	}
-	
 	@Override
 	public final void sendPacketNow(EzyPacket packet) {
 		try {
@@ -147,21 +146,17 @@ public abstract class EzyAbstractHandlerGroup
 		networkStats.addDroppedOutBytes(packet.getSize());
 	}
 	
-	@Override
-	public final void onChannelInactivated(EzyChannel channel) {
-		channelDelegate.onChannelInactivated(channel);
-	}
-	
 	protected final void handleReceivedData(Object data) {
-		EzySocketRequest request = socketRequestBuilder()
-			.data((EzyArray) data)
-			.session(getSession())
-			.build();
+		EzySocketRequest request = newSocketRequest(data);
 		boolean success = requestQueues.add(request);
 		if(!success) {
 			networkStats.addDroppedInPackets(1);
 			getLogger().info("request queue is full, drop incomming request");
 		}
+	}
+	
+	private EzySocketRequest newSocketRequest(Object data) {
+		return new EzySimpleSocketRequest(session, (EzyArray) data);
 	}
 	
 	protected final void executeSendingPacket(EzyPacket packet, Object writeBuffer) {
@@ -172,7 +167,7 @@ public abstract class EzyAbstractHandlerGroup
 	
 	private void sendPacketToClient0(EzyPacket packet, Object writeBuffer) {
 		try {
-			EzyChannel channel = getSession().getChannel();
+			EzyChannel channel = session.getChannel();
 			if(canWriteBytes(channel)) {
 				int writeBytes = writePacketToSocket(packet, writeBuffer);
 				executeAddWrittenBytes(writeBytes);
@@ -182,7 +177,7 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(packet.getSize());
-			getLogger().warn("can't send bytes: " + bytes + " to session: " + getSession() + ", error: " + e.getMessage());
+			getLogger().warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
 		}
 	}
 	
@@ -206,33 +201,32 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	private synchronized void addReadBytes(int count) {
-		getSession().addReadBytes(count);
+		session.addReadBytes(count);
 		networkStats.addReadBytes(count);
 		networkStats.addReadPackets(1);
 	}
 	
 	private synchronized void addWrittenBytes(int count) {
-		getSession().addWrittenBytes(count);
+		session.addWrittenBytes(count);
 		networkStats.addWrittenBytes(count);
 		networkStats.addWrittenPackets(1);
 	}
 	
-	protected final EzyNioSession getSession() {
-		return session.get();
+	protected final boolean isSessionConnected() {
+		return session != null;
 	}
 	
-	protected final boolean isSessionConnected() {
-		return getSession() != null;
+	public EzyNioSession getSession() {
+		return session;
 	}
 	
 	@Override
 	public void destroy() {
-		session.set(null);
+		processWithLogException(decoder::destroy);
+		processWithLogException(handler::destroy);
 	}
 	
 	public static abstract class Builder implements EzyBuilder<EzyHandlerGroup> {
-
-		protected EzyChannel channel;
 
 		protected AtomicInteger sessionCount;
 		protected EzySessionStats sessionStats;
@@ -242,18 +236,19 @@ public abstract class EzyAbstractHandlerGroup
 		protected ExecutorService codecThreadPool;
 		
 		protected Object decoder;
+		protected EzyNioSession session;
 		protected EzyServerContext serverContext;
 		protected EzySocketRequestQueues requestQueues;
-		protected EzySocketChannelDelegate channelDelegate;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
-		
-		public Builder channel(EzyChannel channel) {
-			this.channel = channel;
-			return this;
-		}
+		protected EzySocketDisconnectionQueue disconnectionQueue;
 		
 		public Builder decoder(Object decoder) {
 			this.decoder = decoder;
+			return this;
+		}
+		
+		public Builder session(EzyNioSession session) {
+			this.session = session;
 			return this;
 		}
 		
@@ -292,16 +287,15 @@ public abstract class EzyAbstractHandlerGroup
 			return this;
 		}
 		
-		public Builder channelDelegate(EzySocketChannelDelegate delegate) {
-			this.channelDelegate = delegate;
-			return this;
-		}
-		
 		public Builder sessionTicketsQueue(EzySessionTicketsQueue queue) {
 			this.sessionTicketsQueue = queue;
 			return this;
 		}
 		
+		public Builder disconnectionQueue(EzySocketDisconnectionQueue disconnectionQueue) {
+			this.disconnectionQueue = disconnectionQueue;
+			return this;
+		}
 	}
 	
 }

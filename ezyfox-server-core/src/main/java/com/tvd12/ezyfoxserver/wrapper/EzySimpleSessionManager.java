@@ -62,7 +62,7 @@ public class EzySimpleSessionManager<S extends EzySession>
     public void clearSession(S session) {
 	    if(session != null) {
 	        unmapSession(session);
-	        getLogger().info("remove session, remain sessions = {}", providedObjects.size());
+	        getLogger().info("remove session: {}, remain sessions = {}", session.getName(), providedObjects.size());
 	    }
     }
 	
@@ -88,6 +88,7 @@ public class EzySimpleSessionManager<S extends EzySession>
         S ss = provideSession(channel.getConnectionType());
         ss.setChannel(channel);
         sessionsByConnection.put(channel.getConnection(), ss);
+        getLogger().info("provide session: {}, sessions size = {}", ss.getName(), providedObjects.size());
         return ss;
     }
 	
@@ -111,7 +112,6 @@ public class EzySimpleSessionManager<S extends EzySession>
         S complete = (S)session;
         sessionsById.put(complete.getId(), complete);
 		sessionsByToken.put(complete.getReconnectToken(), complete);
-		getLogger().debug("provide session, sessions size = {}", providedObjects.size());
 		return complete;
 	}
 	

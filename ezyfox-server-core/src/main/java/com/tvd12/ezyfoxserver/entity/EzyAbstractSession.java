@@ -160,11 +160,6 @@ public abstract class EzyAbstractSession
     }
     
     @Override
-    public void setChannel(EzyChannel channel) {
-        this.channel = channel;
-    }
-    
-    @Override
     public void disconnect(EzyConstant disconnectReason) {
         synchronized (disconnectionLock) {
             if(!disconnectionRegistered) {

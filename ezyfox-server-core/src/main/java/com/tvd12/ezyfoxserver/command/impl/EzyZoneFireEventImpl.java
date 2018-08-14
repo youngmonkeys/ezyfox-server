@@ -21,7 +21,7 @@ public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireE
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("fire event {}", type);
+	    getLogger().debug("fire event: {}", type);
 		firePluginsEvent(type, event);
 		fireAppsEvent(type, event);
 	}

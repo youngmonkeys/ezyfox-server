@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
-import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
@@ -43,7 +43,7 @@ public interface EzyZoneUserManager extends EzyUserManager {
 	 * 
 	 * @param session the session
 	 */
-	void unmapSessionUser(EzySession session);
+	void unmapSessionUser(EzySession session, EzyConstant reason);
 	
 	/**
 	 * Remove user
@@ -51,7 +51,7 @@ public interface EzyZoneUserManager extends EzyUserManager {
 	 * @param user the user
 	 * @param reason the reason
 	 */
-	void removeUser(EzyUser user, EzyUserRemoveReason reason);
+	void removeUser(EzyUser user, EzyConstant reason);
 	
 	/**
 	 * 

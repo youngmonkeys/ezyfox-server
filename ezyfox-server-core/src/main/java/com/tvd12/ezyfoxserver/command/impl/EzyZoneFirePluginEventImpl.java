@@ -27,7 +27,7 @@ public class EzyZoneFirePluginEventImpl
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("fire event {}", type);
+	    getLogger().debug("fire event: {}", type);
 		firePluginsEvent(type, event);
 	}
 	

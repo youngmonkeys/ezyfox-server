@@ -125,6 +125,8 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     
     @Override
     public void destroy() {
+        if(session != null)
+            session.destroy();
         this.session = null;
         this.channel = null;
         this.server = null;

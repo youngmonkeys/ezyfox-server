@@ -24,7 +24,7 @@ public class EzyAppFireEventImpl
     @Override
 	public void fire(EzyConstant type, EzyEvent event) {
 	    EzyEventController ctrl = getController(type);
-	    getLogger().debug("fire event {}, controller = {}", type, ctrl);
+	    getLogger().debug("fire event: {}, controller = {}", type, ctrl);
 		fire(ctrl, event);
 	}
 	

@@ -29,7 +29,7 @@ public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFi
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("fire event {}", type);
+	    getLogger().debug("fire event: {}", type);
 		fireAppsEvent(type, event);
 	}
 	

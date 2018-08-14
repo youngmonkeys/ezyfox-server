@@ -43,7 +43,7 @@ public class EzySimpleUserDelegate
                    .fire(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify user removed error", e);
+            getLogger().error("notify user: " + event.getUser() + " removed error", e);
         }
     }
     
@@ -54,7 +54,7 @@ public class EzySimpleUserDelegate
                 .fire(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify user disconnect to server error", e);
+            getLogger().error("notify user: " + event.getUser() + " disconnect to server error", e);
         }
     }
     

@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.handler;
 
-import static com.tvd12.ezyfox.util.EzyIfElse.withIf;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
@@ -21,12 +19,9 @@ public abstract class EzyUserDataHandler<S extends EzySession>
 
     private EzyRequestFactory requestFactory = newRequestFactory();
     
-    protected void unmapUser() {
-        userManager.unmapSessionUser(session);
-    }
-    
-    protected void chechToUnmapUser() {
-        withIf(user != null, this::unmapUser);
+    protected void checkToUnmapUser(EzyConstant reason) {
+        if(user != null)
+            userManager.unmapSessionUser(session, reason);
     }
     
     private EzyRequestFactory newRequestFactory() {
@@ -44,7 +39,7 @@ public abstract class EzyUserDataHandler<S extends EzySession>
         return request;
     }
     
-    protected EzyCloseSession newDisconnectSession(EzyConstant reason) {
+    protected EzyCloseSession newCloseSession(EzyConstant reason) {
         return context.get(EzyCloseSession.class)
                 .reason(reason)
                 .session(session);

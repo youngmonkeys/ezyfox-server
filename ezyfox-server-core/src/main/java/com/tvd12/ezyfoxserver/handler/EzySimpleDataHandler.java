@@ -52,7 +52,6 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             requestFrameInSecond = requestFrameInSecond.nextFrame();
         boolean hasMaxRequest = requestFrameInSecond.addRequests(1);
         if(hasMaxRequest) { 
-            setActive(false);
             processMaxRequestPerSecond();
             return true;
         }
@@ -62,6 +61,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     protected void processMaxRequestPerSecond() {
         responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
+            this.active = false;
             if(sessionManager != null)
                 sessionManager.removeSession(session, MAX_REQUEST_PER_SECOND);
         }
@@ -73,12 +73,19 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         session.addReadRequests(1);
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastActivityTime(System.currentTimeMillis());
+        updateUserByReceivedData();
         handleRequest(cmd, data);
     }
     
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
         if(!unloggableCommands.contains(cmd))
             getLogger().debug("command {}, data {}", cmd, data);
+    }
+    
+    public void updateUserByReceivedData() {
+        if(user != null) {
+            user.setStartIdleTime(System.currentTimeMillis());
+        }
     }
     
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
@@ -138,7 +145,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         removeSession();
         notifySessionRemoved(reason);
         closeSession(reason);
-        chechToUnmapUser();
+        checkToUnmapUser(reason);
         destroy();
     }
     
@@ -182,8 +189,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void closeSession(EzyConstant reason) {
         try {
-            EzyCloseSession disconnect = newDisconnectSession(reason);
-            disconnect.execute();
+            EzyCloseSession close = newCloseSession(reason);
+            close.execute();
         }
         catch(Exception ex) {
             getLogger().error("close session: " + session + " with reason: " + reason + " error", ex);

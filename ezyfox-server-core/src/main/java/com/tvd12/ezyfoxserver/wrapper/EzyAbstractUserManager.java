@@ -53,6 +53,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
             usersById.remove(user.getId());
             usersByName.remove(user.getName());
         }
+        getLogger().info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return user;
     }
     
@@ -79,6 +80,10 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     @Override
     public void removeLock(String username) {
         locks.remove(username);
+    }
+    
+    protected String getMessagePrefix() {
+        return "user manager:";
     }
     
     public abstract static class Builder<B extends Builder<B>> 

@@ -7,10 +7,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfox.util.EzyStartable;
-import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -21,12 +22,14 @@ public class EzyZoneUserManagerImpl
         extends EzyAbstractByMaxUserManager 
         implements EzyZoneUserManager, EzyStartable, EzyDestroyable {
 
+    protected final String zoneName;
     protected final EzyUserDelegate userDelegate;
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
     protected EzyZoneUserManagerImpl(Builder builder) {
         super(builder);
+        this.zoneName = builder.zoneName;
         this.userDelegate = builder.userDelegate;
         this.idleValidationService = newIdleValidationService(builder.maxIdleTime);
     }
@@ -47,7 +50,7 @@ public class EzyZoneUserManagerImpl
 		usersById.put(user.getId(), user);
 		usersByName.put(user.getName(), user);
 		usersBySession.put(session, user);
-		getLogger().info("add user {}, user count = {}", user.getName(), usersById.size());
+		getLogger().debug("add user {}, user count = {}", user.getName(), usersById.size());
 	}
 	
 	@Override
@@ -78,28 +81,19 @@ public class EzyZoneUserManagerImpl
 	 * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyServerUserManager#unmapSessionUser(com.tvd12.ezyfoxserver.mapping.entity.EzySession)
 	 */
 	@Override
-	public void unmapSessionUser(EzySession session) {
+	public void unmapSessionUser(EzySession session, EzyConstant reason) {
 	    EzyUser user = usersBySession.remove(session);
 	    if(user != null) {
 	        user.removeSession(session);
-	        getLogger().debug("remove session {} from user {}, remain {} sessions", session.getClientAddress(), user.getName(), user.getSessionCount());
-	        if(user.getSessionCount() == 0 && user.getMaxIdleTime() <= 0) {
-	            removeUser(user, EzyUserRemoveReason.DISCONNECT);
-	        }
+	        getLogger().debug("zone: {} remove session {} from user {} by reason {}, user remain {} sessions and {} usersBySession", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
+	        if(shouldRemoveUserNow(user)) 
+	            removeUser(user, reason);
 	    }
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyUserManager#removeUser(com.tvd12.ezyfoxserver.mapping.entity.EzyUser)
-	 */
-	@Override
-	public EzyUser removeUser(EzyUser user) {
-		if(user != null) {
-		    super.removeUser(user);
-			removeUserSessions(user);
-		}
-		return user;
+	protected boolean shouldRemoveUserNow(EzyUser user) {
+	    boolean should = user.getSessionCount() == 0 && user.getMaxIdleTime() <= 0;
+	    return should;
 	}
 	
 	/*
@@ -107,13 +101,13 @@ public class EzyZoneUserManagerImpl
 	 * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyServerUserManager#removeUser(com.tvd12.ezyfoxserver.mapping.entity.EzyUser, com.tvd12.ezyfoxserver.mapping.constant.EzyUserRemoveReason)
 	 */
 	@Override
-	public void removeUser(EzyUser user, EzyUserRemoveReason reason) {
+	public void removeUser(EzyUser user, EzyConstant reason) {
 	    EzyProcessor.processWithLock(
-	            () -> tryRemoveUser(user, reason), getLock(user.getName()));
-	    getLogger().info("server: remove user: {}, reason: {}, remain users = {}", user, reason, usersById.size());
+	            () -> removeUser0(user, reason), getLock(user.getName()));
 	}
 	
-	public void tryRemoveUser(EzyUser user, EzyUserRemoveReason reason) {
+	private void removeUser0(EzyUser user, EzyConstant reason) {
+	    getLogger().debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
 	    removeUser(user);
         delegateUserRemove(user, reason);
 	}
@@ -129,7 +123,7 @@ public class EzyZoneUserManagerImpl
 	
 	@Override
 	public void start() throws Exception {
-	    getLogger().debug("start user manager");
+	    getLogger().debug("start user manager for zone: {}", zoneName);
 	    startIdleValidationService();
 	}
 	
@@ -143,19 +137,14 @@ public class EzyZoneUserManagerImpl
 	protected void validateIdleUsers() {
 	    for(EzyUser user : getUserList())
 	        if(isIdleUser(user))
-	            removeUser(user, EzyUserRemoveReason.IDLE);
+	            removeUser(user, EzyDisconnectReason.IDLE);
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
 	    return user.isIdle();
 	}
 	
-	protected void removeUserSessions(EzyUser user) {
-	    for(EzySession session : user.getSessions())
-	        usersBySession.remove(session);
-	}
-	
-	protected void delegateUserRemove(EzyUser user, EzyUserRemoveReason reason) {
+	protected void delegateUserRemove(EzyUser user, EzyConstant reason) {
 	    userDelegate.onUserRemoved(user, reason);
     }
 	
@@ -165,14 +154,25 @@ public class EzyZoneUserManagerImpl
 	        processWithLogException(idleValidationService::shutdown);
 	}
 	
+	@Override
+	protected String getMessagePrefix() {
+	    return "zone: " + zoneName;
+	}
+	
 	public static Builder builder() {
 		return new Builder();
 	}
 	
 	public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
-		
+
+	    protected String zoneName;
 	    protected long maxIdleTime;
 	    protected EzyUserDelegate userDelegate;
+	    
+	    public Builder zoneName(String zoneName) {
+	        this.zoneName = zoneName;
+	        return this;
+	    }
 	    
 	    public Builder maxIdleTime(long maxIdletime) {
 	        this.maxIdleTime = maxIdletime;

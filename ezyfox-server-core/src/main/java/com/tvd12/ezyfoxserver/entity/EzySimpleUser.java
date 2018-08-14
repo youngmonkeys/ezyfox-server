@@ -49,7 +49,6 @@ public class EzySimpleUser
 	
 	@Override
 	public void removeSession(EzySession session) {
-	    setStartIdleTime(System.currentTimeMillis());
 	    sessionMap.remove(session.getReconnectToken());
 	}
 	
@@ -90,7 +89,8 @@ public class EzySimpleUser
 	public boolean isIdle() {
 	    if(!sessionMap.isEmpty())
 	        return false;
-	    return maxIdleTime < System.currentTimeMillis() - startIdleTime;
+	    boolean idle = maxIdleTime < System.currentTimeMillis() - startIdleTime;
+	    return idle;
 	}
 	
 	@Override

@@ -61,7 +61,7 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected EzyEvent newServerReadyEvent() {
-		return EzySimpleServerReadyEvent.builder().build();
+		return new EzySimpleServerReadyEvent();
 	}
 	
 	protected EzyServer getServer() {

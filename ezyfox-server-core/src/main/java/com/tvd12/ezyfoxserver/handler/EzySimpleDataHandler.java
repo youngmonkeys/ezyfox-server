@@ -198,11 +198,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected EzyEvent newSessionRemovedEvent(EzyConstant reason) {
-        return EzySimpleSessionRemovedEvent.builder()
-                .user(user)
-                .session(session)
-                .reason(reason)
-                .build();
+        return new EzySimpleSessionRemovedEvent(user, session, reason);
     }
     
 }

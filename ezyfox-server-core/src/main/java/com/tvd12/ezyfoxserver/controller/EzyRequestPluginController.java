@@ -30,11 +30,10 @@ public abstract class EzyRequestPluginController<P extends EzyRequestPluginParam
 	    EzyPluginContext getPluginContext(EzyZoneContext zoneCtx, P requestParams);
 	
 	protected EzyEvent newRequestPluginEvent(EzyRequestPluginRequest<P> request) {
-		return EzySimpleUserRequestPluginEvent.builder()
-		        .user(request.getUser())
-		        .session(request.getSession())
-		        .data(request.getParams().getData())
-		        .build();
+		return new EzySimpleUserRequestPluginEvent(
+		        request.getUser(),
+		        request.getSession(), 
+		        request.getParams().getData());
 	}
 	
 }

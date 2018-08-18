@@ -16,10 +16,9 @@ public class EzyUserDisconnectControllerTest extends BaseCoreTest {
     public void test() {
         EzyUserRemovedController ctrl = new EzyUserRemovedController();
         EzyServerContext ctx = newServerContext();
-        EzyUserRemovedEvent event = (EzyUserRemovedEvent) EzySimpleUserRemovedEvent.builder()
-                .reason(EzyDisconnectReason.IDLE)
-                .user(newUser())
-                .build();
+        EzyUserRemovedEvent event = new EzySimpleUserRemovedEvent(
+                newUser(), 
+                EzyDisconnectReason.IDLE);
         EzyZoneContext zoneContext = ctx.getZoneContext("example");
         ctrl.handle(zoneContext.getAppContext("ezyfox-chat"), event);
     }

@@ -15,11 +15,7 @@ public class EzyUserLoginEventImplTest extends BaseCoreTest {
         EzyArray data = newArrayBuilder().build();
         data.add("123.abc");
         EzyObject output2 = newObjectBuilder().append("2", "b").build();
-        EzyUserLoginEvent event = EzySimpleUserLoginEvent.builder()
-                .data(data)
-                .username("dungtv")
-                .password("123")
-                .build();
+        EzyUserLoginEvent event = new EzySimpleUserLoginEvent(null, "zone", "dungtv", "123", data);
         assert event.getData() == data;
         assert event.getUsername().equals("dungtv");
         assert event.getPassword().equals("123");

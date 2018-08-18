@@ -69,10 +69,7 @@ public class EzySimpleUserDelegate
     }
     
     protected EzyUserEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {
-        return EzySimpleUserRemovedEvent.builder()
-                .user(user)
-                .reason(reason)
-                .build();
+        return new EzySimpleUserRemovedEvent(user, reason);
     }
     
 }

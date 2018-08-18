@@ -56,11 +56,14 @@ public class EzyWsHandler extends EzyLoggable {
 	@OnWebSocketError
 	public void onError(Session session, Throwable throwable) {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
+		if(dataHandler == null) {
+			getLogger().debug("error on session: " + session.getRemoteAddress() + ", but data handler removed, details: " + throwable);
+		}
 		if (throwable instanceof SocketTimeoutException) {
 			getLogger().debug("session " + session.getRemoteAddress() + ": Timeout on Read");
 		}
-		else {
-			getLogger().debug("error on session: " + session.getRemoteAddress(), throwable);
+		else if(dataHandler != null) {
+			getLogger().debug("error on session: " + session.getRemoteAddress() + ", details: " + throwable);
 			dataHandler.fireExceptionCaught(throwable);
 		}
 	}
@@ -75,13 +78,19 @@ public class EzyWsHandler extends EzyLoggable {
 	@OnWebSocketMessage
 	public void onMessage(Session session, String message) throws Exception {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		dataHandler.fireBytesReceived(message);
+		if(dataHandler == null)
+			getLogger().debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
+		else
+			dataHandler.fireBytesReceived(message);
 	}
 
 	@OnWebSocketMessage
 	public void onMessage(Session session, byte[] payload, int offset, int len) throws Exception {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		dataHandler.fireBytesReceived(payload, offset, len);
+		if(dataHandler == null)
+			getLogger().debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
+		else
+			dataHandler.fireBytesReceived(payload, offset, len);
 	}
 
 	private void setChannelClosed(Session connection) {

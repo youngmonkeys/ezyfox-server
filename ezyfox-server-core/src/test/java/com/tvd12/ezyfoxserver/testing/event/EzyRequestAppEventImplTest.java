@@ -14,10 +14,7 @@ public class EzyRequestAppEventImplTest extends BaseCoreTest {
     public void test() {
         EzyUser user = newUser();
         EzyArray data = newArrayBuilder().append(100).build();
-        EzyUserRequestAppEvent event = (EzyUserRequestAppEvent) EzySimpleUserRequestAppEvent.builder()
-                .user(user)
-                .data(data)
-                .build();
+        EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(user, null, data);
         assert event.getData() == data;
         assert event.getUser() == user;
     }

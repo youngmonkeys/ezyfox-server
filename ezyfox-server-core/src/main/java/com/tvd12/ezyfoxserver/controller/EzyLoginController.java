@@ -74,13 +74,11 @@ public class EzyLoginController
     }
 	
 	protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {
-		return EzySimpleUserLoginEvent.builder()
-		        .data(params.getData())
-		        .zoneName(params.getZoneName())
-				.username(params.getUsername())
-				.password(params.getPassword())
-				.session(session)
-				.build();
+		return new EzySimpleUserLoginEvent(
+		        session,
+		        params.getZoneName(),
+		        params.getUsername(),
+		        params.getPassword(), params.getData());
 	}
 	
     protected void responseLoginError(EzyContext ctx, EzySession session, EzyILoginError error) {

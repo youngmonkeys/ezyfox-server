@@ -7,7 +7,7 @@ import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManagementSetting;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManager;
-import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneId;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneSetting;
 
 import java.util.concurrent.locks.Lock;
 
@@ -209,18 +209,11 @@ public class EzyLoginProcessor
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user) {
-        return EzySimpleSessionLoginEvent.builder()
-                .session(session)
-                .user(user)
-                .build();
+        return new EzySimpleSessionLoginEvent(user, session);
     }
     
     protected EzyEvent newUserAddedEvent(EzyUser user) {
-        return EzySimpleUserAddedEvent.builder()
-                .user(user)
-                .session(session)
-                .loginData(loginData)
-                .build();
+        return new EzySimpleUserAddedEvent(user, session, loginData);
     }
     
     protected void response(EzySession session, EzyResponse response) {
@@ -231,12 +224,14 @@ public class EzyLoginProcessor
     }
     
     protected EzyResponse newLoginReponse(EzyUser user) {
+        EzyZoneSetting zoneSetting = getZoneSetting(zoneContext);
         EzyLoginParams params = new EzyLoginParams();
         params.setData(loginOuputData);
         params.setUserId(user.getId());
         params.setUsername(user.getName());
         params.setJoinedApps(getJoinedAppsDetails());
-        params.setZoneId(getZoneId(zoneContext));
+        params.setZoneId(zoneSetting.getId());
+        params.setZoneName(zoneSetting.getName());
         return new EzyLoginResponse(params);
     }
     

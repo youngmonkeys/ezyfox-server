@@ -13,10 +13,8 @@ public class EzyDisconnectEventImplTest extends BaseCoreTest {
     @Test
     public void test() {
         EzyUser user = newUser();
-        EzyUserRemovedEvent event = (EzyUserRemovedEvent) EzySimpleUserRemovedEvent.builder()
-                .user(user)
-                .reason(EzyDisconnectReason.IDLE)
-                .build();
+        EzyUserRemovedEvent event = new EzySimpleUserRemovedEvent(
+                user, EzyDisconnectReason.IDLE);
         assert event.getUser() == user;
         assert event.getReason() == EzyDisconnectReason.IDLE;
     }

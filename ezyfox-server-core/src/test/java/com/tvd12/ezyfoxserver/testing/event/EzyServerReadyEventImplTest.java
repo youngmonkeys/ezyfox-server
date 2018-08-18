@@ -9,8 +9,7 @@ public class EzyServerReadyEventImplTest extends BaseCoreTest {
 
     @Test
     public void test() {
-        EzySimpleServerReadyEvent.builder()
-                .build();
+        new EzySimpleServerReadyEvent();
     }
     
 }

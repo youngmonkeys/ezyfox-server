@@ -15,10 +15,10 @@ public class EzyUserRequestAppControllerTest extends BaseCoreTest {
     public void test() {
         EzyUserRequestAppController ctrl = new EzyUserRequestAppController();
         EzyServerContext ctx = newServerContext();
-        EzyUserRequestAppEvent event = (EzyUserRequestAppEvent) EzySimpleUserRequestAppEvent.builder()
-                .data(newArrayBuilder().build())
-                .user(newUser())
-                .build();
+        EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(
+                newUser(),
+                null,
+                newArrayBuilder().build());
         EzyZoneContext zoneContext = ctx.getZoneContext("example");
         ctrl.handle(zoneContext.getAppContext("ezyfox-chat"), event);
     }

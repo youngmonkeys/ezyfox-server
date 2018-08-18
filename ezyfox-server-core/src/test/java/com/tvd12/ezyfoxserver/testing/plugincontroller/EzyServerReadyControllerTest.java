@@ -13,8 +13,7 @@ public class EzyServerReadyControllerTest extends BaseCoreTest {
 
     @Test
     public void test() {
-        EzyServerReadyEvent event = EzySimpleServerReadyEvent.builder()
-                .build();
+        EzyServerReadyEvent event = new EzySimpleServerReadyEvent();
         EzyPluginContext context = Mockito.mock(EzyPluginContext.class);
         EzyServerReadyController controller = new EzyServerReadyController();
         controller.handle(context, event);

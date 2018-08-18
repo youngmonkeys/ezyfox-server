@@ -1,27 +1,17 @@
 package com.tvd12.ezyfoxserver.event;
 
+import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
+
 import lombok.Getter;
 
 @Getter
 public class EzySimpleSessionLoginEvent 
         extends EzySimpleUserSessionEvent
 		implements EzySessionLoginEvent {
-    
-    protected EzySimpleSessionLoginEvent(Builder builder) {
-        super(builder);
-    }
 
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder extends EzySimpleUserSessionEvent.Builder<Builder> {
-	    
-	    @Override
-	    public EzySessionLoginEvent build() {
-	        return new EzySimpleSessionLoginEvent(this);
-	    }
-	    
-	}
-	
+    public EzySimpleSessionLoginEvent(EzyUser user, EzySession session) {
+        super(user, session);
+    }
+    
 }

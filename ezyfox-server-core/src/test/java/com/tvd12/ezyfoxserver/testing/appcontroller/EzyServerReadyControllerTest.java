@@ -15,8 +15,7 @@ public class EzyServerReadyControllerTest extends BaseCoreTest {
     public void test() {
         EzyServerReadyController ctrl = new EzyServerReadyController();
         EzyServerContext ctx = newServerContext();
-        EzyServerReadyEvent event = EzySimpleServerReadyEvent.builder()
-                .build();
+        EzyServerReadyEvent event = new EzySimpleServerReadyEvent();
         EzyZoneContext zoneContext = ctx.getZoneContext("example");
         ctrl.handle(zoneContext.getAppContext("ezyfox-chat"), event);
     }

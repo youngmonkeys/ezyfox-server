@@ -36,11 +36,10 @@ public class EzyRequestAppController
 	}
 	
 	protected EzyEvent newRequestAppEvent(EzyRequestAppRequest request) {
-		return EzySimpleUserRequestAppEvent.builder()
-		        .user(request.getUser())
-		        .session(request.getSession())
-		        .data(request.getParams().getData())
-		        .build();
+		return new EzySimpleUserRequestAppEvent(
+		        request.getUser(),
+		        request.getSession(), 
+		        request.getParams().getData());
 	}
 	
 }

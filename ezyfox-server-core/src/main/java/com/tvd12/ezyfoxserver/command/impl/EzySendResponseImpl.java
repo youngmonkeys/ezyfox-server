@@ -104,10 +104,11 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     protected String getRecipientsNames() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder()
+                .append("[ ");
         for(EzyDeliver recv : recipients)
-            builder.append(((EzyHasName)recv).getName());
-        return builder.toString();
+            builder.append(((EzyHasName)recv).getName()).append(" ");
+        return builder.append("]").toString();
     }
     
 }

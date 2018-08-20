@@ -32,4 +32,12 @@ public class EzySimpleUserLoginEvent
 	    this.data = data;
 	}
 	
+	public String getUsername() {
+	    return username == null ? "" : username;
+	}
+	
+	public String getPassword() {
+	    return password == null ? "" : password;
+	}
+	
 }

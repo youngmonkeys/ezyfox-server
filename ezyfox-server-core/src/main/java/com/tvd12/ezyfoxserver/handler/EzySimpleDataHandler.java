@@ -79,7 +79,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
         if(!unloggableCommands.contains(cmd))
-            getLogger().debug("command {}, data {}", cmd, data);
+            getLogger().debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
     }
     
     public void updateUserByReceivedData() {

@@ -20,7 +20,7 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
-import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.response.EzyErrorParams;
@@ -78,7 +78,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
         this.requestFrameInSecond = new EzyRequestFrameSecond(maxRequestPerSecond.getValue());
         
-        ((EzyHasSessionDelegate)this.session).setDelegate(this);
+        ((EzyAbstractSession)this.session).setDelegate(this);
     }
     
     protected EzyAppContext getAppContext(int appId) {

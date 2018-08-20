@@ -30,7 +30,7 @@ import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
-import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -119,7 +119,7 @@ public class EzyLoginProcessor
     }
     
     protected void checkUsername() {
-        if(!username.matches(userNamePattern))
+        if(!username.matches(userNamePattern) && !allowGuestLogin)
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
     
@@ -160,8 +160,7 @@ public class EzyLoginProcessor
     }
     
     protected void notifyLoggedIn(EzyUser user, EzySession session) {
-        EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)session;
-        hasDelegate.getDelegate().onSessionLoggedIn(user);
+        ((EzyAbstractSession)session).setOwner(user);
     }
     
     protected void fireSessionLoginEvent(EzyUser user) {

@@ -33,13 +33,13 @@ public abstract class EzyAbstractSession
             EzySession,
             EzyDisconnectReasonAware,
             EzyImmediateDeliverAware, 
-            EzyHasSessionDelegate,
             EzyDroppedPacketsAware {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
     protected String name;
     protected String clientId;
+    protected String ownerName;
 	protected long creationTime;
 	protected long lastReadTime;
 	protected long lastWriteTime;
@@ -85,6 +85,11 @@ public abstract class EzyAbstractSession
 	protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	
 	protected static final String RECONNECT_TOKEN_SALT = "$1$reconnectToken";
+	
+	public void setOwner(EzyUser owner) {
+	    this.ownerName = owner.getName();
+	    this.delegate.onSessionLoggedIn(owner);
+	}
 	
 	@Override
 	public void setReconnectToken(String token) {
@@ -199,7 +204,9 @@ public abstract class EzyAbstractSession
         return new StringBuilder()
                 .append(name)
                 .append("(")
-                    .append(getClientAddress())
+                    .append("owner: ").append(ownerName)
+                    .append(", ")
+                    .append("address: ").append(getClientAddress())
                 .append(")")
                 .toString();
     }

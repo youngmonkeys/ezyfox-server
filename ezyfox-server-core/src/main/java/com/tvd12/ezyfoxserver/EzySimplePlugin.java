@@ -4,6 +4,8 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,11 @@ public class EzySimplePlugin
         implements EzyPlugin, EzyDestroyable {
 
     protected EzyPluginSetting setting;
+    
+    @Override
+    protected EzyEventControllers newEventControllers() {
+        return EzyEventPluginControllersImpl.builder().build();
+    }
     
     @Override
     public boolean equals(Object obj) {

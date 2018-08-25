@@ -7,12 +7,15 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import lombok.Getter;
 
 @Getter
-public class EzySimpleUserRequestAppEvent 
-		extends EzySimpleUserRequestEvent 
+public class EzySimpleUserRequestEvent 
+		extends EzySimpleUserSessionEvent 
 		implements EzyUserRequestAppEvent {
 
-	public EzySimpleUserRequestAppEvent(EzyUser user, EzySession session, EzyArray data) {
-        super(user, session, data);
+    protected EzyArray data;
+    
+	public EzySimpleUserRequestEvent(EzyUser user, EzySession session, EzyArray data) {
+        super(user, session);
+        this.data = data;
     }
 
 }

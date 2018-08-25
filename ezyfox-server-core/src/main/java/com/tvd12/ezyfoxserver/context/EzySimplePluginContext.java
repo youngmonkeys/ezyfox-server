@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.*;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +20,6 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAddEventControllerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,10 +33,6 @@ public class EzySimplePluginContext
 	@Getter
 	protected EzyPlugin plugin;
 	
-	protected EzyPluginSetting getSetting() {
-        return plugin.getSetting();
-    }
-	
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
@@ -45,7 +40,7 @@ public class EzySimplePluginContext
 		suppliers.put(EzyFireEvent.class, () -> new EzyPluginFireEventImpl(this));
 		suppliers.put(EzyPluginResponse.class, () -> new EzyPluginResponseImpl(this));
 		suppliers.put(EzyHandleException.class, ()-> new EzyPluginHandleExceptionImpl(getPlugin()));
-		suppliers.put(EzyAddEventController.class, () -> new EzyAddEventControllerImpl(getSetting()));
+		suppliers.put(EzyAddEventController.class, () -> new EzyAddEventControllerImpl(getPlugin()));
 	}
 
 	@SuppressWarnings("rawtypes")

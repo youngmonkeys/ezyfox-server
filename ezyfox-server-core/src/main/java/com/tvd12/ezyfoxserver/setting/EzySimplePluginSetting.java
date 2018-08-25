@@ -16,8 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,11 +37,6 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
 	protected EzySimpleListenEvents listenEvents = new EzySimpleListenEvents();
 	
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
-	
-	@Override
-	protected EzyEventControllers newEventControllers() {
-		return EzyEventPluginControllersImpl.builder().build();
-	}
 	
 	@Override
 	protected AtomicInteger getIdCounter() {

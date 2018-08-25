@@ -7,7 +7,6 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -47,10 +46,6 @@ public class EzyAppFireEventImpl
 	}
 	
 	protected EzyEventControllers getEventControllers() {
-		return getAppSetting().getEventControllers();
-	}
-	
-	protected EzyAppSetting getAppSetting() {
-		return context.getApp().getSetting();
+		return context.getApp().getEventControllers();
 	}
 }

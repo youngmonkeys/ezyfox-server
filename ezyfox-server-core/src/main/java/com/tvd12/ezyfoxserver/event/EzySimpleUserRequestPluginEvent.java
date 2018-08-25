@@ -8,14 +8,11 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleUserRequestPluginEvent 
-		extends EzySimpleUserSessionEvent 
+		extends EzySimpleUserRequestEvent 
 		implements EzyUserRequestPluginEvent {
 
-    protected EzyArray data;
-    
 	public EzySimpleUserRequestPluginEvent(EzyUser user, EzySession session, EzyArray data) {
-        super(user, session);
-        this.data = data;
+        super(user, session, data);
     }
 	
 }

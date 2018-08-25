@@ -3,14 +3,17 @@ package com.tvd12.ezyfoxserver;
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyEntry;
 import com.tvd12.ezyfoxserver.ext.EzyEntryAware;
 import com.tvd12.ezyfoxserver.ext.EzyEntryFetcher;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class EzyChildComponent 
+public abstract class EzyChildComponent 
         extends EzyComponent
         implements EzyEntryAware, EzyEntryFetcher {
     
@@ -19,8 +22,24 @@ public class EzyChildComponent
     @JsonIgnore
     protected EzyEntry entry;
     
+    @Getter
+    @JsonIgnore
+    protected EzyEventControllers eventControllers = newEventControllers();
+    
+    @SuppressWarnings("rawtypes")
+    public void addEventController(EzyConstant eventType, EzyEventController ctrl) {
+        eventControllers.addController(eventType, ctrl);
+    }
+    
+    protected abstract EzyEventControllers newEventControllers();
+    
     public void destroy() {
-        processWithLogException(() -> entry.destroy());
+        if(entry != null)
+            processWithLogException(() -> entry.destroy());
+        if(eventControllers != null)
+            processWithLogException(() -> eventControllers.destroy());
+        this.entry = null;
+        this.eventControllers = null;
     }
     
 }

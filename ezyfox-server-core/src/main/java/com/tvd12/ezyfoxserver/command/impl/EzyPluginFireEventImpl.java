@@ -7,7 +7,6 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -47,10 +46,6 @@ public class EzyPluginFireEventImpl
 	}
 	
 	protected EzyEventControllers getEventControllers() {
-		return getPluginSetting().getEventControllers();
-	}
-	
-	protected EzyPluginSetting getPluginSetting() {
-		return context.getPlugin().getSetting();
+		return context.getPlugin().getEventControllers();
 	}
 }

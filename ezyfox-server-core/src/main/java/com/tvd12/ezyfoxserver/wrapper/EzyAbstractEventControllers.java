@@ -27,6 +27,13 @@ public abstract class EzyAbstractEventControllers implements EzyEventControllers
 		return controllers.get(eventType);
 	}
 	
+	@Override
+	public void destroy() {
+	    if(controllers != null)
+	        controllers.clear();
+	    this.controllers = null;
+	}
+	
 	public abstract static class Builder {
 		
 		@SuppressWarnings("rawtypes")

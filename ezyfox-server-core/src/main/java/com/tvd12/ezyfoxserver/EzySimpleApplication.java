@@ -5,6 +5,8 @@ import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventAppControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +19,11 @@ public class EzySimpleApplication
 
     protected EzyAppSetting setting;
     protected EzyAppUserManager userManager;
+    
+    @Override
+    protected EzyEventControllers newEventControllers() {
+        return EzyEventAppControllersImpl.builder().build();
+    }
     
     @Override
     public boolean equals(Object obj) {

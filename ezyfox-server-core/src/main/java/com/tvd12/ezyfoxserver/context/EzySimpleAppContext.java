@@ -21,7 +21,6 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAddEventControllerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
-import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,10 +33,6 @@ public class EzySimpleAppContext
 	@Getter
 	protected EzyApplication app;
 	
-	protected EzyAppSetting getSetting() {
-        return app.getSetting();
-    }
-	
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
@@ -45,7 +40,7 @@ public class EzySimpleAppContext
 		suppliers.put(EzyFireEvent.class, () -> new EzyAppFireEventImpl(this));
 		suppliers.put(EzyAppResponse.class, () -> new EzyAppResponseImpl(this));
 		suppliers.put(EzyHandleException.class, ()-> new EzyAppHandleExceptionImpl(getApp()));
-		suppliers.put(EzyAddEventController.class, () -> new EzyAddEventControllerImpl(getSetting()));
+		suppliers.put(EzyAddEventController.class, () -> new EzyAddEventControllerImpl(getApp()));
 	}
 	
 	@SuppressWarnings("rawtypes")

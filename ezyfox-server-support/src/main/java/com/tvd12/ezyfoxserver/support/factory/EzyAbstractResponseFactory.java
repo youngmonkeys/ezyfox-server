@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Setter
 @EzySingleton("responseFactory")
-public abstract class AbstractResponseFactory implements ResponseFactory {
+public abstract class EzyAbstractResponseFactory implements EzyResponseFactory {
 
 	@EzyAutoBind
 	protected EzyMarshaller marshaller;

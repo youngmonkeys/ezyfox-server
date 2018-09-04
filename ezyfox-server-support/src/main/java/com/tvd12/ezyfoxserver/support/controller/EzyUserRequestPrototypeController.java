@@ -10,7 +10,7 @@ import com.tvd12.ezyfox.bean.EzyPrototypeSupplier;
 import com.tvd12.ezyfox.binding.EzyDataBinding;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.core.annotation.ClientRequestListener;
+import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
@@ -20,13 +20,13 @@ import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 
-public class UserRequestPrototypeController<C extends EzyContext, E extends EzyUserRequestEvent> {
+public class EzyUserRequestPrototypeController<C extends EzyContext, E extends EzyUserRequestEvent> {
 
 	protected final EzyBeanContext beanContext;
 	protected final EzyUnmarshaller unmarshaller;
 	protected final Map<String, EzyPrototypeSupplier> handlers;
 	
-	protected UserRequestPrototypeController(Builder<?> builder) {
+	protected EzyUserRequestPrototypeController(Builder<?> builder) {
 		this.beanContext = builder.beanContext;
 		this.unmarshaller = builder.unmarshaller;
 		this.handlers = builder.getHandlers();
@@ -55,7 +55,7 @@ public class UserRequestPrototypeController<C extends EzyContext, E extends EzyU
 	@SuppressWarnings("rawtypes")
 	public abstract static class Builder<B extends Builder>
 			extends EzyLoggable
-			implements EzyBuilder<UserRequestPrototypeController> {
+			implements EzyBuilder<EzyUserRequestPrototypeController> {
 		
 		protected EzyBeanContext beanContext;
 		protected EzyPrototypeFactory prototypeFactory;
@@ -74,7 +74,7 @@ public class UserRequestPrototypeController<C extends EzyContext, E extends EzyU
 			Map<String, EzyPrototypeSupplier> handlers = new ConcurrentHashMap<>();
 			for(EzyPrototypeSupplier supplier : suppliers) {
 				Class<?> handleType = supplier.getObjectType();
-				ClientRequestListener annotation = handleType.getAnnotation(ClientRequestListener.class);
+				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
 				String command = annotation.command();
 				handlers.put(command, supplier);
 				getLogger().debug("add command {} and request handler supplier {}", command, supplier);
@@ -83,7 +83,7 @@ public class UserRequestPrototypeController<C extends EzyContext, E extends EzyU
 		}
 		
 		private List<EzyPrototypeSupplier> filterSuppliers() {
-			return prototypeFactory.getSuppliers(ClientRequestListener.class);
+			return prototypeFactory.getSuppliers(EzyClientRequestListener.class);
 		}
 	}
 }

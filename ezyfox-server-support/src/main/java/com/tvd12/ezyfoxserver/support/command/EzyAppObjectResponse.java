@@ -4,21 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tvd12.ezyfox.binding.EzyMarshaller;
-import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
+import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
-import com.tvd12.ezyfoxserver.context.EzyPluginContext;
+import com.tvd12.ezyfoxserver.context.EzyAppContext;
 
-public class PluginObjectResponse extends AbstractObjectResponse {
+public class EzyAppObjectResponse extends EzyAbstractObjectResponse {
 
 	protected final Map<Object, Object> additionalParams = new HashMap<>();
 	
-	public PluginObjectResponse(EzyPluginContext context, EzyMarshaller marshaller) {
+	public EzyAppObjectResponse(EzyAppContext context, EzyMarshaller marshaller) {
 		super(context, marshaller);
 	}
 	
 	@Override
 	protected EzyResponse newResponse() {
-		return context.get(EzyPluginResponse.class);
+		return context.get(EzyAppResponse.class);
 	}
 	
 }

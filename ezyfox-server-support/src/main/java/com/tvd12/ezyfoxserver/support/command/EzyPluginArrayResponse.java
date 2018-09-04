@@ -5,9 +5,9 @@ import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
-public class PluginArrayResponse extends AbstractArrayResponse {
+public class EzyPluginArrayResponse extends EzyAbstractArrayResponse {
 	
-	public PluginArrayResponse(EzyPluginContext context, EzyMarshaller marshaller) {
+	public EzyPluginArrayResponse(EzyPluginContext context, EzyMarshaller marshaller) {
 		super(context, marshaller);
 	}
 	

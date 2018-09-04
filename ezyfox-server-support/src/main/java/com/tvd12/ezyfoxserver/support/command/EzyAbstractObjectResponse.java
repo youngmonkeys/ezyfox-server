@@ -8,18 +8,18 @@ import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.entity.EzyObject;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 
-public abstract class AbstractObjectResponse 
-		extends AbstractResponse<ObjectResponse>
-		implements ObjectResponse {
+public abstract class EzyAbstractObjectResponse 
+		extends EzyAbstractResponse<EzyObjectResponse>
+		implements EzyObjectResponse {
 
 	protected final Map<Object, Object> additionalParams = new HashMap<>();
 	
-	public AbstractObjectResponse(EzyContext context, EzyMarshaller marshaller) {
+	public EzyAbstractObjectResponse(EzyContext context, EzyMarshaller marshaller) {
 		super(context, marshaller);
 	}
 	
 	@Override
-	public ObjectResponse param(Object key, Object value) {
+	public EzyObjectResponse param(Object key, Object value) {
 		additionalParams.put(key, value);
 		return this;
 	}

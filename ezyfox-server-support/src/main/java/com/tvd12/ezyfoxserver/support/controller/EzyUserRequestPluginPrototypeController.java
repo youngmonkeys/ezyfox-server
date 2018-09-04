@@ -6,11 +6,11 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContextAware;
 import com.tvd12.ezyfoxserver.controller.EzyPluginEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 
-public class UserRequestPluginPrototypeController 
-		extends UserRequestPrototypeController<EzyPluginContext, EzyUserRequestPluginEvent>
+public class EzyUserRequestPluginPrototypeController 
+		extends EzyUserRequestPrototypeController<EzyPluginContext, EzyUserRequestPluginEvent>
 		implements EzyPluginEventController<EzyUserRequestPluginEvent> {
 
-	protected UserRequestPluginPrototypeController(Builder builder) {
+	protected EzyUserRequestPluginPrototypeController(Builder builder) {
 		super(builder);
 	}
 	
@@ -24,10 +24,10 @@ public class UserRequestPluginPrototypeController
 		return new Builder();
 	}
 	
-	public static class Builder extends UserRequestPrototypeController.Builder<Builder> {
+	public static class Builder extends EzyUserRequestPrototypeController.Builder<Builder> {
 		@Override
-		public UserRequestPluginPrototypeController build() {
-			return new UserRequestPluginPrototypeController(this);
+		public EzyUserRequestPluginPrototypeController build() {
+			return new EzyUserRequestPluginPrototypeController(this);
 		}
 	}
 }

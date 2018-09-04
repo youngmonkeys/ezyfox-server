@@ -5,24 +5,23 @@ import java.util.Arrays;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
-import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 @SuppressWarnings("unchecked")
-public abstract class AbstractResponse<T extends Response<T>> 
+public abstract class EzyAbstractResponse<T extends EzyResponse<T>> 
 		extends EzyEntityBuilders
-		implements Response<T> {
+		implements EzyResponse<T> {
 
 	protected Object data;
 	
-    protected final EzyResponse response;
+    protected final com.tvd12.ezyfoxserver.command.EzyResponse response;
     
     protected final EzyContext context;
     protected final EzyMarshaller marshaller;
     
-    public AbstractResponse(EzyContext context, EzyMarshaller marshaller) {
+    public EzyAbstractResponse(EzyContext context, EzyMarshaller marshaller) {
         this.context = context;
         this.marshaller = marshaller;
         this.response = newResponse();
@@ -100,6 +99,6 @@ public abstract class AbstractResponse<T extends Response<T>>
         	.execute();
      }
     
-    protected abstract EzyResponse newResponse();
+    protected abstract com.tvd12.ezyfoxserver.command.EzyResponse newResponse();
 	
 }

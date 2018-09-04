@@ -6,11 +6,11 @@ import com.tvd12.ezyfoxserver.context.EzyAppContextAware;
 import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 
-public class UserRequestAppPrototypeController 
-		extends UserRequestPrototypeController<EzyAppContext, EzyUserRequestAppEvent>
+public class EzyUserRequestAppPrototypeController 
+		extends EzyUserRequestPrototypeController<EzyAppContext, EzyUserRequestAppEvent>
 		implements EzyAppEventController<EzyUserRequestAppEvent> {
 
-	protected UserRequestAppPrototypeController(Builder builder) {
+	protected EzyUserRequestAppPrototypeController(Builder builder) {
 		super(builder);
 	}
 	
@@ -24,11 +24,11 @@ public class UserRequestAppPrototypeController
 		return new Builder();
 	}
 	
-	public static class Builder extends UserRequestPrototypeController.Builder<Builder> {
+	public static class Builder extends EzyUserRequestPrototypeController.Builder<Builder> {
 		
 		@Override
-		public UserRequestAppPrototypeController build() {
-			return new UserRequestAppPrototypeController(this);
+		public EzyUserRequestAppPrototypeController build() {
+			return new EzyUserRequestAppPrototypeController(this);
 		}
 	}
 }

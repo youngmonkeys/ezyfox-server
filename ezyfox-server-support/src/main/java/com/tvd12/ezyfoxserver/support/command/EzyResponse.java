@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
-public interface Response<T extends Response<T>> extends EzyCommand<Boolean> {
+public interface EzyResponse<T extends EzyResponse<T>> extends EzyCommand<Boolean> {
 
 	T data(Object data);
 	

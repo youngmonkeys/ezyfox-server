@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.command.impl;
+package com.tvd12.ezyfoxserver.command;
 
 import com.tvd12.ezyfox.util.EzyLoggable;
 

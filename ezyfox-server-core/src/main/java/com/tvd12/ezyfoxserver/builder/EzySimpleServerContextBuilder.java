@@ -73,6 +73,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             zoneContext.setZone(zone);
             zoneContext.addAppContexts(newAppContexts(zoneContext));
             zoneContext.addPluginContexts(newPluginContexts(zoneContext));
+            zoneContext.init();
             contexts.add(zoneContext);
             processWithException(((EzyStartable)userManager)::start);
         }

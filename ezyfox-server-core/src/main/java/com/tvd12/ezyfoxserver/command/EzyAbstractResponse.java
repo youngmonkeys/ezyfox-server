@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.command.impl;
+package com.tvd12.ezyfoxserver.command;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -6,8 +6,6 @@ import java.util.Set;
 
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.command.EzyResponse;
-import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -108,7 +106,7 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
     public void execute() {
         com.tvd12.ezyfoxserver.response.EzyResponse response = newResponse();
         recipients.removeAll(exrecipients);
-        context.get(EzySendResponse.class)
+        context.cmd(EzySendResponse.class)
             .recipients(recipients)
             .response(response)
             .execute();

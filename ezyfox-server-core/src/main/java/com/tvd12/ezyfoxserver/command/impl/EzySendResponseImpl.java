@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDeliver;

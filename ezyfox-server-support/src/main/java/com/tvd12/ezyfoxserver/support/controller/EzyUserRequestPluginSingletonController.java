@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
-import com.tvd12.ezyfoxserver.controller.EzyPluginEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 
 public class EzyUserRequestPluginSingletonController 
 		extends EzyUserRequestSingletonController<EzyPluginContext, EzyUserRequestPluginEvent>
-		implements EzyPluginEventController<EzyUserRequestPluginEvent> {
+		implements EzyPluginRequestController {
 
 	protected EzyUserRequestPluginSingletonController(Builder builder) {
 		super(builder);

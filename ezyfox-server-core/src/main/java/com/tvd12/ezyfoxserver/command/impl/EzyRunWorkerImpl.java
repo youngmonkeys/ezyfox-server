@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.tvd12.ezyfox.concurrent.EzyWorker;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 
 import lombok.AllArgsConstructor;

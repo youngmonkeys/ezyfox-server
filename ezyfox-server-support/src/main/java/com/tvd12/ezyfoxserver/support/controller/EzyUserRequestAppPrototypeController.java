@@ -1,14 +1,14 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
 import com.tvd12.ezyfox.function.EzyHandler;
+import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyAppContextAware;
-import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 
 public class EzyUserRequestAppPrototypeController 
 		extends EzyUserRequestPrototypeController<EzyAppContext, EzyUserRequestAppEvent>
-		implements EzyAppEventController<EzyUserRequestAppEvent> {
+		implements EzyAppRequestController {
 
 	protected EzyUserRequestAppPrototypeController(Builder builder) {
 		super(builder);

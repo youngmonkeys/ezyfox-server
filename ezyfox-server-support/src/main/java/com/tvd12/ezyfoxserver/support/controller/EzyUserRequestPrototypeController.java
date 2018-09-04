@@ -11,6 +11,7 @@ import com.tvd12.ezyfox.binding.EzyDataBinding;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
@@ -75,7 +76,7 @@ public class EzyUserRequestPrototypeController<C extends EzyContext, E extends E
 			for(EzyPrototypeSupplier supplier : suppliers) {
 				Class<?> handleType = supplier.getObjectType();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
-				String command = annotation.command();
+				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
 				handlers.put(command, supplier);
 				getLogger().debug("add command {} and request handler supplier {}", command, supplier);
 			}

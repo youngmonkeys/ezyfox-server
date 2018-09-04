@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
 import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
+import com.tvd12.ezyfoxserver.command.EzySetup;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
@@ -36,10 +37,12 @@ public class EzySimplePluginContext
 	
 	@Override
 	protected void init0() {
+	    EzySetup setup = new EzyPluginSetupImpl(plugin);
 	    this.fireEvent = new EzyPluginFireEventImpl(this);
 	    this.properties.put(EzyFireEvent.class, fireEvent);
 	    this.properties.put(EzyHandleException.class, new EzyPluginHandleExceptionImpl(plugin));
-	    this.properties.put(EzyPluginSetup.class, new EzyPluginSetupImpl(plugin));
+	    this.properties.put(EzySetup.class, setup);
+	    this.properties.put(EzyPluginSetup.class, setup);
 	}
 	
 	@Override

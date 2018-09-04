@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.EzyServerChild;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
+import com.tvd12.ezyfoxserver.command.EzyAbstractSetup;
 import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;

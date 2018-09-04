@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
+import com.tvd12.ezyfoxserver.command.EzySetup;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
@@ -35,10 +36,12 @@ public class EzySimpleAppContext
 	
 	@Override
 	protected void init0() {
+	    EzySetup setup = new EzyAppSetupImpl(app);
 	    this.fireEvent = new EzyAppFireEventImpl(this);
 	    this.properties.put(EzyFireEvent.class, fireEvent);
 	    this.properties.put(EzyHandleException.class, new EzyAppHandleExceptionImpl(app));
-	    this.properties.put(EzyAppSetup.class, new EzyAppSetupImpl(app));
+	    this.properties.put(EzySetup.class, setup);
+	    this.properties.put(EzyAppSetup.class, setup);
 	}
 	
 	@Override

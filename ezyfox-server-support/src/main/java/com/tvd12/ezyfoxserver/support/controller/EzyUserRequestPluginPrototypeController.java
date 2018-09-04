@@ -3,12 +3,12 @@ package com.tvd12.ezyfoxserver.support.controller;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContextAware;
-import com.tvd12.ezyfoxserver.controller.EzyPluginEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 
 public class EzyUserRequestPluginPrototypeController 
 		extends EzyUserRequestPrototypeController<EzyPluginContext, EzyUserRequestPluginEvent>
-		implements EzyPluginEventController<EzyUserRequestPluginEvent> {
+		implements EzyPluginRequestController {
 
 	protected EzyUserRequestPluginPrototypeController(Builder builder) {
 		super(builder);

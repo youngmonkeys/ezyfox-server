@@ -4,6 +4,7 @@ import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
 import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
@@ -19,7 +20,7 @@ public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireE
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("fire event: {}", type);
+	    getLogger().debug("zone: {} fire event: {}", getZoneName(), type);
 		firePluginsEvent(type, event);
 		fireAppsEvent(type, event);
 	}
@@ -50,6 +51,10 @@ public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireE
 	    catch(Exception e) {
 	        handleException(ctx, Thread.currentThread(), e);
 	    }
+	}
+	
+	protected String getZoneName() {
+	    return context.getZone().getSetting().getName();
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.handleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;

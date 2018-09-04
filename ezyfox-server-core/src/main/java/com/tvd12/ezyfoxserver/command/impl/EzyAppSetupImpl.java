@@ -4,6 +4,7 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.EzyServerChild;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
+import com.tvd12.ezyfoxserver.command.EzyAbstractSetup;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 

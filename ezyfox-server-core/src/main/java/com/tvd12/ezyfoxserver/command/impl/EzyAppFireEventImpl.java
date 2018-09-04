@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
@@ -23,7 +24,7 @@ public class EzyAppFireEventImpl
     @Override
 	public void fire(EzyConstant type, EzyEvent event) {
 	    EzyEventController ctrl = getController(type);
-	    getLogger().debug("fire event: {}, controller = {}", type, ctrl);
+	    getLogger().debug("app: {} fire event: {}, controller = {}", getAppName(), type, ctrl);
 		fire(ctrl, event);
 	}
 	
@@ -47,5 +48,9 @@ public class EzyAppFireEventImpl
 	
 	protected EzyEventControllers getEventControllers() {
 		return context.getApp().getEventControllers();
+	}
+	
+	protected String getAppName() {
+	    return context.getApp().getSetting().getName();
 	}
 }

@@ -22,7 +22,7 @@ import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdown;
+import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
@@ -47,7 +47,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     protected void init0() {
         this.fireEvent = new EzyFireEventImpl(this); 
         this.properties.put(EzyFireEvent.class, fireEvent);
-        this.properties.put(EzyShutdown.class, new EzyServerShutdown(this));
+        this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
         this.properties.put(EzyHandleException.class, new EzyServerHandleExceptionImpl(server));
     }

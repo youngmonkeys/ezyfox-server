@@ -5,6 +5,7 @@ import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
 import java.util.function.Predicate;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -22,7 +23,7 @@ public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFi
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("zone {} fire event: {}", getZoneName(), type);
+	    getLogger().debug("zone {} fire app event: {}", getZoneName(), type);
 	    for(EzyAppContext appContext : context.getAppContexts())
             fireAppEvent(appContext, type, event);
 	}

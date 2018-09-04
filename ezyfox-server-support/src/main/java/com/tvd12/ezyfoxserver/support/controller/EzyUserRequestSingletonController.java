@@ -9,6 +9,7 @@ import com.tvd12.ezyfox.bean.EzySingletonFactory;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -57,7 +58,7 @@ public class EzyUserRequestSingletonController<C extends EzyContext, E extends E
 			for(Object singleton : singletons) {
 				Class<?> handleType = singleton.getClass();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
-				String command = annotation.command();
+				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
 				handlers.put(command, (EzyUserRequestHandler) singleton);
 				getLogger().debug("add command {} and request handler singleton {}", command, singleton);
 			}

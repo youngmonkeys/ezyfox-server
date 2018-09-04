@@ -9,7 +9,7 @@ public class EzyServerHandleExceptionImpl
         extends EzyAbstractCommand 
         implements EzyHandleException {
 
-    private EzyExceptionHandlersFetcher fetcher; 
+    private final EzyExceptionHandlersFetcher fetcher; 
     
     public EzyServerHandleExceptionImpl(EzyServer server) {
         this.fetcher = (EzyExceptionHandlersFetcher) server;

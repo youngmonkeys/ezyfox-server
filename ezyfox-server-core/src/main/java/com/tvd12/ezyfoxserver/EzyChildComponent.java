@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.ext.EzyEntry;
 import com.tvd12.ezyfoxserver.ext.EzyEntryAware;
 import com.tvd12.ezyfoxserver.ext.EzyEntryFetcher;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,9 @@ public abstract class EzyChildComponent
         eventControllers.addController(eventType, ctrl);
     }
     
-    protected abstract EzyEventControllers newEventControllers();
+    protected EzyEventControllers newEventControllers() {
+        return new EzyEventControllersImpl();
+    }
     
     public void destroy() {
         if(entry != null)

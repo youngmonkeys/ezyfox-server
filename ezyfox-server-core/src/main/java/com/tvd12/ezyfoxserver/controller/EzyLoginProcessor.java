@@ -21,8 +21,6 @@ import com.tvd12.ezyfox.function.EzyVoid;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.EzyZone;
-import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
@@ -169,9 +167,7 @@ public class EzyLoginProcessor
     }
     
     protected void doFireSessionLoginEvent(EzyEvent event) {
-        zoneContext.get(EzyFireAppEvent.class)
-            .filter(appCtx -> containsUser(appCtx, username))
-            .fire(EzyEventType.USER_SESSION_LOGIN, event);
+        zoneContext.fireAppEvent(EzyEventType.USER_SESSION_LOGIN, event, username);
     }
     
     protected void fireUserAddedEvent(EzyUser user) {
@@ -181,8 +177,7 @@ public class EzyLoginProcessor
     
     protected void doFireUserAddedEvent(EzyEvent event) {
         try {
-            zoneContext.get(EzyFirePluginEvent.class)
-                .fire(EzyEventType.USER_ADDED, event);
+            zoneContext.firePluginEvent(EzyEventType.USER_ADDED, event);
         }
         catch(Exception e) {
             getLogger().error("user added error", e);
@@ -216,7 +211,7 @@ public class EzyLoginProcessor
     }
     
     protected void response(EzySession session, EzyResponse response) {
-        serverContext.get(EzySendResponse.class)
+        serverContext.cmd(EzySendResponse.class)
             .recipient(session)
             .response(response)
             .execute();

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -15,15 +16,15 @@ import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public abstract class EzyAbstractResponse<C extends EzyContext> 
         extends EzyMessageController 
-        implements EzyResponse {
+        implements EzyResponse, EzyDestroyable {
 
     protected String command;
     protected EzyData params;
     protected Set<EzySession> recipients = new HashSet<>();
     protected Set<EzySession> exrecipients = new HashSet<>();
     
-    protected final C context;
-    protected final EzyUserManager userManager;
+    protected C context;
+    protected EzyUserManager userManager;
     
     public EzyAbstractResponse(C context) {
         this.context = context;
@@ -104,14 +105,14 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
     }
     
     @Override
-    public Boolean execute() {
+    public void execute() {
         com.tvd12.ezyfoxserver.response.EzyResponse response = newResponse();
         recipients.removeAll(exrecipients);
         context.get(EzySendResponse.class)
             .recipients(recipients)
             .response(response)
             .execute();
-        return Boolean.TRUE;
+        destroy();
     }
 
     protected final EzyData newResponseData() {
@@ -119,5 +120,17 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
     }
     
     protected abstract com.tvd12.ezyfoxserver.response.EzyResponse newResponse();
+    
+    @Override
+    public void destroy() {
+        this.command = null;
+        this.params = null;
+        this.recipients.clear();
+        this.recipients = null;
+        this.exrecipients.clear();
+        this.exrecipients = null;
+        this.context = null;
+        this.userManager = null;
+    }
 
 }

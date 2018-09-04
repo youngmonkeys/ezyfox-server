@@ -6,16 +6,31 @@ import java.util.function.Supplier;
 
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfox.util.EzyInitable;
+import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.command.EzyAddExceptionHandler;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
 
-public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroyable {
+public abstract class EzyAbstractContext 
+        extends EzyEntity 
+        implements EzyInitable, EzyDestroyable {
 
 	@SuppressWarnings("rawtypes")
-	protected Map<Class, Supplier> commandSuppliers = defaultCommandSuppliers();
+	protected Map<Class, Supplier> commandSuppliers;
 	
-	protected abstract EzyExceptionHandlersFetcher getExceptionHandlersFetcher();
+	@Override
+	public final void init() {
+	    this.commandSuppliers = defaultCommandSuppliers();
+	    this.properties.put(
+	            EzyAddExceptionHandler.class, 
+	            new EzyAddExceptionHandlerImpl(getComponent()));
+	    this.init0();
+	}
+	
+	protected void init0() {
+	}
+	
+	protected abstract EzyComponent getComponent();
 	
 	@SuppressWarnings("rawtypes")
 	protected Map<Class, Supplier> defaultCommandSuppliers() {
@@ -26,7 +41,14 @@ public abstract class EzyAbstractContext extends EzyEntity implements EzyDestroy
 	
 	@SuppressWarnings("rawtypes")
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		suppliers.put(EzyAddExceptionHandler.class, () -> new EzyAddExceptionHandlerImpl(getExceptionHandlersFetcher()));
+	}
+	
+	@Override
+	public void destroy() {
+	    this.properties.clear();
+	    this.properties = null;
+	    this.commandSuppliers.clear();
+	    this.commandSuppliers = null;
 	}
 	
 }

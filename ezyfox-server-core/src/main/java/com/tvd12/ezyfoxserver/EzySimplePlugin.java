@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventPluginControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +17,11 @@ public class EzySimplePlugin
         implements EzyPlugin, EzyDestroyable {
 
     protected EzyPluginSetting setting;
+    @JsonIgnore
+    protected EzyPluginRequestController requestController;
     
-    @Override
-    protected EzyEventControllers newEventControllers() {
-        return EzyEventPluginControllersImpl.builder().build();
+    public EzySimplePlugin() {
+        this.requestController = EzyPluginRequestController.DEFAULT;
     }
     
     @Override

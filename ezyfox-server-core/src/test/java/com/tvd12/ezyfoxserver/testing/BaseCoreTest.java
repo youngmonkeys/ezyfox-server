@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
+import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.EzyLoader;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
@@ -17,7 +18,9 @@ import com.tvd12.ezyfoxserver.builder.EzyServerContextBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
+import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -31,7 +34,14 @@ import com.tvd12.test.base.BaseTest;
 public class BaseCoreTest extends BaseTest {
     
     protected EzyServerContext newServerContext() {
-        return newServerContextBuilder().build();
+        EzyServerContext serverContext = newServerContextBuilder().build();
+        for(EzyZoneContext zoneContext : serverContext.getZoneContexts()) {
+            ((EzyInitable)zoneContext).init();
+        }
+        for(EzyAppContext appContext : serverContext.getAppContexts()) {
+            ((EzyInitable)appContext).init();
+        }
+        return serverContext;
     }
 
     protected EzyServerContextBuilder<?> newServerContextBuilder() {

@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
@@ -20,7 +19,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public class EzyZoneUserManagerImpl 
         extends EzyAbstractByMaxUserManager 
-        implements EzyZoneUserManager, EzyStartable, EzyDestroyable {
+        implements EzyZoneUserManager, EzyStartable {
 
     protected final String zoneName;
     protected final EzyUserDelegate userDelegate;
@@ -150,6 +149,8 @@ public class EzyZoneUserManagerImpl
 	
 	@Override
 	public void destroy() {
+	    super.destroy();
+	    this.usersBySession.clear();
 	    if(idleValidationService != null)
 	        processWithLogException(idleValidationService::shutdown);
 	}

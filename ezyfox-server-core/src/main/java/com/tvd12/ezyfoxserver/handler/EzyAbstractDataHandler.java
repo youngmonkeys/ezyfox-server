@@ -100,7 +100,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     }
     
     protected EzySendResponse newSendResponse() {
-        return context.get(EzySendResponse.class);
+        return context.cmd(EzySendResponse.class);
     }
     
     protected void responseError(EzyIError error) {

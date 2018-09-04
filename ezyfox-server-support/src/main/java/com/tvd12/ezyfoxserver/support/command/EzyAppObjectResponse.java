@@ -18,7 +18,7 @@ public class EzyAppObjectResponse extends EzyAbstractObjectResponse {
 	
 	@Override
 	protected EzyResponse newResponse() {
-		return context.get(EzyAppResponse.class);
+		return context.cmd(EzyAppResponse.class);
 	}
 	
 }

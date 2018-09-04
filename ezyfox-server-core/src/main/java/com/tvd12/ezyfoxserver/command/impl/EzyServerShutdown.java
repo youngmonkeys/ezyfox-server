@@ -8,16 +8,15 @@ public class EzyServerShutdown
         extends EzyAbstractCommand
         implements EzyShutdown {
 
-    private EzyServerContext context;
+    private final EzyServerContext context;
     
     public EzyServerShutdown(EzyServerContext context) {
         this.context = context;
     }
     
     @Override
-    public Boolean execute() {
+    public void execute() {
         ((EzyDestroyable)context).destroy();
-        return Boolean.TRUE;
     }
     
 }

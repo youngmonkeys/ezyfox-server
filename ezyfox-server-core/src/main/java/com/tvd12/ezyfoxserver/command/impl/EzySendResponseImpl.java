@@ -63,13 +63,12 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     @Override
-    public Boolean execute() {
+    public void execute() {
         EzyArray data = response.serialize();
         EzyPackage pack = newPackage(data);
         response(pack);
         debugLogResponse(data);
         destroy();
-        return Boolean.TRUE;
     }
     
     protected EzyPackage newPackage(EzyArray data) {

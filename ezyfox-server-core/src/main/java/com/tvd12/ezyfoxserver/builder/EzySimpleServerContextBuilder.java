@@ -50,6 +50,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
         context.addZoneContexts(newZoneContexts(context));
+        context.init();
         return context;
     }
     
@@ -110,6 +111,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         appContext.setApp(app);
         appContext.setParent(parent);
         appContext.setExecutorService(newAppExecutorService(setting));
+        appContext.init();
         return appContext;
     }
     
@@ -136,6 +138,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         pluginContext.setPlugin(plugin);
         pluginContext.setParent(parent);
         pluginContext.setExecutorService(newPluginExecutorService(setting));
+        pluginContext.init();
         return pluginContext;
     }
     

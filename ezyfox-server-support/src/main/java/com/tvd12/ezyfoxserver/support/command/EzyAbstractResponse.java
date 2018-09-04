@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -12,14 +13,14 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 @SuppressWarnings("unchecked")
 public abstract class EzyAbstractResponse<T extends EzyResponse<T>> 
 		extends EzyEntityBuilders
-		implements EzyResponse<T> {
+		implements EzyResponse<T>, EzyDestroyable {
 
 	protected Object data;
 	
-    protected final com.tvd12.ezyfoxserver.command.EzyResponse response;
+    protected com.tvd12.ezyfoxserver.command.EzyResponse response;
     
-    protected final EzyContext context;
-    protected final EzyMarshaller marshaller;
+    protected EzyContext context;
+    protected EzyMarshaller marshaller;
     
     public EzyAbstractResponse(EzyContext context, EzyMarshaller marshaller) {
         this.context = context;
@@ -71,34 +72,42 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
     
     @Override
     public T username(String username) {
-    	this.response.username(username);
-    	return (T)this;
+    		this.response.username(username);
+    		return (T)this;
     }
     
     @Override
     public T usernames(String... usernames) {
-    	return usernames(Arrays.asList(usernames));
+    		return usernames(Arrays.asList(usernames));
     }
     
     @Override
     public T usernames(Iterable<String> usernames) {
-    	usernames.forEach(this::username);
-    	return (T)this;
+    		usernames.forEach(this::username);
+    		return (T)this;
     }
     
-    public Boolean execute() {
-    	response(getResponseData());
-        return Boolean.TRUE;
+    public void execute() {
+    		response(getResponseData());
+    		destroy();
     }
     
     protected abstract EzyData getResponseData();
     
     protected void response(EzyData data) {
-    	response
-        	.params(data)
-        	.execute();
+	    	response
+	        	.params(data)
+	        	.execute();
      }
     
     protected abstract com.tvd12.ezyfoxserver.command.EzyResponse newResponse();
+    
+    @Override
+    public void destroy() {
+    		this.data = null;
+        this.response = null;
+        this.context = null;
+        this.marshaller = null;
+    }
 	
 }

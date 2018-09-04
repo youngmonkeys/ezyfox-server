@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.support.command;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.command.EzyCommand;
+import com.tvd12.ezyfoxserver.command.EzyVoidCommand;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
-public interface EzyResponse<T extends EzyResponse<T>> extends EzyCommand<Boolean> {
+public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
 
 	T data(Object data);
 	

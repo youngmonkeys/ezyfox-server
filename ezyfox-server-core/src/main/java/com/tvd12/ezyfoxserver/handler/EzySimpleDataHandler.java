@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.handler;
 import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.handleException;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
@@ -11,8 +10,6 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
-import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionError;
@@ -168,9 +165,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyAppsSessionRemoved0(EzyEvent event) {
         try {
-            zoneContext.get(EzyFireAppEvent.class)
-                .filter(appCtxt -> containsUser(appCtxt, user))
-                .fire(EzyEventType.SESSION_REMOVED, event);
+            zoneContext.fireAppEvent(EzyEventType.SESSION_REMOVED, event, user);
         }
         catch(Exception e) {
             getLogger().error("notify session: " + session + " removed to apps error", e);
@@ -179,8 +174,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyPluginsSessionRemoved(EzyEvent event) {
         try {
-            zoneContext.get(EzyFirePluginEvent.class)
-                .fire(EzyEventType.SESSION_REMOVED, event);
+            zoneContext.firePluginEvent(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {
             getLogger().error("notify session: " + session + " removed to apps error", e);
@@ -189,8 +183,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void closeSession(EzyConstant reason) {
         try {
-            EzyCloseSession close = newCloseSession(reason);
-            close.execute();
+            context.get(EzyCloseSession.class).close(session, reason);
         }
         catch(Exception ex) {
             getLogger().error("close session: " + session + " with reason: " + reason + " error", ex);

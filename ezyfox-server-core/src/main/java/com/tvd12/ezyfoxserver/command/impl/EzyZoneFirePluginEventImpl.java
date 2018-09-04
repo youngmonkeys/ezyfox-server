@@ -5,7 +5,6 @@ import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
 import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -42,12 +41,13 @@ public class EzyZoneFirePluginEventImpl
 	}
 	
 	protected void firePluginEvent(int pluginId, EzyConstant type, EzyEvent event) {
-		firePluginEvent(context.getPluginContext(pluginId), type, event);
+	    EzyPluginContext pluginContext = context.getPluginContext(pluginId);
+		firePluginEvent(pluginContext, type, event);
 	}
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
 	    try {
-	        ctx.get(EzyFireEvent.class).fire(type, event);
+	        ctx.fireEvent(type, event);
 	    }
 	    catch(Exception e) {
 	        handleException(ctx, Thread.currentThread(), e);

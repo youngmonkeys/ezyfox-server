@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.handler;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
@@ -37,12 +36,6 @@ public abstract class EzyUserDataHandler<S extends EzySession>
             ((EzyUserAware)request).setUser(user);
         }
         return request;
-    }
-    
-    protected EzyCloseSession newCloseSession(EzyConstant reason) {
-        return context.get(EzyCloseSession.class)
-                .reason(reason)
-                .session(session);
     }
     
 }

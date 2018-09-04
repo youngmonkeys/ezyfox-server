@@ -14,7 +14,7 @@ public class EzyPluginFireEventImpl
 		extends EzyAbstractCommand 
 		implements EzyFireEvent {
 
-	private EzyPluginContext context;
+	private final EzyPluginContext context;
 	
 	public EzyPluginFireEventImpl(EzyPluginContext context) {
 		this.context = context;

@@ -49,7 +49,6 @@ public class EzyEventPluginsMapperImpl implements EzyEventPluginsMapper {
                     eventsPluginss.addItems(e, p);
                 }
                 eventsPluginss.addItems(EzyEventType.SERVER_READY, p);
-                eventsPluginss.addItems(EzyEventType.USER_REQUEST, p);
             }
             return eventsPluginss;
         }

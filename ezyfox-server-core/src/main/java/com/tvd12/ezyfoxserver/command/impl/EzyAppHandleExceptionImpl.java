@@ -9,8 +9,8 @@ public class EzyAppHandleExceptionImpl
         extends EzyAbstractCommand 
         implements EzyHandleException {
 
-    private EzyApplication app;
-    private EzyExceptionHandlersFetcher fetcher; 
+    private final EzyApplication app;
+    private final EzyExceptionHandlersFetcher fetcher; 
     
     public EzyAppHandleExceptionImpl(EzyApplication app) {
         this.app = app;

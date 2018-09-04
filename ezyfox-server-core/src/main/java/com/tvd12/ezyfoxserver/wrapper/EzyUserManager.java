@@ -3,9 +3,10 @@ package com.tvd12.ezyfoxserver.wrapper;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
-public interface EzyUserManager {
+public interface EzyUserManager extends EzyDestroyable {
     
 	/**
 	 * Get user by id
@@ -88,6 +89,11 @@ public interface EzyUserManager {
 	 * @param username the username
 	 */
 	void removeLock(String username);
+	
+	/**
+	 * clear all user
+	 */
+	void clear();
 	
 	/**
 	 * Check whether contains user or not

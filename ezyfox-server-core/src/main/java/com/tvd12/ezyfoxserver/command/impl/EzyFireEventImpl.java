@@ -2,8 +2,6 @@ package com.tvd12.ezyfoxserver.command.impl;
 
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.handleException;
 
-import java.util.Set;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -15,32 +13,25 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent {
 
-    private EzyServerContext context;
+    private final EzyServerContext context;
 
     @Override
     public void fire(EzyConstant type, EzyEvent event) {
-        getLogger().debug("fire event: {}", type);
+        getLogger().debug("fire server event: {}", type);
         fireZonesEvent(type, event);
     }
 
     protected void fireZonesEvent(EzyConstant type, EzyEvent event) {
-        getZoneIds().forEach(zoneId -> fireZoneEvent(zoneId, type, event));
-    }
-
-    protected void fireZoneEvent(int zoneId, EzyConstant type, EzyEvent event) {
-        fireZoneEvent(context.getZoneContext(zoneId), type, event);
+        for(EzyZoneContext zoneContext : context.getZoneContexts())
+            fireZoneEvent(zoneContext, type, event);
     }
 
     protected void fireZoneEvent(EzyZoneContext ctx, EzyConstant type, EzyEvent event) {
         try {
-            ctx.get(EzyFireEvent.class).fire(type, event);
+            ctx.fireEvent(type, event);
         } catch (Exception e) {
             handleException(ctx, Thread.currentThread(), e);
         }
-    }
-
-    protected Set<Integer> getZoneIds() {
-        return context.getServer().getSettings().getZoneIds();
     }
 
 }

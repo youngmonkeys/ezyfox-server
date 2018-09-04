@@ -8,7 +8,7 @@ public class EzyAddExceptionHandlerImpl
         extends EzyAbstractCommand
         implements EzyAddExceptionHandler {
 
-    private EzyExceptionHandlersFetcher fetcher; 
+    private final EzyExceptionHandlersFetcher fetcher; 
     
     public EzyAddExceptionHandlerImpl(EzyExceptionHandlersFetcher fetcher) {
         this.fetcher = fetcher;

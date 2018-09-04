@@ -1,12 +1,14 @@
 package com.tvd12.ezyfoxserver;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventAppControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,11 +20,13 @@ public class EzySimpleApplication
         implements EzyApplication, EzyDestroyable {
 
     protected EzyAppSetting setting;
+    @JsonIgnore
     protected EzyAppUserManager userManager;
+    @JsonIgnore
+    protected EzyAppRequestController requestController;
     
-    @Override
-    protected EzyEventControllers newEventControllers() {
-        return EzyEventAppControllersImpl.builder().build();
+    public EzySimpleApplication() {
+        this.requestController = EzyAppRequestController.DEFAULT;
     }
     
     @Override
@@ -37,6 +41,15 @@ public class EzySimpleApplication
         return new EzyHashCodes()
                 .append(setting)
                 .hashCode();
+    }
+    
+    @Override
+    public void destroy() {
+        super.destroy();
+        if(userManager != null)
+            processWithLogException(userManager::destroy);
+        this.userManager = null;
+        this.requestController = null;
     }
     
 }

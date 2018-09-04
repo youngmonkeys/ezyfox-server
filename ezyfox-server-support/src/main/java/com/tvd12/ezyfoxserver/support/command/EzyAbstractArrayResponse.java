@@ -12,7 +12,7 @@ public abstract class EzyAbstractArrayResponse
 		extends EzyAbstractResponse<EzyArrayResponse>
 		implements EzyArrayResponse {
 	
-	protected final List<Object> additionalParams = new ArrayList<>();
+	protected List<Object> additionalParams = new ArrayList<>();
 
 	public EzyAbstractArrayResponse(EzyContext context, EzyMarshaller marshaller) {
 		super(context, marshaller);
@@ -34,6 +34,13 @@ public abstract class EzyAbstractArrayResponse
 			array.add(value);
 		}
 		return array;
+	}
+	
+	@Override
+	public void destroy() {
+		super.destroy();
+		this.additionalParams.clear();
+		this.additionalParams = null;
 	}
 	
 }

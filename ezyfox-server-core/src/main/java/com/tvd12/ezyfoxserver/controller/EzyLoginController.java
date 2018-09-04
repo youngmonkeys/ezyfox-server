@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.controller;
 import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.maximumUsers;
 import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.zoneNotFound;
 
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyILoginError;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -70,7 +69,7 @@ public class EzyLoginController
 	}
 	
 	protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
-        ctx.get(EzyFirePluginEvent.class).fire(EzyEventType.USER_LOGIN, event);
+        ctx.firePluginEvent(EzyEventType.USER_LOGIN, event);
     }
 	
 	protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {

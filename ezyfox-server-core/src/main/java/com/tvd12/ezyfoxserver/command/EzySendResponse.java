@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
-public interface EzySendResponse extends EzyCommand<Boolean> {
+public interface EzySendResponse extends EzyVoidCommand {
 
     EzySendResponse immediate(boolean immediate);
     

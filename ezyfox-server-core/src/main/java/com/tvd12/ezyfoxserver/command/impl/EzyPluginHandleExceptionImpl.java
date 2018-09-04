@@ -9,8 +9,8 @@ public class EzyPluginHandleExceptionImpl
         extends EzyAbstractCommand 
         implements EzyHandleException {
 
-    private EzyPlugin plugin;
-    private EzyExceptionHandlersFetcher fetcher; 
+    private final EzyPlugin plugin;
+    private final EzyExceptionHandlersFetcher fetcher; 
     
     public EzyPluginHandleExceptionImpl(EzyPlugin plugin) {
         this.plugin = plugin;

@@ -13,7 +13,7 @@ public class EzyPluginArrayResponse extends EzyAbstractArrayResponse {
 	
 	@Override
 	protected EzyResponse newResponse() {
-		return context.get(EzyPluginResponse.class);
+		return context.cmd(EzyPluginResponse.class);
 	}
 	
 }

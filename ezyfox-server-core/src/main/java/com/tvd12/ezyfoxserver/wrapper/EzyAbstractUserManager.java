@@ -82,8 +82,26 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
         locks.remove(username);
     }
     
+    @Override
+    public void clear() {
+        this.unlockAll();
+        this.locks.clear();
+        this.usersById.clear();
+        this.usersByName.clear();
+    }
+    
+    protected void unlockAll() {
+        for(Lock lock : locks.values())
+            lock.unlock();
+    }
+    
     protected String getMessagePrefix() {
         return "user manager:";
+    }
+    
+    @Override
+    public void destroy() {
+        clear();
     }
     
     public abstract static class Builder<B extends Builder<B>> 

@@ -10,7 +10,7 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
 public class EzyPluginObjectResponse extends EzyAbstractObjectResponse {
 
-	protected final Map<Object, Object> additionalParams = new HashMap<>();
+	protected Map<Object, Object> additionalParams = new HashMap<>();
 	
 	public EzyPluginObjectResponse(EzyPluginContext context, EzyMarshaller marshaller) {
 		super(context, marshaller);
@@ -18,7 +18,13 @@ public class EzyPluginObjectResponse extends EzyAbstractObjectResponse {
 	
 	@Override
 	protected EzyResponse newResponse() {
-		return context.get(EzyPluginResponse.class);
+		return context.cmd(EzyPluginResponse.class);
 	}
 	
+	@Override
+	public void destroy() {
+		super.destroy();
+		this.additionalParams.clear();
+		this.additionalParams = null;
+	}
 }

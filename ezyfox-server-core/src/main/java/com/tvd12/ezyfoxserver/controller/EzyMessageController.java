@@ -10,7 +10,7 @@ public class EzyMessageController extends EzyEntityBuilders {
 	
 	protected final void response(
 	        EzyContext ctx, EzySession session, EzyResponse response) {
-	    ctx.get(EzySendResponse.class)
+	    ctx.cmd(EzySendResponse.class)
 	        .recipient(session)
 	        .response(response)
 	        .execute();
@@ -18,7 +18,7 @@ public class EzyMessageController extends EzyEntityBuilders {
 	
 	protected final void responseNow(
 	        EzyContext ctx, EzySession session, EzyResponse response) {
-        ctx.get(EzySendResponse.class)
+        ctx.cmd(EzySendResponse.class)
             .recipient(session)
             .immediate(true)
             .response(response)

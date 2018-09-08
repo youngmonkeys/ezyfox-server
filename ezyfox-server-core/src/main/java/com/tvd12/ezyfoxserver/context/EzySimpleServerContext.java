@@ -2,13 +2,16 @@ package com.tvd12.ezyfoxserver.context;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
+import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
@@ -19,7 +22,8 @@ import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdown;
+import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 
@@ -31,19 +35,41 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	@Setter
 	@Getter
 	protected EzyServer server;
+	protected EzyFireEvent fireEvent;
 	
+	@Getter
+	protected List<EzyZoneContext> zoneContexts = new ArrayList<>();
 	protected Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
     protected Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
 	
 	
-	@SuppressWarnings("unchecked")
+    @Override
+    protected void init0() {
+        this.fireEvent = new EzyFireEventImpl(this); 
+        this.properties.put(EzyFireEvent.class, fireEvent);
+        this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
+        this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
+        this.properties.put(EzyHandleException.class, new EzyServerHandleExceptionImpl(server));
+    }
+    
 	@Override
 	public <T> T get(Class<T> clazz) {
-		if(commandSuppliers.containsKey(clazz))
-			return (T) commandSuppliers.get(clazz).get();
-		if(containsKey(clazz))
-			return getProperty(clazz);
+	    if(containsKey(clazz))
+            return getProperty(clazz);
 		throw new IllegalArgumentException("has no instance of " + clazz);
+	}
+	
+	@SuppressWarnings("unchecked")
+    @Override
+	public <T> T cmd(Class<T> clazz) {
+	    if(commandSuppliers.containsKey(clazz))
+            return (T) commandSuppliers.get(clazz).get();
+        throw new IllegalArgumentException("has no command of " + clazz);
+	}
+	
+	@Override
+	public void fireEvent(EzyConstant type, EzyEvent event) {
+	    fireEvent.fire(type, event);
 	}
 	
 	public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
@@ -52,6 +78,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     }
 	
 	public void addZoneContext(EzyZoneSetting zone, EzyZoneContext zoneContext) {
+	    zoneContexts.add(zoneContext);
 	    zoneContextsById.put(zone.getId(), zoneContext);
 	    zoneContextsByName.put(zone.getName(), zoneContext);
 	    addAppContexts(((EzyAppContextsFetcher)zoneContext).getAppContexts());
@@ -76,22 +103,32 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	@Override
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
 		super.addCommandSuppliers(suppliers);
-		suppliers.put(EzyFireEvent.class, ()-> new EzyFireEventImpl(this));
-		suppliers.put(EzyShutdown.class, ()-> new EzyServerShutdown(this));
 		suppliers.put(EzySendResponse.class, ()-> new EzySendResponseImpl(this));
-		suppliers.put(EzyCloseSession.class, ()-> new EzyCloseSessionImpl(this));
-		suppliers.put(EzyHandleException.class, ()-> new EzyServerHandleExceptionImpl(getServer()));
 	}
 	
 	@Override
-	protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
-	    return (EzyExceptionHandlersFetcher) server;
+	protected EzyComponent getComponent() {
+	    return (EzyComponent) server;
 	}
 	
 	@Override
 	public void destroy() {
+	    super.destroy();
 	    destroyServer();
 	    destroyZoneContexts();
+	}
+	
+	@Override
+	protected void clearProperties() {
+	    super.clearProperties();
+	    this.server = null;
+	    this.fireEvent = null;
+	    this.zoneContexts.clear();
+	    this.zoneContexts = null;
+	    this.zoneContextsById.clear();
+	    this.zoneContextsById = null;
+	    this.zoneContextsByName.clear();
+	    this.zoneContextsByName = null;
 	}
 	
 	private void destroyServer() {

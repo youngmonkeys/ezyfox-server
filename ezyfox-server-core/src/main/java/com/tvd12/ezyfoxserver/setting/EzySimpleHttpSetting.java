@@ -20,7 +20,7 @@ public class EzySimpleHttpSetting implements EzyHttpSetting {
     protected int port = 8080;
     
     @XmlElement(name = "active")
-    protected boolean active = true;
+    protected boolean active = false;
     
     @XmlElement(name = "max-threads")
     protected int maxThreads = 8;

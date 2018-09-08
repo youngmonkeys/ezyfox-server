@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDeliver;
@@ -63,13 +64,12 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     @Override
-    public Boolean execute() {
+    public void execute() {
         EzyArray data = response.serialize();
         EzyPackage pack = newPackage(data);
         response(pack);
         debugLogResponse(data);
         destroy();
-        return Boolean.TRUE;
     }
     
     protected EzyPackage newPackage(EzyArray data) {
@@ -104,10 +104,11 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     protected String getRecipientsNames() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder()
+                .append("[ ");
         for(EzyDeliver recv : recipients)
-            builder.append(((EzyHasName)recv).getName());
-        return builder.toString();
+            builder.append(((EzyHasName)recv).getName()).append(" ");
+        return builder.append("]").toString();
     }
     
 }

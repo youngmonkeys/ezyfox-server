@@ -10,11 +10,8 @@ import javax.xml.bind.annotation.XmlElement;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
-import com.tvd12.ezyfoxserver.controller.EzyEventController;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -50,9 +47,6 @@ public abstract class EzyAbstractSetting
 	@JsonIgnore
 	protected String location = "";
 	
-	@JsonIgnore
-	protected final EzyEventControllers eventControllers = newEventControllers();
-	
 	protected int newId() {
 	    return getIdCounter().incrementAndGet();
 	}
@@ -67,14 +61,7 @@ public abstract class EzyAbstractSetting
         return Paths.get(getLocation(), configFile).toString();
     }
 	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void addEventController(EzyConstant eventType, EzyEventController ctrl) {
-		eventControllers.addController(eventType, ctrl);
-	}
-	
 	protected abstract AtomicInteger getIdCounter();
-	protected abstract EzyEventControllers newEventControllers();
 	
 	@Override
     public boolean equals(Object obj) {

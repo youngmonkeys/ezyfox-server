@@ -13,8 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventAppControllersImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,10 +31,6 @@ public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSet
     protected int maxUsers = 999999;
     
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
-	
-	protected EzyEventControllers newEventControllers() {
-		return EzyEventAppControllersImpl.builder().build();
-	}
 	
 	@Override
 	protected AtomicInteger getIdCounter() {

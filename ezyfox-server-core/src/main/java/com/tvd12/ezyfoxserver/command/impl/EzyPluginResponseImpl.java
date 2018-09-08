@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import com.tvd12.ezyfoxserver.command.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContexts;

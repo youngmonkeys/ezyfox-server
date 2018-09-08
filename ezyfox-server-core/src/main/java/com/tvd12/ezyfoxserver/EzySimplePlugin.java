@@ -1,8 +1,10 @@
 package com.tvd12.ezyfoxserver;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
 import lombok.Getter;
@@ -15,6 +17,12 @@ public class EzySimplePlugin
         implements EzyPlugin, EzyDestroyable {
 
     protected EzyPluginSetting setting;
+    @JsonIgnore
+    protected EzyPluginRequestController requestController;
+    
+    public EzySimplePlugin() {
+        this.requestController = EzyPluginRequestController.DEFAULT;
+    }
     
     @Override
     public boolean equals(Object obj) {

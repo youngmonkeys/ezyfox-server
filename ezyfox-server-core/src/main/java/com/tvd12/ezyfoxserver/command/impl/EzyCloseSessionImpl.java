@@ -14,56 +14,40 @@ public class EzyCloseSessionImpl
 		extends EzyMessageController 
 		implements EzyCloseSession {
 
-    private EzySession session;
-	private EzyConstant reason;
-	
-	private EzyServerContext context;
+	private final EzyServerContext context;
 	
 	public EzyCloseSessionImpl(EzyServerContext ctx) {
 		this.context = ctx;
 	}
 	
 	@Override
-	public Boolean execute() {
-		sendToClients();
-		disconnectSession();
-		return Boolean.TRUE;
+	public void close(EzySession session, EzyConstant reason) {
+	    sendToClients(session, reason);
+        disconnectSession(session, reason);
 	}
 	
-	protected void sendToClients() {
-		if(shouldSendToClient())
-		    sendToClients0();
+	protected void sendToClients(EzySession session, EzyConstant reason) {
+		if(shouldSendToClient(reason))
+		    sendToClients0(session, reason);
 	}
 	
-	protected boolean shouldSendToClient() {
+	protected boolean shouldSendToClient(EzyConstant reason) {
 	    return reason != EzyDisconnectReason.UNKNOWN;
 	}
 	
-	protected void disconnectSession() {
+	protected void disconnectSession(EzySession session, EzyConstant reason) {
         getLogger().info("close session: {}, reason: {}", session.getClientAddress(), reason);
         session.close();
     }
 	
-	protected void sendToClients0() {
-	    responseNow(context, session, newResponse());
+	protected void sendToClients0(EzySession session, EzyConstant reason) {
+	    responseNow(context, session, newResponse(reason));
 	}
 	
-	protected EzyResponse newResponse() {
+	protected EzyResponse newResponse(EzyConstant reason) {
 	    EzyDisconnectParams params = new EzyDisconnectParams();
 	    params.setReason(reason);
         return new EzyDisconnectResponse(params);
     }
-
-	@Override
-	public EzyCloseSession session(EzySession session) {
-		this.session = session;
-		return this;
-	}
-
-	@Override
-	public EzyCloseSession reason(EzyConstant reason) {
-		this.reason = reason;
-		return this;
-	}
 
 }

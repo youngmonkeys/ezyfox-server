@@ -3,11 +3,11 @@ package com.tvd12.ezyfoxserver.command.impl;
 import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -15,7 +15,7 @@ public class EzyAppFireEventImpl
 		extends EzyAbstractCommand 
 		implements EzyFireEvent {
 
-	private EzyAppContext context;
+	private final EzyAppContext context;
 	
 	public EzyAppFireEventImpl(EzyAppContext context) {
 		this.context = context;
@@ -24,7 +24,7 @@ public class EzyAppFireEventImpl
     @Override
 	public void fire(EzyConstant type, EzyEvent event) {
 	    EzyEventController ctrl = getController(type);
-	    getLogger().debug("fire event {}, controller = {}", type, ctrl);
+	    getLogger().debug("app: {} fire event: {}, controller = {}", getAppName(), type, ctrl);
 		fire(ctrl, event);
 	}
 	
@@ -47,10 +47,10 @@ public class EzyAppFireEventImpl
 	}
 	
 	protected EzyEventControllers getEventControllers() {
-		return getAppSetting().getEventControllers();
+		return context.getApp().getEventControllers();
 	}
 	
-	protected EzyAppSetting getAppSetting() {
-		return context.getApp().getSetting();
+	protected String getAppName() {
+	    return context.getApp().getSetting().getName();
 	}
 }

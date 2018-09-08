@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
+import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
@@ -30,6 +31,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
+import static com.tvd12.ezyfox.util.EzyProcessor.*;
 
 @SuppressWarnings("unchecked")
 public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuilder<B>> 
@@ -48,6 +50,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
         context.addZoneContexts(newZoneContexts(context));
+        context.init();
         return context;
     }
     
@@ -70,7 +73,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             zoneContext.setZone(zone);
             zoneContext.addAppContexts(newAppContexts(zoneContext));
             zoneContext.addPluginContexts(newPluginContexts(zoneContext));
+            zoneContext.init();
             contexts.add(zoneContext);
+            processWithException(((EzyStartable)userManager)::start);
         }
         return contexts;
     }
@@ -84,6 +89,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzyUserManagementSetting setting = zoneSetting.getUserManagement();
         return EzyZoneUserManagerImpl.builder()
                 .userDelegate(userDelegate)
+                .zoneName(zoneSetting.getName())
                 .maxUsers(zoneSetting.getMaxUsers())
                 .maxIdleTime(setting.getUserMaxIdleTime())
                 .build();
@@ -106,6 +112,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         appContext.setApp(app);
         appContext.setParent(parent);
         appContext.setExecutorService(newAppExecutorService(setting));
+        appContext.init();
         return appContext;
     }
     
@@ -132,6 +139,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         pluginContext.setPlugin(plugin);
         pluginContext.setParent(parent);
         pluginContext.setExecutorService(newPluginExecutorService(setting));
+        pluginContext.init();
         return pluginContext;
     }
     

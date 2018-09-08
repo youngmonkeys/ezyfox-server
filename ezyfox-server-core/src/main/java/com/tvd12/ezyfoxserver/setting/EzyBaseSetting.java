@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-
-public interface EzyBaseSetting extends EzyEventControllerAdder {
+public interface EzyBaseSetting {
 
     int getId();
     
@@ -19,7 +17,5 @@ public interface EzyBaseSetting extends EzyEventControllerAdder {
     int getThreadPoolSize();
     
     String getConfigFile();
-    
-    EzyEventControllers getEventControllers();
 
 }

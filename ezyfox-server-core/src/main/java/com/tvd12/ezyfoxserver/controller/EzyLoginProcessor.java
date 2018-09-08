@@ -7,7 +7,7 @@ import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManagementSetting;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getUserManager;
-import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneId;
+import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneSetting;
 
 import java.util.concurrent.locks.Lock;
 
@@ -21,8 +21,6 @@ import com.tvd12.ezyfox.function.EzyVoid;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.EzyZone;
-import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
@@ -30,7 +28,7 @@ import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
-import com.tvd12.ezyfoxserver.entity.EzyHasSessionDelegate;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -119,7 +117,7 @@ public class EzyLoginProcessor
     }
     
     protected void checkUsername() {
-        if(!username.matches(userNamePattern))
+        if(!username.matches(userNamePattern) && !allowGuestLogin)
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
     
@@ -160,8 +158,7 @@ public class EzyLoginProcessor
     }
     
     protected void notifyLoggedIn(EzyUser user, EzySession session) {
-        EzyHasSessionDelegate hasDelegate = (EzyHasSessionDelegate)session;
-        hasDelegate.getDelegate().onSessionLoggedIn(user);
+        ((EzyAbstractSession)session).setOwner(user);
     }
     
     protected void fireSessionLoginEvent(EzyUser user) {
@@ -170,9 +167,7 @@ public class EzyLoginProcessor
     }
     
     protected void doFireSessionLoginEvent(EzyEvent event) {
-        zoneContext.get(EzyFireAppEvent.class)
-            .filter(appCtx -> containsUser(appCtx, username))
-            .fire(EzyEventType.USER_SESSION_LOGIN, event);
+        zoneContext.fireAppEvent(EzyEventType.USER_SESSION_LOGIN, event, username);
     }
     
     protected void fireUserAddedEvent(EzyUser user) {
@@ -182,8 +177,7 @@ public class EzyLoginProcessor
     
     protected void doFireUserAddedEvent(EzyEvent event) {
         try {
-            zoneContext.get(EzyFirePluginEvent.class)
-                .fire(EzyEventType.USER_ADDED, event);
+            zoneContext.firePluginEvent(EzyEventType.USER_ADDED, event);
         }
         catch(Exception e) {
             getLogger().error("user added error", e);
@@ -209,34 +203,29 @@ public class EzyLoginProcessor
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user) {
-        return EzySimpleSessionLoginEvent.builder()
-                .session(session)
-                .user(user)
-                .build();
+        return new EzySimpleSessionLoginEvent(user, session);
     }
     
     protected EzyEvent newUserAddedEvent(EzyUser user) {
-        return EzySimpleUserAddedEvent.builder()
-                .user(user)
-                .session(session)
-                .loginData(loginData)
-                .build();
+        return new EzySimpleUserAddedEvent(user, session, loginData);
     }
     
     protected void response(EzySession session, EzyResponse response) {
-        serverContext.get(EzySendResponse.class)
+        serverContext.cmd(EzySendResponse.class)
             .recipient(session)
             .response(response)
             .execute();
     }
     
     protected EzyResponse newLoginReponse(EzyUser user) {
+        EzyZoneSetting zoneSetting = getZoneSetting(zoneContext);
         EzyLoginParams params = new EzyLoginParams();
         params.setData(loginOuputData);
         params.setUserId(user.getId());
         params.setUsername(user.getName());
         params.setJoinedApps(getJoinedAppsDetails());
-        params.setZoneId(getZoneId(zoneContext));
+        params.setZoneId(zoneSetting.getId());
+        params.setZoneName(zoneSetting.getName());
         return new EzyLoginResponse(params);
     }
     

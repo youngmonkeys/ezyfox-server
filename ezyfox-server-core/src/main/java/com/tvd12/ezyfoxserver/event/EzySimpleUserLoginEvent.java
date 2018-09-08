@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.event;
 
 import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,50 +20,24 @@ public class EzySimpleUserLoginEvent
 	@Setter
 	protected EzyData output;
 	
-	protected EzySimpleUserLoginEvent(Builder builder) {
-	    super(builder);
-	    this.zoneName = builder.zoneName;
-	    this.data = builder.data;
-	    this.output = builder.output;
-	    this.username = builder.username;
-	    this.password = builder.password;
+	public EzySimpleUserLoginEvent(
+	        EzySession session, 
+	        String zoneName, 
+	        String username, String password, EzyData data) {
+	    super(session);
+	    this.zoneName = zoneName;
+	    this.data = data;
+	    this.username = username;
+	    this.password = password;
+	    this.data = data;
 	}
 	
-	public static Builder builder() {
-		return new Builder();
+	public String getUsername() {
+	    return username == null ? "" : username;
 	}
 	
-	public static class Builder extends EzySimpleSessionEvent.Builder<Builder> {
-	    protected EzyData data;
-	    protected EzyData output;
-	    protected String zoneName;
-	    protected String username;
-	    protected String password;
-		
-		public Builder data(EzyData data) {
-			this.data = data;
-			return this;
-		}
-		
-		public Builder zoneName(String zoneName) {
-            this.zoneName = zoneName;
-            return this;
-        }
-		
-		public Builder username(String username) {
-			this.username = username;
-			return this;
-		}
-		
-		public Builder password(String password) {
-			this.password = password;
-			return this;
-		}
-		
-		@Override
-		public EzyUserLoginEvent build() {
-		    return new EzySimpleUserLoginEvent(this);
-		}
+	public String getPassword() {
+	    return password == null ? "" : password;
 	}
 	
 }

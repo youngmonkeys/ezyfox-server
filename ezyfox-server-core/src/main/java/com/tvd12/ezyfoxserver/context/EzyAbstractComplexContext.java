@@ -1,17 +1,20 @@
 package com.tvd12.ezyfoxserver.context;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
 public abstract class EzyAbstractComplexContext 
         extends EzyAbstractContext 
-        implements EzyComplexContext, EzyPluginContextsFetcher, EzyAppContextsFetcher {
+        implements EzyComplexContext {
 
     protected Set<EzyAppContext> appContexts = new HashSet<>();
     protected Map<Integer, EzyAppContext> appContextsById = new ConcurrentHashMap<>();
@@ -47,12 +50,12 @@ public abstract class EzyAbstractComplexContext
     
     @Override
     public Collection<EzyAppContext> getAppContexts() {
-        return new HashSet<>(appContexts);
+        return appContexts;
     }
     
     @Override
     public Collection<EzyPluginContext> getPluginContexts() {
-        return new HashSet<>(pluginContexts);
+        return pluginContexts;
     }
     
     @Override
@@ -62,4 +65,38 @@ public abstract class EzyAbstractComplexContext
         throw new IllegalArgumentException("has not plugin with id = " + pluginId);
     }
     
+    @Override
+    public void destroy() {
+        super.destroy();
+        destroyAppContexts();
+        destroyPluginContexts();
+        clearProperties();
+    }
+    
+    protected void clearProperties() {
+        this.appContexts.clear();
+        this.appContexts = null;
+        this.pluginContexts.clear();
+        this.pluginContexts = null;
+        this.appContextsById.clear();
+        this.appContextsById = null;
+        this.pluginContextsById.clear();
+        this.pluginContextsById = null;
+    }
+    
+    private void destroyAppContexts() {
+        appContexts.forEach(this::destroyAppContext);
+    }
+    
+    private void destroyPluginContexts() {
+        pluginContexts.forEach(this::destroyPluginContext);
+    }
+    
+    private void destroyAppContext(EzyAppContext appContext) {
+        processWithLogException(() -> ((EzyDestroyable)appContext).destroy());
+    }
+    
+    private void destroyPluginContext(EzyPluginContext pluginContext) {
+        processWithLogException(() -> ((EzyDestroyable)pluginContext).destroy());
+    }
 }

@@ -1,11 +1,9 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 import lombok.Getter;
-
-import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
 
 public class EzyAppUserManagerImpl
         extends EzyAbstractByMaxUserManager
@@ -20,10 +18,8 @@ public class EzyAppUserManagerImpl
     }
     
     @Override
-    public EzyUser removeUser(EzyUser user) {
-         super.removeUser(user);
-         getLogger().info("app: {} remove user: {}, remain users = {}", appName, user, usersById.size());
-         return user;
+    protected String getMessagePrefix() {
+        return "app: " + appName;
     }
 
     public static Builder builder() {

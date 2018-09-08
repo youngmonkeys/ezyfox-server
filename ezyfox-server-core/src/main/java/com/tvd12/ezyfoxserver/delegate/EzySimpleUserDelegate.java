@@ -1,12 +1,9 @@
 package com.tvd12.ezyfoxserver.delegate;
 
-import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -39,22 +36,19 @@ public class EzySimpleUserDelegate
     
     protected void notifyToPlugins(EzyZoneContext context, EzyUserEvent event) {
         try {
-            context.get(EzyFirePluginEvent.class)
-                   .fire(EzyEventType.USER_REMOVED, event);
+            context.firePluginEvent(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify user removed error", e);
+            getLogger().error("notify user: " + event.getUser() + " removed error", e);
         }
     }
     
     protected void notifyToApps(EzyZoneContext context, EzyUserEvent event) {
         try {
-            context.get(EzyFireAppEvent.class)
-                .filter(appCtxt -> containsUser(appCtxt, event.getUser()))
-                .fire(EzyEventType.USER_REMOVED, event);
+            context.fireAppEvent(EzyEventType.USER_REMOVED, event, event.getUser());
         }
         catch(Exception e) {
-            getLogger().error("notify user disconnect to server error", e);
+            getLogger().error("notify user: " + event.getUser() + " disconnect to server error", e);
         }
     }
     
@@ -69,10 +63,7 @@ public class EzySimpleUserDelegate
     }
     
     protected EzyUserEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {
-        return EzySimpleUserRemovedEvent.builder()
-                .user(user)
-                .reason(reason)
-                .build();
+        return new EzySimpleUserRemovedEvent(user, reason);
     }
     
 }

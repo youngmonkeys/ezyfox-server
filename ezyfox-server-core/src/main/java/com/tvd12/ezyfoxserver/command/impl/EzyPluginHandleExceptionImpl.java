@@ -3,14 +3,15 @@ package com.tvd12.ezyfoxserver.command.impl;
 import com.tvd12.ezyfox.util.EzyExceptionHandlers;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfoxserver.EzyPlugin;
+import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 
 public class EzyPluginHandleExceptionImpl 
         extends EzyAbstractCommand 
         implements EzyHandleException {
 
-    private EzyPlugin plugin;
-    private EzyExceptionHandlersFetcher fetcher; 
+    private final EzyPlugin plugin;
+    private final EzyExceptionHandlersFetcher fetcher; 
     
     public EzyPluginHandleExceptionImpl(EzyPlugin plugin) {
         this.plugin = plugin;

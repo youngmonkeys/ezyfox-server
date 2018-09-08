@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="All-Test">
+
+    <test name="All">
+    	<packages>
+    		<package name="com.tvd12.ezyfoxserver.support"/>
+    	</packages>
+    </test>
+</suite>

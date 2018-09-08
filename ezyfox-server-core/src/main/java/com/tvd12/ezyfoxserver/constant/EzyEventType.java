@@ -11,7 +11,6 @@ public enum EzyEventType implements EzyConstant {
 	USER_HANDSHAKE(20),
 	USER_LOGIN(21),
 	USER_SESSION_LOGIN(22),
-	USER_REQUEST(23),
     USER_ACCESS_APP(25),
     USER_ADDED(26),
     USER_REMOVED(27),

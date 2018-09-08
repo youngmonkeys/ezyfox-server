@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.setting.EzyAbstractSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 public class EzyAbstractConfigTest extends BaseCoreTest {
 
@@ -23,10 +22,6 @@ public class EzyAbstractConfigTest extends BaseCoreTest {
         @Override
         protected AtomicInteger getIdCounter() {
             return new AtomicInteger(0);
-        }
-        @Override
-        protected EzyEventControllers newEventControllers() {
-            return null;
         }
     }
 }

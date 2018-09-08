@@ -1,12 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import java.util.Set;
-
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfox.util.EzyExceptionHandlers;
-import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
-import com.tvd12.ezyfox.util.EzyListExceptionHandlers;
+import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.context.EzyAbstractZoneChildContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
@@ -21,6 +17,8 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
          context = newServerContext();
          context.setProperty(Integer.class, 1);
          ctx = new ChildContext();
+         ctx.setParent(context.getZoneContext("example"));
+         ctx.init();
          ctx.setProperty(String.class, "a");
      }
      
@@ -41,21 +39,9 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
      
      public static class ChildContext extends EzyAbstractZoneChildContext {
          
-         @SuppressWarnings("rawtypes")
-        @Override
-        protected void addUnsafeCommands(Set<Class> unsafeCommands) {
-             unsafeCommands.add(UnsafeCommand.class);
-        }
-         
-        @Override
-        protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
-            return new EzyExceptionHandlersFetcher() {
-                
-                @Override
-                public EzyExceptionHandlers getExceptionHandlers() {
-                    return new EzyListExceptionHandlers();
-                }
-            };
+         @Override
+        protected EzyComponent getComponent() {
+            return new EzyComponent();
         }
 
         @Override
@@ -65,6 +51,6 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
      }
      
      public static class UnsafeCommand {
-         
      }
+     
 }

@@ -1,8 +1,12 @@
 package com.tvd12.ezyfoxserver;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
@@ -16,7 +20,14 @@ public class EzySimpleApplication
         implements EzyApplication, EzyDestroyable {
 
     protected EzyAppSetting setting;
+    @JsonIgnore
     protected EzyAppUserManager userManager;
+    @JsonIgnore
+    protected EzyAppRequestController requestController;
+    
+    public EzySimpleApplication() {
+        this.requestController = EzyAppRequestController.DEFAULT;
+    }
     
     @Override
     public boolean equals(Object obj) {
@@ -30,6 +41,15 @@ public class EzySimpleApplication
         return new EzyHashCodes()
                 .append(setting)
                 .hashCode();
+    }
+    
+    @Override
+    public void destroy() {
+        super.destroy();
+        if(userManager != null)
+            processWithLogException(userManager::destroy);
+        this.userManager = null;
+        this.requestController = null;
     }
     
 }

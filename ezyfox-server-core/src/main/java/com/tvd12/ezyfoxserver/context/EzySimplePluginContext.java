@@ -1,26 +1,26 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.*;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
-import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.EzyPlugin;
-import com.tvd12.ezyfoxserver.command.EzyAddEventController;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
-import com.tvd12.ezyfoxserver.command.impl.EzyAddEventControllerImpl;
+import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
+import com.tvd12.ezyfoxserver.command.EzySetup;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+import com.tvd12.ezyfoxserver.command.impl.EzyPluginSetupImpl;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,36 +33,48 @@ public class EzySimplePluginContext
 	@Setter
 	@Getter
 	protected EzyPlugin plugin;
+	protected EzyFireEvent fireEvent;
 	
-	protected EzyPluginSetting getSetting() {
-        return plugin.getSetting();
-    }
+	@Override
+	protected void init0() {
+	    EzySetup setup = new EzyPluginSetupImpl(plugin);
+	    this.fireEvent = new EzyPluginFireEventImpl(this);
+	    this.properties.put(EzyFireEvent.class, fireEvent);
+	    this.properties.put(EzyHandleException.class, new EzyPluginHandleExceptionImpl(plugin));
+	    this.properties.put(EzySetup.class, setup);
+	    this.properties.put(EzyPluginSetup.class, setup);
+	}
+	
+	@Override
+	public void fireEvent(EzyConstant type, EzyEvent event) {
+	    this.fireEvent.fire(type, event);
+	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		super.addCommandSuppliers(suppliers);
-		suppliers.put(EzyFireEvent.class, () -> new EzyPluginFireEventImpl(this));
 		suppliers.put(EzyPluginResponse.class, () -> new EzyPluginResponseImpl(this));
-		suppliers.put(EzyHandleException.class, ()-> new EzyPluginHandleExceptionImpl(getPlugin()));
-		suppliers.put(EzyAddEventController.class, () -> new EzyAddEventControllerImpl(getSetting()));
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected void addUnsafeCommands(Set<Class> unsafeCommands) {
-		super.addUnsafeCommands(unsafeCommands);
-		unsafeCommands.add(EzyFirePluginEvent.class);
+	protected EzyComponent getComponent() {
+	    return (EzyComponent) plugin;
 	}
 	
-	@Override
-	protected EzyExceptionHandlersFetcher getExceptionHandlersFetcher() {
-	    return (EzyExceptionHandlersFetcher) plugin;
-	}
-
     @Override
     public void destroy() {
-        processWithLogException(( )-> ((EzyDestroyable)plugin).destroy());
+        super.destroy();
+        this.destroyPlugin();
+        this.clearProperties();
+    }
+    
+    protected void clearProperties() {
+        this.plugin = null;
+        this.fireEvent = null;
+    }
+    
+    protected void destroyPlugin() {
+        processWithLogException(()-> ((EzyDestroyable)plugin).destroy());
     }
     
     @Override

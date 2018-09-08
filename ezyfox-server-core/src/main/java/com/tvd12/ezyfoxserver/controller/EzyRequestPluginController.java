@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.EzyPlugin;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginRequest;
 
@@ -21,20 +21,20 @@ public abstract class EzyRequestPluginController<P extends EzyRequestPluginParam
 	    EzyUser user = request.getUser();
 	    EzyZoneContext zoneCtx = ctx.getZoneContext(user.getZoneId());
 	    EzyPluginContext pluginCtx = getPluginContext(zoneCtx, params);
-        EzyEvent event = newRequestPluginEvent(request);
-        EzyEventType type = EzyEventType.USER_REQUEST;
-        pluginCtx.get(EzyFireEvent.class).fire(type, event);
+	    EzyPlugin plugin = pluginCtx.getPlugin();
+	    EzyPluginRequestController requestController = plugin.getRequestController();
+	    EzyUserRequestPluginEvent event = newRequestPluginEvent(request);
+        requestController.handle(pluginCtx, event);
 	}
 	
 	protected abstract 
 	    EzyPluginContext getPluginContext(EzyZoneContext zoneCtx, P requestParams);
 	
-	protected EzyEvent newRequestPluginEvent(EzyRequestPluginRequest<P> request) {
-		return EzySimpleUserRequestPluginEvent.builder()
-		        .user(request.getUser())
-		        .session(request.getSession())
-		        .data(request.getParams().getData())
-		        .build();
+	protected EzyUserRequestPluginEvent newRequestPluginEvent(EzyRequestPluginRequest<P> request) {
+		return new EzySimpleUserRequestPluginEvent(
+		        request.getUser(),
+		        request.getSession(), 
+		        request.getParams().getData());
 	}
 	
 }

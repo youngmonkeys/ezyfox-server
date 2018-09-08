@@ -1,4 +1,4 @@
 package com.tvd12.ezyfoxserver.command;
 
-public interface EzyShutdown extends EzyCommand<Boolean> {
+public interface EzyShutdown extends EzyVoidCommand {
 }

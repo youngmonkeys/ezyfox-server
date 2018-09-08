@@ -311,6 +311,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	boolean isIdle();
 	
 	/**
+	 * @return the owner name
+	 */
+	String getOwnerName();
+	
+	/**
 	 * @return the disconnect reason
 	 */
 	EzyConstant getDisconnectReason();

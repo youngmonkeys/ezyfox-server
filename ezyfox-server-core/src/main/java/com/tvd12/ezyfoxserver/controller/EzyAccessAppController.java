@@ -4,7 +4,6 @@ import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyIAccessAppError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
-import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -51,7 +50,7 @@ public class EzyAccessAppController
         appContext.fireEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
         addUser(appUserManger, user, appSetting);
         EzyResponse accessAppResponse = newAccessAppResponse(appSetting);
-        response(ctx, session, accessAppResponse);
+        ctx.send(accessAppResponse, session);
     }
 	
 	protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {
@@ -94,8 +93,9 @@ public class EzyAccessAppController
     }
 	
 	protected void responseAccessAppError(
-	        EzyContext ctx, EzySession session, EzyAccessAppException exception) {
-        response(ctx, session, newAccessAppErrorReponse(exception.getError()));
+	        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
+	    EzyResponse reponse = newAccessAppErrorReponse(exception.getError());
+	    ctx.send(reponse, session);
     }
     
 }

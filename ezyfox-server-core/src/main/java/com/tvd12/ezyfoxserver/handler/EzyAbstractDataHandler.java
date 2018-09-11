@@ -14,7 +14,6 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzyServer;
-import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -96,11 +95,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     
     protected void response(EzyResponse response) {
         if(context != null)
-            newSendResponse().recipient(session).response(response).execute();
-    }
-    
-    protected EzySendResponse newSendResponse() {
-        return context.cmd(EzySendResponse.class);
+            context.send(response, session);
     }
     
     protected void responseError(EzyIError error) {

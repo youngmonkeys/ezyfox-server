@@ -27,7 +27,8 @@ public class EzyHandshakeController
 	    EzyHandshakeParams params = request.getParams();
 	    String reconnectToken = params.getReconnectToken();
 	    ((EzyAbstractSession)newsession).setBeforeReconnectToken(reconnectToken);
-	    response(ctx, newsession, newHandShakeResponse(newsession));
+	    EzyResponse response = newHandShakeResponse(newsession);
+	    ctx.send(response, newsession);
 	}
 	
 	protected void updateSession(EzySession session, EzyHandshakeParams params) {

@@ -5,7 +5,6 @@ import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.zoneNotFou
 
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyILoginError;
-import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -80,8 +79,9 @@ public class EzyLoginController
 		        params.getPassword(), params.getData());
 	}
 	
-    protected void responseLoginError(EzyContext ctx, EzySession session, EzyILoginError error) {
-        response(ctx, session, newLoginErrorReponse(error));
+    protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
+        EzyResponse response = newLoginErrorReponse(error);
+        ctx.send(response, session);
     }
     
     protected EzyResponse newLoginErrorReponse(EzyILoginError error) {

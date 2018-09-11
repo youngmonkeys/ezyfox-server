@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -23,8 +22,10 @@ import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	@Getter
 	protected EzyServer server;
 	protected EzyFireEvent fireEvent;
+	protected EzySendResponse sendResponse;
 	
 	@Getter
 	protected List<EzyZoneContext> zoneContexts = new ArrayList<>();
@@ -46,7 +48,9 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     @Override
     protected void init0() {
         this.fireEvent = new EzyFireEventImpl(this); 
+        this.sendResponse = new EzySendResponseImpl(server);
         this.properties.put(EzyFireEvent.class, fireEvent);
+        this.properties.put(EzySendResponse.class, sendResponse);
         this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
         this.properties.put(EzyHandleException.class, new EzyServerHandleExceptionImpl(server));
@@ -70,6 +74,18 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	@Override
 	public void fireEvent(EzyConstant type, EzyEvent event) {
 	    fireEvent.fire(type, event);
+	}
+	
+	@Override
+	public void send(EzyResponse response, 
+	        EzySession recipient, boolean immediate) {
+	    sendResponse.execute(response, recipient, immediate);
+	}
+	
+	@Override
+	public void send(EzyResponse response, 
+	        Collection<EzySession> recipients, boolean immediate) {
+	    sendResponse.execute(response, recipients, immediate);
 	}
 	
 	public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
@@ -99,13 +115,6 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	    throw new EzyZoneNotFoundException(zoneName);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@Override
-	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		super.addCommandSuppliers(suppliers);
-		suppliers.put(EzySendResponse.class, ()-> new EzySendResponseImpl(this));
-	}
-	
 	@Override
 	protected EzyComponent getComponent() {
 	    return (EzyComponent) server;
@@ -123,6 +132,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	    super.clearProperties();
 	    this.server = null;
 	    this.fireEvent = null;
+	    this.sendResponse = null;
 	    this.zoneContexts.clear();
 	    this.zoneContexts = null;
 	    this.zoneContextsById.clear();

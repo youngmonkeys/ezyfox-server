@@ -21,7 +21,6 @@ import com.tvd12.ezyfox.function.EzyVoid;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.EzyZone;
-import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
@@ -211,10 +210,7 @@ public class EzyLoginProcessor
     }
     
     protected void response(EzySession session, EzyResponse response) {
-        serverContext.cmd(EzySendResponse.class)
-            .recipient(session)
-            .response(response)
-            .execute();
+        serverContext.send(response, session);
     }
     
     protected EzyResponse newLoginReponse(EzyUser user) {

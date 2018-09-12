@@ -40,9 +40,9 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	protected EzySendResponse sendResponse;
 	
 	@Getter
-	protected List<EzyZoneContext> zoneContexts = new ArrayList<>();
-	protected Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
-    protected Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
+	protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
+	protected final Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
+    protected final Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
 	
 	
     @Override
@@ -134,11 +134,8 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	    this.fireEvent = null;
 	    this.sendResponse = null;
 	    this.zoneContexts.clear();
-	    this.zoneContexts = null;
 	    this.zoneContextsById.clear();
-	    this.zoneContextsById = null;
 	    this.zoneContextsByName.clear();
-	    this.zoneContextsByName = null;
 	}
 	
 	private void destroyServer() {

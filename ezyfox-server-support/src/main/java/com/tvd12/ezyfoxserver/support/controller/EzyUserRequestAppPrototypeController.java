@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -18,6 +19,13 @@ public class EzyUserRequestAppPrototypeController
 	protected void prehandle(EzyAppContext context, EzyHandler handler) {
 		if(handler instanceof EzyAppContextAware)
 			((EzyAppContextAware)handler).setAppContext(context);
+	}
+	
+	@Override
+	protected void responseError(
+			EzyAppContext context, 
+			EzyUserRequestAppEvent event, EzyData errorData) {
+		context.send(errorData, event.getSession());
 	}
 	
 	public static Builder builder() {

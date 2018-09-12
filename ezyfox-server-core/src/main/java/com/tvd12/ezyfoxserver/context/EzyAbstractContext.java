@@ -51,7 +51,6 @@ public abstract class EzyAbstractContext
 	@Override
 	public void destroy() {
 	    this.properties.clear();
-	    this.properties = null;
 	    this.commandSuppliers.clear();
 	    this.commandSuppliers = null;
 	}

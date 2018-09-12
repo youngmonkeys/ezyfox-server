@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class EzySimpleUserEvent implements EzyUserEvent {
 
-    protected EzyUser user;
+    protected final EzyUser user;
     
     public EzySimpleUserEvent(EzyUser user) {
         this.user = user;

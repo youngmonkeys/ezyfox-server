@@ -30,7 +30,12 @@ public class EzyLoginController
 	        EzyLoginParams params = request.getParams();
 	        EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneName());
 	        EzyUserLoginEvent loginEvent = newLoginEvent(session, params);
-            control(ctx, zoneContext, loginEvent);
+	        try {
+	            control(ctx, zoneContext, loginEvent);
+	        }
+	        finally {
+	            loginEvent.release();
+	        }
         }
         catch(EzyLoginErrorException e) {
             processException(ctx, request.getSession(), e);

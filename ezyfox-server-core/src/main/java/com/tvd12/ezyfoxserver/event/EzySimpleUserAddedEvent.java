@@ -11,7 +11,7 @@ public class EzySimpleUserAddedEvent
 		extends EzySimpleUserSessionEvent 
 		implements EzyUserAddedEvent {
     
-    protected EzyData loginData;
+    protected final EzyData loginData;
     
     public EzySimpleUserAddedEvent(EzyUser user, EzySession session, EzyData data) {
         super(user, session);

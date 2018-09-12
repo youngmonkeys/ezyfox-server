@@ -14,21 +14,21 @@ import com.tvd12.ezyfox.binding.EzyDataBinding;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
-import com.tvd12.ezyfox.core.constant.EzyResponseCommands;
 import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
 import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
-import com.tvd12.ezyfox.util.EzyEntityArrays;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
-import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 
-public class EzyUserRequestPrototypeController<C extends EzyZoneChildContext, E extends EzyUserRequestEvent> {
+public abstract class EzyUserRequestPrototypeController<
+		C extends EzyZoneChildContext, 
+		E extends EzyUserRequestEvent>
+		extends EzyAbstractUserRequestController {
 
 	protected final EzyBeanContext beanContext;
 	protected final EzyUnmarshaller unmarshaller;
@@ -63,8 +63,10 @@ public class EzyUserRequestPrototypeController<C extends EzyZoneChildContext, E 
 			handler.handle();
 		}
 		catch(EzyBadRequestException e) {
-			if(e.isSendToClient())
-				responseError(context, event.getSession(), e);
+			if(e.isSendToClient()) {
+				EzyData errorData = newErrorData(e);
+				responseError(context, event, errorData);
+			}
 			logger.debug("request cmd: " + cmd + " with data: " + data + " error", e);
 		}
 		catch(Exception e) {
@@ -72,11 +74,7 @@ public class EzyUserRequestPrototypeController<C extends EzyZoneChildContext, E 
 		}
 	}
 	
-	protected void responseError(C context, EzySession session, EzyBadRequestException e) {
-		EzyData errorData = EzyEntityArrays.newArray(e.getCode(), e.getReason());
-		EzyData data = EzyEntityArrays.newArray(EzyResponseCommands.ERROR, errorData);
-		context.send(data, session);
-	}
+	protected abstract void responseError(C context, E event, EzyData errorData);
 	
 	protected void prehandle(C context, EzyHandler handler) {
 	}

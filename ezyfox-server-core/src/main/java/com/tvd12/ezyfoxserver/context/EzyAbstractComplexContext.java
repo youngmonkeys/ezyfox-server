@@ -16,10 +16,10 @@ public abstract class EzyAbstractComplexContext
         extends EzyAbstractContext 
         implements EzyComplexContext {
 
-    protected Set<EzyAppContext> appContexts = new HashSet<>();
-    protected Map<Integer, EzyAppContext> appContextsById = new ConcurrentHashMap<>();
-    protected Set<EzyPluginContext> pluginContexts = new HashSet<>(); 
-    protected Map<Integer, EzyPluginContext> pluginContextsById = new ConcurrentHashMap<>();
+    protected final Set<EzyAppContext> appContexts = new HashSet<>();
+    protected final Map<Integer, EzyAppContext> appContextsById = new ConcurrentHashMap<>();
+    protected final Set<EzyPluginContext> pluginContexts = new HashSet<>(); 
+    protected final Map<Integer, EzyPluginContext> pluginContextsById = new ConcurrentHashMap<>();
     
     public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
         appContexts.add(appContext);
@@ -75,13 +75,9 @@ public abstract class EzyAbstractComplexContext
     
     protected void clearProperties() {
         this.appContexts.clear();
-        this.appContexts = null;
         this.pluginContexts.clear();
-        this.pluginContexts = null;
         this.appContextsById.clear();
-        this.appContextsById = null;
         this.pluginContextsById.clear();
-        this.pluginContextsById = null;
     }
     
     private void destroyAppContexts() {

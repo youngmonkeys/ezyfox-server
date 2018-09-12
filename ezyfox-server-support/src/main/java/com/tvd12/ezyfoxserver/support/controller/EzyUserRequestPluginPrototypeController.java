@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContextAware;
@@ -18,6 +19,13 @@ public class EzyUserRequestPluginPrototypeController
 	protected void prehandle(EzyPluginContext context, EzyHandler handler) {
 		if(handler instanceof EzyPluginContextAware)
 			((EzyPluginContextAware)handler).setPluginContext(context);
+	}
+	
+	@Override
+	protected void responseError(
+			EzyPluginContext context, 
+			EzyUserRequestPluginEvent event, EzyData errorData) {
+		context.send(errorData, event.getSession(), event.isWithName());
 	}
 	
 	public static Builder builder() {

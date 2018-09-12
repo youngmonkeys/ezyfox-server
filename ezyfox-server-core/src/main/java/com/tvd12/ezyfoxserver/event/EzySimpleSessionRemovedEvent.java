@@ -11,11 +11,12 @@ public class EzySimpleSessionRemovedEvent
 		extends EzySimpleUserSessionEvent 
 		implements EzySessionRemovedEvent {
 
-    protected EzyConstant reason;
+    protected final EzyConstant reason;
     
     public EzySimpleSessionRemovedEvent(
             EzyUser user, EzySession session, EzyConstant reason) {
         super(user, session);
+        this.reason = reason;
     }
 	
 }

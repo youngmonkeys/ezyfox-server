@@ -15,4 +15,8 @@ public class EzyRequestPluginByIdController
         return pluginContext;
     }
     
+    @Override
+    protected boolean withName() {
+        return false;
+    }
 }

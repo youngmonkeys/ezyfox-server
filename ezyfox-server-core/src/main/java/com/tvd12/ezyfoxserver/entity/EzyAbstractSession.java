@@ -226,7 +226,6 @@ public abstract class EzyAbstractSession
 	    if(properties != null)
             this.properties.clear();
 	    this.locks = null;
-	    this.properties = null;
 	    this.droppedPackets = null;
 	    this.immediateDeliver = null;
 	    if(packetQueue != null) {

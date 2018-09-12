@@ -108,7 +108,6 @@ public class EzySimpleUser
 	    if(sessionMap != null)
 	        this.sessionMap.clear();
 	    this.locks = null;
-	    this.properties = null;
 	    this.sessionMap = null;
 	}
 	

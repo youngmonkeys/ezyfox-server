@@ -44,8 +44,8 @@ public class EzySimpleZoneContext
 	protected EzyFireAppEvent fireAppEvent;
 	protected EzyFirePluginEvent firePluginEvent;
 	
-	protected Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
-	protected Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+	protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
+	protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
 
 	@Override
 	protected void init0() {
@@ -158,9 +158,7 @@ public class EzySimpleZoneContext
 	    this.fireAppEvent = null;
 	    this.firePluginEvent = null;
 	    this.appContextsByName.clear();
-        this.appContextsByName = null;
 	    this.pluginContextsByName.clear();
-	    this.pluginContextsByName = null;
 	}
 	
 	private void destroyZone() {

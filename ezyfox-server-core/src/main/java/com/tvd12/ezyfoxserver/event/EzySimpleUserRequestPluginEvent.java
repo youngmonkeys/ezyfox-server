@@ -10,9 +10,14 @@ import lombok.Getter;
 public class EzySimpleUserRequestPluginEvent 
 		extends EzySimpleUserRequestEvent 
 		implements EzyUserRequestPluginEvent {
+    
+    protected final boolean withName;
 
-	public EzySimpleUserRequestPluginEvent(EzyUser user, EzySession session, EzyArray data) {
+	public EzySimpleUserRequestPluginEvent(
+	        EzyUser user, 
+	        EzySession session, EzyArray data, boolean withName) {
         super(user, session, data);
+        this.withName = withName;
     }
 	
 }

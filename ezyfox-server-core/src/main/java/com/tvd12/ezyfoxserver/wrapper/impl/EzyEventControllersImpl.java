@@ -10,7 +10,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 public class EzyEventControllersImpl implements EzyEventControllers {
 
 	@SuppressWarnings("rawtypes")
-	protected Map<EzyConstant, EzyEventController> controllers 
+	protected final Map<EzyConstant, EzyEventController> controllers 
 	        = new ConcurrentHashMap<>();
 	
 	@SuppressWarnings("rawtypes")
@@ -29,7 +29,6 @@ public class EzyEventControllersImpl implements EzyEventControllers {
 	public void destroy() {
 	    if(controllers != null)
 	        controllers.clear();
-	    this.controllers = null;
 	}
 	
 }

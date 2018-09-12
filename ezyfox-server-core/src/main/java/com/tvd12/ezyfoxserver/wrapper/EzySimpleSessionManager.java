@@ -28,7 +28,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<String, S> sessionsByToken = new ConcurrentHashMap<>();
-	protected ConcurrentHashMap<Object, S> sessionsByConnection = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<Object, S> sessionsByConnection = new ConcurrentHashMap<>();
 	
 	protected static final AtomicInteger COUNTER = new AtomicInteger(0);
 	

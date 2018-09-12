@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
 public class EzyAppsStarter extends EzyZoneComponentsStater {
 
-    protected Map<String, EzyAppClassLoader> appClassLoaders;
+    protected final Map<String, EzyAppClassLoader> appClassLoaders;
     
     protected EzyAppsStarter(Builder builder) {
         super(builder);

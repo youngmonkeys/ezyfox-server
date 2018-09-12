@@ -27,7 +27,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 @SuppressWarnings("rawtypes")
 public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
-    private String configFile;
+    private final String configFile;
 
     protected EzyStarter(Builder<?> builder) {
         this.configFile = builder.configFile;

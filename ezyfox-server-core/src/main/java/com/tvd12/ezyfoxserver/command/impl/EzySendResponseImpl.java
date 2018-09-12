@@ -17,13 +17,11 @@ import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
 public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendResponse {
 
     protected final EzyServer server;
-    protected final EzyResponseApi responseApi;
     protected final EzyLoggerSetting loggerSetting;
     protected final Set<EzyConstant> unloggableCommands;
     
     public EzySendResponseImpl(EzyServer server) {
         this.server = server;
-        this.responseApi = server.getResponseApi();
         this.loggerSetting = server.getSettings().getLogger();
         this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands(); 
     }
@@ -31,6 +29,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     @Override
     public void execute(EzyResponse response, EzySession recipient, boolean immediate) {
         boolean success = false;
+        EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
         EzySimplePackage pack = newPackage(data);
         pack.addRecipient(recipient);
@@ -39,7 +38,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            getLogger().error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error");
+            getLogger().error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error", e);
         }
         finally {
             pack.release();
@@ -51,6 +50,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     @Override
     public void execute(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
         boolean success = false;
+        EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
         EzySimplePackage pack = newPackage(data);
         pack.addRecipients(recipients);
@@ -59,7 +59,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            getLogger().error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error");
+            getLogger().error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error", e);
         }
         finally {
             pack.release();

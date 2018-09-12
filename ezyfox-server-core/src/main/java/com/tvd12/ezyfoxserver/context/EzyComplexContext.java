@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public interface EzyComplexContext 
-        extends EzyContext, EzyPluginContextsFetcher, EzyAppContextsFetcher{
+        extends EzyContext, EzyPluginContextsFetcher, EzyAppContextsFetcher {
 
     EzyAppContext getAppContext(int appId);
 

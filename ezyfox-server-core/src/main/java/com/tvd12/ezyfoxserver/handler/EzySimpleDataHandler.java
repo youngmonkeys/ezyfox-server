@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.handler;
 import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.handleException;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -91,7 +90,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
         catch(Exception e) {
             Throwable throwable = requestHandleException(cmd, data, e);
-            handleException(context, Thread.currentThread(), throwable);
+            context.handleException(Thread.currentThread(), throwable);
         }
     }
     

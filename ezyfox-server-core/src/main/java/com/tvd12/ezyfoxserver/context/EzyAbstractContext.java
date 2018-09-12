@@ -10,8 +10,10 @@ import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.command.EzyAddCommand;
 import com.tvd12.ezyfoxserver.command.EzyAddExceptionHandler;
+import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddCommandImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyHandleExceptionImpl;
 
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractContext 
@@ -19,21 +21,24 @@ public abstract class EzyAbstractContext
         implements EzyInitable, EzyDestroyable {
 
 	protected Map<Class, Supplier> commandSuppliers;
+	protected EzyHandleException handleException;
 	
 	@Override
 	public final void init() {
 	    this.commandSuppliers = defaultCommandSuppliers();
-	    this.properties.put(
-	            EzyAddExceptionHandler.class, 
-	            new EzyAddExceptionHandlerImpl(getComponent()));
+	    this.handleException = new EzyHandleExceptionImpl(getComponent());
+	    this.properties.put(EzyHandleException.class, handleException);
 	    this.properties.put(EzyAddCommand.class, new EzyAddCommandImpl(this));
+	    this.properties.put(EzyAddExceptionHandler.class, new EzyAddExceptionHandlerImpl(getComponent()));
 	    this.init0();
 	}
 	
-	protected void init0() {
-	}
-	
+	protected void init0() {}
 	protected abstract EzyComponent getComponent();
+	
+	public void handleException(Thread thread, Throwable throwable) {
+	    this.handleException.handle(thread, throwable);
+	}
 	
 	protected Map<Class, Supplier> defaultCommandSuppliers() {
 		Map<Class, Supplier> answer = new ConcurrentHashMap<>();
@@ -41,8 +46,7 @@ public abstract class EzyAbstractContext
 		return answer;
 	}
 	
-	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-	}
+	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {}
 	
     public void addCommand(Class commandType, Supplier commandSupplier) {
 	    this.commandSuppliers.put(commandType, commandSupplier);
@@ -53,6 +57,7 @@ public abstract class EzyAbstractContext
 	    this.properties.clear();
 	    this.commandSuppliers.clear();
 	    this.commandSuppliers = null;
+	    this.handleException = null;
 	}
 	
 }

@@ -14,13 +14,11 @@ import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
 import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyServerHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -53,7 +51,6 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
         this.properties.put(EzySendResponse.class, sendResponse);
         this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
-        this.properties.put(EzyHandleException.class, new EzyServerHandleExceptionImpl(server));
     }
     
 	@Override

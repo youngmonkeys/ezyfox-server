@@ -12,4 +12,6 @@ public interface EzyContext extends EzyProperties {
 	
 	void fireEvent(EzyConstant type, EzyEvent event);
 	
+	void handleException(Thread thread, Throwable throwable);
+	
 }

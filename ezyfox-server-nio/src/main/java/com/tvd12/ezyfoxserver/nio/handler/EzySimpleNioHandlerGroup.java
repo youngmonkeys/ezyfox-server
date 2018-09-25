@@ -42,19 +42,21 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	private void handleReceivedMesssage(EzyMessage message) {
-		Object data = decodeMessage(message);
-		handleReceivedData(data);
-		executeAddReadBytes(message.getByteCount());
+		try {
+			Object data = decodeMessage(message);
+			handleReceivedData(data);
+		}
+		catch (Exception e) {
+			fireExceptionCaught(e);
+		}
+		finally {
+			executeAddReadBytes(message.getByteCount());
+		}
 	}
 	
-	private Object decodeMessage(EzyMessage message) {
-		try {
-			return decoder.decode(message);
-		}
-		catch(Exception e) {
-			getLogger().error("decode message error", e);
-			return null;
-		}
+	private Object decodeMessage(EzyMessage message) throws Exception {
+		Object answer = decoder.decode(message);
+		return answer;
 	}
 	
 	@Override

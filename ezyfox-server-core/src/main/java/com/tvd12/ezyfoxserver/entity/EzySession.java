@@ -93,21 +93,21 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	 * 
 	 * @return the session reconnect token
 	 */
-	String getReconnectToken();
+	String getToken();
 
 	/**
 	 * Get before reconnect token
 	 * 
 	 * @return before reconnect token
 	 */
-	String getBeforeReconnectToken();
+	String getBeforeToken();
 	
 	/**
 	 * Set reconnect token
 	 * 
 	 * @param token the reconnect token
 	 */
-	void setReconnectToken(String token);
+	void setToken(String token);
 	
 	/**
 	 * The private key that decrypt data

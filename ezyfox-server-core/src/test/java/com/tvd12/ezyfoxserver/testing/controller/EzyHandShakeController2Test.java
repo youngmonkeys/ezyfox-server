@@ -25,15 +25,15 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         EzySession first = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("first.token:    " + first);
         System.err.println("alive sessions: " + getSessionManager(ctx).getAliveSessions());
-        assertEquals(getSessionManager(ctx).containsSession(first.getReconnectToken()), true);
+        assertEquals(getSessionManager(ctx).containsSession(first.getId()), true);
         EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("session: " + session);
-        EzyArray data = newHandShakeData(first.getReconnectToken());
+        EzyArray data = newHandShakeData(first.getToken());
         EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
         request.deserializeParams(data);
         request.setSession(session);
         EzyHandshakeParams requestParams = request.getParams();
-        assertEquals(first.getReconnectToken(), requestParams.getReconnectToken());
+        assertEquals(first.getToken(), requestParams.getToken());
         EzyHandshakeController controller = new EzyHandshakeController();
         controller.handle(ctx, request);
     }
@@ -43,16 +43,17 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         return newArrayBuilder()
                 .append("adroid#1")
                 .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
-                .append(reconnectToken)
                 .append("android")
                 .append("1.0.0")
+                .append(true)
+                .append(reconnectToken)
                 .build();
     }
     
     protected EzySession newSession(String reconnectToken) {
         KeyPair keyPair = newRSAKeys();
         EzySession session = super.newSession();
-        session.setReconnectToken(reconnectToken);
+        session.setToken(reconnectToken);
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }

@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.handleException;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyFireEvent;
@@ -31,7 +29,7 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
         try {
             ctx.fireEvent(type, event);
         } catch (Exception e) {
-            handleException(ctx, Thread.currentThread(), e);
+            ctx.handleException(Thread.currentThread(), e);
         }
     }
 

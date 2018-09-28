@@ -25,28 +25,12 @@ public interface EzySessionManager<S extends EzySession> {
     boolean containsSession(long id); 
     
 	/**
-	 * Check contains session mapped to token or not
-	 * 
-	 * @param token the reconnect token
-	 * @return true or false
-	 */
-	boolean containsSession(String token); 
-	
-	/**
      * Get session by id
      * 
      * @param id the id
      * @return the session mapped to the id
      */
     EzySession getSession(long id);
-	
-	/**
-     * Get session by token
-     * 
-     * @param token the token
-     * @return the session mapped to the token
-     */
-    EzySession getSession(String token);
 	
 	/**
 	 * Add session to disconnect queue

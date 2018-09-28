@@ -86,7 +86,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
         try {
-            doHandleRequest(cmd, data);
+            handleRequest0(cmd, data);
         }
         catch(Exception e) {
             Throwable throwable = requestHandleException(cmd, data, e);
@@ -95,7 +95,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     @SuppressWarnings("rawtypes")
-    protected void doHandleRequest(EzyConstant cmd, EzyArray data) throws Exception {
+    protected void handleRequest0(EzyConstant cmd, EzyArray data) throws Exception {
         EzyRequest request = newRequest(cmd, data);
         try {
             EzyInterceptor interceptor = controllers.getInterceptor(cmd);

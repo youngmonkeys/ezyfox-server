@@ -194,7 +194,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         public ExSession() {
             int id = ID_GENTOR.incrementAndGet();
             setId(id);
-            setReconnectToken(String.valueOf(id));
+            setToken(String.valueOf(id));
         }
         
         @Override

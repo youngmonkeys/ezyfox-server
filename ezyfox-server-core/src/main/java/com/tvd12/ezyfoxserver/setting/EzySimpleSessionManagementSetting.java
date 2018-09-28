@@ -29,9 +29,6 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
     @XmlElement(name = "session-max-waiting-time")
     protected long sessionMaxWaitingTimeInSecond = 30;
     
-    @XmlElement(name = "session-allow-reconnect")
-    protected boolean sessionAllowReconnect = true;
-    
     @XmlElement(name = "session-max-request-per-second")
     protected EzySimpleEzyMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleEzyMaxRequestPerSecond();
     

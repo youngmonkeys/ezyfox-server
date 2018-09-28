@@ -113,10 +113,10 @@ public class BaseCoreTest extends BaseTest {
                 .generate();
     }
     
-    protected EzySession newSessionHasKey(String reconnectToken) {
+    protected EzySession newSessionHasKey(String token) {
         KeyPair keyPair = newRSAKeys();
         EzySession session = newSession();
-        session.setReconnectToken(reconnectToken);
+        session.setToken(token);
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }

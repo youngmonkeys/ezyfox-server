@@ -82,7 +82,6 @@
 
 	<xs:complexType name="session-management-type">
 		<xs:all>
-			<xs:element name="session-allow-reconnect" type="xs:boolean" minOccurs="0" maxOccurs="1" />
 			<xs:element name="session-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1" />
 			<xs:element name="session-max-waiting-time" type="xs:long" minOccurs="0" maxOccurs="1" />
 			<xs:element name="session-max-request-per-second" type="session-max-request-per-second-type" minOccurs="0" maxOccurs="1" />

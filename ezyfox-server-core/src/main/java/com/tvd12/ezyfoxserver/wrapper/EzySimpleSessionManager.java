@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
-import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,9 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectProvider;
-import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfox.util.EzyTimes;
-import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -25,9 +22,8 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
     protected final int maxSessions;
 	protected final EzySessionTokenGenerator tokenGenerator;
-	protected final ConcurrentHashMap<String, S> loggedInSession = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<Long, S> loggedInSession = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
-	protected final ConcurrentHashMap<String, S> sessionsByToken = new ConcurrentHashMap<>();
 	protected final ConcurrentHashMap<Object, S> sessionsByConnection = new ConcurrentHashMap<>();
 	
 	protected static final AtomicInteger COUNTER = new AtomicInteger(0);
@@ -40,17 +36,12 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@Override
 	public void addLoggedInSession(S session) {
-	    loggedInSession.put(session.getReconnectToken(), session);
+	    loggedInSession.put(session.getId(), session);
 	}
 	
 	@Override
 	public boolean containsSession(long id) {
 	    return sessionsById.containsKey(id);
-	}
-	
-	@Override
-	public boolean containsSession(String token) {
-		return sessionsByToken.containsKey(token);
 	}
 	
 	@Override
@@ -62,9 +53,19 @@ public class EzySimpleSessionManager<S extends EzySession>
     public void clearSession(S session) {
 	    if(session != null) {
 	        unmapSession(session);
-	        getLogger().info("remove session: {}, remain sessions = {}", session.getName(), providedObjects.size());
+	        getLogger().info(getRemoveSessionMessage(session));
 	    }
     }
+	
+	private String getRemoveSessionMessage(S session) {
+	    StringBuilder builder = new StringBuilder()
+	            .append("remove session: ").append(session.getName())
+	            .append(", remain sessions = ").append(providedObjects.size())
+	            .append(", login sessions = ").append(loggedInSession.size())
+	            .append(", sessions by id = ").append(sessionsById.size())
+	            .append(", sessions by connection = ").append(sessionsByConnection.size());
+	    return builder.toString();
+	}
 	
 	protected void checkToRemoveSession(S session, EzyConstant reason) {
 	    if(shouldRemoveSession(session)) 
@@ -72,15 +73,19 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 
 	protected boolean shouldRemoveSession(S session) {
-	    return session != null && containsSession(session.getReconnectToken());
+	    if(session == null)
+	        return false;
+	    boolean contains = containsSession(session.getId());
+	    return contains;
 	}
 	
 	protected void unmapSession(S session) {
 	    providedObjects.remove(session);
 	    sessionsById.remove(session.getId());
-		sessionsByToken.remove(session.getReconnectToken());
-		loggedInSession.remove(session.getReconnectToken());
-		sessionsByConnection.remove(session.getChannel());
+		loggedInSession.remove(session.getId());
+		EzyChannel channel = session.getChannel();
+		Object connection = channel.getConnection();
+		sessionsByConnection.remove(connection);
 	}
 	
 	@Override
@@ -95,15 +100,12 @@ public class EzySimpleSessionManager<S extends EzySession>
 	@SuppressWarnings("unchecked")
     protected S provideSession(EzyConstant connectionType) {
 	    checkMaxSessions(connectionType);
-		KeyPair keyPair = newKeyPair();
 		EzyAbstractSession session = (EzyAbstractSession)provideObject();
 		session.setLoggedIn(false);
 		session.setName("Session#" + COUNTER.incrementAndGet());
 		session.setConnectionType(connectionType);
-		session.setReconnectToken(newSessionToken());
+		session.setToken(newSessionToken());
 		session.setCreationTime(System.currentTimeMillis());
-		session.setPublicKey(keyPair.getPublic().getEncoded());
-		session.setPrivateKey(keyPair.getPrivate().getEncoded());
 		
 		session.setCreationTime(System.currentTimeMillis());
         session.setLastActivityTime(System.currentTimeMillis());
@@ -111,7 +113,6 @@ public class EzySimpleSessionManager<S extends EzySession>
         session.setLastWriteTime(System.currentTimeMillis());
         S complete = (S)session;
         sessionsById.put(complete.getId(), complete);
-		sessionsByToken.put(complete.getReconnectToken(), complete);
 		return complete;
 	}
 	
@@ -123,51 +124,55 @@ public class EzySimpleSessionManager<S extends EzySession>
 	
 	@Override
 	public EzySession getSession(long id) {
-	    return sessionsById.get(id);
-	}
-	
-	@Override
-	public S getSession(String token) {
-		return sessionsByToken.get(token);
+	    EzySession session = sessionsById.get(id);
+	    return session;
 	}
 	
 	@Override
     public S getSession(Object connection) {
-        return sessionsByConnection.get(connection);
+        S session = sessionsByConnection.get(connection);
+        return session;
     }
 	
 	@Override
 	public List<S> getAllSessions() {
-	    return getProvidedObjects();
+	    List<S> sessions = getProvidedObjects();
+	    return sessions;
 	}
 	
 	@Override
 	public List<S> getAliveSessions() {
-	    return new ArrayList<>(sessionsByToken.values());
+	    List<S> sessions = new ArrayList<>(sessionsById.values());
+	    return sessions;
 	};
 	
 	@Override
 	public List<S> getLoggedInSessions() {
-	    return new ArrayList<>(loggedInSession.values());
+	    List<S> sessions = new ArrayList<>(loggedInSession.values());
+	    return sessions;
 	}
 	
 	@Override
 	public int getAllSessionCount() {
-	    return providedObjects.size();
+	    int size = providedObjects.size();
+	    return size;
 	}
 
 	@Override
 	public int getAliveSessionCount() {
-	    return sessionsByToken.size();
+	    int size = sessionsById.size();
+	    return size;
 	}
 	
 	@Override
 	public int getLoggedInSessionCount() {
-	    return loggedInSession.size();
+	    int size = loggedInSession.size();
+	    return size;
 	}
 	
 	public int getAliveSessionCountWithLock() {
-        return returnWithLock(this::getAllSessionCount);
+        int count = returnWithLock(this::getAllSessionCount);
+        return count;
     }
 	
 	@Override
@@ -184,11 +189,17 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected void checkAndRemoveSessions() {
 	    List<S> idleSessions = new ArrayList<>();
         List<S> unloggedInSessions = new ArrayList<>();
-        for(S session : getAllSessions()) {
-            if(isUnloggedInSession(session))
+        List<S> sessions = getAllSessions();
+        for(S session : sessions) {
+            boolean unloggedIn = isUnloggedInSession(session);
+            if(unloggedIn) {
                 unloggedInSessions.add(session);
-            else if(isIdleSession(session))
+                continue;
+            }
+            boolean idle = isIdleSession(session);
+            if(idle) {
                 idleSessions.add(session);
+            }
         }
         for(S session : idleSessions)
             removeSession(session, EzyDisconnectReason.IDLE);
@@ -197,7 +208,8 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected boolean isIdleSession(S session) {
-	    return session.isIdle();
+	    boolean answer = session.isIdle();
+	    return answer;
 	}
 	
 	protected boolean isUnloggedInSession(EzySession session) {
@@ -205,23 +217,21 @@ public class EzySimpleSessionManager<S extends EzySession>
 	        return false;
 	    if(!session.isActivated())
 	        return false;
-		return getSessionRemainWaitingTime(session) <= 0; 
+	    long remainTime = getSessionRemainWaitingTime(session);
+		boolean answer = remainTime <= 0;
+		return answer;
 	}
 	
 	protected long getSessionRemainWaitingTime(EzySession session) {
-		return EzyTimes.getRemainTime(
-				session.getMaxWaitingTime(), session.getCreationTime());
+	    long maxWaitingTime = session.getMaxWaitingTime();
+	    long creationTime = session.getCreationTime();
+		long remain = EzyTimes.getRemainTime(maxWaitingTime, creationTime);
+		return remain;
 	}
 	
 	protected String newSessionToken() {
-		return tokenGenerator.generate();
-	}
-	
-	protected KeyPair newKeyPair() {
-		return EzyKeysGenerator.builder()
-				.keysize(EzyCoreConstants.SESSION_KEY_SIZE)
-				.algorithm(EzyCoreConstants.DATA_ENCRYPTION_ALGORITHM)
-				.build().generate();
+		String token = tokenGenerator.generate();
+		return token;
 	}
 	
 	@Override
@@ -229,7 +239,6 @@ public class EzySimpleSessionManager<S extends EzySession>
 	    super.destroy();
 	    this.loggedInSession.clear();
 	    this.sessionsById.clear();
-	    this.sessionsByToken.clear();
 	}
 	
 	public abstract static class Builder<S extends EzySession> 

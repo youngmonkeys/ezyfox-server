@@ -12,7 +12,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
     @Test
     public void test() {
         EzySession session = newSession();
-        session.setReconnectToken("abc");
+        session.setToken("abc");
         EzySimpleUser user = newUser();
         user.setName("abc");
         user.addSession(session);
@@ -29,7 +29,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
     public void test1() {
         EzySession session = newSession();
         EzySimpleUser user = newUser();
-        session.setReconnectToken("abc");
+        session.setToken("abc");
         user.setName("abc");
         user.addSession(session);
 //        EzyServerContext context = newServerContext();
@@ -46,7 +46,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         MyTestUser user = new MyTestUser();
         user.setName("dungtv");
         EzySession session = newSession();
-        session.setReconnectToken("abc");
+        session.setToken("abc");
         user.addSession(session);
 //        EzyServerContext context = newServerContext();
 //        new EzyDisconnectUserImpl(context)
@@ -62,7 +62,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         MyTestUser user = new MyTestUser();
         user.setName("dungtv");
         EzySession session = newSession();
-        session.setReconnectToken("abc");
+        session.setToken("abc");
         user.addSession(session);
 //        EzyServerContext context = newServerContext();
 //        new EzyDisconnectUserImpl(context)

@@ -12,7 +12,7 @@ public class MyTestDataHandler extends EzySimpleDataHandler<MyTestSession> {
 
     public void provideSession() {
         MyTestSession session1 = session != null ? session : new MyTestSession();
-        session1.setReconnectToken("abc");
+        session1.setToken("abc");
     }
     
     @Override

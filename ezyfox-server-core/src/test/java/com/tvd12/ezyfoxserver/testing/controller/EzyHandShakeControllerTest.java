@@ -46,9 +46,10 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         return newArrayBuilder()
                 .append("adroid#1")
                 .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
-                .append("reconnectToken#1")
                 .append("android")
                 .append("1.0.0")
+                .append(true)
+                .append("reconnectToken#1")
                 .build();
     }
     
@@ -56,7 +57,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
     protected EzySession newSession() {
         KeyPair keyPair = newRSAKeys();
         EzySession session = super.newSession();
-        session.setReconnectToken("reconnectToken#1");
+        session.setToken("reconnectToken#1");
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }

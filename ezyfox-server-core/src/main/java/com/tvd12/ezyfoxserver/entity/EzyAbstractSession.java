@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
-import com.tvd12.ezyfox.sercurity.EzyMD5;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyProcessor;
@@ -56,12 +55,11 @@ public abstract class EzyAbstractSession
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
-    
+
+    protected String token;
 	protected String clientType;
 	protected String clientVersion;
-	protected String reconnectToken;
-	protected String beforeReconnectToken;
-	protected String fullReconnectToken;
+	protected String beforeToken;
 	protected EzyConstant connectionType;
 	protected EzyConstant disconnectReason;
 
@@ -84,17 +82,9 @@ public abstract class EzyAbstractSession
 	@Setter(AccessLevel.NONE)
 	protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	
-	protected static final String RECONNECT_TOKEN_SALT = "$1$reconnectToken";
-	
 	public void setOwner(EzyUser owner) {
 	    this.ownerName = owner.getName();
 	    this.delegate.onSessionLoggedIn(owner);
-	}
-	
-	@Override
-	public void setReconnectToken(String token) {
-		this.fullReconnectToken = token;
-		this.reconnectToken = EzyMD5.cryptUtf(token, RECONNECT_TOKEN_SALT);
 	}
 	
 	@Override
@@ -259,7 +249,7 @@ public abstract class EzyAbstractSession
 	            .append(", type: ").append(clientType)
 	            .append(", version: ").append(clientVersion)
 	            .append(", address: ").append(getClientAddress())
-	            .append(", reconnectToken: ").append(reconnectToken)
+	            .append(", token: ").append(token)
 	            .append(")")
 	            .toString();
 	}

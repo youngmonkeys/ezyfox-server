@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.delegate;
 
-import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.forEachAppContexts;
+import java.util.Collection;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -53,7 +53,9 @@ public class EzySimpleUserDelegate
     }
     
     protected void removeUserFromApps(EzyZoneContext context, EzyUser user) {
-        forEachAppContexts(context, ctx -> removeUserFromApp(ctx, user));
+        Collection<EzyAppContext> appContexts = context.getAppContexts();
+        for(EzyAppContext appCtx : appContexts)
+            removeUserFromApp(appCtx, user);
     }
     
     protected void removeUserFromApp(EzyAppContext ctx, EzyUser user) {

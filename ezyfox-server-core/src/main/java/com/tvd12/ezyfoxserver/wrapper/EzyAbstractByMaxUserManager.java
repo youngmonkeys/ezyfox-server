@@ -14,7 +14,8 @@ public class EzyAbstractByMaxUserManager
     @Override
     public EzyUser addUser(EzyUser user) {
         checkMaxUsers();
-        return addUser0(user);
+        EzyUser answer = addUser0(user);
+        return answer;
     }
     
     protected void checkMaxUsers() {
@@ -26,8 +27,9 @@ public class EzyAbstractByMaxUserManager
     protected EzyUser addUser0(EzyUser user) {
         EzyUser old = usersByName.putIfAbsent(user.getName(), user);
         if(old != null) return old; 
-        getLogger().info("{} add user: {}, user count = {}", getMessagePrefix(), user, usersByName.size());
-        return usersById.putIfAbsent(user.getId(), user);
+        EzyUser answer = usersById.putIfAbsent(user.getId(), user);
+        getLogger().info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        return answer;
     }
     
     public static abstract class Builder<B extends Builder<B>>

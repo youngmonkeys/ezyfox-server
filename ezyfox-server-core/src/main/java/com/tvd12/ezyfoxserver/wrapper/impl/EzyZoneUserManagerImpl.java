@@ -138,13 +138,15 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected void validateIdleUsers() {
-	    for(EzyUser user : getUserList())
+	    for(EzyUser user : getUserList()) {
 	        if(isIdleUser(user))
 	            removeUser(user, EzyDisconnectReason.IDLE);
+	    }
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
-	    return user.isIdle();
+	    boolean idle = user.isIdle();
+	    return idle;
 	}
 	
 	protected void delegateUserRemove(EzyUser user, EzyConstant reason) {

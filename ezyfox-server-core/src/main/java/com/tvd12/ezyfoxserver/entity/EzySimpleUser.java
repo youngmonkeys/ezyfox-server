@@ -49,6 +49,7 @@ public class EzySimpleUser
 	
 	@Override
 	public void removeSession(EzySession session) {
+	    startIdleTime = System.currentTimeMillis();
 	    sessionMap.remove(session.getId());
 	}
 	

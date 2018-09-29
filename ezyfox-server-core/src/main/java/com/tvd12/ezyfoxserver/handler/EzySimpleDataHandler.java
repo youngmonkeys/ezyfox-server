@@ -69,19 +69,12 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         session.addReadRequests(1);
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastActivityTime(System.currentTimeMillis());
-        updateUserByReceivedData();
         handleRequest(cmd, data);
     }
     
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
         if(!unloggableCommands.contains(cmd))
             getLogger().debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
-    }
-    
-    public void updateUserByReceivedData() {
-        if(user != null) {
-            user.setStartIdleTime(System.currentTimeMillis());
-        }
     }
     
     protected void handleRequest(EzyConstant cmd, EzyArray data) {

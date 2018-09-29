@@ -58,11 +58,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         EzyZone zone = zoneContext.getZone();
         EzyZoneSetting zoneSetting = zone.getSetting();
         EzyUserManagementSetting userManagementSetting = zoneSetting.getUserManagement();
-        String username = event.getUsername();
-        checkUsername(username,
+        String username = checkUsername(event.getUsername(),
                 userManagementSetting.getUserNamePattern(),
-                userManagementSetting.isAllowGuestLogin());
-        username = getNewUsername(event.getUsername(),
                 userManagementSetting.isAllowGuestLogin(),
                 userManagementSetting.getGuestNamePrefix());
         String password = event.getPassword();
@@ -91,13 +88,18 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         fireSessionLoginEvent(zoneContext, user, session, alreadyLoggedIn);
     }
     
-    protected void checkUsername(
+    protected String checkUsername(
             String username,
-            String userNamePattern, boolean allowGuestLogin) {
-        if(allowGuestLogin)
-            return;
-        if(username == null || !username.matches(userNamePattern))
-            throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
+            String userNamePattern,
+            boolean allowGuestLogin, String guestNamePrefix) {
+        if(username != null && username.matches(userNamePattern))
+            return username;
+        if(allowGuestLogin) {
+            long userId = GUEST_COUNT.incrementAndGet();
+            String answer = guestNamePrefix + userId;
+            return answer;
+        }
+        throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
     
     protected void processUserSessions(EzyUser user,
@@ -189,17 +191,6 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         user.setMaxIdleTime(userManagementSetting.getUserMaxIdleTime());
         user.setMaxSessions(userManagementSetting.getMaxSessionPerUser());
         return user;
-    }
-    
-    protected String getNewUsername(
-            String currentName, 
-            boolean allowGuestLogin, String guestNamePrefix) {
-        if(allowGuestLogin) {
-            long userId = GUEST_COUNT.incrementAndGet();
-            return guestNamePrefix + userId;
-        }
-        return currentName;
-        
     }
     
     protected EzyEvent newSessionLoginEvent(EzyUser user, EzySession session) {

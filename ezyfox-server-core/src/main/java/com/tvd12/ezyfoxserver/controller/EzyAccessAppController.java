@@ -38,8 +38,9 @@ public class EzyAccessAppController
 	
 	protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
 	    EzyUser user = request.getUser();
+	    int zoneId = user.getZoneId();
         EzyAccessAppParams params = request.getParams();
-        EzyZoneContext zoneContext = ctx.getZoneContext(user.getZoneId());
+        EzyZoneContext zoneContext = ctx.getZoneContext(zoneId);
         EzyAppContext appContext = zoneContext.getAppContext(params.getAppName());
         EzyApplication app = appContext.getApp();
         EzyAppSetting appSetting = app.getSetting();
@@ -49,7 +50,7 @@ public class EzyAccessAppController
         EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
         appContext.fireEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
         addUser(appUserManger, user, appSetting);
-        EzyResponse accessAppResponse = newAccessAppResponse(appSetting);
+        EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting);
         ctx.send(accessAppResponse, session);
     }
 	
@@ -61,27 +62,24 @@ public class EzyAccessAppController
 	        throw EzyAccessAppException.maximumUser(appName, current, max);
 	}
 	
-	protected void addUser(EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
+	protected void addUser(
+	        EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
 	    try {
-	        addUser0(appUserManger, user, setting);
+	        appUserManger.addUser(user);
 	    }
 	    catch(EzyMaxUserException e) {
 	        throw EzyAccessAppException.maximumUser(setting.getName(), e);
 	    }
 	}
 	
-	protected void addUser0(EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
-        if(appUserManger.addUser(user) != null)
-            throw EzyAccessAppException.hasJoinedApp(user.getName(), setting.getName());
-    }
-	
 	protected EzyUserAccessAppEvent newAccessAppEvent(EzyUser user) {
 	    return new EzySimpleUserAccessAppEvent(user);
 	}
 	
-	protected EzyResponse newAccessAppResponse(EzyAppSetting app) {
+	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app) {
 	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
 	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
+	    params.setZoneId(zoneId);
 	    params.setApp(app);
 	    return new EzyAccessAppResponse(params);
 	}

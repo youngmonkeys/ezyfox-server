@@ -21,7 +21,7 @@ public class EzySimpleLoginParams
         this.zoneName = t.get(0, String.class);
         this.username = t.get(1, String.class);
         this.password = t.get(2, String.class);
-        this.data = t.get(3, EzyData.class);
+        this.data = t.get(3, EzyData.class, null);
     }
     
     @Override

@@ -35,7 +35,7 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
         setSslActive(false);
         setMaxFrameSize(32678);
         setSslConfig(new EzySimpleSslConfigSetting());
-        setCodecCreator("com.tvd12.ezyfoxserver.mapping.codec.JacksonCodecCreator");
+        setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
     }
     
 }

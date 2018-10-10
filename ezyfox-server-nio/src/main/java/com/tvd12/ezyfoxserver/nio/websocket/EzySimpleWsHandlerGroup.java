@@ -1,10 +1,13 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
+import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
+import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
+import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 
 public class EzySimpleWsHandlerGroup
-		extends EzyAbstractHandlerGroup<EzyWsDataDecoder>
+		extends EzyAbstractHandlerGroup<EzyStringDataDecoder>
 		implements EzyWsHandlerGroup {
 
 	private final EzyCallback<Object> decodeBytesCallback;
@@ -15,8 +18,8 @@ public class EzySimpleWsHandlerGroup
 	}
 	
 	@Override
-	protected EzyWsDataDecoder newDecoder(Object decoder) {
-		return new EzySimpleWsDataDecoder((EzyWsByteToObjectDecoder)decoder);
+	protected EzyStringDataDecoder newDecoder(Object decoder) {
+		return new EzySimpleStringDataDecoder((EzyStringToObjectDecoder)decoder);
 	}
 	
 	@Override

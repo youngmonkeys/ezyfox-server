@@ -5,10 +5,13 @@ import java.nio.channels.SelectionKey;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
+import com.tvd12.ezyfox.codec.EzyMessageDataDecoder;
+import com.tvd12.ezyfox.codec.EzySimpleMessageDataDecoder;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
-		extends EzyAbstractHandlerGroup<EzyNioDataDecoder>
+		extends EzyAbstractHandlerGroup<EzyMessageDataDecoder>
 		implements EzyNioHandlerGroup {
 	
 	private final EzyCallback<EzyMessage> decodeBytesCallback;
@@ -19,8 +22,8 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	@Override
-	protected EzyNioDataDecoder newDecoder(Object decoder) {
-		return new EzySimpleNioDataDecoder((EzyNioByteToObjectDecoder)decoder);
+	protected EzyMessageDataDecoder newDecoder(Object decoder) {
+		return new EzySimpleMessageDataDecoder((EzyByteToObjectDecoder)decoder);
 	}
 	
 	@Override

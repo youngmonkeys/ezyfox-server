@@ -5,6 +5,7 @@
 	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
+	<node-name>localhost</node-name>
 	<max-sessions>30000</max-sessions>
 	
 	<socket>

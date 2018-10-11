@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.testing;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
+import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession> {
@@ -25,6 +26,7 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
 
         @Override
         public MyTestSessionManager build() {
+            this.tokenGenerator = new EzySimpleSessionTokenGenerator();
             return new MyTestSessionManager(this);
         }
 

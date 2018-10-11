@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 
 import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
 
-import java.net.SocketTimeoutException;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -59,7 +59,7 @@ public class EzyWsHandler extends EzyLoggable {
 		if(dataHandler == null) {
 			getLogger().debug("error on session: " + session.getRemoteAddress() + ", but data handler removed, details: " + throwable);
 		}
-		if (throwable instanceof SocketTimeoutException) {
+		if (throwable instanceof TimeoutException) {
 			getLogger().debug("session " + session.getRemoteAddress() + ": Timeout on Read");
 		}
 		else if(dataHandler != null) {

@@ -6,6 +6,7 @@
 		<xs:complexType>
 			<xs:all>
 				<xs:element ref="debug" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="node-name" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
@@ -18,6 +19,7 @@
 	</xs:element>
 
 	<xs:element name="debug" type="xs:boolean" />
+	<xs:element name="node-name" type="xs:string" />
 	<xs:element name="max-sessions" type="xs:integer" />
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />

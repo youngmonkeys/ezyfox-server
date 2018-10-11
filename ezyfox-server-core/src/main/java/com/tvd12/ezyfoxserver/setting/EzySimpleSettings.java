@@ -26,6 +26,9 @@ public class EzySimpleSettings implements EzySettings {
     @XmlElement(name = "debug")
     protected boolean debug;
     
+    @XmlElement(name = "node-name")
+    protected String nodeName = "ezyfox";
+    
     @XmlElement(name = "max-sessions")
     protected int maxSessions = 999999;
     

@@ -13,7 +13,6 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
-import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 public class EzySimpleSessionManager<S extends EzySession> 
@@ -31,7 +30,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	protected EzySimpleSessionManager(Builder<S> builder) {
 		super(builder);
 		this.maxSessions = builder.maxSessions;
-		this.tokenGenerator = builder.getSessionTokenGenerator();
+		this.tokenGenerator = builder.tokenGenerator;
 	}
 	
 	@Override
@@ -260,10 +259,6 @@ public class EzySimpleSessionManager<S extends EzySession>
 		public Builder<S> tokenGenerator(EzySessionTokenGenerator generator) {
 		    this.tokenGenerator = generator;
 		    return this;
-		}
-		
-		protected EzySessionTokenGenerator getSessionTokenGenerator() {
-		    return tokenGenerator != null ? tokenGenerator : new EzySimpleSessionTokenGenerator();
 		}
 		
 		public abstract EzySimpleSessionManager<S> build();

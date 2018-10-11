@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
+import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
+import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
@@ -74,7 +76,11 @@ public abstract class EzyLoader extends EzyLoggable {
     protected EzySessionManager newSessionManagers(EzySettings settings) {
         EzySimpleSessionManager.Builder builder 
                 = createSessionManagerBuilder(settings);
-        builder.maxSessions(settings.getMaxSessions());
+        EzySessionTokenGenerator tokenGenerator 
+                = new EzySimpleSessionTokenGenerator(settings.getNodeName());
+        builder
+            .tokenGenerator(tokenGenerator)
+            .maxSessions(settings.getMaxSessions());
         return builder.build();
     }
     

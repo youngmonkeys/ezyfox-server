@@ -29,9 +29,10 @@ public class EzySimpleUserDelegate
     @Override
     public void onUserRemoved(EzyUser user, EzyConstant reason) {
         EzyZoneContext zoneContext = serverContext.getZoneContext(user.getZoneId());
+        removeUserFromApps(zoneContext, user); 
         EzyUserEvent event = newUserRemovedEvent(user, reason);
+        notifyToApps(zoneContext, event);
         notifyToPlugins(zoneContext, event);
-        removeUserFromApps(zoneContext, user);
     }
     
     protected void notifyToPlugins(EzyZoneContext context, EzyUserEvent event) {
@@ -39,7 +40,8 @@ public class EzySimpleUserDelegate
             context.firePluginEvent(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify user: " + event.getUser() + " removed error", e);
+            String zoneName = context.getZone().getSetting().getName();
+            getLogger().error("zone: " + zoneName + ", notify to plugins user: " + event.getUser() + " removed error", e);
         }
     }
     
@@ -48,7 +50,8 @@ public class EzySimpleUserDelegate
             context.fireAppEvent(EzyEventType.USER_REMOVED, event, event.getUser());
         }
         catch(Exception e) {
-            getLogger().error("notify user: " + event.getUser() + " disconnect to server error", e);
+            String zoneName = context.getZone().getSetting().getName();
+            getLogger().error("zone: " + zoneName + ", notify to apps user: " + event.getUser() + " removed error", e);
         }
     }
     

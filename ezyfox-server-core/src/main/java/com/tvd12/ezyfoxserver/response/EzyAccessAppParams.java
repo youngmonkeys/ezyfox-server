@@ -12,14 +12,12 @@ import lombok.Setter;
 public class EzyAccessAppParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = -2355811939162393678L;
     
-    protected int zoneId;
     protected EzyData data;
 	protected EzyAppSetting app;
 	
 	@Override
 	protected EzyArrayBuilder serialize0() {
 	    return newArrayBuilder()
-	            .append(zoneId)
                 .append(app.getId())
                 .append(app.getName())
                 .append(data);

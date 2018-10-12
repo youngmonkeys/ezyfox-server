@@ -79,7 +79,6 @@ public class EzyAccessAppController
 	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app) {
 	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
 	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
-	    params.setZoneId(zoneId);
 	    params.setApp(app);
 	    return new EzyAccessAppResponse(params);
 	}

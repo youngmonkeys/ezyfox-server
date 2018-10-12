@@ -19,7 +19,7 @@ public class EzyUserManagerImplTest extends BaseCoreTest {
         MyTestUser user = new MyTestUser();
         user.setId(1);
         user.setName("dungtv");
-        session.setReconnectToken("123456");
+        session.setToken("123456");
         user.addSession(session);
         manager.addUser(session, user);
         

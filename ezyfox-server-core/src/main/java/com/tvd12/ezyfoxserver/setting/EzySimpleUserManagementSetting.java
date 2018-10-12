@@ -29,6 +29,9 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting,
     @XmlElement(name = "allow-guest-login")
     protected boolean allowGuestLogin = true;
     
+    @XmlElement(name = "allow-change-session")
+    protected boolean allowChangeSession = true;
+    
     @XmlElement(name = "guest-name-prefix")
     protected String guestNamePrefix = "Guest#";
     

@@ -10,7 +10,7 @@ public class EzySimpleUserRemovedEvent
 		extends EzySimpleUserEvent 
 		implements EzyUserRemovedEvent {
 
-    protected EzyConstant reason;
+    protected final EzyConstant reason;
     
 	public EzySimpleUserRemovedEvent(EzyUser user, EzyConstant reason) {
         super(user);

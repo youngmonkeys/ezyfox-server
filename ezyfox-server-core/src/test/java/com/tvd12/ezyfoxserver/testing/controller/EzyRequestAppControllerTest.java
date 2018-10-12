@@ -41,7 +41,7 @@ public class EzyRequestAppControllerTest extends BaseCoreContextTest {
     @Override
     protected EzyServerContext newServerContext() {
         session = newSession();
-        session.setReconnectToken("abc");
+        session.setToken("abc");
         user = new MyTestUser();
         user.setName("dungtv");
         user.addSession(session);

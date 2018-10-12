@@ -5,7 +5,6 @@ import static com.tvd12.ezyfoxserver.exception.EzyLoginErrorException.zoneNotFou
 
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyILoginError;
-import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -31,7 +30,12 @@ public class EzyLoginController
 	        EzyLoginParams params = request.getParams();
 	        EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneName());
 	        EzyUserLoginEvent loginEvent = newLoginEvent(session, params);
-            control(ctx, zoneContext, loginEvent);
+	        try {
+	            control(ctx, zoneContext, loginEvent);
+	        }
+	        finally {
+	            loginEvent.release();
+	        }
         }
         catch(EzyLoginErrorException e) {
             processException(ctx, request.getSession(), e);
@@ -60,12 +64,8 @@ public class EzyLoginController
 	
 	protected void process(
 	        EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
-	    EzyLoginProcessor processor = EzyLoginProcessor.builder()
-	            .event(event)
-	            .serverContext(ctx)
-	            .zoneContext(zoneContext)
-	            .build();
-	    processor.apply();
+	    EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
+	    processor.apply(zoneContext, event);
 	}
 	
 	protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
@@ -80,8 +80,9 @@ public class EzyLoginController
 		        params.getPassword(), params.getData());
 	}
 	
-    protected void responseLoginError(EzyContext ctx, EzySession session, EzyILoginError error) {
-        response(ctx, session, newLoginErrorReponse(error));
+    protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
+        EzyResponse response = newLoginErrorReponse(error);
+        ctx.send(response, session);
     }
     
     protected EzyResponse newLoginErrorReponse(EzyILoginError error) {

@@ -1,21 +1,21 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.codec.EzyMessageDataEncoder;
+import com.tvd12.ezyfox.codec.EzyObjectToByteEncoder;
+import com.tvd12.ezyfox.codec.EzySimpleMessageDataEncoder;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.api.EzyAbstractResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.handler.EzyNioDataEncoder;
-import com.tvd12.ezyfoxserver.nio.handler.EzyNioObjectToByteEncoder;
-import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioDataEncoder;
 
 public class EzyNioSocketResponseApi extends EzyAbstractResponseApi {
 
-	protected final EzyNioDataEncoder encoder;
+	protected final EzyMessageDataEncoder encoder;
 	
 	protected EzyNioSocketResponseApi(Builder builder) {
-		this.encoder = new EzySimpleNioDataEncoder(
-				(EzyNioObjectToByteEncoder)builder.encoder);
+		this.encoder = new EzySimpleMessageDataEncoder(
+				(EzyObjectToByteEncoder)builder.encoder);
 	}
 	
 	@Override

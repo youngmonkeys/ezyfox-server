@@ -4,10 +4,8 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.entity.EzySessionAware;
-import com.tvd12.ezyfoxserver.entity.EzyUserAware;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
-import com.tvd12.ezyfoxserver.request.EzyRequestParamsDeserializable;
+import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 
 public abstract class EzyUserDataHandler<S extends EzySession> 
         extends EzySessionDataHandler<S> {
@@ -29,12 +27,10 @@ public abstract class EzyUserDataHandler<S extends EzySession>
     
     @SuppressWarnings({ "rawtypes" })
     protected EzyRequest newRequest(EzyConstant cmd, EzyArray data) {
-        EzyRequest request = requestFactory.newRequest(cmd);
-        ((EzySessionAware)request).setSession(session);
-        ((EzyRequestParamsDeserializable)request).deserializeParams(data);
-        if(request instanceof EzyUserAware) {
-            ((EzyUserAware)request).setUser(user);
-        }
+        EzySimpleRequest request = requestFactory.newRequest(cmd);
+        request.setSession(session);
+        request.setUser(user);
+        request.deserializeParams(data);
         return request;
     }
     

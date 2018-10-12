@@ -6,13 +6,13 @@ import java.util.Set;
 
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
-public abstract class EzyAbstractResponse<C extends EzyContext> 
+public abstract class EzyAbstractResponse<C extends EzyZoneChildContext> 
         extends EzyMessageController 
         implements EzyResponse, EzyDestroyable {
 
@@ -104,20 +104,17 @@ public abstract class EzyAbstractResponse<C extends EzyContext>
     
     @Override
     public void execute() {
-        com.tvd12.ezyfoxserver.response.EzyResponse response = newResponse();
         recipients.removeAll(exrecipients);
-        context.cmd(EzySendResponse.class)
-            .recipients(recipients)
-            .response(response)
-            .execute();
+        EzyData data = newResponseData();
+        sendData(data);
         destroy();
     }
+    
+    protected abstract void sendData(EzyData data);
 
     protected final EzyData newResponseData() {
         return newArrayBuilder().append(command).append(params).build();
     }
-    
-    protected abstract com.tvd12.ezyfoxserver.response.EzyResponse newResponse();
     
     @Override
     public void destroy() {

@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class EzySimpleSessionEvent implements EzySessionEvent {
 
-    protected EzySession session;
+    protected final EzySession session;
     
     public EzySimpleSessionEvent(EzySession session) {
         this.session = session;

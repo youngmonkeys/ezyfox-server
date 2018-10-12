@@ -35,8 +35,8 @@ public class EzyProxySession {
 		return real.getClientType();
 	}
 	
-	public String getReconnectToken() {
-		return real.getReconnectToken();
+	public String getToken() {
+		return real.getToken();
 	}
 	
 	public long getMaxIdleTime() {

@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
@@ -10,6 +11,13 @@ public class EzyUserRequestPluginSingletonController
 
 	protected EzyUserRequestPluginSingletonController(Builder builder) {
 		super(builder);
+	}
+	
+	@Override
+	protected void responseError(
+			EzyPluginContext context, 
+			EzyUserRequestPluginEvent event, EzyData errorData) {
+		context.send(errorData, event.getSession(), event.isWithName());
 	}
 	
 	public static Builder builder() {

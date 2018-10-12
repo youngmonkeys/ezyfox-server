@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.context;
 
-import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
@@ -41,11 +40,6 @@ public final class EzyServerContexts {
     
     public static EzyHttpSetting getHttpSetting(EzyServerContext context) {
         return getSettings(context).getHttp();
-    }
-    
-    public static void handleException(
-            EzyServerContext context, Thread thread, Throwable throwable) {
-        context.get(EzyHandleException.class).handle(thread, throwable);
     }
     
 }

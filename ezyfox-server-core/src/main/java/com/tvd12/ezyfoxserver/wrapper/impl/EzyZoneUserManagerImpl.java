@@ -5,6 +5,7 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -49,7 +50,7 @@ public class EzyZoneUserManagerImpl
 		usersById.put(user.getId(), user);
 		usersByName.put(user.getName(), user);
 		usersBySession.put(session, user);
-		getLogger().debug("add user {}, user count = {}", user.getName(), usersById.size());
+		getLogger().info("zone: {} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", zoneName, user, locks.size(), usersById.size(), usersByName.size());
 	}
 	
 	@Override
@@ -91,7 +92,9 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected boolean shouldRemoveUserNow(EzyUser user) {
-	    boolean should = user.getSessionCount() == 0 && user.getMaxIdleTime() <= 0;
+	    int sessionCount = user.getSessionCount();
+	    long maxIdleTime = user.getMaxIdleTime();
+	    boolean should = sessionCount <= 0 && maxIdleTime <= 0;
 	    return should;
 	}
 	
@@ -101,14 +104,15 @@ public class EzyZoneUserManagerImpl
 	 */
 	@Override
 	public void removeUser(EzyUser user, EzyConstant reason) {
-	    EzyProcessor.processWithLock(
-	            () -> removeUser0(user, reason), getLock(user.getName()));
+	    Lock lock = getLock(user.getName());
+	    EzyProcessor.processWithLock(() -> removeUser0(user, reason), lock);
 	}
 	
 	private void removeUser0(EzyUser user, EzyConstant reason) {
 	    getLogger().debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
 	    removeUser(user);
         delegateUserRemove(user, reason);
+        destroyUser(user);
 	}
 	
 	@Override
@@ -134,18 +138,24 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected void validateIdleUsers() {
-	    for(EzyUser user : getUserList())
+	    for(EzyUser user : getUserList()) {
 	        if(isIdleUser(user))
 	            removeUser(user, EzyDisconnectReason.IDLE);
+	    }
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
-	    return user.isIdle();
+	    boolean idle = user.isIdle();
+	    return idle;
 	}
 	
 	protected void delegateUserRemove(EzyUser user, EzyConstant reason) {
 	    userDelegate.onUserRemoved(user, reason);
     }
+	
+	protected void destroyUser(EzyUser user) {
+	    user.destroy();
+	}
 	
 	@Override
 	public void destroy() {

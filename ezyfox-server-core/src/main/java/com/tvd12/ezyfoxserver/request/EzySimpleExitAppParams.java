@@ -5,13 +5,16 @@ import com.tvd12.ezyfox.entity.EzyArray;
 import lombok.Getter;
 
 @Getter
-public class EzySimplePingParams
+public class EzySimpleExitAppParams
         extends EzySimpleRequestParams
-        implements EzyPingParams {
-    private static final long serialVersionUID = 4329468610224689234L;
+        implements EzyExitAppParams {
+    private static final long serialVersionUID = -5086750569893577041L;
+
+    private int appId;
     
     @Override
     public void deserialize(EzyArray t) {
+        this.appId = t.get(0, int.class);
     }
     
 }

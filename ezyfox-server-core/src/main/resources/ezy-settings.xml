@@ -5,6 +5,7 @@
 	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
+	<node-name>localhost</node-name>
 	<max-sessions>30000</max-sessions>
 	
 	<socket>
@@ -39,7 +40,6 @@
 	</administrators>
 	
 	<session-management>
-		<session-allow-reconnect>true</session-allow-reconnect>
 		<session-max-idle-time>15000</session-max-idle-time>
 		<session-max-waiting-time>30000</session-max-waiting-time>
 		<session-max-request-per-second>

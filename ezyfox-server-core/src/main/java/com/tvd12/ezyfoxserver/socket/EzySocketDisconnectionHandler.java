@@ -59,7 +59,8 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
 	}
 	
 	protected EzySocketDataHandlerGroup removeDataHandlerGroup(EzySession session) {
-	    return dataHandlerGroupRemover.removeHandlerGroup(session);
+		EzySocketDataHandlerGroup group = dataHandlerGroupRemover.removeHandlerGroup(session);
+		return group;
 	}
 	
 }

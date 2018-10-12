@@ -11,6 +11,7 @@ import lombok.Getter;
 public class EzyComponent implements EzyExceptionHandlersFetcher {
 
     @JsonIgnore
-    protected EzyExceptionHandlers exceptionHandlers = new EzyListExceptionHandlers();
+    protected final EzyExceptionHandlers exceptionHandlers 
+            = new EzyListExceptionHandlers();
     
 }

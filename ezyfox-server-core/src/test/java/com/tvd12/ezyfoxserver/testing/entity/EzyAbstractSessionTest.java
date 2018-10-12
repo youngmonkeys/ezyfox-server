@@ -20,14 +20,12 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         MyTestSession session = new MyTestSession();
         session.setId(100);
         session.setPrivateKey(new byte[] {1, 2, 3});
-        session.setFullReconnectToken("123456");
         session.addReadBytes(10);
         session.addWrittenBytes(10);
         session.setLoggedInTime(12345);
         session.setMaxWaitingTime(123);
         session.setMaxIdleTime(12345L);
         assertEquals(session.getPrivateKey(), new byte[] {1, 2, 3});
-        assertEquals(session.getFullReconnectToken(), "123456");
         assertEquals(session.getReadBytes(), 10);
         assertEquals(session.getWrittenBytes(), 10);
         assertEquals(session.getLoggedInTime(), 12345L);

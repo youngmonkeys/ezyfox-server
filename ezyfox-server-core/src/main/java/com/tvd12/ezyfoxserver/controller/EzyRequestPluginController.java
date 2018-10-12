@@ -34,7 +34,10 @@ public abstract class EzyRequestPluginController<P extends EzyRequestPluginParam
 		return new EzySimpleUserRequestPluginEvent(
 		        request.getUser(),
 		        request.getSession(), 
-		        request.getParams().getData());
+		        request.getParams().getData(),
+		        withName());
 	}
+	
+	protected abstract boolean withName();
 	
 }

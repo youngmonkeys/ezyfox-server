@@ -19,7 +19,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     public void test() {
         EzyServerContext ctx = newServerContext();
         EzySession session = newSession();
-        session.setReconnectToken("abcdef");
+        session.setToken("abcdef");
         EzyArray data = newLoginData();
         EzyLoginController controller = new EzyLoginController();
         EzySimpleLoginRequest request = new EzySimpleLoginRequest();
@@ -32,7 +32,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     public void test1() {
         EzyServerContext ctx = newServerContext();
         EzySession session = newSession();
-        session.setReconnectToken("abcdef");
+        session.setToken("abcdef");
         EzyArray data = newLoginData1();
         EzyLoginController controller = new EzyLoginController() {
             @Override
@@ -50,7 +50,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     public void test2() {
         EzyServerContext ctx = newServerContext();
         EzySession session = newSession();
-        session.setReconnectToken("abcdef");
+        session.setToken("abcdef");
         EzyArray data = newLoginData();
         EzyLoginController controller = new EzyLoginController() {
             @Override

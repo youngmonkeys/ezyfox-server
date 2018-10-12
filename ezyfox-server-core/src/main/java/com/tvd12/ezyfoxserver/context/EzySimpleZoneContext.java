@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.context;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -18,8 +19,10 @@ import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireAppEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneFirePluginEventImpl;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
@@ -41,8 +44,8 @@ public class EzySimpleZoneContext
 	protected EzyFireAppEvent fireAppEvent;
 	protected EzyFirePluginEvent firePluginEvent;
 	
-	protected Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
-	protected Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+	protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
+	protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
 
 	@Override
 	protected void init0() {
@@ -131,6 +134,16 @@ public class EzySimpleZoneContext
 	}
 	
 	@Override
+	public void send(EzyResponse response, EzySession recipient, boolean immediate) {
+	    parent.send(response, recipient, immediate);
+	}
+	
+	@Override
+	public void send(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
+	    parent.send(response, recipients, immediate);
+	}
+	
+	@Override
 	public void destroy() {
 	    super.destroy();
 	    destroyZone();
@@ -145,9 +158,7 @@ public class EzySimpleZoneContext
 	    this.fireAppEvent = null;
 	    this.firePluginEvent = null;
 	    this.appContextsByName.clear();
-        this.appContextsByName = null;
 	    this.pluginContextsByName.clear();
-	    this.pluginContextsByName = null;
 	}
 	
 	private void destroyZone() {

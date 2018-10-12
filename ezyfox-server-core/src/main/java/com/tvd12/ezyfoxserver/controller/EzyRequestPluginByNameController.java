@@ -15,4 +15,9 @@ public class EzyRequestPluginByNameController
         return pluginContext;
     }
     
+    @Override
+    protected boolean withName() {
+        return true;
+    }
+    
 }

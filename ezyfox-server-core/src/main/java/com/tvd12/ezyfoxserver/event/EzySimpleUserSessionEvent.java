@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public class EzySimpleUserSessionEvent implements EzyUserSessionEvent {
 
-    protected EzyUser user;
-    protected EzySession session;
+    protected final EzyUser user;
+    protected final EzySession session;
     
     public EzySimpleUserSessionEvent(EzyUser user, EzySession session) {
         this.user = user;

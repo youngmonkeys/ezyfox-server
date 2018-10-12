@@ -17,7 +17,7 @@ public class EzySimpleAccessAppParams
     @Override
     public void deserialize(EzyArray t) {
         this.appName = t.get(0, String.class);
-        this.data = t.get(1, EzyData.class);
+        this.data = t.get(1, EzyData.class, null);
     }
     
 }

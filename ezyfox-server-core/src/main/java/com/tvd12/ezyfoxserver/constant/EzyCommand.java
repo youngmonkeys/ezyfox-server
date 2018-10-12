@@ -18,7 +18,6 @@ public enum EzyCommand implements EzyConstant {
     DISCONNECT(14, 10),
 	LOGIN(20, 1),
 	LOGIN_ERROR(21, 10),
-	LOGOUT(22, 10),
 	APP_ACCESS(30, 2),
 	APP_REQUEST(31, 10),
 	APP_EXIT(33, 10),
@@ -62,7 +61,7 @@ public enum EzyCommand implements EzyConstant {
 	}
 	
 	private static final Set<EzyCommand> systemCommands() {
-	    return Sets.newHashSet(HANDSHAKE, LOGIN, LOGOUT, APP_ACCESS, APP_EXIT, DISCONNECT);
+	    return Sets.newHashSet(HANDSHAKE, LOGIN, APP_ACCESS, APP_EXIT, DISCONNECT);
 	}
 	
 	private static final Map<Integer, EzyCommand> commandsById() {

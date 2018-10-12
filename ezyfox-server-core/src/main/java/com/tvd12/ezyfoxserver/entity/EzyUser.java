@@ -89,6 +89,14 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
     void removeSession(EzySession session);
     
     /**
+     * change current session
+     * 
+     * @param session the session to change
+     * @return the old sessions
+     */
+    List<EzySession> changeSession(EzySession session);
+    
+    /**
      * @return is idle or not
      */
     boolean isIdle();

@@ -38,39 +38,55 @@ public class EzySimpleUser
 	@Setter(AccessLevel.NONE)
     protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	@Setter(AccessLevel.NONE)
-	protected Map<String, EzySession> sessionMap = new ConcurrentHashMap<>();
+	protected Map<Long, EzySession> sessionMap = new ConcurrentHashMap<>();
 
 	private transient static final AtomicLong COUNTER = new AtomicLong(0);
 	
 	@Override
 	public void addSession(EzySession session) {
-	    sessionMap.put(session.getReconnectToken(), session);
+	    sessionMap.put(session.getId(), session);
 	}
 	
 	@Override
 	public void removeSession(EzySession session) {
-	    sessionMap.remove(session.getReconnectToken());
+	    startIdleTime = System.currentTimeMillis();
+	    sessionMap.remove(session.getId());
+	}
+	
+	@Override
+	public List<EzySession> changeSession(EzySession session) {
+	    Map<Long, EzySession> newSessionMap = new ConcurrentHashMap<>();
+	    newSessionMap.put(session.getId(), session);
+	    Map<Long, EzySession> oldSessionMap = sessionMap;
+	    this.sessionMap = newSessionMap;
+	    List<EzySession> answer = new ArrayList<>(oldSessionMap.values());
+	    oldSessionMap.clear();
+	    return answer;
 	}
 	
 	@Override
 	public EzySession getSession() {
 	    List<EzySession> sessions = getSessions();
-	    return sessions.isEmpty() ? null : sessions.get(0);
+	    EzySession session = sessions.isEmpty() ? null : sessions.get(0);
+	    return session;
 	}
 	
 	@Override
 	public List<EzySession> getSessions() {
-	    return new ArrayList<>(sessionMap.values());
+	    List<EzySession> sessions = new ArrayList<>(sessionMap.values());
+	    return sessions;
 	}
 	
 	@Override
 	public int getSessionCount() {
-	    return sessionMap.size();
+	    int size = sessionMap.size();
+	    return size;
 	}
 	
 	@Override
     public Lock getLock(String name) {
-        return locks.computeIfAbsent(name, k -> new ReentrantLock());
+        Lock lock = locks.computeIfAbsent(name, k -> new ReentrantLock());
+        return lock;
     }
 	
 	@Override
@@ -103,12 +119,10 @@ public class EzySimpleUser
 	public void destroy() {
 	    if(locks != null)
 	        locks.clear();
-	    if(properties != null)
-	        this.properties.clear();
 	    if(sessionMap != null)
 	        this.sessionMap.clear();
+	    this.properties.clear();
 	    this.locks = null;
-	    this.properties = null;
 	    this.sessionMap = null;
 	}
 	

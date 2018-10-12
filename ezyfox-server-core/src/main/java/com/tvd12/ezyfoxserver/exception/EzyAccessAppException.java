@@ -21,11 +21,6 @@ public class EzyAccessAppException extends IllegalStateException {
         this.error = error;
     }
     
-    public static EzyAccessAppException hasJoinedApp(String username, String appName) {
-        String message = "user: " + username + " has joined app: " + appName;
-        return new EzyAccessAppException(message, EzyAccessAppError.HAS_JOINED);
-    }
-    
     public static EzyAccessAppException maximumUser(String appName, EzyMaxUserException e) {
         String message = "app: " + appName + " has maximum user";
         return new EzyAccessAppException(message, EzyAccessAppError.MAXIMUM_USER, e);

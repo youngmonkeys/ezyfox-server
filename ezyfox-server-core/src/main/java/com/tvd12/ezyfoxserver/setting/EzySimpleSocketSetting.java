@@ -23,6 +23,6 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
         super();
         setPort(3005);
         setMaxRequestSize(32768);
-        setCodecCreator("com.tvd12.ezyfoxserver.mapping.codec.MsgPackCodecCreator");
+        setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
 }

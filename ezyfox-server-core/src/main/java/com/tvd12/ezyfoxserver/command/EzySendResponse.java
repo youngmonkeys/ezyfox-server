@@ -5,14 +5,18 @@ import java.util.Collection;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
-public interface EzySendResponse extends EzyVoidCommand {
+public interface EzySendResponse {
 
-    EzySendResponse immediate(boolean immediate);
+    void execute(EzyResponse response, EzySession recipient, boolean immediate);
     
-    EzySendResponse response(EzyResponse response);
+    void execute(EzyResponse response, Collection<EzySession> recipients, boolean immediate);
     
-    EzySendResponse recipient(EzySession recipient);
+    default void execute(EzyResponse response, EzySession recipient) {
+        execute(response, recipient, false);
+    }
     
-    EzySendResponse recipients(Collection<EzySession> recipients);
+    default void execute(EzyResponse response, Collection<EzySession> recipients) {
+        execute(response, recipients, false);
+    }
     
 }

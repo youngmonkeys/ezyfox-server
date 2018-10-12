@@ -41,7 +41,8 @@ public class EzyCloseSessionImpl
     }
 	
 	protected void sendToClients0(EzySession session, EzyConstant reason) {
-	    responseNow(context, session, newResponse(reason));
+	    EzyResponse response = newResponse(reason);
+	    context.send(response, session, true);
 	}
 	
 	protected EzyResponse newResponse(EzyConstant reason) {

@@ -8,8 +8,6 @@ public interface EzySessionManagementSetting {
     
     long getSessionMaxWaitingTime();
     
-    boolean isSessionAllowReconnect();
-    
     EzyMaxRequestPerSecond getSessionMaxRequestPerSecond();
     
     interface EzyMaxRequestPerSecond {

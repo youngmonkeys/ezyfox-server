@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.handler;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.request.EzyRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 
 @SuppressWarnings("rawtypes")
 public interface EzyRequestFactory {
     
-    EzyRequest newRequest(EzyConstant cmd);
+    EzySimpleRequest newRequest(EzyConstant cmd);
     
 }

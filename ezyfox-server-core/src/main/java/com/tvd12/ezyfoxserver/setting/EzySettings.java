@@ -6,6 +6,8 @@ public interface EzySettings {
 
     boolean isDebug();
     
+    String getNodeName();
+    
     int getMaxSessions();
     
     EzyHttpSetting getHttp();

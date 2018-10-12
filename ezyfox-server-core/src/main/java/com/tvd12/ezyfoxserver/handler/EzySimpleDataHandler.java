@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.handler;
 import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.handleException;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -70,7 +69,6 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         session.addReadRequests(1);
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastActivityTime(System.currentTimeMillis());
-        updateUserByReceivedData();
         handleRequest(cmd, data);
     }
     
@@ -79,24 +77,18 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             getLogger().debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
     }
     
-    public void updateUserByReceivedData() {
-        if(user != null) {
-            user.setStartIdleTime(System.currentTimeMillis());
-        }
-    }
-    
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
         try {
-            doHandleRequest(cmd, data);
+            handleRequest0(cmd, data);
         }
         catch(Exception e) {
             Throwable throwable = requestHandleException(cmd, data, e);
-            handleException(context, Thread.currentThread(), throwable);
+            context.handleException(Thread.currentThread(), throwable);
         }
     }
     
     @SuppressWarnings("rawtypes")
-    protected void doHandleRequest(EzyConstant cmd, EzyArray data) throws Exception {
+    protected void handleRequest0(EzyConstant cmd, EzyArray data) throws Exception {
         EzyRequest request = newRequest(cmd, data);
         try {
             EzyInterceptor interceptor = controllers.getInterceptor(cmd);

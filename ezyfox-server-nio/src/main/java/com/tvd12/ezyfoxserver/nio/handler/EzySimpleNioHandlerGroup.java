@@ -5,10 +5,13 @@ import java.nio.channels.SelectionKey;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
+import com.tvd12.ezyfox.codec.EzyMessageDataDecoder;
+import com.tvd12.ezyfox.codec.EzySimpleMessageDataDecoder;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 
 public class EzySimpleNioHandlerGroup
-		extends EzyAbstractHandlerGroup<EzyNioDataDecoder>
+		extends EzyAbstractHandlerGroup<EzyMessageDataDecoder>
 		implements EzyNioHandlerGroup {
 	
 	private final EzyCallback<EzyMessage> decodeBytesCallback;
@@ -19,8 +22,8 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	@Override
-	protected EzyNioDataDecoder newDecoder(Object decoder) {
-		return new EzySimpleNioDataDecoder((EzyNioByteToObjectDecoder)decoder);
+	protected EzyMessageDataDecoder newDecoder(Object decoder) {
+		return new EzySimpleMessageDataDecoder((EzyByteToObjectDecoder)decoder);
 	}
 	
 	@Override
@@ -42,19 +45,21 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	private void handleReceivedMesssage(EzyMessage message) {
-		Object data = decodeMessage(message);
-		handleReceivedData(data);
-		executeAddReadBytes(message.getByteCount());
+		try {
+			Object data = decodeMessage(message);
+			handleReceivedData(data);
+		}
+		catch (Exception e) {
+			fireExceptionCaught(e);
+		}
+		finally {
+			executeAddReadBytes(message.getByteCount());
+		}
 	}
 	
-	private Object decodeMessage(EzyMessage message) {
-		try {
-			return decoder.decode(message);
-		}
-		catch(Exception e) {
-			getLogger().error("decode message error", e);
-			return null;
-		}
+	private Object decodeMessage(EzyMessage message) throws Exception {
+		Object answer = decoder.decode(message);
+		return answer;
 	}
 	
 	@Override

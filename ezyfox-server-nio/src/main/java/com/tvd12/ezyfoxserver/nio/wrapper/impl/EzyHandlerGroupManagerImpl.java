@@ -88,7 +88,8 @@ public class EzyHandlerGroupManagerImpl
 			return null;
 		if(session.getChannel().getConnection() == null)
 			return null;
-		Object connection = session.getChannel().getConnection();
+		EzyChannel channel = session.getChannel();
+		Object connection = channel.getConnection();
 		EzyHandlerGroup group = groupsByConnection.remove(connection);
 		getLogger().debug("remove handler group: {} with session: {}", group, session);
 		return group;
@@ -97,11 +98,13 @@ public class EzyHandlerGroupManagerImpl
 	private EzyHandlerGroup getHandlerGroup(EzySession session) {
 		if(session == null)
 			return null;
-		if(session.getChannel() == null)
+		EzyChannel channel = session.getChannel();
+		if(channel == null)
 			return null;
-		if(session.getChannel().getConnection() == null)
+		Object connection = channel.getConnection();
+		if(connection == null)
 			return null;
-		return groupsByConnection.get(session.getChannel().getConnection());
+		return groupsByConnection.get(connection);
 	}
 	
 	@Override

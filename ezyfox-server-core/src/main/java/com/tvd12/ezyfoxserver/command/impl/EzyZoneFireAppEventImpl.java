@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import static com.tvd12.ezyfoxserver.context.EzyAppContexts.handleException;
+import static com.tvd12.ezyfoxserver.context.EzyAppContexts.containsUser;
 
 import java.util.function.Predicate;
 
@@ -11,7 +11,6 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import static com.tvd12.ezyfoxserver.context.EzyAppContexts.*;
 
 public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFireAppEvent {
 
@@ -52,7 +51,7 @@ public class EzyZoneFireAppEventImpl extends EzyAbstractCommand implements EzyFi
 	        ctx.fireEvent(type, event);
 	    }
 	    catch(Exception e) {
-	        handleException(ctx, Thread.currentThread(), e);
+	        ctx.handleException(Thread.currentThread(), e);
 	    }
 	}
 	

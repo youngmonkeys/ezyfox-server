@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.controller;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.request.EzyPingRequest;
 import com.tvd12.ezyfoxserver.response.EzyPongResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
@@ -11,7 +12,9 @@ public class EzyPingController
 
     @Override
     public void handle(EzyServerContext ctx, EzyPingRequest request) {
-        response(ctx, request.getSession(), newPongResponse());
+        EzyResponse response = newPongResponse();
+        EzySession session = request.getSession();
+        ctx.send(response, session);
     }
 
     protected EzyResponse newPongResponse() {

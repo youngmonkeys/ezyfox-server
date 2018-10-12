@@ -4,24 +4,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
 import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class EzyUserRequestSingletonController<C extends EzyContext, E extends EzyUserRequestEvent> {
+public abstract class EzyUserRequestSingletonController<
+		C extends EzyZoneChildContext, 
+		E extends EzyUserRequestEvent>
+		extends EzyAbstractUserRequestController{
 
 	private final EzyUnmarshaller unmarshaller;
 	private final Map<String, EzyUserRequestHandler> handlers;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected EzyUserRequestSingletonController(Builder<?> builder) {
 		this.unmarshaller = builder.unmarshaller;
@@ -33,11 +41,29 @@ public class EzyUserRequestSingletonController<C extends EzyContext, E extends E
 		String cmd = data.get(0, String.class);
 		EzyData params = data.get(1, EzyData.class, null);
 		EzyUserRequestHandler handler = handlers.get(cmd);
+		if(handler == null) {
+			logger.warn("has no handler with command: {}", cmd);
+			return;
+		}
 		Object handlerData = handler.newData();
 		if(params != null)
 			unmarshaller.unwrap(params, handlerData);
-		handler.handle(context, event.getUser(), handlerData);
+		try {
+			handler.handle(context, event.getUser(), handlerData);
+		}
+		catch(EzyBadRequestException e) {
+			if(e.isSendToClient()) {
+				EzyData errorData = newErrorData(e);
+				responseError(context, event, errorData);
+			}
+			logger.debug("request cmd: " + cmd + " with data: " + data + " error", e);
+		}
+		catch(Exception e) {
+			throw e;
+		}
 	}
+	
+	protected abstract void responseError(C context, E event, EzyData errorData);
 	
 	public abstract static class Builder<B extends Builder>
 			extends EzyLoggable

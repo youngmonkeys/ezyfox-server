@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPrototypeFactory;
 import com.tvd12.ezyfox.bean.EzyPrototypeSupplier;
@@ -11,21 +14,26 @@ import com.tvd12.ezyfox.binding.EzyDataBinding;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
 import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.context.EzyContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 
-public class EzyUserRequestPrototypeController<C extends EzyContext, E extends EzyUserRequestEvent> {
+public abstract class EzyUserRequestPrototypeController<
+		C extends EzyZoneChildContext, 
+		E extends EzyUserRequestEvent>
+		extends EzyAbstractUserRequestController {
 
 	protected final EzyBeanContext beanContext;
 	protected final EzyUnmarshaller unmarshaller;
 	protected final Map<String, EzyPrototypeSupplier> handlers;
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected EzyUserRequestPrototypeController(Builder<?> builder) {
 		this.beanContext = builder.beanContext;
@@ -38,6 +46,10 @@ public class EzyUserRequestPrototypeController<C extends EzyContext, E extends E
 		String cmd = data.get(0, String.class);
 		EzyData params = data.get(1, EzyData.class, null);
 		EzyPrototypeSupplier supplier = handlers.get(cmd);
+		if(supplier == null) {
+			logger.warn("has no handler with command: {}", cmd);
+			return;
+		}
 		EzyHandler handler = (EzyHandler)supplier.supply(beanContext);
 		if(handler instanceof EzyUserAware)
 			((EzyUserAware)handler).setUser(event.getUser());
@@ -47,8 +59,22 @@ public class EzyUserRequestPrototypeController<C extends EzyContext, E extends E
 			if(params != null)
 				unmarshaller.unwrap(params, handler);
 		prehandle(context, handler);
-		handler.handle();
+		try {
+			handler.handle();
+		}
+		catch(EzyBadRequestException e) {
+			if(e.isSendToClient()) {
+				EzyData errorData = newErrorData(e);
+				responseError(context, event, errorData);
+			}
+			logger.debug("request cmd: " + cmd + " with data: " + data + " error", e);
+		}
+		catch(Exception e) {
+			throw e;
+		}
 	}
+	
+	protected abstract void responseError(C context, E event, EzyData errorData);
 	
 	protected void prehandle(C context, EzyHandler handler) {
 	}

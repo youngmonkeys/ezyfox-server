@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import static com.tvd12.ezyfoxserver.context.EzyPluginContexts.handleException;
-
 import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -32,13 +30,14 @@ public class EzyZoneFirePluginEventImpl
 	}
 	
 	protected Set<EzyPluginSetting> getValidPlugins(EzyConstant type) {
-	    return eventPluginsMapper.getPlugins(type);
+	    Set<EzyPluginSetting> valid = eventPluginsMapper.getPlugins(type);
+	    return valid;
 	}
 	
 	protected void firePluginsEvent(EzyConstant type, EzyEvent event) {
-	    getValidPlugins(type).forEach(plugin -> 
-	        firePluginEvent(plugin.getId(), type, event)
-	    );
+	    Set<EzyPluginSetting> pluginSettings = getValidPlugins(type);
+	    for(EzyPluginSetting pluginSetting : pluginSettings)
+	        firePluginEvent(pluginSetting.getId(), type, event);
 	}
 	
 	protected void firePluginEvent(int pluginId, EzyConstant type, EzyEvent event) {
@@ -51,7 +50,7 @@ public class EzyZoneFirePluginEventImpl
 	        ctx.fireEvent(type, event);
 	    }
 	    catch(Exception e) {
-	        handleException(ctx, Thread.currentThread(), e);
+	        ctx.handleException(Thread.currentThread(), e);
 	    }
 	}
 	

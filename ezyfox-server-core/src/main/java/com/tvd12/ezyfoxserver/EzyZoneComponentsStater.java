@@ -9,8 +9,8 @@ import com.tvd12.ezyfox.util.EzyStartable;
 
 public abstract class EzyZoneComponentsStater extends EzyLoggable implements EzyStartable {
 
-    protected EzyZoneSetting zoneSetting;
-    protected EzyZoneContext zoneContext;
+    protected final EzyZoneSetting zoneSetting;
+    protected final EzyZoneContext zoneContext;
     
     protected EzyZoneComponentsStater(Builder<?,?> builder) {
         this.zoneContext = builder.zoneContext;

@@ -11,8 +11,8 @@ public class EzySimpleUserLoginEvent
         extends EzySimpleSessionEvent 
         implements EzyUserLoginEvent {
 
-	protected EzyData data;
-	protected String zoneName;
+	protected final EzyData data;
+	protected final String zoneName;
 	@Setter
 	protected String username;
 	@Setter
@@ -29,7 +29,6 @@ public class EzySimpleUserLoginEvent
 	    this.data = data;
 	    this.username = username;
 	    this.password = password;
-	    this.data = data;
 	}
 	
 	public String getUsername() {
@@ -38,6 +37,14 @@ public class EzySimpleUserLoginEvent
 	
 	public String getPassword() {
 	    return password == null ? "" : password;
+	}
+	
+	@Override
+	public void release() {
+	    super.release();
+	    this.username = null;
+	    this.password = null;
+	    this.output = null;
 	}
 	
 }

@@ -11,7 +11,7 @@ public class EzySimpleUserRequestEvent
 		extends EzySimpleUserSessionEvent 
 		implements EzyUserRequestAppEvent {
 
-    protected EzyArray data;
+    protected final EzyArray data;
     
 	public EzySimpleUserRequestEvent(EzyUser user, EzySession session, EzyArray data) {
         super(user, session);

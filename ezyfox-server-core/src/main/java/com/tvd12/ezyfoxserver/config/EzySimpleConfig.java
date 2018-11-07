@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.config;
 
-import com.tvd12.ezyfox.util.EzyReturner;
 import com.tvd12.properties.file.annotation.Property;
 
 import lombok.Getter;
@@ -22,7 +21,9 @@ public class EzySimpleConfig implements EzyConfig {
 	private String loggerConfigFile;
 	
 	public String getEzyfoxHome() {
-	    return EzyReturner.returnNotNull(ezyfoxHome, "");
+	    if(ezyfoxHome == null)
+	        return "";
+	    return ezyfoxHome;
 	}
 	
 }

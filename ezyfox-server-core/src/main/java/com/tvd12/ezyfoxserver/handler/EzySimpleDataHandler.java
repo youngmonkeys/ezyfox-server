@@ -8,7 +8,6 @@ import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.request
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
-import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionError;
@@ -175,7 +174,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void closeSession(EzyConstant reason) {
         try {
-            context.get(EzyCloseSession.class).close(session, reason);
+            closeSession.close(session, reason);
         }
         catch(Exception ex) {
             getLogger().error("close session: " + session + " with reason: " + reason + " error", ex);

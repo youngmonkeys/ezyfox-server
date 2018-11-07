@@ -14,6 +14,7 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -46,6 +47,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyServer server;
     protected EzyServerContext context;
     protected EzyZoneContext zoneContext;
+    protected EzyCloseSession closeSession;
     protected EzyServerControllers controllers;
     protected EzyZoneUserManager userManager;
     protected EzySessionManager sessionManager;
@@ -70,6 +72,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.server = context.getServer();
         this.controllers = server.getControllers();
         this.sessionManager = server.getSessionManager();
+        this.closeSession = context.get(EzyCloseSession.class);
         
         this.settings = server.getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
@@ -130,6 +133,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.zoneContext = null;
         this.controllers = null;
         this.userManager = null;
+        this.closeSession = null;
         this.sessionManager = null;
         this.lock = null;
         this.settings = null;

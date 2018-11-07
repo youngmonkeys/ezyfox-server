@@ -170,8 +170,13 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	public int getAliveSessionCountWithLock() {
-        int count = returnWithLock(this::getAllSessionCount);
-        return count;
+	    lock.lock();
+        try {
+            return getAllSessionCount();
+        }
+        finally {
+            lock.unlock();
+        }
     }
 	
 	@Override

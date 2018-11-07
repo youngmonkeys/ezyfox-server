@@ -85,7 +85,6 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         fireUserAddedEvent(zoneContext, user, session, event.getData(), alreadyLoggedIn);
         EzyResponse response = newLoginReponse(zoneContext, user, event.getOutput());
         serverContext.send(response, session);
-        fireSessionLoginEvent(zoneContext, user, session, alreadyLoggedIn);
     }
     
     protected String checkUsername(
@@ -145,16 +144,6 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             userManager.addUser(session, user);
             userStats.addUsers(1);
             userStats.setCurrentUsers(userManager.getUserCount());
-        }
-    }
-    
-    protected void fireSessionLoginEvent(
-            EzyZoneContext zoneContext, 
-            EzyUser user,
-            EzySession session, boolean alreadyLoggedIn) {
-        if(alreadyLoggedIn) {
-            EzyEvent event = newSessionLoginEvent(user, session);
-            zoneContext.fireAppEvent(EzyEventType.USER_SESSION_LOGIN, event, user.getName());
         }
     }
     

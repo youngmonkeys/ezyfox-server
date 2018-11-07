@@ -189,7 +189,11 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	private boolean canWriteBytes(EzyChannel channel) {
-		return channel != null && channel.isConnected();
+		if(channel == null)
+			return false;
+		if(channel.isConnected())
+			return true;
+		return false;
 	}
 	
 	protected final void executeAddReadBytes(int bytes) {

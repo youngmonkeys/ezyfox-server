@@ -9,7 +9,6 @@ import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
@@ -105,7 +104,13 @@ public class EzyZoneUserManagerImpl
 	@Override
 	public void removeUser(EzyUser user, EzyConstant reason) {
 	    Lock lock = getLock(user.getName());
-	    EzyProcessor.processWithLock(() -> removeUser0(user, reason), lock);
+	    lock.lock();
+        try {
+        	    removeUser0(user, reason);
+        }
+        finally {
+            lock.unlock();
+        }
 	}
 	
 	private void removeUser0(EzyUser user, EzyConstant reason) {

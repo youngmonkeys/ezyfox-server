@@ -15,12 +15,10 @@ public class EzyNioResponseApi implements EzyResponseApi {
 	
 	protected EzyNioResponseApi(Builder builder) {
 		EzyCodecFactory codecFactory = builder.codecFactory;
-		this.socketResponseApi = EzyNioSocketResponseApi.builder()
-				.encoder(codecFactory.newEncoder(EzyConnectionType.SOCKET))
-				.build();
-		this.websocketResponseApi = EzyWsResponseApi.builder()
-				.encoder(codecFactory.newEncoder(EzyConnectionType.WEBSOCKET))
-				.build();
+		Object socketEncoder = codecFactory.newEncoder(EzyConnectionType.SOCKET);
+		Object wsEncoder = codecFactory.newEncoder(EzyConnectionType.WEBSOCKET);
+		this.socketResponseApi = new EzyNioSocketResponseApi(socketEncoder);
+		this.websocketResponseApi = new EzyWsResponseApi(wsEncoder);
 	}
 	
 	@Override

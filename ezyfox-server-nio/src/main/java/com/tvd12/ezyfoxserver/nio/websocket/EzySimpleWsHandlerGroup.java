@@ -53,7 +53,9 @@ public class EzySimpleWsHandlerGroup
 	
 	private void handleReceivedBytes(byte[] bytes, int offset, int len) {
 		try {
-			decoder.decode(bytes, offset, len, decodeBytesCallback);
+			// need a parsing first byte here
+			int newOffset = offset + 1;
+			decoder.decode(bytes, newOffset, len, decodeBytesCallback);
 		}
 		catch(Throwable throwable) {
 			fireExceptionCaught(throwable);

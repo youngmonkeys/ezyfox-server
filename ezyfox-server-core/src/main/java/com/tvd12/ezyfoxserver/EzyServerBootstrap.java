@@ -58,7 +58,7 @@ public abstract class EzyServerBootstrap
 	    getLogger().info("\n{}\n", new EzyBannerPrinter().getBannerString());
 	    EzyEvent event = newServerReadyEvent();
 	    context.handleEvent(EzyEventType.SERVER_READY, event);
-		context.fireEvent(EzyEventType.SERVER_READY, event);
+		context.broadcast(EzyEventType.SERVER_READY, event);
 	}
 	
 	protected EzyEvent newServerReadyEvent() {

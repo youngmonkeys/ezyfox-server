@@ -69,7 +69,7 @@ public class EzyLoginController
 	}
 	
 	protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
-        ctx.firePluginEvent(EzyEventType.USER_LOGIN, event);
+        ctx.broadcastPlugins(EzyEventType.USER_LOGIN, event);
     }
 	
 	protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {

@@ -24,25 +24,25 @@ public abstract class EzyAbstractContext
         extends EzyEntity 
         implements EzyInitable, EzyDestroyable {
 
+    protected EzyComponent component;
 	protected Map<Class, Supplier> commandSuppliers;
 	protected EzyHandleException handleException;
 	
 	@Override
 	public final void init() {
 	    this.commandSuppliers = defaultCommandSuppliers();
-	    this.handleException = new EzyHandleExceptionImpl(getComponent());
+	    this.handleException = new EzyHandleExceptionImpl(component);
 	    this.properties.put(EzyHandleException.class, handleException);
 	    this.properties.put(EzyAddCommand.class, new EzyAddCommandImpl(this));
-	    this.properties.put(EzyAddExceptionHandler.class, new EzyAddExceptionHandlerImpl(getComponent()));
+	    this.properties.put(EzyAddExceptionHandler.class, new EzyAddExceptionHandlerImpl(component));
 	    this.init0();
 	}
 	
 	protected void init0() {}
-	protected abstract EzyComponent getComponent();
 	
 	@SuppressWarnings("unchecked")
     public void handleEvent(EzyConstant eventType, EzyEvent event) {
-	    EzyEventControllers controllers = getComponent().getEventControllers();
+	    EzyEventControllers controllers = component.getEventControllers();
 	    EzyEventController controller = controllers.getController(eventType);
 	    if(controller != null)
 	        controller.handle(this, event);
@@ -68,6 +68,7 @@ public abstract class EzyAbstractContext
 	public void destroy() {
 	    this.properties.clear();
 	    this.commandSuppliers.clear();
+	    this.component = null;
 	    this.commandSuppliers = null;
 	    this.handleException = null;
 	}

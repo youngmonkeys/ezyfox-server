@@ -4,21 +4,19 @@ import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastPluginsEvent;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
-public class EzyZoneFirePluginEventImpl 
-		extends EzyAbstractCommand 
-		implements EzyFirePluginEvent {
+public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements EzyBroadcastPluginsEvent {
 
 	private final EzyZoneContext context;
 	private final EzyEventPluginsMapper eventPluginsMapper;
 	
-	public EzyZoneFirePluginEventImpl(EzyZoneContext context) {
+	public EzyBroadcastPluginsEventImpl(EzyZoneContext context) {
 	    this.context = context;
 	    this.eventPluginsMapper = context.getZone().getSetting().getEventPluginsMapper();
 	}
@@ -47,7 +45,7 @@ public class EzyZoneFirePluginEventImpl
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
 	    try {
-	        ctx.fireEvent(type, event);
+	        ctx.handleEvent(type, event);
 	    }
 	    catch(Exception e) {
 	        ctx.handleException(Thread.currentThread(), e);

@@ -48,7 +48,7 @@ public class EzyAccessAppController
         EzySession session = request.getSession();
         checkAppUserMangerAvailable(appUserManger);
         EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
-        appContext.fireEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
+        appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
         addUser(appUserManger, user, appSetting);
         EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting);
         ctx.send(accessAppResponse, session);

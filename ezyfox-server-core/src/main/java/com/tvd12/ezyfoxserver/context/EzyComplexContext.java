@@ -2,7 +2,9 @@ package com.tvd12.ezyfoxserver.context;
 
 import java.util.Collection;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public interface EzyComplexContext 
@@ -11,6 +13,8 @@ public interface EzyComplexContext
     EzyAppContext getAppContext(int appId);
 
     EzyPluginContext getPluginContext(int pluginId);
+    
+    void broadcast(EzyConstant eventType, EzyEvent event);
     
     void send(EzyResponse response, 
             EzySession recipient, boolean immediate);

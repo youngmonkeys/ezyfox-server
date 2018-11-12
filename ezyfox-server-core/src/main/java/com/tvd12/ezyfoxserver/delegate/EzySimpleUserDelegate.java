@@ -37,21 +37,21 @@ public class EzySimpleUserDelegate
     
     protected void notifyToPlugins(EzyZoneContext context, EzyUserEvent event) {
         try {
-            context.firePluginEvent(EzyEventType.USER_REMOVED, event);
+            context.broadcastPlugins(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
             String zoneName = context.getZone().getSetting().getName();
-            getLogger().error("zone: " + zoneName + ", notify to plugins user: " + event.getUser() + " removed error", e);
+            logger.error("zone: " + zoneName + ", notify to plugins user: " + event.getUser() + " removed error", e);
         }
     }
     
     protected void notifyToApps(EzyZoneContext context, EzyUserEvent event) {
         try {
-            context.fireAppEvent(EzyEventType.USER_REMOVED, event, event.getUser());
+            context.broadcastApps(EzyEventType.USER_REMOVED, event, event.getUser());
         }
         catch(Exception e) {
             String zoneName = context.getZone().getSetting().getName();
-            getLogger().error("zone: " + zoneName + ", notify to apps user: " + event.getUser() + " removed error", e);
+            logger.error("zone: " + zoneName + ", notify to apps user: " + event.getUser() + " removed error", e);
         }
     }
     

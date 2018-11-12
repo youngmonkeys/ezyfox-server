@@ -71,7 +71,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void handleReceivedStreaming(byte[] bytes) throws Exception {
-//        getLogger().debug("received from: {} {} raw bytes", session.getName(), bytes.length);
+//        logger.debug("received from: {} {} raw bytes", session.getName(), bytes.length);
         updateSessionBeforeHandleRequest();
         handleReceivedStreaming0(bytes);
     }
@@ -108,7 +108,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
         if(!unloggableCommands.contains(cmd))
-            getLogger().debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
+            logger.debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
     }
     
     @SuppressWarnings("rawtypes")
@@ -130,7 +130,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     public void exceptionCaught(Throwable cause) throws Exception {
-        getLogger().debug("exception caught at session: " + session, cause);
+        logger.debug("exception caught at session: " + session, cause);
         EzyExceptionHandler exceptionHandler = exceptionHandlers.get(cause.getClass());
         if(exceptionHandler != null) 
             exceptionHandler.handleException(Thread.currentThread(), cause);
@@ -163,19 +163,19 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyAppsSessionRemoved0(EzyEvent event) {
         try {
-            zoneContext.fireAppEvent(EzyEventType.SESSION_REMOVED, event, user);
+            zoneContext.broadcastApps(EzyEventType.SESSION_REMOVED, event, user);
         }
         catch(Exception e) {
-            getLogger().error("notify session: " + session + " removed to apps error", e);
+            logger.error("notify session: " + session + " removed to apps error", e);
         }
     }
     
     protected void notifyPluginsSessionRemoved(EzyEvent event) {
         try {
-            zoneContext.firePluginEvent(EzyEventType.SESSION_REMOVED, event);
+            zoneContext.broadcastPlugins(EzyEventType.SESSION_REMOVED, event);
         }
         catch(Exception e) {
-            getLogger().error("notify session: " + session + " removed to apps error", e);
+            logger.error("notify session: " + session + " removed to apps error", e);
         }
     }
     
@@ -184,7 +184,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             closeSession.close(session, reason);
         }
         catch(Exception ex) {
-            getLogger().error("close session: " + session + " with reason: " + reason + " error", ex);
+            logger.error("close session: " + session + " with reason: " + reason + " error", ex);
         }
     }
     

@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 
-public interface EzyFireAppEvent extends EzyFireEvent {
+public interface EzyBroadcastAppsEvent extends EzyBroadcastEvent {
 
     void fire(EzyConstant type, EzyEvent event, String username);
     

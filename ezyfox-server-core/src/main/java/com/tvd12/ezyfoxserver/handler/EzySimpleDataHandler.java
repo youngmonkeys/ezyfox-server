@@ -13,10 +13,12 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzySessionError;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyController;
+import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
+import com.tvd12.ezyfoxserver.request.EzyStreamingRequest;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
 
 @SuppressWarnings("unchecked")
@@ -32,6 +34,12 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         if(!validateSession()) return;
         if(cmd != PING && checkMaxRequestPerSecond()) return;
         handleReceivedData(cmd, msg);
+    }
+    
+    public void streamingReceived(byte[] bytes) throws Exception {
+        if(!validateState()) return;
+        if(!validateSession()) return;
+        handleReceivedStreaming(bytes);
     }
     
     protected boolean validateState() {
@@ -62,13 +70,40 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
     
+    protected void handleReceivedStreaming(byte[] bytes) throws Exception {
+//        getLogger().debug("received from: {} {} raw bytes", session.getName(), bytes.length);
+        updateSessionBeforeHandleRequest();
+        handleReceivedStreaming0(bytes);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    protected void handleReceivedStreaming0(byte[] bytes) throws Exception {
+        EzyStreamingRequest request = newStreamingRequest(bytes);
+        try {
+            EzyInterceptor interceptor = controllers.getStreamingInterceptor();
+            interceptor.intercept(context, request);
+            EzyStreamingController controller = controllers.getStreamingController();
+            controller.handle(zoneContext, request);
+        }
+        catch(Exception e) {
+            context.handleException(Thread.currentThread(), e);
+        }
+        finally {
+            request.release();
+        }
+    }
+    
     protected void handleReceivedData(EzyConstant cmd, EzyArray msg) throws Exception {
         EzyArray data = msg.get(1, EzyArray.class);
         debugLogReceivedData(cmd, data);
+        updateSessionBeforeHandleRequest();
+        handleRequest(cmd, data);
+    }
+    
+    private void updateSessionBeforeHandleRequest() {
         session.addReadRequests(1);
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastActivityTime(System.currentTimeMillis());
-        handleRequest(cmd, data);
     }
     
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
@@ -76,50 +111,22 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             getLogger().debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
     }
     
+    @SuppressWarnings("rawtypes")
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
+        EzyRequest request = newRequest(cmd, data);
         try {
-            handleRequest0(cmd, data);
+            EzyInterceptor interceptor = controllers.getInterceptor(cmd);
+            interceptor.intercept(context, request);
+            EzyController controller = controllers.getController(cmd);
+            controller.handle(context, request);
         }
         catch(Exception e) {
             Throwable throwable = requestHandleException(cmd, data, e);
             context.handleException(Thread.currentThread(), throwable);
         }
-    }
-    
-    @SuppressWarnings("rawtypes")
-    protected void handleRequest0(EzyConstant cmd, EzyArray data) throws Exception {
-        EzyRequest request = newRequest(cmd, data);
-        try {
-            EzyInterceptor interceptor = controllers.getInterceptor(cmd);
-            interceptRequest(interceptor, request);
-            EzyController controller = controllers.getController(cmd);
-            handleRequest(controller, request);
-        }
         finally {
             request.release();
         }
-    }
-    
-    @SuppressWarnings("rawtypes")
-    protected void interceptRequest(
-            EzyInterceptor interceptor, Object request) throws Exception {
-        interceptServerRequest(interceptor, request);
-    }
-    
-    @SuppressWarnings({ "rawtypes" })
-    protected void interceptServerRequest(
-            EzyInterceptor interceptor, Object request) throws Exception {
-        interceptor.intercept(context, request);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    protected void handleRequest(EzyController controller, Object request) {
-        handleServerRequest(controller, request);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    protected void handleServerRequest(EzyController controller, Object request) {
-        controller.handle(context, request);
     }
     
     public void exceptionCaught(Throwable cause) throws Exception {

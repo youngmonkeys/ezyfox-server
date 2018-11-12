@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.constant;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.util.EzyEnums;
 
 import lombok.Getter;
 
@@ -13,7 +12,8 @@ public enum EzyEventType implements EzyConstant {
     USER_ACCESS_APP(25),
     USER_ADDED(26),
     USER_REMOVED(27),
-    SESSION_REMOVED(35);
+    SESSION_REMOVED(35),
+    STREAMING(36);
     
 	@Getter
 	private final int id;
@@ -25,10 +25,6 @@ public enum EzyEventType implements EzyConstant {
 	@Override
 	public String getName() {
 		return toString();
-	}
-	
-	public static EzyEventType valueOf(int id) {
-		return EzyEnums.valueOf(values(), id);
 	}
 	
 }

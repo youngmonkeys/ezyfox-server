@@ -27,6 +27,7 @@ public class EzyFireEventImpl extends EzyAbstractCommand implements EzyFireEvent
 
     protected void fireZoneEvent(EzyZoneContext ctx, EzyConstant type, EzyEvent event) {
         try {
+            ctx.handleEvent(type, event);
             ctx.fireEvent(type, event);
         } catch (Exception e) {
             ctx.handleException(Thread.currentThread(), e);

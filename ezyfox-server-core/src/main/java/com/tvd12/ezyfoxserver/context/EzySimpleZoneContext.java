@@ -130,7 +130,7 @@ public class EzySimpleZoneContext
 	
 	@Override
 	protected EzyComponent getComponent() {
-	    return (EzyComponent) parent.getServer();
+	    return (EzyComponent) zone;
 	}
 	
 	@Override

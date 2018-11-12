@@ -11,6 +11,7 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAppFireEventImpl;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 
 public class EzyAppFireEventImplTest extends BaseCoreTest {
 
@@ -21,6 +22,7 @@ public class EzyAppFireEventImplTest extends BaseCoreTest {
         EzyAppContext context = mock(EzyAppContext.class);
         
         EzySimpleApplication application = new EzySimpleApplication();
+        application.setEventControllers(new EzyEventControllersImpl());
         application.setSetting(app);
         
         when(context.getApp()).thenReturn(application);

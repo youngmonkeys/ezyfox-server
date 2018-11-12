@@ -37,5 +37,7 @@ public interface EzyZoneSetting {
     EzyUserManagementSetting getUserManagement();
     
     EzyEventPluginsMapper getEventPluginsMapper();
+    
+    EzyEventControllersSetting getEventControllers();
 
 }

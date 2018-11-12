@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyInitable;
@@ -14,6 +15,9 @@ import com.tvd12.ezyfoxserver.command.EzyHandleException;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddCommandImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyHandleExceptionImpl;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractContext 
@@ -35,6 +39,14 @@ public abstract class EzyAbstractContext
 	
 	protected void init0() {}
 	protected abstract EzyComponent getComponent();
+	
+	@SuppressWarnings("unchecked")
+    public void handleEvent(EzyConstant eventType, EzyEvent event) {
+	    EzyEventControllers controllers = getComponent().getEventControllers();
+	    EzyEventController controller = controllers.getController(eventType);
+	    if(controller != null)
+	        controller.handle(this, event);
+	}
 	
 	public void handleException(Thread thread, Throwable throwable) {
 	    this.handleException.handle(thread, throwable);

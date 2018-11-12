@@ -2,16 +2,16 @@ package com.tvd12.ezyfoxserver;
 
 import java.util.Map;
 
+import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
-import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
-public interface EzyServer {
+public interface EzyServer extends EzyEventComponent {
 
     /**
      * Get server version

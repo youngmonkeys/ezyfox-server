@@ -6,6 +6,8 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 
 public interface EzySocketDataHandler extends EzyDestroyable {
 
-    public void channelRead(EzyCommand cmd, EzyArray msg) throws Exception;
+    void channelRead(EzyCommand cmd, EzyArray msg) throws Exception;
+    
+    void streamingReceived(byte[] bytes) throws Exception;
     
 }

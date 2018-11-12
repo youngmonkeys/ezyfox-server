@@ -11,6 +11,8 @@ public interface EzyContext extends EzyProperties {
 	<T> T cmd(Class<T> clazz);
 	
 	void fireEvent(EzyConstant type, EzyEvent event);
+
+	void handleEvent(EzyConstant eventType, EzyEvent event);
 	
 	void handleException(Thread thread, Throwable throwable);
 	

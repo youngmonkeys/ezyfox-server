@@ -9,22 +9,25 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
+import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
-import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
-import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
+import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettingsReader;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 
 /**
@@ -48,6 +51,7 @@ public abstract class EzyLoader extends EzyLoggable {
         	answer.setStatistics(newStatistics());
         	answer.setControllers(newControllers());
         	answer.setSessionManager(newSessionManagers(settings));
+        	answer.setEventControllers(newEventControllers(settings.getEventControllers()));
         	return answer;
     }
     
@@ -98,6 +102,10 @@ public abstract class EzyLoader extends EzyLoggable {
     protected EzyAppClassLoader newAppClassLoader(File dir) {
     	    getLogger().info("load " + dir);
         return new EzyAppClassLoader(dir, classLoader);
+    }
+    
+    protected EzyEventControllers newEventControllers(EzyEventControllersSetting setting) {
+        return EzyEventControllersImpl.create(setting);
     }
     
     protected File[] getEntryFolders() {

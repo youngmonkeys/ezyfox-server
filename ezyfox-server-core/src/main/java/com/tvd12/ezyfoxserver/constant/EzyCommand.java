@@ -57,7 +57,8 @@ public enum EzyCommand implements EzyConstant {
 	}
 	
 	public static EzyCommand valueOf(int id) {
-		return COMMANDS_BY_ID.get(id);
+	    EzyCommand cmd = COMMANDS_BY_ID.get(id);
+	    return cmd;
 	}
 	
 	private static final Set<EzyCommand> systemCommands() {

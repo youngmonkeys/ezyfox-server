@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
+import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
 import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
@@ -53,9 +54,18 @@ public class EzySimpleWsHandlerGroup
 	
 	private void handleReceivedBytes(byte[] bytes, int offset, int len) {
 		try {
-			// need a parsing first byte here
+			if(len <= 1) return;
 			int newOffset = offset + 1;
-			decoder.decode(bytes, newOffset, len, decodeBytesCallback);
+			int newLen = len - 1;
+			byte headerByte = bytes[offset];
+			boolean isRawBytes = (headerByte & 1) == 0;
+			if(isRawBytes) {
+				byte[] rawBytes = EzyBytes.copy(bytes, newOffset, newLen);
+				handler.streamingReceived(rawBytes);
+			}
+			else if(len > 1) {
+				decoder.decode(bytes, newOffset, newLen, decodeBytesCallback);
+			}
 		}
 		catch(Throwable throwable) {
 			fireExceptionCaught(throwable);

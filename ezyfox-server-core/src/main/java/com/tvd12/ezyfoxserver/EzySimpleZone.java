@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class EzySimpleZone implements EzyZone, EzyDestroyable {
+public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyable {
 
     protected EzyZoneSetting setting;
     @JsonIgnore
@@ -20,6 +20,7 @@ public class EzySimpleZone implements EzyZone, EzyDestroyable {
     
     @Override
     public void destroy() {
+        super.destroy();
         this.userManager.clear();
         this.userManager = null;
         this.setting = null;

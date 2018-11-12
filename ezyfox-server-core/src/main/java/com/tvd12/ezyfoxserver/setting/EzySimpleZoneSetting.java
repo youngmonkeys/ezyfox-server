@@ -26,7 +26,7 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "zone")
 @JsonIgnoreProperties(value = {"eventPluginsMapper"}, ignoreUnknown = true)
-@JsonPropertyOrder({"id", "name", "configFile", "maxUsers", "userManagement", "plugins", "applications"})
+@JsonPropertyOrder({"id", "name", "configFile", "maxUsers", "userManagement", "eventControllers", "plugins", "applications"})
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
     protected int id = COUNTER.incrementAndGet();
@@ -46,6 +46,9 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     
     @XmlElement(name = "user-management")
     protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
+    
+    @XmlElement(name = "event-controllers")
+    protected EzySimpleEventHandlersSetting eventControllers = new EzySimpleEventHandlersSetting();
     
     protected EzyEventPluginsMapper eventPluginsMapper;
     

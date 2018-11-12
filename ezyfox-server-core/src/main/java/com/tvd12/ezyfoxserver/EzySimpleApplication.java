@@ -48,6 +48,7 @@ public class EzySimpleApplication
         super.destroy();
         if(userManager != null)
             processWithLogException(userManager::destroy);
+        this.setting = null;
         this.userManager = null;
         this.requestController = null;
     }

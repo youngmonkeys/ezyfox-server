@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -24,6 +26,7 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
 	protected final Map<Integer, EzySimpleZoneSetting> zonesByIds = new ConcurrentHashMap<>();
 	protected final Map<String, EzySimpleZoneSetting> zonesByNames = new ConcurrentHashMap<>();
 
+	@XmlElement(name = "zone")
 	public void setItem(EzySimpleZoneSetting item) {
 		zones.add(item);
 		zonesByIds.put(item.getId(), item);

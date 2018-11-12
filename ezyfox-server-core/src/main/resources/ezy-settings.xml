@@ -48,6 +48,13 @@
 		</session-max-request-per-second>
 	</session-management>
 	
+	<event-controllers>
+		<event-controller>
+			<event-type>SERVER_READY</event-type>
+			<controller>com.tvd12.ezyfoxserver.handler.ServerReadyHandler</controller>
+		</event-controller>
+	</event-controllers>
+	
 	<zones>
 		<zone>
 			<name>example</name>

@@ -11,7 +11,6 @@ public class EzyEventTypeTest extends BaseTest {
     public void test() {
         assert EzyEventType.USER_LOGIN.getId() >= 0;
         assert EzyEventType.USER_LOGIN.getName().equals("USER_LOGIN");
-        assert EzyEventType.valueOf(EzyEventType.USER_LOGIN.getId()) == EzyEventType.USER_LOGIN;
         EzyEventType.values();
         EzyEventType.valueOf("USER_LOGIN");
     }

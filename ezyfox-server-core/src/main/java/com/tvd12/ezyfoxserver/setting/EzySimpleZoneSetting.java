@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyInitable;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,8 +51,6 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     
     @XmlElement(name = "event-controllers")
     protected EzySimpleEventHandlersSetting eventControllers = new EzySimpleEventHandlersSetting();
-    
-    protected EzyEventPluginsMapper eventPluginsMapper;
     
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
     

@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import java.util.Collection;
 import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -11,8 +12,6 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
-import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
-import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
 public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements EzyBroadcastPluginsEvent {
 
@@ -49,17 +48,13 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
 	}
 	
 	private EzyMapSet<EzyConstant, EzyPluginContext> getPluginContextss() {
-        EzyZoneSetting zoneSetting = context.getZone().getSetting();
-        EzyEventPluginsMapper eventPluginsMapper = zoneSetting.getEventPluginsMapper();
+        Collection<EzyPluginContext> pluginContexts = context.getPluginContexts();
         EzyMapSet<EzyConstant, EzyPluginContext> pluginContextss = new EzyHashMapSet<>();
-        EzyMapSet<EzyConstant, EzyPluginSetting> eventsPluginss = eventPluginsMapper.getEventsPluginss();
-        for(EzyConstant type : eventsPluginss.keySet()) {
-            Set<EzyPluginSetting> pluginSettings = eventsPluginss.get(type);
-            for(EzyPluginSetting pluginSetting : pluginSettings) {
-                int pluginId = pluginSetting.getId();
-                EzyPluginContext pluginContext = context.getPluginContext(pluginId);
-                pluginContextss.addItem(type, pluginContext);
-            }
+        for(EzyPluginContext pluginContext : pluginContexts) {
+            EzyPluginSetting pluginSetting = pluginContext.getPlugin().getSetting();
+            Set<EzyConstant> listenEvents = pluginSetting.getListenEvents().getEvents();
+            for(EzyConstant listenEvent : listenEvents)
+                pluginContextss.addItem(listenEvent, pluginContext);
         }
         return pluginContextss;
     }

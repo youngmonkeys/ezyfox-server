@@ -4,11 +4,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
-import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
+import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfox.codec.EzyMessageDataDecoder;
+import com.tvd12.ezyfox.codec.EzyMessageHeader;
 import com.tvd12.ezyfox.codec.EzySimpleMessageDataDecoder;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketStream;
+import com.tvd12.ezyfoxserver.socket.EzySocketStream;
 
 public class EzySimpleNioHandlerGroup
 		extends EzyAbstractHandlerGroup<EzyMessageDataDecoder>
@@ -46,8 +49,20 @@ public class EzySimpleNioHandlerGroup
 	
 	private void handleReceivedMesssage(EzyMessage message) {
 		try {
-			Object data = decodeMessage(message);
-			handleReceivedData(data);
+			EzyMessageHeader header = message.getHeader();
+			if(header.isRawBytes()) {
+				boolean sessionStreamingEnable = session.isStreamingEnable();
+				if(!streamingEnable || !sessionStreamingEnable) {
+					return;
+				}
+				byte[] rawBytes = message.getContent();
+				EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
+				streamQueue.add(stream);
+			}
+			else {
+				Object data = decodeMessage(message);
+				handleReceivedData(data);
+			}
 		}
 		catch (Exception e) {
 			fireExceptionCaught(e);

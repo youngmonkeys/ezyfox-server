@@ -30,10 +30,10 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
 			processDisconnection(disconnection);
 		} 
 		catch (InterruptedException e) {
-			getLogger().warn("disconnection-handler thread interrupted: " + Thread.currentThread());
+			logger.warn("disconnection-handler thread interrupted: " + Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			getLogger().warn("problems in disconnection-handler main loop, thread: " + Thread.currentThread(), throwable);
+			logger.warn("problems in disconnection-handler main loop, thread: " + Thread.currentThread(), throwable);
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
 	        handlerGroup.fireChannelInactive(disconnectReason);
 	    }
 	    else { 
-	        getLogger().warn("has no handler group with session: " + session + ", ignore disconnection: " + disconnection);
+	        logger.warn("has no handler group with session: " + session + ", ignore disconnection: " + disconnection);
 	    }
 	}
 	

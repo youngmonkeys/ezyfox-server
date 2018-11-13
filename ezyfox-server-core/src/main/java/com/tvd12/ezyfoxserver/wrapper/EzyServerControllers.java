@@ -2,13 +2,17 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.controller.EzyController;
+import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 
+@SuppressWarnings("rawtypes")
 public interface EzyServerControllers {
 
-	@SuppressWarnings("rawtypes")
 	EzyController getController(EzyConstant cmd);
 	
-	@SuppressWarnings("rawtypes")
 	EzyInterceptor getInterceptor(EzyConstant cmd);
+	
+	EzyInterceptor getStreamingInterceptor();
+	
+	EzyStreamingController getStreamingController();
 }

@@ -42,7 +42,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 			EzyServerEventHandler annotation = controllerType.getAnnotation(EzyServerEventHandler.class);
 			EzyEventType eventType = EzyEventType.valueOf(annotation.event());
 			setup.addEventController(eventType, (EzyEventController) controller);
-			getLogger().info("add  event {} controller {}", eventType, controller);
+			logger.info("add  event {} controller {}", eventType, controller);
 		}
 	}
 	

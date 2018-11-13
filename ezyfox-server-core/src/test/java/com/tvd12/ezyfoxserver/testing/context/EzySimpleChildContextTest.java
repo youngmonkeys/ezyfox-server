@@ -39,11 +39,10 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
      
      public static class ChildContext extends EzyAbstractZoneChildContext {
          
-         @Override
-        protected EzyComponent getComponent() {
-            return new EzyComponent();
-        }
-
+         public ChildContext() {
+             this.component = new EzyComponent();
+         }
+         
         @Override
         public void destroy() {
             

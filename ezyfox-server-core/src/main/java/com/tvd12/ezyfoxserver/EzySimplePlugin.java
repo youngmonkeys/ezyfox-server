@@ -25,6 +25,13 @@ public class EzySimplePlugin
     }
     
     @Override
+    public void destroy() {
+        super.destroy();
+        this.setting = null;
+        this.requestController = null;
+    }
+    
+    @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimplePlugin>()
                 .function(t -> t.setting)

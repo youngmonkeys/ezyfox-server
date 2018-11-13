@@ -12,14 +12,16 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
-import com.tvd12.ezyfoxserver.command.EzyFireEvent;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.command.EzyShutdown;
+import com.tvd12.ezyfoxserver.command.EzyStreamBytes;
+import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyFireEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyStreamBytesImpl;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
@@ -27,15 +29,14 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 
 import lombok.Getter;
-import lombok.Setter;
 
 public class EzySimpleServerContext extends EzyAbstractComplexContext implements EzyServerContext {
 
-	@Setter
 	@Getter
 	protected EzyServer server;
-	protected EzyFireEvent fireEvent;
+	protected EzyStreamBytes streamBytes;
 	protected EzySendResponse sendResponse;
+	protected EzyBroadcastEvent broadcastEvent;
 	
 	@Getter
 	protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
@@ -45,9 +46,11 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	
     @Override
     protected void init0() {
-        this.fireEvent = new EzyFireEventImpl(this); 
+        this.broadcastEvent = new EzyBroadcastEventImpl(this);
+        this.streamBytes = new EzyStreamBytesImpl(server);
         this.sendResponse = new EzySendResponseImpl(server);
-        this.properties.put(EzyFireEvent.class, fireEvent);
+        this.properties.put(EzyBroadcastEvent.class, broadcastEvent);
+        this.properties.put(EzyStreamBytes.class, streamBytes);
         this.properties.put(EzySendResponse.class, sendResponse);
         this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
@@ -69,8 +72,8 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	}
 	
 	@Override
-	public void fireEvent(EzyConstant type, EzyEvent event) {
-	    fireEvent.fire(type, event);
+	public void broadcast(EzyConstant eventType, EzyEvent event) {
+	    broadcastEvent.fire(eventType, event);
 	}
 	
 	@Override
@@ -83,6 +86,16 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	public void send(EzyResponse response, 
 	        Collection<EzySession> recipients, boolean immediate) {
 	    sendResponse.execute(response, recipients, immediate);
+	}
+	
+	@Override
+	public void stream(byte[] bytes, EzySession recipient) {
+	    streamBytes.execute(bytes, recipient);
+	}
+	
+	@Override
+	public void stream(byte[] bytes, Collection<EzySession> recipients) {
+	    streamBytes.execute(bytes, recipients);
 	}
 	
 	public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
@@ -112,10 +125,10 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	    throw new EzyZoneNotFoundException(zoneName);
 	}
 	
-	@Override
-	protected EzyComponent getComponent() {
-	    return (EzyComponent) server;
-	}
+	public void setServer(EzyServer server) {
+        this.server = server;
+        this.component = (EzyComponent)server;
+    }
 	
 	@Override
 	public void destroy() {
@@ -128,8 +141,8 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	protected void clearProperties() {
 	    super.clearProperties();
 	    this.server = null;
-	    this.fireEvent = null;
 	    this.sendResponse = null;
+	    this.broadcastEvent = null;
 	    this.zoneContexts.clear();
 	    this.zoneContextsById.clear();
 	    this.zoneContextsByName.clear();

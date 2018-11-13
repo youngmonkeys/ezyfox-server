@@ -16,6 +16,17 @@
 		<user-name-pattern>^[a-zA-Z0-9_.#]{3,36}$</user-name-pattern>
 	</user-management>
 	
+	<streaming>
+		<enable>true</enable>
+	</streaming>
+	
+	<event-controllers>
+		<event-controller>
+			<event-type>SERVER_READY</event-type>
+			<controller>com.tvd12.ezyfoxserver.zone.handler.ServerReadyHandler</controller>
+		</event-controller>
+	</event-controllers>
+	
 	<applications>
 		<application>
 			<name>ezyfox-chat</name>

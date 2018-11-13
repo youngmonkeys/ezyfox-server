@@ -23,13 +23,16 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleUserDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import static com.tvd12.ezyfox.util.EzyProcessor.*;
 
@@ -67,7 +70,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             zone.setSetting(zoneSetting);
             EzyUserDelegate userDelegate = newUserDelegate(parent);
             EzyZoneUserManager userManager = newZoneUserManager(zoneSetting, userDelegate);
+            EzyEventControllers eventControllers = newEventControllers(zoneSetting.getEventControllers());
             zone.setUserManager(userManager);
+            zone.setEventControllers(eventControllers);
             EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
             zoneContext.setParent(parent);
             zoneContext.setZone(zone);
@@ -95,6 +100,14 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
                 .build();
     }
     
+    protected EzyEventControllers newEventControllers() {
+        return new EzyEventControllersImpl();
+    }
+    
+    protected EzyEventControllers newEventControllers(EzyEventControllersSetting setting) {
+        return EzyEventControllersImpl.create(setting);
+    }
+    
     protected Collection<EzyAppContext> newAppContexts(EzyZoneContext parent) {
         EzyZone zone = parent.getZone();
         EzyZoneSetting zoneSetting = zone.getSetting();
@@ -108,6 +121,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(setting);
         app.setUserManager(newAppUserManager(setting));
+        app.setEventControllers(newEventControllers());
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
         appContext.setParent(parent);
@@ -135,6 +149,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     protected EzyPluginContext newPluginContext(EzySimpleZoneContext parent, EzyPluginSetting setting) {
         EzySimplePlugin plugin = new EzySimplePlugin();
         plugin.setSetting(setting);
+        plugin.setEventControllers(newEventControllers());
         EzySimplePluginContext pluginContext = new EzySimplePluginContext();
         pluginContext.setPlugin(plugin);
         pluginContext.setParent(parent);

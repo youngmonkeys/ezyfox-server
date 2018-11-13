@@ -24,7 +24,7 @@ public class EzyExitAppController
         EzyEvent event = new EzySimpleUserRemovedEvent(
                 request.getUser(), 
                 EzyUserRemoveReason.EXIT_APP);
-        appContext.fireEvent(EzyEventType.USER_REMOVED, event);
+        appContext.handleEvent(EzyEventType.USER_REMOVED, event);
     }
     
 }

@@ -19,7 +19,7 @@ public class EzyZonesStarter extends EzyComponentsStater {
     
     protected void startAllZones() {
         Set<String> zoneNames = getZoneNames();
-        getLogger().info("start zones: {}", zoneNames);
+        logger.info("start zones: {}", zoneNames);
         zoneNames.forEach(this::startZone);
         
     }
@@ -32,7 +32,7 @@ public class EzyZonesStarter extends EzyComponentsStater {
     
   //===================== plugins ===================
     protected void startAllPlugins(EzyZoneContext zoneContext) {
-        getLogger().info("start all plugins ...");
+        logger.info("start all plugins ...");
         startComponents(newPluginsStarterBuilder(), zoneContext);
     }
     
@@ -44,7 +44,7 @@ public class EzyZonesStarter extends EzyComponentsStater {
     
   //====================== apps ===================
     protected void startAllApps(EzyZoneContext zoneContext) {
-        getLogger().info("start all apps ...");
+        logger.info("start all apps ...");
         EzyAppsStarter.Builder appClassLoaders = newAppsStarterBuilder()
                 .appClassLoaders(getAppClassLoaders());
         startComponents(appClassLoaders, zoneContext);

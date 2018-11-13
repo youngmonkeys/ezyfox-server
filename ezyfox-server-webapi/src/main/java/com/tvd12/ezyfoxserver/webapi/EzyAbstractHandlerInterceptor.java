@@ -1,4 +1,6 @@
 package com.tvd12.ezyfoxserver.webapi;
 
-public class EzyAbstractHandlerInterceptor {
+import com.tvd12.ezyfox.util.EzyLoggable;
+
+public class EzyAbstractHandlerInterceptor extends EzyLoggable {
 }

@@ -45,7 +45,7 @@ public class EzyWsHandler extends EzyLoggable {
 
 	@OnWebSocketClose
 	public void onClose(Session session, int statusCode, String reason) {
-		getLogger().debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
+		logger.debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
 		if(isIgnoreStatusCode(statusCode)) 
 			return;
 		setChannelClosed(session);
@@ -57,13 +57,13 @@ public class EzyWsHandler extends EzyLoggable {
 	public void onError(Session session, Throwable throwable) {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
 		if(dataHandler == null) {
-			getLogger().debug("error on session: " + session.getRemoteAddress() + ", but data handler removed, details: " + throwable);
+			logger.debug("error on session: " + session.getRemoteAddress() + ", but data handler removed, details: " + throwable);
 		}
 		if (throwable instanceof TimeoutException) {
-			getLogger().debug("session " + session.getRemoteAddress() + ": Timeout on Read");
+			logger.debug("session " + session.getRemoteAddress() + ": Timeout on Read");
 		}
 		else if(dataHandler != null) {
-			getLogger().debug("error on session: " + session.getRemoteAddress() + ", details: " + throwable);
+			logger.debug("error on session: " + session.getRemoteAddress() + ", details: " + throwable);
 			dataHandler.fireExceptionCaught(throwable);
 		}
 	}
@@ -79,7 +79,7 @@ public class EzyWsHandler extends EzyLoggable {
 	public void onMessage(Session session, String message) throws Exception {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
 		if(dataHandler == null)
-			getLogger().debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
+			logger.debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
 		else
 			dataHandler.fireBytesReceived(message);
 	}
@@ -88,7 +88,7 @@ public class EzyWsHandler extends EzyLoggable {
 	public void onMessage(Session session, byte[] payload, int offset, int len) throws Exception {
 		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
 		if(dataHandler == null)
-			getLogger().debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
+			logger.debug("session: " + session.getRemoteAddress() + " disconnected, data handler = null");
 		else
 			dataHandler.fireBytesReceived(payload, offset, len);
 	}

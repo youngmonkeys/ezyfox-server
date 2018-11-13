@@ -26,7 +26,7 @@ public class EzyNioSocketChannel implements EzyChannel {
 	}
 	
 	@Override
-	public int write(Object data) throws Exception {
+	public int write(Object data, boolean binary) throws Exception {
 		return channel.write((ByteBuffer)data);
 	}
 	

@@ -46,7 +46,7 @@ public class EzyNioSocketAcceptor
 			processReadyKeys();
 		}
 		catch(Exception e) {
-			getLogger().info("I/O error at socket-acceptor", e);
+			logger.info("I/O error at socket-acceptor", e);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class EzyNioSocketAcceptor
 			acceptConnection0(clientChannel);
 		}
 		catch(Exception e) {
-			getLogger().error("can't acception connection: " + clientChannel, e);
+			logger.error("can't acception connection: " + clientChannel, e);
 		}
 	}
 	

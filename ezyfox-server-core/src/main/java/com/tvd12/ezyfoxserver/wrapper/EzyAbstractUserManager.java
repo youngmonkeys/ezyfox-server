@@ -53,7 +53,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
             usersById.remove(user.getId());
             usersByName.remove(user.getName());
         }
-        getLogger().info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return user;
     }
     

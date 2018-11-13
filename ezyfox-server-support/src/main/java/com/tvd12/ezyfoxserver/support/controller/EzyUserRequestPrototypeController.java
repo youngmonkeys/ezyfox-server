@@ -104,7 +104,7 @@ public abstract class EzyUserRequestPrototypeController<
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
 				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
 				handlers.put(command, supplier);
-				getLogger().debug("add command {} and request handler supplier {}", command, supplier);
+				logger.debug("add command {} and request handler supplier {}", command, supplier);
 			}
 			return handlers;
 		}

@@ -49,14 +49,16 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected void startLocalBootstrap() throws Exception {
-		getLogger().debug("starting local bootstrap ....");
+		logger.debug("starting local bootstrap ....");
 		localBootstrap.start();
-		getLogger().debug("local bootstrap has started");
+		logger.debug("local bootstrap has started");
 	}
 	
 	protected void notifyServerReady() {
-	    getLogger().info("\n{}\n", new EzyBannerPrinter().getBannerString());
-		context.fireEvent(EzyEventType.SERVER_READY, newServerReadyEvent());
+	    logger.info("\n{}\n", new EzyBannerPrinter().getBannerString());
+	    EzyEvent event = newServerReadyEvent();
+	    context.handleEvent(EzyEventType.SERVER_READY, event);
+		context.broadcast(EzyEventType.SERVER_READY, event);
 	}
 	
 	protected EzyEvent newServerReadyEvent() {

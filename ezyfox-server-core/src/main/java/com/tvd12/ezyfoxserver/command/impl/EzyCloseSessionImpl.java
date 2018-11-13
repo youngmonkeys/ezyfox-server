@@ -36,7 +36,7 @@ public class EzyCloseSessionImpl
 	}
 	
 	protected void disconnectSession(EzySession session, EzyConstant reason) {
-        getLogger().info("close session: {}, reason: {}", session.getClientAddress(), reason);
+        logger.info("close session: {}, reason: {}", session.getClientAddress(), reason);
         session.close();
     }
 	

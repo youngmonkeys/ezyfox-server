@@ -20,9 +20,9 @@ public abstract class EzySimpleSocketEventLoop extends EzySocketEventLoop {
     }
     
     protected final void eventLoop() {
-        getLogger().info("{} event loop has started", currentThreadName());
+        logger.info("{} event loop has started", currentThreadName());
         eventLoop0();
-        getLogger().info("{} event loop has stopped", currentThreadName());
+        logger.info("{} event loop has stopped", currentThreadName());
     }
     
     protected abstract void eventLoop0();

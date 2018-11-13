@@ -13,11 +13,15 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
 	String getPassword();
 	
 	EzyData getData();
+	
+	boolean isStreamingEnable();
 
 	void setOutput(EzyData output);
 	
 	void setUsername(String username);
 	
 	void setPassword(String password);
+	
+	void setStreamingEnable(boolean enable);
 	
 }

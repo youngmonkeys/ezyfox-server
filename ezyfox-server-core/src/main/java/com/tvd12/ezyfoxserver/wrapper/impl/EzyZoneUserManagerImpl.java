@@ -49,7 +49,7 @@ public class EzyZoneUserManagerImpl
 		usersById.put(user.getId(), user);
 		usersByName.put(user.getName(), user);
 		usersBySession.put(session, user);
-		getLogger().info("zone: {} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", zoneName, user, locks.size(), usersById.size(), usersByName.size());
+		logger.info("zone: {} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", zoneName, user, locks.size(), usersById.size(), usersByName.size());
 	}
 	
 	@Override
@@ -84,7 +84,7 @@ public class EzyZoneUserManagerImpl
 	    EzyUser user = usersBySession.remove(session);
 	    if(user != null) {
 	        user.removeSession(session);
-	        getLogger().debug("zone: {} remove session {} from user {} by reason {}, user remain {} sessions and {} usersBySession", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
+	        logger.debug("zone: {} remove session {} from user {} by reason {}, user remain {} sessions and {} usersBySession", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
 	        if(shouldRemoveUserNow(user)) 
 	            removeUser(user, reason);
 	    }
@@ -114,7 +114,7 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	private void removeUser0(EzyUser user, EzyConstant reason) {
-	    getLogger().debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
+	    logger.debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
 	    removeUser(user);
         delegateUserRemove(user, reason);
         destroyUser(user);
@@ -131,7 +131,7 @@ public class EzyZoneUserManagerImpl
 	
 	@Override
 	public void start() throws Exception {
-	    getLogger().debug("start user manager for zone: {}", zoneName);
+	    logger.debug("start user manager for zone: {}", zoneName);
 	    startIdleValidationService();
 	}
 	

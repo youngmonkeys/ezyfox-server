@@ -21,21 +21,21 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
     
     protected void startAllPlugins() {
         Set<String> pluginNames = getPluginNames();
-        getLogger().info("start plugins: {}", pluginNames);
+        logger.info("start plugins: {}", pluginNames);
         pluginNames.forEach(this::startPlugin);
     }
     
     protected void startPlugin(String pluginName) {
         try {
-            getLogger().debug("plugin: " + pluginName + " loading...");
+            logger.debug("plugin: " + pluginName + " loading...");
             EzyPluginContext context = zoneContext.getPluginContext(pluginName);
             EzyPlugin plugin = context.getPlugin();
             EzyPluginEntry entry = startPlugin(pluginName, newPluginEntryLoader(pluginName));
             ((EzyEntryAware)plugin).setEntry(entry);
-            getLogger().debug("plugin: " + pluginName + " loaded");
+            logger.debug("plugin: " + pluginName + " loaded");
         }
         catch(Exception e) {
-            getLogger().error("can not start plugin " + pluginName, e);
+            logger.error("can not start plugin " + pluginName, e);
         } 
     }
     

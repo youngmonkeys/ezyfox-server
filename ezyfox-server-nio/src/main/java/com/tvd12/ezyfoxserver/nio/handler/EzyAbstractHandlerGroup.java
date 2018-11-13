@@ -25,6 +25,7 @@ import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 
@@ -43,6 +44,7 @@ public abstract class EzyAbstractHandlerGroup
 	protected final D decoder;
 	protected final EzyNioDataHandler handler;
 
+	protected final boolean streamingEnable;
 	protected final AtomicInteger sessionCount;
 	protected final EzySessionStats sessionStats;
 	protected final EzyNetworkStats networkStats;
@@ -52,6 +54,7 @@ public abstract class EzyAbstractHandlerGroup
 
 	protected final EzyNioSession session;
 	protected final EzySocketRequestQueues requestQueues;
+	protected final EzySocketStreamQueue streamQueue;
 	protected final EzySessionTicketsQueue sessionTicketsQueue;
 	protected final EzySocketDisconnectionQueue disconnectionQueue;
 	
@@ -63,6 +66,8 @@ public abstract class EzyAbstractHandlerGroup
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
+		this.streamQueue = builder.streamQueue;
+		this.streamingEnable = builder.isStreamingEnable();
 		this.disconnectionQueue = builder.disconnectionQueue;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 
@@ -102,7 +107,7 @@ public abstract class EzyAbstractHandlerGroup
 			handler.channelInactive(reason);
 		}
 		catch(Exception e) {
-			getLogger().error("handler inactive error", e);
+			logger.error("handler inactive error", e);
 		}
 		finally {
 			sessionStats.setCurrentSessions(sessionCount.decrementAndGet());
@@ -124,6 +129,10 @@ public abstract class EzyAbstractHandlerGroup
 	
 	public final void fireChannelRead(EzyCommand cmd, EzyArray msg) throws Exception {
 		handler.channelRead(cmd, msg);
+	}
+	
+	public void fireStreamBytesReceived(byte[] bytes) throws Exception {
+		handler.streamingReceived(bytes);
 	}
 	
 	@Override
@@ -151,7 +160,7 @@ public abstract class EzyAbstractHandlerGroup
 		boolean success = requestQueues.add(request);
 		if(!success) {
 			networkStats.addDroppedInPackets(1);
-			getLogger().info("request queue is full, drop incomming request");
+			logger.info("request queue is full, drop incomming request");
 		}
 	}
 	
@@ -177,13 +186,13 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(packet.getSize());
-			getLogger().warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
+			logger.warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
 		}
 	}
 	
 	protected int writePacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
 		Object bytes = packet.getData();
-		int writeBytes = channel.write(bytes);
+		int writeBytes = channel.write(bytes, packet.isBinary());
 		packet.release();
 		return writeBytes;
 	}
@@ -243,6 +252,7 @@ public abstract class EzyAbstractHandlerGroup
 		protected EzyNioSession session;
 		protected EzyServerContext serverContext;
 		protected EzySocketRequestQueues requestQueues;
+		protected EzySocketStreamQueue streamQueue;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
 		protected EzySocketDisconnectionQueue disconnectionQueue;
 		
@@ -291,6 +301,11 @@ public abstract class EzyAbstractHandlerGroup
 			return this;
 		}
 		
+		public Builder streamQueue(EzySocketStreamQueue streamQueue) {
+			this.streamQueue = streamQueue;
+			return this;
+		}
+		
 		public Builder sessionTicketsQueue(EzySessionTicketsQueue queue) {
 			this.sessionTicketsQueue = queue;
 			return this;
@@ -299,6 +314,10 @@ public abstract class EzyAbstractHandlerGroup
 		public Builder disconnectionQueue(EzySocketDisconnectionQueue disconnectionQueue) {
 			this.disconnectionQueue = disconnectionQueue;
 			return this;
+		}
+		
+		protected boolean isStreamingEnable() {
+			return serverContext.getServer().getSettings().getStreaming().isEnable();
 		}
 	}
 	

@@ -16,6 +16,8 @@ public interface EzySettings {
     
     EzyWebSocketSetting getWebsocket();
     
+    EzyStreamingSetting getStreaming();
+    
     EzyAdminsSetting getAdmins();
     
     EzyLoggerSetting getLogger();
@@ -31,4 +33,6 @@ public interface EzySettings {
     EzyZoneSetting getZoneById(Integer id);
 
     EzyZoneSetting getZoneByName(String name);
+    
+    EzyEventControllersSetting getEventControllers();
 }

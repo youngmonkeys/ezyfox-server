@@ -26,10 +26,10 @@ public class EzyPluginHandleExceptionImpl
             handlers.handleException(thread, throwable);
         }
         catch(Exception e) {
-            getLogger().warn("handle exception on plugin " + pluginName + " error", e);
+            logger.warn("handle exception on plugin " + pluginName + " error", e);
         }
         finally {
-            getLogger().debug("handle plugin " + pluginName + " error", throwable);
+            logger.debug("handle plugin " + pluginName + " error", throwable);
         }
     }
     

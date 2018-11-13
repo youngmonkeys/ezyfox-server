@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
-import com.tvd12.ezyfoxserver.command.EzyFireEvent;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -11,13 +11,13 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireEvent {
+public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements EzyBroadcastEvent {
 
 	private final EzyZoneContext context;
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("zone: {} fire event: {}", getZoneName(), type);
+	    logger.debug("zone: {} fire event: {}", getZoneName(), type);
 		firePluginsEvent(type, event);
 		fireAppsEvent(type, event);
 	}
@@ -29,7 +29,7 @@ public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireE
 	
 	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event) {
 	    try {
-	        ctx.fireEvent(type, event);
+	        ctx.handleEvent(type, event);
 	    }
 	    catch(Exception e) {
 	        ctx.handleException(Thread.currentThread(), e);
@@ -43,7 +43,7 @@ public class EzyZoneFireEventImpl extends EzyAbstractCommand implements EzyFireE
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
 	    try {
-	        ctx.fireEvent(type, event);
+	        ctx.handleEvent(type, event);
 	    }
 	    catch(Exception e) {
 	        ctx.handleException(Thread.currentThread(), e);

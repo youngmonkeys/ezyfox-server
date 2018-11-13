@@ -12,7 +12,7 @@ public interface EzyChannel {
 	
 	boolean isConnected();
 	
-	int write(Object data) throws Exception;
+	int write(Object data, boolean binary) throws Exception;
 	
 	<T> T getConnection();
 	

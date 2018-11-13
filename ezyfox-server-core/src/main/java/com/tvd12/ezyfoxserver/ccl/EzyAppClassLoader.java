@@ -18,7 +18,7 @@ import com.tvd12.ezyfox.util.EzyDirectories;
  */
 public class EzyAppClassLoader extends URLClassLoader {
     
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     
     /**
      * @param urls
@@ -33,7 +33,7 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        getLogger().debug("loadClass({})", name);
+        logger.debug("loadClass({})", name);
         return super.loadClass(name);
     }
     
@@ -42,7 +42,7 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        getLogger().debug("findClass({})", name);
+        logger.debug("findClass({})", name);
         return super.findClass(name);
     }
     
@@ -51,7 +51,7 @@ public class EzyAppClassLoader extends URLClassLoader {
      */
     @Override
     public URL findResource(String name) {
-        getLogger().info("findResource({})", name);
+        logger.info("findResource({})", name);
         return super.findResource(name);
     }
     
@@ -65,9 +65,5 @@ public class EzyAppClassLoader extends URLClassLoader {
         } catch (Exception e) {
             throw new IllegalStateException("can not load classes from path: " + directories, e);
         }
-    }
-    
-    protected Logger getLogger() {
-    	return logger;
     }
 }

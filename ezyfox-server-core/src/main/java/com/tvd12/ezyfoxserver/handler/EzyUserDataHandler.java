@@ -4,7 +4,9 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.request.EzyStreamingRequest;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
+import com.tvd12.ezyfoxserver.request.EzySimpleStreamingRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 
 public abstract class EzyUserDataHandler<S extends EzySession> 
@@ -31,6 +33,14 @@ public abstract class EzyUserDataHandler<S extends EzySession>
         request.setSession(session);
         request.setUser(user);
         request.deserializeParams(data);
+        return request;
+    }
+    
+    protected EzyStreamingRequest newStreamingRequest(byte[] bytes) {
+        EzySimpleStreamingRequest request = new EzySimpleStreamingRequest();
+        request.setUser(user);
+        request.setSession(session);
+        request.setBytes(bytes);
         return request;
     }
     

@@ -11,10 +11,10 @@ public abstract class EzyHttpServerBootstrap extends EzyServerBootstrap {
 	protected void startHttpBootstrap() throws Exception {
 		EzyHttpSetting setting = getHttpSetting();
 		if(!setting.isActive()) return;
-	    getLogger().debug("starting http server bootstrap ....");
+	    logger.debug("starting http server bootstrap ....");
 	    httpBootstrap = newHttpBottstrap();
 	    httpBootstrap.start();
-	    getLogger().debug("http server bootstrap has started");
+	    logger.debug("http server bootstrap has started");
 	}
 	
 	private EzyHttpBootstrap newHttpBottstrap() {

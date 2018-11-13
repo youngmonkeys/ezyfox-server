@@ -31,10 +31,10 @@ public class EzySocketWriter
 			processSessionQueue(session);
 		} 
 		catch (InterruptedException e) {
-			getLogger().warn("socket-writer thread interrupted: " + Thread.currentThread());
+			logger.warn("socket-writer thread interrupted: " + Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			getLogger().warn("problems in socket-writer main loop, thread: " + Thread.currentThread(), throwable);
+			logger.warn("problems in socket-writer main loop, thread: " + Thread.currentThread(), throwable);
 		}
 	}
 	

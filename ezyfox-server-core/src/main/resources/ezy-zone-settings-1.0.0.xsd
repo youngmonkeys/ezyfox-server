@@ -6,6 +6,8 @@
 		<xs:complexType>
 			<xs:all>
 				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="user-management" minOccurs="0" maxOccurs="1" />
@@ -13,12 +15,45 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="streaming" type="streaming-type" />
+	<xs:element name="event-controllers" type="event-controllers-type" />
+	<xs:element name="event-controller" type="event-controller-type" />
 	<xs:element name="max-users" type="xs:integer" />
 	<xs:element name="applications" type="applications-type" />
 	<xs:element name="application" type="application-type" />
 	<xs:element name="plugins" type="plugins-type" />
 	<xs:element name="plugin" type="plugin-type" />
 	<xs:element name="user-management" type="user-management-type" />
+	
+	<xs:complexType name="streaming-type">
+		<xs:all>
+			<xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="event-controllers-type">
+		<xs:all>
+			<xs:element ref="event-controller" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="event-controller-type">
+		<xs:all>
+			<xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1" />
+			<xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+
+	<xs:simpleType name="listen-event-type">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SERVER_READY" />
+					<xs:enumeration value="STREAMING" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
 
 	<xs:complexType name="plugins-type">
 		<xs:all>

@@ -8,6 +8,10 @@
 	<node-name>localhost</node-name>
 	<max-sessions>30000</max-sessions>
 	
+	<streaming>
+		<enable>true</enable>
+	</streaming>
+	
 	<socket>
 		<port>3005</port>
 		<address>0.0.0.0</address>
@@ -47,6 +51,13 @@
 			<action>DISCONNECT_SESSION</action>
 		</session-max-request-per-second>
 	</session-management>
+	
+	<event-controllers>
+		<event-controller>
+			<event-type>SERVER_READY</event-type>
+			<controller>com.tvd12.ezyfoxserver.handler.ServerReadyHandler</controller>
+		</event-controller>
+	</event-controllers>
 	
 	<zones>
 		<zone>

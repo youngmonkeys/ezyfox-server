@@ -13,12 +13,12 @@ import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.EzyZone;
-import com.tvd12.ezyfoxserver.command.EzyFireAppEvent;
-import com.tvd12.ezyfoxserver.command.EzyFireEvent;
-import com.tvd12.ezyfoxserver.command.EzyFirePluginEvent;
-import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireAppEventImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyZoneFireEventImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyZoneFirePluginEventImpl;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastAppsEvent;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastPluginsEvent;
+import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastAppsEventImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastPluginsEventImpl;
+import com.tvd12.ezyfoxserver.command.impl.EzyZoneBroadcastEventImpl;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -33,28 +33,27 @@ public class EzySimpleZoneContext
         extends EzyAbstractComplexContext 
         implements EzyZoneContext, EzyChildContext {
 
-	@Setter
 	@Getter
 	protected EzyZone zone;
 	
 	@Setter
     @Getter
 	protected EzyServerContext parent;
-	protected EzyFireEvent fireEvent;
-	protected EzyFireAppEvent fireAppEvent;
-	protected EzyFirePluginEvent firePluginEvent;
+	protected EzyBroadcastEvent broadcastEvent;
+	protected EzyBroadcastAppsEvent broadcastAppsEvent;
+	protected EzyBroadcastPluginsEvent broadcastPluginsEvent;
 	
 	protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
 	protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
 
 	@Override
 	protected void init0() {
-	    this.fireEvent = new EzyZoneFireEventImpl(this);
-	    this.firePluginEvent = new EzyZoneFirePluginEventImpl(this);
-	    this.fireAppEvent = new EzyZoneFireAppEventImpl(this);
-	    this.properties.put(EzyFireEvent.class, fireEvent);
-	    this.properties.put(EzyFirePluginEvent.class, firePluginEvent);
-	    this.properties.put(EzyFireAppEvent.class, fireAppEvent);
+	    this.broadcastEvent = new EzyZoneBroadcastEventImpl(this);
+	    this.broadcastAppsEvent = new EzyBroadcastAppsEventImpl(this);
+	    this.broadcastPluginsEvent = new EzyBroadcastPluginsEventImpl(this);
+	    this.properties.put(EzyBroadcastEvent.class, broadcastEvent);
+	    this.properties.put(EzyBroadcastAppsEvent.class, broadcastAppsEvent);
+	    this.properties.put(EzyBroadcastPluginsEvent.class, broadcastPluginsEvent);
 	}
 	
 	@Override
@@ -73,33 +72,33 @@ public class EzySimpleZoneContext
     }
     
     @Override
-    public void fireEvent(EzyConstant type, EzyEvent event) {
-        fireEvent.fire(type, event);
+    public void broadcast(EzyConstant eventType, EzyEvent event) {
+        broadcastEvent.fire(eventType, event);
     }
     
     @Override
-    public void firePluginEvent(EzyConstant type, EzyEvent event) {
-        firePluginEvent.fire(type, event);
+    public void broadcastPlugins(EzyConstant type, EzyEvent event) {
+        broadcastPluginsEvent.fire(type, event);
     }
     
     @Override
-    public void fireAppEvent(EzyConstant type, EzyEvent event) {
-        fireAppEvent.fire(type, event);
+    public void broadcastApps(EzyConstant type, EzyEvent event) {
+        broadcastAppsEvent.fire(type, event);
     }
     
     @Override
-    public void fireAppEvent(EzyConstant type, EzyEvent event, String username) {
-        fireAppEvent.fire(type, event, username);
+    public void broadcastApps(EzyConstant type, EzyEvent event, String username) {
+        broadcastAppsEvent.fire(type, event, username);
     }
     
     @Override
-    public void fireAppEvent(EzyConstant type, EzyEvent event, EzyUser user) {
-        fireAppEvent.fire(type, event, user);
+    public void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user) {
+        broadcastAppsEvent.fire(type, event, user);
     }
     
     @Override
-    public void fireAppEvent(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter) {
-        fireAppEvent.fire(type, event, filter);
+    public void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter) {
+        broadcastAppsEvent.fire(type, event, filter);
     }
 	
 	@Override
@@ -128,10 +127,10 @@ public class EzySimpleZoneContext
         throw new IllegalArgumentException("has not plugin with name = " + pluginName);
     }
 	
-	@Override
-	protected EzyComponent getComponent() {
-	    return (EzyComponent) parent.getServer();
-	}
+	public void setZone(EzyZone zone) {
+        this.zone = zone;
+        this.component = (EzyComponent)zone;
+    }
 	
 	@Override
 	public void send(EzyResponse response, EzySession recipient, boolean immediate) {
@@ -141,6 +140,16 @@ public class EzySimpleZoneContext
 	@Override
 	public void send(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
 	    parent.send(response, recipients, immediate);
+	}
+	
+	@Override
+	public void stream(byte[] bytes, EzySession recipient) {
+	    parent.stream(bytes, recipient);
+	}
+	
+	@Override
+	public void stream(byte[] bytes, Collection<EzySession> recipients) {
+	    parent.stream(bytes, recipients);
 	}
 	
 	@Override
@@ -154,9 +163,9 @@ public class EzySimpleZoneContext
 	    super.clearProperties();
 	    this.zone = null;
 	    this.parent = null;
-	    this.fireEvent = null;
-	    this.fireAppEvent = null;
-	    this.firePluginEvent = null;
+	    this.broadcastEvent = null;
+	    this.broadcastAppsEvent = null;
+	    this.broadcastPluginsEvent = null;
 	    this.appContextsByName.clear();
 	    this.pluginContextsByName.clear();
 	}

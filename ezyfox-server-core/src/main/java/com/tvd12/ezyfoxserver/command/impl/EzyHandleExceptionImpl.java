@@ -22,10 +22,10 @@ public class EzyHandleExceptionImpl
             handlers.handleException(thread, throwable);
         }
         catch(Exception e) {
-            getLogger().error("handle exception error", e);
+            logger.error("handle exception error", e);
         }
         finally {
-            getLogger().warn("handle exception", throwable);
+            logger.warn("handle exception", throwable);
         }
     }
     

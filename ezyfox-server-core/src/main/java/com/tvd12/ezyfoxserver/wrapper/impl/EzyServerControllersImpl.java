@@ -12,32 +12,45 @@ import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.controller.EzyPingController;
 import com.tvd12.ezyfoxserver.controller.EzyPluginInfoController;
+import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByIdController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByNameController;
+import com.tvd12.ezyfoxserver.controller.EzySimpleStreamingController;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
+import com.tvd12.ezyfoxserver.interceptor.EzyRawBytesInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
+
+import lombok.Getter;
 
 @SuppressWarnings("rawtypes")
 public class EzyServerControllersImpl implements EzyServerControllers {
 
+    @Getter
+    protected final EzyInterceptor streamingInterceptor;
+    @Getter
+    protected final EzyStreamingController streamingController;
 	protected final Map<EzyConstant, EzyController> controllers;
 	protected final Map<EzyConstant, EzyInterceptor> interceptors;
 	
 	protected EzyServerControllersImpl(Builder builder) {
 	    this.controllers = builder.newControllers();
 	    this.interceptors = builder.newInterceptors();
+	    this.streamingInterceptor = new EzyRawBytesInterceptor();
+	    this.streamingController = new EzySimpleStreamingController();
 	}
 	
 	@Override
 	public EzyController getController(EzyConstant cmd) {
-		return controllers.get(cmd);
+	    EzyController controller = controllers.get(cmd);
+	    return controller;
 	}
 	
 	@Override
 	public EzyInterceptor getInterceptor(EzyConstant cmd) {
-		return interceptors.get(cmd);
+	    EzyInterceptor interceptor = interceptors.get(cmd);
+	    return interceptor;
 	}
 	
 	public static Builder builder() {

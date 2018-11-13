@@ -8,11 +8,13 @@
 				<xs:element ref="debug" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="node-name" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="administrators" minOccurs="1" maxOccurs="1" />
 				<xs:element ref="session-management" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="zones" minOccurs="0" maxOccurs="1" />
 			</xs:all>
 		</xs:complexType>
@@ -24,10 +26,19 @@
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />
 	<xs:element name="web-socket" type="web-socket-type" />
+	<xs:element name="streaming" type="streaming-type" />
 	<xs:element name="administrators" type="administrators-type" />
 	<xs:element name="session-management" type="session-management-type" />
+	<xs:element name="event-controllers" type="event-controllers-type" />
+	<xs:element name="event-controller" type="event-controller-type" />
 	<xs:element name="zone" type="zone-type" />
 	<xs:element name="zones" type="zones-type" />
+	
+	<xs:complexType name="streaming-type">
+		<xs:all>
+			<xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
 
 	<xs:complexType name="socket-type">
 		<xs:all>
@@ -51,7 +62,7 @@
 			<xs:element name="max-frame-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
-
+	
 	<xs:complexType name="ssl-config-type">
 		<xs:all>
 			<xs:element name="file" type="file-type" maxOccurs="1" minOccurs="0" />
@@ -103,6 +114,29 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="DROP_REQUEST" />
 					<xs:enumeration value="DISCONNECT_SESSION" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
+	
+	<xs:complexType name="event-controllers-type">
+		<xs:all>
+			<xs:element ref="event-controller" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="event-controller-type">
+		<xs:all>
+			<xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1" />
+			<xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+
+	<xs:simpleType name="listen-event-type">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SERVER_READY" />
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:list>

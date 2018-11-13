@@ -2,9 +2,13 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
+import com.tvd12.ezyfox.io.EzyBytes;
+import com.tvd12.ezyfox.codec.EzyMessageHeaderReader;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
 import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketStream;
+import com.tvd12.ezyfoxserver.socket.EzySocketStream;
 
 public class EzySimpleWsHandlerGroup
 		extends EzyAbstractHandlerGroup<EzyStringDataDecoder>
@@ -53,9 +57,23 @@ public class EzySimpleWsHandlerGroup
 	
 	private void handleReceivedBytes(byte[] bytes, int offset, int len) {
 		try {
-			// need a parsing first byte here
-			int newOffset = offset + 1;
-			decoder.decode(bytes, newOffset, len, decodeBytesCallback);
+			if(len <= 1) return;
+			byte headerByte = bytes[offset];
+			boolean isRawBytes = EzyMessageHeaderReader.readRawBytes(headerByte);
+			if(isRawBytes) {
+				boolean sessionStreamingEnable = session.isStreamingEnable();
+				if(!streamingEnable || !sessionStreamingEnable) {
+					return;
+				}
+				byte[] rawBytes = EzyBytes.copy(bytes, offset, len);
+				EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
+				streamQueue.add(stream);
+			}
+			else if(len > 1) {
+				int newLen = len - 1;
+				int newOffset = offset + 1;
+				decoder.decode(bytes, newOffset, newLen, decodeBytesCallback);
+			}
 		}
 		catch(Throwable throwable) {
 			fireExceptionCaught(throwable);

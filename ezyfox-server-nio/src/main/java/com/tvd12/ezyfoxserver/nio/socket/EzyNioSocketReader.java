@@ -45,7 +45,7 @@ public class EzyNioSocketReader
 			Thread.sleep(5L);
 		}
 		catch(Exception e) {
-			getLogger().info("I/O error at socket-reader: " + e.getMessage());
+			logger.info("I/O error at socket-reader: " + e.getMessage());
 		}
 	}
 	

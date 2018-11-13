@@ -19,13 +19,13 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
     
     @Override
     public void execute(byte[] bytes, EzySession recipient) {
-        boolean success = false;
+//        boolean success = false;
         EzyStreamingApi streamingApi = server.getStreamingApi();
         EzySimpleBytesPackage pack = newPackage(bytes);
         pack.addRecipient(recipient);
         try {
             streamingApi.response(pack);
-            success = true;
+//            success = true;
         } 
         catch(Exception e) {
             logger.error("send {} bytes " + bytes.length + ", to client: " + recipient.getName() + " error", e);
@@ -33,19 +33,19 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
         finally {
             pack.release();
         }
-        if(success)
-            logger.debug("send {} bytes to: {}", bytes.length, recipient.getName());
+//        if(success)
+//            logger.debug("send {} bytes to: {}", bytes.length, recipient.getName());
     }
     
     @Override
     public void execute(byte[] bytes, Collection<EzySession> recipients) {
-        boolean success = false;
+//        boolean success = false;
         EzyStreamingApi streamingApi = server.getStreamingApi();
         EzySimpleBytesPackage pack = newPackage(bytes);
         pack.addRecipients(recipients);
         try {
             streamingApi.response(pack);
-            success = true;
+//            success = true;
         } 
         catch(Exception e) {
             logger.error("send {} bytes " + bytes.length + ", to client: " + getRecipientsNames(recipients) + " error", e);
@@ -53,8 +53,8 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
         finally {
             pack.release();
         }
-        if(success)
-            logger.debug("send {} bytes to: {}", bytes.length, getRecipientsNames(recipients));
+//        if(success)
+//            logger.debug("send {} bytes to: {}", bytes.length, getRecipientsNames(recipients));
     }
     
     protected EzySimpleBytesPackage newPackage(byte[] bytes) {

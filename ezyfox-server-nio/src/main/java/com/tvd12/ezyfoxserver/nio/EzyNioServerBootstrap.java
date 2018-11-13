@@ -23,6 +23,9 @@ import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandlingLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamHandlingLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandlingLoopHandler;
 
@@ -43,6 +46,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	@Setter
 	private EzySocketRequestQueues requestQueues;
 	@Setter
+	private EzySocketStreamQueue streamQueue;
+	@Setter
 	private EzyHandlerGroupManager handlerGroupManager;
 	@Setter
 	private EzySessionTicketsQueue socketSessionTicketsQueue;
@@ -54,6 +59,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	private EzySocketEventLoopOneHandler systemRequestHandlingLoopHandler;
 	
 	private EzySocketEventLoopOneHandler extensionRequestHandlingLoopHandler;
+	
+	private EzySocketEventLoopOneHandler streamHandlingLoopHandler;
 	
 	private EzySocketEventLoopOneHandler socketDisconnectionHandlingLoopHandler;
 	
@@ -69,6 +76,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		startSocketServerBootstrap();
 		startWebSocketServerBootstrap();
 		startRequestHandlingLoopHandlers();
+		startStreamHandlingLoopHandlers();
 		startDisconnectionHandlingLoopHandlers();
 		callback.run();
 	}
@@ -96,6 +104,11 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		extensionRequestHandlingLoopHandler = newExtensionRequestHandlingLoopHandler();
 		systemRequestHandlingLoopHandler.start();
 		extensionRequestHandlingLoopHandler.start();
+	}
+	
+	private void startStreamHandlingLoopHandlers() throws Exception {
+		streamHandlingLoopHandler = newSocketStreamHandlingLoopHandler();
+		streamHandlingLoopHandler.start();
 	}
 	
 	private void startDisconnectionHandlingLoopHandlers() throws Exception {
@@ -140,6 +153,16 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		return loopHandler;
 	}
 	
+	private EzySocketEventLoopOneHandler newSocketStreamHandlingLoopHandler() {
+		EzySocketEventLoopOneHandler loopHandler = new EzySocketStreamHandlingLoopHandler();
+		loopHandler.setThreadPoolSize(getStreamHandlerPoolSize());
+		EzySocketStreamHandler eventHandler = new EzySocketStreamHandler();
+		eventHandler.setStreamQueue(streamQueue);
+		eventHandler.setDataHandlerGroupFetcher(handlerGroupManager);
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
+	}
+	
 	private EzySocketEventLoopOneHandler newSocketDisconnectionHandlingLoopHandler() {
 		EzySocketEventLoopOneHandler loopHandler = new EzySocketDisconnectionHandlingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketDisconnectionHandlerPoolSize());
@@ -148,6 +171,10 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		eventHandler.setDisconnectionQueue(socketDisconnectionQueue);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
+	}
+	
+	private int getStreamHandlerPoolSize() {
+		return EzyNioThreadPoolSizes.STREAM_HANDLER;
 	}
 	
 	private int getSystemRequestHandlerPoolSize() {

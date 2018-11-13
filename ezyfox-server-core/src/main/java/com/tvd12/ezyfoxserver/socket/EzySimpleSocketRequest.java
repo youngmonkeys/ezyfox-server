@@ -5,7 +5,6 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class EzySimpleSocketRequest implements EzySocketRequest {
@@ -14,7 +13,6 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
     private long timestamp;
     private EzyCommand command;
     private boolean systemRequest;
-    @Setter
     private EzySession session;
     
     public EzySimpleSocketRequest(EzySession session, EzyArray data) {

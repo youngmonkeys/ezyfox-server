@@ -10,4 +10,6 @@ public interface EzySocketDataHandlerGroup {
     
     void fireChannelInactive(EzyConstant reason);
     
+    void fireStreamBytesReceived(byte[] bytes) throws Exception;
+    
 }

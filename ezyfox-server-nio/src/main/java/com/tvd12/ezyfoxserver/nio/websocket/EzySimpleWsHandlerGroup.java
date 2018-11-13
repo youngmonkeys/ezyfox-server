@@ -6,6 +6,8 @@ import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
 import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketStream;
+import com.tvd12.ezyfoxserver.socket.EzySocketStream;
 
 public class EzySimpleWsHandlerGroup
 		extends EzyAbstractHandlerGroup<EzyStringDataDecoder>
@@ -55,15 +57,16 @@ public class EzySimpleWsHandlerGroup
 	private void handleReceivedBytes(byte[] bytes, int offset, int len) {
 		try {
 			if(len <= 1) return;
-			int newOffset = offset + 1;
-			int newLen = len - 1;
 			byte headerByte = bytes[offset];
 			boolean isRawBytes = (headerByte & 1) == 0;
 			if(isRawBytes) {
 				byte[] rawBytes = EzyBytes.copy(bytes, offset, len);
-				handler.streamingReceived(rawBytes);
+				EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
+				streamQueue.add(stream);
 			}
 			else if(len > 1) {
+				int newLen = len - 1;
+				int newOffset = offset + 1;
 				decoder.decode(bytes, newOffset, newLen, decodeBytesCallback);
 			}
 		}

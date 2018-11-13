@@ -19,10 +19,12 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
+import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 
 public class EzyNioServerBootstrapBuilderImpl
 		extends EzyHttpServerBootstrapBuilder 
@@ -36,6 +38,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		EzyStreamingApi streamingApi = newStreamingApi();
 		EzyResponseApi responseApi = newResponseApi(codecFactory);
 		EzySocketRequestQueues requestQueues = newRequestQueues();
+		EzySocketStreamQueue streamQueue = newStreamQueue();
 		EzySessionTicketsQueue socketSessionTicketsQueue = newSocketSessionTicketsQueue();
 		EzySessionTicketsQueue websocketSessionTicketsQueue = newWebSocketSessionTicketsQueue();
 		EzySocketDisconnectionQueue socketDisconnectionQueue = newSocketDisconnectionQueue();
@@ -47,12 +50,14 @@ public class EzyNioServerBootstrapBuilderImpl
 				codecThreadPool, 
 				codecFactory,
 				requestQueues,
+				streamQueue,
 				socketDisconnectionQueue,
 				handlerGroupBuilderFactory);
 		EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
 		bootstrap.setResponseApi(responseApi);
 		bootstrap.setStreamingApi(streamingApi);
 		bootstrap.setRequestQueues(requestQueues);
+		bootstrap.setStreamQueue(streamQueue);
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
@@ -66,12 +71,14 @@ public class EzyNioServerBootstrapBuilderImpl
 			ExecutorService codecThreadPool,
 			EzyCodecFactory codecFactory,
 			EzySocketRequestQueues requestQueues,
+			EzySocketStreamQueue streamQueue,
 			EzySocketDisconnectionQueue disconnectionQueue,
 			EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory) {
 		
 		return EzyHandlerGroupManagerImpl.builder()
 				.serverContext(serverContext)
 				.requestQueues(requestQueues)
+				.streamQueue(streamQueue)
 				.codecFactory(codecFactory)
 				.statsThreadPool(statsThreadPool)
 				.codecThreadPool(codecThreadPool)
@@ -109,6 +116,10 @@ public class EzyNioServerBootstrapBuilderImpl
 	
 	private EzySocketRequestQueues newRequestQueues() {
 		return new EzySimpleSocketRequestQueues();
+	}
+	
+	private EzySocketStreamQueue newStreamQueue() {
+		return new EzyBlockingSocketStreamQueue();
 	}
 	
 	private EzySessionTicketsQueue newSocketSessionTicketsQueue() {

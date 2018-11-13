@@ -25,6 +25,7 @@ import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 
@@ -52,6 +53,7 @@ public abstract class EzyAbstractHandlerGroup
 
 	protected final EzyNioSession session;
 	protected final EzySocketRequestQueues requestQueues;
+	protected final EzySocketStreamQueue streamQueue;
 	protected final EzySessionTicketsQueue sessionTicketsQueue;
 	protected final EzySocketDisconnectionQueue disconnectionQueue;
 	
@@ -63,6 +65,7 @@ public abstract class EzyAbstractHandlerGroup
 		this.statsThreadPool = builder.statsThreadPool;
 		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
+		this.streamQueue = builder.streamQueue;
 		this.disconnectionQueue = builder.disconnectionQueue;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 
@@ -124,6 +127,10 @@ public abstract class EzyAbstractHandlerGroup
 	
 	public final void fireChannelRead(EzyCommand cmd, EzyArray msg) throws Exception {
 		handler.channelRead(cmd, msg);
+	}
+	
+	public void fireStreamBytesReceived(byte[] bytes) throws Exception {
+		handler.streamingReceived(bytes);
 	}
 	
 	@Override
@@ -243,6 +250,7 @@ public abstract class EzyAbstractHandlerGroup
 		protected EzyNioSession session;
 		protected EzyServerContext serverContext;
 		protected EzySocketRequestQueues requestQueues;
+		protected EzySocketStreamQueue streamQueue;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
 		protected EzySocketDisconnectionQueue disconnectionQueue;
 		
@@ -288,6 +296,11 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
 			this.requestQueues = requestQueues;
+			return this;
+		}
+		
+		public Builder streamQueue(EzySocketStreamQueue streamQueue) {
+			this.streamQueue = streamQueue;
 			return this;
 		}
 		

@@ -23,7 +23,7 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("zone: {} fire plugin event: {}", getZoneName(), type);
+	    logger.debug("zone: {} broadcast to plugins event: {}", getZoneName(), type);
 		firePluginsEvent(type, event);
 	}
 	

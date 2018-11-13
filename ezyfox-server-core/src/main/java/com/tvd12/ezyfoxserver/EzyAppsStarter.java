@@ -26,21 +26,21 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     
     protected void startAllApps() {
         Set<String> appNames = getAppNames();
-        getLogger().info("start apps: {}", appNames);
+        logger.info("start apps: {}", appNames);
         appNames.forEach(this::startApp);
     }
     
     protected void startApp(String appName) {
         try {
-            getLogger().debug("app: " + appName + " loading...");
+            logger.debug("app: " + appName + " loading...");
             EzyAppContext context = zoneContext.getAppContext(appName);
             EzyApplication application = context.getApp();
             EzyAppEntry entry = startApp(appName, newAppEntryLoader(appName));
             ((EzyEntryAware)application).setEntry(entry);
-            getLogger().debug("app: " + appName + " loaded");
+            logger.debug("app: " + appName + " loaded");
         }
         catch(Exception e) {
-            getLogger().error("can not start app " + appName, e);
+            logger.error("can not start app " + appName, e);
         } 
     }
     

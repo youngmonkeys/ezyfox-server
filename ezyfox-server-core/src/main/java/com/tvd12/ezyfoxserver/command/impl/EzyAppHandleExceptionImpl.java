@@ -26,10 +26,10 @@ public class EzyAppHandleExceptionImpl
             handlers.handleException(thread, throwable);
         }
         catch(Exception e) {
-            getLogger().warn("handle exception on app " + appName + " error", e);
+            logger.warn("handle exception on app " + appName + " error", e);
         }
         finally {
-            getLogger().debug("handle app " + appName + " error", throwable);
+            logger.debug("handle app " + appName + " error", throwable);
         }
     }
     

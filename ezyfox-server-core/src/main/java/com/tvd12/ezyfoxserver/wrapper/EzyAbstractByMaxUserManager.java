@@ -28,7 +28,7 @@ public class EzyAbstractByMaxUserManager
         EzyUser old = usersByName.putIfAbsent(user.getName(), user);
         if(old != null) return old; 
         EzyUser answer = usersById.putIfAbsent(user.getId(), user);
-        getLogger().info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        logger.info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return answer;
     }
     

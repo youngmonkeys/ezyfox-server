@@ -52,7 +52,7 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected void startEzyFox(EzyServer server) throws Exception {
-        getLogger().info("settings: \n{}", server.toString());
+        logger.info("settings: \n{}", server.toString());
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
         serverBoostrap.start();
     }

@@ -32,10 +32,10 @@ public abstract class EzySocketRequestHandler
 			processRequestQueue(request);
 		} 
 		catch (InterruptedException e) {
-			getLogger().warn(getRequestType() + "-request-handler thread interrupted: " + Thread.currentThread());
+			logger.warn(getRequestType() + "-request-handler thread interrupted: " + Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			getLogger().warn("problems in " + getRequestType() + "-request-handler main loop, thread: " + Thread.currentThread(), throwable);
+			logger.warn("problems in " + getRequestType() + "-request-handler main loop, thread: " + Thread.currentThread(), throwable);
 		}
 	}
 	
@@ -57,7 +57,7 @@ public abstract class EzySocketRequestHandler
 	    if(handlerGroup != null)
 	        handlerGroup.fireChannelRead(request.getCommand(), data);
 	    else 
-	        getLogger().warn("has no handler group with session: " + session + ", drop request: " + request);
+	        logger.warn("has no handler group with session: " + session + ", drop request: " + request);
 	}
 	
 	protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {

@@ -16,7 +16,7 @@ public class EzyBroadcastEventImpl extends EzyAbstractCommand implements EzyBroa
 
     @Override
     public void fire(EzyConstant type, EzyEvent event) {
-        getLogger().debug("fire server event: {}", type);
+        logger.debug("broadcast server event: {}", type);
         fireZonesEvent(type, event);
     }
 

@@ -91,7 +91,7 @@ public class EzyHandlerGroupManagerImpl
 		EzyChannel channel = session.getChannel();
 		Object connection = channel.getConnection();
 		EzyHandlerGroup group = groupsByConnection.remove(connection);
-		getLogger().debug("remove handler group: {} with session: {}", group, session);
+		logger.debug("remove handler group: {} with session: {}", group, session);
 		return group;
 	}
 	

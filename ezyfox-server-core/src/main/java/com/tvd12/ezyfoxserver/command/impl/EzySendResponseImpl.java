@@ -38,13 +38,13 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            getLogger().error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error", e);
+            logger.error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error", e);
         }
         finally {
             pack.release();
         }
         if(success && !unloggableCommands.contains(response.getCommand()))
-            getLogger().debug("send to: {} data: {}", recipient.getName(), data);
+            logger.debug("send to: {} data: {}", recipient.getName(), data);
     }
     
     @Override
@@ -59,13 +59,13 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            getLogger().error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error", e);
+            logger.error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error", e);
         }
         finally {
             pack.release();
         }
         if(success && !unloggableCommands.contains(response.getCommand()))
-            getLogger().debug("send to: {} data: {}", getRecipientsNames(recipients), data);
+            logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
     }
     
     protected EzySimplePackage newPackage(EzyArray data) {

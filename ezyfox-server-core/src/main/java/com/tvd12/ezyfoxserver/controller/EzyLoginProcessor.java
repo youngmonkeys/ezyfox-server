@@ -164,7 +164,7 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             zoneContext.broadcastPlugins(EzyEventType.USER_ADDED, event);
         }
         catch(Exception e) {
-            getLogger().error("user added error", e);
+            logger.error("user added error", e);
         }
     }
     

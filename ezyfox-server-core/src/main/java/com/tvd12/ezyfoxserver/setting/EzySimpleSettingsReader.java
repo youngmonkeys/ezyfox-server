@@ -30,7 +30,7 @@ public class EzySimpleSettingsReader
     }
     
     protected EzySettings readSettings() {
-        getLogger().info("read setting file: " + getSettingsFilePath());
+        logger.info("read setting file: " + getSettingsFilePath());
         EzyXmlReader xmlReader = newXmlReader();
         EzySimpleSettings settings = readSettingsFile(xmlReader);
         EzySimpleZoneFilesSetting zoneFiles = settings.getZoneFiles();

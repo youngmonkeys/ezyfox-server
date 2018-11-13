@@ -71,19 +71,19 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	private void startSocketServerBootstrap() throws Exception {
 		EzySocketSetting socketSetting = getSocketSetting();
 		if(!socketSetting.isActive()) return;
-		getLogger().debug("starting tcp socket server bootstrap ....");
+		logger.debug("starting tcp socket server bootstrap ....");
 		socketServerBootstrap = newSocketServerBootstrap();
 		socketServerBootstrap.start();
-		getLogger().debug("tcp socket server bootstrap has started");
+		logger.debug("tcp socket server bootstrap has started");
 	}
 	
 	protected void startWebSocketServerBootstrap() throws Exception {
 		EzyWebSocketSetting socketSetting = getWebSocketSetting();
 		if(!socketSetting.isActive()) return;
-		getLogger().debug("starting websocket server bootstrap ....");
+		logger.debug("starting websocket server bootstrap ....");
 		websocketServerBootstrap = newWebSocketServerBootstrap();
 		websocketServerBootstrap.start();
-		getLogger().debug("websockt server bootstrap has started");
+		logger.debug("websockt server bootstrap has started");
 	}
 	
 	private void startRequestHandlingLoopHandlers() throws Exception {

@@ -38,7 +38,7 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 			return write0(data);
 		}
 		catch(WebSocketException e) {
-			getLogger().debug("write data: " + data + ", to: " + clientAddress + " error", e);
+			logger.debug("write data: " + data + ", to: " + clientAddress + " error", e);
 			return 0;
 		}
 	}

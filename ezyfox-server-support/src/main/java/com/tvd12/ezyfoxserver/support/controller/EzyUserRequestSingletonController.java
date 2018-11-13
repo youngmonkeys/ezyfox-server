@@ -86,7 +86,7 @@ public abstract class EzyUserRequestSingletonController<
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
 				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
 				handlers.put(command, (EzyUserRequestHandler) singleton);
-				getLogger().debug("add command {} and request handler singleton {}", command, singleton);
+				logger.debug("add command {} and request handler singleton {}", command, singleton);
 			}
 			return handlers;
 		}

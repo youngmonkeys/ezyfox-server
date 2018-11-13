@@ -100,7 +100,7 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     protected EzyAppClassLoader newAppClassLoader(File dir) {
-    	    getLogger().info("load " + dir);
+    	    logger.info("load " + dir);
         return new EzyAppClassLoader(dir, classLoader);
     }
     

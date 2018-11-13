@@ -85,7 +85,7 @@ public class EzySimpleNioHandlerGroup
 				selectionKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 			}
 			else {
-				getLogger().warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, session);
+				logger.warn("selection key invalid, wrriten bytes: {}, session: {}", bytesWritten, session);
 			}
 		}
 		else {

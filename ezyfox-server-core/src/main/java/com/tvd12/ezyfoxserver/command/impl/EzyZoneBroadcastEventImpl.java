@@ -17,7 +17,7 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("zone: {} fire event: {}", getZoneName(), type);
+	    logger.debug("zone: {} fire event: {}", getZoneName(), type);
 		firePluginsEvent(type, event);
 		fireAppsEvent(type, event);
 	}

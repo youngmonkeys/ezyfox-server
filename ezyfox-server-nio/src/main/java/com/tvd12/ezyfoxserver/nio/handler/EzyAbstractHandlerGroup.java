@@ -102,7 +102,7 @@ public abstract class EzyAbstractHandlerGroup
 			handler.channelInactive(reason);
 		}
 		catch(Exception e) {
-			getLogger().error("handler inactive error", e);
+			logger.error("handler inactive error", e);
 		}
 		finally {
 			sessionStats.setCurrentSessions(sessionCount.decrementAndGet());
@@ -151,7 +151,7 @@ public abstract class EzyAbstractHandlerGroup
 		boolean success = requestQueues.add(request);
 		if(!success) {
 			networkStats.addDroppedInPackets(1);
-			getLogger().info("request queue is full, drop incomming request");
+			logger.info("request queue is full, drop incomming request");
 		}
 	}
 	
@@ -177,7 +177,7 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(packet.getSize());
-			getLogger().warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
+			logger.warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
 		}
 	}
 	

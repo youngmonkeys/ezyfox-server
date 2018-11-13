@@ -22,7 +22,7 @@ public class EzyBroadcastAppsEventImpl extends EzyAbstractCommand implements Ezy
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event) {
-	    getLogger().debug("zone {} fire app event: {}", getZoneName(), type);
+	    logger.debug("zone {} broadcast to apps event: {}", getZoneName(), type);
 	    for(EzyAppContext appContext : context.getAppContexts())
             fireAppEvent(appContext, type, event);
 	}
@@ -39,7 +39,7 @@ public class EzyBroadcastAppsEventImpl extends EzyAbstractCommand implements Ezy
 	
 	@Override
 	public void fire(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter) {
-	    getLogger().debug("zone {} fire event: {}", getZoneName(), type);
+	    logger.debug("zone {} broadcast to apps event: {}", getZoneName(), type);
 	    for(EzyAppContext appContext : context.getAppContexts()) {
             if(filter.test(appContext)) 
                 fireAppEvent(appContext, type, event);

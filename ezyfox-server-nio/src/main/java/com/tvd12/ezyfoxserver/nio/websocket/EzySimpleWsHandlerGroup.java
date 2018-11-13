@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.nio.websocket;
 import com.tvd12.ezyfox.callback.EzyCallback;
 import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
 import com.tvd12.ezyfox.io.EzyBytes;
+import com.tvd12.ezyfox.codec.EzyMessageHeaderReader;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
 import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
@@ -58,7 +59,7 @@ public class EzySimpleWsHandlerGroup
 		try {
 			if(len <= 1) return;
 			byte headerByte = bytes[offset];
-			boolean isRawBytes = (headerByte & 1) == 0;
+			boolean isRawBytes = EzyMessageHeaderReader.readRawBytes(headerByte);
 			if(isRawBytes) {
 				boolean sessionStreamingEnable = session.isStreamingEnable();
 				if(!streamingEnable || !sessionStreamingEnable) {

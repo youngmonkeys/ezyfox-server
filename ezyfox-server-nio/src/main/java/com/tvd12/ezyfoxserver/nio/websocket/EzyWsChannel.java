@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
@@ -33,9 +34,11 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 	}
 	
 	@Override
-	public int write(Object data) throws Exception {
+	public int write(Object data, boolean binary) throws Exception {
 		try {
-			return write0(data);
+			if(binary)
+				return writeBinary((byte[])data);
+			return writeString((String)data);
 		}
 		catch(WebSocketException e) {
 			logger.debug("write data: " + data + ", to: " + clientAddress + " error", e);
@@ -43,8 +46,14 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 		}
 	}
 	
-	private int write0(Object data) throws Exception {
-		String bytes = (String)data;
+	private int writeBinary(byte[] bytes) throws Exception {
+		int bytesSize = bytes.length;
+		RemoteEndpoint remote = session.getRemote();
+		remote.sendBytes(ByteBuffer.wrap(bytes));
+		return bytesSize;
+	}
+	
+	private int writeString(String bytes) throws Exception {
 		int bytesSize = bytes.length();
 		RemoteEndpoint remote = session.getRemote();
 		remote.sendString(bytes);

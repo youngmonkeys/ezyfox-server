@@ -183,7 +183,7 @@ public abstract class EzyAbstractHandlerGroup
 	
 	protected int writePacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
 		Object bytes = packet.getData();
-		int writeBytes = channel.write(bytes);
+		int writeBytes = channel.write(bytes, packet.isBinary());
 		packet.release();
 		return writeBytes;
 	}

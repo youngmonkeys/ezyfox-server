@@ -6,7 +6,6 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
-import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 public abstract class EzyAbstractResponseApi implements EzyResponseApi {
@@ -27,7 +26,7 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
 		}
 	}
 	
-    private EzyPacket createPacket(Object bytes, EzyPackage pack) {
+    protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
 		EzySimplePacket packet = new EzySimplePacket();
 		packet.setTransportType(pack.getTransportType());
 		packet.setData(bytes);

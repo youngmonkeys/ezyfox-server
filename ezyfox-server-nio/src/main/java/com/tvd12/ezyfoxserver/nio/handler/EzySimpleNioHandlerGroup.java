@@ -76,7 +76,7 @@ public class EzySimpleNioHandlerGroup
 		buffer.clear();
 		buffer.put(bytes);
 		buffer.flip();
-		int bytesWritten = channel.write(buffer);
+		int bytesWritten = channel.write(buffer, packet.isBinary());
 		if (bytesWritten < bytesToWrite) {
 			byte[] remainBytes = getPacketFragment(buffer);
 			packet.setFragment(remainBytes);

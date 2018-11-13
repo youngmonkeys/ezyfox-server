@@ -4,12 +4,14 @@ import java.util.concurrent.ExecutorService;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.api.EzyProxyResponseApi;
+import com.tvd12.ezyfoxserver.api.EzyProxyStreamingApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
+import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
-import com.tvd12.ezyfoxserver.nio.api.EzyNioResponseApi;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
@@ -31,6 +33,7 @@ public class EzyNioServerBootstrapBuilderImpl
 		ExecutorService statsThreadPool = newStatsThreadPool();
 		ExecutorService codecThreadPool = newCodecThreadPool();
 		EzyCodecFactory codecFactory = newCodecFactory();
+		EzyStreamingApi streamingApi = newStreamingApi();
 		EzyResponseApi responseApi = newResponseApi(codecFactory);
 		EzySocketRequestQueues requestQueues = newRequestQueues();
 		EzySessionTicketsQueue socketSessionTicketsQueue = newSocketSessionTicketsQueue();
@@ -48,6 +51,7 @@ public class EzyNioServerBootstrapBuilderImpl
 				handlerGroupBuilderFactory);
 		EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
 		bootstrap.setResponseApi(responseApi);
+		bootstrap.setStreamingApi(streamingApi);
 		bootstrap.setRequestQueues(requestQueues);
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
@@ -87,12 +91,14 @@ public class EzyNioServerBootstrapBuilderImpl
 				.build();
 	}
 	
-	protected EzyResponseApi newResponseApi(EzyCodecFactory codecFactory) {
-		return EzyNioResponseApi.builder()
-				.codecFactory(codecFactory)
-				.build();
+	protected EzyStreamingApi newStreamingApi() {
+		return new EzyProxyStreamingApi();
 	}
-
+	
+	protected EzyResponseApi newResponseApi(EzyCodecFactory codecFactory) {
+		return new EzyProxyResponseApi(codecFactory);
+	}
+	
 	private ExecutorService newStatsThreadPool() {
 		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.STATISTICS, "statistics");
 	}

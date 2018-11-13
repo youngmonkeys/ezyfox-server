@@ -1,12 +1,13 @@
-package com.tvd12.ezyfoxserver.nio.websocket;
+package com.tvd12.ezyfoxserver.api;
 
 import com.tvd12.ezyfox.codec.EzyObjectToStringEncoder;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataEncoder;
 import com.tvd12.ezyfox.codec.EzyStringDataEncoder;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfoxserver.api.EzyAbstractResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.response.EzyPackage;
+import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 public class EzyWsResponseApi extends EzyAbstractResponseApi {
 
@@ -14,6 +15,13 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
 	
 	public EzyWsResponseApi(Object encoder) {
 		this.encoder = new EzySimpleStringDataEncoder((EzyObjectToStringEncoder)encoder);
+	}
+	
+	@Override
+	protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
+	    EzySimplePacket packet = super.createPacket(bytes, pack);
+	    packet.setBinary(false);
+	    return packet;
 	}
 	
 	@Override

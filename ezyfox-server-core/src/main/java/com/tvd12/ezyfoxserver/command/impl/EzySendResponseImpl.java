@@ -28,14 +28,14 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     
     @Override
     public void execute(EzyResponse response, EzySession recipient, boolean immediate) {
-        boolean success = false;
+//        boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
         EzySimplePackage pack = newPackage(data);
         pack.addRecipient(recipient);
         try {
             responseApi.response(pack, immediate);
-            success = true;
+//            success = true;
         } 
         catch(Exception e) {
             logger.error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error", e);
@@ -43,20 +43,20 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         finally {
             pack.release();
         }
-        if(success && !unloggableCommands.contains(response.getCommand()))
-            logger.debug("send to: {} data: {}", recipient.getName(), data);
+//        if(success && !unloggableCommands.contains(response.getCommand()))
+//            logger.debug("send to: {} data: {}", recipient.getName(), data);
     }
     
     @Override
     public void execute(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
-        boolean success = false;
+//        boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
         EzySimplePackage pack = newPackage(data);
         pack.addRecipients(recipients);
         try {
             responseApi.response(pack, immediate);
-            success = true;
+//            success = true;
         } 
         catch(Exception e) {
             logger.error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error", e);
@@ -64,8 +64,8 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         finally {
             pack.release();
         }
-        if(success && !unloggableCommands.contains(response.getCommand()))
-            logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
+//        if(success && !unloggableCommands.contains(response.getCommand()))
+//            logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
     }
     
     protected EzySimplePackage newPackage(EzyArray data) {

@@ -8,6 +8,8 @@ import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
+import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
+import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -29,7 +31,7 @@ import lombok.Setter;
 @SuppressWarnings("rawtypes")
 public class EzySimpleServer 
         extends EzyComponent 
-        implements EzyServer, EzyResponseApiAware, EzySessionManagerAware, EzyDestroyable {
+        implements EzyServer, EzyResponseApiAware, EzyStreamingApiAware, EzySessionManagerAware, EzyDestroyable {
 
 	protected EzyConfig config;
 	protected EzySettings settings;
@@ -44,6 +46,8 @@ public class EzySimpleServer
 	protected EzyServerControllers controllers;
 	@JsonIgnore
     protected EzyResponseApi responseApi;
+	@JsonIgnore
+	protected EzyStreamingApi streamingApi;
     @JsonIgnore
 	protected EzySessionManager sessionManager;
 	@JsonIgnore

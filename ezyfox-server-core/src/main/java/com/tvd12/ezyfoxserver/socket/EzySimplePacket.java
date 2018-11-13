@@ -14,6 +14,8 @@ public class EzySimplePacket implements EzyPacket {
 	private boolean released;
 	private boolean fragmented;
 	@Setter
+    private boolean binary = true;
+	@Setter
 	private EzyConstant transportType = EzyTransportType.TCP;
 	
 	@Override

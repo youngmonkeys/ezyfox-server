@@ -8,6 +8,8 @@ import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
+import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
+import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
@@ -37,6 +39,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	@Setter
 	private EzyResponseApi responseApi;
 	@Setter
+	private EzyStreamingApi streamingApi;
+	@Setter
 	private EzySocketRequestQueues requestQueues;
 	@Setter
 	private EzyHandlerGroupManager handlerGroupManager;
@@ -57,6 +61,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	protected void setupServer() {
 		EzyServer server = getServer();
 		((EzyResponseApiAware)server).setResponseApi(responseApi);
+		((EzyStreamingApiAware)server).setStreamingApi(streamingApi);
 	}
 	
 	@Override

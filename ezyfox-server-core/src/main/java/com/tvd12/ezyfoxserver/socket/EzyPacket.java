@@ -7,6 +7,8 @@ public interface EzyPacket extends EzyReleasable {
 
 	Object getData();
 	
+	boolean isBinary();
+	
 	boolean isReleased();
 	
 	boolean isFragmented();

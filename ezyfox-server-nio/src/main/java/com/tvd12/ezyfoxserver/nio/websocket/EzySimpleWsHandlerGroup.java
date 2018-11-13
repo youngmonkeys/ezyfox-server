@@ -60,7 +60,7 @@ public class EzySimpleWsHandlerGroup
 			byte headerByte = bytes[offset];
 			boolean isRawBytes = (headerByte & 1) == 0;
 			if(isRawBytes) {
-				byte[] rawBytes = EzyBytes.copy(bytes, newOffset, newLen);
+				byte[] rawBytes = EzyBytes.copy(bytes, offset, len);
 				handler.streamingReceived(rawBytes);
 			}
 			else if(len > 1) {

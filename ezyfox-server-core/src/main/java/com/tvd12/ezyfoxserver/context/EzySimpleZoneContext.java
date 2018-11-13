@@ -143,6 +143,16 @@ public class EzySimpleZoneContext
 	}
 	
 	@Override
+	public void stream(byte[] bytes, EzySession recipient) {
+	    parent.stream(bytes, recipient);
+	}
+	
+	@Override
+	public void stream(byte[] bytes, Collection<EzySession> recipients) {
+	    parent.stream(bytes, recipients);
+	}
+	
+	@Override
 	public void destroy() {
 	    super.destroy();
 	    destroyZone();

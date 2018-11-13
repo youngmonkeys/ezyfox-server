@@ -13,6 +13,8 @@ public interface EzyZoneSetting {
     String getConfigFile();
 
     int getMaxUsers();
+    
+    EzyStreamingSetting getStreaming();
 
     EzyPluginsSetting getPlugins();
 

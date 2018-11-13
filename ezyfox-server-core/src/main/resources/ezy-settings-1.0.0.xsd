@@ -8,6 +8,7 @@
 				<xs:element ref="debug" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="node-name" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="http" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="socket" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
@@ -25,12 +26,19 @@
 	<xs:element name="http" type="http-type" />
 	<xs:element name="socket" type="socket-type" />
 	<xs:element name="web-socket" type="web-socket-type" />
+	<xs:element name="streaming" type="streaming-type" />
 	<xs:element name="administrators" type="administrators-type" />
 	<xs:element name="session-management" type="session-management-type" />
 	<xs:element name="event-controllers" type="event-controllers-type" />
 	<xs:element name="event-controller" type="event-controller-type" />
 	<xs:element name="zone" type="zone-type" />
 	<xs:element name="zones" type="zones-type" />
+	
+	<xs:complexType name="streaming-type">
+		<xs:all>
+			<xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
 
 	<xs:complexType name="socket-type">
 		<xs:all>
@@ -54,7 +62,7 @@
 			<xs:element name="max-frame-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
-
+	
 	<xs:complexType name="ssl-config-type">
 		<xs:all>
 			<xs:element name="file" type="file-type" maxOccurs="1" minOccurs="0" />

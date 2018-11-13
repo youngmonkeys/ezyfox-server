@@ -19,6 +19,8 @@ public class EzySimpleUserLoginEvent
 	protected String password;
 	@Setter
 	protected EzyData output;
+	@Setter
+	protected boolean streamingEnable;
 	
 	public EzySimpleUserLoginEvent(
 	        EzySession session, 
@@ -29,6 +31,7 @@ public class EzySimpleUserLoginEvent
 	    this.data = data;
 	    this.username = username;
 	    this.password = password;
+	    this.streamingEnable = true;
 	}
 	
 	public String getUsername() {

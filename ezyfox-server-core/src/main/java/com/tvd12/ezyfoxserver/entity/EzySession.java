@@ -311,6 +311,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	boolean isIdle();
 	
 	/**
+	 * @return streaming enable or not
+	 */
+	boolean isStreamingEnable();
+	
+	/**
 	 * @return the owner name
 	 */
 	String getOwnerName();

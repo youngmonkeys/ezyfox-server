@@ -60,6 +60,10 @@ public class EzySimpleWsHandlerGroup
 			byte headerByte = bytes[offset];
 			boolean isRawBytes = (headerByte & 1) == 0;
 			if(isRawBytes) {
+				boolean sessionStreamingEnable = session.isStreamingEnable();
+				if(!streamingEnable || !sessionStreamingEnable) {
+					return;
+				}
 				byte[] rawBytes = EzyBytes.copy(bytes, offset, len);
 				EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
 				streamQueue.add(stream);

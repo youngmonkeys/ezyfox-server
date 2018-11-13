@@ -44,6 +44,7 @@ public abstract class EzyAbstractHandlerGroup
 	protected final D decoder;
 	protected final EzyNioDataHandler handler;
 
+	protected final boolean streamingEnable;
 	protected final AtomicInteger sessionCount;
 	protected final EzySessionStats sessionStats;
 	protected final EzyNetworkStats networkStats;
@@ -66,6 +67,7 @@ public abstract class EzyAbstractHandlerGroup
 		this.codecThreadPool = builder.codecThreadPool;
 		this.requestQueues = builder.requestQueues;
 		this.streamQueue = builder.streamQueue;
+		this.streamingEnable = builder.isStreamingEnable();
 		this.disconnectionQueue = builder.disconnectionQueue;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 
@@ -312,6 +314,10 @@ public abstract class EzyAbstractHandlerGroup
 		public Builder disconnectionQueue(EzySocketDisconnectionQueue disconnectionQueue) {
 			this.disconnectionQueue = disconnectionQueue;
 			return this;
+		}
+		
+		protected boolean isStreamingEnable() {
+			return serverContext.getServer().getSettings().getStreaming().isEnable();
 		}
 	}
 	

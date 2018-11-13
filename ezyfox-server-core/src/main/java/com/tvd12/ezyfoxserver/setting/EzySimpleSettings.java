@@ -32,6 +32,9 @@ public class EzySimpleSettings implements EzySettings {
     @XmlElement(name = "max-sessions")
     protected int maxSessions = 999999;
     
+    @XmlElement(name = "streaming")
+    protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
+    
 	@XmlElement(name = "http")
 	protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
 	

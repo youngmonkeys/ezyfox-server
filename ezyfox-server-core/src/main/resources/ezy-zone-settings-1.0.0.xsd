@@ -5,9 +5,9 @@
 	<xs:element name="settings">
 		<xs:complexType>
 			<xs:all>
+				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="user-management" minOccurs="0" maxOccurs="1" />

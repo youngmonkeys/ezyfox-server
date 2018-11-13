@@ -16,6 +16,8 @@ public interface EzySettings {
     
     EzyWebSocketSetting getWebsocket();
     
+    EzyStreamingSetting getStreaming();
+    
     EzyAdminsSetting getAdmins();
     
     EzyLoggerSetting getLogger();

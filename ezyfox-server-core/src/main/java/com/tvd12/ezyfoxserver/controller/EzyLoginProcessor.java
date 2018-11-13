@@ -34,6 +34,7 @@ import com.tvd12.ezyfoxserver.response.EzyLoginParams;
 import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.setting.EzyStreamingSetting;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.statistics.EzyUserStatistics;
@@ -76,7 +77,9 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
                     : newUser(zoneSetting, userManagementSetting, username, password);
             int maxSessionPerUser = userManagementSetting.getMaxSessionPerUser();
             boolean allowChangeSession = userManagementSetting.isAllowChangeSession();
-            processUserSessions(user, session, maxSessionPerUser, allowChangeSession);
+            EzyStreamingSetting streamingSetting = zoneSetting.getStreaming();
+            boolean streamingEnable = streamingSetting.isEnable() && event.isStreamingEnable();
+            processUserSessions(user, session, maxSessionPerUser, allowChangeSession, streamingEnable);
             addUserToManager(userManager, user, session, alreadyLoggedIn);
         }
         finally {
@@ -104,7 +107,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
     protected void processUserSessions(EzyUser user,
             EzySession session,
             int maxSessionPerUser,
-            boolean allowChangeSession) {
+            boolean allowChangeSession,
+            boolean streamingEnable) {
         if(maxSessionPerUser <= 0)
             throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         int sessionCount = user.getSessionCount();
@@ -115,6 +119,7 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         session.setLoggedIn(true);
         session.setLoggedInTime(System.currentTimeMillis());
         ((EzyAbstractSession)session).setOwner(user);
+        ((EzyAbstractSession)session).setStreamingEnable(streamingEnable);
         if(sessionCount == 0) {
             user.addSession(session);
         }

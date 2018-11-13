@@ -11,8 +11,11 @@ import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginsSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventPluginsMapper;
 
+import lombok.Getter;
+
 public class EzyEventPluginsMapperImpl implements EzyEventPluginsMapper {
 
+    @Getter
     protected final EzyMapSet<EzyConstant, EzyPluginSetting> eventsPluginss;
     
     protected EzyEventPluginsMapperImpl(Builder builder) {

@@ -8,6 +8,10 @@
 	<node-name>localhost</node-name>
 	<max-sessions>30000</max-sessions>
 	
+	<streaming>
+		<enable>true</enable>
+	</streaming>
+	
 	<socket>
 		<port>3005</port>
 		<address>0.0.0.0</address>

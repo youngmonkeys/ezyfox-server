@@ -55,6 +55,7 @@ public abstract class EzyAbstractSession
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
+    protected volatile boolean streamingEnable;
 
     protected String token;
 	protected String clientType;

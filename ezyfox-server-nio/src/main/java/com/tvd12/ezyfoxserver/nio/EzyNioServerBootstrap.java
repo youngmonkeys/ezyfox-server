@@ -12,7 +12,9 @@ import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzyStreamingSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionHandler;
@@ -107,8 +109,12 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	}
 	
 	private void startStreamHandlingLoopHandlers() throws Exception {
-		streamHandlingLoopHandler = newSocketStreamHandlingLoopHandler();
-		streamHandlingLoopHandler.start();
+		EzySettings settings = this.getServerSettings();
+		EzyStreamingSetting streamingSetting = settings.getStreaming();
+		if(streamingSetting.isEnable()) {
+			streamHandlingLoopHandler = newSocketStreamHandlingLoopHandler();
+			streamHandlingLoopHandler.start();
+		}
 	}
 	
 	private void startDisconnectionHandlingLoopHandlers() throws Exception {

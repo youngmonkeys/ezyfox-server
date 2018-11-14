@@ -28,25 +28,36 @@ public class EzySimpleWsHandlerGroup
 	
 	@Override
 	public void fireBytesReceived(String bytes) throws Exception {
-		executeHandleReceivedBytes(bytes);
+		handleReceivedBytes(bytes);
 		executeAddReadBytes(bytes.length());
 	}
 	
 	@Override
 	public void fireBytesReceived(byte[] bytes, int offset, int len) throws Exception {
-		executeHandleReceivedBytes(bytes, offset, len);
+		handleReceivedBytes(bytes, offset, len);
 		executeAddReadBytes(len - offset);
 	}
 	
+	@SuppressWarnings("unused")
 	private void executeHandleReceivedBytes(String bytes) {
 		codecThreadPool.execute(() -> handleReceivedBytes(bytes));
 	}
 	
-	private void executeHandleReceivedBytes(byte[] bytes, int offset, int len) {
-		codecThreadPool.execute(() -> handleReceivedBytes(bytes, offset, len));
+	@SuppressWarnings("unused")
+	private void executeHandleReceivedBytes(byte[] bytes) {
+		codecThreadPool.execute(() -> handleReceivedBytes(bytes));
 	}
 	
 	private void handleReceivedBytes(String bytes) {
+		try {
+			decoder.decode(bytes, decodeBytesCallback);
+		}
+		catch(Throwable throwable) {
+			fireExceptionCaught(throwable);
+		}
+	}
+	
+	private void handleReceivedBytes(byte[] bytes) {
 		try {
 			decoder.decode(bytes, decodeBytesCallback);
 		}
@@ -72,7 +83,8 @@ public class EzySimpleWsHandlerGroup
 			else if(len > 1) {
 				int newLen = len - 1;
 				int newOffset = offset + 1;
-				decoder.decode(bytes, newOffset, newLen, decodeBytesCallback);
+				byte[] messageBytes = EzyBytes.copy(bytes, newOffset, newLen);
+				handleReceivedBytes(messageBytes);
 			}
 		}
 		catch(Throwable throwable) {

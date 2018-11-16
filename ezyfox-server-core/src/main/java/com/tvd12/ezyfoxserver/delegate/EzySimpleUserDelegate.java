@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.delegate;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -29,13 +31,13 @@ public class EzySimpleUserDelegate
     @Override
     public void onUserRemoved(EzyUser user, EzyConstant reason) {
         EzyZoneContext zoneContext = serverContext.getZoneContext(user.getZoneId());
-        removeUserFromApps(zoneContext, user); 
+        Set<EzyAppContext> appContexts = removeUserFromApps(zoneContext, user); 
         EzyUserEvent event = newUserRemovedEvent(user, reason);
-        notifyToApps(zoneContext, event);
-        notifyToPlugins(zoneContext, event);
+        notifyUserRemovedToApps(zoneContext, appContexts, event);
+        notifyUserRemovedToPlugins(zoneContext, event);
     }
     
-    protected void notifyToPlugins(EzyZoneContext context, EzyUserEvent event) {
+    protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserEvent event) {
         try {
             context.broadcastPlugins(EzyEventType.USER_REMOVED, event);
         }
@@ -45,26 +47,38 @@ public class EzySimpleUserDelegate
         }
     }
     
-    protected void notifyToApps(EzyZoneContext context, EzyUserEvent event) {
+    protected void notifyUserRemovedToApps(EzyZoneContext zoneContext, Set<EzyAppContext> appContexts, EzyUserEvent event) {
+        for(EzyAppContext appContext : appContexts)
+            notifyUserRemovedToApp(zoneContext, appContext, event);
+    }
+    
+    protected void notifyUserRemovedToApp(EzyZoneContext zoneContext, EzyAppContext appContext, EzyUserEvent event) {
         try {
-            context.broadcastApps(EzyEventType.USER_REMOVED, event, event.getUser());
+            appContext.handleEvent(EzyEventType.USER_REMOVED, event);
         }
         catch(Exception e) {
-            String zoneName = context.getZone().getSetting().getName();
+            String zoneName = zoneContext.getZone().getSetting().getName();
             logger.error("zone: " + zoneName + ", notify to apps user: " + event.getUser() + " removed error", e);
         }
     }
     
-    protected void removeUserFromApps(EzyZoneContext context, EzyUser user) {
+    protected Set<EzyAppContext> removeUserFromApps(EzyZoneContext context, EzyUser user) {
+        Set<EzyAppContext> containAppContexts = new HashSet<>();
         Collection<EzyAppContext> appContexts = context.getAppContexts();
-        for(EzyAppContext appCtx : appContexts)
-            removeUserFromApp(appCtx, user);
+        for(EzyAppContext appCtx : appContexts) {
+            boolean contains = removeUserFromApp(appCtx, user);
+            if(contains)
+                containAppContexts.add(appCtx);
+        }
+        return containAppContexts;
     }
     
-    protected void removeUserFromApp(EzyAppContext ctx, EzyUser user) {
+    protected boolean removeUserFromApp(EzyAppContext ctx, EzyUser user) {
         EzyUserManager userManager = ctx.getApp().getUserManager();
-        if(userManager.containsUser(user))
+        boolean contains = userManager.containsUser(user);
+        if(contains)
             userManager.removeUser(user);
+        return contains;
     }
     
     protected EzyUserEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {

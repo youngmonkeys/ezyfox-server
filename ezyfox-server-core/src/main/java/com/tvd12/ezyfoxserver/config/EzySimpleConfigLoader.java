@@ -7,7 +7,9 @@ public class EzySimpleConfigLoader implements EzyConfigLoader {
     
     @Override
     public EzyConfig load(String filePath) {
-        return newPropertiesReader().read(filePath, EzySimpleConfig.class);
+        EzyPropertiesFileReader reader = newPropertiesReader();
+        EzySimpleConfig config = reader.read(filePath, EzySimpleConfig.class);
+        return config;
     }
     
     protected EzyPropertiesFileReader newPropertiesReader() {

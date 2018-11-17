@@ -4,8 +4,8 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.SecureRandom;
-import java.security.Security;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -29,7 +29,6 @@ public class EzySimpleSslContextFactory
     private static final String SUNX509             = "SunX509";
     private static final String PROTOCOL            = "TLS";
     private static final String JKS_KEYSTORE        = "JKS";
-    private static final String ALGORITHM_PROPERTY  = "ssl.KeyManagerFactory.algorithm";
     
     @Override
     public SSLContext newSslContext(EzySslConfig config) throws Exception {
@@ -49,7 +48,8 @@ public class EzySimpleSslContextFactory
 
         // Initialize the SSLContext to work with our key managers.
         SSLContext context = SSLContext.getInstance(getProtocol());
-        context.init(keyManagerFactory.getKeyManagers(), trustManagers, secureRandom);
+        KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+        context.init(keyManagers, null, null);
         return context;
     }
     
@@ -66,12 +66,24 @@ public class EzySimpleSslContextFactory
     
     protected void loadKeyStore(KeyStore keyStore, InputStream stream, char[] password) 
             throws Exception {
-        keyStore.load(stream, password);
+        try {
+            keyStore.load(stream, password);
+        }
+        finally {
+            stream.close();
+        }
     }
     
-    protected char[] getPassword(String file) {
+    protected char[] getPassword(String file) throws Exception {
         InputStream stream = newInputStreamLoader().load(file);
-        return newInputStreamReader().readChars(stream, "UTF-8");
+        char[] answer = null;
+        try {
+            answer = newInputStreamReader().readChars(stream, "UTF-8");
+        }
+        finally {
+            stream.close();
+        }
+        return answer;
     }
     
     protected InputStream loadKeyStoreStream(String file) {
@@ -91,12 +103,8 @@ public class EzySimpleSslContextFactory
     }
 
     protected String getAlgorithm(EzySslConfig config) {
-        String algorithm = Security.getProperty(getAlgorithmProperty());
+        String algorithm = KeyManagerFactory.getDefaultAlgorithm();
         return algorithm != null ? algorithm : SUNX509;
-    }
-    
-    protected String getAlgorithmProperty() {
-        return ALGORITHM_PROPERTY;
     }
     
     protected EzyInputStreamLoader newInputStreamLoader() {

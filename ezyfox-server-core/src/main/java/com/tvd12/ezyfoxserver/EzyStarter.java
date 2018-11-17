@@ -5,7 +5,6 @@ package com.tvd12.ezyfoxserver;
 
 import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.SETTINGS;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -39,7 +38,8 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected void startSystem() throws Exception {
-        startSystem(readConfig(new File(configFile).toString()));
+        EzyConfig config = readConfig(configFile);
+        startSystem(config);
     }
 
     protected void startSystem(EzyConfig config) throws Exception {

@@ -12,10 +12,6 @@ public class EzySimpleSslContextFactoryTest extends BaseCoreTest {
     @Test
     public void test() {
         new EzySimpleSslContextFactory() {
-            protected String getAlgorithmProperty() {
-                return "zzfsdff";
-            };
-
             @Override
             public String getAlgorithm(EzySslConfig config) {
                 return super.getAlgorithm(config);

@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver.testing;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import com.tvd12.ezyfox.collect.Lists;
 
 public class UsernamePatternTest {
 

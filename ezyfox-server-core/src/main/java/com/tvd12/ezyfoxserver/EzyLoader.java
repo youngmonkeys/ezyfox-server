@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
+import com.tvd12.ezyfox.json.EzyJsonMapper;
 import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;

@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver;
 
 import java.util.Map;
 
-import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
+import com.tvd12.ezyfox.json.EzyJsonMapper;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;

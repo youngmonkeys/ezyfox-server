@@ -5,7 +5,7 @@ import java.security.KeyPair;
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyObjectBuilder;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
-import com.tvd12.ezyfox.mapping.jackson.EzyJsonMapper;
+import com.tvd12.ezyfox.json.EzyJsonMapper;
 import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;

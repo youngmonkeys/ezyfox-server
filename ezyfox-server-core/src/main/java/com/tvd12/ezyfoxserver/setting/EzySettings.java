@@ -2,7 +2,9 @@ package com.tvd12.ezyfoxserver.setting;
 
 import java.util.Set;
 
-public interface EzySettings {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzySettings extends EzyToMap {
 
     boolean isDebug();
     

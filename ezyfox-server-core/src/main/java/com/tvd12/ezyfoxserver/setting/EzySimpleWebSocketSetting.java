@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -38,4 +40,13 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
     }
     
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = super.toMap();
+        map.put("sslPort", sslPort);
+        map.put("maxFrameSize", maxFrameSize);
+        map.put("sslActive", sslActive);
+        map.put("sslConfig", sslConfig.toMap());
+        return map;
+    }
 }

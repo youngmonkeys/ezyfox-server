@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
@@ -15,7 +14,6 @@ import lombok.Setter;
 public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyable {
 
     protected EzyZoneSetting setting;
-    @JsonIgnore
     protected EzyZoneUserManager userManager;
     
     @Override

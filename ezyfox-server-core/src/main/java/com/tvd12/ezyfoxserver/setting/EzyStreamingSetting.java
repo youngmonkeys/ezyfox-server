@@ -1,7 +1,11 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzyStreamingSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyStreamingSetting extends EzyToMap {
 
     boolean isEnable();
+    
+    
     
 }

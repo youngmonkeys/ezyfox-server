@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.config;
 
-public interface EzyConfig {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyConfig extends EzyToMap {
 
     String getEzyfoxHome();
-    
-    String getEzyfoxVersion();
     
     String getLoggerConfigFile();
     

@@ -15,7 +15,6 @@ public class EzyLoaderTest extends BaseCoreTest {
         
         EzyConfig config = server.getConfig();
         assertEquals(config.getEzyfoxHome(), "test-data");
-        assertEquals(config.getEzyfoxVersion(), "1.0.0");
         assertEquals(config.getLoggerConfigFile(), "logback.groovy");
         
     }

@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -27,6 +30,16 @@ public abstract class EzyAbstractSocketSetting implements EzyBaseSocketSetting {
 	public EzyAbstractSocketSetting() {
 	    setActive(true);
 	    setAddress("0.0.0.0");
+	}
+	
+	@Override
+	public Map<Object, Object> toMap() {
+	    Map<Object, Object> map = new HashMap<>();
+        map.put("port", port);
+        map.put("address", address);
+        map.put("active", active);
+        map.put("codecCreator", codecCreator);
+        return map;
 	}
 	
 }

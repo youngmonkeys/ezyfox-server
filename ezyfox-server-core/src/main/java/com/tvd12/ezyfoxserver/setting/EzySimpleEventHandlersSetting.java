@@ -1,7 +1,9 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,6 +26,16 @@ public class EzySimpleEventHandlersSetting implements EzyEventControllersSetting
     @XmlElement(name = "event-controller")
     public void setItem(EzySimpleEventHandlerSetting item) {
         eventControllers.add(item);
+    }
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        List<Object> eventControllerMaps = new ArrayList<>();
+        for(EzyEventControllerSetting eventController : eventControllers)
+            eventControllerMaps.add(eventController.toMap());
+        map.put("eventControllers", eventControllerMaps);
+        return map;
     }
     
 }

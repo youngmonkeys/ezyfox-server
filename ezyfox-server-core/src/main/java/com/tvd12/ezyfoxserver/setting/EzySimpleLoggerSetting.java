@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,6 +27,13 @@ public class EzySimpleLoggerSetting implements EzyLoggerSetting {
     @XmlElement(name = "ignored-commands")
     protected EzySimpleIgnoredCommandsSetting ignoredCommands 
             = new EzySimpleIgnoredCommandsSetting();
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("ignoredCommands", ignoredCommands.getCommands());
+        return map;
+    }
     
     @Getter
     @ToString

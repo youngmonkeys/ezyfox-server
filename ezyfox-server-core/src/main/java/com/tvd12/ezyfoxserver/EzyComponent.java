@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyExceptionHandlers;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
@@ -13,11 +12,9 @@ import lombok.Setter;
 @Getter
 public class EzyComponent implements EzyExceptionHandlersFetcher, EzyDestroyable {
 
-    @JsonIgnore
     @Setter
     protected EzyEventControllers eventControllers;
     
-    @JsonIgnore
     protected final EzyExceptionHandlers exceptionHandlers 
             = new EzyListExceptionHandlers();
     

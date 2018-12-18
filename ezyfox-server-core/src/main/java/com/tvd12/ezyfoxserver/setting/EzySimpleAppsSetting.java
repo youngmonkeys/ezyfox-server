@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,9 +12,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,14 +21,11 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "applications")
-@JsonIgnoreProperties({"appsByIds", "appsByNames", "appNames", "appIds"})
-@JsonPropertyOrder({"size", "apps"})
 public class EzySimpleAppsSetting implements EzyAppsSetting {
 
 	protected final List<EzyAppSetting> apps = new ArrayList<>();
 	protected final Map<Integer, EzySimpleAppSetting> appsByIds = new ConcurrentHashMap<>();
 	protected final Map<String, EzySimpleAppSetting> appsByNames = new ConcurrentHashMap<>();
-	
 	
 	@XmlElement(name = "application")
 	public void setItem(EzySimpleAppSetting item) {
@@ -70,6 +65,17 @@ public class EzySimpleAppsSetting implements EzyAppsSetting {
 	
 	public void setZoneId(int zoneId) {
         apps.forEach(a -> ((EzyZoneIdAware)a).setZoneId(zoneId));
+    }
+	
+	@Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        List<Object> appMaps = new ArrayList<>();
+        for(EzyAppSetting app : apps)
+            appMaps.add(app.toMap());
+        map.put("size", apps.size());
+        map.put("apps", appMaps);
+        return map;
     }
 	
 }

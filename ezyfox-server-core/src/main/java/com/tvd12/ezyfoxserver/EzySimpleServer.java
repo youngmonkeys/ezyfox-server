@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tvd12.ezyfox.json.EzyJsonMapper;
+import com.tvd12.ezyfox.json.EzyJsonWriter;
+import com.tvd12.ezyfox.json.EzySimpleJsonWriter;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
@@ -27,7 +27,6 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-@JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("rawtypes")
 public class EzySimpleServer 
         extends EzyComponent 
@@ -35,22 +34,12 @@ public class EzySimpleServer
 
 	protected EzyConfig config;
 	protected EzySettings settings;
-	
-	@JsonIgnore
 	protected ClassLoader classLoader;
-	@JsonIgnore
-	protected EzyJsonMapper jsonMapper;
-	@JsonIgnore
 	protected EzyStatistics statistics;
-	@JsonIgnore
 	protected EzyServerControllers controllers;
-	@JsonIgnore
     protected EzyResponseApi responseApi;
-	@JsonIgnore
 	protected EzyStreamingApi streamingApi;
-    @JsonIgnore
 	protected EzySessionManager sessionManager;
-	@JsonIgnore
     protected Map<String, EzyAppClassLoader> appClassLoaders;
 	
 	@Override
@@ -66,7 +55,18 @@ public class EzySimpleServer
 	
 	@Override
 	public String toString() {
-		return jsonMapper.writeAsString(this);
+	    EzyJsonWriter writer = new EzySimpleJsonWriter();
+		String json = writer.writeAsString(this);
+		return json;
 	}
+	
+	@Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("version", getVersion());
+        map.put("config", config.toMap());
+        map.put("settings", settings.toMap());
+        return map;
+    }
     
 }

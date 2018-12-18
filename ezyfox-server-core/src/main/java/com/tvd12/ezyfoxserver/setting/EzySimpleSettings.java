@@ -1,14 +1,13 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +19,6 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "settings")
-@JsonIgnoreProperties(value = {"zoneFiles"}, ignoreUnknown = true)
 public class EzySimpleSettings implements EzySettings {
 
     @XmlElement(name = "debug")
@@ -61,19 +59,34 @@ public class EzySimpleSettings implements EzySettings {
     
     @XmlElement(name = "zones")
     protected EzySimpleZoneFilesSetting zoneFiles = new EzySimpleZoneFilesSetting();
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("debug", debug);
+        map.put("nodeName", nodeName);
+        map.put("maxSessions", maxSessions);
+        map.put("streaming", streaming.toMap());
+        map.put("socket", socket.toMap());
+        map.put("websocket", websocket.toMap());
+        map.put("logger", logger.toMap());
+        map.put("admins", admins.toMap());
+        map.put("sessionManagement", sessionManagement.toMap());
+        map.put("eventControllers", eventControllers.toMap());
+        map.put("zones", zones.toMap());
+        return map;
+    }
 
     //==================== apps ================//
     public void addZone(EzySimpleZoneSetting zone) {
         this.zones.setItem(zone);
     }
     
-	@JsonIgnore
 	@Override
 	public Set<String> getZoneNames() {
 		return zones.getZoneNames();
 	}
 	
-	@JsonIgnore
 	@Override
 	public Set<Integer> getZoneIds() {
 		return zones.getZoneIds();

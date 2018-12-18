@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,4 +28,12 @@ public class EzySimpleHttpSetting implements EzyHttpSetting {
     @XmlElement(name = "max-threads")
     protected int maxThreads = 8;
     
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("port", port);
+        map.put("active", active);
+        map.put("maxThreads", maxThreads);
+        return map;
+    }
 }

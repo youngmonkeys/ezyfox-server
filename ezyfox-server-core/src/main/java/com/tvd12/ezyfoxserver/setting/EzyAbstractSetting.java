@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,7 +11,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 
@@ -41,10 +42,8 @@ public abstract class EzyAbstractSetting
 	@XmlElement(name = "config-file")
 	protected String configFile = "config.properties";
 	
-	@JsonIgnore
 	protected String homePath = "";
 	
-	@JsonIgnore
 	protected String location = "";
 	
 	protected int newId() {
@@ -73,6 +72,18 @@ public abstract class EzyAbstractSetting
 	@Override
 	public int hashCode() {
 	    return new EzyHashCodes().append(id).toHashCode();
+	}
+	
+	@Override
+	public Map<Object, Object> toMap() {
+	    Map<Object, Object> map = new HashMap<>();
+	    map.put("id", id);
+	    map.put("name", name);
+	    map.put("folder", folder);
+	    map.put("entryLoader", entryLoader);
+	    map.put("threadPoolSize", threadPoolSize);
+	    map.put("configFile", configFile);
+	    return map;
 	}
 	
 }

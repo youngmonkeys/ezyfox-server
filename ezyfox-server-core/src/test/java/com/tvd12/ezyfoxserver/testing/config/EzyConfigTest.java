@@ -11,7 +11,6 @@ public class EzyConfigTest extends BaseCoreTest {
     public void test() {
         EzySimpleConfig config = new EzySimpleConfig();
         config.setEzyfoxHome("home");
-        config.setEzyfoxVersion("1.0.0");
         config.setLoggerConfigFile("abc");
         assert config.toString() != null;
     }

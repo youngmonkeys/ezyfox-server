@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -38,6 +41,17 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
         this.sessionMaxWaitingTime = sessionMaxWaitingTimeInSecond * 1000;
     }
     
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("sessionMaxIdleTime", sessionMaxIdleTime);
+        map.put("sessionMaxIdleTimeInSecond", sessionMaxIdleTimeInSecond);
+        map.put("sessionMaxWaitingTime", sessionMaxWaitingTime);
+        map.put("sessionMaxWaitingTimeInSecond", sessionMaxWaitingTimeInSecond);
+        map.put("sessionMaxRequestPerSecond", sessionMaxRequestPerSecond.toMap());
+        return map;
+    }
+    
     @Getter
     @ToString
     @XmlAccessorType(XmlAccessType.NONE)
@@ -49,6 +63,14 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
         
         @XmlElement(name = "action")
         protected EzyMaxRequestPerSecondAction action = EzyMaxRequestPerSecondAction.DROP_REQUEST;
+        
+        @Override
+        public Map<Object, Object> toMap() {
+            Map<Object, Object> map = new HashMap<>();
+            map.put("value", value);
+            map.put("action", action);
+            return map;
+        }
     }
     
 }

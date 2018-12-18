@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzyBaseSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyBaseSetting extends EzyToMap {
 
     int getId();
     
@@ -17,5 +19,5 @@ public interface EzyBaseSetting {
     int getThreadPoolSize();
     
     String getConfigFile();
-
+    
 }

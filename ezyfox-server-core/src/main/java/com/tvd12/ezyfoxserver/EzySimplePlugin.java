@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
@@ -17,7 +16,6 @@ public class EzySimplePlugin
         implements EzyPlugin, EzyDestroyable {
 
     protected EzyPluginSetting setting;
-    @JsonIgnore
     protected EzyPluginRequestController requestController;
     
     public EzySimplePlugin() {

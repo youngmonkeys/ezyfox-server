@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,6 +44,19 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting,
     @Override
     public void init() {
         this.userMaxIdleTime = userMaxIdleTimeInSecond * 1000;
+    }
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("userMaxIdleTime", userMaxIdleTime);
+        map.put("userMaxIdleTimeInSecond", userMaxIdleTimeInSecond);
+        map.put("maxSessionPerUser", maxSessionPerUser);
+        map.put("allowGuestLogin", allowGuestLogin);
+        map.put("allowChangeSession", allowChangeSession);
+        map.put("guestNamePrefix", guestNamePrefix);
+        map.put("userNamePattern", userNamePattern);
+        return map;
     }
     
 }

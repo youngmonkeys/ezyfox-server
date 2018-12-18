@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
@@ -20,9 +19,7 @@ public class EzySimpleApplication
         implements EzyApplication, EzyDestroyable {
 
     protected EzyAppSetting setting;
-    @JsonIgnore
     protected EzyAppUserManager userManager;
-    @JsonIgnore
     protected EzyAppRequestController requestController;
     
     public EzySimpleApplication() {
@@ -52,5 +49,4 @@ public class EzySimpleApplication
         this.userManager = null;
         this.requestController = null;
     }
-    
 }

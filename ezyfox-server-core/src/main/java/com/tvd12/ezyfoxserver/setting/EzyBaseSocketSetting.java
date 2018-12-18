@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzyBaseSocketSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyBaseSocketSetting extends EzyToMap {
 
     int getPort();
     

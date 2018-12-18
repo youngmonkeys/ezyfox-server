@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -8,9 +10,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyInitable;
@@ -24,8 +23,6 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "zone")
-@JsonIgnoreProperties(value = {"eventPluginsMapper"}, ignoreUnknown = true)
-@JsonPropertyOrder({"id", "name", "configFile", "maxUsers", "streaming", "userManagement", "eventControllers", "plugins", "applications"})
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
     protected int id = COUNTER.incrementAndGet();
@@ -61,12 +58,10 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     }
 	
 	//==================== apps ================//
-	@JsonIgnore
 	public Set<String> getAppNames() {
 		return applications.getAppNames();
 	}
 	
-	@JsonIgnore
 	public Set<Integer> getAppIds() {
 		return applications.getAppIds();
 	}
@@ -81,13 +76,11 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 	//=============================================//
 	
 	//==================== plugins ================//
-	@JsonIgnore
 	@Override
 	public Set<String> getPluginNames() {
 		return plugins.getPluginNames();
 	}
 	
-	@JsonIgnore
 	@Override
 	public Set<Integer> getPluginIds() {
 		return plugins.getPluginIds();
@@ -114,6 +107,21 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     @Override
     public int hashCode() {
         return new EzyHashCodes().append(id).toHashCode();
+    }
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", name);
+        map.put("configFile", configFile);
+        map.put("maxUsers", maxUsers);
+        map.put("streaming", streaming.toMap());
+        map.put("userManagement", userManagement.toMap());
+        map.put("eventControllers", eventControllers.toMap());
+        map.put("plugins", plugins.toMap());
+        map.put("applications", applications.toMap());
+        return map;
     }
 	
 }

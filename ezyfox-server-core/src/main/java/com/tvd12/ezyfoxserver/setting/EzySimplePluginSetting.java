@@ -4,6 +4,7 @@ import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.PLUGINS;
 
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,8 +13,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 
@@ -26,8 +25,6 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "plugin")
-@JsonIgnoreProperties(value = {"zoneId"}, ignoreUnknown = true)
-@JsonPropertyOrder({"id", "name", "entryLoader", "priority", "listenEvents"})
 public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPluginSetting {
 
 	@XmlElement(name = "priority")
@@ -46,6 +43,14 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
 	@Override
     public String getLocation() {
         return Paths.get(homePath, PLUGINS, name).toString();
+    }
+	
+	@Override
+    public Map<Object, Object> toMap() {
+         Map<Object, Object> map = super.toMap();
+         map.put("priority", priority);
+         map.put("listenEvents", listenEvents.getEvents());
+         return map;
     }
     
 	@Getter

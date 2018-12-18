@@ -2,7 +2,9 @@ package com.tvd12.ezyfoxserver.setting;
 
 import java.util.List;
 
-public interface EzyEventControllersSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyEventControllersSetting extends EzyToMap {
 
     List<EzyEventControllerSetting> getEventControllers();
     

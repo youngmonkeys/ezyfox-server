@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzyUserManagementSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyUserManagementSetting extends EzyToMap {
 
     long getUserMaxIdleTime();
     

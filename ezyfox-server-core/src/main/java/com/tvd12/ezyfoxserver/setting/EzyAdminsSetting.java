@@ -2,7 +2,9 @@ package com.tvd12.ezyfoxserver.setting;
 
 import java.util.List;
 
-public interface EzyAdminsSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyAdminsSetting extends EzyToMap {
     
     List<EzyAdminSetting> getAdmins();
 

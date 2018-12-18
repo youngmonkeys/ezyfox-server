@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfox.json.EzyJsonMapper;
-import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
@@ -47,7 +45,6 @@ public abstract class EzyLoader extends EzyLoggable {
         	answer.setSettings(settings);
         	answer.setClassLoader(classLoader);
         	answer.setAppClassLoaders(newAppClassLoaders());
-        	answer.setJsonMapper(newJsonMapper());
         	answer.setStatistics(newStatistics());
         	answer.setControllers(newControllers());
         	answer.setSessionManager(newSessionManagers(settings));
@@ -64,10 +61,6 @@ public abstract class EzyLoader extends EzyLoggable {
                 .homePath(getHomePath())
                 .classLoader(classLoader)
                 .build();
-    }
-    
-    protected EzyJsonMapper newJsonMapper() {
-        return EzySimpleJsonMapper.builder().build();
     }
     
     protected EzyStatistics newStatistics() {

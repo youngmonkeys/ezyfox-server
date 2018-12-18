@@ -1,8 +1,9 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import com.tvd12.ezyfox.util.EzyToMap;
 import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
 
-public interface EzySessionManagementSetting {
+public interface EzySessionManagementSetting extends EzyToMap {
 
     long getSessionMaxIdleTime();
     
@@ -10,7 +11,7 @@ public interface EzySessionManagementSetting {
     
     EzyMaxRequestPerSecond getSessionMaxRequestPerSecond();
     
-    interface EzyMaxRequestPerSecond {
+    interface EzyMaxRequestPerSecond extends EzyToMap {
         
         int getValue();
         

@@ -1,15 +1,13 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +16,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@JsonIgnoreProperties({"zonesByIds", "zonesByNames", "zoneNames", "zoneIds"})
-@JsonPropertyOrder({"size", "zones"})
 public class EzySimpleZonesSetting implements EzyZonesSetting {
 
 	protected final List<EzyZoneSetting> zones = new ArrayList<>();
@@ -60,6 +56,17 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
 	@Override
 	public int getSize() {
 		return zones.size();
+	}
+	
+	@Override
+	public Map<Object, Object> toMap() {
+	    Map<Object, Object> map = new HashMap<>();
+	    List<Object> zoneMaps = new ArrayList<>();
+	    for(EzyZoneSetting zone : zones)
+	        zoneMaps.add(zone.toMap());
+	    map.put("size", zones.size());
+	    map.put("zones", zoneMaps);
+	    return map;
 	}
 	
 }

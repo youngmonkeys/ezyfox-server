@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
+import com.tvd12.ezyfox.json.EzySimpleJsonWriter;
 import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
@@ -38,7 +38,7 @@ public class EzySimpleXmlReaderTest extends BaseTest {
                 .build();
         EzySimpleSettings settings = 
                 reader.read(new File("src/main/resources/ezy-settings.xml"), EzySimpleSettings.class);
-        System.out.println(EzySimpleJsonMapper.builder().build().writeAsString(settings));
+        System.out.println(new EzySimpleJsonWriter().writeAsString(settings));
     }
     
     public static class ClassB {

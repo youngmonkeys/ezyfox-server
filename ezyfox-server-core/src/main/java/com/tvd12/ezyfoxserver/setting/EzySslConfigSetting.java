@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzySslConfigSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzySslConfigSetting extends EzyToMap {
 
     String getFile();
     

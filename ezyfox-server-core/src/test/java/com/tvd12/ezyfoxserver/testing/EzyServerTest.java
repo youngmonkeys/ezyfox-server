@@ -17,7 +17,6 @@ public class EzyServerTest extends BaseCoreTest {
     @Test
     public void test() {
         assertEquals(server.getClassLoader(), EzySimpleServer.class.getClassLoader());
-        assertEquals(server.getJsonMapper() != null, true);
         assertEquals(server.getControllers() != null, true);
         assertEquals(server.getAppClassLoaders().containsKey("ezyfox-chat"), true);
     }

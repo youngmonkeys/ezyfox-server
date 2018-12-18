@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,8 +10,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,6 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "administrators")
-@JsonIgnoreProperties({"adminsByName", "adminsByApiAccessToken"})
 public class EzySimpleAdminsSetting implements EzyAdminsSetting {
 
     protected Map<String, EzyAdminSetting> adminsByName = new ConcurrentHashMap<>();
@@ -56,6 +54,17 @@ public class EzySimpleAdminsSetting implements EzyAdminsSetting {
     @Override
     public boolean containsAdminByApiAccessToken(String token) {
         return adminsByApiAccessToken.containsKey(token);
+    }
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        List<Object> adminMaps = new ArrayList<>();
+        for(EzyAdminSetting admin : adminsByName.values())
+            adminMaps.add(admin.toMap());
+        map.put("count", adminsByName.size());
+        map.put("admins", adminMaps);
+        return map;
     }
     
 }

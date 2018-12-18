@@ -3,7 +3,9 @@ package com.tvd12.ezyfoxserver.setting;
 import java.util.List;
 import java.util.Set;
 
-public interface EzyZonesSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyZonesSetting extends EzyToMap {
 
     int getSize();
     

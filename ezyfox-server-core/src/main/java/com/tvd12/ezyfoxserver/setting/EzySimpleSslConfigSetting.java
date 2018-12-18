@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,5 +27,14 @@ public class EzySimpleSslConfigSetting implements EzySslConfigSetting {
     
     @XmlElement(name = "context-factory-builder")
     protected String contextFactoryBuilder = "com.tvd12.ezyfoxserver.mapping.ssl.EzySimpleSslContextFactoryBuilder";
+    
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("file", file);
+        map.put("loader", loader);
+        map.put("contextFactoryBuilder", contextFactoryBuilder);
+        return map;
+    }
     
 }

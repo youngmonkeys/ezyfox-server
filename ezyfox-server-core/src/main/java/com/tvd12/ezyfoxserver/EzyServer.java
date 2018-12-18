@@ -2,7 +2,7 @@ package com.tvd12.ezyfoxserver;
 
 import java.util.Map;
 
-import com.tvd12.ezyfox.json.EzyJsonMapper;
+import com.tvd12.ezyfox.util.EzyToMap;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
@@ -12,7 +12,7 @@ import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
-public interface EzyServer extends EzyEventComponent {
+public interface EzyServer extends EzyEventComponent, EzyToMap {
 
     /**
      * Get server version
@@ -48,13 +48,6 @@ public interface EzyServer extends EzyEventComponent {
      * @return the server statistics
      */
     EzyStatistics getStatistics();
-
-    /**
-     * Get json mappers
-     * 
-     * @return the json mapper
-     */
-    EzyJsonMapper getJsonMapper();
 
     /**
      * Get server controllers

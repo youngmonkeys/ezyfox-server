@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.PLUGINS;
-
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -41,9 +38,9 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
 	}
 	
 	@Override
-    public String getLocation() {
-        return Paths.get(homePath, PLUGINS, name).toString();
-    }
+	protected String getParentFolder() {
+	    return EzyFolderNamesSetting.PLUGINS;
+	}
 	
 	@Override
     public Map<Object, Object> toMap() {

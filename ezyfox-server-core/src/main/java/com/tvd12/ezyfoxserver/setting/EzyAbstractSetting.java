@@ -44,8 +44,6 @@ public abstract class EzyAbstractSetting
 	
 	protected String homePath = "";
 	
-	protected String location = "";
-	
 	protected int newId() {
 	    return getIdCounter().incrementAndGet();
 	}
@@ -56,10 +54,16 @@ public abstract class EzyAbstractSetting
 	}
 	
 	@Override
+	public String getLocation() {
+	    return Paths.get(homePath, getParentFolder(), getFolder()).toString();
+	}
+	
+	@Override
     public String getConfigFile() {
         return Paths.get(getLocation(), configFile).toString();
     }
-	
+
+	protected abstract String getParentFolder();
 	protected abstract AtomicInteger getIdCounter();
 	
 	@Override

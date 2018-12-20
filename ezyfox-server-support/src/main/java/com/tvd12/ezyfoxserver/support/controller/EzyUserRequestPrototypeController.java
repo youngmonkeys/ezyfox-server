@@ -55,9 +55,10 @@ public abstract class EzyUserRequestPrototypeController<
 			((EzyUserAware)handler).setUser(event.getUser());
 		if(handler instanceof EzySessionAware)
 			((EzySessionAware)handler).setSession(event.getSession());
-		if(handler instanceof EzyDataBinding)
+		if(handler instanceof EzyDataBinding) {
 			if(params != null)
 				unmarshaller.unwrap(params, handler);
+		}
 		prehandle(context, handler);
 		try {
 			handler.handle();

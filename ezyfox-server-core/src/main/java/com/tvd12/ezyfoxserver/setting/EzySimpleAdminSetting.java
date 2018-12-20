@@ -34,7 +34,7 @@ public class EzySimpleAdminSetting implements EzyAdminSetting {
         map.put("username", username);
         map.put("password", "*******");
         map.put("apiAccessToken", "*******");
-        return null;
+        return map;
     }
     
 }

@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginPrototypeController;
+import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
@@ -37,12 +38,13 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	
 	private void addEventControllers(EzyPluginContext context, EzyBeanContext beanContext) {
 		EzySetup setup = context.get(EzySetup.class);
-		List<Object> eventHandlers = beanContext.getSingletons(EzyServerEventHandler.class);
-		for(Object handler : eventHandlers) {
-			Class<?> handlerType = handler.getClass();
+		List<Object> eventControllers = beanContext.getSingletons(EzyServerEventHandler.class);
+		for(Object controller : eventControllers) {
+			Class<?> handlerType = controller.getClass();
 			EzyServerEventHandler annotation = handlerType.getAnnotation(EzyServerEventHandler.class);
 			String eventName = EzyServerEventHandlerAnnotations.getEvent(annotation);
-			setup.addEventController(EzyEventType.valueOf(eventName), (EzyEventController) handler);
+			setup.addEventController(EzyEventType.valueOf(eventName), (EzyEventController) controller);
+			logger.info("add  event {} controller {}", eventName, controller);
 		}
 	}
 	
@@ -68,6 +70,9 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     			.addSingleton("unmarshaller", unmarshaller)
     			.addSingleton("zoneContext", context.getParent())
 			.addSingleton("serverContext", context.getParent().getParent());
+    		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
+		for(Class singletonClass : defaultSingletonClasses)
+			beanContextBuilder.addSingletonClass(singletonClass);
     		Class[] singletonClasses = getSingletonClasses();
 		for(Class singletonClass : singletonClasses)
 			beanContextBuilder.addSingletonClass(singletonClass);
@@ -86,6 +91,12 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		EzySimpleBindingContext answer = builder.build();
 		return answer;
 	}
+    
+    protected Class[] getDefaultSingletonClasses() {
+    		return new Class[] {
+    				EzyPluginResponseFactory.class
+    		};
+    }
 
     protected Class[] getSingletonClasses() {
 		return new Class[0];

@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
 import com.tvd12.ezyfox.core.annotation.EzyServerEventHandler;
+import com.tvd12.ezyfox.core.util.EzyServerEventHandlerAnnotations;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.command.EzySetup;
@@ -18,6 +19,7 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppPrototypeController;
+import com.tvd12.ezyfoxserver.support.factory.EzyAppResponseFactory;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
@@ -40,9 +42,9 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		for (Object controller : eventControllers) {
 			Class<?> controllerType = controller.getClass();
 			EzyServerEventHandler annotation = controllerType.getAnnotation(EzyServerEventHandler.class);
-			EzyEventType eventType = EzyEventType.valueOf(annotation.event());
-			setup.addEventController(eventType, (EzyEventController) controller);
-			logger.info("add  event {} controller {}", eventType, controller);
+			String eventName = EzyServerEventHandlerAnnotations.getEvent(annotation);
+			setup.addEventController(EzyEventType.valueOf(eventName), (EzyEventController) controller);
+			logger.info("add  event {} controller {}", eventName, controller);
 		}
 	}
 	
@@ -69,6 +71,9 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
 				.addSingleton("userManager", context.getApp().getUserManager());
+		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
+		for(Class singletonClass : defaultSingletonClasses)
+			beanContextBuilder.addSingletonClass(singletonClass);
 		Class[] singletonClasses = getSingletonClasses();
 		for(Class singletonClass : singletonClasses)
 			beanContextBuilder.addSingletonClass(singletonClass);
@@ -86,6 +91,12 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 			builder.scan(pack);
 		EzySimpleBindingContext answer = builder.build();
 		return answer;
+	}
+	
+	protected final Class[] getDefaultSingletonClasses() {
+		return new Class[] {
+				EzyAppResponseFactory.class
+		};
 	}
 	
 	protected Class[] getSingletonClasses() {

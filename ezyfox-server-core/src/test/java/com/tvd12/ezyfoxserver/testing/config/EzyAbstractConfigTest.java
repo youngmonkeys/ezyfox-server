@@ -23,5 +23,10 @@ public class EzyAbstractConfigTest extends BaseCoreTest {
         protected AtomicInteger getIdCounter() {
             return new AtomicInteger(0);
         }
+        
+        @Override
+        protected String getParentFolder() {
+            return "";
+        }
     }
 }

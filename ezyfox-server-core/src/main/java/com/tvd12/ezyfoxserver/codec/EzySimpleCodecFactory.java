@@ -25,16 +25,20 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	
 	@Override
     public Object newEncoder(EzyConstant type) {
-        return type == EzyConnectionType.SOCKET
-                ? socketCodecCreator.newEncoder()
-                : websocketCodecCreator.newEncoder();
+        if(type == EzyConnectionType.SOCKET)
+            return socketCodecCreator.newEncoder();
+        if(websocketCodecCreator != null)
+            return websocketCodecCreator.newEncoder();
+        return null;
     }
 	
 	@Override
 	public Object newDecoder(EzyConstant type) {
-		return type == EzyConnectionType.SOCKET
-		        ? socketCodecCreator.newDecoder(socketSettings.getMaxRequestSize())
-		        : websocketCodecCreator.newDecoder(websocketSettings.getMaxFrameSize());
+		if(type == EzyConnectionType.SOCKET)
+		    return socketCodecCreator.newDecoder(socketSettings.getMaxRequestSize());
+		if(websocketCodecCreator != null)
+		    return websocketCodecCreator.newDecoder(websocketSettings.getMaxFrameSize());
+		return null;
 	}
 	
 	private EzyCodecCreator newSocketCodecCreator() {
@@ -42,7 +46,9 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	}
 	
 	private EzyCodecCreator newWebsocketCodecCreator() {
-		return EzyClasses.newInstance(websocketSettings.getCodecCreator());
+	    if(websocketSettings.isActive())
+	        return EzyClasses.newInstance(websocketSettings.getCodecCreator());
+	    return null;
 	}
 	
 	public static Builder builder() {

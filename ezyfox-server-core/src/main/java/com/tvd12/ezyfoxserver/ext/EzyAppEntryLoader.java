@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.ext;
 
-import com.tvd12.ezyfox.util.EzyProperties;
-
-public interface EzyAppEntryLoader extends EzyProperties {
+public interface EzyAppEntryLoader {
 
 	EzyAppEntry load() throws Exception;
 	

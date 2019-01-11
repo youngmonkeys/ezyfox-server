@@ -14,17 +14,11 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<ezy.core.version>1.0.0</ezy.core.version>
 		<ezy.boot.version>1.0.0</ezy.boot.version>
 		<jetty.version>9.4.12.v20180830</jetty.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-core</artifactId>
-			<version>${ezy.core.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-boot</artifactId>

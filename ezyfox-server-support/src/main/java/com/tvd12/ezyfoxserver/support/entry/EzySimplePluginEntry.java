@@ -71,14 +71,11 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     			.addSingleton("zoneContext", context.getParent())
 			.addSingleton("serverContext", context.getParent().getParent());
     		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
-		for(Class singletonClass : defaultSingletonClasses)
-			beanContextBuilder.addSingletonClass(singletonClass);
+    		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
     		Class[] singletonClasses = getSingletonClasses();
-		for(Class singletonClass : singletonClasses)
-			beanContextBuilder.addSingletonClass(singletonClass);
+    		beanContextBuilder.addSingletonClasses(singletonClasses);
 		String[] scanablePackages = getScanableBeanPackages();
-		for(String scanablePackage : scanablePackages)
-			beanContextBuilder.scan(scanablePackage);
+		beanContextBuilder.scan(scanablePackages);
 		setupBeanContext(context, beanContextBuilder);
 		return beanContextBuilder.build();
     }
@@ -86,8 +83,7 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     protected EzyBindingContext createBindingContext() {
 		EzyBindingContextBuilder builder = EzyBindingContext.builder();
 		String[] scanablePackages = getScanableBindingPackages();
-		for(String pack : scanablePackages)
-			builder.scan(pack);
+		builder.scan(scanablePackages);
 		EzySimpleBindingContext answer = builder.build();
 		return answer;
 	}

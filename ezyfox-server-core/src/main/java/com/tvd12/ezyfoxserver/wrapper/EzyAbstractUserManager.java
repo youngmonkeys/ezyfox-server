@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyUserManager {
 
@@ -16,6 +15,10 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     protected final ConcurrentHashMap<String, Lock> locks = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Long, EzyUser> usersById = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<String, EzyUser> usersByName = new ConcurrentHashMap<>();
+    
+    public EzyAbstractUserManager(int maxUser) {
+        this.maxUsers = maxUser;
+    }
     
     protected EzyAbstractUserManager(Builder<?> builder) {
         this.maxUsers = builder.maxUsers;
@@ -74,7 +77,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     @Override
     public Lock getLock(String username) {
-        return locks.computeIfAbsent(username, k -> new ReentrantLock());
+        return locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
     }
     
     @Override

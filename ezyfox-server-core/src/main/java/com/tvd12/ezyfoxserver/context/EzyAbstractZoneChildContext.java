@@ -2,12 +2,16 @@ package com.tvd12.ezyfoxserver.context;
 
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.tvd12.ezyfoxserver.concurrent.EzyExecutorServiceFetcher;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter 
 @Getter
-public abstract class EzyAbstractZoneChildContext extends EzyAbstractContext {
+public abstract class EzyAbstractZoneChildContext 
+        extends EzyAbstractContext 
+        implements EzyExecutorServiceFetcher {
 
 	protected EzyZoneContext parent;
     protected ScheduledExecutorService executorService;
@@ -24,4 +28,8 @@ public abstract class EzyAbstractZoneChildContext extends EzyAbstractContext {
             return (T) commandSuppliers.get(clazz).get();
         return parent.cmd(clazz);
     }
+	
+	public void setExecutorService(ScheduledExecutorService executorService) {
+	    properties.put(ScheduledExecutorService.class, executorService);
+	}
 }

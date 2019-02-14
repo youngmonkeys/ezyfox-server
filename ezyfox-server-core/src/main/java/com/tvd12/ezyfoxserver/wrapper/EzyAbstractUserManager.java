@@ -107,12 +107,11 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
         clear();
     }
     
-    public abstract static class Builder<B extends Builder<B>> 
-            implements EzyBuilder<EzyUserManager> {
+    @SuppressWarnings("unchecked")
+    public abstract static class Builder<B extends Builder<B>> implements EzyBuilder<EzyUserManager> {
         
         protected int maxUsers = 999999;
         
-        @SuppressWarnings("unchecked")
         public B maxUsers(int maxUsers) {
             this.maxUsers = maxUsers;
             return (B)this;

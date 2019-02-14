@@ -10,76 +10,52 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
-import lombok.Getter;
+public class EzyDefaultUserManager extends EzyLoggable implements EzyUserManager {
 
-public class SynchronizedUserManager 
-		extends EzyLoggable
-		implements EzyUserManager {
-
-	@Getter
-	protected final int maxUsers;
-	@Getter
-    protected final Object synchronizedLock = new Object();
+    protected final int maxUsers;
     protected final Map<String, Lock> locks = new HashMap<>();
     protected final Map<Long, EzyUser> usersById = new HashMap<>();
     protected final Map<String, EzyUser> usersByName = new HashMap<>();
     
-    public SynchronizedUserManager(int maxUser) {
+    public EzyDefaultUserManager(int maxUser) {
         this.maxUsers = maxUser;
     }
     
-    protected SynchronizedUserManager(Builder<?> builder) {
+    protected EzyDefaultUserManager(Builder<?> builder) {
         this.maxUsers = builder.maxUsers;
     }
     
     @Override
     public EzyUser getUser(long userId) {
-    		synchronized(synchronizedLock) {
-    			EzyUser user = usersById.get(userId);
-    			return user;
-    		}
+        return usersById.get(userId);
     }
 
     @Override
     public EzyUser getUser(String username) {
-    		synchronized(synchronizedLock) {
-    			EzyUser user = usersByName.get(username);
-    			return user;
-    		}
+        return usersByName.get(username);
     }
     
     @Override
     public List<EzyUser> getUserList() {
-    		synchronized (synchronizedLock) {
-    			List<EzyUser> users = new ArrayList<>(usersById.values());
-    	        return users;	
-		}
+        return new ArrayList<>(usersById.values());
     }
 
     @Override
     public boolean containsUser(long userId) {
-    		synchronized (synchronizedLock) {
-	        boolean answer = usersById.containsKey(userId);
-	        return answer;
-    		}
+        return usersById.containsKey(userId);
     }
 
     @Override
     public boolean containsUser(String username) {
-    		synchronized (synchronizedLock) {
-    			boolean answer = usersByName.containsKey(username);
-    			return answer;
-    		}
+        return usersByName.containsKey(username);
     }
 
     @Override
     public EzyUser removeUser(EzyUser user) {
         if(user != null) {
-	        	synchronized (synchronizedLock) {
-	            locks.remove(user.getName());
-	            usersById.remove(user.getId());
-	            usersByName.remove(user.getName());
-	        	}
+            locks.remove(user.getName());
+            usersById.remove(user.getId());
+            usersByName.remove(user.getName());
         }
         logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return user;
@@ -87,44 +63,35 @@ public class SynchronizedUserManager
     
     @Override
     public int getUserCount() {
-	    	synchronized (synchronizedLock) {
-	        int count = usersById.size();
-	        return count;
-	    	}
+        return usersById.size();
+    }
+    
+    @Override
+    public int getMaxUsers() {
+        return maxUsers;
     }
     
     @Override
     public boolean available() {
-	    	synchronized (synchronizedLock) {
-	    		int userCount = getUserCount();
-	        boolean answer = userCount < maxUsers;
-	        return answer;
-	    	}
+        return getUserCount() < maxUsers;
     }
     
     @Override
     public Lock getLock(String username) {
-	    	synchronized (synchronizedLock) {
-	        Lock lock = locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
-	        return lock;
-	    	}
+        return locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
     }
     
     @Override
     public void removeLock(String username) {
-	    	synchronized (synchronizedLock) {
-	        locks.remove(username);
-	    	}
+        locks.remove(username);
     }
     
     @Override
     public void clear() {
-	    	synchronized (synchronizedLock) {
-	        this.unlockAll();
-	        this.locks.clear();
-	        this.usersById.clear();
-	        this.usersByName.clear();
-	    	}
+        this.unlockAll();
+        this.locks.clear();
+        this.usersById.clear();
+        this.usersByName.clear();
     }
     
     protected void unlockAll() {
@@ -140,9 +107,13 @@ public class SynchronizedUserManager
     public void destroy() {
         clear();
     }
+    
+    public static Builder<?> builder() {
+        return new Builder<>();
+    }
 
     @SuppressWarnings("unchecked")
-    public abstract static class Builder<B extends Builder<B>> implements EzyBuilder<EzyUserManager> {
+    public static class Builder<B extends Builder<B>> implements EzyBuilder<EzyUserManager> {
         
         protected int maxUsers = 999999;
         
@@ -150,6 +121,10 @@ public class SynchronizedUserManager
             this.maxUsers = maxUsers;
             return (B)this;
         }
+        
+        @Override
+        public EzyUserManager build() {
+            return new EzyDefaultUserManager(this);
+        }
     }
-
 }

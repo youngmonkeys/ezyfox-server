@@ -2,19 +2,21 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 
 public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyUserManager {
 
     protected final int maxUsers;
-    protected final ConcurrentHashMap<String, Lock> locks = new ConcurrentHashMap<>();
-    protected final ConcurrentHashMap<Long, EzyUser> usersById = new ConcurrentHashMap<>();
-    protected final ConcurrentHashMap<String, EzyUser> usersByName = new ConcurrentHashMap<>();
+    protected final Map<String, Lock> locks = newLocksMap();
+    protected final Map<Long, EzyUser> usersById = newUsersByIdMap();
+    protected final Map<String, EzyUser> usersByName = newUsersByName();
     
     public EzyAbstractUserManager(int maxUser) {
         this.maxUsers = maxUser;
@@ -25,44 +27,75 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     }
     
     @Override
+    public EzyUser addUser(EzyUser user) {
+        EzyUser answer = addUser0(user);
+        logger.info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        return answer;
+    }
+    
+    protected void checkMaxUsers() {
+        int current = usersById.size();
+        if(current > maxUsers)
+            throw new EzyMaxUserException(current, maxUsers);
+    }
+    
+    protected EzyUser addUser0(EzyUser user) {
+        checkMaxUsers();
+        EzyUser old = usersByName.putIfAbsent(user.getName(), user);
+        if(old != null) return old; 
+        EzyUser answer = usersById.putIfAbsent(user.getId(), user);
+        return answer;
+    }
+    
+    @Override
     public EzyUser getUser(long userId) {
-        return usersById.get(userId);
+        EzyUser user = usersById.get(userId);
+        return user;
     }
 
     @Override
     public EzyUser getUser(String username) {
-        return usersByName.get(username);
+        EzyUser user = usersByName.get(username);
+        return user;
     }
     
     @Override
     public List<EzyUser> getUserList() {
-        return new ArrayList<>(usersById.values());
+        List<EzyUser> users = new ArrayList<>(usersById.values());
+        return users;
     }
 
     @Override
     public boolean containsUser(long userId) {
-        return usersById.containsKey(userId);
+        boolean contains = usersById.containsKey(userId);
+        return contains;
     }
 
     @Override
     public boolean containsUser(String username) {
-        return usersByName.containsKey(username);
+        boolean contains = usersByName.containsKey(username);
+        return contains;
     }
 
     @Override
     public EzyUser removeUser(EzyUser user) {
+        removeUser0(user);
+        logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        return user;
+    }
+    
+    protected void removeUser0(EzyUser user) {
         if(user != null) {
             locks.remove(user.getName());
             usersById.remove(user.getId());
             usersByName.remove(user.getName());
         }
-        logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
-        return user;
     }
     
     @Override
     public int getUserCount() {
-        return usersById.size();
+        int count = usersById.size();
+        return count;
     }
     
     @Override
@@ -72,12 +105,14 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     @Override
     public boolean available() {
-        return getUserCount() < maxUsers;
+        boolean available = usersById.size() < maxUsers;
+        return available;
     }
     
     @Override
     public Lock getLock(String username) {
-        return locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
+        Lock lock = locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
+        return lock;
     }
     
     @Override
@@ -105,6 +140,18 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     @Override
     public void destroy() {
         clear();
+    }
+    
+    protected Map<String, Lock> newLocksMap() {
+        return new ConcurrentHashMap<>();
+    }
+    
+    protected Map<Long, EzyUser> newUsersByIdMap() {
+        return new ConcurrentHashMap<>();
+    }
+    
+    protected Map<String, EzyUser> newUsersByName() {
+        return new ConcurrentHashMap<>();
     }
     
     @SuppressWarnings("unchecked")

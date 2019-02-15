@@ -14,11 +14,11 @@ import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyAbstractUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public class EzyZoneUserManagerImpl 
-        extends EzyAbstractByMaxUserManager 
+        extends EzyAbstractUserManager 
         implements EzyZoneUserManager, EzyStartable {
 
     protected final String zoneName;
@@ -35,7 +35,7 @@ public class EzyZoneUserManagerImpl
     
     protected ScheduledExecutorService newIdleValidationService(long maxIdleTime) {
         if(maxIdleTime <= 0) return null;
-        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(3, "user-manager");
+        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(1, "user-manager");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> answer.shutdown()));
         return answer;
     }
@@ -179,7 +179,7 @@ public class EzyZoneUserManagerImpl
 		return new Builder();
 	}
 	
-	public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
+	public static class Builder extends EzyAbstractUserManager.Builder<Builder> {
 
 	    protected String zoneName;
 	    protected long maxIdleTime;

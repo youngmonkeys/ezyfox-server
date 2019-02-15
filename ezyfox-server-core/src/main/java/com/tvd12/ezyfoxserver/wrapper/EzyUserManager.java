@@ -12,6 +12,8 @@ public interface EzyUserManager extends EzyDestroyable {
     
     Function<String, Lock> NEW_REENTRANTLOCK_FUNC = k -> new ReentrantLock();
     
+    EzyUser addUser(EzyUser user);
+    
 	/**
 	 * Get user by id
 	 * 

@@ -16,7 +16,7 @@ public class EzyUserRequestPluginPrototypeController
 	}
 	
 	@Override
-	protected void prehandle(EzyPluginContext context, EzyHandler handler) {
+	protected void preHandle(EzyPluginContext context, EzyHandler handler) {
 		if(handler instanceof EzyPluginContextAware)
 			((EzyPluginContextAware)handler).setPluginContext(context);
 	}

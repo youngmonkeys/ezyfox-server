@@ -14,7 +14,7 @@ public interface EzyComplexContext
 
     EzyPluginContext getPluginContext(int pluginId);
     
-    void broadcast(EzyConstant eventType, EzyEvent event);
+    void broadcast(EzyConstant eventType, EzyEvent event, boolean catchException);
     
     void send(EzyResponse response, 
             EzySession recipient, boolean immediate);

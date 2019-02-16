@@ -39,7 +39,7 @@ public class EzySimpleUserDelegate
     
     protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserEvent event) {
         try {
-            context.broadcastPlugins(EzyEventType.USER_REMOVED, event);
+            context.broadcastPlugins(EzyEventType.USER_REMOVED, event, true);
         }
         catch(Exception e) {
             String zoneName = context.getZone().getSetting().getName();

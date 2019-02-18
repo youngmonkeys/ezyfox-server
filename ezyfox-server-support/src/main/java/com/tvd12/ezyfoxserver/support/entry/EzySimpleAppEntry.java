@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
@@ -64,10 +65,12 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		EzyBindingContext bindingContext = createBindingContext();
 		EzyMarshaller marshaller = bindingContext.newMarshaller();
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
+		ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
 		EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
 				.addSingleton("appContext", context)
 				.addSingleton("marshaller", marshaller)
 				.addSingleton("unmarshaller", unmarshaller)
+				.addSingleton("executorService", executorService)
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
 				.addSingleton("userManager", context.getApp().getUserManager());

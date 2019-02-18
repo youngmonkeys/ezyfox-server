@@ -77,7 +77,7 @@ public abstract class EzyAbstractSession
 	protected transient EzySessionDelegate delegate;
 	
 	@Setter(AccessLevel.NONE)
-	protected boolean disconnectionRegistered;
+	protected volatile boolean disconnectionRegistered;
 	@Setter(AccessLevel.NONE)
 	protected Object disconnectionLock = new Object();
 	@Setter(AccessLevel.NONE)

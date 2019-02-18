@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -103,21 +105,22 @@ public class EzyZoneUserManagerImpl
 	 */
 	@Override
 	public void removeUser(EzyUser user, EzyConstant reason) {
-	    Lock lock = getLock(user.getName());
-	    lock.lock();
-        try {
-        	    removeUser0(user, reason);
-        }
-        finally {
-            lock.unlock();
-        }
+	    Lock lock = locks.get(user.getName());
+	    if(lock != null) {
+    	        lock.lock();
+            try {
+            	    removeUser0(user, reason);
+            }
+            finally {
+                lock.unlock();
+            }
+	    }
 	}
 	
 	private void removeUser0(EzyUser user, EzyConstant reason) {
 	    logger.debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
 	    removeUser(user);
         delegateUserRemove(user, reason);
-        destroyUser(user);
 	}
 	
 	@Override
@@ -143,10 +146,13 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected void validateIdleUsers() {
+	    List<EzyUser> toRemoveUsers = new ArrayList<>();
 	    for(EzyUser user : getUserList()) {
 	        if(isIdleUser(user))
-	            removeUser(user, EzyDisconnectReason.IDLE);
+	            toRemoveUsers.add(user);
 	    }
+	    for(EzyUser user : toRemoveUsers)
+	        removeUser(user, EzyDisconnectReason.IDLE);
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
@@ -157,10 +163,6 @@ public class EzyZoneUserManagerImpl
 	protected void delegateUserRemove(EzyUser user, EzyConstant reason) {
 	    userDelegate.onUserRemoved(user, reason);
     }
-	
-	protected void destroyUser(EzyUser user) {
-	    user.destroy();
-	}
 	
 	@Override
 	public void destroy() {

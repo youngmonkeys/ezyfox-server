@@ -30,6 +30,8 @@ import com.tvd12.ezyfoxserver.socket.EzySocketStreamHandlingLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandlingLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalHandlingLoopHandler;
 
 import lombok.Setter;
 
@@ -66,6 +68,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	
 	private EzySocketEventLoopOneHandler socketDisconnectionHandlingLoopHandler;
 	
+	private EzySocketEventLoopOneHandler socketUserRemovalHandlingLoopHandler;
+	
 	@Override
 	protected void setupServer() {
 		EzyServer server = getServer();
@@ -80,6 +84,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		startRequestHandlingLoopHandlers();
 		startStreamHandlingLoopHandlers();
 		startDisconnectionHandlingLoopHandlers();
+		startUserRemovalHandlingLoopHandlers();
 		callback.run();
 	}
 	
@@ -120,6 +125,11 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	private void startDisconnectionHandlingLoopHandlers() throws Exception {
 		socketDisconnectionHandlingLoopHandler = newSocketDisconnectionHandlingLoopHandler();
 		socketDisconnectionHandlingLoopHandler.start();
+	}
+	
+	private void startUserRemovalHandlingLoopHandlers() throws Exception {
+		socketUserRemovalHandlingLoopHandler = newSocketUserRemovalHandlingLoopHandler();
+		socketUserRemovalHandlingLoopHandler.start();
 	}
 	
 	private EzySocketServerBootstrap newSocketServerBootstrap() {
@@ -179,6 +189,14 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		return loopHandler;
 	}
 	
+	private EzySocketEventLoopOneHandler newSocketUserRemovalHandlingLoopHandler() {
+		EzySocketEventLoopOneHandler loopHandler = new EzySocketUserRemovalHandlingLoopHandler();
+		loopHandler.setThreadPoolSize(getSocketUserRemovalHandlerPoolSize());
+		EzySocketUserRemovalHandler eventHandler = new EzySocketUserRemovalHandler();
+		loopHandler.setEventHandler(eventHandler);
+		return loopHandler;
+	}
+	
 	private int getStreamHandlerPoolSize() {
 		return EzyNioThreadPoolSizes.STREAM_HANDLER;
 	}
@@ -193,6 +211,10 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	
 	private int getSocketDisconnectionHandlerPoolSize() {
 		return EzyNioThreadPoolSizes.SOCKET_DISCONNECTION_HANDLER;
+	}
+	
+	private int getSocketUserRemovalHandlerPoolSize() {
+		return EzyNioThreadPoolSizes.SOCKET_USER_REMOVAL_HANDLER;
 	}
 	
 	@Override
@@ -210,6 +232,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 			processWithLogException(extensionRequestHandlingLoopHandler::destroy);
 		if(socketDisconnectionHandlingLoopHandler != null)
 			processWithLogException(socketDisconnectionHandlingLoopHandler::destroy);
+		if(socketUserRemovalHandlingLoopHandler != null)
+			processWithLogException(socketUserRemovalHandlingLoopHandler::destroy);
 	}
 	
 }

@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyAbstractUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 import lombok.Getter;
 
-public class EzyAppUserManagerImpl
-        extends EzyAbstractByMaxUserManager
-        implements EzyAppUserManager {
+public class EzyAppUserManagerImpl 
+        extends EzyAbstractUserManager implements EzyAppUserManager {
     
     @Getter
     protected final String appName;
@@ -26,7 +25,7 @@ public class EzyAppUserManagerImpl
         return new Builder();
     }
     
-    public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
+    public static class Builder extends EzyAbstractUserManager.Builder<Builder> {
         
         protected String appName;
         

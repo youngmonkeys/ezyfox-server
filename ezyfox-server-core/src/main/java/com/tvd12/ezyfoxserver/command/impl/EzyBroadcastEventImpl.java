@@ -15,22 +15,28 @@ public class EzyBroadcastEventImpl extends EzyAbstractCommand implements EzyBroa
     private final EzyServerContext context;
 
     @Override
-    public void fire(EzyConstant type, EzyEvent event) {
+    public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
         logger.debug("broadcast server event: {}", type);
-        fireZonesEvent(type, event);
+        fireZonesEvent(type, event, catchException);
     }
 
-    protected void fireZonesEvent(EzyConstant type, EzyEvent event) {
+    protected void fireZonesEvent(EzyConstant type, EzyEvent event, boolean catchException) {
         for(EzyZoneContext zoneContext : context.getZoneContexts())
-            fireZoneEvent(zoneContext, type, event);
+            fireZoneEvent(zoneContext, type, event, catchException);
     }
 
-    protected void fireZoneEvent(EzyZoneContext ctx, EzyConstant type, EzyEvent event) {
-        try {
+    protected void fireZoneEvent(EzyZoneContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+        if(catchException) {
+            try {
+                ctx.handleEvent(type, event);
+                ctx.broadcast(type, event, catchException);
+            } catch (Exception e) {
+                ctx.handleException(Thread.currentThread(), e);
+            }
+        }
+        else {
             ctx.handleEvent(type, event);
-            ctx.broadcast(type, event);
-        } catch (Exception e) {
-            ctx.handleException(Thread.currentThread(), e);
+            ctx.broadcast(type, event, catchException);
         }
     }
 

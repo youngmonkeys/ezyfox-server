@@ -10,9 +10,14 @@ public class EzyBlockingSocketDisconnectionQueue
         implements EzySocketDisconnectionQueue {
 
 	private final BlockingQueue<EzySocketDisconnection> queue;
+	private static final EzyBlockingSocketDisconnectionQueue INSTANCE = new EzyBlockingSocketDisconnectionQueue();
 	
-	public EzyBlockingSocketDisconnectionQueue() {
+	private EzyBlockingSocketDisconnectionQueue() {
 	    this.queue = new LinkedBlockingQueue<EzySocketDisconnection>();
+	}
+	
+	public static EzyBlockingSocketDisconnectionQueue getInstance() {
+	    return INSTANCE;
 	}
 
 	@Override

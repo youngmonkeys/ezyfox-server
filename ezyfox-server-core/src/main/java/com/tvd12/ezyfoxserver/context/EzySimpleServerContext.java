@@ -72,8 +72,8 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	}
 	
 	@Override
-	public void broadcast(EzyConstant eventType, EzyEvent event) {
-	    broadcastEvent.fire(eventType, event);
+	public void broadcast(EzyConstant eventType, EzyEvent event, boolean catchException) {
+	    broadcastEvent.fire(eventType, event, catchException);
 	}
 	
 	@Override

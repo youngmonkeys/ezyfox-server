@@ -71,7 +71,6 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void handleReceivedStreaming(byte[] bytes) throws Exception {
-//        logger.debug("received from: {} {} raw bytes", session.getName(), bytes.length);
         updateSessionBeforeHandleRequest();
         handleReceivedStreaming0(bytes);
     }
@@ -163,7 +162,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyAppsSessionRemoved0(EzyEvent event) {
         try {
-            zoneContext.broadcastApps(EzyEventType.SESSION_REMOVED, event, user);
+            zoneContext.broadcastApps(EzyEventType.SESSION_REMOVED, event, user, true);
         }
         catch(Exception e) {
             logger.error("notify session: " + session + " removed to apps error", e);
@@ -172,7 +171,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     
     protected void notifyPluginsSessionRemoved(EzyEvent event) {
         try {
-            zoneContext.broadcastPlugins(EzyEventType.SESSION_REMOVED, event);
+            zoneContext.broadcastPlugins(EzyEventType.SESSION_REMOVED, event, true);
         }
         catch(Exception e) {
             logger.error("notify session: " + session + " removed to apps error", e);

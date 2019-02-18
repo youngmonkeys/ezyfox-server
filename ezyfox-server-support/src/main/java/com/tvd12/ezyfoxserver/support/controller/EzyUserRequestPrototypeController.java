@@ -59,7 +59,7 @@ public abstract class EzyUserRequestPrototypeController<
 			if(params != null)
 				unmarshaller.unwrap(params, handler);
 		}
-		prehandle(context, handler);
+		preHandle(context, handler);
 		try {
 			handler.handle();
 		}
@@ -77,7 +77,7 @@ public abstract class EzyUserRequestPrototypeController<
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
 	
-	protected void prehandle(C context, EzyHandler handler) {
+	protected void preHandle(C context, EzyHandler handler) {
 	}
 	
 	@SuppressWarnings("rawtypes")

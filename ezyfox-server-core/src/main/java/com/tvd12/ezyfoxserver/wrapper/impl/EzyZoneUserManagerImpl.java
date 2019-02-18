@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.wrapper.impl;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,11 +16,11 @@ import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.wrapper.EzyAbstractByMaxUserManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyAbstractUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public class EzyZoneUserManagerImpl 
-        extends EzyAbstractByMaxUserManager 
+        extends EzyAbstractUserManager 
         implements EzyZoneUserManager, EzyStartable {
 
     protected final String zoneName;
@@ -35,7 +37,7 @@ public class EzyZoneUserManagerImpl
     
     protected ScheduledExecutorService newIdleValidationService(long maxIdleTime) {
         if(maxIdleTime <= 0) return null;
-        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(3, "user-manager");
+        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(1, "user-manager");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> answer.shutdown()));
         return answer;
     }
@@ -103,21 +105,22 @@ public class EzyZoneUserManagerImpl
 	 */
 	@Override
 	public void removeUser(EzyUser user, EzyConstant reason) {
-	    Lock lock = getLock(user.getName());
-	    lock.lock();
-        try {
-        	    removeUser0(user, reason);
-        }
-        finally {
-            lock.unlock();
-        }
+	    Lock lock = locks.get(user.getName());
+	    if(lock != null) {
+    	        lock.lock();
+            try {
+            	    removeUser0(user, reason);
+            }
+            finally {
+                lock.unlock();
+            }
+	    }
 	}
 	
 	private void removeUser0(EzyUser user, EzyConstant reason) {
 	    logger.debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
 	    removeUser(user);
         delegateUserRemove(user, reason);
-        destroyUser(user);
 	}
 	
 	@Override
@@ -143,10 +146,13 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	protected void validateIdleUsers() {
+	    List<EzyUser> toRemoveUsers = new ArrayList<>();
 	    for(EzyUser user : getUserList()) {
 	        if(isIdleUser(user))
-	            removeUser(user, EzyDisconnectReason.IDLE);
+	            toRemoveUsers.add(user);
 	    }
+	    for(EzyUser user : toRemoveUsers)
+	        removeUser(user, EzyDisconnectReason.IDLE);
 	}
 	
 	protected boolean isIdleUser(EzyUser user) {
@@ -157,10 +163,6 @@ public class EzyZoneUserManagerImpl
 	protected void delegateUserRemove(EzyUser user, EzyConstant reason) {
 	    userDelegate.onUserRemoved(user, reason);
     }
-	
-	protected void destroyUser(EzyUser user) {
-	    user.destroy();
-	}
 	
 	@Override
 	public void destroy() {
@@ -179,7 +181,7 @@ public class EzyZoneUserManagerImpl
 		return new Builder();
 	}
 	
-	public static class Builder extends EzyAbstractByMaxUserManager.Builder<Builder> {
+	public static class Builder extends EzyAbstractUserManager.Builder<Builder> {
 
 	    protected String zoneName;
 	    protected long maxIdleTime;

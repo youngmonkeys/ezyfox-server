@@ -25,21 +25,26 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
 	}
 	
 	@Override
-	public void fire(EzyConstant type, EzyEvent event) {
+	public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
 	    logger.debug("zone: {} broadcast to plugins event: {}", getZoneName(), type);
 		Set<EzyPluginContext> pluginContexts = pluginContextss.get(type);
 		if(pluginContexts != null) {
 		    for(EzyPluginContext pluginContext : pluginContexts)
-		        firePluginEvent(pluginContext, type, event);
+		        firePluginEvent(pluginContext, type, event, catchException);
 		}
 	}
 	
-	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
-	    try {
-	        ctx.handleEvent(type, event);
+	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+	    if(catchException) {
+        	    try {
+        	        ctx.handleEvent(type, event);
+        	    }
+        	    catch(Exception e) {
+        	        ctx.handleException(Thread.currentThread(), e);
+        	    }
 	    }
-	    catch(Exception e) {
-	        ctx.handleException(Thread.currentThread(), e);
+	    else {
+	        ctx.handleEvent(type, event);
 	    }
 	}
 	

@@ -13,7 +13,8 @@ public enum EzyLoginError implements EzyILoginError {
     INVALID_TOKEN(4, "invalid token"),
     MAXIMUM_SESSION(5, "has gotten maximum sessions"),
     MAXIMUM_USER(6, "server has maximum users"),
-    ZONE_NOT_FOUND(7, "zone not found");
+    ZONE_NOT_FOUND(7, "zone not found"),
+    SERVER_ERROR(8, "server error");
     
     @Getter
     private final int id;

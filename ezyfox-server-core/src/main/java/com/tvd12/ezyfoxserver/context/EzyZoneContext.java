@@ -17,14 +17,14 @@ public interface EzyZoneContext extends EzyComplexContext {
 	
 	EzyPluginContext getPluginContext(String pluginName);
 	
-	void broadcastPlugins(EzyConstant type, EzyEvent event);
+	void broadcastPlugins(EzyConstant type, EzyEvent event, boolean catchExeption);
 	
-	void broadcastApps(EzyConstant type, EzyEvent event);
+	void broadcastApps(EzyConstant type, EzyEvent event, boolean catchExeption);
 	
-	void broadcastApps(EzyConstant type, EzyEvent event, String username);
+	void broadcastApps(EzyConstant type, EzyEvent event, String username, boolean catchExeption);
 	
-	void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user);
+	void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user, boolean catchExeption);
 	
-	void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter);
+	void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchExeption);
 	
 }

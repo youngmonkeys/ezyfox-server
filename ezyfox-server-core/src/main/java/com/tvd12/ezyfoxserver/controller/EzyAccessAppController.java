@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.controller;
 
+import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyIAccessAppError;
@@ -50,7 +51,7 @@ public class EzyAccessAppController
         EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
         appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
         addUser(appUserManger, user, appSetting);
-        EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting);
+        EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, accessAppEvent.getOutput());
         ctx.send(accessAppResponse, session);
     }
 	
@@ -76,10 +77,11 @@ public class EzyAccessAppController
 	    return new EzySimpleUserAccessAppEvent(user);
 	}
 	
-	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app) {
+	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
 	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
 	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
 	    params.setApp(app);
+	    params.setData(data);
 	    return new EzyAccessAppResponse(params);
 	}
 	

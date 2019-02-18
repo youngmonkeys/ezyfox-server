@@ -9,10 +9,10 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 
 public interface EzyBroadcastAppsEvent extends EzyBroadcastEvent {
 
-    void fire(EzyConstant type, EzyEvent event, String username);
+    void fire(EzyConstant type, EzyEvent event, String username, boolean catchException);
     
-    void fire(EzyConstant type, EzyEvent event, EzyUser user);
+    void fire(EzyConstant type, EzyEvent event, EzyUser user, boolean catchException);
     
-    void fire(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter);
+    void fire(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchException);
     
 }

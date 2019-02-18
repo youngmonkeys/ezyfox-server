@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import lombok.Setter;
 
-public abstract class EzySocketEventLoopMultiHandler  extends EzySocketEventLoopHandler {
+public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopHandler {
 
     @Setter
     protected Supplier<EzySocketEventHandler> eventHandlerSupplier;

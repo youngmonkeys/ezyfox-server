@@ -16,37 +16,47 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
 	private final EzyZoneContext context;
 	
 	@Override
-	public void fire(EzyConstant type, EzyEvent event) {
+	public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
 	    logger.debug("zone: {} fire event: {}", getZoneName(), type);
-		firePluginsEvent(type, event);
-		fireAppsEvent(type, event);
+		firePluginsEvent(type, event, catchException);
+		fireAppsEvent(type, event, catchException);
 	}
 	
-	protected void fireAppsEvent(EzyConstant type, EzyEvent event) {
+	protected void fireAppsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
 	    for(EzyAppContext appContext : context.getAppContexts())
-	        fireAppEvent(appContext, type, event);
+	        fireAppEvent(appContext, type, event, catchException);
 	}
 	
-	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event) {
-	    try {
+	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+	    if(catchException) {
+        	    try {
+        	        ctx.handleEvent(type, event);
+        	    }
+        	    catch(Exception e) {
+        	        ctx.handleException(Thread.currentThread(), e);
+        	    }
+	    }
+	    else {
 	        ctx.handleEvent(type, event);
 	    }
-	    catch(Exception e) {
-	        ctx.handleException(Thread.currentThread(), e);
-	    }
 	}
 	
-	protected void firePluginsEvent(EzyConstant type, EzyEvent event) {
+	protected void firePluginsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
 	    for(EzyPluginContext pluginContext : context.getPluginContexts())
-	        firePluginEvent(pluginContext, type, event);
+	        firePluginEvent(pluginContext, type, event, catchException);
 	}
 	
-	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event) {
-	    try {
-	        ctx.handleEvent(type, event);
+	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+	    if(catchException) {
+        	    try {
+        	        ctx.handleEvent(type, event);
+        	    }
+        	    catch(Exception e) {
+        	        ctx.handleException(Thread.currentThread(), e);
+        	    }
 	    }
-	    catch(Exception e) {
-	        ctx.handleException(Thread.currentThread(), e);
+	    else {
+	        ctx.handleEvent(type, event);
 	    }
 	}
 	

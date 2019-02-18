@@ -72,33 +72,33 @@ public class EzySimpleZoneContext
     }
     
     @Override
-    public void broadcast(EzyConstant eventType, EzyEvent event) {
-        broadcastEvent.fire(eventType, event);
+    public void broadcast(EzyConstant eventType, EzyEvent event, boolean catchExeption) {
+        broadcastEvent.fire(eventType, event, catchExeption);
     }
     
     @Override
-    public void broadcastPlugins(EzyConstant type, EzyEvent event) {
-        broadcastPluginsEvent.fire(type, event);
+    public void broadcastPlugins(EzyConstant type, EzyEvent event, boolean catchException) {
+        broadcastPluginsEvent.fire(type, event, catchException);
     }
     
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event) {
-        broadcastAppsEvent.fire(type, event);
+    public void broadcastApps(EzyConstant type, EzyEvent event, boolean catchException) {
+        broadcastAppsEvent.fire(type, event, catchException);
     }
     
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, String username) {
-        broadcastAppsEvent.fire(type, event, username);
+    public void broadcastApps(EzyConstant type, EzyEvent event, String username, boolean catchException) {
+        broadcastAppsEvent.fire(type, event, username, catchException);
     }
     
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user) {
-        broadcastAppsEvent.fire(type, event, user);
+    public void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user, boolean catchException) {
+        broadcastAppsEvent.fire(type, event, user, catchException);
     }
     
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter) {
-        broadcastAppsEvent.fire(type, event, filter);
+    public void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchException) {
+        broadcastAppsEvent.fire(type, event, filter, catchException);
     }
 	
 	@Override

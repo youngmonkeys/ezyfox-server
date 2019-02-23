@@ -123,6 +123,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     
     @Override
     public void destroy() {
+        this.active = false;
         if(session != null)
             session.destroy();
         this.session = null;
@@ -141,10 +142,35 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.sessionManagementSetting = null;
         this.requestFrameInSecond = null;
         this.maxRequestPerSecond = null;
-        this.active = false;
         if(exceptionHandlers != null)
             this.exceptionHandlers.clear();
         this.exceptionHandlers = null;
+    }
+    
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("(")
+                .append("\n\tactive: ").append(active)
+                .append("\n\tsession: ").append(session)
+                .append("\n\tchannel: ").append(channel)
+                .append("\n\tserver: ").append(server)
+                .append("\n\tuser: ").append(user)
+                .append("\n\tcontext: ").append(context)
+                .append("\n\tzoneContext: ").append(zoneContext)
+                .append("\n\tcontrollers: ").append(controllers)
+                .append("\n\tuserManager: ").append(userManager)
+                .append("\n\tcloseSession: ").append(closeSession)
+                .append("\n\tsessionManager: ").append(sessionManager)
+                .append("\n\tlock: ").append(lock)
+                .append("\n\tsettings: ").append(settings)
+                .append("\n\tunloggableCommands: ").append(unloggableCommands)
+                .append("\n\tsessionManagementSetting: ").append(sessionManagementSetting)
+                .append("\n\trequestFrameInSecond: ").append(requestFrameInSecond)
+                .append("\n\tmaxRequestPerSecond: ").append(maxRequestPerSecond)
+                .append("\n\texceptionHandlers: ").append(exceptionHandlers)
+                .append("\n)")
+                .toString();
     }
     
 }

@@ -120,8 +120,19 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             controller.handle(context, request);
         }
         catch(Exception e) {
-            Throwable throwable = requestHandleException(cmd, data, e);
-            context.handleException(Thread.currentThread(), throwable);
+            if(context != null) {
+                Throwable throwable = requestHandleException(cmd, data, e);
+                context.handleException(Thread.currentThread(), throwable);
+            }
+            else {
+                if(active) {
+                    logger.warn("fatal error, please add an issue to ezyfox-server github with log: " + toString() + "\nand stacktrace: ", e);
+                }
+                else {
+                    logger.warn("can't handle command: " + cmd + " and data: " + data + ", this session maybe destroyed (session = " + session + "), error message: " + e.getMessage());
+                }
+            }
+            
         }
         finally {
             request.release();

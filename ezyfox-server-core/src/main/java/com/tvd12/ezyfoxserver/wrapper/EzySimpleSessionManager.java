@@ -116,7 +116,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	protected void checkMaxSessions(EzyConstant connectionType) {
-	    int current = getAliveSessionCountWithLock();
+	    int current = providedObjects.size();
 	    if(current >= maxSessions)
 	        throw new EzyMaxSessionException(current, maxSessions);
 	}
@@ -168,16 +168,6 @@ public class EzySimpleSessionManager<S extends EzySession>
 	    int size = loggedInSession.size();
 	    return size;
 	}
-	
-	public int getAliveSessionCountWithLock() {
-	    lock.lock();
-        try {
-            return getAllSessionCount();
-        }
-        finally {
-            lock.unlock();
-        }
-    }
 	
 	@Override
 	public void start() throws Exception {
@@ -252,7 +242,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 	    protected EzySessionTokenGenerator tokenGenerator;
 	    
 		@Override
-		protected String getProductName() {
+		protected String getValidationThreadPoolName() {
 			return "session-manager";
 		}
 		

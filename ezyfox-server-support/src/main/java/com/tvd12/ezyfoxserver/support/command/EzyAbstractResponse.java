@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.support.command;
 
-import java.util.Arrays;
-
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -39,52 +37,55 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
         return (T) this;
     }
 
-    public T user(EzyUser user) {
-        this.response.user(user);
+    public T user(EzyUser user, boolean exclude) {
+        this.response.user(user, exclude);
         return (T) this;
     }
     
-    public T users(EzyUser... users) {
-        return users(Arrays.asList(users));
+    public T users(EzyUser[] users, boolean exclude) {
+    		this.response.users(users, exclude);
+        return (T) this;
     }
 
-    public T users(Iterable<EzyUser> users) {
-        users.forEach(this::user);
+    public T users(Iterable<EzyUser> users, boolean exclude) {
+        this.response.users(users, exclude);
         return (T) this;
     }
     
     @Override
-    public T session(EzySession session) {
-        this.response.session(session);
+    public T session(EzySession session, boolean exclude) {
+        this.response.session(session, exclude);
         return (T) this;
     }
     
     @Override
-    public T sessions(EzySession... sessions) {
-        return sessions(Arrays.asList(sessions));
+    public T sessions(EzySession[] sessions, boolean exclude) {
+        this.response.sessions(sessions, exclude);
+        return (T)this;
     }
     
     @Override
-    public T sessions(Iterable<EzySession> sessions) {
-        sessions.forEach(this::session);
+    public T sessions(Iterable<EzySession> sessions, boolean exclude) {
+        this.response.sessions(sessions, exclude);
         return (T) this;
     }
     
     @Override
-    public T username(String username) {
-    		this.response.username(username);
+    public T username(String username, boolean exclude) {
+    		this.response.username(username, exclude);
     		return (T)this;
     }
     
     @Override
-    public T usernames(String... usernames) {
-    		return usernames(Arrays.asList(usernames));
+    public T usernames(String[] usernames, boolean exclude) {
+    		this.response.usernames(usernames, exclude);
+    		return (T)this;
     }
     
     @Override
-    public T usernames(Iterable<String> usernames) {
-    		usernames.forEach(this::username);
-    		return (T)this;
+    public T usernames(Iterable<String> usernames, boolean exclude) {
+    		this.response.usernames(usernames, exclude);
+		return (T)this;
     }
     
     public void execute() {

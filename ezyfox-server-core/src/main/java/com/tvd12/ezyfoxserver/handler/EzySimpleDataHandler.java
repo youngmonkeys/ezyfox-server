@@ -121,7 +121,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
         catch(Exception e) {
             if(context != null) {
-                Throwable throwable = requestHandleException(cmd, data, e);
+                Throwable throwable = requestHandleException(session, cmd, data, e);
                 context.handleException(Thread.currentThread(), throwable);
             }
             else {

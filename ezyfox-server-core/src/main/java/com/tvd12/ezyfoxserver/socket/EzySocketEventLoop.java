@@ -62,7 +62,7 @@ public abstract class EzySocketEventLoop
 		setActive(false);
 		if(threadPool != null) {
 		    List<Runnable> remainTasks = threadPool.shutdownNow();
-		    logger.info("{} has stopped. Never commenced execution task: {}", getClass().getSimpleName(), remainTasks.size());
+		    logger.debug("{} has stopped. Never commenced execution task: {}", getClass().getSimpleName(), remainTasks.size());
 		}
 	}
 	

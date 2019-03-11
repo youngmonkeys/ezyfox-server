@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.command;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,29 +54,35 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     
     @Override
     public EzyResponse users(EzyUser[] users, boolean exclude) {
-        return users(Arrays.asList(users), exclude);
+        for(EzyUser u : users)
+            user(u, exclude);
+        return this;
     }
 
     @Override
     public EzyResponse users(Iterable<EzyUser> users, boolean exclude) {
-        users.forEach(u -> user(u, exclude));
+        for(EzyUser u : users)
+            user(u, exclude);
         return this;
     }
     
     @Override
     public EzyResponse username(String username, boolean exclude) {
-        return user(userManager.getUser(username), exclude);
+        EzyUser user = userManager.getUser(username);
+        return user(user, exclude);
     }
     
     @Override
     public EzyResponse usernames(String[] usernames, boolean exclude) {
-        Arrays.stream(usernames).forEach(un -> username(un, exclude));
+        for(String un : usernames)
+            username(un, exclude);
         return this;
     }
     
     @Override
     public EzyResponse usernames(Iterable<String> usernames, boolean exclude) {
-        usernames.forEach(un -> username(un, exclude));
+        for(String un : usernames)
+            username(un, exclude);
         return this;
     }
 
@@ -92,13 +97,15 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     
     @Override
     public EzyResponse sessions(EzySession[] sessions, boolean exclude) {
-        Arrays.stream(sessions).forEach(s -> session(s, exclude));
+        for(EzySession s : sessions)
+            session(s, exclude);
         return this;
     }
     
     @Override
     public EzyResponse sessions(Iterable<EzySession> sessions, boolean exclude) {
-        sessions.forEach(s -> session(s, exclude));
+        for(EzySession s : sessions)
+            session(s, exclude);
         return this;
     }
     

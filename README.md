@@ -1,5 +1,9 @@
 # ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="48" height="48" />
 
+# Documentation
+
+[https://tvd12.com/](https://tvd12.com/)
+
 # Synopsis
 
 Ezyfox server is a socket server. It supports both tcp socket and websocket. It also provides manipulation beans,
@@ -101,9 +105,7 @@ mvn test
 # Contributors
 
 - Project development
-  - [DungTV](mailto:dungtv192@gmail.com)
-- Project admin tools development
-  - [SonPH](hoaison95@gmail.com)
+  - [DungTV](mailto:itprono3@gmail.com)
 
 # License
 

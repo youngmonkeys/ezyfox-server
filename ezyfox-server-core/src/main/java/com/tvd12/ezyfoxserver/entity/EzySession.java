@@ -245,7 +245,7 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	/**
 	 * add written responses
 	 * 
-	 * @param responses number of reponses
+	 * @param responses number of responses
 	 */
 	void addWrittenResponses(int responses);
 	

@@ -93,8 +93,8 @@ public class EzyAccessAppController
 	
 	protected void responseAccessAppError(
 	        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
-	    EzyResponse reponse = newAccessAppErrorReponse(exception.getError());
-	    ctx.send(reponse, session);
+	    EzyResponse response = newAccessAppErrorReponse(exception.getError());
+	    ctx.send(response, session);
     }
     
 }

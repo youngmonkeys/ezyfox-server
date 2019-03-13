@@ -54,15 +54,19 @@ public abstract class EzyServerBootstrap
 		logger.debug("local bootstrap has started");
 	}
 	
-	protected void notifyServerReady() {
-	    logger.info("\n{}\n", new EzyBannerPrinter().getBannerString());
-	    EzyEvent event = newServerReadyEvent();
-	    context.handleEvent(EzyEventType.SERVER_READY, event);
-		context.broadcast(EzyEventType.SERVER_READY, event, true);
+	protected final void notifyServerReady() {
+		printBanner();
+		notifyServerReady0();
 	}
 	
-	protected EzyEvent newServerReadyEvent() {
-		return new EzySimpleServerReadyEvent();
+	protected final void printBanner() {
+		logger.info("\n{}\n", new EzyBannerPrinter().getBannerString());
+	}
+	
+	protected void notifyServerReady0() {
+		EzyEvent event = new EzySimpleServerReadyEvent();
+        context.handleEvent(EzyEventType.SERVER_READY, event);
+        context.broadcast(EzyEventType.SERVER_READY, event, true);
 	}
 	
 	protected EzyServer getServer() {

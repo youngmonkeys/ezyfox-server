@@ -48,6 +48,17 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>ezy-settings-1.0.0.xsd</exclude>
+					<exclude>ezy-settings.xml</exclude>
+					<exclude>ezy-zone-settings-1.0.0.xsd</exclude>
+					<exclude>ezy-zone-settings.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 	</build>
 
 </project>

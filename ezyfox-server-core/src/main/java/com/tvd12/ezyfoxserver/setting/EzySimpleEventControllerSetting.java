@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "event-controller")
-public class EzySimpleEventHandlerSetting implements EzyEventControllerSetting {
+public class EzySimpleEventControllerSetting implements EzyEventControllerSetting {
 
     @XmlElement(name = "event-type")
     private String eventType;

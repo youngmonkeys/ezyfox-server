@@ -19,12 +19,12 @@ import lombok.ToString;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "event-controllers")
-public class EzySimpleEventHandlersSetting implements EzyEventControllersSetting {
+public class EzySimpleEventControllersSetting implements EzyEventControllersSetting {
 
     private List<EzyEventControllerSetting> eventControllers = new ArrayList<>();
     
     @XmlElement(name = "event-controller")
-    public void setItem(EzySimpleEventHandlerSetting item) {
+    public void setItem(EzySimpleEventControllerSetting item) {
         eventControllers.add(item);
     }
     

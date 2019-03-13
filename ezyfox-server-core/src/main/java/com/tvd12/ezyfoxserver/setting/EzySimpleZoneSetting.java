@@ -47,7 +47,7 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
     
     @XmlElement(name = "event-controllers")
-    protected EzySimpleEventHandlersSetting eventControllers = new EzySimpleEventHandlersSetting();
+    protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
     
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
     

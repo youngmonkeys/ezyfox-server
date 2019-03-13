@@ -4,7 +4,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.event.EzyServerInitializingEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 
 public class EzyZonesStarter extends EzyComponentsStater {
 
@@ -26,11 +29,17 @@ public class EzyZonesStarter extends EzyComponentsStater {
     
     protected void startZone(String zoneName) {
         EzyZoneContext zoneContext = serverContext.getZoneContext(zoneName);
+        notifyServerInitializing(zoneContext);
         startAllPlugins(zoneContext);
         startAllApps(zoneContext);
     }
     
-  //===================== plugins ===================
+    protected void notifyServerInitializing(EzyZoneContext zoneContext) {
+        EzyServerInitializingEvent event = new EzySimpleServerInitializingEvent();
+        zoneContext.handleEvent(EzyEventType.SERVER_INITIALIZING, event);
+    }
+    
+    //===================== plugins ===================
     protected void startAllPlugins(EzyZoneContext zoneContext) {
         logger.info("start all plugins ...");
         startComponents(newPluginsStarterBuilder(), zoneContext);

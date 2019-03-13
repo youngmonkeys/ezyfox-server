@@ -1,10 +1,13 @@
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.event.EzyServerInitializingEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyBootstrap 
@@ -19,8 +22,14 @@ public class EzyBootstrap
 	
 	@Override
 	public void start() throws Exception {
+	    notifyServerInitializing();
 		startAllZones();
 		startSessionManager();
+	}
+	
+	protected void notifyServerInitializing() {
+	    EzyServerInitializingEvent event = new EzySimpleServerInitializingEvent();
+	    context.handleEvent(EzyEventType.SERVER_INITIALIZING, event);
 	}
 	
     @Override

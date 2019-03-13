@@ -52,7 +52,7 @@ public class EzySimpleSettings implements EzySettings {
 	protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
 	
 	@XmlElement(name = "event-controllers")
-	protected EzySimpleEventHandlersSetting eventControllers = new EzySimpleEventHandlersSetting();
+	protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
 	
 	@Setter(AccessLevel.NONE)
     protected EzySimpleZonesSetting zones = new EzySimpleZonesSetting();

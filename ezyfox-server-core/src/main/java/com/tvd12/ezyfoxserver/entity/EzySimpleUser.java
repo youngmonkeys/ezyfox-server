@@ -35,6 +35,7 @@ public class EzySimpleUser
 	protected int maxSessions = 30;
 	protected long maxIdleTime = 3 * 60 * 1000;
 	protected long startIdleTime = System.currentTimeMillis();
+	protected volatile boolean destroyed = false;
 	@Setter(AccessLevel.NONE)
     protected Map<String, Lock> locks = new ConcurrentHashMap<>();
 	@Setter(AccessLevel.NONE)
@@ -117,6 +118,7 @@ public class EzySimpleUser
 	
 	@Override
 	public void destroy() {
+	    this.destroyed = true;
 	    if(locks != null)
 	        locks.clear();
 	    if(sessionMap != null)

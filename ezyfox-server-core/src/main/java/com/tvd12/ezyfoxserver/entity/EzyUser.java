@@ -101,6 +101,11 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
      */
     boolean isIdle();
     
+    /**
+     * @return destroyed or not
+     */
+    boolean isDestroyed();
+    
 	/**
 	 * @param name the lock name
 	 * @return the lock

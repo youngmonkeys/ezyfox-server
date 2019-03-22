@@ -47,7 +47,7 @@ public abstract class EzyUserRequestPrototypeController<
 		EzyData params = data.get(1, EzyData.class, null);
 		EzyPrototypeSupplier supplier = handlers.get(cmd);
 		if(supplier == null) {
-			logger.warn("has no handler with command: {}", cmd);
+			logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
 			return;
 		}
 		EzyHandler handler = (EzyHandler)supplier.supply(beanContext);

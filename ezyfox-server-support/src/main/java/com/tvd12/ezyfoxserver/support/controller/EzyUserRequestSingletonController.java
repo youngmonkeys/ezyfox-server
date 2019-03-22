@@ -42,7 +42,7 @@ public abstract class EzyUserRequestSingletonController<
 		EzyData params = data.get(1, EzyData.class, null);
 		EzyUserRequestHandler handler = handlers.get(cmd);
 		if(handler == null) {
-			logger.warn("has no handler with command: {}", cmd);
+			logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
 			return;
 		}
 		Object handlerData = handler.newData();

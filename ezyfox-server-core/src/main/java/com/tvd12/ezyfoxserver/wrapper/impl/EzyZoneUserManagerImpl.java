@@ -25,6 +25,9 @@ public class EzyZoneUserManagerImpl
 
     protected final String zoneName;
     protected final EzyUserDelegate userDelegate;
+    protected final long idleValidationDelay;
+    protected final long idleValidationInterval;
+    protected final int idleValidationThreadPoolSize;
     protected final ScheduledExecutorService idleValidationService;
     protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
     
@@ -32,12 +35,15 @@ public class EzyZoneUserManagerImpl
         super(builder);
         this.zoneName = builder.zoneName;
         this.userDelegate = builder.userDelegate;
+        this.idleValidationDelay = builder.idleValidationDelay;
+        this.idleValidationInterval = builder.idleValidationInterval;
+        this.idleValidationThreadPoolSize = builder.idleValidationThreadPoolSize;
         this.idleValidationService = newIdleValidationService(builder.maxIdleTime);
     }
     
     protected ScheduledExecutorService newIdleValidationService(long maxIdleTime) {
         if(maxIdleTime <= 0) return null;
-        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(1, "user-manager");
+        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(idleValidationThreadPoolSize, "user-manager");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> answer.shutdown()));
         return answer;
     }
@@ -141,7 +147,9 @@ public class EzyZoneUserManagerImpl
 	protected void startIdleValidationService() {
 	    if(idleValidationService != null) {
 	        idleValidationService.scheduleAtFixedRate(
-	                this::validateIdleUsers, 3000, 100, TimeUnit.MILLISECONDS);
+	                this::validateIdleUsers, 
+	                idleValidationDelay, 
+	                idleValidationInterval, TimeUnit.MILLISECONDS);
 	    }
 	}
 	
@@ -186,6 +194,9 @@ public class EzyZoneUserManagerImpl
 	    protected String zoneName;
 	    protected long maxIdleTime;
 	    protected EzyUserDelegate userDelegate;
+	    protected long idleValidationInterval = 100;
+        protected long idleValidationDelay = 3 * 1000;
+        protected int idleValidationThreadPoolSize = 1;
 	    
 	    public Builder zoneName(String zoneName) {
 	        this.zoneName = zoneName;
@@ -201,6 +212,21 @@ public class EzyZoneUserManagerImpl
 	        this.userDelegate = userDelegate;
 	        return this;
 	    }
+	    
+	    public Builder idleValidationDelay(long validationDelay) {
+            this.idleValidationDelay = validationDelay;
+            return this;
+        }
+        
+        public Builder idleValidationInterval(long validationInterval) {
+            this.idleValidationInterval = validationInterval;
+            return this;
+        }
+        
+        public Builder idleValidationThreadPoolSize(int threadPoolSize) {
+            this.idleValidationThreadPoolSize = threadPoolSize;
+            return this;
+        }
 	    
 		@Override
 		public EzyZoneUserManager build() {

@@ -7,16 +7,16 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 import lombok.Getter;
 
-public class SynchronizedUserManager extends EzyAbstractUserManager {
+public class EzySynchronizedUserManager extends EzyAbstractUserManager {
 
 	@Getter
     protected final Object synchronizedLock = new Object();
     
-    public SynchronizedUserManager(int maxUser) {
+    public EzySynchronizedUserManager(int maxUser) {
         super(maxUser);
     }
     
-    protected SynchronizedUserManager(Builder<?> builder) {
+    protected EzySynchronizedUserManager(Builder<?> builder) {
         super(builder);
     }
     
@@ -121,8 +121,8 @@ public class SynchronizedUserManager extends EzyAbstractUserManager {
     public static class Builder<B extends Builder<B>> extends EzyAbstractUserManager.Builder<B> {
 
         @Override
-        public SynchronizedUserManager build() {
-            return new SynchronizedUserManager(this);
+        public EzySynchronizedUserManager build() {
+            return new EzySynchronizedUserManager(this);
         }
         
     }

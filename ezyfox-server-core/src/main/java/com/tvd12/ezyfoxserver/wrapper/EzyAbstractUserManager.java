@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.function.EzyFunctions;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
@@ -111,7 +112,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     @Override
     public Lock getLock(String username) {
-        Lock lock = locks.computeIfAbsent(username, NEW_REENTRANTLOCK_FUNC);
+        Lock lock = locks.computeIfAbsent(username, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
         return lock;
     }
     

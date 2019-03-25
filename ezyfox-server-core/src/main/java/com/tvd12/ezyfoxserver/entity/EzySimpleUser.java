@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.function.EzyFunctions;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyNameAware;
@@ -74,7 +74,10 @@ public class EzySimpleUser
 	
 	@Override
 	public List<EzySession> getSessions() {
-	    List<EzySession> sessions = new ArrayList<>(sessionMap.values());
+	    List<EzySession> sessions = new ArrayList<>();
+	    Map<Long, EzySession> sessionMapNow = sessionMap;
+	    if(sessionMapNow != null)
+	        sessions.addAll(sessionMapNow.values());
 	    return sessions;
 	}
 	
@@ -86,7 +89,7 @@ public class EzySimpleUser
 	
 	@Override
     public Lock getLock(String name) {
-        Lock lock = locks.computeIfAbsent(name, k -> new ReentrantLock());
+        Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
         return lock;
     }
 	
@@ -104,10 +107,12 @@ public class EzySimpleUser
 	
 	@Override
 	public boolean isIdle() {
-	    if(!sessionMap.isEmpty())
-	        return false;
-	    boolean idle = maxIdleTime < System.currentTimeMillis() - startIdleTime;
-	    return idle;
+	    if(sessionMap.isEmpty()) {
+	        long offset = System.currentTimeMillis() - startIdleTime;
+	        boolean idle = maxIdleTime < offset;
+	        return idle;
+	    }
+	    return false;
 	}
 	
 	@Override

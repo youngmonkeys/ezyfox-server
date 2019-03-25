@@ -2,15 +2,11 @@ package com.tvd12.ezyfoxserver.wrapper;
 
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Function;
 
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public interface EzyUserManager extends EzyDestroyable {
-    
-    Function<String, Lock> NEW_REENTRANTLOCK_FUNC = k -> new ReentrantLock();
     
     EzyUser addUser(EzyUser user);
     

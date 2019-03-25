@@ -4,10 +4,10 @@ import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.function.EzyFunctions;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyProcessor;
@@ -115,23 +115,28 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public boolean isIdle() {
-	    if(!loggedIn)
-	        return false;
-	    return maxIdleTime < (System.currentTimeMillis() - lastReadTime);
+	    if(loggedIn) {
+	        long offset = System.currentTimeMillis() - lastReadTime;
+	        boolean idle = maxIdleTime < offset;
+	        return idle;
+	    }
+	    return false;
 	}
 	
 	@Override
 	public Lock getLock(String name) {
-	    return locks.computeIfAbsent(name, k -> new ReentrantLock());
+	    Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
+	    return lock;
 	}
 	
 	@Override
 	public final void send(EzyPacket packet) {
-	    if(!activated) return;
-	    addWrittenResponses(1);
-	    setLastWriteTime(System.currentTimeMillis());
-        setLastActivityTime(System.currentTimeMillis());
-        addPacketToSessionQueue(packet);
+	    if(activated) {
+        	    addWrittenResponses(1);
+        	    setLastWriteTime(System.currentTimeMillis());
+            setLastActivityTime(System.currentTimeMillis());
+            addPacketToSessionQueue(packet);
+	    }
 	}
 	
 	@Override
@@ -140,18 +145,22 @@ public abstract class EzyAbstractSession
 	}
 	
     private void addPacketToSessionQueue(EzyPacket packet) {
-        boolean empty = false;
-        boolean success = false;
-        synchronized (packetQueue) {
-            empty = packetQueue.isEmpty();
-            success = packetQueue.add(packet);
-            if(success && empty) {
-                    sessionTicketsQueue.add(this);
+        EzyPacketQueue packetQueueNow = packetQueue;
+        if(packetQueueNow != null) {
+            boolean empty = false;
+            boolean success = false;
+            synchronized (packetQueueNow) {
+                if(activated) {
+                    empty = packetQueueNow.isEmpty();
+                    success = packetQueueNow.add(packet);
+                    if(success && empty)
+                        sessionTicketsQueue.add(this);
+                }
             }
-        }
-        if(!success) {
-            droppedPackets.addDroppedPacket(packet);
-            packet.release();
+            if(!success) {
+                droppedPackets.addDroppedPacket(packet);
+                packet.release();
+            }
         }
     }
     
@@ -204,9 +213,9 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void destroy() {
+	    this.activated = false;
 	    this.channel = null;
 	    this.delegate = null;
-	    this.activated = false;
 	    this.loggedIn = false;
 	    this.readBytes = 0L;
 	    this.writtenBytes = 0L;

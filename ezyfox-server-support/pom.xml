@@ -6,8 +6,8 @@
 		<artifactId>ezyfox-server</artifactId>
 		<version>0.0.2</version>
 	</parent>
-	<version>1.0.0</version>
 	<artifactId>ezyfox-server-support</artifactId>
+	<version>1.0.0</version> <!-- ${project.version} -->
 	<name>ezyfox-server-support</name>
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	

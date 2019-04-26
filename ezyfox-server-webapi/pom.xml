@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>ezyfox-server-webapi</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0</version> <!-- ${project.version} -->
 
 	<name>ezyfox-server-webapi</name>
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>

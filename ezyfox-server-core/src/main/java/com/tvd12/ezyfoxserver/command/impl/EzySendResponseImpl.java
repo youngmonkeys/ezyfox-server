@@ -43,7 +43,8 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         finally {
             pack.release();
         }
-        if(success && !unloggableCommands.contains(response.getCommand()))
+        boolean debug = server.getSettings().isDebug();
+        if(debug && success && !unloggableCommands.contains(response.getCommand()))
             logger.debug("send to: {} data: {}", recipient.getName(), data);
     }
     
@@ -64,7 +65,8 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         finally {
             pack.release();
         }
-        if(success && !unloggableCommands.contains(response.getCommand()))
+        boolean debug = server.getSettings().isDebug();
+        if(debug && success && !unloggableCommands.contains(response.getCommand()))
             logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
     }
     

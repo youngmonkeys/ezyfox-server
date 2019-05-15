@@ -12,11 +12,10 @@ import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.controller.EzyPingController;
 import com.tvd12.ezyfoxserver.controller.EzyPluginInfoController;
-import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
 import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
-import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByIdController;
-import com.tvd12.ezyfoxserver.controller.EzyRequestPluginByNameController;
+import com.tvd12.ezyfoxserver.controller.EzyRequestPluginController;
 import com.tvd12.ezyfoxserver.controller.EzySimpleStreamingController;
+import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyRawBytesInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
@@ -68,8 +67,7 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 			answer.put(EzyCommand.APP_REQUEST, new EzyRequestAppController());
 			answer.put(EzyCommand.APP_EXIT, new EzyExitAppController());
 			answer.put(EzyCommand.PLUGIN_INFO, new EzyPluginInfoController());
-			answer.put(EzyCommand.PLUGIN_REQUEST_BY_ID, new EzyRequestPluginByIdController());
-			answer.put(EzyCommand.PLUGIN_REQUEST_BY_NAME, new EzyRequestPluginByNameController());
+			answer.put(EzyCommand.PLUGIN_REQUEST, new EzyRequestPluginController());
 			return answer;
 		}
 		
@@ -82,8 +80,7 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 			answer.put(EzyCommand.APP_REQUEST, new EzyServerUserInterceptor<>());
 			answer.put(EzyCommand.APP_EXIT, new EzyServerUserInterceptor<>());
 			answer.put(EzyCommand.PLUGIN_INFO, new EzyServerUserInterceptor<>());
-			answer.put(EzyCommand.PLUGIN_REQUEST_BY_ID, new EzyServerUserInterceptor<>());
-			answer.put(EzyCommand.PLUGIN_REQUEST_BY_NAME, new EzyServerUserInterceptor<>());
+			answer.put(EzyCommand.PLUGIN_REQUEST, new EzyServerUserInterceptor<>());
 			return answer;
 		}
 		

@@ -11,13 +11,13 @@ import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginRequest;
 
-public abstract class EzyRequestPluginController<P extends EzyRequestPluginParams> 
+public class EzyRequestPluginController 
 		extends EzyAbstractServerController 
-		implements EzyServerController<EzyRequestPluginRequest<P>> {
+		implements EzyServerController<EzyRequestPluginRequest> {
 
 	@Override
-	public void handle(EzyServerContext ctx, EzyRequestPluginRequest<P> request) {
-	    P params = request.getParams();
+	public void handle(EzyServerContext ctx, EzyRequestPluginRequest request) {
+	    EzyRequestPluginParams params = request.getParams();
 	    EzyUser user = request.getUser();
 	    EzyZoneContext zoneCtx = ctx.getZoneContext(user.getZoneId());
 	    EzyPluginContext pluginCtx = getPluginContext(zoneCtx, params);
@@ -27,17 +27,18 @@ public abstract class EzyRequestPluginController<P extends EzyRequestPluginParam
         requestController.handle(pluginCtx, event);
 	}
 	
-	protected abstract 
-	    EzyPluginContext getPluginContext(EzyZoneContext zoneCtx, P requestParams);
+	protected EzyPluginContext getPluginContext(
+            EzyZoneContext zoneCtx, EzyRequestPluginParams requestParams) {
+        int pluginId = requestParams.getPluginId();
+        EzyPluginContext pluginContext = zoneCtx.getPluginContext(pluginId);
+        return pluginContext;
+    }
 	
-	protected EzyUserRequestPluginEvent newRequestPluginEvent(EzyRequestPluginRequest<P> request) {
+	protected EzyUserRequestPluginEvent newRequestPluginEvent(EzyRequestPluginRequest request) {
 		return new EzySimpleUserRequestPluginEvent(
 		        request.getUser(),
 		        request.getSession(), 
-		        request.getParams().getData(),
-		        withName());
+		        request.getParams().getData());
 	}
-	
-	protected abstract boolean withName();
 	
 }

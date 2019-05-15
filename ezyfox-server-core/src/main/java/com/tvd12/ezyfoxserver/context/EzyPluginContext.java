@@ -13,31 +13,15 @@ public interface EzyPluginContext extends EzyZoneChildContext {
 
     EzyPlugin getPlugin();
     
-    void send(EzyData data, EzySession recipient, boolean withName);
+    void send(EzyData data, EzySession recipient);
     
-    void send(EzyData data, Collection<EzySession> recipients, boolean withName);
-    
-    default void send(EzyData data, EzySession recipient) {
-        send(data, recipient, true);
-    }
-    
-    default void send(EzyData data, Collection<EzySession> recipients) {
-        send(data, recipients, true);
-    }
+    void send(EzyData data, Collection<EzySession> recipients);
     
     default void send(EzyData data, EzyUser recipient) {
-        send(data, recipient, true);
-    }
-    
-    default void send(EzyData data, Iterable<EzyUser> recipients) {
-        send(data, recipients, true);
-    }
-    
-    default void send(EzyData data, EzyUser recipient, boolean withName) {
         send(data, recipient.getSessions());
     }
     
-    default void send(EzyData data, Iterable<EzyUser> recipients, boolean withName) {
+    default void send(EzyData data, Iterable<EzyUser> recipients) {
         Set<EzySession> sessions = new HashSet<>();
         for(EzyUser user : recipients)
             sessions.addAll(user.getSessions());

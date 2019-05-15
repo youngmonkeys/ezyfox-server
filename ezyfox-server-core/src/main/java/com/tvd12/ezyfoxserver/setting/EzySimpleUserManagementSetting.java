@@ -30,7 +30,7 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting,
     protected int maxSessionPerUser = 5;
     
     @XmlElement(name = "allow-guest-login")
-    protected boolean allowGuestLogin = true;
+    protected boolean allowGuestLogin = false;
     
     @XmlElement(name = "allow-change-session")
     protected boolean allowChangeSession = true;

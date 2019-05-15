@@ -14,8 +14,7 @@ import com.tvd12.ezyfoxserver.request.EzySimplePingRequest;
 import com.tvd12.ezyfoxserver.request.EzySimplePluginInfoRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 import com.tvd12.ezyfoxserver.request.EzySimpleRequestAppRequest;
-import com.tvd12.ezyfoxserver.request.EzySimpleRequestPluginRequestById;
-import com.tvd12.ezyfoxserver.request.EzySimpleRequestPluginRequestByName;
+import com.tvd12.ezyfoxserver.request.EzySimpleRequestPluginRequest;
 
 @SuppressWarnings("rawtypes")
 public class EzySimpleRequestFactory implements EzyRequestFactory {
@@ -40,8 +39,7 @@ public class EzySimpleRequestFactory implements EzyRequestFactory {
         answer.put(EzyCommand.APP_REQUEST, EzySimpleRequestAppRequest::new);
         answer.put(EzyCommand.APP_EXIT, EzySimpleExitAppRequest::new);
         answer.put(EzyCommand.PLUGIN_INFO, EzySimplePluginInfoRequest::new);
-        answer.put(EzyCommand.PLUGIN_REQUEST_BY_ID, EzySimpleRequestPluginRequestById::new);
-        answer.put(EzyCommand.PLUGIN_REQUEST_BY_NAME, EzySimpleRequestPluginRequestByName::new);
+        answer.put(EzyCommand.PLUGIN_REQUEST, EzySimpleRequestPluginRequest::new);
         return answer;
     }
 }

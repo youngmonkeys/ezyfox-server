@@ -45,13 +45,13 @@ public class EzySimplePluginContext
 	}
 	
 	@Override
-	public void send(EzyData data, EzySession recipient, boolean withName) {
-	    this.sendResponse.execute(data, recipient, withName);
+	public void send(EzyData data, EzySession recipient) {
+	    this.sendResponse.execute(data, recipient);
 	}
 	
 	@Override
-	public void send(EzyData data, Collection<EzySession> recipients, boolean withName) {
-	    this.sendResponse.execute(data, recipients, withName);
+	public void send(EzyData data, Collection<EzySession> recipients) {
+	    this.sendResponse.execute(data, recipients);
 	}
 	
 	public void setPlugin(EzyPlugin plugin) {

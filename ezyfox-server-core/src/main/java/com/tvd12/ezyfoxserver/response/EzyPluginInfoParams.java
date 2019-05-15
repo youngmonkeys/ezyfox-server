@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.response;
 
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,19 +11,18 @@ import lombok.Setter;
 public class EzyPluginInfoParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = 712776912690368311L;
 
-    protected int pluginId;
-    protected String pluginName;
+    protected EzyPluginSetting plugin;
     
     @Override
     protected EzyArrayBuilder serialize0() {
         return newArrayBuilder()
-                .append(pluginName)
-                .append(pluginId);
+                .append(plugin.getId())
+                .append(plugin.getName());
     }
     
     @Override
     public void release() {
-        this.pluginName = null;
+        this.plugin = null;
     }
 
 }

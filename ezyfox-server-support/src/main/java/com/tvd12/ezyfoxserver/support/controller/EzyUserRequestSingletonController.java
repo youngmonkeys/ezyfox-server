@@ -49,7 +49,7 @@ public abstract class EzyUserRequestSingletonController<
 		if(params != null)
 			unmarshaller.unwrap(params, handlerData);
 		try {
-			handler.handle(context, event.getUser(), handlerData);
+			handler.handle(context, event, handlerData);
 		}
 		catch(EzyBadRequestException e) {
 			if(e.isSendToClient()) {

@@ -10,17 +10,10 @@ import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 public class EzyPluginResponseImpl 
         extends EzyAbstractResponse<EzyPluginContext> 
         implements EzyPluginResponse {
-    
-    private boolean withName = true;
 
     public EzyPluginResponseImpl(EzyPluginContext context) {
         super(context);
     } 
-    
-    @Override
-    public void withName(boolean value) {
-        this.withName = value;
-    }
     
     @Override
     protected EzyUserManager getUserManager(EzyPluginContext context) {
@@ -29,7 +22,7 @@ public class EzyPluginResponseImpl
     
     @Override
     protected void sendData(EzyData data) {
-        context.send(data, exrecipients, withName);
+        context.send(data, recipients);
     }
 
 }

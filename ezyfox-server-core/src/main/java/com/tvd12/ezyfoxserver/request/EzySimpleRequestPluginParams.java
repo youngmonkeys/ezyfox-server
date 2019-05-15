@@ -10,10 +10,12 @@ public class EzySimpleRequestPluginParams
         implements EzyRequestPluginParams {
     private static final long serialVersionUID = 1875560863565659154L;
     
+    protected int pluginId;
     protected EzyArray data;
     
     @Override
     public void deserialize(EzyArray t) {
+        this.pluginId = t.get(0, int.class);
         this.data = t.get(1, EzyArray.class);
     }
     

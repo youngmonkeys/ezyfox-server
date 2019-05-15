@@ -41,6 +41,7 @@ public class EzySimpleServer
 	protected EzyStreamingApi streamingApi;
 	protected EzySessionManager sessionManager;
     protected Map<String, EzyAppClassLoader> appClassLoaders;
+    protected long startupTime = System.currentTimeMillis();
 	
 	@Override
 	public String getVersion() {

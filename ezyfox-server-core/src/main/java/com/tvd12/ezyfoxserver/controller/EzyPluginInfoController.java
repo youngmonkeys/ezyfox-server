@@ -22,16 +22,17 @@ public class EzyPluginInfoController
 	    EzyPluginInfoParams params = request.getParams();
 	    EzyZoneContext zoneCtx = ctx.getZoneContext(user.getZoneId());
 	    EzyPluginContext pluginCtx = zoneCtx.getPluginContext(params.getPluginName());
-	    EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
-	    EzyResponse response = newPluginInfoResponse(setting);
-	    ctx.send(response, session);
+	    if(pluginCtx != null) {
+        	    EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
+        	    EzyResponse response = newPluginInfoResponse(setting);
+        	    ctx.send(response, session);
+	    }
 	}
 	
 	protected EzyResponse newPluginInfoResponse(EzyPluginSetting pluginSetting) {
         com.tvd12.ezyfoxserver.response.EzyPluginInfoParams params = 
                 new com.tvd12.ezyfoxserver.response.EzyPluginInfoParams();
-        params.setPluginId(pluginSetting.getId());
-        params.setPluginName(pluginSetting.getName());
+        params.setPlugin(pluginSetting);
         return new EzyPluginInfoResponse(params);
     }
 	

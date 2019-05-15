@@ -11,13 +11,10 @@ public class EzySimpleUserRequestPluginEvent
 		extends EzySimpleUserRequestEvent 
 		implements EzyUserRequestPluginEvent {
     
-    protected final boolean withName;
-
 	public EzySimpleUserRequestPluginEvent(
 	        EzyUser user, 
-	        EzySession session, EzyArray data, boolean withName) {
+	        EzySession session, EzyArray data) {
         super(user, session, data);
-        this.withName = withName;
     }
 	
 }

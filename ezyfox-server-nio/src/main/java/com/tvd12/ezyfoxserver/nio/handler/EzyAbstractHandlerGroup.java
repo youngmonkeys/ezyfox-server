@@ -155,11 +155,12 @@ public abstract class EzyAbstractHandlerGroup
 		networkStats.addDroppedOutBytes(packet.getSize());
 	}
 	
-	protected final void handleReceivedData(Object data) {
+	protected final void handleReceivedData(Object data, int dataSize) {
 		EzySocketRequest request = newSocketRequest(data);
 		boolean success = requestQueues.add(request);
 		if(!success) {
 			networkStats.addDroppedInPackets(1);
+			networkStats.addDroppedInBytes(dataSize);
 			logger.info("request queue is full, drop incomming request");
 		}
 	}

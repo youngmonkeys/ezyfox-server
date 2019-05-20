@@ -61,7 +61,8 @@ public class EzySimpleNioHandlerGroup
 			}
 			else {
 				Object data = decodeMessage(message);
-				handleReceivedData(data);
+				int dataSize = message.getByteCount();
+				handleReceivedData(data, dataSize);
 			}
 		}
 		catch (Exception e) {

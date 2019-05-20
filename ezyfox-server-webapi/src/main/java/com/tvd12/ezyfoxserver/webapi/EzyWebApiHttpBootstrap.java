@@ -21,10 +21,4 @@ public class EzyWebApiHttpBootstrap
 	public void destroy() {
 	}
 	
-	protected EzyWebApiApplication newApplication() {
-		EzyWebApiApplication app = new EzyWebApiApplication(getClass());
-		app.setServerContext(serverContext);
-		return app;
-	}
-	
 }

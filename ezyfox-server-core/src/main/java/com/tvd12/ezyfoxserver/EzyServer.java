@@ -36,13 +36,6 @@ public interface EzyServer extends EzyEventComponent, EzyToMap {
     EzySettings getSettings();
     
     /**
-     * Get the server's startup time
-     * 
-     * @return the startup time
-     */
-    long getStartupTime();
-
-    /**
      * Get server class loader
      * 
      * @return the server class loader

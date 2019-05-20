@@ -18,7 +18,21 @@ public class EzySimpleWsHandlerGroup
 	
 	public EzySimpleWsHandlerGroup(Builder builder) {
 		super(builder);
-		this.decodeBytesCallback = this::handleReceivedData;
+		this.decodeBytesCallback = newDecodeBytesCallback();
+	}
+	
+	protected EzyCallback<Object> newDecodeBytesCallback() {
+		return new EzyCallback<Object>() {
+			@Override
+			public void call(Object data) {
+				throw new UnsupportedOperationException("should use call(data, dataSize)");
+			}
+		
+			@Override
+			public void call(Object data, int dataSize) {
+				handleReceivedData(data, dataSize);
+			}
+		};
 	}
 	
 	@Override

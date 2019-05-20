@@ -55,6 +55,7 @@ public abstract class EzyAbstractSession
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
+    protected volatile boolean destroyed;
     protected volatile boolean streamingEnable;
 
     protected String token;
@@ -213,6 +214,7 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public void destroy() {
+	    this.destroyed = true;
 	    this.activated = false;
 	    this.channel = null;
 	    this.delegate = null;
@@ -237,6 +239,7 @@ public abstract class EzyAbstractSession
         }
 	    this.packetQueue = null;
 	    this.sessionTicketsQueue = null;
+	    this.disconnectionQueue = null;
 	}
 	
 	@Override

@@ -61,7 +61,7 @@ public enum EzyCommand implements EzyConstant {
 	}
 	
 	private static final Set<EzyCommand> systemCommands() {
-	    return Sets.newHashSet(HANDSHAKE, LOGIN, APP_ACCESS, APP_EXIT, DISCONNECT);
+	    return Sets.newHashSet(HANDSHAKE, LOGIN, APP_ACCESS, APP_EXIT, PLUGIN_INFO, DISCONNECT);
 	}
 	
 	private static final Map<Integer, EzyCommand> commandsById() {

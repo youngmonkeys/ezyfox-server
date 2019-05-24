@@ -311,6 +311,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	boolean isIdle();
 	
 	/**
+     * @return destroyed or not
+     */
+    boolean isDestroyed();
+	
+	/**
 	 * @return streaming enable or not
 	 */
 	boolean isStreamingEnable();

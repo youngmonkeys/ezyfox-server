@@ -1,8 +1,11 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithException;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
+
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
@@ -12,23 +15,19 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithException;
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.*;
-
 import lombok.Getter;
 
 @Getter
 public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 
 	private final Session session;
-	private final AtomicBoolean opened;
+	private volatile boolean opened;
 	private final SocketAddress serverAddress;
 	private final SocketAddress clientAddress;
 	
 	public EzyWsChannel(Session session) {
+		this.opened = true;
 		this.session = session;
-		this.opened = new AtomicBoolean(true);
 		this.serverAddress = session.getLocalAddress();
 		this.clientAddress = session.getRemoteAddress();
 	}
@@ -73,11 +72,11 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 	
 	@Override
 	public boolean isConnected() {
-		return opened.get();
+		return opened;
 	}
 	
 	public void setClosed() {
-		this.opened.set(false);
+		this.opened = false;
 	}
 	
 	@Override

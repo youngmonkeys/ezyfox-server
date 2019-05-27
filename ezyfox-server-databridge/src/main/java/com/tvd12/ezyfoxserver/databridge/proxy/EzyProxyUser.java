@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzyProxyUser {
 
-	private EzyUser real;
+	protected final EzyUser real;
 	
 	public static EzyProxyUser proxyUser(EzyUser real) {
 		return new EzyProxyUser(real);

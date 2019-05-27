@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzyProxyAdminUser {
 
-	private final EzyAdminSetting setting;
+	protected final EzyAdminSetting setting;
 	
 	public static EzyProxyAdminUser proxyAdminUser(EzyAdminSetting setting) {
 		return new EzyProxyAdminUser(setting);

@@ -10,9 +10,9 @@ import lombok.Setter;
 public class EzyMemoryPoint implements Serializable {
 	private static final long serialVersionUID = -8664380030251940944L;
 	
-	private long maxMemory;
-	private long freeMemory;
-	private long totalMemory;
+	protected long maxMemory;
+	protected long freeMemory;
+	protected long totalMemory;
 	
 	public long getAllocatedMemory() {
 		return totalMemory;

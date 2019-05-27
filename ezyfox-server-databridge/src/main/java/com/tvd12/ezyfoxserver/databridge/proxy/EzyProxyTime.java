@@ -11,7 +11,7 @@ import lombok.Getter;
 public class EzyProxyTime {
 
 	@Getter
-	private final long millis;
+	protected final long millis;
 	
 	public String getTimestamp() {
 		return EzyDates.format(new Date(millis), "yyyy-MM-dd'T'HH:mm:ss.SSSZ");

@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzyProxySession {
 
-	private final EzySession real;
+	protected final EzySession real;
 	
 	public static EzyProxySession proxySession(EzySession real) {
 		return new EzyProxySession(real);

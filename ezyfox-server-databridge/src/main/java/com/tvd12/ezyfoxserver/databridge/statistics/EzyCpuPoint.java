@@ -10,7 +10,7 @@ import lombok.Setter;
 public class EzyCpuPoint implements Serializable {
 	private static final long serialVersionUID = 9034906186633586693L;
 
-	private double systemCpuLoad;
-	private double processCpuLoad;
+	protected double systemCpuLoad;
+	protected double processCpuLoad;
 	
 }

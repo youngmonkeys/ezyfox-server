@@ -13,8 +13,8 @@ import lombok.Getter;
 public class EzyNetworkPoint implements Serializable {
 	private static final long serialVersionUID = -6537078366231599664L;
 	
-	private long inputBytes;
-	private long outputBytes;
+	protected long inputBytes;
+	protected long outputBytes;
 	
 	public EzyNetworkPoint(EzyStatistics statistics) {
 		EzySocketStatistics socketStats = statistics.getSocketStats();

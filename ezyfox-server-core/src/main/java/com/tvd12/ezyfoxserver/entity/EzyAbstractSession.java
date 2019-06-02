@@ -159,7 +159,9 @@ public abstract class EzyAbstractSession
                 }
             }
             if(!success) {
-                droppedPackets.addDroppedPacket(packet);
+                EzyDroppedPackets droppedPacketsNow = droppedPackets;
+                if(droppedPacketsNow != null)
+                    droppedPackets.addDroppedPacket(packet);
                 packet.release();
             }
         }

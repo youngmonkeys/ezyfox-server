@@ -26,7 +26,7 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
 		HttpConfiguration httpsConfig = new HttpConfiguration(httpConfig);
 		httpsConfig.addCustomizer(new SecureRequestCustomizer());
 		
-		SslContextFactory sslContextFactory = new SslContextFactory();
+		SslContextFactory sslContextFactory = new SslContextFactory.Server();
 		sslContextFactory.setSslContext(sslContext);
 		
 		ServerConnector wssConnector = new ServerConnector(server,

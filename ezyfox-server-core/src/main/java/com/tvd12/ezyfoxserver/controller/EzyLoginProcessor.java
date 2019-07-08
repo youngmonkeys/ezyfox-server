@@ -170,7 +170,7 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         }
         catch(Exception e) {
             String zoneName = zoneContext.getZone().getSetting().getName();
-            logger.error("broadcast user added to zone: " +  zoneName + " to plugins error", e);
+            logger.error("broadcast user added to zone: {} to plugins error", zoneName, e);
         }
     }
     

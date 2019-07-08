@@ -100,7 +100,7 @@ public class EzyNioSocketAcceptor
 			acceptConnection0(clientChannel);
 		}
 		catch(Exception e) {
-			logger.error("can't acception connection: " + clientChannel, e);
+			logger.error("can't acception connection: {}", clientChannel, e);
 		}
 	}
 	

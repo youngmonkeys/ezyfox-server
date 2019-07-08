@@ -38,7 +38,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            logger.error("send data: " + pack.getData() + ", to client: " + recipient.getName() + " error", e);
+            logger.error("send data: {}, to client: {} error", pack.getData(), recipient.getName(), e);
         }
         finally {
             pack.release();
@@ -60,7 +60,7 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             success = true;
         } 
         catch(Exception e) {
-            logger.error("send data: " + pack.getData() + ", to client: " + getRecipientsNames(recipients) + " error", e);
+            logger.error("send data: {}, to client: {} error", pack.getData(), getRecipientsNames(recipients), e);
         }
         finally {
             pack.release();

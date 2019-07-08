@@ -10,20 +10,22 @@ import java.nio.ByteBuffer;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 import lombok.Getter;
 
 @Getter
-public class EzyWsChannel extends EzyLoggable implements EzyChannel {
+public class EzyWsChannel implements EzyChannel {
 
 	private final Session session;
 	private volatile boolean opened;
 	private final SocketAddress serverAddress;
 	private final SocketAddress clientAddress;
+	private final static Logger LOGGER = LoggerFactory.getLogger(EzyWsChannel.class);
 	
 	public EzyWsChannel(Session session) {
 		this.opened = true;
@@ -40,7 +42,7 @@ public class EzyWsChannel extends EzyLoggable implements EzyChannel {
 			return writeString((String)data);
 		}
 		catch(WebSocketException e) {
-			logger.debug("write data: " + data + ", to: " + clientAddress + " error", e);
+			LOGGER.debug("write data: {}, to: {} error", data, clientAddress, e);
 			return 0;
 		}
 	}

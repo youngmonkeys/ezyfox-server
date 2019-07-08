@@ -19,7 +19,7 @@ public class EzyRunWorkerImpl extends EzyAbstractCommand implements EzyRunWorker
 		try {
 			executor.submit(worker).get(30, TimeUnit.SECONDS);
 		} catch (Exception e) {
-			logger.error("error when run worker " + worker, e);
+			logger.error("error when run worker: {}", worker, e);
 		}
 	}
 

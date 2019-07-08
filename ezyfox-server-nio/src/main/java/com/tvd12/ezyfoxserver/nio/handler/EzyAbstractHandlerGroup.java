@@ -187,7 +187,7 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(packet.getSize());
-			logger.warn("can't send bytes: " + bytes + " to session: " + session + ", error: " + e.getMessage());
+			logger.warn("can't send bytes: {} to session: {}, error: {}", bytes, session, e.getMessage());
 		}
 	}
 	

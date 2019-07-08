@@ -127,10 +127,10 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             }
             else {
                 if(active) {
-                    logger.warn("fatal error, please add an issue to ezyfox-server github with log: " + toString() + "\nand stacktrace: ", e);
+                    logger.warn("fatal error, please add an issue to ezyfox-server github with log: {}\nand stacktrace: ", toString(), e);
                 }
                 else {
-                    logger.warn("can't handle command: " + cmd + " and data: " + data + ", this session maybe destroyed (session = " + session + "), error message: " + e.getMessage());
+                    logger.warn("can't handle command: {} and data: {}, this session maybe destroyed (session: {}), error message: {}", cmd, data, session, e.getMessage());
                 }
             }
             
@@ -141,7 +141,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     public void exceptionCaught(Throwable cause) throws Exception {
-        logger.debug("exception caught at session: " + session, cause);
+        logger.debug("exception caught at session: {}", session, cause);
         EzyExceptionHandler exceptionHandler = exceptionHandlers.get(cause.getClass());
         if(exceptionHandler != null) 
             exceptionHandler.handleException(Thread.currentThread(), cause);
@@ -177,7 +177,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             zoneContext.broadcastApps(EzyEventType.SESSION_REMOVED, event, user, true);
         }
         catch(Exception e) {
-            logger.error("notify session: " + session + " removed to apps error", e);
+            logger.error("notify session: {} removed to apps error", session, e);
         }
     }
     
@@ -186,7 +186,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             zoneContext.broadcastPlugins(EzyEventType.SESSION_REMOVED, event, true);
         }
         catch(Exception e) {
-            logger.error("notify session: " + session + " removed to apps error", e);
+            logger.error("notify session: {} removed to apps error", session, e);
         }
     }
     
@@ -195,7 +195,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             closeSession.close(session, reason);
         }
         catch(Exception ex) {
-            logger.error("close session: " + session + " with reason: " + reason + " error", ex);
+            logger.error("close session: {} with reason: {} error", session, reason, ex);
         }
     }
     

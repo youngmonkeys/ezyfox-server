@@ -29,10 +29,10 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
 			processStreamQueue(stream);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("socket-stream-handler thread interrupted: " + Thread.currentThread());
+			logger.warn("socket-stream-handler thread interrupted: {}", Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			logger.warn("problems in socket-stream-handler main loop, thread: " + Thread.currentThread(), throwable);
+			logger.warn("problems in socket-stream-handler, thread: {}", Thread.currentThread(), throwable);
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
 	    if(handlerGroup != null)
 	        handlerGroup.fireStreamBytesReceived(bytes);
 	    else 
-	        logger.warn("has no handler group with session: " + session + ", drop " + bytes.length + " bytes");
+	        logger.warn("has no handler group with session: {}, drop: {} bytes", session, bytes.length);
 	}
 	
 	protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {

@@ -39,10 +39,10 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 			processUserRemoval(removal);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("user-removal-handler thread interrupted: " + Thread.currentThread());
+			logger.warn("user-removal-handler thread interrupted: {}", Thread.currentThread());
 		}
 		catch(Throwable throwable) {
-			logger.warn("problems in user-removal-handler main loop, thread: " + Thread.currentThread(), throwable);
+			logger.warn("problems in user-removal-handler, thread: {}", Thread.currentThread(), throwable);
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
         }
         catch(Exception e) {
             String zoneName = context.getZone().getSetting().getName();
-            logger.error("zone: " + zoneName + ", notify to plugins user: " + event.getUser() + " removed error", e);
+            logger.error("zone: {}, notify to plugins user: {} removed error", zoneName, event.getUser(), e);
         }
     }
     
@@ -92,7 +92,7 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
         }
         catch(Exception e) {
             String zoneName = zoneContext.getZone().getSetting().getName();
-            logger.error("zone: " + zoneName + ", notify to apps user: " + event.getUser() + " removed error", e);
+            logger.error("zone: {}, notify to apps user: {} removed error", zoneName, event.getUser(), e);
         }
     }
     

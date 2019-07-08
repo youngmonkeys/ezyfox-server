@@ -68,7 +68,7 @@ public abstract class EzyUserRequestPrototypeController<
 				EzyData errorData = newErrorData(e);
 				responseError(context, event, errorData);
 			}
-			logger.debug("request cmd: " + cmd + " by session: " + event.getSession().getName() + " with data: " + data + " error", e);
+			logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
 		}
 		catch(Exception e) {
 			throw e;

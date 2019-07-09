@@ -2,10 +2,7 @@ package com.tvd12.ezyfoxserver.socket;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-
-import com.tvd12.ezyfox.concurrent.EzyExecutors;
+import com.tvd12.ezyfox.concurrent.EzyThreadList;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
@@ -14,12 +11,8 @@ public abstract class EzySocketEventLoop
 		extends EzyLoggable
 		implements EzyStartable, EzyDestroyable {
 
-	protected ExecutorService threadPool;
-	
 	protected volatile boolean active;
-	
-	public EzySocketEventLoop() {
-	}
+	protected EzyThreadList threadPool;
 	
 	protected abstract String threadName();
 	protected abstract int threadPoolSize();
@@ -36,21 +29,18 @@ public abstract class EzySocketEventLoop
 	}
 	
 	private void startLoopService() {
-		Runnable task = newServiceTask();
-		int threadPoolSize = threadPoolSize();
-		for(int i = 0 ; i < threadPoolSize ; i++)
-			threadPool.execute(task);
+	    threadPool.execute();
 	}
 	
 	private Runnable newServiceTask() {
-		return this::eventLoop;
+		return () -> eventLoop();
 	}
 	
 	protected abstract void eventLoop();
 	
 	protected void initThreadPool() {
-	    this.threadPool = EzyExecutors.newFixedThreadPool(threadPoolSize(), threadName());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> threadPool.shutdown()));
+	    Runnable task = newServiceTask();
+        threadPool = new EzyThreadList(threadPoolSize(), task, threadName());
 	}
 	
 	@Override
@@ -60,10 +50,7 @@ public abstract class EzySocketEventLoop
 	
 	protected void destroy0() throws Exception {
 		setActive(false);
-		if(threadPool != null) {
-		    List<Runnable> remainTasks = threadPool.shutdownNow();
-		    logger.debug("{} has stopped. Never commenced execution task: {}", getClass().getSimpleName(), remainTasks.size());
-		}
+		logger.error("{} stopped", getClass().getSimpleName());
 	}
 	
 }

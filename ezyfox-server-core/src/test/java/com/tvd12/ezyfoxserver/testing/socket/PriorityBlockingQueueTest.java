@@ -39,7 +39,7 @@ public class PriorityBlockingQueueTest extends BaseTest {
         assert queue.take() == loginRequest3;
         
         long start = System.currentTimeMillis();
-        for(int i = 0 ; i < 10000 ; i++) {
+        for(int i = 0 ; i < 10000 ; ++i) {
             queue.offer(loginRequest3);
         }
         long offset = System.currentTimeMillis() - start;

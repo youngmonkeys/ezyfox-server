@@ -23,7 +23,7 @@ public class EzyNonBlockingPacketQueueTest extends BaseTest {
     @Test
     public void test2() {
         EzyNonBlockingPacketQueue queue = new EzyNonBlockingPacketQueue();
-        for(int i = 0 ; i < 256 ; i++) {
+        for(int i = 0 ; i < 256 ; ++i) {
             queue.add(new Packet());
         }
         assert !queue.add(new Packet());

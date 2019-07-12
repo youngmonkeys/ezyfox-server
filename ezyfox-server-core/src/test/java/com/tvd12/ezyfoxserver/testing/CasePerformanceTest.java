@@ -22,7 +22,7 @@ public class CasePerformanceTest extends BaseTest {
         EzySession session = new EzyAbstractSession() {
         };
         long start = System.currentTimeMillis();
-        for(int i = 0 ; i < 1000000 ; i++) {
+        for(int i = 0 ; i < 1000000 ; ++i) {
             if(a instanceof EzyUserAware) {
                 ((EzyUserAware)a).setUser(user);
             }

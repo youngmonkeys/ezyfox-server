@@ -31,11 +31,11 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         
         assert queue.isEmpty();
         
-        for(int i = 0 ; i < 10 ; i ++) {
+        for(int i = 0 ; i < 10 ; ++i) {
             queue.add(sessions.get(0));
         }
         
-        for(int i = 0 ; i < 10 ; i ++) {
+        for(int i = 0 ; i < 10 ; ++i) {
             queue.add(sessions.get(i));
         }
         

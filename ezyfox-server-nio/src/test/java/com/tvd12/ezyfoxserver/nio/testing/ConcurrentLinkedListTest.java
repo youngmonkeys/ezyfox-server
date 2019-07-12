@@ -15,7 +15,7 @@ public class ConcurrentLinkedListTest {
 		write.start();
 		
 		Thread[] reads = new Thread[200];
-		for(int i = 0 ; i < reads.length ; i++) {
+		for(int i = 0 ; i < reads.length ; ++i) {
 			final int index = i;
 			reads[index] = new Thread(() -> {
 				while(true) {
@@ -23,7 +23,7 @@ public class ConcurrentLinkedListTest {
 				}
 			});
 		}
-		for(int i = 0 ; i < reads.length ; i++) {
+		for(int i = 0 ; i < reads.length ; ++i) {
 			reads[i].start();
 		}
 	}

@@ -15,7 +15,7 @@ public class ByteBufferAndByteArrayTest extends BaseTest {
 	@Test
 	public void test() {
 		byte[] bc = new byte[200];
-		for(int i = 0 ; i < 200 ; i++) {
+		for(int i = 0 ; i < 200 ; ++i) {
 			bc[i] = 1;
 		}
 		long time1 = Performance.create()

@@ -18,7 +18,7 @@ public class EzySimpleSessionManagerTest {
         Thread.sleep(30 * 1000);
         List<MySession> sessions = new ArrayList<>();
         System.out.println("add sessions");
-        for(int i = 0 ; i < 500 ; i++) {
+        for(int i = 0 ; i < 500 ; ++i) {
             sessions.add(manager.provideSession());
         }
         Thread.sleep(30 * 1000);

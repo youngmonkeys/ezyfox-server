@@ -3,9 +3,8 @@ package com.tvd12.ezyfoxserver.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import com.tvd12.ezyfox.stream.EzyClassPathInputStreamLoader;
+import com.tvd12.ezyfox.stream.EzyInputStreams;
 
 public class EzyBannerPrinter {
 
@@ -19,7 +18,7 @@ public class EzyBannerPrinter {
     
     protected byte[] getBannerBytes(InputStream stream) {
         try {
-            return IOUtils.toByteArray(stream);
+            return EzyInputStreams.toByteArray(stream);
         } catch (IOException e) {
             return new byte[0];
         }

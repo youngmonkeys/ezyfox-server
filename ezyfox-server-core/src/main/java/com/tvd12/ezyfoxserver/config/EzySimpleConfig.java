@@ -17,8 +17,15 @@ public class EzySimpleConfig implements EzyConfig {
 	@Property("ezyfox.home")
 	private String ezyfoxHome;
 	
+	@Property("settings.print")
+    private boolean printSettings;
+	
 	@Property("logger.config.file")
 	private String loggerConfigFile;
+	
+	public EzySimpleConfig() {
+	    this.printSettings = true;
+	}
 	
 	public String getEzyfoxHome() {
 	    if(ezyfoxHome == null)

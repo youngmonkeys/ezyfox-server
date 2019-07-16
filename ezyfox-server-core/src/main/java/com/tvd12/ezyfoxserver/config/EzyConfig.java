@@ -6,6 +6,8 @@ public interface EzyConfig extends EzyToMap {
 
     String getEzyfoxHome();
     
+    boolean isPrintSettings();
+    
     String getLoggerConfigFile();
     
 }

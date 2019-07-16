@@ -49,7 +49,9 @@ public abstract class EzyUserRequestSingletonController<
 		if(params != null)
 			unmarshaller.unwrap(params, handlerData);
 		try {
+			preHandle(context, event, data);
 			handler.handle(context, event, handlerData);
+			postHandle(context, event, data, null);
 		}
 		catch(EzyBadRequestException e) {
 			if(e.isSendToClient()) {
@@ -57,11 +59,16 @@ public abstract class EzyUserRequestSingletonController<
 				responseError(context, event, errorData);
 			}
 			logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
+			postHandle(context, event, handlerData, e);
 		}
 		catch(Exception e) {
+			postHandle(context, event, handlerData, e);
 			throw e;
 		}
 	}
+	
+	protected void preHandle(C context, E event, Object data) {}
+	protected void postHandle(C context, E event, Object data, Exception e) {}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
 	

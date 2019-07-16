@@ -16,7 +16,9 @@ public class EzyUserRequestAppPrototypeController
 	}
 	
 	@Override
-	protected void preHandle(EzyAppContext context, EzyHandler handler) {
+	protected void preHandle(
+			EzyAppContext context, 
+			EzyUserRequestAppEvent event, EzyHandler handler) {
 		if(handler instanceof EzyAppContextAware)
 			((EzyAppContextAware)handler).setAppContext(context);
 	}

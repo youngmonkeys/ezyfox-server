@@ -59,9 +59,10 @@ public abstract class EzyUserRequestPrototypeController<
 			if(params != null)
 				unmarshaller.unwrap(params, handler);
 		}
-		preHandle(context, handler);
 		try {
+			preHandle(context, event, handler);
 			handler.handle();
+			postHandle(context, event, handler, null);
 		}
 		catch(EzyBadRequestException e) {
 			if(e.isSendToClient()) {
@@ -69,16 +70,18 @@ public abstract class EzyUserRequestPrototypeController<
 				responseError(context, event, errorData);
 			}
 			logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
+			postHandle(context, event, handler, e);
 		}
 		catch(Exception e) {
+			postHandle(context, event, handler, e);
 			throw e;
 		}
 	}
 	
-	protected abstract void responseError(C context, E event, EzyData errorData);
+	protected void preHandle(C context, E event, EzyHandler handler) {}
+	protected void postHandle(C context, E event, EzyHandler handler, Exception e) {}
 	
-	protected void preHandle(C context, EzyHandler handler) {
-	}
+	protected abstract void responseError(C context, E event, EzyData errorData);
 	
 	@SuppressWarnings("rawtypes")
 	public abstract static class Builder<B extends Builder>

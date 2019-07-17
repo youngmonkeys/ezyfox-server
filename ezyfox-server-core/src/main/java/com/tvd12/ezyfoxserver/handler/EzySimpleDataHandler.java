@@ -148,6 +148,19 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
 
     public void channelInactive(EzyConstant reason) {
+        lock.lock();
+        try {
+            if(destroyed)
+                return;
+            destroyed = true;
+        }
+        finally {
+            lock.unlock();
+        }
+        channelInactive0(reason);
+    }
+    
+    protected void channelInactive0(EzyConstant reason) {
         removeSession();
         notifySessionRemoved(reason);
         closeSession(reason);
@@ -156,7 +169,8 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     }
     
     protected void removeSession() {
-        sessionManager.clearSession(session);
+        if(sessionManager != null)
+            sessionManager.clearSession(session);
     }
     
     protected void notifySessionRemoved(EzyConstant reason) {

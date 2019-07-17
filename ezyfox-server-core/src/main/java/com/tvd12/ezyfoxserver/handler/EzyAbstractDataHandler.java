@@ -51,7 +51,6 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyServerControllers controllers;
     protected EzyZoneUserManager userManager;
     protected EzySessionManager sessionManager;
-    protected Lock lock = new ReentrantLock();
     
     protected EzySettings settings;
     protected Set<EzyConstant> unloggableCommands;
@@ -61,8 +60,10 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyRequestFrame requestFrameInSecond;
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
     //=====  =====
-    
+
     protected volatile boolean active = true;
+    protected volatile boolean destroyed = false;
+    protected final Lock lock = new ReentrantLock();
     protected Map<Class<?>, EzyExceptionHandler> exceptionHandlers = newExceptionHandlers();
     
     public EzyAbstractDataHandler(EzyServerContext ctx, S session) {
@@ -124,6 +125,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     @Override
     public void destroy() {
         this.active = false;
+        this.destroyed = true;
         if(session != null)
             session.destroy();
         this.session = null;
@@ -136,7 +138,6 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.userManager = null;
         this.closeSession = null;
         this.sessionManager = null;
-        this.lock = null;
         this.settings = null;
         this.unloggableCommands = null;
         this.sessionManagementSetting = null;

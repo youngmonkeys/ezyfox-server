@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 
@@ -50,7 +49,7 @@ public abstract class EzyAbstractSetting
 	
 	@Override
 	public String getFolder() {
-	    return StringUtils.isEmpty(folder) ? name : folder;
+	    return EzyStrings.isNoContent(folder) ? name : folder;
 	}
 	
 	@Override

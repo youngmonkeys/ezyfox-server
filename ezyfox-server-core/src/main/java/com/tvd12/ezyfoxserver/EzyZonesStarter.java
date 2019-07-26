@@ -23,7 +23,8 @@ public class EzyZonesStarter extends EzyComponentsStater {
     protected void startAllZones() {
         Set<String> zoneNames = getZoneNames();
         logger.info("start zones: {}", zoneNames);
-        zoneNames.forEach(this::startZone);
+        for(String zoneName : zoneNames)
+            this.startZone(zoneName);
         
     }
     

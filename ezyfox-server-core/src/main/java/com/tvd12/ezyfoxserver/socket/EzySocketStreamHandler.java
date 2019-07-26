@@ -20,7 +20,7 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
 	
 	@Override
 	public void destroy() {
-	    processWithLogException(streamQueue::clear);
+	    processWithLogException(() -> streamQueue.clear());
 	}
 	
 	private void processStreamQueue0() {

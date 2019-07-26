@@ -27,7 +27,7 @@ public abstract class EzyHttpServerBootstrap extends EzyServerBootstrap {
 	public void destroy() {
 		super.destroy();
 		if(httpBootstrap != null)
-			processWithLogException(httpBootstrap::destroy);
+			processWithLogException(() -> httpBootstrap.destroy());
 	}
 	
 }

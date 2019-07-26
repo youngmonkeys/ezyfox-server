@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.context;
 
+import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
@@ -10,15 +11,21 @@ public final class EzyZoneContexts {
     }
     
     public static EzyZoneSetting getZoneSetting(EzyZoneContext context) {
-        return context.getZone().getSetting();
+        EzyZone zone = context.getZone();
+        EzyZoneSetting setting = zone.getSetting();
+        return setting;
     }
     
     public static EzyZoneUserManager getUserManager(EzyZoneContext context) {
-        return context.getZone().getUserManager();
+        EzyZone zone = context.getZone();
+        EzyZoneUserManager userManager = zone.getUserManager();
+        return userManager;
     }
     
     public static EzyUserManagementSetting getUserManagementSetting(EzyZoneContext context) {
-        return getZoneSetting(context).getUserManagement();
+        EzyZoneSetting zoneSetting = getZoneSetting(context);
+        EzyUserManagementSetting userManagement = zoneSetting.getUserManagement();
+        return userManagement;
     }
     
 }

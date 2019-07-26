@@ -20,7 +20,7 @@ public class EzyProxySession {
 	}
 	
 	public static Collection<EzyProxySession> newCollection(Collection<EzySession> reals) {
-		return EzyLists.newArrayList(reals, EzyProxySession::proxySession);
+		return EzyLists.newArrayList(reals, s -> EzyProxySession.proxySession(s));
 	}
 	
 	public long getId() {

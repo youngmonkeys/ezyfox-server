@@ -21,9 +21,9 @@ public class EzySocketWriter
 	}
 	
 	@Override
-	public void destroy() {
-	    processWithLogException(sessionTicketsQueue::clear);
-	}
+    public void destroy() {
+        processWithLogException(() -> sessionTicketsQueue.clear());
+    }
 	
 	private void processSessionTicketsQueue0() {
 		try {

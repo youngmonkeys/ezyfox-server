@@ -22,7 +22,8 @@ public class EzySimplePackage implements EzyPackage {
     protected EzyHashMapList<EzyConstant, EzySession> recipients = new EzyHashMapList<>();
     
     public void addRecipients(Collection<EzySession> recipients) {
-        recipients.forEach(this::addRecipient);
+        for(EzySession recipient : recipients)
+            this.addRecipient(recipient);
     }
     
     public void addRecipient(EzySession recipient) {

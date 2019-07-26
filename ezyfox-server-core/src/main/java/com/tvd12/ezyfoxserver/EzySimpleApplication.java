@@ -44,7 +44,7 @@ public class EzySimpleApplication
     public void destroy() {
         super.destroy();
         if(userManager != null)
-            processWithLogException(userManager::destroy);
+            processWithLogException(() -> userManager.destroy());
         this.setting = null;
         this.userManager = null;
         this.requestController = null;

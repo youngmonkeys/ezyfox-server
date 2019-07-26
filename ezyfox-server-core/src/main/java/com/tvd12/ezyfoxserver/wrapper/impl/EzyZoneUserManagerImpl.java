@@ -147,7 +147,7 @@ public class EzyZoneUserManagerImpl
 	protected void startIdleValidationService() {
 	    if(idleValidationService != null) {
 	        idleValidationService.scheduleAtFixedRate(
-	                this::validateIdleUsers, 
+	                () -> validateIdleUsers(), 
 	                idleValidationDelay, 
 	                idleValidationInterval, TimeUnit.MILLISECONDS);
 	    }
@@ -177,7 +177,7 @@ public class EzyZoneUserManagerImpl
 	    super.destroy();
 	    this.usersBySession.clear();
 	    if(idleValidationService != null)
-	        processWithLogException(idleValidationService::shutdown);
+	        processWithLogException(() -> idleValidationService.shutdown());
 	}
 	
 	@Override

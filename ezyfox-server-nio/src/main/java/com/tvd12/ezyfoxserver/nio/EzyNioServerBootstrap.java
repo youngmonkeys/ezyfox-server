@@ -221,19 +221,19 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	public void destroy() {
 		super.destroy();
 		if(socketServerBootstrap != null)
-			processWithLogException(socketServerBootstrap::destroy);
+			processWithLogException(() -> socketServerBootstrap.destroy());
 		if(websocketServerBootstrap != null)
-			processWithLogException(websocketServerBootstrap::destroy);
+			processWithLogException(() -> websocketServerBootstrap.destroy());
 		if(handlerGroupManager != null)
-			processWithLogException(handlerGroupManager::destroy);
+			processWithLogException(() -> handlerGroupManager.destroy());
 		if(systemRequestHandlingLoopHandler != null)
-			processWithLogException(systemRequestHandlingLoopHandler::destroy);
+			processWithLogException(() -> systemRequestHandlingLoopHandler.destroy());
 		if(extensionRequestHandlingLoopHandler != null)
-			processWithLogException(extensionRequestHandlingLoopHandler::destroy);
+			processWithLogException(() -> extensionRequestHandlingLoopHandler.destroy());
 		if(socketDisconnectionHandlingLoopHandler != null)
-			processWithLogException(socketDisconnectionHandlingLoopHandler::destroy);
+			processWithLogException(() -> socketDisconnectionHandlingLoopHandler.destroy());
 		if(socketUserRemovalHandlingLoopHandler != null)
-			processWithLogException(socketUserRemovalHandlingLoopHandler::destroy);
+			processWithLogException(() -> socketUserRemovalHandlingLoopHandler.destroy());
 	}
 	
 }

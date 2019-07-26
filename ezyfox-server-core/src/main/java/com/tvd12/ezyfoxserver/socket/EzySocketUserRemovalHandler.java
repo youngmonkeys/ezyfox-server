@@ -30,7 +30,7 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 	
 	@Override
 	public void destroy() {
-	    processWithLogException(userRemovalQueue::clear);
+	    processWithLogException(() -> userRemovalQueue.clear());
 	}
 	
 	private void processUserRemovalQueue() {

@@ -28,7 +28,7 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 	
 	@Override
 	public void destroy() {
-		processWithLogException(writingLoopHandler::destroy);
+		processWithLogException(() -> writingLoopHandler.destroy());
 	}
 	
 	protected final EzySessionManagementSetting getSessionSetting() {

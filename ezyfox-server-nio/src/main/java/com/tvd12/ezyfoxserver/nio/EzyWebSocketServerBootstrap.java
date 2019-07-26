@@ -34,8 +34,8 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 	
 	@Override
 	public void destroy() {
-		processWithLogException(writingLoopHandler::destroy);
-		processWithLogException(server::stop);
+		processWithLogException(() -> writingLoopHandler.destroy());
+		processWithLogException(() -> server.stop());
 	}
 	
 	private Server newSocketServer() {

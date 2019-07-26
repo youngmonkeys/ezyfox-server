@@ -33,9 +33,9 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
 	@Override
 	public void destroy() {
 		if(eventLoop != null)
-		    processWithLogException(eventLoop::destroy);
+		    processWithLogException(() -> eventLoop.destroy());
 		for(EzySocketEventHandler eventHandler : eventHandlers)
-		    processWithLogException(eventHandler::destroy);
+		    processWithLogException(() -> eventHandler.destroy());
 	}
 	
 }

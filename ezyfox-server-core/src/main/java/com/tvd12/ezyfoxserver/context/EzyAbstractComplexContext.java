@@ -81,11 +81,13 @@ public abstract class EzyAbstractComplexContext
     }
     
     private void destroyAppContexts() {
-        appContexts.forEach(this::destroyAppContext);
+        for(EzyAppContext ac : appContexts)
+            this.destroyAppContext(ac);
     }
     
     private void destroyPluginContexts() {
-        pluginContexts.forEach(this::destroyPluginContext);
+        for(EzyPluginContext pc : pluginContexts)
+            this.destroyPluginContext(pc);
     }
     
     private void destroyAppContext(EzyAppContext appContext) {

@@ -21,8 +21,8 @@ public class EzyNioSocketChannel implements EzyChannel {
 	
 	public EzyNioSocketChannel(SocketChannel channel) {
 		this.channel = channel;
-		this.serverAddress = returnWithException(channel::getLocalAddress);
-		this.clientAddress = returnWithException(channel::getRemoteAddress);
+		this.serverAddress = returnWithException(() -> channel.getLocalAddress());
+		this.clientAddress = returnWithException(() -> channel.getRemoteAddress());
 	}
 	
 	@Override
@@ -48,12 +48,12 @@ public class EzyNioSocketChannel implements EzyChannel {
 	
 	@Override
 	public void disconnect() {
-		processWithLogException(channel::finishConnect);
+		processWithLogException(() -> channel.finishConnect());
 	}
 	
 	@Override
 	public void close() {
-		processWithLogException(channel::close);
+		processWithLogException(() -> channel.close());
 	}
 	
 }

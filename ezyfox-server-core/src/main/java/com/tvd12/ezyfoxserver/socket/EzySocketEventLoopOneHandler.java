@@ -26,7 +26,7 @@ public abstract class EzySocketEventLoopOneHandler extends EzySocketEventLoopHan
 	public void destroy() {
 		super.destroy();
 		if(eventHandler != null)
-		    processWithLogException(eventHandler::destroy);
+		    processWithLogException(() -> eventHandler.destroy());
 	}
 	
 }

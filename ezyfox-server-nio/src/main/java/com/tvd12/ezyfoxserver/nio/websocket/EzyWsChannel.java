@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithException;
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
 
 import java.net.SocketAddress;
@@ -83,11 +81,21 @@ public class EzyWsChannel implements EzyChannel {
 	
 	@Override
 	public void disconnect() {
-		processWithLogException(session::disconnect);
+		try {
+			session.disconnect();
+		}
+		catch(Exception e) {
+			LOGGER.warn("disconnect session: {} error", session, e);
+		}
 	}
 	
 	@Override
 	public void close() {
-		processWithException(() -> session.close(CLOSE_BY_SERVER));
+		try {
+			session.close(CLOSE_BY_SERVER);
+		}
+		catch(Exception e) {
+			LOGGER.warn("close session: {} error", session, e);
+		}
 	}
 }

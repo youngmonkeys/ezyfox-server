@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.context;
 
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -14,32 +14,37 @@ public final class EzyServerContexts {
     }
     
     public static EzySettings getSettings(EzyServerContext context) {
-        return context.getServer().getSettings();
+        EzyServer server = context.getServer();
+        EzySettings settings = server.getSettings();
+        return settings;
     }
     
     public static boolean containsUser(EzyAppContext context, EzyUser user) {
-        return EzyAppContexts.containsUser(context, user);
+        boolean contains = EzyAppContexts.containsUser(context, user);
+        return contains;
     }
     
     public static boolean containsUser(EzyAppContext context, String username) {
-        return EzyAppContexts.containsUser(context, username);
+        boolean contains = EzyAppContexts.containsUser(context, username);
+        return contains;
     }
     
     public static EzyUserManager getUserManager(EzyAppContext context) {
-        return EzyAppContexts.getUserManager(context);
+        EzyUserManager userManager = EzyAppContexts.getUserManager(context);
+        return userManager;
     }
     
     public static EzyStatistics getStatistics(EzyServerContext context) {
-        return context.getServer().getStatistics();
+        EzyServer server = context.getServer();
+        EzyStatistics statistics = server.getStatistics();
+        return statistics;
     }
     
     @SuppressWarnings("unchecked")
     public static EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
-        return ctx.getServer().getSessionManager();
-    }
-    
-    public static EzyHttpSetting getHttpSetting(EzyServerContext context) {
-        return getSettings(context).getHttp();
+        EzyServer server = ctx.getServer();
+        EzySessionManager<EzySession> sessionManager = server.getSessionManager();
+        return sessionManager;
     }
     
 }

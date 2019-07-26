@@ -22,7 +22,8 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
     protected void startAllPlugins() {
         Set<String> pluginNames = getPluginNames();
         logger.info("start plugins: {}", pluginNames);
-        pluginNames.forEach(this::startPlugin);
+        for(String pluginName : pluginNames)
+            this.startPlugin(pluginName);
     }
     
     protected void startPlugin(String pluginName) {

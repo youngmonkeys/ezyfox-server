@@ -32,7 +32,7 @@ public abstract class EzyServerBootstrap
 	    setupServer();
 		startLocalBootstrap();
 		startHttpBootstrap();
-		startOtherBootstraps(this::notifyServerReady);
+		startOtherBootstraps(() -> this.notifyServerReady());
 	}
 	
 	protected void setupServer() {
@@ -45,7 +45,7 @@ public abstract class EzyServerBootstrap
 	
 	@Override
 	public void destroy() {
-		processWithLogException(localBootstrap::destroy);
+		processWithLogException(() -> localBootstrap.destroy());
 	}
 	
 	protected void startLocalBootstrap() throws Exception {

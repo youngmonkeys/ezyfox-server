@@ -21,7 +21,7 @@ public class EzySimpleNioHandlerGroup
 
 	public EzySimpleNioHandlerGroup(Builder builder) {
 		super(builder);
-		this.decodeBytesCallback = this::executeHandleReceivedMessage;
+		this.decodeBytesCallback = m -> this.executeHandleReceivedMessage(m);
 	}
 	
 	@Override

@@ -46,11 +46,11 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 	
 	@Override
 	public void destroy() {
-		processWithLogException(writingLoopHandler::destroy);
-		processWithLogException(readingLoopHandler::destroy);
-		processWithLogException(socketAcceptanceLoopHandler::destroy);
-		processWithLogException(serverSocket::close);
-		processWithLogException(serverSocketChannel::close);
+		processWithLogException(() -> writingLoopHandler.destroy());
+		processWithLogException(() -> readingLoopHandler.destroy());
+		processWithLogException(() -> socketAcceptanceLoopHandler.destroy());
+		processWithLogException(() -> serverSocket.close());
+		processWithLogException(() -> serverSocketChannel.close());
 	}
 	
 	private void openSelectors() throws Exception {

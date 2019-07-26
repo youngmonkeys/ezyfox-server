@@ -30,11 +30,11 @@ public class EzyNioSocketReader
 	@Setter
 	protected EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler;
 	
-	protected ByteBuffer buffer = ByteBuffer.allocateDirect(getMaxBufferSize());
+	protected final ByteBuffer buffer = ByteBuffer.allocateDirect(getMaxBufferSize());
 
 	@Override
 	public void destroy() {
-		processWithLogException(ownSelector::close);
+		processWithLogException(() -> ownSelector.close());
 	}
 	
 	@Override
@@ -128,4 +128,5 @@ public class EzyNioSocketReader
 		EzyHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup((SocketChannel) channel);
 		handlerGroup.enqueueDisconnection();
 	}
+	
 }

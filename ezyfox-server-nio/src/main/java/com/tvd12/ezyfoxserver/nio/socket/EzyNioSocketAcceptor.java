@@ -37,7 +37,7 @@ public class EzyNioSocketAcceptor
 	
 	@Override
 	public void destroy() {
-		processWithLogException(ownSelector::close);
+		processWithLogException(() -> ownSelector.close());
 	}
 
 	@Override

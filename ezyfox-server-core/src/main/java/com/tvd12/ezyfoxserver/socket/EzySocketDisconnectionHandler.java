@@ -21,7 +21,7 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
 	
 	@Override
 	public void destroy() {
-	    processWithLogException(disconnectionQueue::clear);
+	    processWithLogException(() -> disconnectionQueue.clear());
 	}
 	
 	private void processDisconnectionQueue() {

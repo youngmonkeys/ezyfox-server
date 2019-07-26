@@ -17,7 +17,7 @@ public class EzyProxyUser {
 	}
 	
 	public static Collection<EzyProxyUser> newCollection(Collection<EzyUser> reals) {
-		return EzyLists.newArrayList(reals, EzyProxyUser::proxyUser);
+		return EzyLists.newArrayList(reals, u -> EzyProxyUser.proxyUser(u));
 	}
 	
 	public long getId() {

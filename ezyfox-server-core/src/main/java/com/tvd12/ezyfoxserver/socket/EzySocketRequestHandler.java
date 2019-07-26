@@ -23,7 +23,7 @@ public abstract class EzySocketRequestHandler
 	
 	@Override
 	public void destroy() {
-	    processWithLogException(requestQueue::clear);
+	    processWithLogException(() -> requestQueue.clear());
 	}
 	
 	private void processRequestQueue0() {

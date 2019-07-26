@@ -27,7 +27,8 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     protected void startAllApps() {
         Set<String> appNames = getAppNames();
         logger.info("start apps: {}", appNames);
-        appNames.forEach(this::startApp);
+        for(String appName : appNames)
+            this.startApp(appName);
     }
     
     protected void startApp(String appName) {

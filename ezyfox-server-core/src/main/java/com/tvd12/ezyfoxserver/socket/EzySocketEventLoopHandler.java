@@ -36,7 +36,7 @@ public abstract class EzySocketEventLoopHandler
 	@Override
 	public void destroy() {
 		if(eventLoop != null)
-		    processWithLogException(eventLoop::destroy);
+		    processWithLogException(() -> eventLoop.destroy());
 	}
 	
 }

@@ -236,8 +236,8 @@ public abstract class EzyAbstractHandlerGroup
 	
 	@Override
 	public void destroy() {
-		processWithLogException(decoder::destroy);
-		processWithLogException(handler::destroy);
+		processWithLogException(() -> decoder.destroy());
+		processWithLogException(() -> handler.destroy());
 	}
 	
 	public static abstract class Builder implements EzyBuilder<EzyHandlerGroup> {

@@ -153,7 +153,8 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	}
 	
 	private void destroyZoneContexts() {
-        zoneContextsById.values().forEach(this::destroyZoneContext);
+	    for(EzyZoneContext zc : zoneContextsById.values())
+	        this.destroyZoneContext(zc);
     }
 	
 	private void destroyZoneContext(EzyZoneContext zoneContext) {

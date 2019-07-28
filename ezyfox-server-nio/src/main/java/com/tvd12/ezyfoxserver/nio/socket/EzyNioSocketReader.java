@@ -45,7 +45,7 @@ public class EzyNioSocketReader
 			Thread.sleep(5L);
 		}
 		catch(Exception e) {
-			logger.info("I/O error at socket-reader: {}", e.getMessage());
+			logger.info("I/O error at socket-reader: {}({})", e.getClass().getName(), e.getMessage());
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class EzyNioSocketReader
 		acceptableConnectionsHandler.handleAcceptableConnections();
 	}
 	
-	private synchronized void processReadyKeys0() throws Exception {
+	private void processReadyKeys0() throws Exception {
 		int readyKeyCount = ownSelector.selectNow();
 		if(readyKeyCount > 0) {
 			processReadyKeys();

@@ -27,7 +27,8 @@ public class EzyNioSocketChannel implements EzyChannel {
 	
 	@Override
 	public int write(Object data, boolean binary) throws Exception {
-		return channel.write((ByteBuffer)data);
+		int writtenBytes = channel.write((ByteBuffer)data);
+		return writtenBytes;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -43,7 +44,8 @@ public class EzyNioSocketChannel implements EzyChannel {
 	
 	@Override
 	public boolean isConnected() {
-		return channel.isConnected();
+		boolean connected = channel.isConnected();
+		return connected;
 	}
 	
 	@Override

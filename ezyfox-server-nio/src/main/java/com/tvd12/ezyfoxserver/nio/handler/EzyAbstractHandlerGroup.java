@@ -187,7 +187,7 @@ public abstract class EzyAbstractHandlerGroup
 			Object bytes = packet.getData();
 			networkStats.addWriteErrorPackets(1);
 			networkStats.addWriteErrorBytes(packet.getSize());
-			logger.warn("can't send bytes: {} to session: {}, error: {}", bytes, session, e.getMessage());
+			logger.warn("can't send bytes: {} to session: {}, error: {}({})", bytes, session, e.getClass().getName(), e.getMessage());
 		}
 	}
 	
@@ -214,13 +214,13 @@ public abstract class EzyAbstractHandlerGroup
 		statsThreadPool.execute(() -> addWrittenBytes(bytes));
 	}
 	
-	private synchronized void addReadBytes(int count) {
+	private void addReadBytes(int count) {
 		session.addReadBytes(count);
 		networkStats.addReadBytes(count);
 		networkStats.addReadPackets(1);
 	}
 	
-	private synchronized void addWrittenBytes(int count) {
+	private void addWrittenBytes(int count) {
 		session.addWrittenBytes(count);
 		networkStats.addWrittenBytes(count);
 		networkStats.addWrittenPackets(1);

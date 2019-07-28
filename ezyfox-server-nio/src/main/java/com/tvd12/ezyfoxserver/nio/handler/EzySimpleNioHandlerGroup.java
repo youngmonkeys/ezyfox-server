@@ -34,7 +34,7 @@ public class EzySimpleNioHandlerGroup
 		handleReceivedBytes(bytes);
 	}
 	
-	private synchronized void handleReceivedBytes(byte[] bytes) {
+	private void handleReceivedBytes(byte[] bytes) {
 		try {
 			decoder.decode(bytes, decodeBytesCallback);
 		}

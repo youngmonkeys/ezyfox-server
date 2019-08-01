@@ -98,8 +98,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	}
 	
 	protected void startWebSocketServerBootstrap() throws Exception {
-		EzyWebSocketSetting socketSetting = getWebSocketSetting();
-		if(!socketSetting.isActive()) return;
+		EzyWebSocketSetting wsSetting = getWebSocketSetting();
+		if(!wsSetting.isActive()) return;
 		logger.debug("starting websocket server bootstrap ....");
 		websocketServerBootstrap = newWebSocketServerBootstrap();
 		websocketServerBootstrap.start();

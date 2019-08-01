@@ -25,24 +25,38 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	
 	@Override
     public Object newEncoder(EzyConstant type) {
-        if(type == EzyConnectionType.SOCKET)
-            return socketCodecCreator.newEncoder();
-        if(websocketCodecCreator != null)
-            return websocketCodecCreator.newEncoder();
+        if(type == EzyConnectionType.SOCKET) {
+            if(socketCodecCreator != null)
+                return socketCodecCreator.newEncoder();
+        }
+        else {
+            if(websocketCodecCreator != null)
+                return websocketCodecCreator.newEncoder();
+        }
         return null;
     }
 	
 	@Override
 	public Object newDecoder(EzyConstant type) {
-		if(type == EzyConnectionType.SOCKET)
-		    return socketCodecCreator.newDecoder(socketSettings.getMaxRequestSize());
-		if(websocketCodecCreator != null)
-		    return websocketCodecCreator.newDecoder(websocketSettings.getMaxFrameSize());
+		if(type == EzyConnectionType.SOCKET) {
+		    if(socketCodecCreator != null) {
+                int maxRequestSize = socketSettings.getMaxRequestSize();
+                return socketCodecCreator.newDecoder(maxRequestSize);
+            }
+		}
+		else {
+		    if(websocketCodecCreator != null) {
+                int maxFrameSize = websocketSettings.getMaxFrameSize();
+                return websocketCodecCreator.newDecoder(maxFrameSize);
+            }
+		}
 		return null;
 	}
 	
 	private EzyCodecCreator newSocketCodecCreator() {
-		return EzyClasses.newInstance(socketSettings.getCodecCreator());
+	    if(socketSettings.isActive())
+	        return EzyClasses.newInstance(socketSettings.getCodecCreator());
+	    return null;
 	}
 	
 	private EzyCodecCreator newWebsocketCodecCreator() {

@@ -12,9 +12,15 @@ public class EzyProxyResponseApi implements EzyResponseApi {
 	public EzyProxyResponseApi(EzyCodecFactory codecFactory) {
 		Object socketEncoder = codecFactory.newEncoder(EzyConnectionType.SOCKET);
 		Object wsEncoder = codecFactory.newEncoder(EzyConnectionType.WEBSOCKET);
-		this.socketResponseApi = new EzySocketResponseApi(socketEncoder);
+		this.socketResponseApi = newSocketResponseApi(socketEncoder);
 		this.websocketResponseApi = newWebsocketResponseApi(wsEncoder);
 	}
+	
+	private EzyResponseApi newSocketResponseApi(Object socketEncoder) {
+        return socketEncoder != null 
+                ? new EzySocketResponseApi(socketEncoder) 
+                : EzyEmptyResponseApi.getInstance();
+    }
 	
 	private EzyResponseApi newWebsocketResponseApi(Object wsEncoder) {
 	    return wsEncoder != null 

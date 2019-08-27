@@ -12,13 +12,9 @@ public class EzyPingController
 
     @Override
     public void handle(EzyServerContext ctx, EzyPingRequest request) {
-        EzyResponse response = newPongResponse();
+        EzyResponse response = EzyPongResponse.getInstance();
         EzySession session = request.getSession();
         ctx.send(response, session);
-    }
-
-    protected EzyResponse newPongResponse() {
-        return new EzyPongResponse();
     }
     
 }

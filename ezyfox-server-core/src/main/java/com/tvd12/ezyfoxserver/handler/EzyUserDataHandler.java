@@ -12,19 +12,20 @@ import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 public abstract class EzyUserDataHandler<S extends EzySession> 
         extends EzySessionDataHandler<S> {
 
+    protected final EzyRequestFactory requestFactory;
+    
     public EzyUserDataHandler(EzyServerContext ctx, S session) {
         super(ctx, session);
+        this.requestFactory = newRequestFactory();
+    }
+    
+    protected EzyRequestFactory newRequestFactory() {
+        return new EzySimpleRequestFactory();
     }
 
-    private EzyRequestFactory requestFactory = newRequestFactory();
-    
     protected void checkToUnmapUser(EzyConstant reason) {
         if(user != null)
             userManager.unmapSessionUser(session, reason);
-    }
-    
-    private EzyRequestFactory newRequestFactory() {
-        return new EzySimpleRequestFactory();
     }
     
     @SuppressWarnings({ "rawtypes" })

@@ -25,6 +25,20 @@ public abstract class EzyAbstractArrayResponse
 	}
 	
 	@Override
+	public EzyArrayResponse params(Object... values) {
+		for(Object value : values)
+			additionalParams.add(value);
+		return this;
+	}
+	
+	@Override
+	public EzyArrayResponse params(Iterable<?> values) {
+		for(Object value : values)
+			additionalParams.add(value);
+		return this;
+	}
+	
+	@Override
 	protected EzyData getResponseData() {
 		EzyArray array = data != null 
 				? marshaller.marshal(data) 

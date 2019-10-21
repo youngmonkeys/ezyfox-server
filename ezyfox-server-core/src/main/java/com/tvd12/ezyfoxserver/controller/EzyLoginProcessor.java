@@ -224,7 +224,6 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         return answer;
     }
     
-    @SuppressWarnings("unchecked")
     protected EzyArrayBuilder newJoinedAppInfo(EzyAppContext appCtx) {
         EzyAppSetting app = appCtx.getApp().getSetting();
         EzyArrayBuilder builder = newArrayBuilder()

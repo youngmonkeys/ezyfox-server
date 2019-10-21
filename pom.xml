@@ -5,10 +5,9 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 	</parent>
 	<artifactId>ezyfox-server</artifactId>
-	<version>0.0.2</version>
 	<packaging>pom</packaging>
 
 	<name>ezyfox-server</name>

@@ -58,8 +58,8 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 	private void processUserRemoval0(EzySocketUserRemoval removal) {
 	    EzyUser user = removal.getUser();
 	    try {
-    	        EzyConstant reason = removal.getReason();
-    	        EzyZoneContext zoneContext = removal.getZoneContext();
+	        EzyConstant reason = removal.getReason();
+	        EzyZoneContext zoneContext = removal.getZoneContext();
             Set<EzyAppContext> appContexts = removeUserFromApps(zoneContext, user); 
             EzyUserEvent event = newUserRemovedEvent(user, reason);
             notifyUserRemovedToApps(zoneContext, appContexts, event);

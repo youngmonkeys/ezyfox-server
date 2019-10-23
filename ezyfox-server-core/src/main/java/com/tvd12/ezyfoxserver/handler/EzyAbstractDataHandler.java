@@ -16,7 +16,6 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
 import com.tvd12.ezyfoxserver.constant.EzyIError;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
@@ -82,14 +81,6 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.requestFrameInSecond = new EzyRequestFrameSecond(maxRequestPerSecond.getValue());
         
         ((EzyAbstractSession)this.session).setDelegate(this);
-    }
-    
-    protected EzyAppContext getAppContext(int appId) {
-        return context.getAppContext(appId);
-    }
-    
-    protected void setActive(boolean value) {
-        this.active = value;
     }
     
     protected EzyZoneUserManager getUserManager(int zoneId) {

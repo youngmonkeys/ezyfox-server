@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 
@@ -13,10 +12,5 @@ public class MyTestDataHandler extends EzySimpleDataHandler<MyTestSession> {
     public void provideSession() {
         MyTestSession session1 = session != null ? session : new MyTestSession();
         session1.setToken("abc");
-    }
-    
-    @Override
-    public EzyAppContext getAppContext(int appId) {
-        return super.getAppContext(appId);
     }
 }

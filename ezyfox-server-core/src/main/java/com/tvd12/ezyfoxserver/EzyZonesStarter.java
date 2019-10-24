@@ -91,12 +91,6 @@ public class EzyZonesStarter extends EzyComponentsStater {
     }
     
     public static class Builder extends EzyComponentsStater.Builder<EzyZonesStarter, Builder> {
-        protected Map<String, EzyAppClassLoader> appClassLoaders;
-        
-        public Builder appClassLoaders(Map<String, EzyAppClassLoader> appClassLoaders) {
-            this.appClassLoaders = appClassLoaders;
-            return this;
-        }
         
         @Override
         public EzyZonesStarter build() {

@@ -183,7 +183,7 @@ public class EzySimpleZoneContext
     
     @Override
     public int hashCode() {
-        return new EzyHashCodes().append(zone).hashCode();
+        return new EzyHashCodes().append(zone).toHashCode();
     }
 	
 }

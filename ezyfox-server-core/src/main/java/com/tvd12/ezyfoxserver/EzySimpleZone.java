@@ -33,7 +33,7 @@ public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyab
     
     @Override
     public int hashCode() {
-        return new EzyHashCodes().append(setting).hashCode();
+        return new EzyHashCodes().append(setting).toHashCode();
     }
 
 }

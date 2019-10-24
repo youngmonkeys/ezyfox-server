@@ -37,7 +37,7 @@ public class EzySimpleApplication
     public int hashCode() {
         return new EzyHashCodes()
                 .append(setting)
-                .hashCode();
+                .toHashCode();
     }
     
     @Override

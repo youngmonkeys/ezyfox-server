@@ -89,7 +89,7 @@ public class EzySimpleAppContext
     
     @Override
     public int hashCode() {
-        return new EzyHashCodes().append(app).hashCode();
+        return new EzyHashCodes().append(app).toHashCode();
     }
 	
 }

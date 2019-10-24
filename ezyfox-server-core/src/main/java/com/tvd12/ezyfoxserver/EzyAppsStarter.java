@@ -79,8 +79,9 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     }
     
     protected EzyAppClassLoader getClassLoader(String appName, String appFolder) {
-        if(appClassLoaders.containsKey(appFolder)) 
-            return appClassLoaders.get(appFolder);
+        EzyAppClassLoader classLoader = appClassLoaders.get(appFolder);
+        if(classLoader != null) 
+            return classLoader;
         throw new IllegalArgumentException(
                 "folder: " + appFolder + " for app: " + appName + " doesn't exist");
     }

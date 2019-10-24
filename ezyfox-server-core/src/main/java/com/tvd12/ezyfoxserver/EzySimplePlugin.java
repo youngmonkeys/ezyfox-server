@@ -40,7 +40,7 @@ public class EzySimplePlugin
     public int hashCode() {
         return new EzyHashCodes()
                 .append(setting)
-                .hashCode();
+                .toHashCode();
     }
     
 }

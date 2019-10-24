@@ -90,7 +90,7 @@ public class EzySimplePluginContext
     
     @Override
     public int hashCode() {
-        return new EzyHashCodes().append(plugin).hashCode();
+        return new EzyHashCodes().append(plugin).toHashCode();
     }
 	
 }

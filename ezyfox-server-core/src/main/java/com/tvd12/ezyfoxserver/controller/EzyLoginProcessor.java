@@ -84,6 +84,7 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         }
         finally {
             lock.unlock();
+            userManager.removeLock(username);
         }
         fireUserAddedEvent(zoneContext, user, session, event.getData(), alreadyLoggedIn);
         EzyResponse response = newLoginReponse(zoneContext, user, event.getOutput());

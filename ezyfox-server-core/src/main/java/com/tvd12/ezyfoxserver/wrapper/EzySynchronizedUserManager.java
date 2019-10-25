@@ -32,37 +32,37 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
     
     @Override
     public EzyUser getUser(long userId) {
-    		synchronized(synchronizedLock) {
-    			return getUser(userId);
-    		}
+        synchronized (synchronizedLock) {
+            return super.getUser(userId);
+        }
     }
 
     @Override
     public EzyUser getUser(String username) {
-    		synchronized(synchronizedLock) {
-    			return super.getUser(username);
-    		}
+        synchronized (synchronizedLock) {
+            return super.getUser(username);
+        }
     }
-    
+
     @Override
     public List<EzyUser> getUserList() {
-    		synchronized (synchronizedLock) {
-    			return super.getUserList();	
-		}
+        synchronized (synchronizedLock) {
+            return super.getUserList();
+        }
     }
 
     @Override
     public boolean containsUser(long userId) {
-    		synchronized (synchronizedLock) {
-	        return super.containsUser(userId);
-    		}
+        synchronized (synchronizedLock) {
+            return super.containsUser(userId);
+        }
     }
 
     @Override
     public boolean containsUser(String username) {
-    		synchronized (synchronizedLock) {
-    			return super.containsUser(username);
-    		}
+        synchronized (synchronizedLock) {
+            return super.containsUser(username);
+        }
     }
 
     @Override
@@ -76,37 +76,37 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
     
     @Override
     public int getUserCount() {
-	    	synchronized (synchronizedLock) {
-	        return super.getUserCount();
-	    	}
+        synchronized (synchronizedLock) {
+            return super.getUserCount();
+        }
     }
-    
+
     @Override
     public boolean available() {
-	    	synchronized (synchronizedLock) {
-	    		return super.available();
-	    	}
+        synchronized (synchronizedLock) {
+            return super.available();
+        }
     }
-    
+
     @Override
     public Lock getLock(String username) {
-	    	synchronized (synchronizedLock) {
-	        return super.getLock(username);
-	    	}
+        synchronized (synchronizedLock) {
+            return super.getLock(username);
+        }
     }
-    
+
     @Override
     public void removeLock(String username) {
-	    	synchronized (synchronizedLock) {
-	        super.removeLock(username);
-	    	}
+        synchronized (synchronizedLock) {
+            super.removeLock(username);
+        }
     }
-    
+
     @Override
     public void clear() {
-	    	synchronized (synchronizedLock) {
-	        super.clear();
-	    	}
+        synchronized (synchronizedLock) {
+            super.clear();
+        }
     }
     
     @Override

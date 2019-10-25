@@ -10,6 +10,10 @@ public class EzySimpleUserManager extends EzyAbstractUserManager {
         super(builder);
     }
     
+    public static Builder builder() {
+        return new Builder();
+    }
+    
     public static class Builder extends EzyAbstractUserManager.Builder<Builder> {
 
         @Override

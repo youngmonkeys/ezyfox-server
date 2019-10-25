@@ -42,8 +42,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     protected EzyUser addUser0(EzyUser user) {
         checkMaxUsers();
-        EzyUser old = usersByName.putIfAbsent(user.getName(), user);
-        if(old != null) return old; 
+        usersByName.putIfAbsent(user.getName(), user);
         EzyUser answer = usersById.putIfAbsent(user.getId(), user);
         return answer;
     }
@@ -123,15 +122,9 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     @Override
     public void clear() {
-        this.unlockAll();
         this.locks.clear();
         this.usersById.clear();
         this.usersByName.clear();
-    }
-    
-    protected void unlockAll() {
-        for(Lock lock : locks.values())
-            lock.unlock();
     }
     
     protected String getMessagePrefix() {

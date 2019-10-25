@@ -21,8 +21,14 @@ public class EzySimpleUserDelegate
     protected final EzySocketUserRemovalQueue userRemovalQueue;
     
     public EzySimpleUserDelegate(EzyServerContext serverContext) {
+        this(serverContext, EzyBlockingSocketUserRemovalQueue.getInstance());
+    }
+    
+    public EzySimpleUserDelegate(
+            EzyServerContext serverContext,
+            EzySocketUserRemovalQueue userRemovalQueue) {
         this.serverContext = serverContext;
-        this.userRemovalQueue = EzyBlockingSocketUserRemovalQueue.getInstance();
+        this.userRemovalQueue = userRemovalQueue;
     }
     
     @Override

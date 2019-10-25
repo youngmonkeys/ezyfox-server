@@ -20,7 +20,11 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 	protected final EzySocketUserRemovalQueue userRemovalQueue;
 	
 	public EzySocketUserRemovalHandler() {
-	    this.userRemovalQueue = EzyBlockingSocketUserRemovalQueue.getInstance();
+	    this(EzyBlockingSocketUserRemovalQueue.getInstance());
+	}
+	
+	public EzySocketUserRemovalHandler(EzySocketUserRemovalQueue userRemovalQueue) {
+	    this.userRemovalQueue = userRemovalQueue;
 	}
 	
 	@Override

@@ -53,14 +53,4 @@ public interface EzyZoneUserManager extends EzyUserManager {
 	 */
 	void removeUser(EzyUser user, EzyConstant reason);
 	
-	/**
-	 * 
-	 * Find user by the old session and update user to new session
-	 * 
-	 * @param user the user
-	 * @param newSession the new session
-	 * @return the updated user
-	 */
-	EzyUser findAndUpdateUser(EzySession current, EzySession update);
-	
 }

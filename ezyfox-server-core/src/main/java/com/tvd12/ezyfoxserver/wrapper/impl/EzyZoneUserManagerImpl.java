@@ -131,15 +131,6 @@ public class EzyZoneUserManagerImpl
 	}
 	
 	@Override
-	public EzyUser findAndUpdateUser(EzySession current, EzySession update) {
-	    EzyUser user = usersBySession.remove(current);
-	    if(user == null) return null;
-	    user.addSession(update);
-	    user.removeSession(current);
-	    return usersBySession.computeIfAbsent(update, k -> user);
-	}
-	
-	@Override
 	public void start() throws Exception {
 	    logger.debug("start user manager for zone: {}", zoneName);
 	    startIdleValidationService();

@@ -42,8 +42,7 @@ public class EzyEventControllersImpl implements EzyEventControllers {
 	
 	@Override
 	public void destroy() {
-	    if(controllers != null)
-	        controllers.clear();
+	    controllers.clear();
 	}
 	
 }

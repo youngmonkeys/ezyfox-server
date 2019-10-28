@@ -4,20 +4,26 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfoxserver.EzySimpleServer;
+import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
+import static org.mockito.Mockito.*;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
 
     @Test
     public void test() {
-        EzyServerContext ctx = newServerContext();
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
         EzySession session = newSession();
         session.setToken("abcdef");
         EzyArray data = newLoginData();
@@ -30,7 +36,9 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     
     @Test(expectedExceptions = {EzyLoginErrorException.class})
     public void test1() {
-        EzyServerContext ctx = newServerContext();
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
         EzySession session = newSession();
         session.setToken("abcdef");
         EzyArray data = newLoginData1();
@@ -48,7 +56,9 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     
     @Test(expectedExceptions = {EzyLoginErrorException.class})
     public void test2() {
-        EzyServerContext ctx = newServerContext();
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
         EzySession session = newSession();
         session.setToken("abcdef");
         EzyArray data = newLoginData();
@@ -58,6 +68,22 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
                 throw new EzyLoginErrorException();
             }
         };
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+    }
+    
+    @Test
+    public void allowGuestLoginTest() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "");
+        EzyLoginController controller = new EzyLoginController();
         EzySimpleLoginRequest request = new EzySimpleLoginRequest();
         request.deserializeParams(data);
         request.setSession(session);

@@ -10,11 +10,13 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
+import com.tvd12.ezyfoxserver.EzySimplePlugin;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.EzyZonesStarter;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
@@ -72,6 +74,12 @@ public class EzyZonesStarterTest extends BaseTest {
         EzyAppContext appContext = mock(EzyAppContext.class);
         when(appContext.getApp()).thenReturn(app);
         when(zoneContext.getAppContext("apps")).thenReturn(appContext);
+        
+        EzySimplePlugin plugin = new EzySimplePlugin();
+        plugin.setSetting(pluginSetting);
+        EzyPluginContext pluginContext = mock(EzyPluginContext.class);
+        when(pluginContext.getPlugin()).thenReturn(plugin);
+        when(zoneContext.getPluginContext("plugins")).thenReturn(pluginContext);
 
         Map<String, EzyAppClassLoader> appClassLoaders = new HashMap<>();
         appClassLoaders.put("apps", new EzyAppClassLoader(new File("test-data"), getClass().getClassLoader()));

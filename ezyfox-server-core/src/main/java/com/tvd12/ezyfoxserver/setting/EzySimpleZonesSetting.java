@@ -41,15 +41,17 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
 	
 	@Override
 	public EzySimpleZoneSetting getZoneByName(String name) {
-		if(zonesByNames.containsKey(name))
-			return zonesByNames.get(name);
+	    EzySimpleZoneSetting zoneSetting = zonesByNames.get(name);
+		if(zoneSetting != null)
+			return zoneSetting;
 		throw new IllegalArgumentException("has no zone with name: " + name);
 	}
 	
 	@Override
 	public EzySimpleZoneSetting getZoneById(Integer id) {
-		if(zonesByIds.containsKey(id))
-			return zonesByIds.get(id);
+	    EzySimpleZoneSetting zoneSetting = zonesByIds.get(id);
+		if(zoneSetting != null)
+			return zoneSetting;
 		throw new IllegalArgumentException("has no zone with id: " + id);
 	}
 	

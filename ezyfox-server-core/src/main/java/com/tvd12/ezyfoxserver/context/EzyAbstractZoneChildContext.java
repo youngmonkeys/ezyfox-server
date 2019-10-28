@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.context;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.function.Supplier;
 
 import com.tvd12.ezyfoxserver.concurrent.EzyExecutorServiceFetcher;
 
@@ -17,15 +18,17 @@ public abstract class EzyAbstractZoneChildContext
     protected ScheduledExecutorService executorService;
 	
 	public <T> T get(Class<T> clazz) {
-	    if(containsKey(clazz))
-            return getProperty(clazz);
+		T property = getProperty(clazz);
+	    if(property != null)
+            return property;
 		return parent.get(clazz);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
     public <T> T cmd(Class<T> clazz) {
-        if(commandSuppliers.containsKey(clazz))
-            return (T) commandSuppliers.get(clazz).get();
+		Supplier supplier = commandSuppliers.get(clazz);
+        if(supplier != null)
+            return (T) supplier.get();
         return parent.cmd(clazz);
     }
 	

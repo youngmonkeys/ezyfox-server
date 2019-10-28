@@ -46,15 +46,17 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
 	
 	@Override
 	public EzySimplePluginSetting getPluginByName(String name) {
-		if(pluginsByNames.containsKey(name))
-			return pluginsByNames.get(name);
+	    EzySimplePluginSetting pluginSetting = pluginsByNames.get(name);
+		if(pluginSetting != null)
+			return pluginSetting;
 		throw new IllegalArgumentException("has no plugin with name: " + name);
 	}
 	
 	@Override
 	public EzySimplePluginSetting getPluginById(Integer id) {
-		if(pluginsByIds.containsKey(id))
-			return pluginsByIds.get(id);
+	    EzySimplePluginSetting pluginSetting = pluginsByIds.get(id);
+		if(pluginSetting != null)
+			return pluginSetting;
 		throw new IllegalArgumentException("has no plugin with id: " + id);
 	}
 	

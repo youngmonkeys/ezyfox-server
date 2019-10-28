@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -58,16 +59,18 @@ public class EzySimpleZoneContext
 	
 	@Override
     public <T> T get(Class<T> clazz) {
-        if(containsKey(clazz))
-            return getProperty(clazz);
+	    T property = getProperty(clazz);
+        if(property != null)
+            return property;
         return parent.get(clazz);
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <T> T cmd(Class<T> clazz) {
-        if(commandSuppliers.containsKey(clazz))
-            return (T) commandSuppliers.get(clazz).get();
+        Supplier supplier = commandSuppliers.get(clazz);
+        if(supplier != null)
+            return (T) supplier.get();
         return parent.cmd(clazz);
     }
     
@@ -115,15 +118,17 @@ public class EzySimpleZoneContext
 	
 	@Override
     public EzyAppContext getAppContext(String appName) {
-        if(appContextsByName.containsKey(appName))
-            return appContextsByName.get(appName);
+	    EzyAppContext appContext = appContextsByName.get(appName);
+        if(appContext != null)
+            return appContext;
         throw new IllegalArgumentException("has not app with name = " + appName);
     }
 	
 	@Override
     public EzyPluginContext getPluginContext(String pluginName) {
-        if(pluginContextsByName.containsKey(pluginName))
-            return pluginContextsByName.get(pluginName);
+	    EzyPluginContext pluginContext = pluginContextsByName.get(pluginName);
+        if(pluginContext != null)
+            return pluginContext;
         throw new IllegalArgumentException("has not plugin with name = " + pluginName);
     }
 	

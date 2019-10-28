@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -58,16 +59,18 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     
 	@Override
 	public <T> T get(Class<T> clazz) {
-	    if(containsKey(clazz))
-            return getProperty(clazz);
+	    T property = getProperty(clazz);
+	    if(property != null)
+            return property;
 		throw new IllegalArgumentException("has no instance of " + clazz);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public <T> T cmd(Class<T> clazz) {
-	    if(commandSuppliers.containsKey(clazz))
-            return (T) commandSuppliers.get(clazz).get();
+	    Supplier supplier = commandSuppliers.get(clazz);
+	    if(supplier != null)
+            return (T) supplier.get();
         throw new IllegalArgumentException("has no command of " + clazz);
 	}
 	
@@ -113,15 +116,17 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	
 	@Override
 	public EzyZoneContext getZoneContext(int zoneId) {
-	    if(zoneContextsById.containsKey(zoneId))
-	        return zoneContextsById.get(zoneId);
+	    EzyZoneContext zoneContext = zoneContextsById.get(zoneId);
+	    if(zoneContext != null)
+	        return zoneContext;
 	    throw new EzyZoneNotFoundException(zoneId);
 	}
 	
 	@Override
 	public EzyZoneContext getZoneContext(String zoneName) {
-	    if(zoneContextsByName.containsKey(zoneName))
-	        return zoneContextsByName.get(zoneName);
+	    EzyZoneContext zoneContext = zoneContextsByName.get(zoneName);
+	    if(zoneContext != null)
+	        return zoneContext;
 	    throw new EzyZoneNotFoundException(zoneName);
 	}
 	

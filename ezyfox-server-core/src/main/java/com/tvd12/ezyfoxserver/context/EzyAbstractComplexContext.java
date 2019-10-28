@@ -43,8 +43,9 @@ public abstract class EzyAbstractComplexContext
     
     @Override
     public EzyAppContext getAppContext(int appId) {
-        if(appContextsById.containsKey(appId))
-            return appContextsById.get(appId);
+        EzyAppContext appContext = appContextsById.get(appId);
+        if(appContext != null)
+            return appContext;
         throw new IllegalArgumentException("has not app with id = " + appId);
     }
     
@@ -60,8 +61,9 @@ public abstract class EzyAbstractComplexContext
     
     @Override
     public EzyPluginContext getPluginContext(int pluginId) {
-        if(pluginContextsById.containsKey(pluginId))
-            return pluginContextsById.get(pluginId);
+        EzyPluginContext pluginContext = pluginContextsById.get(pluginId);
+        if(pluginContext != null)
+            return pluginContext;
         throw new IllegalArgumentException("has not plugin with id = " + pluginId);
     }
     

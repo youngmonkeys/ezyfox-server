@@ -2,7 +2,8 @@ package com.tvd12.ezyfoxserver.testing.context;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
+import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
@@ -13,11 +14,11 @@ import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzySimpleServerContextTest extends BaseCoreTest {
 
-    private EzyServerContext context;
+    private EzySimpleServerContext context;
     
     public EzySimpleServerContextTest() {
         super();
-        context = newServerContext();
+        context = (EzySimpleServerContext) newServerContext();
         EzySimpleServerContext ctx = ((EzySimpleServerContext)context);
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
@@ -44,6 +45,16 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         pluginContext.setProperty("test.2", "abc");
         assert context.getProperty("test.2") == null;
         assert pluginContext.getProperty("test.2") != null;
+        
+        assert context.get(EzyBroadcastEvent.class) != null;
+        context.addCommand(ExCommand.class, () -> new ExCommand());
+        assert context.cmd(ExCommand.class) != null;
+        try {
+            context.cmd(Void.class);
+        }
+        catch (Exception e) {
+            assert e instanceof IllegalArgumentException;
+        }
     }
     
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -71,5 +82,14 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
     public void test5() {
         EzyZoneContext zoneContext = context.getZoneContext("example");
         zoneContext.getPluginContext("noone");
+    }
+    
+    public static class ExCommand implements EzyCommand<Boolean> {
+
+        @Override
+        public Boolean execute() {
+            return Boolean.TRUE;
+        }
+        
     }
 }

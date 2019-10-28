@@ -46,15 +46,17 @@ public class EzySimpleAppsSetting implements EzyAppsSetting {
 	
 	@Override
 	public EzySimpleAppSetting getAppByName(String name) {
-		if(appsByNames.containsKey(name))
-			return appsByNames.get(name);
+	    EzySimpleAppSetting appSetting = appsByNames.get(name);
+		if(appSetting != null)
+			return appSetting;
 		throw new IllegalArgumentException("has no app with name: " + name);
 	}
 	
 	@Override
 	public EzySimpleAppSetting getAppById(Integer id) {
-		if(appsByIds.containsKey(id))
-			return appsByIds.get(id);
+	    EzySimpleAppSetting appSetting = appsByIds.get(id);
+		if(appSetting != null)
+			return appSetting;
 		throw new IllegalArgumentException("has no app with id: " + id);
 	}
 	

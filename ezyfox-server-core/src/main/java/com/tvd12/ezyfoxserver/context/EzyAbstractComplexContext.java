@@ -1,14 +1,11 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
@@ -68,10 +65,9 @@ public abstract class EzyAbstractComplexContext
     }
     
     @Override
-    public void destroy() {
+    public final void destroy() {
         super.destroy();
-        destroyAppContexts();
-        destroyPluginContexts();
+        destroyComponents();
         clearProperties();
     }
     
@@ -82,21 +78,7 @@ public abstract class EzyAbstractComplexContext
         this.pluginContextsById.clear();
     }
     
-    private void destroyAppContexts() {
-        for(EzyAppContext ac : appContexts)
-            this.destroyAppContext(ac);
+    protected void destroyComponents() {
     }
     
-    private void destroyPluginContexts() {
-        for(EzyPluginContext pc : pluginContexts)
-            this.destroyPluginContext(pc);
-    }
-    
-    private void destroyAppContext(EzyAppContext appContext) {
-        processWithLogException(() -> ((EzyDestroyable)appContext).destroy());
-    }
-    
-    private void destroyPluginContext(EzyPluginContext pluginContext) {
-        processWithLogException(() -> ((EzyDestroyable)pluginContext).destroy());
-    }
 }

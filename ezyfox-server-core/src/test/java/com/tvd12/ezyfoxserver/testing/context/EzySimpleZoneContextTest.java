@@ -22,6 +22,7 @@ import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleZoneContextTest extends BaseTest {
@@ -33,6 +34,7 @@ public class EzySimpleZoneContextTest extends BaseTest {
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         zoneSetting.setName("test");
         EzySimpleZone zone = new EzySimpleZone();
+        zone.setUserManager(mock(EzyZoneUserManager.class));
         zone.setSetting(zoneSetting);
         EzySimpleZoneContext context = new EzySimpleZoneContext();
         context.setZone(zone);

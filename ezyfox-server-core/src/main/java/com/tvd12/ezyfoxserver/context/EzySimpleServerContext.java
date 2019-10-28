@@ -136,10 +136,9 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     }
 	
 	@Override
-	public void destroy() {
-	    super.destroy();
-	    destroyServer();
+	protected void destroyComponents() {
 	    destroyZoneContexts();
+	    destroyServer();
 	}
 	
 	@Override

@@ -158,9 +158,10 @@ public class EzySimpleZoneContext
 	}
 	
 	@Override
-	public void destroy() {
-	    super.destroy();
-	    destroyZone();
+	protected void destroyComponents() {
+	    destroyAppContexts();
+        destroyPluginContexts();
+        destroyZone();
 	}
 	
 	@Override
@@ -175,9 +176,27 @@ public class EzySimpleZoneContext
 	    this.pluginContextsByName.clear();
 	}
 	
-	private void destroyZone() {
-	    processWithLogException(() -> ((EzyDestroyable)zone).destroy());
-	}
+	private void destroyAppContexts() {
+        for(EzyAppContext ac : appContexts)
+            this.destroyAppContext(ac);
+    }
+    
+    private void destroyPluginContexts() {
+        for(EzyPluginContext pc : pluginContexts)
+            this.destroyPluginContext(pc);
+    }
+    
+    private void destroyZone() {
+        processWithLogException(() -> ((EzyDestroyable)zone).destroy());
+    }
+    
+    private void destroyAppContext(EzyAppContext appContext) {
+        processWithLogException(() -> ((EzyDestroyable)appContext).destroy());
+    }
+    
+    private void destroyPluginContext(EzyPluginContext pluginContext) {
+        processWithLogException(() -> ((EzyDestroyable)pluginContext).destroy());
+    }
 	
 	@Override
     public boolean equals(Object obj) {

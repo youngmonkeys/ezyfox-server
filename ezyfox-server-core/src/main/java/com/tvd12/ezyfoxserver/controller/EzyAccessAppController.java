@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.controller;
 
+import java.util.concurrent.locks.Lock;
+
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
@@ -47,12 +49,30 @@ public class EzyAccessAppController
         EzyAppSetting appSetting = app.getSetting();
         EzyAppUserManager appUserManger = app.getUserManager();
         EzySession session = request.getSession();
-        checkAppUserMangerAvailable(appUserManger);
-        EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
-        appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
-        addUser(appUserManger, user, appSetting);
-        EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, accessAppEvent.getOutput());
-        ctx.send(accessAppResponse, session);
+        String username = user.getName();
+        Lock lock = appUserManger.getLock(username);
+        lock.lock();
+        try {
+            boolean hasNotAccessed = !appUserManger.containsUser(user);
+            
+            if(hasNotAccessed)
+                checkAppUserMangerAvailable(appUserManger);
+            
+            EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
+            appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
+            
+            if(hasNotAccessed)
+                addUser(appUserManger, user, appSetting);
+            
+            EzyArray output = accessAppEvent.getOutput();
+            EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
+            ctx.send(accessAppResponse, session);
+        }
+        finally {
+            lock.unlock();
+            appUserManger.removeLock(username);
+        }
+        
     }
 	
 	protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {

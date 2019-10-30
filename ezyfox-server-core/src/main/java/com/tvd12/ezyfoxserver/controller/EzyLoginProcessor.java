@@ -1,24 +1,19 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import static com.tvd12.ezyfoxserver.context.EzyServerContexts.containsUser;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getSessionManager;
 import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneSetting;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfox.builder.EzyArrayBuilder;
-import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
 import com.tvd12.ezyfoxserver.EzyZone;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
@@ -26,14 +21,12 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.event.EzySimpleSessionLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAddedEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.response.EzyLoginParams;
 import com.tvd12.ezyfoxserver.response.EzyLoginResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyStreamingSetting;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
@@ -113,8 +106,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         if(maxSessionPerUser <= 0)
             throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         int sessionCount = user.getSessionCount();
-        if(maxSessionPerUser > 1) {
-            if(sessionCount >= maxSessionPerUser)
+        if(sessionCount >= maxSessionPerUser) {
+            if((maxSessionPerUser > 1) || (maxSessionPerUser == 1 && !allowChangeSession))
                 throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         }
         session.setLoggedIn(true);
@@ -124,12 +117,13 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         if(sessionCount == 0) {
             user.addSession(session);
         }
-        else if(maxSessionPerUser == 1) {
-            if(allowChangeSession)
-                processChangeSession(user, session);
-        }
         else {
-            user.addSession(session);
+            if(maxSessionPerUser > 1) {
+                user.addSession(session);
+            }
+            else {
+                processChangeSession(user, session);
+            }
         }
         sessionManager.addLoggedInSession(session);
     }
@@ -189,10 +183,6 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         return user;
     }
     
-    protected EzyEvent newSessionLoginEvent(EzyUser user, EzySession session) {
-        return new EzySimpleSessionLoginEvent(user, session);
-    }
-    
     protected EzyEvent newUserAddedEvent(EzyUser user, 
             EzySession session, EzyData loginData) {
         return new EzySimpleUserAddedEvent(user, session, loginData);
@@ -203,33 +193,12 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             EzyUser user, EzyData loginOuputData) {
         EzyZoneSetting zoneSetting = getZoneSetting(zoneContext);
         EzyLoginParams params = new EzyLoginParams();
-        EzyArray joinedApps = getJoinedAppsDetails(zoneContext, user.getName());
         params.setData(loginOuputData);
         params.setUserId(user.getId());
         params.setUsername(user.getName());
-        params.setJoinedApps(joinedApps);
         params.setZoneId(zoneSetting.getId());
         params.setZoneName(zoneSetting.getName());
         return new EzyLoginResponse(params);
-    }
-    
-    protected EzyArray getJoinedAppsDetails(
-            EzyZoneContext zoneContext, String username) {
-        EzyArrayBuilder builder = newArrayBuilder();
-        Collection<EzyAppContext> appContexts = zoneContext.getAppContexts();
-        for(EzyAppContext appCtx : appContexts) {
-            if(containsUser(appCtx, username))
-                builder.append(newJoinedAppInfo(appCtx));
-        }
-        EzyArray answer = builder.build();
-        return answer;
-    }
-    
-    protected EzyArrayBuilder newJoinedAppInfo(EzyAppContext appCtx) {
-        EzyAppSetting app = appCtx.getApp().getSetting();
-        EzyArrayBuilder builder = newArrayBuilder()
-                .append(app.getId(), app.getName());
-        return builder;
     }
     
 }

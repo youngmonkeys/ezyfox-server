@@ -1,9 +1,12 @@
 package com.tvd12.ezyfoxserver.context;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
@@ -32,6 +35,17 @@ public interface EzyComplexContext
     
     default void send(EzyResponse response, Collection<EzySession> recipients) {
         send(response, recipients, false);
+    }
+    
+    default void send(EzyResponse response, EzyUser recipient) {
+        send(response, recipient.getSessions());
+    }
+    
+    default void send(EzyResponse response, Iterable<EzyUser> recipients) {
+        Set<EzySession> sessions = new HashSet<>();
+        for(EzyUser user : recipients)
+            sessions.addAll(user.getSessions());
+        send(response, sessions);
     }
     
 }

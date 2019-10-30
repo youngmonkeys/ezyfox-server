@@ -40,16 +40,16 @@ public abstract class EzyLoader extends EzyLoggable {
     
     public EzyServer load() {
         EzySettings settings = readSettings();
-        	EzySimpleServer answer = new EzySimpleServer();
-        	answer.setConfig(config);
-        	answer.setSettings(settings);
-        	answer.setClassLoader(classLoader);
-        	answer.setAppClassLoaders(newAppClassLoaders());
-        	answer.setStatistics(newStatistics());
-        	answer.setControllers(newControllers());
-        	answer.setSessionManager(newSessionManagers(settings));
-        	answer.setEventControllers(newEventControllers(settings.getEventControllers()));
-        	return answer;
+    	EzySimpleServer answer = new EzySimpleServer();
+    	answer.setConfig(config);
+    	answer.setSettings(settings);
+    	answer.setClassLoader(classLoader);
+    	answer.setAppClassLoaders(newAppClassLoaders());
+    	answer.setStatistics(newStatistics());
+    	answer.setControllers(newControllers());
+    	answer.setSessionManager(newSessionManagers(settings));
+    	answer.setEventControllers(newEventControllers(settings.getEventControllers()));
+    	return answer;
     }
     
     protected EzySettings readSettings() {

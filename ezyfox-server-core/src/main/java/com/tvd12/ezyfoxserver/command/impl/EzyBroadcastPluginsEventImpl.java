@@ -36,12 +36,12 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
 	
 	protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
 	    if(catchException) {
-        	    try {
-        	        ctx.handleEvent(type, event);
-        	    }
-        	    catch(Exception e) {
-        	        ctx.handleException(Thread.currentThread(), e);
-        	    }
+    	    try {
+    	        ctx.handleEvent(type, event);
+    	    }
+    	    catch(Exception e) {
+    	        ctx.handleException(Thread.currentThread(), e);
+    	    }
 	    }
 	    else {
 	        ctx.handleEvent(type, event);

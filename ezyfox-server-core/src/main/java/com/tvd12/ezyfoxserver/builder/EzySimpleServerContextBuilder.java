@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.builder;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +22,8 @@ import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.delegate.EzyAppUserDelegate;
+import com.tvd12.ezyfoxserver.delegate.EzySimpleAppUserDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleUserDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzyUserDelegate;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
@@ -34,7 +38,6 @@ import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
-import static com.tvd12.ezyfox.util.EzyProcessor.*;
 
 @SuppressWarnings("unchecked")
 public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuilder<B>> 
@@ -118,22 +121,29 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     }
     
     protected EzyAppContext newAppContext(EzyZoneContext parent, EzyAppSetting setting) {
+        EzySimpleAppUserDelegate userDelegate = new EzySimpleAppUserDelegate();
+        EzyAppUserManager appUserManager = newAppUserManager(setting, userDelegate);
+        EzyEventControllers eventControllers = newEventControllers();
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(setting);
-        app.setUserManager(newAppUserManager(setting));
-        app.setEventControllers(newEventControllers());
+        app.setUserManager(appUserManager);
+        app.setEventControllers(eventControllers);
+        ScheduledExecutorService appExecutorService = newAppExecutorService(setting);
         EzySimpleAppContext appContext = new EzySimpleAppContext();
+        userDelegate.setAppContext(appContext);
         appContext.setApp(app);
         appContext.setParent(parent);
-        appContext.setExecutorService(newAppExecutorService(setting));
+        appContext.setExecutorService(appExecutorService);
         appContext.init();
         return appContext;
     }
     
-    protected EzyAppUserManager newAppUserManager(EzyAppSetting setting) {
+    protected EzyAppUserManager 
+            newAppUserManager(EzyAppSetting setting, EzyAppUserDelegate userDelegate) {
         return EzyAppUserManagerImpl.builder()
                 .appName(setting.getName())
                 .maxUsers(setting.getMaxUsers())
+                .userDelegate(userDelegate)
                 .build();
     }
     

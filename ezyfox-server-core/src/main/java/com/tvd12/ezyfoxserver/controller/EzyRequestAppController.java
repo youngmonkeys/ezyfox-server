@@ -2,13 +2,19 @@ package com.tvd12.ezyfoxserver.controller;
 
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
+import com.tvd12.ezyfoxserver.constant.EzyIRequestAppError;
+import com.tvd12.ezyfoxserver.constant.EzyRequestAppError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestAppRequest;
+import com.tvd12.ezyfoxserver.response.EzyErrorParams;
+import com.tvd12.ezyfoxserver.response.EzyRequestAppErrorResponse;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public class EzyRequestAppController 
@@ -28,13 +34,17 @@ public class EzyRequestAppController
 	    EzyUser user = request.getUser();
 	    
 	    // check user joined app or not to prevent spam request
-	    if(!userManger.containsUser(user))
-	       throw new IllegalStateException("user " + user.getName() + " hasn't joined app");
+	    boolean hasAccessed = userManger.containsUser(user);
 	    
-        EzyUserRequestAppEvent event = newRequestAppEvent(request);
-
-        // redirect handling to app
-        requestController.handle(appCtx, event);
+	    if(hasAccessed) {
+            // redirect handling to app
+	        EzyUserRequestAppEvent event = newRequestAppEvent(request);
+            requestController.handle(appCtx, event);
+	    }
+	    else {
+	        EzySession session = request.getSession();
+	        responseRequestAppError(ctx, session, EzyRequestAppError.HAS_NOT_ACCESSED);
+	    }
 	}
 	
 	protected EzyUserRequestAppEvent newRequestAppEvent(EzyRequestAppRequest request) {
@@ -44,4 +54,15 @@ public class EzyRequestAppController
 		        request.getParams().getData());
 	}
 	
+	protected EzyResponse newRequestAppErrorReponse(EzyIRequestAppError error) {
+        EzyErrorParams params = new EzyErrorParams();
+        params.setError(error);
+        return new EzyRequestAppErrorResponse(params);
+    }
+    
+    protected void responseRequestAppError(
+            EzyServerContext ctx, EzySession session, EzyIRequestAppError error) {
+        EzyResponse response = newRequestAppErrorReponse(error);
+        ctx.send(response, session);
+    }
 }

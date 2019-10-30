@@ -4,9 +4,9 @@ import com.tvd12.ezyfox.util.EzyEnums;
 
 import lombok.Getter;
 
-public enum EzyAccessAppError implements EzyIAccessAppError {
+public enum EzyRequestAppError implements EzyIRequestAppError {
 
-    MAXIMUM_USER(6, "app has maximum users");
+    HAS_NOT_ACCESSED(1, "user hasn't accessed app yet");
     
     @Getter
     private final int id;
@@ -14,7 +14,7 @@ public enum EzyAccessAppError implements EzyIAccessAppError {
     @Getter
     private final String message;
     
-    private EzyAccessAppError(int id, String message) {
+    private EzyRequestAppError(int id, String message) {
         this.id = id;
         this.message = message;
     }
@@ -24,8 +24,8 @@ public enum EzyAccessAppError implements EzyIAccessAppError {
         return toString();
     }
     
-    public static EzyAccessAppError valueOf(int id) {
+    public static EzyRequestAppError valueOf(int id) {
         return EzyEnums.valueOf(values(), id);
     }
-    
+
 }

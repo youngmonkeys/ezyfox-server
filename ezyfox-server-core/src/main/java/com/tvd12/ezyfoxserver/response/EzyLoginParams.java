@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.response;
 
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
-import com.tvd12.ezyfox.entity.EzyArray;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +15,6 @@ public class EzyLoginParams extends EzySimpleResponseParams {
     protected long userId;
 	protected Object data;
 	protected String username;
-	protected EzyArray joinedApps;
 	
 	@Override
 	protected EzyArrayBuilder serialize0() {
@@ -25,7 +23,6 @@ public class EzyLoginParams extends EzySimpleResponseParams {
 	            .append(zoneName)
                 .append(userId)
                 .append(username)
-                .append(joinedApps)
                 .append(data);
 	}
 	
@@ -33,7 +30,6 @@ public class EzyLoginParams extends EzySimpleResponseParams {
 	public void release() {
 	    super.release();
 	    this.data = null;
-	    this.joinedApps = null;
 	}
 
 }

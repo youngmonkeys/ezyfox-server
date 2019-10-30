@@ -3,17 +3,16 @@ package com.tvd12.ezyfoxserver.socket;
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRemovedEvent;
-import com.tvd12.ezyfoxserver.event.EzyUserEvent;
-import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
+import com.tvd12.ezyfoxserver.event.EzyUserRemovedEvent;
+import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 
@@ -64,9 +63,8 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 	    try {
 	        EzyConstant reason = removal.getReason();
 	        EzyZoneContext zoneContext = removal.getZoneContext();
-            Set<EzyAppContext> appContexts = removeUserFromApps(zoneContext, user); 
-            EzyUserEvent event = newUserRemovedEvent(user, reason);
-            notifyUserRemovedToApps(zoneContext, appContexts, event);
+            EzyUserRemovedEvent event = newUserRemovedEvent(user, reason);
+            removeUserFromApps(zoneContext, event);
             notifyUserRemovedToPlugins(zoneContext, event);
 	    }
 	    finally {
@@ -75,7 +73,7 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 	    logger.debug("user {} has destroyed", user);
 	}
 	
-	protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserEvent event) {
+	protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserRemovedEvent event) {
         try {
             context.broadcastPlugins(EzyEventType.USER_REMOVED, event, true);
         }
@@ -85,41 +83,28 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
         }
     }
     
-    protected void notifyUserRemovedToApps(EzyZoneContext zoneContext, Set<EzyAppContext> appContexts, EzyUserEvent event) {
+    protected void removeUserFromApps(EzyZoneContext zoneContext, EzyUserRemovedEvent event) {
+        Collection<EzyAppContext> appContexts = zoneContext.getAppContexts();
         for(EzyAppContext appContext : appContexts)
-            notifyUserRemovedToApp(zoneContext, appContext, event);
+            removeUserFromApp(appContext, event);
     }
     
-    protected void notifyUserRemovedToApp(EzyZoneContext zoneContext, EzyAppContext appContext, EzyUserEvent event) {
+    protected void removeUserFromApp(EzyAppContext appContext, EzyUserRemovedEvent event) {
+        EzyUser user = event.getUser();
+        EzyApplication app = appContext.getApp();
+        EzyAppUserManager userManager = app.getUserManager();
         try {
-            appContext.handleEvent(EzyEventType.USER_REMOVED, event);
+            boolean contains = userManager.containsUser(user);
+            if(contains)
+                userManager.removeUser(user, event.getReason());
         }
         catch(Exception e) {
-            String zoneName = zoneContext.getZone().getSetting().getName();
-            logger.error("zone: {}, notify to apps user: {} removed error", zoneName, event.getUser(), e);
+            String appName = app.getSetting().getName();
+            logger.error("remove user: {} from app: {} error", event.getUser(), appName, e);
         }
     }
     
-    protected Set<EzyAppContext> removeUserFromApps(EzyZoneContext context, EzyUser user) {
-        Set<EzyAppContext> containAppContexts = new HashSet<>();
-        Collection<EzyAppContext> appContexts = context.getAppContexts();
-        for(EzyAppContext appCtx : appContexts) {
-            boolean contains = removeUserFromApp(appCtx, user);
-            if(contains)
-                containAppContexts.add(appCtx);
-        }
-        return containAppContexts;
-    }
-    
-    protected boolean removeUserFromApp(EzyAppContext ctx, EzyUser user) {
-        EzyUserManager userManager = ctx.getApp().getUserManager();
-        boolean contains = userManager.containsUser(user);
-        if(contains)
-            userManager.removeUser(user);
-        return contains;
-    }
-    
-    protected EzyUserEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {
+    protected EzyUserRemovedEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {
         return new EzySimpleUserRemovedEvent(user, reason);
     }
 }

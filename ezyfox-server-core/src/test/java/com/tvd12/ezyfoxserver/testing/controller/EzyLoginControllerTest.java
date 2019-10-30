@@ -15,6 +15,9 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
+import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
+
 import static org.mockito.Mockito.*;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
@@ -87,6 +90,93 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         EzySimpleLoginRequest request = new EzySimpleLoginRequest();
         request.deserializeParams(data);
         request.setSession(session);
+        controller.handle(ctx, request);
+    }
+    
+    @Test(expectedExceptions = EzyLoginErrorException.class)
+    public void invalidUsernameTest() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyZoneSetting zoneSetting = zoneContext.getZone().getSetting();
+        EzySimpleUserManagementSetting userManagementSetting = (EzySimpleUserManagementSetting) zoneSetting.getUserManagement();
+        userManagementSetting.setAllowGuestLogin(false);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+    }
+    
+    @Test(expectedExceptions = EzyLoginErrorException.class)
+    public void maximumSession1Test() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyZoneSetting zoneSetting = zoneContext.getZone().getSetting();
+        EzySimpleUserManagementSetting userManagementSetting = (EzySimpleUserManagementSetting) zoneSetting.getUserManagement();
+        userManagementSetting.setMaxSessionPerUser(0);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+    }
+    
+    @Test(expectedExceptions = EzyLoginErrorException.class)
+    public void maximumSession2Test() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyZoneSetting zoneSetting = zoneContext.getZone().getSetting();
+        EzySimpleUserManagementSetting userManagementSetting = (EzySimpleUserManagementSetting) zoneSetting.getUserManagement();
+        userManagementSetting.setMaxSessionPerUser(2);
+        userManagementSetting.setAllowChangeSession(false);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession(1);
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "helloworld");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+        request.setSession(newSession(2));
+        controller.handle(ctx, request);
+        request.setSession(newSession(3));
+        controller.handle(ctx, request);
+    }
+    
+    @Test(expectedExceptions = EzyLoginErrorException.class)
+    public void maximumSession3Test() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyZoneSetting zoneSetting = zoneContext.getZone().getSetting();
+        EzySimpleUserManagementSetting userManagementSetting = (EzySimpleUserManagementSetting) zoneSetting.getUserManagement();
+        userManagementSetting.setMaxSessionPerUser(1);
+        userManagementSetting.setAllowChangeSession(false);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "helloworld");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
         controller.handle(ctx, request);
     }
     

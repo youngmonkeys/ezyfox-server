@@ -114,6 +114,13 @@ public class BaseCoreTest extends BaseTest {
         return session;
     }
     
+    protected EzySession newSession(int id) {
+        MyTestSession session = new MyTestSession();
+        session.setId(id);
+        session.setDelegate(new SessionDelegate());
+        return session;
+    }
+    
     protected KeyPair newRSAKeys() {
         return EzyKeysGenerator.builder()
                 .build()

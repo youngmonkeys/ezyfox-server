@@ -22,6 +22,7 @@ public enum EzyCommand implements EzyConstant {
 	APP_REQUEST(31, 10),
 	APP_EXIT(33, 10),
 	APP_ACCESS_ERROR(34, 10),
+	APP_REQUEST_ERROR(35, 10),
 	PLUGIN_INFO(40, 10),
     PLUGIN_REQUEST(41, 10);
 	

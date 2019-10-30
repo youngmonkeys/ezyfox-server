@@ -48,12 +48,12 @@ public class EzyBroadcastAppsEventImpl extends EzyAbstractCommand implements Ezy
 	
 	protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
 	    if(catchException) {
-        	    try {
-        	        ctx.handleEvent(type, event);
-        	    }
-        	    catch(Exception e) {
-        	        ctx.handleException(Thread.currentThread(), e);
-        	    }
+    	    try {
+    	        ctx.handleEvent(type, event);
+    	    }
+    	    catch(Exception e) {
+    	        ctx.handleException(Thread.currentThread(), e);
+    	    }
 	    }
 	    else {
 	        ctx.handleEvent(type, event);

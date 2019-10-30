@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum EzyUserRemoveReason implements EzyConstant {
 
-    EXIT_APP(1);
+    EXIT_APP(300);
     
     private final int id;
     

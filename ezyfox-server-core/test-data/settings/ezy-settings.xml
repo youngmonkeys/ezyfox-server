@@ -54,6 +54,11 @@
 			<config-file>ezy-zone-settings.xml</config-file>
 			<active>true</active>
 		</zone>
+		<zone>
+			<name>example2</name>
+			<config-file>ezy-zone-settings.xml</config-file>
+			<active>false</active>
+		</zone>
 	</zones>
 	
 </settings>

@@ -25,7 +25,7 @@ import lombok.ToString;
 @XmlRootElement(name = "zone")
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
-    protected int id = COUNTER.incrementAndGet();
+    protected final int id = COUNTER.incrementAndGet();
     
     protected String name;
     

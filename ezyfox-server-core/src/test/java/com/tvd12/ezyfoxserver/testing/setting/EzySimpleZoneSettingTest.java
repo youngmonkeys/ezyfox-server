@@ -4,8 +4,11 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginsSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 
 public class EzySimpleZoneSettingTest {
@@ -27,9 +30,18 @@ public class EzySimpleZoneSettingTest {
         assert setting.getPluginNames().size() == 1;
         assert setting.getPluginByName("plugin") == pluginSetting;
         assert setting.equals(setting);
+        assert !setting.equals(new EzySimpleZoneSetting());
         assert setting.hashCode() == setting.hashCode();
         System.out.println(setting.toMap());
         System.out.println(setting);
+        setting.setName("test");
+        setting.setConfigFile("hello");
+        setting.setMaxUsers(1);
+        setting.setStreaming(new EzySimpleStreamingSetting());
+        setting.setPlugins(new EzySimplePluginsSetting());
+        setting.setApplications(new EzySimpleAppsSetting());
+        setting.setUserManagement(new EzySimpleUserManagementSetting());
+        setting.setEventControllers(new EzySimpleEventControllersSetting());
     }
     
 }

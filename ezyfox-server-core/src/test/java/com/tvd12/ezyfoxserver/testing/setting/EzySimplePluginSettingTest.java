@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.testing.setting;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting.EzySimpleListenEvents;
 import com.tvd12.test.base.BaseTest;
 
 public class EzySimplePluginSettingTest extends BaseTest {
@@ -22,6 +23,8 @@ public class EzySimplePluginSettingTest extends BaseTest {
         System.out.println(setting.getLocation());
         System.out.println(setting.getConfigFile());
         assert setting.equals(setting);
+        setting.setPriority(1);
+        setting.setListenEvents(new EzySimpleListenEvents());
     }
 
 }

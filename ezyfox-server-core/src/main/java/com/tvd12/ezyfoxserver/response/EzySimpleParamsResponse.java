@@ -26,6 +26,7 @@ public class EzySimpleParamsResponse<P extends EzyResponseParams>
     @Override
     public void release() {
         super.release();
+        this.params.release();
         this.params = null;
     }
     

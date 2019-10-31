@@ -44,8 +44,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
     
     public EzyLoginProcessor(EzyServerContext serverContext) {
         this.serverContext = serverContext;
-        	this.sessionManager = getSessionManager(serverContext);
-        	this.userStats = getStatistics(serverContext).getUserStats();
+    	this.sessionManager = getSessionManager(serverContext);
+    	this.userStats = getStatistics(serverContext).getUserStats();
     }
     
     public void apply(EzyZoneContext zoneContext, EzyUserLoginEvent event) {

@@ -1,5 +1,11 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -11,14 +17,15 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
+import com.tvd12.ezyfoxserver.controller.EzyLoginProcessor;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
 import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
-
-import static org.mockito.Mockito.*;
+import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
 
@@ -178,6 +185,45 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
         controller.handle(ctx, request);
+    }
+    
+    @Test
+    public void processChangeSessionTest() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyZoneSetting zoneSetting = zoneContext.getZone().getSetting();
+        EzySimpleUserManagementSetting userManagementSetting = (EzySimpleUserManagementSetting) zoneSetting.getUserManagement();
+        userManagementSetting.setMaxSessionPerUser(1);
+        userManagementSetting.setAllowChangeSession(true);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(1, "helloworld");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+        controller.handle(ctx, request);
+    }
+    
+    @Test
+    public void fireUserAddedEvent0ExceptionCase() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+        when(zoneContext.getZone()).thenReturn(ctx.getZoneContext("example").getZone());
+        doThrow(new IllegalStateException())
+            .when(zoneContext)
+            .broadcastPlugins(any(EzyConstant.class), any(EzyEvent.class), anyBoolean());
+        MethodInvoker.create()
+            .method("fireUserAddedEvent0")
+            .object(processor)
+            .param(EzyZoneContext.class, zoneContext)
+            .param(EzyEvent.class, mock(EzyEvent.class))
+            .invoke();
     }
     
     private EzyArray newLoginData() {

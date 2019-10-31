@@ -11,8 +11,8 @@ import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.response.EzySimplePackage;
 import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
+import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
 
 public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendResponse {
 

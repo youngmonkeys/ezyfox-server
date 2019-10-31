@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.response;
+package com.tvd12.ezyfoxserver.socket;
 
 import java.util.Collection;
 
@@ -7,6 +7,7 @@ import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyHashMapList;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.response.EzyPackage;
 
 import lombok.Getter;
 import lombok.Setter;

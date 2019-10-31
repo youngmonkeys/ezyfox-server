@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyStreamBytes;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.response.EzySimpleBytesPackage;
+import com.tvd12.ezyfoxserver.socket.EzySimpleBytesPackage;
 
 public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamBytes {
 

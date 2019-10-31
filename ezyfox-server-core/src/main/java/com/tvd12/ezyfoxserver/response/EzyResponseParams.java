@@ -7,4 +7,7 @@ import com.tvd12.ezyfox.util.EzyReleasable;
 
 public interface EzyResponseParams 
         extends EzyArraySerializable, EzyReleasable, Serializable {
+    
+    @Override
+    void release();
 }

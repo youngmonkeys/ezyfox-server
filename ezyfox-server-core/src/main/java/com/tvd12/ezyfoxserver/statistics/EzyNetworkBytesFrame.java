@@ -10,11 +10,13 @@ import lombok.Getter;
 @Getter
 public abstract class EzyNetworkBytesFrame implements Serializable {
     private static final long serialVersionUID = 4153904393261840635L;
-    protected long endTime;
-    protected long startTime;
+    
     protected long readBytes;
     protected long writtenBytes;
-    protected long id = COUNTER.incrementAndGet();
+    
+    protected final long endTime;
+    protected final long startTime;
+    protected final long id = COUNTER.incrementAndGet();
     
     private static final AtomicLong COUNTER  = new AtomicLong(0);
     

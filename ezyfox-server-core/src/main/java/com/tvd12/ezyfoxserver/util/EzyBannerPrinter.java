@@ -8,7 +8,7 @@ import com.tvd12.ezyfox.stream.EzyInputStreams;
 
 public class EzyBannerPrinter {
 
-    public String getBannerString() {
+    public String getBannerText() {
         return new String(getBannerBytes());
     }
     

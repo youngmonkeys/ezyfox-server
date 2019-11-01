@@ -8,7 +8,6 @@ import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.command.EzyCommand;
-import com.tvd12.ezyfoxserver.command.EzyRunWorker;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
 
@@ -20,7 +19,6 @@ public class Performance3Test extends BaseTest {
 		long start = System.currentTimeMillis();
 		ConcurrentHashMap<Object, Object> strs = new ConcurrentHashMap<>();
 		strs.put(EzyCommand.class, EzyObject.class);
-		strs.put(EzyRunWorker.class, EzyObject.class);
 		strs.put(EzyObject.class, EzyObject.class);
 		strs.put(EzyArray.class, EzyObject.class);
 		strs.put(EzySimpleAppSetting.class, EzyObject.class);

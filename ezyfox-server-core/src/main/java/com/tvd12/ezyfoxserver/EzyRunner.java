@@ -11,7 +11,7 @@ public abstract class EzyRunner {
     
     public void run(String[] args) throws Exception {
         validateArguments(args);
-    	    startSystem(args[0]);
+        startSystem(args[0]);
     }
     
     protected void validateArguments(String[] args) {
@@ -21,11 +21,11 @@ public abstract class EzyRunner {
     
     protected void startSystem(String configFile) throws Exception {
         EzyStarter starter = newStarter(configFile);
-    	    starter.start();
+        starter.start();
     }
     
     protected EzyStarter newStarter(String configFile) {
-    	    return newStarterBuilder().configFile(configFile).build();
+        return newStarterBuilder().configFile(configFile).build();
     }
     
     protected abstract EzyStarter.Builder<?> newStarterBuilder();

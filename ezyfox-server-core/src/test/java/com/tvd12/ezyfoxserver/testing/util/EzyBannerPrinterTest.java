@@ -23,7 +23,7 @@ public class EzyBannerPrinterTest extends BaseTest {
                     }
                 };
             }
-        }.getBannerString();
+        }.getBannerText();
     }
     
 }

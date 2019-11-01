@@ -60,7 +60,7 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected final void printBanner() {
-		logger.info("\n{}\n", new EzyBannerPrinter().getBannerString());
+		logger.info("\n{}\n", new EzyBannerPrinter().getBannerText());
 	}
 	
 	protected void notifyServerReady0() {

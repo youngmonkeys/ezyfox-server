@@ -55,6 +55,7 @@ public class EzyZoneUserManagerImpl
 	 */
 	@Override
 	public void addUser(EzySession session, EzyUser user) {
+	    checkMaxUsers();
 		usersById.put(user.getId(), user);
 		usersByName.put(user.getName(), user);
 		usersBySession.put(session, user);

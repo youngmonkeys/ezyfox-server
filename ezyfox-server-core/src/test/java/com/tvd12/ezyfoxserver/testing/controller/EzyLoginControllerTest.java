@@ -11,8 +11,10 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
+import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyILoginError;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -22,9 +24,18 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
+import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
+import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
 import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
+import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
+import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
@@ -224,6 +235,99 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
             .param(EzyZoneContext.class, zoneContext)
             .param(EzyEvent.class, mock(EzyEvent.class))
             .invoke();
+    }
+    
+    @Test(expectedExceptions = EzyZoneNotFoundException.class)
+    public void testEzyZoneNotFoundException() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        data.set(0, "not found");
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Test(expectedExceptions = EzyMaxUserException.class)
+    public void testEzyMaxUserExceptionCase() {
+        EzyServerContext ctx = mock(EzyServerContext.class);
+        EzyStatistics userStats = new EzySimpleStatistics();
+        
+        EzySimpleServer server = new EzySimpleServer();
+        server.setStatistics(userStats);
+        when(ctx.getServer()).thenReturn(server);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySessionManager sessionManager = mock(EzySessionManager.class);
+        server.setSessionManager(sessionManager);
+        
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+        when(ctx.getZoneContext("example")).thenReturn(zoneContext);
+        EzySimpleZone zone = new EzySimpleZone();
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        zone.setSetting(zoneSetting);
+        when(zoneContext.getZone()).thenReturn(zone);
+        EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
+                .maxUsers(1)
+                .build();
+        zone.setUserManager(zoneUserManager);
+        
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        EzyLoginController controller = new EzyLoginController();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
+        
+        data.set(1, "test1");
+        request.deserializeParams(data);
+        controller.handle(ctx, request);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testExceptionCase() {
+        EzyServerContext ctx = mock(EzyServerContext.class);
+        doThrow(new IllegalStateException("server maintain")).when(ctx).send(any(EzyResponse.class), any(EzySession.class));
+        EzyStatistics userStats = new EzySimpleStatistics();
+        
+        EzySimpleServer server = new EzySimpleServer();
+        server.setStatistics(userStats);
+        when(ctx.getServer()).thenReturn(server);
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySessionManager sessionManager = mock(EzySessionManager.class);
+        server.setSessionManager(sessionManager);
+        
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+        when(ctx.getZoneContext("example")).thenReturn(zoneContext);
+        EzySimpleZone zone = new EzySimpleZone();
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        zone.setSetting(zoneSetting);
+        when(zoneContext.getZone()).thenReturn(zone);
+        EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
+                .maxUsers(1)
+                .build();
+        zone.setUserManager(zoneUserManager);
+        
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        EzyLoginController controller = new EzyLoginController() {
+            @Override
+            protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
+            }
+        };
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        controller.handle(ctx, request);
     }
     
     private EzyArray newLoginData() {

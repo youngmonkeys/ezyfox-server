@@ -23,9 +23,9 @@ public class EzyPluginInfoController
 	    EzyZoneContext zoneCtx = ctx.getZoneContext(user.getZoneId());
 	    EzyPluginContext pluginCtx = zoneCtx.getPluginContext(params.getPluginName());
 	    if(pluginCtx != null) {
-        	    EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
-        	    EzyResponse response = newPluginInfoResponse(setting);
-        	    ctx.send(response, session);
+    	    EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
+    	    EzyResponse response = newPluginInfoResponse(setting);
+    	    ctx.send(response, session);
 	    }
 	}
 	

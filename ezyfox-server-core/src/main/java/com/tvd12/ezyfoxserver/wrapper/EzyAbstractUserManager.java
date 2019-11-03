@@ -36,7 +36,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     
     protected void checkMaxUsers() {
         int current = usersById.size();
-        if(current > maxUsers)
+        if(current >= maxUsers)
             throw new EzyMaxUserException(current, maxUsers);
     }
     

@@ -7,8 +7,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 public final class EzyZoneContexts {
 
-    private EzyZoneContexts() {
-    }
+    private EzyZoneContexts() {}
     
     public static EzyZoneSetting getZoneSetting(EzyZoneContext context) {
         EzyZone zone = context.getZone();

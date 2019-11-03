@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.spy;
 
 import org.testng.annotations.Test;
@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
@@ -54,6 +55,10 @@ public class EzySimpleZoneContextTest extends BaseTest {
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, user, true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, EzyPredicates.ALWAY_TRUE, true);
         assert context.equals(context);
+        EzyZoneContext zoneContext2 = mock(EzyZoneContext.class);
+        EzySimpleZone zone2 = new EzySimpleZone();
+        when(zoneContext2.getZone()).thenReturn(zone2);
+        assert !zoneContext2.equals(context);
         System.out.println(context.hashCode() + ", " + context.hashCode());
         assert context.hashCode() == context.hashCode();
         
@@ -65,6 +70,19 @@ public class EzySimpleZoneContextTest extends BaseTest {
         context.stream(new byte[0], Lists.newArrayList(recipient));
         
         context.destroy();
+    }
+    
+    @Test
+    public void equalsCaseTest() {
+        EzySimpleZoneContext zoneContext1 = new EzySimpleZoneContext();
+        EzySimpleZone zone1 = new EzySimpleZone();
+        zoneContext1.setZone(zone1);
+        
+        EzySimpleZoneContext zoneContext2 = new EzySimpleZoneContext();
+        EzySimpleZone zone2 = new EzySimpleZone();
+        zoneContext1.setZone(zone2);
+        
+        assert !zoneContext1.equals(zoneContext2);
     }
     
     public static class ExCommand implements EzyCommand<Boolean> {

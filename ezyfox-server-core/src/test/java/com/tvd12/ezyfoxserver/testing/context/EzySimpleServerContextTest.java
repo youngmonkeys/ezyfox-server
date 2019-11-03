@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
@@ -49,6 +50,7 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("abcxyz");
         ctx.addAppContext(appSetting, appContext);
+        assert ctx.getAppContext(appSetting.getId()) != null;
         
         context.setProperty("test.1", "abc");
         assert context.getProperty("test.1") != null;
@@ -66,6 +68,7 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         pluginContext.setPlugin(plugin);
         pluginContext.init();
         ctx.addPluginContext(pluginSetting, pluginContext);
+        assert ctx.getPluginContext(pluginSetting.getId()) != null;
         
         context.setProperty("test.1", "abc");
         assert context.getProperty("test.1") != null;
@@ -98,6 +101,12 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         context.send(response, Lists.newArrayList(recipient), true);
         context.stream(new byte[0], recipient);
         context.stream(new byte[0], Lists.newArrayList(recipient));
+        
+        EzySimpleUser user = new EzySimpleUser();
+        user.setName("test");
+        user.addSession(recipient);
+        context.send(response, user);
+        context.send(response, Lists.newArrayList(user));
         
         assert context.getZoneContext(zoneContext.getZone().getSetting().getId()) != null;
         try {

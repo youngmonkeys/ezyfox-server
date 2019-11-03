@@ -33,6 +33,7 @@ public abstract class EzyAbstractZoneChildContext
     }
 	
 	public void setExecutorService(ScheduledExecutorService executorService) {
-	    properties.put(ScheduledExecutorService.class, executorService);
+	    this.executorService = executorService;
+	    this.properties.put(ScheduledExecutorService.class, executorService);
 	}
 }

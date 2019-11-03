@@ -10,8 +10,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public final class EzyServerContexts {
 
-    private EzyServerContexts() {
-    }
+    private EzyServerContexts() {}
     
     public static EzySettings getSettings(EzyServerContext context) {
         EzyServer server = context.getServer();

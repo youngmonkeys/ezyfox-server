@@ -7,8 +7,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
 public final class EzyAppContexts {
 
-    private EzyAppContexts() {
-    }
+    private EzyAppContexts() {}
     
     public static EzyUserManager getUserManager(EzyAppContext context) {
         EzyApplication app = context.getApp();

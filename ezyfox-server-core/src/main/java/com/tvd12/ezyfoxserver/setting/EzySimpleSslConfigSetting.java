@@ -23,10 +23,10 @@ public class EzySimpleSslConfigSetting implements EzySslConfigSetting {
     protected String file = "ssl-config.properties";
     
     @XmlElement(name = "loader")
-    protected String loader = "com.tvd12.ezyfoxserver.mapping.ssl.EzySimpleSslConfigLoader";
+    protected String loader = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader";
     
     @XmlElement(name = "context-factory-builder")
-    protected String contextFactoryBuilder = "com.tvd12.ezyfoxserver.mapping.ssl.EzySimpleSslContextFactoryBuilder";
+    protected String contextFactoryBuilder = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder";
     
     @Override
     public Map<Object, Object> toMap() {

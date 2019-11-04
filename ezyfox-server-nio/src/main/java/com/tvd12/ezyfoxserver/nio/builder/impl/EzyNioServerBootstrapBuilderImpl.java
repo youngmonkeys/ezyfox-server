@@ -136,8 +136,8 @@ public class EzyNioServerBootstrapBuilderImpl
 
 	private EzyCodecFactory newCodecFactory() {
 		return EzySimpleCodecFactory.builder()
-				.socketSettings(getSocketSetting())
-				.websocketSettings(getWebsocketSetting())
+				.socketSetting(getSocketSetting())
+				.websocketSetting(getWebsocketSetting())
 				.build();
     }
 	

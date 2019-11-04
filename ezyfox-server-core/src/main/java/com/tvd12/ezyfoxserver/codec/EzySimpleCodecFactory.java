@@ -10,15 +10,15 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
 public class EzySimpleCodecFactory implements EzyCodecFactory {
 
-	private final EzySocketSetting socketSettings;
-	private final EzyWebSocketSetting websocketSettings;
+	protected final EzySocketSetting socketSetting;
+	protected final EzyWebSocketSetting websocketSetting;
 
-	private final EzyCodecCreator socketCodecCreator;
-	private final EzyCodecCreator websocketCodecCreator;
+	protected final EzyCodecCreator socketCodecCreator;
+	protected final EzyCodecCreator websocketCodecCreator;
 	
 	public EzySimpleCodecFactory(Builder builder) {
-		this.socketSettings = builder.socketSettings;
-		this.websocketSettings = builder.websocketSettings;
+		this.socketSetting = builder.socketSetting;
+		this.websocketSetting = builder.websocketSetting;
 		this.socketCodecCreator = newSocketCodecCreator();
 		this.websocketCodecCreator = newWebsocketCodecCreator();
 	}
@@ -40,13 +40,13 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	public Object newDecoder(EzyConstant type) {
 		if(type == EzyConnectionType.SOCKET) {
 		    if(socketCodecCreator != null) {
-                int maxRequestSize = socketSettings.getMaxRequestSize();
+                int maxRequestSize = socketSetting.getMaxRequestSize();
                 return socketCodecCreator.newDecoder(maxRequestSize);
             }
 		}
 		else {
 		    if(websocketCodecCreator != null) {
-                int maxFrameSize = websocketSettings.getMaxFrameSize();
+                int maxFrameSize = websocketSetting.getMaxFrameSize();
                 return websocketCodecCreator.newDecoder(maxFrameSize);
             }
 		}
@@ -54,14 +54,14 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	}
 	
 	private EzyCodecCreator newSocketCodecCreator() {
-	    if(socketSettings.isActive())
-	        return EzyClasses.newInstance(socketSettings.getCodecCreator());
+	    if(socketSetting.isActive())
+	        return EzyClasses.newInstance(socketSetting.getCodecCreator());
 	    return null;
 	}
 	
 	private EzyCodecCreator newWebsocketCodecCreator() {
-	    if(websocketSettings.isActive())
-	        return EzyClasses.newInstance(websocketSettings.getCodecCreator());
+	    if(websocketSetting.isActive())
+	        return EzyClasses.newInstance(websocketSetting.getCodecCreator());
 	    return null;
 	}
 	
@@ -70,16 +70,16 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	}
 	
 	public static class Builder implements EzyBuilder<EzyCodecFactory> {
-		private EzySocketSetting socketSettings;
-		private EzyWebSocketSetting websocketSettings;
+		protected EzySocketSetting socketSetting;
+		protected EzyWebSocketSetting websocketSetting;
 		
-		public Builder socketSettings(EzySocketSetting settings) {
-			this.socketSettings = settings;
+		public Builder socketSetting(EzySocketSetting settings) {
+			this.socketSetting = settings;
 			return this;
 		}
 		
-		public Builder websocketSettings(EzyWebSocketSetting settings) {
-			this.websocketSettings = settings;
+		public Builder websocketSetting(EzyWebSocketSetting settings) {
+			this.websocketSetting = settings;
 			return this;
 		}
 		

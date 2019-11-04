@@ -6,6 +6,16 @@
 			<package name="com.tvd12.ezyfoxserver.testing"></package>
 		</packages>
 	</test>
+	<test name="Api">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.api"></package>
+		</packages>
+	</test>
+	<test name="Codec">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.codec"></package>
+		</packages>
+	</test>
 	<test name="Loader">
 		<packages>
 			<package name="com.tvd12.ezyfoxserver.testing.loader"></package>

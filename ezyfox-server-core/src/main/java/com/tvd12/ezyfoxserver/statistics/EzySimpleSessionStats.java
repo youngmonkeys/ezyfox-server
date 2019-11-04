@@ -8,9 +8,9 @@ import lombok.Getter;
 public class EzySimpleSessionStats implements EzySessionStats, Serializable {
     private static final long serialVersionUID = 8573411975323609800L;
 
-    private int maxSessions;
-    private int totalSessions;
-    private int currentSessions;
+    protected int maxSessions;
+    protected int totalSessions;
+    protected int currentSessions;
     
     @Override
     public void addSessions(int sessions) {

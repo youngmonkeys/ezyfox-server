@@ -12,6 +12,13 @@ public class EzyRequestFrameSecondTest extends BaseTest {
         EzyRequestFrameSecond frame = new EzyRequestFrameSecond(20);
         assert !frame.isInvalid();
         assert !frame.isExpired();
+        assert frame.nextFrame() != frame;
+        System.out.println(frame.getStartTime());
+        assert frame.getStartTime() < frame.getEndTime();
+        assert frame.getMaxRequests() == 20;
+        assert frame.getId() > 0;
+        assert frame.getRequests() == 0;
+        System.out.println(frame);
     }
     
     @Test

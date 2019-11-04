@@ -48,6 +48,8 @@ public class EzySimpleStatisticsTest {
         System.out.println(networkStats.getReadPackets());
         System.out.println(networkStats.getWrittenBytes());
         System.out.println(networkStats.getWrittenPackets());
+        assert statistics.getStartTime() > 0;
+        assert statistics.getWebSocketStats() != null;
     }
     
 }

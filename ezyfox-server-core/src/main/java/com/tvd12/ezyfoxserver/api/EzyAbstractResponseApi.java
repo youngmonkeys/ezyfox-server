@@ -17,8 +17,8 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
 		if(recipients.isEmpty()) return;
 		Object bytes = encodeData(pack.getData());
 		if(immediate) {
-        		for(EzySession session : recipients)
-        		    session.sendNow(createPacket(bytes, pack));
+    		for(EzySession session : recipients)
+    		    session.sendNow(createPacket(bytes, pack));
 		}
 		else {
 		    for(EzySession session : recipients)

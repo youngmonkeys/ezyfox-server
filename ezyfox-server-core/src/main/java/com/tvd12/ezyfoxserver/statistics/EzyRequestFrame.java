@@ -11,11 +11,11 @@ import lombok.Getter;
 public abstract class EzyRequestFrame implements Serializable {
     private static final long serialVersionUID = 5034914725676324216L;
 
-    protected long endTime;
-    protected long startTime;
-    protected int maxRequests;
     protected volatile int requests;
-    protected long id = COUNTER.incrementAndGet();
+    protected final long endTime;
+    protected final long startTime;
+    protected final int maxRequests;
+    protected final long id = COUNTER.incrementAndGet();
     
     private static final AtomicLong COUNTER  = new AtomicLong(0);
     

@@ -8,9 +8,9 @@ import lombok.Getter;
 public class EzySimpleUserStats implements EzyUserStatistics, Serializable {
     private static final long serialVersionUID = 8573411975323609800L;
 
-    private int maxUsers;
-    private int totalUsers;
-    private int currentUsers;
+    protected int maxUsers;
+    protected int totalUsers;
+    protected int currentUsers;
     
     @Override
     public void addUsers(int users) {

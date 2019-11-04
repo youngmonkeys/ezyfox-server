@@ -16,6 +16,11 @@
 			<package name="com.tvd12.ezyfoxserver.testing.codec"></package>
 		</packages>
 	</test>
+	<test name="Creator">
+		<packages>
+			<package name="com.tvd12.ezyfoxserver.testing.creator"></package>
+		</packages>
+	</test>
 	<test name="Loader">
 		<packages>
 			<package name="com.tvd12.ezyfoxserver.testing.loader"></package>

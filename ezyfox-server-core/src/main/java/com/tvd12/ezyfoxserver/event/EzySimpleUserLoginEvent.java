@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.event;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
@@ -22,6 +25,8 @@ public class EzySimpleUserLoginEvent
 	@Setter
 	protected boolean streamingEnable;
 	
+	protected Map<Object, Object> userProperties;
+	
 	public EzySimpleUserLoginEvent(
 	        EzySession session, 
 	        String zoneName, 
@@ -32,6 +37,7 @@ public class EzySimpleUserLoginEvent
 	    this.username = username;
 	    this.password = password;
 	    this.streamingEnable = true;
+	    this.userProperties = new HashMap<>();
 	}
 	
 	public String getUsername() {
@@ -43,11 +49,23 @@ public class EzySimpleUserLoginEvent
 	}
 	
 	@Override
+	public void setUserProperty(Object key, Object value) {
+	    this.userProperties.put(key, value);
+	}
+	
+	@Override
+	public void setUserProperties(Map<Object, Object> properties) {
+	    this.userProperties.putAll(properties);
+	}
+	
+	@Override
 	public void release() {
 	    super.release();
 	    this.username = null;
 	    this.password = null;
 	    this.output = null;
+	    this.userProperties.clear();
+	    this.userProperties = null;
 	}
 	
 }

@@ -5,6 +5,7 @@ import static com.tvd12.ezyfoxserver.context.EzyServerContexts.getStatistics;
 import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneSetting;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
@@ -65,9 +66,10 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         lock.lock();
         try {
             alreadyLoggedIn = userManager.containsUser(username);
-            user = alreadyLoggedIn 
-                    ? userManager.getUser(username)
-                    : newUser(zoneSetting, userManagementSetting, username, password);
+            if(alreadyLoggedIn)
+                user = userManager.getUser(username);
+            else
+                user = newUser(zoneSetting, userManagementSetting, username, password, event.getUserProperties());
             int maxSessionPerUser = userManagementSetting.getMaxSessionPerUser();
             boolean allowChangeSession = userManagementSetting.isAllowChangeSession();
             EzyStreamingSetting streamingSetting = zoneSetting.getStreaming();
@@ -173,13 +175,15 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             EzyZoneSetting zoneSetting,
             EzyUserManagementSetting userManagementSetting,
             String newUserName,
-            String password) {
+            String password,
+            Map<Object, Object> properties) {
         EzySimpleUser user = new EzySimpleUser();
         user.setName(newUserName);
         user.setPassword(password);
         user.setZoneId(zoneSetting.getId());
         user.setMaxIdleTime(userManagementSetting.getUserMaxIdleTime());
         user.setMaxSessions(userManagementSetting.getMaxSessionPerUser());
+        user.setProperties(properties);
         return user;
     }
     

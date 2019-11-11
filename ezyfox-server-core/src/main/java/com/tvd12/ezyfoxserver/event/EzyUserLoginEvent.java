@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.event;
 
+import java.util.Map;
+
 import com.tvd12.ezyfox.entity.EzyData;
 
 public interface EzyUserLoginEvent extends EzySessionEvent {
@@ -14,6 +16,8 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
 	
 	EzyData getData();
 	
+	Map<Object, Object> getUserProperties();
+	
 	boolean isStreamingEnable();
 
 	void setOutput(EzyData output);
@@ -23,5 +27,9 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
 	void setPassword(String password);
 	
 	void setStreamingEnable(boolean enable);
+	
+	void setUserProperty(Object key, Object value);
+	
+	void setUserProperties(Map<Object, Object> properties);
 	
 }

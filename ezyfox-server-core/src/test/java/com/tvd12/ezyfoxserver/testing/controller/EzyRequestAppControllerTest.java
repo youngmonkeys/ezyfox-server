@@ -35,6 +35,21 @@ public class EzyRequestAppControllerTest extends BaseCoreContextTest {
         controller.handle(ctx, request);
     }
     
+    @Test
+    public void testHasNotAccessed() {
+        EzyArray data = EzyEntityArrays.newArray(1, EzyEntityArrays.newArray());
+        EzyRequestAppController controller = new EzyRequestAppController();
+        MyTestUser user = new MyTestUser();
+        user.setName("dungtv1");
+        user.addSession(session);
+        EzySimpleRequestAppRequest request = new EzySimpleRequestAppRequest();
+        request.deserializeParams(data);
+        request.setUser(user);
+        request.setSession(session);
+        EzyServerContext ctx = newServerContext();
+        controller.handle(ctx, request);
+    }
+    
     @Override
     protected EzyServerContext newServerContext() {
         session = newSession();

@@ -21,11 +21,14 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyLoginController;
 import com.tvd12.ezyfoxserver.controller.EzyLoginProcessor;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
+import com.tvd12.ezyfoxserver.request.EzyLoginParams;
 import com.tvd12.ezyfoxserver.request.EzySimpleLoginRequest;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
@@ -328,6 +331,33 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.deserializeParams(data);
         request.setSession(session);
         controller.handle(ctx, request);
+    }
+    
+    @Test
+    public void testSetUserProperties() {
+        EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
+        EzySimpleServer server = (EzySimpleServer) ctx.getServer();
+        server.setResponseApi(mock(EzyResponseApi.class));
+        EzySession session = newSession();
+        session.setToken("abcdef");
+        EzyArray data = newLoginData();
+        EzySimpleLoginRequest request = new EzySimpleLoginRequest();
+        request.deserializeParams(data);
+        request.setSession(session);
+        EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
+        EzyZoneContext zoneContext = ctx.getZoneContext("example");
+        EzyLoginParams params = request.getParams();
+        EzySimpleUserLoginEvent event = new EzySimpleUserLoginEvent(
+                session,
+                params.getZoneName(),
+                params.getUsername(),
+                params.getPassword(), params.getData());
+        event.setUserProperty("dataId",123L);
+        processor.apply(zoneContext, event);
+        event.release();
+        EzyZoneUserManager userManager = zoneContext.getZone().getUserManager();
+        EzyUser user = userManager.getUser("dungtv");
+        assert user.getProperty("dataId").equals(123L);
     }
     
     private EzyArray newLoginData() {

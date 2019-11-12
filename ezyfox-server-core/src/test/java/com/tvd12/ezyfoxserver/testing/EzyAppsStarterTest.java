@@ -16,6 +16,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyAppsStarterTest extends BaseTest {
 
@@ -63,5 +64,37 @@ public class EzyAppsStarterTest extends BaseTest {
                 .appClassLoaders(loaders)
                 .build();
         starter.start();
+    }
+    
+    @Test
+    public void getClassLoaderErrorCaseTest() {
+        Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
+        EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
+        EzySimpleApplication app = new EzySimpleApplication();
+        EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
+        appSetting.setName("abc");
+        app.setSetting(appSetting);
+        EzySimpleAppContext appContext = new EzySimpleAppContext();
+        appContext.setApp(app);
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleAppsSetting appsSetting = new EzySimpleAppsSetting();
+        appsSetting.setItem(appSetting);
+        zoneSetting.setApplications(appsSetting);
+        zoneContext.addAppContext(appSetting, appContext);
+        EzyAppsStarter starter = new EzyAppsStarter.Builder()
+                .zoneContext(zoneContext)
+                .appClassLoaders(loaders)
+                .build();
+        try {
+            MethodInvoker.create()
+                .object(starter)
+                .method("getClassLoader")
+                .param("abc")
+                .param("hello")
+                .invoke();
+        }
+        catch (IllegalStateException e) {
+            assert e.getCause().getCause() instanceof IllegalArgumentException;
+        }
     }
 }

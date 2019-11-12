@@ -30,6 +30,7 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         sessions.add(new MySession());
         
         assert queue.isEmpty();
+        assert queue.size() == 0;
         
         for(int i = 0 ; i < 10 ; ++i) {
             queue.add(sessions.get(0));

@@ -49,4 +49,19 @@ public class EzySendResponseImplTest {
         cmd.execute(response, Lists.newArrayList(recipient));
     }
     
+    @Test
+    public void responseOneExceptionCase() throws Exception {
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.setDebug(true);
+        EzyResponseApi responseApi = mock(EzyResponseApi.class);
+        doThrow(new IllegalArgumentException()).when(responseApi).response(any(EzyPackage.class), anyBoolean());
+        EzySimpleServer server = new EzySimpleServer();
+        server.setResponseApi(responseApi);
+        server.setSettings(settings);
+        EzySendResponseImpl cmd = new EzySendResponseImpl(server);
+        EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
+        EzySession recipient = spy(EzyAbstractSession.class);
+        cmd.execute(response, recipient);
+    }
+    
 }

@@ -12,6 +12,7 @@ public class EzyBlockingSocketUserRemovalQueueTest {
     @Test
     public void test() {
         EzyBlockingSocketUserRemovalQueue queue = EzyBlockingSocketUserRemovalQueue.getInstance();
+        queue.clear();
         assert queue.isEmpty();
         assert queue.size() == 0;
         
@@ -20,6 +21,15 @@ public class EzyBlockingSocketUserRemovalQueueTest {
         assert queue.size() == 1;
         queue.remove(removal);
         assert queue.size() == 0;
+        
+        try {
+        	queue.add(removal);
+        	System.out.println(queue.take());
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+        }
+        
     }
     
 }

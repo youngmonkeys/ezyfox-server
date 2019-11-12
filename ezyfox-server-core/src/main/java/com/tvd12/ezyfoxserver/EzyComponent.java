@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyExceptionHandlers;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
@@ -20,6 +22,8 @@ public class EzyComponent implements EzyExceptionHandlersFetcher, EzyDestroyable
     
     @Override
     public void destroy() {
+    	if(eventControllers != null)
+            processWithLogException(() -> eventControllers.destroy());
         this.eventControllers = null;
     }
     

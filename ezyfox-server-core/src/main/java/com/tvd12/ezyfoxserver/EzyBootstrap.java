@@ -55,10 +55,6 @@ public class EzyBootstrap
 		((EzyStartable)sessionManager).start();
 	}
 	
-	protected EzyServer getServer() {
-		return context.getServer();
-	}
-	
 	public static Builder builder() {
 	    return new Builder();
 	}

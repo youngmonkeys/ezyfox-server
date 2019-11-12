@@ -125,10 +125,6 @@ public abstract class EzyLoader extends EzyLoggable {
     	    return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
     }
     
-    protected String getSettingsPath() {
-        return getPath(getHomePath(), EzyFolderNamesSetting.SETTINGS);
-    }
-    
     protected String getPath(String first, String... more) {
         return Paths.get(first, more).toString();
     }

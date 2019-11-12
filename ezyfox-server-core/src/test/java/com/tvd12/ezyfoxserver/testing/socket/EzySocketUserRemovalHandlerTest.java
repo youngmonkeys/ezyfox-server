@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserEvent;
+import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketUserRemoval;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemoval;
@@ -126,6 +127,38 @@ public class EzySocketUserRemovalHandlerTest {
         EzySocketUserRemoval item = new EzySimpleSocketUserRemoval(zoneContext, user, EzyUserRemoveReason.EXIT_APP);
         queue.add(item);
         EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler(queue);
+        handler.handleEvent();
+        handler.destroy();
+    }
+    
+    @Test
+    public void removeUserFromAppExceptionCaseTest() {
+        TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
+        EzyAppContext appContext1 = mock(EzyAppContext.class);
+        EzyAppUserManager userManager1 = mock(EzyAppUserManager.class);
+        when(userManager1.containsUser(any(EzyUser.class))).thenReturn(true);
+        EzyApplication app1 = mock(EzyApplication.class);
+        when(app1.getUserManager()).thenReturn(userManager1);
+        when(appContext1.getApp()).thenReturn(app1);
+        doThrow(new IllegalArgumentException()).when(userManager1).removeUser(any(), any());
+        EzySimpleAppSetting appSetting1 = new EzySimpleAppSetting();
+        appSetting1.setName("app1");
+        when(app1.getSetting()).thenReturn(appSetting1);
+        
+        EzyAppContext appContext2 = mock(EzyAppContext.class);
+        EzyAppUserManager userManager2 = mock(EzyAppUserManager.class);
+        when(userManager2.containsUser(any(EzyUser.class))).thenReturn(false);
+        EzyApplication app2 = mock(EzyApplication.class);
+        when(app2.getUserManager()).thenReturn(userManager2);
+        when(appContext2.getApp()).thenReturn(app2);
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+        when(zoneContext.getAppContexts()).thenReturn(Lists.newArrayList(appContext1, appContext2));
+        EzySimpleUser user = new EzySimpleUser();
+        user.setName("test");
+        EzySocketUserRemoval item = new EzySimpleSocketUserRemoval(zoneContext, user, EzyUserRemoveReason.EXIT_APP);
+        queue.add(item);
+        EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler();
+        handler = new EzySocketUserRemovalHandler(queue);
         handler.handleEvent();
         handler.destroy();
     }

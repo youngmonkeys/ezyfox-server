@@ -11,7 +11,6 @@ public class EzyLoginErrorTest extends BaseTest {
     public void test() {
         EzyLoginError value = EzyLoginError.ALREADY_LOGIN;
         assert value.getId() == 1;
-        assert value == EzyLoginError.valueOf(1);
         assert value.getName().equals("ALREADY_LOGIN");
         EzyLoginError.valueOf("ALREADY_LOGIN");
     }

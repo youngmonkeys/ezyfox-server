@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.constant;
 
-import com.tvd12.ezyfox.util.EzyEnums;
-
 import lombok.Getter;
 
 public enum EzyAccessAppError implements EzyIAccessAppError {
@@ -22,10 +20,6 @@ public enum EzyAccessAppError implements EzyIAccessAppError {
     @Override
     public String getName() {
         return toString();
-    }
-    
-    public static EzyAccessAppError valueOf(int id) {
-        return EzyEnums.valueOf(values(), id);
     }
     
 }

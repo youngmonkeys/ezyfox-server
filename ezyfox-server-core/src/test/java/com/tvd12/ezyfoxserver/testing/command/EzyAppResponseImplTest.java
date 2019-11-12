@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.command.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
@@ -156,6 +157,20 @@ public class EzyAppResponseImplTest extends BaseTest {
         response.sessions(Lists.newArrayList(session4, session5), true);
         assert ((Collection)recipients.get(response)).size() == 27;
         assert ((Collection)exrecipients.get(response)).size() == 15;
+    }
+    
+    @Test
+    public void executeTest() {
+        EzyAppContext appContext = mock(EzyAppContext.class);
+        EzyApplication app = mock(EzyApplication.class);
+        EzyAppUserManager userManager = EzyAppUserManagerImpl.builder()
+                .build();
+        when(app.getUserManager()).thenReturn(userManager);
+        when(appContext.getApp()).thenReturn(app);
+        EzyAppResponse cmd = (EzyAppResponse) new EzyAppResponseImpl(appContext)
+                .command("test")
+                .params(EzyEntityFactory.newArrayBuilder());
+        cmd.execute();
     }
     
     private EzyUser newUser(String name) {

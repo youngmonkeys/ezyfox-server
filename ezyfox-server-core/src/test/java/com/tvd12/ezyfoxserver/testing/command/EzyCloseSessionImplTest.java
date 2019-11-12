@@ -22,4 +22,14 @@ public class EzyCloseSessionImplTest extends BaseTest {
         cmd.close(session, EzyDisconnectReason.ADMIN_BAN);
     }
     
+    @Test
+    public void noSendToClient() {
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyCloseSessionImpl cmd = new EzyCloseSessionImpl(serverContext);
+        EzyAbstractSession session = spy(EzyAbstractSession.class);
+        EzyChannel channel = mock(EzyChannel.class);
+        session.setChannel(channel);
+        cmd.close(session, EzyDisconnectReason.UNKNOWN);
+    }
+    
 }

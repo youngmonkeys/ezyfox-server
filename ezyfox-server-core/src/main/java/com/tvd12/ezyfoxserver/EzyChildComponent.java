@@ -28,8 +28,6 @@ public abstract class EzyChildComponent
         super.destroy();
         if(entry != null)
             processWithLogException(() -> entry.destroy());
-        if(eventControllers != null)
-            processWithLogException(() -> eventControllers.destroy());
         this.entry = null;
     }
     

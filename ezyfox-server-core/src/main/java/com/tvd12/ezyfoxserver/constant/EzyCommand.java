@@ -34,10 +34,6 @@ public enum EzyCommand implements EzyConstant {
 	private static final Set<EzyCommand> SYSTEM_COMMANDS = systemCommands();
 	private static final Map<Integer, EzyCommand> COMMANDS_BY_ID = commandsById();
 	
-	private EzyCommand(int id) {
-	    this(id, 10);
-	}
-	
 	private EzyCommand(int id, int priority) {
 		this.id = id;
 		this.priority = priority;
@@ -45,10 +41,6 @@ public enum EzyCommand implements EzyConstant {
 	
 	public boolean isSystemCommand() {
 	    return SYSTEM_COMMANDS.contains(this);
-	}
-	
-	public int compareByPriority(EzyCommand other) {
-	    return this.getPriority() - other.getPriority();
 	}
 	
 	@Override

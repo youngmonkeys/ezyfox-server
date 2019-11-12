@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
+import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfox.util.EzyExceptionHandlers;
 import com.tvd12.ezyfox.util.EzyExceptionHandlersFetcher;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
@@ -16,7 +17,7 @@ public class EzyAddExceptionHandlerImpl
     }
     
     @Override
-    public void add(EzyExceptionHandlers handler) {
+    public void add(EzyExceptionHandler handler) {
         EzyExceptionHandlers handlers = fetcher.getExceptionHandlers();
         handlers.addExceptionHandler(handler);
     }

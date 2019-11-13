@@ -78,6 +78,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);
+		Class[] prototypeClasses = getPrototypeClasses();
+		beanContextBuilder.addPrototypeClasses(prototypeClasses);
 		String[] scanablePackages = getScanableBeanPackages();
 		if(scanablePackages.length > 0)
 			beanContextBuilder.scan(scanablePackages);
@@ -101,6 +103,10 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 	}
 	
 	protected Class[] getSingletonClasses() {
+		return new Class[0];
+	}
+	
+	protected Class[] getPrototypeClasses() {
 		return new Class[0];
 	}
 	

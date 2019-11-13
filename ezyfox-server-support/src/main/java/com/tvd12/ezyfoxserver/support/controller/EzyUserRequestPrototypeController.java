@@ -1,11 +1,8 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPrototypeFactory;
@@ -33,7 +30,6 @@ public abstract class EzyUserRequestPrototypeController<
 	protected final EzyBeanContext beanContext;
 	protected final EzyUnmarshaller unmarshaller;
 	protected final Map<String, EzyPrototypeSupplier> handlers;
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected EzyUserRequestPrototypeController(Builder<?> builder) {
 		this.beanContext = builder.beanContext;
@@ -78,7 +74,7 @@ public abstract class EzyUserRequestPrototypeController<
 		}
 	}
 	
-	protected void preHandle(C context, E event, EzyHandler handler) {}
+	protected abstract void preHandle(C context, E event, EzyHandler handler);
 	protected void postHandle(C context, E event, EzyHandler handler, Exception e) {}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
@@ -102,7 +98,7 @@ public abstract class EzyUserRequestPrototypeController<
 		
 		private Map<String, EzyPrototypeSupplier> getHandlers() {
 			List<EzyPrototypeSupplier> suppliers = filterSuppliers();
-			Map<String, EzyPrototypeSupplier> handlers = new ConcurrentHashMap<>();
+			Map<String, EzyPrototypeSupplier> handlers = new HashMap<>();
 			for(EzyPrototypeSupplier supplier : suppliers) {
 				Class<?> handleType = supplier.getObjectType();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);

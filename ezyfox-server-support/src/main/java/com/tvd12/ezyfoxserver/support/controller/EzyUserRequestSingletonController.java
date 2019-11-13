@@ -1,11 +1,8 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
@@ -29,7 +26,6 @@ public abstract class EzyUserRequestSingletonController<
 
 	private final EzyUnmarshaller unmarshaller;
 	private final Map<String, EzyUserRequestHandler> handlers;
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected EzyUserRequestSingletonController(Builder<?> builder) {
 		this.unmarshaller = builder.unmarshaller;
@@ -87,7 +83,7 @@ public abstract class EzyUserRequestSingletonController<
 		
 		private Map<String, EzyUserRequestHandler> getHandlers() {
 			List<Object> singletons = filterSingletons();
-			Map<String, EzyUserRequestHandler> handlers = new ConcurrentHashMap<>();
+			Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
 			for(Object singleton : singletons) {
 				Class<?> handleType = singleton.getClass();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);

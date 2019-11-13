@@ -73,10 +73,12 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     			.addSingleton("executorService", executorService)
     			.addSingleton("zoneContext", context.getParent())
 			.addSingleton("serverContext", context.getParent().getParent());
-    		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
-    		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
-    		Class[] singletonClasses = getSingletonClasses();
-    		beanContextBuilder.addSingletonClasses(singletonClasses);
+		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
+		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
+		Class[] singletonClasses = getSingletonClasses();
+		beanContextBuilder.addSingletonClasses(singletonClasses);
+		Class[] prototypeClasses = getPrototypeClasses();
+		beanContextBuilder.addPrototypeClasses(prototypeClasses);
 		String[] scanablePackages = getScanableBeanPackages();
 		if(scanablePackages.length > 0)
 			beanContextBuilder.scan(scanablePackages);
@@ -101,6 +103,10 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 
     protected Class[] getSingletonClasses() {
 		return new Class[0];
+    }
+    
+    protected Class[] getPrototypeClasses() {
+    	return new Class[0];
     }
     
     protected String[] getScanableBindingPackages() {

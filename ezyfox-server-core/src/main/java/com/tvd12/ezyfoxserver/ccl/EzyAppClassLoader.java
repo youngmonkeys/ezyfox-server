@@ -19,10 +19,9 @@ import com.tvd12.ezyfox.util.EzyDirectories;
 public class EzyAppClassLoader extends URLClassLoader {
     
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    
-    /**
-     * @param urls
-     * @param parent
+
+    /* (non-Javadoc)
+     * @see java.lang.URLClassLoader#URLClassLoader(java.net.URL[], java.lang.ClassLoader)
      */
     public EzyAppClassLoader(File directory, ClassLoader parent) {
         super(getURLsByPath(directory), parent);

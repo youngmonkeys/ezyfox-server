@@ -380,6 +380,7 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     /**
      * Get connection
      * 
+     * @param <T> the connection type
      * @return the connection
      */
     <T> T getConnection();

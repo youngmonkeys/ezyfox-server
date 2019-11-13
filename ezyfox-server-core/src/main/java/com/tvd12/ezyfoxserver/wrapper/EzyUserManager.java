@@ -74,6 +74,7 @@ public interface EzyUserManager extends EzyDestroyable {
 	 * Remove user
 	 * 
 	 * @param user the user
+	 * @return the current user
 	 */
 	EzyUser removeUser(EzyUser user);
 	
@@ -111,6 +112,7 @@ public interface EzyUserManager extends EzyDestroyable {
 	 * Remove user by id
 	 * 
 	 * @param userId the user id
+	 * @return the current user
 	 */
 	default EzyUser removeUser(long userId) {
 		return removeUser(getUser(userId));
@@ -120,6 +122,7 @@ public interface EzyUserManager extends EzyDestroyable {
 	 * Remove user byte name
 	 * 
 	 * @param username the user name
+	 * @return the current user
 	 */
 	default EzyUser removeUser(String username) {
 		return removeUser(getUser(username));

@@ -4,12 +4,14 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyObject;
+import com.tvd12.ezyfox.util.EzyMapBuilder;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 
 public class EzyUserLoginEventImplTest extends BaseCoreTest {
 
+    @SuppressWarnings("unchecked")
     @Test
     public void test() {
         EzyArray data = newArrayBuilder().build();
@@ -28,6 +30,18 @@ public class EzyUserLoginEventImplTest extends BaseCoreTest {
         assert event.getUsername().equals("new login name");
         assert event.getPassword().equals("new password");
         assert event.getOutput() == output2;
+        
+        event.setUserProperty("id", 1);
+        event.setUserProperties(EzyMapBuilder.mapBuilder().build());
+        assert event.getUserProperties().size() == 1;
+        event.setStreamingEnable(true);
+        assert event.isStreamingEnable();
+        assert event.getZoneName().equals("zone");
+        
+        event = new EzySimpleUserLoginEvent(null, null, null, null, null);
+        
+        assert event.getUsername().equals("");
+        assert event.getPassword().equals("");
     }
     
 }

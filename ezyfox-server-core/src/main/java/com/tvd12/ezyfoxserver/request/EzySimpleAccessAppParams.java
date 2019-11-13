@@ -20,4 +20,10 @@ public class EzySimpleAccessAppParams
         this.data = t.get(1, EzyData.class, null);
     }
     
+    @Override
+    public void release() {
+        super.release();
+        this.data = null;
+    }
+    
 }

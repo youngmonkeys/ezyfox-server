@@ -10,7 +10,7 @@ public class EzyConnectionTypeTest extends BaseTest {
     @Test
     public void test() {
         assert EzyConnectionType.SOCKET.getId() == 1;
-        System.out.println(EzyConnectionType.WEBSOCKET);
+        System.out.println(EzyConnectionType.WEBSOCKET.getName());
     }
     
 }

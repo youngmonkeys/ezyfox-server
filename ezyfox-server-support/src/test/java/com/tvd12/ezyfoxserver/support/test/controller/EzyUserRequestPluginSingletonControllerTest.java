@@ -11,32 +11,32 @@ import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
-import com.tvd12.ezyfoxserver.EzySimpleApplication;
+import com.tvd12.ezyfoxserver.EzySimplePlugin;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
-import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
-import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
+import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
-import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
-import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
-import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
-import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
-import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
+import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
+import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
+import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
+import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.base.BaseTest;
 
-public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
+public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 
 	@Test
 	public void test() throws Exception {
@@ -50,41 +50,41 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
 		EzySimpleZone zone = new EzySimpleZone();
 		zone.setSetting(zoneSetting);
+		EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
+				.zoneName("test")
+				.build();
+		zone.setUserManager(zoneUserManager);
 		EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
 		zoneContext.setZone(zone);
 		zoneContext.init();
 		zoneContext.setParent(serverContext);
 		
-		EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
-		appSetting.setName("test");
+		EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
+		pluginSetting.setName("test");
 		
-		EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-				.build();
-
 		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
 		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
-		EzySimpleApplication application = new EzySimpleApplication();
-		application.setSetting(appSetting);
-		application.setUserManager(appUserManager);
-		application.setEventControllers(eventControllers);
+		EzySimplePlugin plugin = new EzySimplePlugin();
+		plugin.setSetting(pluginSetting);
+		plugin.setEventControllers(eventControllers);
 		
-		ScheduledExecutorService appScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
-		EzySimpleAppContext appContext = new EzySimpleAppContext();
-		appContext.setApp(application);
-		appContext.setParent(zoneContext);
-		appContext.setExecutorService(appScheduledExecutorService);
-		appContext.init();
+		ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
+		EzySimplePluginContext pluginContext = new EzySimplePluginContext();
+		pluginContext.setPlugin(plugin);
+		pluginContext.setParent(zoneContext);
+		pluginContext.setExecutorService(pluginScheduledExecutorService);
+		pluginContext.init();
 		
-		EzySimpleAppEntry entry = new EzyAppEntryEx();
-		entry.config(appContext);
+		EzySimplePluginEntry entry = new EzyPluginEntryEx();
+		entry.config(pluginContext);
 		entry.start();
-		handleClientRequest(appContext);
+		handleClientRequest(pluginContext);
 		entry.destroy();
 	}
 	
-	private void handleClientRequest(EzyAppContext context) {
-		EzySimpleApplication app = (EzySimpleApplication) context.getApp();
-		EzyAppRequestController requestController = app.getRequestController();
+	private void handleClientRequest(EzyPluginContext context) {
+		EzySimplePlugin plugin = (EzySimplePlugin) context.getPlugin();
+		EzyPluginRequestController requestController = plugin.getRequestController();
 		
 		EzyAbstractSession session = spy(EzyAbstractSession.class);
 		EzySimpleUser user = new EzySimpleUser();
@@ -93,7 +93,7 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 				.append(EzyEntityFactory.newObjectBuilder()
 						.append("who", "Mr.Young Monkey!"))
 				.build();
-		EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(user, session, data);
+		EzyUserRequestPluginEvent event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
@@ -101,38 +101,38 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 				.append(EzyEntityFactory.newObjectBuilder()
 						.append("who", "Mr.Young Monkey!"))
 				.build();
-		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
 				.append("no command")
 				.build();
-		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
 				.append("hello")
 				.build();
-		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
 				.append("badRequestSend")
 				.build();
-		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
 				.append("badRequestNotSend")
 				.build();
-		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
 		requestController.handle(context, event);
 		
 		try {
 			data = EzyEntityFactory.newArrayBuilder()
 					.append("exception")
 					.build();
-			event = new EzySimpleUserRequestAppEvent(user, session, data);
+			event = new EzySimpleUserRequestPluginEvent(user, session, data);
 			requestController.handle(context, event);
 		}
 		catch (Exception e) {
@@ -140,12 +140,12 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		}
 	}
 	
-	public static class EzyAppEntryEx extends EzySimpleAppEntry {
+	public static class EzyPluginEntryEx extends EzySimplePluginEntry {
 
 		@Override
 		protected String[] getScanableBeanPackages() {
 			return new String[] {
-					"com.tvd12.ezyfoxserver.support.test.controller.app"
+					"com.tvd12.ezyfoxserver.support.test.controller.plugin"
 			};
 		}
 		
@@ -164,12 +164,12 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		}
 
 		@Override
-		protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
+		protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
 		}
 		
 		@Override
-		protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
-			return EzyUserRequestAppSingletonController.builder()
+		protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
+			return EzyUserRequestPluginSingletonController.builder()
 					.beanContext(beanContext)
 					.build();
 		}

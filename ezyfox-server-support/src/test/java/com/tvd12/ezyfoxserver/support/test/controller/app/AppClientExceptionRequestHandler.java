@@ -8,13 +8,13 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
-@EzyClientRequestListener("hello")
-public class AppClientHelloRequestHandler 
+@EzyClientRequestListener("exception")
+public class AppClientExceptionRequestHandler 
 		implements EzyUserRequestHandler<EzyAppContext, Hello> {
-	
+
 	@Override
 	public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
-		System.out.println("hello: " + data.getWho());
+		throw new IllegalStateException("server maintain");
 	}
 
 	@Override

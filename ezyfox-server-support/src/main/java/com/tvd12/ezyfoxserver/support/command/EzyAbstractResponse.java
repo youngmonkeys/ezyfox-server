@@ -105,7 +105,7 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
     
     @Override
     public void destroy() {
-    		this.data = null;
+    	this.data = null;
         this.response = null;
         this.context = null;
         this.marshaller = null;

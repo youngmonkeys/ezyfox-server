@@ -18,7 +18,7 @@ public abstract class EzyHttpServerBootstrap extends EzyServerBootstrap {
 	}
 	
 	private EzyHttpBootstrap newHttpBottstrap() {
-		EzyComplexHttpBootstrap bootstrap = new EzyComplexHttpBootstrap();
+		EzyEmptyHttpBootstrap bootstrap = new EzyEmptyHttpBootstrap();
 		bootstrap.setServerContext(context);
 		return bootstrap;
 	}

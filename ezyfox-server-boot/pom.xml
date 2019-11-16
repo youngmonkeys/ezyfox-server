@@ -13,14 +13,14 @@
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	
 	<properties>
-		<ezy.httpserver.version>1.0.0</ezy.httpserver.version>
+		<ezy.core.version>1.0.0</ezy.core.version>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-httpserver</artifactId>
-			<version>${ezy.httpserver.version}</version>
+			<artifactId>ezyfox-server-core</artifactId>
+			<version>${ezy.core.version}</version>
 		</dependency>
 	</dependencies>
 	

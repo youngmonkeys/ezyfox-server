@@ -29,12 +29,6 @@
 		
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-monitor</artifactId>
-			<version>${ezy.monitor.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-databridge</artifactId>
 			<version>${ezy.databridge.version}</version>
 		</dependency>

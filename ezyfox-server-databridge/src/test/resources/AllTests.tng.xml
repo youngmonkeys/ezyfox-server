@@ -3,7 +3,7 @@
 <suite name="AllTests">
 	<test name="All">
 		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing"></package>
+			<package name="com.tvd12.ezyfoxserver.databridge.test"></package>
 		</packages>
 	</test>
 </suite>

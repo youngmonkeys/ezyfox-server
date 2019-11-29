@@ -234,6 +234,13 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 			processWithLogException(() -> socketDisconnectionHandlingLoopHandler.destroy());
 		if(socketUserRemovalHandlingLoopHandler != null)
 			processWithLogException(() -> socketUserRemovalHandlingLoopHandler.destroy());
+		this.socketServerBootstrap = null;
+		this.websocketServerBootstrap = null;
+		this.handlerGroupManager = null;
+		this.systemRequestHandlingLoopHandler = null;
+		this.extensionRequestHandlingLoopHandler = null;
+		this.socketDisconnectionHandlingLoopHandler = null;
+		this.socketUserRemovalHandlingLoopHandler = null;
 	}
 	
 }

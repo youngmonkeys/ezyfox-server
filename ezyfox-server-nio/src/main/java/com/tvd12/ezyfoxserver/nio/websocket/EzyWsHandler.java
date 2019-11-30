@@ -26,17 +26,17 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 public class EzyWsHandler extends EzyLoggable {
 
 	private final EzyNioSessionManager sessionManager;
-	private final EzySessionManagementSetting settings;
 	private final EzyHandlerGroupManager handlerGroupManager;
+	private final EzySessionManagementSetting sessionManagementSetting;
 	
 	private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
 			CLOSE_BY_SERVER.getCode()
 	);
 
 	public EzyWsHandler(Builder builder) {
-		this.settings = builder.settings;
 		this.sessionManager = builder.sessionManager;
 		this.handlerGroupManager = builder.handlerGroupManager;
+		this.sessionManagementSetting = builder.sessionManagementSetting;
 	}
 	
 	private boolean isIgnoreStatusCode(int statusCode) {
@@ -71,7 +71,8 @@ public class EzyWsHandler extends EzyLoggable {
 
 	@OnWebSocketConnect
 	public void onConnect(Session session) throws Exception {
-		session.setIdleTimeout(settings.getSessionMaxIdleTime());
+		long sessionMaxIdleTime = sessionManagementSetting.getSessionMaxIdleTime();
+		session.setIdleTimeout(sessionMaxIdleTime);
 		EzyChannel channel = new EzyWsChannel(session);
 		handlerGroupManager.newHandlerGroup(channel, EzyConnectionType.WEBSOCKET);
 	}
@@ -110,13 +111,8 @@ public class EzyWsHandler extends EzyLoggable {
 	public static class Builder implements EzyBuilder<EzyWsHandler> {
 
 		private EzyNioSessionManager sessionManager;
-		private EzySessionManagementSetting settings;
 		private EzyHandlerGroupManager handlerGroupManager;
-
-		public Builder settings(EzySessionManagementSetting settings) {
-			this.settings = settings;
-			return this;
-		}
+		private EzySessionManagementSetting sessionManagementSetting;
 
 		public Builder sessionManager(EzyNioSessionManager sessionManager) {
 			this.sessionManager = sessionManager;
@@ -125,6 +121,11 @@ public class EzyWsHandler extends EzyLoggable {
 
 		public Builder handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
 			this.handlerGroupManager = handlerGroupManager;
+			return this;
+		}
+		
+		public Builder sessionManagementSetting(EzySessionManagementSetting sessionManagementSetting) {
+			this.sessionManagementSetting = sessionManagementSetting;
 			return this;
 		}
 

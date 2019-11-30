@@ -23,7 +23,7 @@ public class EzyWebSocketServerCreator {
 	protected EzyWebSocketSetting setting;
 	protected EzyNioSessionManager sessionManager;
 	protected EzyHandlerGroupManager handlerGroupManager;
-	protected EzySessionManagementSetting sessionSetting;
+	protected EzySessionManagementSetting sessionManagementSetting;
 	
 	public EzyWebSocketServerCreator setting(EzyWebSocketSetting setting) {
 		this.setting = setting;
@@ -35,13 +35,13 @@ public class EzyWebSocketServerCreator {
 		return this;
 	}
 	
-	public EzyWebSocketServerCreator sessionSetting(EzySessionManagementSetting sessionSetting) {
-		this.sessionSetting = sessionSetting;
+	public EzyWebSocketServerCreator handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
+		this.handlerGroupManager = handlerGroupManager;
 		return this;
 	}
 	
-	public EzyWebSocketServerCreator handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
-		this.handlerGroupManager = handlerGroupManager;
+	public EzyWebSocketServerCreator sessionManagementSetting(EzySessionManagementSetting sessionManagementSetting) {
+		this.sessionManagementSetting = sessionManagementSetting;
 		return this;
 	}
 	
@@ -72,9 +72,9 @@ public class EzyWebSocketServerCreator {
 	
 	private EzyWsHandler newWsHandler() {
 		return EzyWsHandler.builder()
-				.settings(sessionSetting)
-				.handlerGroupManager(handlerGroupManager)
 				.sessionManager(sessionManager)
+				.handlerGroupManager(handlerGroupManager)
+				.sessionManagementSetting(sessionManagementSetting)
 				.build();
 	}
 	

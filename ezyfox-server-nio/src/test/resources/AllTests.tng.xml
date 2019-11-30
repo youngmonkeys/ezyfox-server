@@ -5,6 +5,8 @@
 		<packages>
 			<package name="com.tvd12.ezyfoxserver.nio.testing"></package>
 			<package name="com.tvd12.ezyfoxserver.nio.testing.handler"></package>
+			<package name="com.tvd12.ezyfoxserver.nio.testing.websocket"></package>
+			<package name="com.tvd12.ezyfoxserver.nio.testing.socket"></package>
 		</packages>
 	</test>
 </suite>

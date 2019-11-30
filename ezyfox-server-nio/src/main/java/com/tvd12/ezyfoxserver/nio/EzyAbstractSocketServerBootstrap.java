@@ -31,10 +31,6 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 		processWithLogException(() -> writingLoopHandler.destroy());
 	}
 	
-	protected final EzySessionManagementSetting getSessionSetting() {
-		return getServerSettings().getSessionManagement();
-	}
-	
 	protected final EzySettings getServerSettings() {
 		return serverContext.getServer().getSettings();
 	}
@@ -42,6 +38,10 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 	protected final EzyNioSessionManager getSessionManager() {
 		return (EzyNioSessionManager) 
 				serverContext.getServer().getSessionManager();
+	}
+	
+	protected final EzySessionManagementSetting getSessionManagementSetting() {
+		return getServerSettings().getSessionManagement();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -155,14 +155,14 @@ public class EzyHandlerGroupManagerImpl
 			this.codecThreadPool = codecThreadPool;
 			return this;
 		}
-		
-		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
-			this.requestQueues = requestQueues;
+
+		public Builder streamQueue(EzySocketStreamQueue streamQueue) {
+			this.streamQueue = streamQueue;
 			return this;
 		}
 		
-		public Builder streamQueue(EzySocketStreamQueue streamQueue) {
-			this.streamQueue = streamQueue;
+		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
+			this.requestQueues = requestQueues;
 			return this;
 		}
 		

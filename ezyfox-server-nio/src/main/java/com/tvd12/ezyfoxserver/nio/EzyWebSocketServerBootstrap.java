@@ -42,8 +42,8 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 		return newSocketServerCreator()
 				.setting(getWsSetting())
 				.sessionManager(getSessionManager())
-				.sessionSetting(getSessionSetting())
 				.handlerGroupManager(handlerGroupManager)
+				.sessionManagementSetting(getSessionManagementSetting())
 				.create();
 	}
 	

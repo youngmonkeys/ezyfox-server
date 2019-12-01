@@ -1,20 +1,23 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.AbstractSelector;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
@@ -28,13 +31,10 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketChannel;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
@@ -45,7 +45,6 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
@@ -54,117 +53,76 @@ import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.FieldUtil;
 
-public class EzyNioSocketReaderTest extends BaseTest {
+public class EzyNioSocketAcceptorTest extends BaseTest {
 
 	@Test
 	public void test() throws Exception {
 		EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager();
 		
 		Selector ownSelector = spy(ExSelector.class);
-		when(ownSelector.selectNow()).thenReturn(1);
 		SelectionKey selectionKey1 = spy(ExSelectionKey.class);
 		SelectionKey selectionKey2 = spy(ExSelectionKey.class);
-		SelectionKey selectionKey3 = spy(ExSelectionKey.class);
-		SelectionKey selectionKey4 = spy(ExSelectionKey.class);
-		SelectionKey selectionKey5 = spy(ExSelectionKey.class);
 		when(ownSelector.selectedKeys()).thenReturn(Sets.newHashSet(
-				selectionKey1, 
-				selectionKey2, 
-				selectionKey3, selectionKey4, selectionKey5));
+				selectionKey1, selectionKey2)); 
 		when(selectionKey1.isValid()).thenReturn(true);
-		when(selectionKey1.readyOps()).thenReturn(SelectionKey.OP_READ);
-		when(selectionKey2.isValid()).thenReturn(true);
-		when(selectionKey2.readyOps()).thenReturn(SelectionKey.OP_WRITE);
-		when(selectionKey3.isValid()).thenReturn(false);
-		when(selectionKey4.isValid()).thenReturn(true);
-		when(selectionKey4.readyOps()).thenReturn(SelectionKey.OP_READ);
-		when(selectionKey5.isValid()).thenReturn(true);
-		when(selectionKey5.readyOps()).thenReturn(SelectionKey.OP_READ);
+		when(selectionKey1.readyOps()).thenReturn(SelectionKey.OP_ACCEPT);
+		ExServerSocketChannel serverChannel1 = spy(ExServerSocketChannel.class);
+		when(selectionKey1.channel()).thenReturn(serverChannel1);
+		SocketChannel channel1 = spy(ExSocketChannel.class);
+		when(serverChannel1.accept()).thenReturn(channel1);
+		Socket socket1 = new Socket();
+		when(channel1.socket()).thenReturn(socket1);
 		
-		SocketChannel socketChannel1 = mock(SocketChannel.class);
-		EzyChannel channel1 = new EzyNioSocketChannel(socketChannel1);
+		Selector readSelector = spy(ExSelector.class);
 		
-		handlerGroupManager.newHandlerGroup(channel1, EzyConnectionType.SOCKET);
+		channel1.configureBlocking(false);
+		when(channel1.register(readSelector, SelectionKey.OP_READ)).thenReturn(selectionKey1);
 		
-		when(selectionKey1.channel()).thenReturn(socketChannel1);
-		when(socketChannel1.isConnected()).thenReturn(true);
-		when(socketChannel1.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-			@Override
-			public Integer answer(InvocationOnMock invocation) throws Throwable {
-				ByteBuffer buffer = invocation.getArgumentAt(0, ByteBuffer.class);
-				buffer.put("hello".getBytes());
-				return "hello".length();
-			}
-		});
-		
-		SocketChannel socketChannel4 = mock(SocketChannel.class);
-		when(selectionKey4.channel()).thenReturn(socketChannel4);
-		
-		SocketChannel socketChannel5 = spy(ExSocketChannel.class);
-		EzyChannel channel5 = new EzyNioSocketChannel(socketChannel5);
-		when(selectionKey5.channel()).thenReturn(socketChannel5);
-		doNothing().when(socketChannel5).close();
-		
-		handlerGroupManager.newHandlerGroup(channel5, EzyConnectionType.SOCKET);
-		
-		when(selectionKey5.channel()).thenReturn(socketChannel5);
-		when(socketChannel5.isConnected()).thenReturn(true);
-		when(socketChannel5.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-			@Override
-			public Integer answer(InvocationOnMock invocation) throws Throwable {
-				return -1;
-			}
-		});
-		
-		EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
-		socketAcceptor.setReadSelector(ownSelector);
-		socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-		socketAcceptor.setAcceptableConnections(new ArrayList<>());
-		
-		EzyNioSocketReader socketReader = new EzyNioSocketReader();
-		socketReader.setOwnSelector(ownSelector);
-		socketReader.setAcceptableConnectionsHandler(socketAcceptor);
-		socketReader.setHandlerGroupManager(handlerGroupManager);
-		socketReader.handleEvent();
+		EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
+		acceptor.setAcceptableConnections(new ArrayList<>());
+		acceptor.setHandlerGroupManager(handlerGroupManager);
+		acceptor.setOwnSelector(ownSelector);
+		acceptor.setReadSelector(readSelector);
+		acceptor.handleEvent();
+		List<SocketChannel> acceptableConnections = FieldUtil.getFieldValue(acceptor, "acceptableConnections");
+		assert acceptableConnections.size() == 1;
+		acceptor.handleAcceptableConnections();
+		assert acceptableConnections.size() == 0;
 	}
 	
 	@Test
-	public void testExceptionCase() throws Exception {
+	public void acceptConnectionExceptionCase() throws Exception {
 		EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager();
 		
 		Selector ownSelector = spy(ExSelector.class);
-		when(ownSelector.selectNow()).thenReturn(1);
 		SelectionKey selectionKey1 = spy(ExSelectionKey.class);
-		when(ownSelector.selectedKeys()).thenReturn(Sets.newHashSet(selectionKey1)); 
+		SelectionKey selectionKey2 = spy(ExSelectionKey.class);
+		when(ownSelector.selectedKeys()).thenReturn(Sets.newHashSet(
+				selectionKey1, selectionKey2)); 
 		when(selectionKey1.isValid()).thenReturn(true);
-		when(selectionKey1.readyOps()).thenReturn(SelectionKey.OP_READ);
+		when(selectionKey1.readyOps()).thenReturn(SelectionKey.OP_ACCEPT);
+		ExServerSocketChannel serverChannel1 = spy(ExServerSocketChannel.class);
+		when(selectionKey1.channel()).thenReturn(serverChannel1);
+		SocketChannel channel1 = spy(ExSocketChannel.class);
+		when(serverChannel1.accept()).thenReturn(channel1);
+		when(channel1.socket()).thenThrow(new IllegalStateException("server maintain"));
 		
-		SocketChannel socketChannel1 = mock(SocketChannel.class);
-		EzyChannel channel1 = new EzyNioSocketChannel(socketChannel1);
+		Selector readSelector = spy(ExSelector.class);
 		
-		handlerGroupManager.newHandlerGroup(channel1, EzyConnectionType.SOCKET);
-		
-		when(selectionKey1.channel()).thenReturn(socketChannel1);
-		when(socketChannel1.isConnected()).thenReturn(true);
-		when(socketChannel1.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-			@Override
-			public Integer answer(InvocationOnMock invocation) throws Throwable {
-				throw new IllegalStateException("server maintain");
-			}
-		});
-		
-		EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
-		socketAcceptor.setReadSelector(ownSelector);
-		socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-		socketAcceptor.setAcceptableConnections(new ArrayList<>());
-		
-		EzyNioSocketReader socketReader = new EzyNioSocketReader();
-		socketReader.setOwnSelector(ownSelector);
-		socketReader.setAcceptableConnectionsHandler(socketAcceptor);
-		socketReader.setHandlerGroupManager(handlerGroupManager);
-		socketReader.handleEvent();
+		EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
+		acceptor.setAcceptableConnections(new ArrayList<>());
+		acceptor.setHandlerGroupManager(handlerGroupManager);
+		acceptor.setOwnSelector(ownSelector);
+		acceptor.setReadSelector(readSelector);
+		acceptor.handleEvent();
+		List<SocketChannel> acceptableConnections = FieldUtil.getFieldValue(acceptor, "acceptableConnections");
+		assert acceptableConnections.size() == 1;
+		acceptor.handleAcceptableConnections();
+		assert acceptableConnections.size() == 0;
 	}
+	
 	
 	private EzyHandlerGroupManager newHandlerGroupManager() {
 		EzyNioSessionManager sessionManager = (EzyNioSessionManager)EzyNioSessionManagerImpl.builder()
@@ -211,6 +169,13 @@ public class EzyNioSocketReaderTest extends BaseTest {
 		return handlerGroupManager;
 	}
 	
+	public static abstract class ExServerSocketChannel extends ServerSocketChannel {
+		public ExServerSocketChannel() {
+			super(SelectorProvider.provider());
+		}
+	}
+	
+	
 	public static abstract class ExSocketChannel extends SocketChannel {
 
 		public ExSocketChannel() {
@@ -219,8 +184,10 @@ public class EzyNioSocketReaderTest extends BaseTest {
 		
 	}
 	
-	public static abstract class ExSelector extends Selector {
-		public ExSelector() {}
+	public static abstract class ExSelector extends AbstractSelector {
+		public ExSelector() {
+			super(SelectorProvider.provider());
+		}
 	}
 	
 	public static abstract class ExSelectionKey extends SelectionKey {

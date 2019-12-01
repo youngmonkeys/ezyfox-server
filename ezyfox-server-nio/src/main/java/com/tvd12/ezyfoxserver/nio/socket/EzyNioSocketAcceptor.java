@@ -25,13 +25,13 @@ public class EzyNioSocketAcceptor
 		implements EzyHandlerGroupManagerAware, EzyNioAcceptableConnectionsHandler {
 
 	@Setter
-	private boolean tcpNoDelay;
+	protected boolean tcpNoDelay;
 	@Setter
-	private Selector ownSelector;
+	protected Selector ownSelector;
 	@Setter
-	private Selector readSelector;
+	protected Selector readSelector;
 	@Setter
-	private List<SocketChannel> acceptableConnections;
+	protected List<SocketChannel> acceptableConnections;
 	@Setter
 	protected EzyHandlerGroupManager handlerGroupManager;
 	
@@ -73,8 +73,8 @@ public class EzyNioSocketAcceptor
 	}
 	
 	private void processReadyKey(SelectionKey key) throws Exception {
-		ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
 		if(key.isAcceptable()) {
+			ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
 			SocketChannel clientChannel = serverChannel.accept();
 			addConnection(clientChannel);
 		}

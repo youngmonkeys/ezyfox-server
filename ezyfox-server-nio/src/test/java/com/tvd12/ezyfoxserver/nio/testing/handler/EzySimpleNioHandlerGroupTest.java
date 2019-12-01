@@ -32,6 +32,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
@@ -93,7 +94,15 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 		ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
 		group.firePacketSend(packet, writeBuffer);
 		group.sendPacketNow(packet);
+		group.fireChannelInactive();
+		group.fireChannelRead(EzyCommand.PING, EzyEntityFactory.EMPTY_ARRAY);
+		group.fireStreamBytesReceived(new byte[] {0, 1, 2});
+		EzyPacket droppedPacket = mock(EzyPacket.class);
+		when(droppedPacket.getSize()).thenReturn(12);
+		group.addDroppedPacket(droppedPacket);
 		Thread.sleep(2000);
+		group.destroy();
+		group.destroy();
 	}
 	
 	public static class ExEzyByteToObjectDecoder implements EzyByteToObjectDecoder {

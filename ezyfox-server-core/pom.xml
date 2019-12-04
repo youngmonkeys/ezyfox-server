@@ -9,12 +9,12 @@
 		<version>0.0.2</version>
 	</parent>
 	<artifactId>ezyfox-server-core</artifactId>
-	<version>1.0.0</version> <!-- ${project.version} -->
+	<version>1.1.0</version> <!-- ${project.version} -->
 	<name>ezyfox-server-core</name>
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	<properties>
-		<ezy.codec.version>1.0.0</ezy.codec.version>
-		<ezy.mapping.version>1.0.0</ezy.mapping.version>
+		<ezy.codec.version>1.1.0</ezy.codec.version>
+		<ezy.mapping.version>1.1.0</ezy.mapping.version>
 	</properties>
 
 	<dependencies>

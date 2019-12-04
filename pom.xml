@@ -13,7 +13,7 @@
 	<name>ezyfox-server</name>
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	<description>
-		Common maven project configuration 
+		EzyFox Server maven project configuration 
 	</description>
 
 	<organization>

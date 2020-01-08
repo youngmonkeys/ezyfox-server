@@ -95,13 +95,22 @@ public class EzyNioSocketReader
 		if(!channel.isConnected()) {
 			return;
 		}
-		long readBytes = channel.read(buffer);
-		if(readBytes == -1L) {
+		int readBytes = -1;
+		Exception exception = null;
+		try {
+			readBytes = channel.read(buffer);
+		}
+		catch (Exception e) {
+			exception = e;
+		}
+		if(readBytes == -1) {
 			closeConnection(channel);
 		}
 		else if(readBytes > 0) {
 			processReadBytes(channel);
 		}
+		if(exception != null)
+			throw exception;
 	}
 	
 	private void processReadBytes(SocketChannel channel) throws Exception {

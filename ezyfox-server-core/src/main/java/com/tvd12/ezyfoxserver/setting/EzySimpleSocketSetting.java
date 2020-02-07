@@ -21,6 +21,9 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
     
+    @XmlElement(name = "tcp-no-delay")
+    protected boolean tcpNoDelay;
+    
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
@@ -31,6 +34,7 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
+        map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         return map;
     }

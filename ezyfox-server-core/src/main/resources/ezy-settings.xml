@@ -16,6 +16,7 @@
 		<port>3005</port>
 		<address>0.0.0.0</address>
 		<active>true</active>
+		<tcp-no-delay>true</tcp-no-delay>
 		<max-request-size>65536</max-request-size>
 		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
 	</socket>

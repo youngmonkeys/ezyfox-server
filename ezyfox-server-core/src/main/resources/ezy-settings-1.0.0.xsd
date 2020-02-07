@@ -47,6 +47,7 @@
 			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="max-request-size" type="xs:int" maxOccurs="1" minOccurs="0" />
+			<xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>
 

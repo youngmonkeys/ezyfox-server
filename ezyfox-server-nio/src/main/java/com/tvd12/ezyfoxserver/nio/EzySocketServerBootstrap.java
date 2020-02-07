@@ -108,7 +108,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 			EzyNioSocketAcceptor socketAcceptor) {
 		EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
-		socketAcceptor.setTcpNoDelay(false);
+		socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
 		socketAcceptor.setReadSelector(readSelector);
 		socketAcceptor.setOwnSelector(acceptSelector);
 		socketAcceptor.setAcceptableConnections(new ArrayList<>());
@@ -143,6 +143,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 	
 	private String getSocketAddress() {
 		return getSocketSetting().getAddress();
+	}
+	
+	private boolean getSocketTcpNoDelay() {
+		return getSocketSetting().isTcpNoDelay();
 	}
 	
 	private EzySocketSetting getSocketSetting() {

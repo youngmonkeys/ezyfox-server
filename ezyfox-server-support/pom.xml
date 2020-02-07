@@ -7,7 +7,7 @@
 		<version>0.0.2</version>
 	</parent>
 	<artifactId>ezyfox-server-support</artifactId>
-	<version>1.1.1</version> <!-- ${project.version} -->
+	<version>1.1.2</version> <!-- ${project.version} -->
 	<name>ezyfox-server-support</name>
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	
@@ -15,7 +15,6 @@
 		<ezy.core.version>2.0.1</ezy.core.version>
 		<ezy.bean.version>1.1.1</ezy.bean.version>
 		<ezy.binding.version>1.1.1</ezy.binding.version>
-		<ezy.server.core.version>1.1.1</ezy.server.core.version>
 	</properties>
 	
 	<dependencies>
@@ -37,7 +36,7 @@
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-core</artifactId>
-			<version>${ezy.server.core.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	

@@ -39,6 +39,9 @@ public class EzySimpleSettings implements EzySettings {
 	@XmlElement(name = "socket")
 	protected EzySimpleSocketSetting socket = new EzySimpleSocketSetting();
 	
+	@XmlElement(name = "udp")
+	protected EzySimpleUdpSetting udp = new EzySimpleUdpSetting();
+	
 	@XmlElement(name = "administrators")
 	protected EzySimpleAdminsSetting admins = new EzySimpleAdminsSetting();
 	
@@ -68,6 +71,7 @@ public class EzySimpleSettings implements EzySettings {
         map.put("maxSessions", maxSessions);
         map.put("streaming", streaming.toMap());
         map.put("socket", socket.toMap());
+        map.put("udp", udp.toMap());
         map.put("websocket", websocket.toMap());
         map.put("logger", logger.toMap());
         map.put("admins", admins.toMap());

@@ -21,6 +21,13 @@
 		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
 	</socket>
 	
+	<udp>
+		<port>2611</port>
+		<address>0.0.0.0</address>
+		<active>true</active>
+		<max-request-size>1024</max-request-size>
+	</udp>
+	
 	<web-socket>
 		<port>2208</port>
 		<address>0.0.0.0</address>

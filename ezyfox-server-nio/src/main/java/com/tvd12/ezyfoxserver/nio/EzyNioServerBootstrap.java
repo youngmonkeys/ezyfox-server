@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzyStreamingSetting;
+import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionHandler;
@@ -37,7 +38,8 @@ import lombok.Setter;
 
 
 public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
-
+	
+	private EzyUdpServerBootstrap udpServerBootstrap;
 	private EzySocketServerBootstrap socketServerBootstrap;
 	private EzyWebSocketServerBootstrap websocketServerBootstrap;
 	
@@ -80,6 +82,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	@Override
 	protected void startOtherBootstraps(Runnable callback) throws Exception {
 		startSocketServerBootstrap();
+		startUdpServerBootstrap();
 		startWebSocketServerBootstrap();
 		startRequestHandlingLoopHandlers();
 		startStreamHandlingLoopHandlers();
@@ -95,6 +98,15 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 		socketServerBootstrap = newSocketServerBootstrap();
 		socketServerBootstrap.start();
 		logger.debug("tcp socket server bootstrap has started");
+	}
+	
+	private void startUdpServerBootstrap() throws Exception {
+		EzyUdpSetting udpSetting = getUdpSetting();
+		if(!udpSetting.isActive()) return;
+		logger.debug("starting udp socket server bootstrap ....");
+		udpServerBootstrap = newUdpServerBootstrap();
+		udpServerBootstrap.start();
+		logger.debug("udp socket server bootstrap has started");
 	}
 	
 	protected void startWebSocketServerBootstrap() throws Exception {
@@ -137,6 +149,13 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 				.serverContext(context)
 				.handlerGroupManager(handlerGroupManager)
 				.sessionTicketsQueue(socketSessionTicketsQueue)
+				.build();
+	}
+	
+	private EzyUdpServerBootstrap newUdpServerBootstrap() {
+		return EzyUdpServerBootstrap.builder()
+				.serverContext(context)
+				.handlerGroupManager(handlerGroupManager)
 				.build();
 	}
 	

@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
 
@@ -83,6 +84,10 @@ public abstract class EzyServerBootstrap
 	
 	protected EzySocketSetting getSocketSetting() {
         return getServerSettings().getSocket();
+    }
+	
+	protected EzyUdpSetting getUdpSetting() {
+        return getServerSettings().getUdp();
     }
 	
 	protected EzyWebSocketSetting getWebSocketSetting() {

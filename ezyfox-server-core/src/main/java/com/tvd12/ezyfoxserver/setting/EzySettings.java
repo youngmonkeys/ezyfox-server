@@ -16,6 +16,8 @@ public interface EzySettings extends EzyToMap {
     
     EzySocketSetting getSocket();
     
+    EzyUdpSetting getUdp();
+    
     EzyWebSocketSetting getWebsocket();
     
     EzyStreamingSetting getStreaming();

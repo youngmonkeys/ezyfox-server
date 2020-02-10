@@ -13,9 +13,7 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioAcceptableConnectionsHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
+import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReader;
 import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReadingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -71,19 +69,16 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	}
 	
 	private void startSocketHandlers() throws Exception {
-		EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
-		readingLoopHandler = newReadingLoopHandler(socketAcceptor);
+		readingLoopHandler = newReadingLoopHandler();
 		readingLoopHandler.start();
 	}
 	
-	private EzySocketEventLoopHandler newReadingLoopHandler(
-			EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
+	private EzySocketEventLoopHandler newReadingLoopHandler() {
 		EzySocketEventLoopOneHandler loopHandler = new EzyNioUdpReadingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
-		EzyNioSocketReader eventHandler = new EzyNioSocketReader();
+		EzyNioUdpReader eventHandler = new EzyNioUdpReader(getUdpMaxRequestSize());
 		eventHandler.setOwnSelector(readSelector);
 		eventHandler.setHandlerGroupManager(handlerGroupManager);
-		eventHandler.setAcceptableConnectionsHandler(acceptableConnectionsHandler);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
@@ -102,6 +97,10 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private String getUdpAddress() {
 		return getUdpSetting().getAddress();
+	}
+	
+	private int getUdpMaxRequestSize() {
+		return getUdpSetting().getMaxRequestSize();
 	}
 	
 	private EzyUdpSetting getUdpSetting() {

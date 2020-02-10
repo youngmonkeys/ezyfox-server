@@ -11,7 +11,6 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
@@ -41,23 +40,16 @@ public class EzyNioUdpReader
 	@Override
 	public void handleEvent() {
 		try {
-			processReadyKeys0();
+			processReadyKeys();
 		}
 		catch(Exception e) {
-			logger.info("I/O error at socket-reader: {}({})", e.getClass().getName(), e.getMessage());
-		}
-	}
-	
-	private void processReadyKeys0() throws Exception {
-		int readyKeyCount = ownSelector.selectNow();
-		if(readyKeyCount > 0) {
-			processReadyKeys();
+			logger.info("I/O error at udp socket-reader: {}({})", e.getClass().getName(), e.getMessage());
 		}
 	}
 	
 	private void processReadyKeys() throws Exception {
-		Set<SelectionKey> readyKeys = this.ownSelector.selectedKeys();
-		Iterator<SelectionKey> iterator = readyKeys.iterator();
+		ownSelector.select();
+		Iterator<SelectionKey> iterator = this.ownSelector.selectedKeys().iterator();
 		while(iterator.hasNext()) {
 			SelectionKey key = iterator.next();
 			iterator.remove();
@@ -68,7 +60,6 @@ public class EzyNioUdpReader
 	}
 	
 	private void processReadyKey(SelectionKey key) throws Exception {
-		buffer.clear();
 		if(key.isReadable()) {
 			processReadableKey(key);
 		}
@@ -76,9 +67,6 @@ public class EzyNioUdpReader
 	
 	private void processReadableKey(SelectionKey key) throws Exception {
 		DatagramChannel channel = (DatagramChannel) key.channel();
-		if(!channel.isConnected()) {
-			return;
-		}
 		try {
 			processReadBytes(channel);
 		}
@@ -94,20 +82,20 @@ public class EzyNioUdpReader
 
 		} 
 		catch (Exception e) {
-			throw e;
+			logger.error("fatal error at udp socket-reader", e);
 		}
 	}
 
 	private void processReadBytes(DatagramChannel channel) throws IOException {
+		buffer.clear();
 		InetSocketAddress address = (InetSocketAddress) channel.receive(buffer);
 		if(address == null) {
 			logger.info("has no data in udp channel: {}", channel);
 			return;
 		}
-
 		int byteCount = buffer.position();
 
-		if (byteCount > 0L) {
+		if (byteCount > 0) {
 
 			buffer.flip();
 			byte[] binary = new byte[buffer.limit()];

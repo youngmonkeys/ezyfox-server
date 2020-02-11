@@ -12,21 +12,20 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
 
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
+import com.tvd12.ezyfoxserver.socket.EzySimpleUdpReceivedPacket;
 import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
+import com.tvd12.ezyfoxserver.socket.EzyUdpReceivedPacket;
 
 import lombok.Setter;
 
-public class EzyNioUdpReader 
-		extends EzySocketAbstractEventHandler
-		implements EzyHandlerGroupManagerAware {
+public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
 
 	protected final ByteBuffer buffer;
 	@Setter
 	protected Selector ownSelector;
 	@Setter
-	protected EzyHandlerGroupManager handlerGroupManager;
+	protected EzyNioUdpDataHandler udpDataHandler;
 	
 	public EzyNioUdpReader(int maxBufferSize) {
 		this.buffer = ByteBuffer.allocateDirect(maxBufferSize);
@@ -86,7 +85,7 @@ public class EzyNioUdpReader
 		}
 	}
 
-	private void processReadBytes(DatagramChannel channel) throws IOException {
+	private void processReadBytes(DatagramChannel channel) throws Exception {
 		buffer.clear();
 		InetSocketAddress address = (InetSocketAddress) channel.receive(buffer);
 		if(address == null) {
@@ -100,7 +99,9 @@ public class EzyNioUdpReader
 			buffer.flip();
 			byte[] binary = new byte[buffer.limit()];
 			buffer.get(binary);
-			logger.debug("udp received: {}", binary);
+			EzyUdpReceivedPacket packet = 
+					new EzySimpleUdpReceivedPacket(channel, address, binary);
+			udpDataHandler.fireUdpPacketReceived(packet);
 		}
 	}
 	

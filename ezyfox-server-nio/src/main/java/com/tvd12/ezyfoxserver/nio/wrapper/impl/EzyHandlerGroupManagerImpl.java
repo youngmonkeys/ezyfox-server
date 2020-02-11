@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.wrapper.impl;
 
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +42,7 @@ public class EzyHandlerGroupManagerImpl
 	private final EzySocketDisconnectionQueue disconnectionQueue;
 	
 	private final Map<Object, EzyHandlerGroup> groupsByConnection;
+	private final Map<Object, EzyHandlerGroup> groupsByUdpAddress;
 	private final EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory;
 	
 	public EzyHandlerGroupManagerImpl(Builder builder) {
@@ -54,6 +56,7 @@ public class EzyHandlerGroupManagerImpl
 		this.sessionCreator = builder.sessionCreator;
 		this.handlerGroupBuilderFactory = builder.handlerGroupBuilderFactory;
 		this.groupsByConnection = new ConcurrentHashMap<>();
+		this.groupsByUdpAddress = new ConcurrentHashMap<>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -82,6 +85,24 @@ public class EzyHandlerGroupManagerImpl
 	@Override
 	public <T extends EzyHandlerGroup> T getHandlerGroup(Object connection) {
 		return (T) groupsByConnection.get(connection);
+	}
+	
+	@Override
+	public void unmapHandlerGroup(SocketAddress udpAddress) {
+		groupsByUdpAddress.remove(udpAddress);
+	}
+	
+	@Override
+	public void mapHandlerGroup(SocketAddress udpAddress, EzySession session) {
+		EzyHandlerGroup group = getHandlerGroup(session);
+		if(group != null)
+			groupsByUdpAddress.put(udpAddress, group);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends EzyHandlerGroup> T getHandlerGroup(SocketAddress udpAddress) {
+		return (T)groupsByUdpAddress.get(udpAddress);
 	}
 	
 	@Override

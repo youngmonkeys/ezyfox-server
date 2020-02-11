@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.entity;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
 import java.util.concurrent.locks.Lock;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -391,6 +392,20 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @return the packet queue
      */
     EzyPacketQueue getPacketQueue();
+    
+    /**
+     * Get udp client address
+     * 
+     * @return the udp client address
+     */
+    SocketAddress getUdpClientAddress(); 
+    
+    /**
+     * Get upd channel
+     * 
+     * @return the udp channel
+     */
+    DatagramChannel getDatagramChannel();
     
     /**
      * set session tickets queue

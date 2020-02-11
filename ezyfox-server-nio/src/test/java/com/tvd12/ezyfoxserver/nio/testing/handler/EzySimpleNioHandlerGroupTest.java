@@ -276,7 +276,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 
 		@Override
 		public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
-			EzyMessageHeader header = new EzySimpleMessageHeader(false, false, false, false, false);
+			EzyMessageHeader header = new EzySimpleMessageHeader(false, false, false, false, false, false);
 			byte[] content = new byte[bytes.remaining()];
 			bytes.get(content);
 			EzyMessage message = new EzySimpleMessage(header, content, content.length);
@@ -299,7 +299,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 
 		@Override
 		public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
-			EzyMessageHeader header = new EzySimpleMessageHeader(true, true, true, true, true);
+			EzyMessageHeader header = new EzySimpleMessageHeader(true, true, true, true, true, false);
 			byte[] content = new byte[bytes.remaining()];
 			bytes.get(content);
 			EzyMessage message = new EzySimpleMessage(header, content, content.length);

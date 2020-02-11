@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.entity;
 
 import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -13,12 +14,14 @@ import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
+import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,6 +34,8 @@ public abstract class EzyAbstractSession
         implements 
             EzySession,
             EzyDisconnectReasonAware,
+            EzyDatagramChannelAware,
+            EzyUdpClientAddressAware,
             EzyImmediateDeliverAware, 
             EzyDroppedPacketsAware {
     private static final long serialVersionUID = -4112736666616219904L;
@@ -64,6 +69,8 @@ public abstract class EzyAbstractSession
 	protected String beforeToken;
 	protected EzyConstant connectionType;
 	protected EzyConstant disconnectReason;
+	protected SocketAddress udpClientAddress;
+	protected DatagramChannel datagramChannel;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;

@@ -13,6 +13,8 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
+import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioUdpDataHandler;
 import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReader;
 import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReadingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
@@ -20,12 +22,14 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
+import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
 public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	private Selector readSelector;
 	private DatagramSocket datagramSocket;
 	private DatagramChannel datagramChannel;
+	private EzyNioUdpDataHandler udpDataHandler;
 	private EzySocketEventLoopHandler readingLoopHandler;
 	
 	protected EzyServerContext serverContext;
@@ -34,6 +38,7 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	public EzyUdpServerBootstrap(Builder builder) {
 		this.serverContext = builder.serverContext;
 		this.handlerGroupManager = builder.handlerGroupManager;
+		this.udpDataHandler = newUdpDataHandler();
 	}
 	
 	@Override
@@ -73,12 +78,19 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		readingLoopHandler.start();
 	}
 	
+	private EzyNioUdpDataHandler newUdpDataHandler() {
+		EzySimpleNioUdpDataHandler handler = new EzySimpleNioUdpDataHandler();
+		handler.setSessionManager(getSessionManager());
+		handler.setHandlerGroupManager(handlerGroupManager);
+		return handler;
+	}
+	
 	private EzySocketEventLoopHandler newReadingLoopHandler() {
 		EzySocketEventLoopOneHandler loopHandler = new EzyNioUdpReadingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
 		EzyNioUdpReader eventHandler = new EzyNioUdpReader(getUdpMaxRequestSize());
 		eventHandler.setOwnSelector(readSelector);
-		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		eventHandler.setUdpDataHandler(udpDataHandler);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}
@@ -109,6 +121,11 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private EzySettings getServerSettings() {
 		return serverContext.getServer().getSettings();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private EzySessionManager getSessionManager() {
+		return serverContext.getServer().getSessionManager();
 	}
 	
 	public static Builder builder() {

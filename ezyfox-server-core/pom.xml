@@ -14,8 +14,8 @@
 	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
 	
 	<properties>
-		<ezy.codec.version>1.1.1</ezy.codec.version>
-		<ezy.mapping.version>1.1.1</ezy.mapping.version>
+		<ezy.codec.version>1.1.2</ezy.codec.version>
+		<ezy.mapping.version>1.1.2</ezy.mapping.version>
 	</properties>
 
 	<dependencies>

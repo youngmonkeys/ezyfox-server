@@ -16,7 +16,7 @@ public class EzySimpleNioDataHandler
 	
 	@Override
 	public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
-    		dataReceived(cmd, msg);
+    	dataReceived(cmd, msg);
     }
     
 }

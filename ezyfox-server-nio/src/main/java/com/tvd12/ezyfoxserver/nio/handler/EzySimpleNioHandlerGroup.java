@@ -34,6 +34,11 @@ public class EzySimpleNioHandlerGroup
 		handleReceivedBytes(bytes);
 	}
 	
+	@Override
+	public void fireMessageReceived(EzyMessage message) throws Exception {
+		handleReceivedMesssage(message);
+	}
+	
 	private void handleReceivedBytes(byte[] bytes) {
 		try {
 			decoder.decode(bytes, decodeBytesCallback);

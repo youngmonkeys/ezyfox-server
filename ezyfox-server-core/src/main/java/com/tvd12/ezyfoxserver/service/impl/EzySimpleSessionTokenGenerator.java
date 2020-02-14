@@ -1,7 +1,9 @@
 package com.tvd12.ezyfoxserver.service.impl;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.tvd12.ezyfox.sercurity.EzySHA256;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 
 public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator {
@@ -20,8 +22,13 @@ public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator 
 	
 	@Override
 	public String generate() {
-	    String token = serverNodeName + "#" + getCount();
-	    return token;
+	    String token = new StringBuilder()
+	            .append(serverNodeName).append("#")
+	            .append(getCount()).append("#")
+	            .append(UUID.randomUUID()).append("#")
+	            .append(System.currentTimeMillis())
+	            .toString();
+	    return EzySHA256.cryptUtf(token);
 	}
 	
 	private long getCount() {

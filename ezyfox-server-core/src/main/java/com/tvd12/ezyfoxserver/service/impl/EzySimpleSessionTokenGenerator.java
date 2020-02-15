@@ -28,7 +28,7 @@ public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator 
 	            .append(UUID.randomUUID()).append("#")
 	            .append(System.currentTimeMillis())
 	            .toString();
-	    return EzySHA256.cryptUtf(token);
+	    return EzySHA256.cryptUtfToLowercase(token);
 	}
 	
 	private long getCount() {

@@ -2,6 +2,9 @@ package com.tvd12.ezyfoxserver.nio.handler;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,6 +15,7 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
 import com.tvd12.ezyfoxserver.entity.EzyDroppedPacketsAware;
@@ -179,7 +183,11 @@ public abstract class EzyAbstractHandlerGroup
 		try {
 			EzyChannel channel = session.getChannel();
 			if(canWriteBytes(channel)) {
-				int writeBytes = writePacketToSocket(packet, writeBuffer);
+				int writeBytes = 0;
+				if(packet.getTransportType() == EzyTransportType.TCP)
+					writeBytes = writePacketToSocket(packet, writeBuffer);
+				else
+					writeBytes = writeUdpPacketToSocket(packet, writeBuffer);
 				executeAddWrittenBytes(writeBytes);
 			}
 		}
@@ -192,10 +200,41 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	protected int writePacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
-		Object bytes = packet.getData();
-		int writeBytes = channel.write(bytes, packet.isBinary());
-		packet.release();
-		return writeBytes;
+		try {
+			Object bytes = packet.getData();
+			int writeBytes = channel.write(bytes, packet.isBinary());
+			packet.release();
+			return writeBytes;
+		}
+		finally {
+			packet.release();
+		}
+	}
+	
+	protected int writeUdpPacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
+		try {
+			DatagramChannel channel = session.getDatagramChannel();
+			SocketAddress clientAddress = session.getUdpClientAddress();
+			byte[] bytes = getBytesToWrite(packet);
+			int bytesToWrite = bytes.length;
+			ByteBuffer buffer = getWriteBuffer((ByteBuffer)writeBuffer, bytesToWrite);
+			buffer.clear();
+			buffer.put(bytes);
+			buffer.flip();
+			int writtenByes = channel.send(buffer, clientAddress);
+			return writtenByes;
+		}
+		finally {
+			packet.release();
+		}
+	}
+	
+	protected byte[] getBytesToWrite(EzyPacket packet) {
+		return (byte[])packet.getData();
+	}
+	
+	protected ByteBuffer getWriteBuffer(ByteBuffer fixed, int bytesToWrite) {
+		return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
 	}
 	
 	private boolean canWriteBytes(EzyChannel channel) {

@@ -12,6 +12,7 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = 6597013677969259046L;
 
     protected String token;
+    protected long sessionId;
     protected byte[] clientKey;
     protected byte[] serverPublicKey;
 	
@@ -20,7 +21,8 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
 	    String encryptedServerPublicKey = encryptServerPublicKey();
 	    return newArrayBuilder()
             .append(encryptedServerPublicKey)
-            .append(token);
+            .append(token)
+            .append(sessionId);
 	}
 	
 	protected String encryptServerPublicKey() {

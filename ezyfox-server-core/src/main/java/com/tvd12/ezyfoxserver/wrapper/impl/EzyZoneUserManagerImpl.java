@@ -94,7 +94,7 @@ public class EzyZoneUserManagerImpl
 	    EzyUser user = usersBySession.remove(session);
 	    if(user != null) {
 	        user.removeSession(session);
-	        logger.debug("zone: {} remove session {} from user {} by reason {}, user remain {} sessions and {} usersBySession", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
+	        logger.debug("zone: {} remove session {} from user {} by reason {}, user remain: {} sessions, usersBySession.size: {}", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
 	        if(shouldRemoveUserNow(user)) 
 	            removeUser(user, reason);
 	    }

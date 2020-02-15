@@ -90,6 +90,7 @@ public class EzyHandlerGroupManagerImpl
 	@Override
 	public void unmapHandlerGroup(SocketAddress udpAddress) {
 		groupsByUdpAddress.remove(udpAddress);
+		logger.debug("unmap handler group from: {}, groupsByConnection.size: {}", udpAddress, groupsByUdpAddress.size());
 	}
 	
 	@Override
@@ -97,6 +98,7 @@ public class EzyHandlerGroupManagerImpl
 		EzyHandlerGroup group = getHandlerGroup(session);
 		if(group != null)
 			groupsByUdpAddress.put(udpAddress, group);
+		logger.debug("map handler group from: {}, groupsByConnection.size: {}", udpAddress, groupsByUdpAddress.size());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -116,7 +118,10 @@ public class EzyHandlerGroupManagerImpl
 		EzyChannel channel = session.getChannel();
 		Object connection = channel.getConnection();
 		EzyHandlerGroup group = groupsByConnection.remove(connection);
-		logger.debug("remove handler group: {} with session: {}", group, session);
+		SocketAddress udpClientAddress = session.getUdpClientAddress();
+		if(udpClientAddress != null)
+			groupsByUdpAddress.remove(udpClientAddress);
+		logger.debug("remove handler group: {} with session: {}, groupsByConnection.size: {}, groupsByUdpAddress.size: {}", group, session, groupsByConnection.size(), groupsByUdpAddress.size());
 		return group;
 	}
 	
@@ -129,7 +134,8 @@ public class EzyHandlerGroupManagerImpl
 		Object connection = channel.getConnection();
 		if(connection == null)
 			return null;
-		return groupsByConnection.get(connection);
+		EzyHandlerGroup group = groupsByConnection.get(connection);
+		return group;
 	}
 	
 	@Override

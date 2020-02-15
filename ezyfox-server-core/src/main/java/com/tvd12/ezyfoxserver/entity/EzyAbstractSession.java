@@ -249,6 +249,8 @@ public abstract class EzyAbstractSession
 	    this.packetQueue = null;
 	    this.sessionTicketsQueue = null;
 	    this.disconnectionQueue = null;
+	    this.udpClientAddress = null;
+	    this.datagramChannel = null;
 	}
 	
 	@Override

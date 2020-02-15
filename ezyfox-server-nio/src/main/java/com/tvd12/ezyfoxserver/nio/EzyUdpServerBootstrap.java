@@ -11,6 +11,7 @@ import java.nio.channels.Selector;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
+import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
@@ -60,10 +61,10 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		this.readSelector = openSelector();
 	}
 	
+	
 	private void newAndConfigServerDatagramChannel() throws Exception {
 		this.datagramChannel = DatagramChannel.open();
 	    this.datagramChannel.configureBlocking(false);
-	    
 	}
 	
 	private void getBindAndConfigServerSocket() throws Exception {
@@ -80,6 +81,7 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private EzyNioUdpDataHandler newUdpDataHandler() {
 		EzySimpleNioUdpDataHandler handler = new EzySimpleNioUdpDataHandler();
+		handler.setResponseApi(getResponseApi());
 		handler.setSessionManager(getSessionManager());
 		handler.setHandlerGroupManager(handlerGroupManager);
 		return handler;
@@ -121,6 +123,10 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	private EzySettings getServerSettings() {
 		return serverContext.getServer().getSettings();
+	}
+	
+	private EzyResponseApi getResponseApi() {
+		return serverContext.getServer().getResponseApi();
 	}
 	
 	@SuppressWarnings("rawtypes")

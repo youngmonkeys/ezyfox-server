@@ -11,6 +11,7 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
 import com.tvd12.ezyfoxserver.socket.EzySimpleUdpReceivedPacket;
@@ -48,7 +49,8 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
 	
 	private void processReadyKeys() throws Exception {
 		ownSelector.select();
-		Iterator<SelectionKey> iterator = this.ownSelector.selectedKeys().iterator();
+		Set<SelectionKey> selectedKeys = this.ownSelector.selectedKeys();
+		Iterator<SelectionKey> iterator = selectedKeys.iterator();
 		while(iterator.hasNext()) {
 			SelectionKey key = iterator.next();
 			iterator.remove();
@@ -93,6 +95,8 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
 			return;
 		}
 		int byteCount = buffer.position();
+		
+		logger.debug("process read udp bytes: {}", byteCount);
 
 		if (byteCount > 0) {
 

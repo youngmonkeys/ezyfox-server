@@ -115,18 +115,10 @@ public class EzySimpleNioHandlerGroup
 		return bytesWritten;
 	}
 	
-	private ByteBuffer getWriteBuffer(ByteBuffer fixed, int bytesToWrite) {
-		return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
-	}
-	
 	private byte[] getPacketFragment(ByteBuffer buffer) {
 		byte[] remainBytes = new byte[buffer.remaining()];
 		buffer.get(remainBytes);
 		return remainBytes;
-	}
-	
-	private byte[] getBytesToWrite(EzyPacket packet) {
-		return (byte[])packet.getData();
 	}
 	
 	public static Builder builder() {

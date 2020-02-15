@@ -62,6 +62,7 @@ public class EzyHandshakeController
 	protected EzyResponse newHandShakeResponse(EzySession session) {
 	    EzyHandShakeParams params = new EzyHandShakeParams();
 	    params.setToken(session.getToken());
+	    params.setSessionId(session.getId());
 	    params.setClientKey(session.getClientKey());
 	    params.setServerPublicKey(session.getPublicKey());
 	    return new EzyHandShakeResponse(params);

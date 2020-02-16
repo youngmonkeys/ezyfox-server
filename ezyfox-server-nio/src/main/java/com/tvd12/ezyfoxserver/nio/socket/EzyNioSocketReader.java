@@ -77,7 +77,6 @@ public class EzyNioSocketReader
 	}
 	
 	private void processReadyKey(SelectionKey key) throws Exception {
-		buffer.clear();
 		if(key.isWritable()) {
 			processWritableKey(key);
 		}
@@ -91,13 +90,11 @@ public class EzyNioSocketReader
 	}
 	
 	private void processReadableKey(SelectionKey key) throws Exception {
-		SocketChannel channel = (SocketChannel) key.channel();
-		if(!channel.isConnected()) {
-			return;
-		}
 		int readBytes = -1;
 		Exception exception = null;
+		SocketChannel channel = (SocketChannel) key.channel();
 		try {
+			buffer.clear();
 			readBytes = channel.read(buffer);
 		}
 		catch (Exception e) {
@@ -110,7 +107,7 @@ public class EzyNioSocketReader
 			processReadBytes(channel);
 		}
 		if(exception != null)
-			throw exception;
+			logger.info("I/O error at socket-reader: {}({})", exception.getClass().getName(), exception.getMessage());
 	}
 	
 	private void processReadBytes(SocketChannel channel) throws Exception {

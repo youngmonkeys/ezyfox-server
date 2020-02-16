@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.command;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
@@ -28,6 +29,8 @@ public interface EzyResponse extends EzyVoidCommand {
     EzyResponse sessions(EzySession[] sessions, boolean exclude);
     
     EzyResponse sessions(Iterable<EzySession> sessions, boolean exclude);
+    
+    EzyResponse transportType(EzyTransportType transportType);
     
     default EzyResponse user(EzyUser user) {
         return user(user, false);

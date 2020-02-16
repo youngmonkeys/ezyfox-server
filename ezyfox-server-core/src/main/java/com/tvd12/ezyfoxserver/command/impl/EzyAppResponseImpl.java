@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.command.impl;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.command.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
@@ -20,8 +21,8 @@ public class EzyAppResponseImpl
     }
     
     @Override
-    protected void sendData(EzyData data) {
-        context.send(data, recipients);
+    protected void sendData(EzyData data, EzyTransportType transportType) {
+        context.send(data, recipients, transportType);
     }
     
 }

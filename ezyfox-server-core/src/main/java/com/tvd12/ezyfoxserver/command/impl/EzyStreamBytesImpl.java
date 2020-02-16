@@ -6,6 +6,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyStreamBytes;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.socket.EzySimpleBytesPackage;
 
@@ -18,9 +19,11 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
     }
     
     @Override
-    public void execute(byte[] bytes, EzySession recipient) {
+    public void execute(
+            byte[] bytes,
+            EzySession recipient, EzyTransportType transportType) {
         EzyStreamingApi streamingApi = server.getStreamingApi();
-        EzySimpleBytesPackage pack = newPackage(bytes);
+        EzySimpleBytesPackage pack = newPackage(bytes, transportType);
         pack.addRecipient(recipient);
         try {
             streamingApi.response(pack);
@@ -34,9 +37,11 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
     }
     
     @Override
-    public void execute(byte[] bytes, Collection<EzySession> recipients) {
+    public void execute(
+            byte[] bytes, 
+            Collection<EzySession> recipients, EzyTransportType transportType) {
         EzyStreamingApi streamingApi = server.getStreamingApi();
-        EzySimpleBytesPackage pack = newPackage(bytes);
+        EzySimpleBytesPackage pack = newPackage(bytes, transportType);
         pack.addRecipients(recipients);
         try {
             streamingApi.response(pack);
@@ -49,9 +54,10 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
         }
     }
     
-    protected EzySimpleBytesPackage newPackage(byte[] bytes) {
+    protected EzySimpleBytesPackage newPackage(byte[] bytes, EzyTransportType transportType) {
         EzySimpleBytesPackage pack = new EzySimpleBytesPackage();
         pack.setBytes(bytes);
+        pack.setTransportType(transportType);
         return pack;
     }
     

@@ -23,6 +23,7 @@ import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyStreamBytesImpl;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
@@ -75,30 +76,38 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	}
 	
 	@Override
-	public void broadcast(EzyConstant eventType, EzyEvent event, boolean catchException) {
+	public void broadcast(
+	        EzyConstant eventType, EzyEvent event, boolean catchException) {
 	    broadcastEvent.fire(eventType, event, catchException);
 	}
 	
 	@Override
-	public void send(EzyResponse response, 
-	        EzySession recipient, boolean immediate) {
-	    sendResponse.execute(response, recipient, immediate);
+	public void send(
+	        EzyResponse response, 
+	        EzySession recipient, 
+	        boolean immediate, EzyTransportType transportType) {
+	    sendResponse.execute(response, recipient, immediate, transportType);
 	}
 	
 	@Override
 	public void send(EzyResponse response, 
-	        Collection<EzySession> recipients, boolean immediate) {
-	    sendResponse.execute(response, recipients, immediate);
+	        Collection<EzySession> recipients, 
+	        boolean immediate, EzyTransportType transportType) {
+	    sendResponse.execute(response, recipients, immediate, transportType);
 	}
 	
 	@Override
-	public void stream(byte[] bytes, EzySession recipient) {
-	    streamBytes.execute(bytes, recipient);
+	public void stream(
+	        byte[] bytes, 
+	        EzySession recipient, EzyTransportType transportType) {
+	    streamBytes.execute(bytes, recipient, transportType);
 	}
 	
 	@Override
-	public void stream(byte[] bytes, Collection<EzySession> recipients) {
-	    streamBytes.execute(bytes, recipients);
+	public void stream(
+	        byte[] bytes, 
+	        Collection<EzySession> recipients, EzyTransportType transportType) {
+	    streamBytes.execute(bytes, recipients, transportType);
 	}
 	
 	public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {

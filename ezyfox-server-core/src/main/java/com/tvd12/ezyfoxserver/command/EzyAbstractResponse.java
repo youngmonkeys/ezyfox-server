@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.controller.EzyMessageController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -17,6 +18,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
 
     protected String command;
     protected EzyData params;
+    protected EzyTransportType transportType;
     protected Set<EzySession> recipients = new HashSet<>();
     protected Set<EzySession> exrecipients = new HashSet<>();
     
@@ -26,6 +28,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     public EzyAbstractResponse(C context) {
         this.context = context;
         this.userManager = getUserManager(context);
+        this.transportType = EzyTransportType.TCP;
     }
     
     protected abstract EzyUserManager getUserManager(C context);
@@ -110,14 +113,20 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     }
     
     @Override
+    public EzyResponse transportType(EzyTransportType transportType) {
+        this.transportType = transportType;
+        return this;
+    }
+    
+    @Override
     public void execute() {
         recipients.removeAll(exrecipients);
         EzyData data = newResponseData();
-        sendData(data);
+        sendData(data, transportType);
         destroy();
     }
     
-    protected abstract void sendData(EzyData data);
+    protected abstract void sendData(EzyData data, EzyTransportType transportType);
 
     protected final EzyData newResponseData() {
         return newArrayBuilder().append(command).append(params).build();

@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.command.EzyBroadcastPluginsEvent;
 import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastAppsEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastPluginsEventImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyZoneBroadcastEventImpl;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -138,23 +139,33 @@ public class EzySimpleZoneContext
     }
 	
 	@Override
-	public void send(EzyResponse response, EzySession recipient, boolean immediate) {
-	    parent.send(response, recipient, immediate);
+	public void send(
+	        EzyResponse response, 
+	        EzySession recipient,
+	        boolean immediate, EzyTransportType transportType) {
+	    parent.send(response, recipient, immediate, transportType);
 	}
 	
 	@Override
-	public void send(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
-	    parent.send(response, recipients, immediate);
+	public void send(
+	        EzyResponse response, 
+	        Collection<EzySession> recipients, 
+	        boolean immediate, EzyTransportType transportType) {
+	    parent.send(response, recipients, immediate, transportType);
 	}
 	
 	@Override
-	public void stream(byte[] bytes, EzySession recipient) {
-	    parent.stream(bytes, recipient);
+	public void stream(
+	        byte[] bytes, 
+	        EzySession recipient, EzyTransportType transportType) {
+	    parent.stream(bytes, recipient, transportType);
 	}
 	
 	@Override
-	public void stream(byte[] bytes, Collection<EzySession> recipients) {
-	    parent.stream(bytes, recipients);
+	public void stream(
+	        byte[] bytes, 
+	        Collection<EzySession> recipients, EzyTransportType transportType) {
+	    parent.stream(bytes, recipients, transportType);
 	}
 	
 	@Override

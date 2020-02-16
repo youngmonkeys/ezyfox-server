@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.support.command;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.command.EzyVoidCommand;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
@@ -28,6 +29,8 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
     T usernames(String[] usernames, boolean exclude);
     
     T usernames(Iterable<String> usernames, boolean exclude);
+    
+    T transportType(EzyTransportType transportType);
     
     default T data(EzyBuilder<?> builder) {
         return data(builder.build());
@@ -67,6 +70,10 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
     
     default T usernames(Iterable<String> usernames) {
     		return usernames(usernames, false);
+    }
+    
+    default T udpTransport() {
+    	return transportType(EzyTransportType.UDP);
     }
 	
 }

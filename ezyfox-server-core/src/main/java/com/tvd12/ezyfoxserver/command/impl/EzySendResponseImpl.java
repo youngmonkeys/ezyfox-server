@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzySendResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
@@ -27,11 +28,13 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     @Override
-    public void execute(EzyResponse response, EzySession recipient, boolean immediate) {
+    public void execute(EzyResponse response, 
+            EzySession recipient, 
+            boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
-        EzySimplePackage pack = newPackage(data);
+        EzySimplePackage pack = newPackage(data, transportType);
         pack.addRecipient(recipient);
         try {
             responseApi.response(pack, immediate);
@@ -49,11 +52,14 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     @Override
-    public void execute(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
+    public void execute(
+            EzyResponse response, 
+            Collection<EzySession> recipients, 
+            boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
-        EzySimplePackage pack = newPackage(data);
+        EzySimplePackage pack = newPackage(data, transportType);
         pack.addRecipients(recipients);
         try {
             responseApi.response(pack, immediate);
@@ -70,9 +76,10 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
     }
     
-    protected EzySimplePackage newPackage(EzyArray data) {
+    protected EzySimplePackage newPackage(EzyArray data, EzyTransportType transportType) {
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
+        pack.setTransportType(transportType);
         return pack;
     }
     

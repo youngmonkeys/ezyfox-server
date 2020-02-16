@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.command.EzyAbstractChildSendResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppSendResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyRequestAppResponse;
@@ -21,15 +22,19 @@ public class EzyAppSendResponseImpl
     }
     
     @Override
-    public void execute(EzyData data, EzySession recipient) {
+    public void execute(
+            EzyData data, 
+            EzySession recipient, EzyTransportType transportType) {
         EzyResponse response = newResponse(data);
-        serverContext.send(response, recipient);
+        serverContext.send(response, recipient, transportType);
     }
 
     @Override
-    public void execute(EzyData data, Collection<EzySession> recipients) {
+    public void execute(
+            EzyData data, 
+            Collection<EzySession> recipients, EzyTransportType transportType) {
         EzyResponse response = newResponse(data);
-        serverContext.send(response, recipients);
+        serverContext.send(response, recipients, transportType);
     }
     
     protected EzyResponse newResponse(EzyData data) {

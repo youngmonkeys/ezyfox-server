@@ -21,6 +21,7 @@ import com.tvd12.ezyfoxserver.command.impl.EzyPluginHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginSendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyPluginSetupImpl;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Getter;
@@ -45,13 +46,17 @@ public class EzySimplePluginContext
 	}
 	
 	@Override
-	public void send(EzyData data, EzySession recipient) {
-	    this.sendResponse.execute(data, recipient);
+	public void send(
+	        EzyData data, 
+	        EzySession recipient, EzyTransportType transportType) {
+	    this.sendResponse.execute(data, recipient, transportType);
 	}
 	
 	@Override
-	public void send(EzyData data, Collection<EzySession> recipients) {
-	    this.sendResponse.execute(data, recipients);
+	public void send(
+	        EzyData data, 
+	        Collection<EzySession> recipients, EzyTransportType transportType) {
+	    this.sendResponse.execute(data, recipients, transportType);
 	}
 	
 	public void setPlugin(EzyPlugin plugin) {

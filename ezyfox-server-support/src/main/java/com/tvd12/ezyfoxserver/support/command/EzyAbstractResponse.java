@@ -4,6 +4,7 @@ import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEntityBuilders;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
@@ -86,6 +87,12 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
     public T usernames(Iterable<String> usernames, boolean exclude) {
     		this.response.usernames(usernames, exclude);
 		return (T)this;
+    }
+    
+    @Override
+    public T transportType(EzyTransportType transportType) {
+    	this.response.transportType(transportType);
+    	return (T)this;
     }
     
     public void execute() {

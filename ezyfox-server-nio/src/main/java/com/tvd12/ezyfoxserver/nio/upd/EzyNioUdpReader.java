@@ -96,10 +96,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
 		}
 		int byteCount = buffer.position();
 		
-		logger.debug("process read udp bytes: {}", byteCount);
-
 		if (byteCount > 0) {
-
 			buffer.flip();
 			byte[] binary = new byte[buffer.limit()];
 			buffer.get(binary);

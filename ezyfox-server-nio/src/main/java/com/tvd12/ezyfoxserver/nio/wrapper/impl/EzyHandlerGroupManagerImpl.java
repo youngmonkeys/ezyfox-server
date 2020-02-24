@@ -89,8 +89,10 @@ public class EzyHandlerGroupManagerImpl
 	
 	@Override
 	public void unmapHandlerGroup(SocketAddress udpAddress) {
-		groupsByUdpAddress.remove(udpAddress);
-		logger.debug("unmap handler group from: {}, groupsByConnection.size: {}", udpAddress, groupsByUdpAddress.size());
+		if(udpAddress != null) {
+			groupsByUdpAddress.remove(udpAddress);
+			logger.debug("unmap handler group from: {}, groupsByUdpAddress.size: {}", udpAddress, groupsByUdpAddress.size());
+		}
 	}
 	
 	@Override
@@ -98,7 +100,7 @@ public class EzyHandlerGroupManagerImpl
 		EzyHandlerGroup group = getHandlerGroup(session);
 		if(group != null)
 			groupsByUdpAddress.put(udpAddress, group);
-		logger.debug("map handler group from: {}, groupsByConnection.size: {}", udpAddress, groupsByUdpAddress.size());
+		logger.debug("map handler group from: {}, groupsByUdpAddress.size: {}", udpAddress, groupsByUdpAddress.size());
 	}
 	
 	@SuppressWarnings("unchecked")

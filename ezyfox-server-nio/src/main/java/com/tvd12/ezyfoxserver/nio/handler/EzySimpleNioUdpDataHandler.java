@@ -77,7 +77,7 @@ public class EzySimpleNioUdpDataHandler
 			}
 		}
 		catch (Exception e) {
-			logger.warn("handle received udp package: {} error", packet, e.getMessage());
+			logger.warn("handle received udp package: {} error: {}", packet, e.getMessage());
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class EzySimpleNioUdpDataHandler
 		String sessionToken = session.getToken();
 		if(sessionToken.equals(token)) {
 			responseCode = 200;
-			SocketAddress oldUdpAddress = session.getClientAddress();
+			SocketAddress oldUdpAddress = session.getUdpClientAddress();
 			handlerGroupManager.unmapHandlerGroup(oldUdpAddress);
 			handlerGroupManager.mapHandlerGroup(address, session);
 			((EzyDatagramChannelAware)session).setDatagramChannel(channel);
@@ -122,6 +122,7 @@ public class EzySimpleNioUdpDataHandler
 		response.setTransportType(EzyTransportType.UDP);
 		response.setData(responseCommand);
 		responseApi.response(response);
+		logger.debug("response udp handshake to: {}, code: {}", recipient, responseCode);
 	}
 	
 	protected boolean isOneClient(SocketAddress tcpAddress, SocketAddress udpAddress) {

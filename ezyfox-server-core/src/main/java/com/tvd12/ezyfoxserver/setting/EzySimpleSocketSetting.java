@@ -24,10 +24,14 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     @XmlElement(name = "tcp-no-delay")
     protected boolean tcpNoDelay;
     
+    @XmlElement(name = "writer-thread-pool-size")
+    protected int writerThreadPoolSize;
+    
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
         setMaxRequestSize(32768);
+        setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
     

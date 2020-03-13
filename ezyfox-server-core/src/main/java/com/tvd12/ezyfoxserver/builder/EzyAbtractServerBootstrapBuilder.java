@@ -10,6 +10,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
+import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
 
@@ -91,6 +92,10 @@ public abstract class EzyAbtractServerBootstrapBuilder
     
     protected EzyWebSocketSetting getWebsocketSetting() {
         return getSettings().getWebsocket();
+    }
+    
+    protected EzyThreadPoolSizeSetting getThreadPoolSizeSetting() {
+        return getSettings().getThreadPoolSize();
     }
 }
 

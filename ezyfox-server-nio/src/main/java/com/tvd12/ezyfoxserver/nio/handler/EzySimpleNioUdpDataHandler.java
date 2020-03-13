@@ -48,8 +48,9 @@ public class EzySimpleNioUdpDataHandler
 	protected EzyHandlerGroupManager handlerGroupManager;
 	protected final ExecutorService executorService;
 	
-	public EzySimpleNioUdpDataHandler() {
-		this.executorService = EzyExecutors.newFixedThreadPool(3, "udp-data-handler");
+	public EzySimpleNioUdpDataHandler(int threadPoolSize) {
+		this.executorService = 
+				EzyExecutors.newFixedThreadPool(threadPoolSize, "udp-data-handler");
 	}
 	
 	@Override

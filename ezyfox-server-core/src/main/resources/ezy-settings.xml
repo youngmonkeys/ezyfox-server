@@ -8,6 +8,16 @@
 	<node-name>localhost</node-name>
 	<max-sessions>30000</max-sessions>
 	
+	<thread-pool-size>
+		<codec>3</codec>
+		<statistics>1</statistics>
+		<stream-handler>8</stream-handler>
+		<system-request-handler>8</system-request-handler>
+		<extension-request-handler>8</extension-request-handler>
+		<socket-disconnection-handler>2</socket-disconnection-handler>
+		<socket-user-removal-handler>3</socket-user-removal-handler>
+	</thread-pool-size>
+	
 	<streaming>
 		<enable>true</enable>
 	</streaming>
@@ -18,6 +28,7 @@
 		<active>true</active>
 		<tcp-no-delay>true</tcp-no-delay>
 		<max-request-size>65536</max-request-size>
+		<writer-thread-pool-size>8</writer-thread-pool-size>
 		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
 	</socket>
 	
@@ -26,6 +37,7 @@
 		<address>0.0.0.0</address>
 		<active>true</active>
 		<max-request-size>1024</max-request-size>
+		<handler-thread-pool-size>5</handler-thread-pool-size>
 	</udp>
 	
 	<web-socket>
@@ -34,6 +46,7 @@
 		<active>true</active>
 		<ssl-port>2812</ssl-port>
 		<max-frame-size>65536</max-frame-size>
+		<writer-thread-pool-size>8</writer-thread-pool-size>
 		<ssl-active>false</ssl-active>
 		<ssl-config>
 			<file>ssl-config.properties</file>

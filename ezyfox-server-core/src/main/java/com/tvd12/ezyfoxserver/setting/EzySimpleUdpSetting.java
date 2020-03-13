@@ -21,11 +21,15 @@ public class EzySimpleUdpSetting extends EzyAbstractSocketSetting implements Ezy
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
     
+    @XmlElement(name = "handler-thread-pool-size")
+    protected int handlerThreadPoolSize;
+    
     public EzySimpleUdpSetting() {
         super();
         setPort(2611);
         setActive(false);
         setMaxRequestSize(1024);
+        setHandlerThreadPoolSize(5);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
     

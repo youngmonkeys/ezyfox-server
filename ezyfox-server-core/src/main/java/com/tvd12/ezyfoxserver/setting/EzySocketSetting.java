@@ -5,5 +5,6 @@ public interface EzySocketSetting extends EzyBaseSocketSetting {
     boolean isTcpNoDelay();
     
     int getMaxRequestSize();
-
+    
+    int getWriterThreadPoolSize();
 }

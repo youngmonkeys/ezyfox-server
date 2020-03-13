@@ -79,14 +79,6 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		readingLoopHandler.start();
 	}
 	
-	private EzyNioUdpDataHandler newUdpDataHandler() {
-		EzySimpleNioUdpDataHandler handler = new EzySimpleNioUdpDataHandler();
-		handler.setResponseApi(getResponseApi());
-		handler.setSessionManager(getSessionManager());
-		handler.setHandlerGroupManager(handlerGroupManager);
-		return handler;
-	}
-	
 	private EzySocketEventLoopHandler newReadingLoopHandler() {
 		EzySocketEventLoopOneHandler loopHandler = new EzyNioUdpReadingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
@@ -97,12 +89,25 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		return loopHandler;
 	}
 	
+	private EzyNioUdpDataHandler newUdpDataHandler() {
+		int handlerThreadPoolSize = getSocketHandlerPoolSize();
+		EzySimpleNioUdpDataHandler handler = new EzySimpleNioUdpDataHandler(handlerThreadPoolSize);
+		handler.setResponseApi(getResponseApi());
+		handler.setSessionManager(getSessionManager());
+		handler.setHandlerGroupManager(handlerGroupManager);
+		return handler;
+	}
+	
 	private Selector openSelector() throws Exception {
 		return Selector.open();
 	}
 	
 	private int getSocketReaderPoolSize() {
 		return EzyNioThreadPoolSizes.SOCKET_READER;
+	}
+	
+	private int getSocketHandlerPoolSize() {
+		return getUdpSetting().getHandlerThreadPoolSize();
 	}
 	
 	private int getUdpPort() {

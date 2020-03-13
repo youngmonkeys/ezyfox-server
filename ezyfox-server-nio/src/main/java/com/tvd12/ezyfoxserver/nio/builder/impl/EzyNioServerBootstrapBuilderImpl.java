@@ -13,7 +13,6 @@ import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
-import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
@@ -107,11 +106,13 @@ public class EzyNioServerBootstrapBuilderImpl
 	}
 	
 	private ExecutorService newStatsThreadPool() {
-		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.STATISTICS, "statistics");
+		int threadPoolSize = getThreadPoolSizeSetting().getStatistics();
+		return EzyExecutors.newFixedThreadPool(threadPoolSize, "statistics");
 	}
 	
 	private ExecutorService newCodecThreadPool() {
-		return EzyExecutors.newFixedThreadPool(EzyNioThreadPoolSizes.CODEC, "codec");
+		int threadPoolSize = getThreadPoolSizeSetting().getCodec();
+		return EzyExecutors.newFixedThreadPool(threadPoolSize, "codec");
 	}
 	
 	private EzySocketRequestQueues newRequestQueues() {

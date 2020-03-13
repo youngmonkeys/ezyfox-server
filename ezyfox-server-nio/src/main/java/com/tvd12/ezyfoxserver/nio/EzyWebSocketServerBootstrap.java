@@ -8,7 +8,6 @@ import org.eclipse.jetty.server.Server;
 
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
-import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
@@ -66,7 +65,7 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 	}
 	
 	private int getSocketWriterPoolSize() {
-		return EzyNioThreadPoolSizes.WEBSOCKET_WRITER;
+		return getWsSetting().getWriterThreadPoolSize();
 	}
 	
 	private boolean isSslActive() {

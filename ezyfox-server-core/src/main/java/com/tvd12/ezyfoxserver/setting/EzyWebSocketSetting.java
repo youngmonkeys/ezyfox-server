@@ -6,6 +6,8 @@ public interface EzyWebSocketSetting extends EzyBaseSocketSetting {
     
     int getMaxFrameSize();
     
+    int getWriterThreadPoolSize();
+    
     boolean isSslActive();
     
     EzySslConfigSetting getSslConfig();

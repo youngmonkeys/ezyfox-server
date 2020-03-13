@@ -51,6 +51,9 @@ public class EzySimpleSettings implements EzySettings {
 	@XmlElement(name = "web-socket")
 	protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
 	
+	@XmlElement(name = "thread-pool-size")
+	protected EzySimpleThreadPoolSizeSetting threadPoolSize = new EzySimpleThreadPoolSizeSetting();
+	
 	@XmlElement(name = "session-management")
 	protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
 	
@@ -69,6 +72,7 @@ public class EzySimpleSettings implements EzySettings {
         map.put("debug", debug);
         map.put("nodeName", nodeName);
         map.put("maxSessions", maxSessions);
+        map.put("threadPoolSize", threadPoolSize);
         map.put("streaming", streaming.toMap());
         map.put("socket", socket.toMap());
         map.put("udp", udp.toMap());

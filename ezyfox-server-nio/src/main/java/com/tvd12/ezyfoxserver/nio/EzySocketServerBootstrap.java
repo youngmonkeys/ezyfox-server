@@ -130,7 +130,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 	}
 	
 	private int getSocketWriterPoolSize() {
-		return EzyNioThreadPoolSizes.SOCKET_WRITER;
+		return getSocketSetting().getWriterThreadPoolSize();
 	}
 	
 	private int getSocketAcceptorPoolSize() {

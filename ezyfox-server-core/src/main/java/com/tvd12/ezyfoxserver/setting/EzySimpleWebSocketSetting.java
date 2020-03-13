@@ -24,6 +24,9 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
     @XmlElement(name = "max-frame-size")
     protected int maxFrameSize;
     
+    @XmlElement(name = "writer-thread-pool-size")
+    protected int writerThreadPoolSize;
+    
     @XmlElement(name = "ssl-active")
     protected boolean sslActive;
     
@@ -36,6 +39,7 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
         setSslPort(2812);
         setSslActive(false);
         setMaxFrameSize(32678);
+        setWriterThreadPoolSize(8);
         setSslConfig(new EzySimpleSslConfigSetting());
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
     }

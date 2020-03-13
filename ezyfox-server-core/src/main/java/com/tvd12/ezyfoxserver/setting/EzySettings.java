@@ -26,6 +26,8 @@ public interface EzySettings extends EzyToMap {
     
     EzyLoggerSetting getLogger();
     
+    EzyThreadPoolSizeSetting getThreadPoolSize();
+    
     EzySessionManagementSetting getSessionManagement();
     
     EzyZonesSetting getZones();

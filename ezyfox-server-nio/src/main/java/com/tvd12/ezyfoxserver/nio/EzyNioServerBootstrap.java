@@ -10,7 +10,6 @@ import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
-import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
@@ -217,23 +216,23 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	}
 	
 	private int getStreamHandlerPoolSize() {
-		return EzyNioThreadPoolSizes.STREAM_HANDLER;
+		return getThreadPoolSizeSetting().getStreamHandler();
 	}
 	
 	private int getSystemRequestHandlerPoolSize() {
-		return EzyNioThreadPoolSizes.SYSTEM_REQUEST_HANDLER;
+		return getThreadPoolSizeSetting().getSystemRequestHandler();
 	}
 	
 	private int getExtensionRequestHandlerPoolSize() {
-		return EzyNioThreadPoolSizes.EXTENSION_REQUEST_HANDLER;
+		return getThreadPoolSizeSetting().getExtensionRequestHandler();
 	}
 	
 	private int getSocketDisconnectionHandlerPoolSize() {
-		return EzyNioThreadPoolSizes.SOCKET_DISCONNECTION_HANDLER;
+		return getThreadPoolSizeSetting().getSocketDisconnectionHandler();
 	}
 	
 	private int getSocketUserRemovalHandlerPoolSize() {
-		return EzyNioThreadPoolSizes.SOCKET_USER_REMOVAL_HANDLER;
+		return getThreadPoolSizeSetting().getSocketUserRemovalHandler();
 	}
 	
 	@Override

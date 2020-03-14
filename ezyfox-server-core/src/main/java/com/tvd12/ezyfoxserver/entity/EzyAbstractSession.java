@@ -15,6 +15,8 @@ import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
@@ -37,7 +39,8 @@ public abstract class EzyAbstractSession
             EzyDatagramChannelAware,
             EzyUdpClientAddressAware,
             EzyImmediateDeliverAware, 
-            EzyDroppedPacketsAware {
+            EzyDroppedPacketsAware,
+            EzyDatagramChannelPoolAware {
     private static final long serialVersionUID = -4112736666616219904L;
     
     protected long id;
@@ -71,6 +74,7 @@ public abstract class EzyAbstractSession
 	protected EzyConstant disconnectReason;
 	protected SocketAddress udpClientAddress;
 	protected DatagramChannel datagramChannel;
+	protected EzyDatagramChannelPool datagramChannelPool;
 
 	protected long maxWaitingTime  = 5 * 1000;
 	protected long maxIdleTime     = 3 * 60 * 1000;

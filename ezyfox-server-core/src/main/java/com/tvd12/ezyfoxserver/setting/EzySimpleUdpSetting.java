@@ -21,6 +21,9 @@ public class EzySimpleUdpSetting extends EzyAbstractSocketSetting implements Ezy
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
     
+    @XmlElement(name = "channel-pool-size")
+    protected int channelPoolSize;
+    
     @XmlElement(name = "handler-thread-pool-size")
     protected int handlerThreadPoolSize;
     
@@ -29,6 +32,7 @@ public class EzySimpleUdpSetting extends EzyAbstractSocketSetting implements Ezy
         setPort(2611);
         setActive(false);
         setMaxRequestSize(1024);
+        setChannelPoolSize(16);
         setHandlerThreadPoolSize(5);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
@@ -37,6 +41,8 @@ public class EzySimpleUdpSetting extends EzyAbstractSocketSetting implements Ezy
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
         map.put("maxRequestSize", maxRequestSize);
+        map.put("channelPoolSize", channelPoolSize);
+        map.put("handlerThreadPoolSize", handlerThreadPoolSize);
         return map;
     }
 }

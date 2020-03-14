@@ -75,6 +75,7 @@
 			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="channel-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="handler-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
 		</xs:all>
 	</xs:complexType>

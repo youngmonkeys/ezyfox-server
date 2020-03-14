@@ -23,6 +23,7 @@ import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliverAware;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequest;
@@ -213,14 +214,19 @@ public abstract class EzyAbstractHandlerGroup
 	
 	protected int writeUdpPacketToSocket(EzyPacket packet, Object writeBuffer) throws Exception {
 		try {
-			DatagramChannel channel = session.getDatagramChannel();
+			EzyDatagramChannelPool udpChannelPool = session.getDatagramChannelPool();
+			if(udpChannelPool == null)
+				return 0;
 			SocketAddress clientAddress = session.getUdpClientAddress();
+			if(clientAddress == null)
+				return 0;
 			byte[] bytes = getBytesToWrite(packet);
 			int bytesToWrite = bytes.length;
 			ByteBuffer buffer = getWriteBuffer((ByteBuffer)writeBuffer, bytesToWrite);
 			buffer.clear();
 			buffer.put(bytes);
 			buffer.flip();
+			DatagramChannel channel = udpChannelPool.getChannel();
 			int writtenByes = channel.send(buffer, clientAddress);
 			return writtenByes;
 		}

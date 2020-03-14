@@ -2,10 +2,7 @@ package com.tvd12.ezyfoxserver.nio;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
-import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
@@ -21,6 +18,7 @@ import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReadingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
@@ -28,8 +26,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	private Selector readSelector;
-	private DatagramSocket datagramSocket;
-	private DatagramChannel datagramChannel;
+	private EzyDatagramChannelPool udpChannelPool;
 	private EzyNioUdpDataHandler udpDataHandler;
 	private EzySocketEventLoopHandler readingLoopHandler;
 	
@@ -39,39 +36,35 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	public EzyUdpServerBootstrap(Builder builder) {
 		this.serverContext = builder.serverContext;
 		this.handlerGroupManager = builder.handlerGroupManager;
+		this.udpChannelPool = newChannelPool();
 		this.udpDataHandler = newUdpDataHandler();
 	}
 	
 	@Override
 	public void start() throws Exception {
 		openSelectors();
-		newAndConfigServerDatagramChannel();
-		getBindAndConfigServerSocket();
+		configChannelPool();
 		startSocketHandlers();
 	}
 	
 	@Override
 	public void destroy() {
 		processWithLogException(() -> readingLoopHandler.destroy());
-		processWithLogException(() -> datagramSocket.close());
-		processWithLogException(() -> datagramChannel.close());
+		processWithLogException(() -> udpChannelPool.close());
 	}
 	
 	private void openSelectors() throws Exception {
 		this.readSelector = openSelector();
 	}
 	
-	
-	private void newAndConfigServerDatagramChannel() throws Exception {
-		this.datagramChannel = DatagramChannel.open();
-	    this.datagramChannel.configureBlocking(false);
+	private EzyDatagramChannelPool newChannelPool() {
+		int poolSize = getUdpSetting().getChannelPoolSize();
+		return new EzyDatagramChannelPool(poolSize);
 	}
 	
-	private void getBindAndConfigServerSocket() throws Exception {
-		this.datagramSocket = datagramChannel.socket();
-		this.datagramSocket.setReuseAddress(true);
-		this.datagramSocket.bind(new InetSocketAddress(getUdpAddress(), getUdpPort()));
-		this.datagramChannel.register(readSelector, SelectionKey.OP_READ);
+	private void configChannelPool() throws Exception {
+		this.udpChannelPool.bind(new InetSocketAddress(getUdpAddress(), getUdpPort()));
+		this.udpChannelPool.register(readSelector);
 	}
 	
 	private void startSocketHandlers() throws Exception {
@@ -93,6 +86,7 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		int handlerThreadPoolSize = getSocketHandlerPoolSize();
 		EzySimpleNioUdpDataHandler handler = new EzySimpleNioUdpDataHandler(handlerThreadPoolSize);
 		handler.setResponseApi(getResponseApi());
+		handler.setDatagramChannelPool(udpChannelPool);
 		handler.setSessionManager(getSessionManager());
 		handler.setHandlerGroupManager(handlerGroupManager);
 		return handler;

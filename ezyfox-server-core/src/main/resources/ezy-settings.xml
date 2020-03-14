@@ -37,6 +37,7 @@
 		<address>0.0.0.0</address>
 		<active>true</active>
 		<max-request-size>1024</max-request-size>
+		<channel-pool-size>8</channel-pool-size>
 		<handler-thread-pool-size>5</handler-thread-pool-size>
 	</udp>
 	

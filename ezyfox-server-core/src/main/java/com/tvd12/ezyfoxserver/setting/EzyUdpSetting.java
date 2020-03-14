@@ -4,6 +4,8 @@ public interface EzyUdpSetting extends EzyBaseSocketSetting {
 
     int getMaxRequestSize();
     
+    int getChannelPoolSize();
+    
     int getHandlerThreadPoolSize();
     
 }

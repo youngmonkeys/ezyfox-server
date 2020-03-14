@@ -24,6 +24,8 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
 import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
 import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
 import com.tvd12.ezyfoxserver.socket.EzyUdpReceivedPacket;
@@ -38,7 +40,8 @@ public class EzySimpleNioUdpDataHandler
 		implements 
 			EzyNioUdpDataHandler, 
 			EzySessionManagerAware,
-			EzyHandlerGroupManagerAware {
+			EzyHandlerGroupManagerAware,
+			EzyDatagramChannelPoolAware {
 
 	@Setter
 	protected EzyResponseApi responseApi;
@@ -46,6 +49,9 @@ public class EzySimpleNioUdpDataHandler
 	protected EzySessionManager sessionManager;
 	@Setter
 	protected EzyHandlerGroupManager handlerGroupManager;
+	@Setter
+	protected EzyDatagramChannelPool datagramChannelPool; 
+	
 	protected final ExecutorService executorService;
 	
 	public EzySimpleNioUdpDataHandler(int threadPoolSize) {
@@ -108,6 +114,7 @@ public class EzySimpleNioUdpDataHandler
 			handlerGroupManager.mapHandlerGroup(address, session);
 			((EzyDatagramChannelAware)session).setDatagramChannel(channel);
 			((EzyUdpClientAddressAware)session).setUdpClientAddress(address);
+			((EzyDatagramChannelPoolAware)session).setDatagramChannelPool(datagramChannelPool);
 		}
 		response(session, responseCode);
 	}

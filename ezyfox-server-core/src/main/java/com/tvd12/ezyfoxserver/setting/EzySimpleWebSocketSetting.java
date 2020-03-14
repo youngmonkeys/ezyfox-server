@@ -51,6 +51,7 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
         map.put("maxFrameSize", maxFrameSize);
         map.put("sslActive", sslActive);
         map.put("sslConfig", sslConfig.toMap());
+        map.put("writerThreadPoolSize", writerThreadPoolSize);
         return map;
     }
 }

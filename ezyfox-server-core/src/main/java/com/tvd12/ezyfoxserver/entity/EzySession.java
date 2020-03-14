@@ -11,6 +11,7 @@ import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProperties;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
@@ -406,6 +407,13 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @return the udp channel
      */
     DatagramChannel getDatagramChannel();
+    
+    /**
+     * Get datagram channel pool
+     * 
+     * @return the datagram channel pool
+     */
+    EzyDatagramChannelPool getDatagramChannelPool();
     
     /**
      * set session tickets queue

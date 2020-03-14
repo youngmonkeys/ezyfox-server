@@ -11,6 +11,7 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
 import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSetting;
+import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
 
@@ -20,10 +21,6 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	protected EzyServer server;
 	protected EzyServerContext serverContext;
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.tvd12.ezyfoxserver.mapping.builder.EzyServerBootstrapBuilder#boss(com.tvd12.ezyfoxserver.mapping.EzyServer)
-	 */
 	@Override
 	public EzyAbtractServerBootstrapBuilder server(EzyServer server) {
 		this.server = server;
@@ -84,6 +81,10 @@ public abstract class EzyAbtractServerBootstrapBuilder
     
     protected EzySettings getSettings() {
         return server.getSettings();
+    }
+    
+    protected EzyUdpSetting getUdpSetting() {
+        return getSettings().getUdp();
     }
     
     protected EzySocketSetting getSocketSetting() {

@@ -40,6 +40,7 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
         Map<Object, Object> map = super.toMap();
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
+        map.put("writerThreadPoolSize", writerThreadPoolSize);
         return map;
     }
 }

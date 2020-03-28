@@ -50,7 +50,9 @@ public abstract class EzyAbstractSession
 	protected long creationTime;
 	protected long lastReadTime;
 	protected long lastWriteTime;
+	@Setter(AccessLevel.NONE)
 	protected long readBytes;
+	@Setter(AccessLevel.NONE)
 	protected long writtenBytes;
 	protected long lastActivityTime;
 	protected long loggedInTime;

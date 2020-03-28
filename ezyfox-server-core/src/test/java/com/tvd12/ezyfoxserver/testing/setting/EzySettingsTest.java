@@ -10,6 +10,8 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleThreadPoolSizeSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneFilesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
@@ -37,6 +39,8 @@ public class EzySettingsTest extends BaseTest {
         zoneSetting.setName("test");
         zonesSetting.setItem(zoneSetting);
         assert settings.getZoneByName("test") == zoneSetting;
+        settings.setUdp(new EzySimpleUdpSetting());
+        settings.setThreadPoolSize(new EzySimpleThreadPoolSizeSetting());
     }
     
 }

@@ -18,6 +18,8 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         assert setting.isActive();
         setting.setCodecCreator("hello");
         assert setting.getCodecCreator().equals("hello");
+        setting.setTcpNoDelay(true);
+        assert setting.isTcpNoDelay();
     }
     
 }

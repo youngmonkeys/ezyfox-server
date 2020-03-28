@@ -1,7 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.entity;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
+
+import java.net.InetSocketAddress;
+import java.nio.channels.DatagramChannel;
 
 import org.testng.annotations.Test;
 
@@ -11,6 +14,7 @@ import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyNonBlockingPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
@@ -124,10 +128,32 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         privateSession.setDisconnectionQueue(disconnectionQueue);
         privateSession.disconnect();
         privateSession.disconnect();
-        privateSession.setChannel(mock(EzyChannel.class));
+        assert privateSession.getServerAddress() == null;
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.getServerAddress()).thenReturn(new InetSocketAddress(2233));
+        privateSession.setChannel(channel);
+        assert privateSession.getServerAddress() != null;
         privateSession.close();
         assert privateSession.getConnection() == null;
-        assert privateSession.getServerAddress() == null;
+        assert privateSession.getUdpClientAddress() == null;
+        assert privateSession.getDatagramChannel() == null;
+        assert privateSession.getDatagramChannelPool() == null;
+        privateSession.setUdpClientAddress(new InetSocketAddress(12345));
+        assert privateSession.getUdpClientAddress() != null;
+        try {
+            privateSession.setDatagramChannel(DatagramChannel.open());
+            assert privateSession.getDatagramChannel() != null;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            privateSession.setDatagramChannelPool(new EzyDatagramChannelPool(2));
+            assert privateSession.getDatagramChannelPool() != null;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     private static class PrivateSession extends EzyAbstractSession {

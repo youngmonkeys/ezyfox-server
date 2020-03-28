@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.command.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -169,6 +170,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         when(appContext.getApp()).thenReturn(app);
         EzyAppResponse cmd = (EzyAppResponse) new EzyAppResponseImpl(appContext)
                 .command("test")
+                .transportType(EzyTransportType.TCP)
                 .params(EzyEntityFactory.newArrayBuilder());
         cmd.execute();
     }

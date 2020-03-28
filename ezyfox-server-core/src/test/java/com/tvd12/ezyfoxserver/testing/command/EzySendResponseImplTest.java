@@ -47,6 +47,7 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
         cmd.execute(response, Lists.newArrayList(recipient));
+        cmd.execute(response, Lists.newArrayList(recipient), true);
     }
     
     @Test
@@ -62,6 +63,7 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
         cmd.execute(response, recipient);
+        cmd.execute(response, recipient, true);
     }
     
 }

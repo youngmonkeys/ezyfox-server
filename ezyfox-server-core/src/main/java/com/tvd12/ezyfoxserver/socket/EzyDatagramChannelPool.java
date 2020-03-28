@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -18,7 +19,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
 	
 	protected DatagramChannel newChannel() {
 		try {
-	        DatagramChannel chan = DatagramChannel.open();
+	        DatagramChannel chan = openChannel();
 	        chan.configureBlocking(false);
 	        chan.socket().setReuseAddress(true);
 	        return chan;
@@ -27,6 +28,10 @@ public class EzyDatagramChannelPool extends EzyLoggable {
 			throw new IllegalStateException(e);
 		}
     }
+	
+	protected DatagramChannel openChannel() throws IOException {
+	    return DatagramChannel.open();
+	}
 	
 	public void bind(InetSocketAddress address) {
 		channels.forEach(channel -> {

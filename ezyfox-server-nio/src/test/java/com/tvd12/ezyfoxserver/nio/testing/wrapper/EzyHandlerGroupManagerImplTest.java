@@ -4,6 +4,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -103,6 +104,10 @@ public class EzyHandlerGroupManagerImplTest extends BaseTest {
 		assert handlerGroupManager.getDataHandlerGroup(session1) == null;
 		assert handlerGroupManager.getDataHandlerGroup(session2) == null;
 		assert handlerGroupManager.getWriterGroup(session3) == handlerGroup3;
+		InetSocketAddress udpAddress = new InetSocketAddress("127.0.0.1", 12345);
+		handlerGroupManager.mapHandlerGroup(udpAddress, session3);
+		assert handlerGroupManager.getHandlerGroup(udpAddress) != null;
+		handlerGroupManager.unmapHandlerGroup(udpAddress);
 		handlerGroupManager.removeHandlerGroup(session3);
 		handlerGroupManager.destroy();
 	}

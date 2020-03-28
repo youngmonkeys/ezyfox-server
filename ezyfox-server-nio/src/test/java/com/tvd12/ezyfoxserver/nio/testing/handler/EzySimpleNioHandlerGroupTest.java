@@ -153,6 +153,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 				.requestQueues(requestQueues)
 				.build();
 		group.fireBytesReceived("hello".getBytes());
+		group.fireMessageReceived(mock(EzyMessage.class));
 		Thread.sleep(300);
 	}
 	

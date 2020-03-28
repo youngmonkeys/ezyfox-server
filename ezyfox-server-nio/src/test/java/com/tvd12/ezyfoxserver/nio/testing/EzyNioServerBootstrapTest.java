@@ -50,6 +50,7 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleStreamingSetting streaming = settings.getStreaming();
 		streaming.setEnable(true);
+		settings.getUdp().setActive(true);
 		EzySimpleServer server = new EzySimpleServer();
 		EzyServerControllers serverControllers = EzyServerControllersImpl.builder().build();
 		server.setControllers(serverControllers);

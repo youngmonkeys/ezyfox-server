@@ -84,7 +84,7 @@ public class EzySimpleNioUdpDataHandler
 			}
 		}
 		catch (Exception e) {
-			logger.warn("handle received udp package: {} error: {}", packet, e.getMessage());
+			logger.warn("handle received udp package: {} error: {}({})", packet, e.getClass().getName(), e.getMessage());
 		}
 	}
 	

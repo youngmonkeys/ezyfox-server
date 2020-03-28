@@ -5,6 +5,7 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
@@ -28,8 +29,12 @@ import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
@@ -114,6 +119,26 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 					.append(EzyEntityFactory.EMPTY_OBJECT)
 					.build())
 			.param(int.class, 100)
+			.invoke();
+		
+		((EzyDatagramChannelPoolAware)session).setDatagramChannelPool(new EzyDatagramChannelPool(1));
+		((EzyUdpClientAddressAware)session).setUdpClientAddress(new InetSocketAddress("127.0.0.1", 12348));
+		
+		EzyPacket packet = mock(EzyPacket.class);
+		when(packet.getData()).thenReturn(new byte[] {1, 2, 3});
+		ByteBuffer buffer = ByteBuffer.allocate(100);
+		MethodInvoker.create()
+			.object(group)
+			.method("sendPacketToClient0")
+			.param(EzyPacket.class, packet)
+			.param(Object.class, buffer)
+			.invoke();
+		
+		MethodInvoker.create()
+			.object(group)
+			.method("sendPacketToClient0")
+			.param(EzyPacket.class, packet)
+			.param(Object.class, new Object())
 			.invoke();
 	}
 	

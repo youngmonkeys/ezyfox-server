@@ -82,7 +82,7 @@ public abstract class EzyAbstractSetting
 	    Map<Object, Object> map = new HashMap<>();
 	    map.put("id", id);
 	    map.put("name", name);
-	    map.put("folder", folder);
+	    map.put("folder", getFolder());
 	    map.put("entryLoader", entryLoader);
 	    map.put("threadPoolSize", threadPoolSize);
 	    map.put("configFile", configFile);

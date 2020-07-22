@@ -5,11 +5,13 @@ package com.tvd12.ezyfoxserver;
 
 import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.SETTINGS;
 
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
@@ -66,9 +68,12 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     protected abstract EzyServerBootstrapBuilder newServerBootstrapBuilder();
 
     protected void setSystemProperties(EzyConfig config) {
-        PropertyConfigurator.configure(getLoggerConfigFile(config));
-        System.setProperty("log4j.configuration", getLoggerConfigFile(config));
-        System.setProperty("logging.config", getLoggerConfigFile(config));
+    	String loggerConfigFile = getLoggerConfigFile(config);
+    	if(!Files.exists(Paths.get(loggerConfigFile)))
+    		return;
+        PropertyConfigurator.configure(loggerConfigFile);
+        System.setProperty("log4j.configuration", loggerConfigFile);
+        System.setProperty("logging.config", loggerConfigFile);
     }
 
     protected EzyServer loadEzyFox(EzyConfig config) {
@@ -101,7 +106,10 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected String getLoggerConfigFile(EzyConfig config) {
-        return getPath(config.getEzyfoxHome(), SETTINGS, config.getLoggerConfigFile());
+    	String loggerFile = config.getLoggerConfigFile();
+    	if(EzyStrings.isNoContent(loggerFile))
+    		loggerFile = "log4j.properties";
+        return getPath(config.getEzyfoxHome(), SETTINGS, loggerFile);
     }
 
     protected String getPath(String first, String... more) {

@@ -8,6 +8,8 @@ public interface EzyConfig extends EzyToMap {
     
     boolean isPrintSettings();
     
+    boolean isPrintBanner();
+    
     String getLoggerConfigFile();
     
 }

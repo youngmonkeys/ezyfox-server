@@ -20,11 +20,15 @@ public class EzySimpleConfig implements EzyConfig {
 	@Property("settings.print")
     private boolean printSettings;
 	
+	@Property("banner.print")
+    private boolean printBanner;
+	
 	@Property("logger.config.file")
 	private String loggerConfigFile;
 	
 	public EzySimpleConfig() {
 	    this.printSettings = true;
+	    this.printBanner = true;
 	}
 	
 	public String getEzyfoxHome() {

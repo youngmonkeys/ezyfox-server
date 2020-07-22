@@ -5,6 +5,7 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
+import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
@@ -62,7 +63,8 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected final void printBanner() {
-		logger.info("\n{}\n", new EzyBannerPrinter().getBannerText());
+	    if(getServerConfig().isPrintBanner())
+	        logger.info("\n{}\n", new EzyBannerPrinter().getBannerText());
 	}
 	
 	protected void notifyServerReady0() {
@@ -73,6 +75,10 @@ public abstract class EzyServerBootstrap
 	
 	protected EzyServer getServer() {
 	    return context.getServer();
+	}
+	
+	protected EzyConfig getServerConfig() {
+	    return getServer().getConfig();
 	}
 	
 	protected EzySettings getServerSettings() {

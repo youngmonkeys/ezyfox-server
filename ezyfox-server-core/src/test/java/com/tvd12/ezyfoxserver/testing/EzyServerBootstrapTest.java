@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
+import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -43,6 +44,8 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
         
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzySimpleServer server = new EzySimpleServer();
+        EzySimpleConfig config = new EzySimpleConfig();
+        server.setConfig(config);
         when(serverContext.getServer()).thenReturn(server);
         EzySimpleSettings settings = new EzySimpleSettings();
         server.setSettings(settings);

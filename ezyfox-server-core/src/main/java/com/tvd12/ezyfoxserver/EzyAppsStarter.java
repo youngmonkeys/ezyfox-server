@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver;
 import java.util.Map;
 import java.util.Set;
 
-import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
@@ -12,7 +11,7 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
 public class EzyAppsStarter extends EzyZoneComponentsStater {
 
-    protected final Map<String, EzyAppClassLoader> appClassLoaders;
+    protected final Map<String, ClassLoader> appClassLoaders;
     
     protected EzyAppsStarter(Builder builder) {
         super(builder);
@@ -68,7 +67,7 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     @SuppressWarnings("unchecked")
     protected Class<EzyAppEntryLoader> 
             getAppEntryLoaderClass(EzyAppSetting app) throws Exception {
-        EzyAppClassLoader classLoader = getClassLoader(app.getName(), app.getFolder());
+        ClassLoader classLoader = getClassLoader(app.getName(), app.getFolder());
         return (Class<EzyAppEntryLoader>) 
                 Class.forName(app.getEntryLoader(), true, classLoader);
     }
@@ -78,8 +77,8 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
          return entryLoaderClass.newInstance();
     }
     
-    protected EzyAppClassLoader getClassLoader(String appName, String appFolder) {
-        EzyAppClassLoader classLoader = appClassLoaders.get(appFolder);
+    protected ClassLoader getClassLoader(String appName, String appFolder) {
+        ClassLoader classLoader = appClassLoaders.get(appFolder);
         if(classLoader != null) 
             return classLoader;
         throw new IllegalArgumentException(
@@ -95,9 +94,9 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     }
     
     public static class Builder extends EzyZoneComponentsStater.Builder<EzyAppsStarter, Builder> {
-        protected Map<String, EzyAppClassLoader> appClassLoaders;
+        protected Map<String, ClassLoader> appClassLoaders;
         
-        public Builder appClassLoaders(Map<String, EzyAppClassLoader> appClassLoaders) {
+        public Builder appClassLoaders(Map<String, ClassLoader> appClassLoaders) {
             this.appClassLoaders = appClassLoaders;
             return this;
         }

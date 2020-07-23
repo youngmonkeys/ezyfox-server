@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver;
 import java.util.Map;
 import java.util.Set;
 
-import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyServerInitializingEvent;
@@ -82,7 +81,7 @@ public class EzyZonesStarter extends EzyComponentsStater {
         return settings.getZoneNames();
     }
     
-    protected Map<String, EzyAppClassLoader> getAppClassLoaders() {
+    protected Map<String, ClassLoader> getAppClassLoaders() {
         return serverContext.getServer().getAppClassLoaders();
     }
     

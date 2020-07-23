@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.EzyAppsStarter;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
-import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
@@ -22,7 +21,7 @@ public class EzyAppsStarterTest extends BaseTest {
 
     @Test
     public void test1() {
-        Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
+        Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
         EzyAppsStarter starter = new EzyAppsStarter.Builder() {
             @Override
             public EzyAppsStarter build() {
@@ -46,7 +45,7 @@ public class EzyAppsStarterTest extends BaseTest {
     
     @Test
     public void test2() {
-        Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
+        Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
         EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
@@ -68,7 +67,7 @@ public class EzyAppsStarterTest extends BaseTest {
     
     @Test
     public void getClassLoaderErrorCaseTest() {
-        Map<String, EzyAppClassLoader> loaders = new ConcurrentHashMap<>();
+        Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
         EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();

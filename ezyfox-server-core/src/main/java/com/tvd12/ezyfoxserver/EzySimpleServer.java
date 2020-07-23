@@ -10,7 +10,6 @@ import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
-import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
@@ -40,7 +39,7 @@ public class EzySimpleServer
     protected EzyResponseApi responseApi;
 	protected EzyStreamingApi streamingApi;
 	protected EzySessionManager sessionManager;
-    protected Map<String, EzyAppClassLoader> appClassLoaders;
+    protected Map<String, ClassLoader> appClassLoaders;
 	
 	@Override
 	public String getVersion() {

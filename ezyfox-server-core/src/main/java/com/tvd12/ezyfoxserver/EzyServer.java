@@ -5,7 +5,6 @@ import java.util.Map;
 import com.tvd12.ezyfox.util.EzyToMap;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
-import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
@@ -83,6 +82,6 @@ public interface EzyServer extends EzyEventComponent, EzyToMap {
      * 
      * @return the applications class loader
      */
-    Map<String, EzyAppClassLoader> getAppClassLoaders();
+    Map<String, ClassLoader> getAppClassLoaders();
 
 }

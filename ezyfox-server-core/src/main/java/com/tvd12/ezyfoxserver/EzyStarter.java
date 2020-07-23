@@ -98,7 +98,7 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected ClassLoader getClassLoader() {
-        return EzySimpleServer.class.getClassLoader();
+        return Thread.currentThread().getContextClassLoader();
     }
 
     protected EzyConfig readConfig(String configFile) throws Exception {

@@ -85,16 +85,18 @@ public abstract class EzyLoader extends EzyLoggable {
         return EzyServerControllersImpl.builder().build();
     }
     
-    protected Map<String, EzyAppClassLoader> newAppClassLoaders() {
-        Map<String, EzyAppClassLoader> answer = new ConcurrentHashMap<>();
+    protected Map<String, ClassLoader> newAppClassLoaders() {
+        Map<String, ClassLoader> answer = new ConcurrentHashMap<>();
         for(File dir : getEntryFolders())
             answer.put(dir.getName(), newAppClassLoader(dir));
         return answer;
     }
     
-    protected EzyAppClassLoader newAppClassLoader(File dir) {
-    	    logger.info("load: {}", dir);
-        return new EzyAppClassLoader(dir, classLoader);
+    protected ClassLoader newAppClassLoader(File dir) {
+        logger.info("load: {}", dir);
+        if(config.isEnableAppClassLoader())
+            return new EzyAppClassLoader(dir, classLoader);
+        return classLoader;
     }
     
     protected EzyEventControllers newEventControllers(EzyEventControllersSetting setting) {

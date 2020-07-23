@@ -26,9 +26,13 @@ public class EzySimpleConfig implements EzyConfig {
 	@Property("logger.config.file")
 	private String loggerConfigFile;
 	
+	@Property("app.classloader.enable")
+	private boolean enableAppClassLoader;
+	
 	public EzySimpleConfig() {
 	    this.printSettings = true;
 	    this.printBanner = true;
+	    this.enableAppClassLoader = true;
 	}
 	
 	public String getEzyfoxHome() {
@@ -42,6 +46,7 @@ public class EzySimpleConfig implements EzyConfig {
 	    Map<Object, Object> map = new HashMap<>();
 	    map.put("ezyfoxHome", getEzyfoxHome());
 	    map.put("loggerConfigFile", loggerConfigFile);
+	    map.put("enableAppClassLoader", enableAppClassLoader);
 	    return map;
 	}
 	

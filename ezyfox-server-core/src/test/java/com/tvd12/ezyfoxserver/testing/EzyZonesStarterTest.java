@@ -81,7 +81,7 @@ public class EzyZonesStarterTest extends BaseTest {
         when(pluginContext.getPlugin()).thenReturn(plugin);
         when(zoneContext.getPluginContext("plugins")).thenReturn(pluginContext);
 
-        Map<String, EzyAppClassLoader> appClassLoaders = new HashMap<>();
+        Map<String, ClassLoader> appClassLoaders = new HashMap<>();
         appClassLoaders.put("apps", new EzyAppClassLoader(new File("test-data"), getClass().getClassLoader()));
         server.setAppClassLoaders(appClassLoaders);
         

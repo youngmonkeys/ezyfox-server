@@ -2,6 +2,9 @@ package com.tvd12.ezyfoxserver.nio.testing;
 
 import static org.mockito.Mockito.mock;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import javax.net.ssl.SSLContext;
 
 import org.testng.annotations.Test;
@@ -10,6 +13,7 @@ import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
+import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyServerReadyController;
@@ -24,6 +28,7 @@ import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
@@ -45,8 +50,40 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
 		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
 		EzySessionTicketsQueue websocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySocketDisconnectionQueue socketDisconnectionQueue = mock(EzySocketDisconnectionQueue.class);
+		EzySocketDisconnectionQueue socketDisconnectionQueue = new EzySocketDisconnectionQueue() {
+			
+			BlockingQueue<EzySocketDisconnection> queue = new LinkedBlockingQueue<>();
+			
+			@Override
+			public EzySocketDisconnection take() throws InterruptedException {
+				return queue.take();
+			}
+			
+			@Override
+			public int size() {
+				return 0;
+			}
+			
+			@Override
+			public void remove(EzySocketDisconnection disconnection) {
+			}
+			
+			@Override
+			public boolean isEmpty() {
+				return false;
+			}
+			
+			@Override
+			public void clear() {
+			}
+			
+			@Override
+			public boolean add(EzySocketDisconnection disconnection) {
+				return false;
+			}
+		};
 		
+		EzySimpleConfig config = new EzySimpleConfig();
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleStreamingSetting streaming = settings.getStreaming();
 		streaming.setEnable(true);
@@ -57,6 +94,7 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
 		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
 		server.setEventControllers(eventControllers);
+		server.setConfig(config);
 		server.setSettings(settings);
 		EzySimpleServerContext serverContext = new EzySimpleServerContext();
 		serverContext.setServer(server);

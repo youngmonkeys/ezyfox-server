@@ -59,8 +59,15 @@ public abstract class EzyAbstractSetting
 	
 	@Override
     public String getConfigFile() {
-        return Paths.get(getLocation(), configFile).toString();
+        return getConfigFile(false);
     }
+	
+	@Override
+	public String getConfigFile(boolean noParent) {
+	    if(noParent)
+	        return configFile;
+	    return Paths.get(getLocation(), configFile).toString();
+	}
 
 	protected abstract String getParentFolder();
 	protected abstract AtomicInteger getIdCounter();

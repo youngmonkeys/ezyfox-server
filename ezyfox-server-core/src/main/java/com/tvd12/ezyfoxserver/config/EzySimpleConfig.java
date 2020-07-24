@@ -35,6 +35,12 @@ public class EzySimpleConfig implements EzyConfig {
 	    this.enableAppClassLoader = true;
 	}
 	
+	public static EzySimpleConfig defaultConfig() {
+	    EzySimpleConfig config = new EzySimpleConfig();
+	    config.setEnableAppClassLoader(false);
+	    return config;
+	}
+	
 	public String getEzyfoxHome() {
 	    if(ezyfoxHome == null)
 	        return "";
@@ -45,7 +51,7 @@ public class EzySimpleConfig implements EzyConfig {
 	public Map<Object, Object> toMap() {
 	    Map<Object, Object> map = new HashMap<>();
 	    map.put("ezyfoxHome", getEzyfoxHome());
-	    map.put("loggerConfigFile", loggerConfigFile);
+	    map.put("loggerConfigFile", loggerConfigFile != null ? loggerConfigFile : "default");
 	    map.put("enableAppClassLoader", enableAppClassLoader);
 	    return map;
 	}

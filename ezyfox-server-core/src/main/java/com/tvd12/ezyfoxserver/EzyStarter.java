@@ -18,8 +18,11 @@ import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
+
+import lombok.Getter;
 
 /**
  * @author tavandung12
@@ -29,6 +32,8 @@ import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     private final String configFile;
+    @Getter
+    private EzyServerContext serverContext;
 
     protected EzyStarter(Builder<?> builder) {
         this.configFile = builder.configFile;
@@ -59,6 +64,7 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
             logger.info("settings: \n{}", server.toString());
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
         serverBoostrap.start();
+        serverContext = serverBoostrap.getContext();
     }
 
     protected EzyServerBootstrap newServerBoostrap(EzyServer server) {

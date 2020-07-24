@@ -51,7 +51,9 @@ public abstract class EzyAbtractServerBootstrapBuilder
 	}
 	
 	protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
-	    return newSslContextInitializer(sslConfig).init();
+	    if(getWebsocketSetting().isSslActive())
+	        return newSslContextInitializer(sslConfig).init();
+	    return null;
 	}
 	
 	protected EzySslContextInitializer newSslContextInitializer(EzySslConfigSetting sslConfig) {

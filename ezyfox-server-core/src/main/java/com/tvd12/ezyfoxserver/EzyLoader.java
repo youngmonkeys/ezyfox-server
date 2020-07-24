@@ -87,7 +87,8 @@ public abstract class EzyLoader extends EzyLoggable {
     
     protected Map<String, ClassLoader> newAppClassLoaders() {
         Map<String, ClassLoader> answer = new ConcurrentHashMap<>();
-        for(File dir : getEntryFolders())
+        File[] entryFolders = getEntryFolders();
+        for(File dir : entryFolders)
             answer.put(dir.getName(), newAppClassLoader(dir));
         return answer;
     }
@@ -105,12 +106,13 @@ public abstract class EzyLoader extends EzyLoggable {
     
     protected File[] getEntryFolders() {
         File entries = getEntriesFolder();
-        return entries.listFiles(new FileFilter() {
+        File[] answer = entries.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
                 return file.isDirectory();
             }
         });
+        return answer != null ? answer : new File[0];
     }
     
     protected File getEntriesFolder() {
@@ -124,7 +126,7 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     protected String getAppsPath() {
-    	    return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
+    	return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
     }
     
     protected String getPath(String first, String... more) {
@@ -132,7 +134,7 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     protected String getHomePath() {
-    	    return config.getEzyfoxHome();
+        return config.getEzyfoxHome();
     }
     
     public EzyLoader classLoader(ClassLoader classLoader) {
@@ -141,8 +143,8 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     public EzyLoader config(EzyConfig config) {
-    	    this.config = config;
-    	    return this;
+	    this.config = config;
+	    return this;
     }
     
     

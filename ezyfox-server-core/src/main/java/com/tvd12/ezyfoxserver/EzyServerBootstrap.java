@@ -18,6 +18,7 @@ import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
 
+import lombok.Getter;
 import lombok.Setter;
 
 
@@ -26,6 +27,7 @@ public abstract class EzyServerBootstrap
         implements EzyStartable, EzyDestroyable {
 	
 	@Setter
+	@Getter
 	protected EzyServerContext context;
 	@Setter
 	protected EzyBootstrap localBootstrap;

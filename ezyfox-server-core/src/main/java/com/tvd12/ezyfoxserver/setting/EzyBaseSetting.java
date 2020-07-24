@@ -20,4 +20,6 @@ public interface EzyBaseSetting extends EzyToMap {
     
     String getConfigFile();
     
+    String getConfigFile(boolean noParent);
+    
 }

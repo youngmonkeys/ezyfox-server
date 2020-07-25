@@ -47,6 +47,14 @@ public abstract class EzyAbstractSetting
 	    return getIdCounter().incrementAndGet();
 	}
 	
+	public void setEntryLoader(Class<?> loaderClass) {
+	    this.entryLoader = loaderClass.getName();
+	}
+	
+	public void setEntryLoader(String loaderClass) {
+        this.entryLoader = loaderClass;
+    }
+	
 	@Override
 	public String getFolder() {
 	    return EzyStrings.isNoContent(folder) ? name : folder;

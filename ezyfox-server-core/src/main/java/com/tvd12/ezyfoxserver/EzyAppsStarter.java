@@ -11,11 +11,15 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 
 public class EzyAppsStarter extends EzyZoneComponentsStater {
 
+    protected final ClassLoader classLoader;
+    protected final boolean enableAppClassLoader;
     protected final Map<String, ClassLoader> appClassLoaders;
     
     protected EzyAppsStarter(Builder builder) {
         super(builder);
+        this.classLoader = builder.classLoader;
         this.appClassLoaders = builder.appClassLoaders;
+        this.enableAppClassLoader = builder.enableAppClassLoader;
     }
     
     @Override
@@ -67,7 +71,7 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     @SuppressWarnings("unchecked")
     protected Class<EzyAppEntryLoader> 
             getAppEntryLoaderClass(EzyAppSetting app) throws Exception {
-        ClassLoader classLoader = getClassLoader(app.getName(), app.getFolder());
+        ClassLoader classLoader = getAppClassLoader(app.getName(), app.getFolder());
         return (Class<EzyAppEntryLoader>) 
                 Class.forName(app.getEntryLoader(), true, classLoader);
     }
@@ -77,9 +81,11 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
          return entryLoaderClass.newInstance();
     }
     
-    protected ClassLoader getClassLoader(String appName, String appFolder) {
-        ClassLoader classLoader = appClassLoaders.get(appFolder);
-        if(classLoader != null) 
+    protected ClassLoader getAppClassLoader(String appName, String appFolder) {
+        ClassLoader appClassLoader = appClassLoaders.get(appFolder);
+        if(appClassLoader != null) 
+            return appClassLoader;
+        if(!enableAppClassLoader && classLoader != null)
             return classLoader;
         throw new IllegalArgumentException(
                 "folder: " + appFolder + " for app: " + appName + " doesn't exist");
@@ -93,8 +99,22 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
         return new Builder();
     }
     
-    public static class Builder extends EzyZoneComponentsStater.Builder<EzyAppsStarter, Builder> {
+    public static class Builder 
+            extends EzyZoneComponentsStater.Builder<EzyAppsStarter, Builder> {
+        
+        protected ClassLoader classLoader;
+        protected boolean enableAppClassLoader;
         protected Map<String, ClassLoader> appClassLoaders;
+        
+        public Builder classLoader(ClassLoader classLoader) {
+            this.classLoader = classLoader;
+            return this;
+        }
+        
+        public Builder enableAppClassLoader(boolean enableAppClassLoader) {
+            this.enableAppClassLoader = enableAppClassLoader;
+            return this;
+        }
         
         public Builder appClassLoaders(Map<String, ClassLoader> appClassLoaders) {
             this.appClassLoaders = appClassLoaders;

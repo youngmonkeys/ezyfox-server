@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.EzyZonesStarter;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
+import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -60,6 +61,7 @@ public class EzyZonesStarterTest extends BaseTest {
         
         EzySimpleServer server = new EzySimpleServer();
         server.setSettings(settings);
+        server.setConfig(new EzySimpleConfig());
         EzyServerContext serverContext = mock(EzyServerContext.class);
         when(serverContext.getServer()).thenReturn(server);
         

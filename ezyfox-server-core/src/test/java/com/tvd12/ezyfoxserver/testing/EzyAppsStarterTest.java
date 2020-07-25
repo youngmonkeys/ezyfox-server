@@ -87,12 +87,13 @@ public class EzyAppsStarterTest extends BaseTest {
         try {
             MethodInvoker.create()
                 .object(starter)
-                .method("getClassLoader")
+                .method("getAppClassLoader")
                 .param("abc")
                 .param("hello")
                 .invoke();
         }
         catch (IllegalStateException e) {
+            e.printStackTrace();
             assert e.getCause().getCause() instanceof IllegalArgumentException;
         }
     }

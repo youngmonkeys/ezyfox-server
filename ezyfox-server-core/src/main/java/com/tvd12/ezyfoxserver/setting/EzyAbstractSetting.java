@@ -100,7 +100,7 @@ public abstract class EzyAbstractSetting
 	    map.put("folder", getFolder());
 	    map.put("entryLoader", entryLoader);
 	    map.put("threadPoolSize", threadPoolSize);
-	    map.put("configFile", configFile);
+	    map.put("configFile", configFile != null ? configFile : "");
 	    return map;
 	}
 	

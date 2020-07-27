@@ -27,7 +27,7 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
     protected final int id = COUNTER.incrementAndGet();
     
-    protected String name;
+    protected String name = "default";
     
     protected String configFile;
     
@@ -114,7 +114,7 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
         Map<Object, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("name", name);
-        map.put("configFile", configFile);
+        map.put("configFile", configFile != null ? configFile : "");
         map.put("maxUsers", maxUsers);
         map.put("streaming", streaming.toMap());
         map.put("userManagement", userManagement.toMap());

@@ -15,19 +15,19 @@ import lombok.ToString;
 public class EzySimpleConfig implements EzyConfig {
 
 	@Property("ezyfox.home")
-	private String ezyfoxHome;
+	protected String ezyfoxHome;
 	
 	@Property("settings.print")
-    private boolean printSettings;
+	protected boolean printSettings;
 	
 	@Property("banner.print")
-    private boolean printBanner;
+	protected boolean printBanner;
 	
 	@Property("logger.config.file")
-	private String loggerConfigFile;
+	protected String loggerConfigFile;
 	
 	@Property("app.classloader.enable")
-	private boolean enableAppClassLoader;
+	protected boolean enableAppClassLoader;
 	
 	public EzySimpleConfig() {
 	    this.printSettings = true;

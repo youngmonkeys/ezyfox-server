@@ -52,6 +52,7 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
         return map;
     }
     
+    @Setter
     @Getter
     @ToString
     @XmlAccessorType(XmlAccessType.NONE)

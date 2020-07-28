@@ -94,6 +94,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         return this;
     }
     
+    @Override
     public EzySimpleSettings build() {
         EzySimpleSettings p = new EzySimpleSettings();
         p.setDebug(debug);

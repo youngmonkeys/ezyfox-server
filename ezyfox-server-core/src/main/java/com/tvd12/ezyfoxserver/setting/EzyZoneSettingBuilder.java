@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public class EzyZoneSettingBuilder {
+import com.tvd12.ezyfox.builder.EzyBuilder;
+
+public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
 
     protected String name = "default";
     protected String configFile;
@@ -61,6 +63,7 @@ public class EzyZoneSettingBuilder {
         return this;
     }
 
+    @Override
     public EzySimpleZoneSetting build() {
         EzySimpleZoneSetting p = new EzySimpleZoneSetting();
         p.setName(name);

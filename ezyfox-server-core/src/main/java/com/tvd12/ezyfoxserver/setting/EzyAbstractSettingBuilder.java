@@ -38,6 +38,7 @@ public abstract class EzyAbstractSettingBuilder<
         return (B)this;
     }
 
+    @Override
     public T build() {
         T p = newSetting();
         p.setName(name);

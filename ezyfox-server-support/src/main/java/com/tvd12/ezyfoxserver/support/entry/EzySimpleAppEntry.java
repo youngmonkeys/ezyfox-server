@@ -32,10 +32,12 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		addEventControllers(context, beanContext);
 		setAppRequestController(context, beanContext);
 		postConfig(context);
+		postConfig(context, beanContext);
 	}
 	
 	protected void preConfig(EzyAppContext context) {}
 	protected void postConfig(EzyAppContext context) {}
+	protected void postConfig(EzyAppContext context, EzyBeanContext beanContext) {}
 	
 	private void addEventControllers(EzyAppContext appContext, EzyBeanContext beanContext) {
 		EzySetup setup = appContext.get(EzySetup.class);

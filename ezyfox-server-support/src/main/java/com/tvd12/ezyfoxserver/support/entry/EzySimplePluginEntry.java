@@ -32,10 +32,12 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		addEventControllers(context, beanContext);
 		setPluginRequestController(context, beanContext);
 		postConfig(context);
+		postConfig(context, beanContext);
 	}
 	
 	protected void preConfig(EzyPluginContext ctx) {}
 	protected void postConfig(EzyPluginContext ctx) {}
+	protected void postConfig(EzyPluginContext ctx, EzyBeanContext beanContext) {}
 	
 	private void addEventControllers(EzyPluginContext context, EzyBeanContext beanContext) {
 		EzySetup setup = context.get(EzySetup.class);

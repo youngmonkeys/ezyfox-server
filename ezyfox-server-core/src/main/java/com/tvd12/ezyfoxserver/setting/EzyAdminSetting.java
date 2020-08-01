@@ -8,5 +8,5 @@ public interface EzyAdminSetting extends EzyToMap {
     
     String getPassword();
     
-    String getApiAccessToken();
+    String getAccessToken();
 }

@@ -53,6 +53,11 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         this.udp = udp;
         return this;
     }
+    
+    public EzySettingsBuilder admin(EzySimpleAdminSetting admin) {
+        this.admins.setItem(admin);
+        return this;
+    }
 
     public EzySettingsBuilder admins(EzySimpleAdminsSetting admins) {
         this.admins = admins;

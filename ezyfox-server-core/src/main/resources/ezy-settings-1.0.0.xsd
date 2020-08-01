@@ -120,7 +120,7 @@
 		<xs:all>
 			<xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="api-access-token" type="not-empty-type" minOccurs="1" maxOccurs="1" />
+			<xs:element name="access-token" type="xs:string" minOccurs="0" maxOccurs="1" />
 		</xs:all>
 	</xs:complexType>
 

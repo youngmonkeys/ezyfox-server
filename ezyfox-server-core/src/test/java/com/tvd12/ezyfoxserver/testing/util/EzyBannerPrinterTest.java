@@ -14,7 +14,7 @@ public class EzyBannerPrinterTest extends BaseTest {
     public void test() {
         new EzyBannerPrinter() {
             @Override
-            protected InputStream getBannerInputStream() {
+            protected InputStream getBannerInputStream(String file) {
                 return new InputStream() {
                     
                     @Override
@@ -23,7 +23,7 @@ public class EzyBannerPrinterTest extends BaseTest {
                     }
                 };
             }
-        }.getBannerText();
+        }.getBannerText("ezyfox-banner.txt");
     }
     
 }

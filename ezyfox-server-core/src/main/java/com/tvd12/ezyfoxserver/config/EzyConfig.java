@@ -10,6 +10,8 @@ public interface EzyConfig extends EzyToMap {
     
     boolean isPrintBanner();
     
+    String getBannerFile();
+    
     String getLoggerConfigFile();
     
     boolean isEnableAppClassLoader();

@@ -23,6 +23,9 @@ public class EzySimpleConfig implements EzyConfig {
 	@Property("banner.print")
 	protected boolean printBanner;
 	
+	@Property("banner.file")
+    protected String bannerFile;
+	
 	@Property("logger.config.file")
 	protected String loggerConfigFile;
 	
@@ -33,6 +36,7 @@ public class EzySimpleConfig implements EzyConfig {
 	    this.printSettings = true;
 	    this.printBanner = true;
 	    this.enableAppClassLoader = true;
+	    this.bannerFile = "ezyfox-banner.txt";
 	}
 	
 	public static EzySimpleConfig defaultConfig() {

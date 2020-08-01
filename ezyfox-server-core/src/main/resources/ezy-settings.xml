@@ -61,7 +61,7 @@
 		<administrator>
 			<username>admin</username>
 			<password>admin</password>
-			<api-access-token>admin</api-access-token>
+			<access-token>admin</access-token>
 		</administrator>
 	</administrators>
 	

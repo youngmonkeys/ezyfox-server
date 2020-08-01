@@ -8,12 +8,12 @@ import com.tvd12.ezyfox.stream.EzyInputStreams;
 
 public class EzyBannerPrinter {
 
-    public String getBannerText() {
-        return new String(getBannerBytes());
+    public String getBannerText(String file) {
+        return new String(getBannerBytes(file));
     }
     
-    protected byte[] getBannerBytes() {
-        return getBannerBytes(getBannerInputStream());
+    protected byte[] getBannerBytes(String file) {
+        return getBannerBytes(getBannerInputStream(file));
     }
     
     protected byte[] getBannerBytes(InputStream stream) {
@@ -24,11 +24,11 @@ public class EzyBannerPrinter {
         }
     }
     
-    protected InputStream getBannerInputStream() {
+    protected InputStream getBannerInputStream(String file) {
         return EzyClassPathInputStreamLoader.builder()
                 .context(getClass())
                 .build()
-                .load("ezyfox-banner.txt");
+                .load(file);
     }
     
 }

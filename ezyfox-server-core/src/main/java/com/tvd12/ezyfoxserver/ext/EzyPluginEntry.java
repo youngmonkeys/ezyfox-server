@@ -5,6 +5,6 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
 public interface EzyPluginEntry extends EzyEntry, EzyDestroyable {
 	
-	void config(EzyPluginContext ctx);
+	default void config(EzyPluginContext ctx) {}
 	
 }

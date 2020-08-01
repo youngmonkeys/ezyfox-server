@@ -14,17 +14,17 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
     public void test() {
         EzySimpleAdminsSetting setting = new EzySimpleAdminsSetting();
         setting.setAdminsByName(new HashMap<>());
-        setting.setAdminsByApiAccessToken(new HashMap<>());
+        setting.setAdminsByAccessToken(new HashMap<>());
         assert setting.getAdmins().size() == 0;
         EzySimpleAdminSetting adminSetting = new EzySimpleAdminSetting();
-        adminSetting.setApiAccessToken("token");
+        adminSetting.setAccessToken("token");
         adminSetting.setUsername("user");
         adminSetting.setPassword("password");
         setting.setItem(adminSetting);
         assert setting.getAdminByName("user") != null;
-        assert setting.getAdminByApiAccessToken("token") != null;
+        assert setting.getAdminByAccessToken("token") != null;
         assert setting.containsAdminByName("user");
-        assert setting.containsAdminByApiAccessToken("token");
+        assert setting.containsAdminByAccessToken("token");
     }
 
 }

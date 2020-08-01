@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.tvd12.ezyfox.io.EzyStrings;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,13 +24,17 @@ import lombok.ToString;
 @XmlRootElement(name = "administrators")
 public class EzySimpleAdminsSetting implements EzyAdminsSetting {
 
+    protected List<EzyAdminSetting> admins = new ArrayList<>();
     protected Map<String, EzyAdminSetting> adminsByName = new ConcurrentHashMap<>();
-    protected Map<String, EzyAdminSetting> adminsByApiAccessToken = new ConcurrentHashMap<>();
+    protected Map<String, EzyAdminSetting> adminsByAccessToken = new ConcurrentHashMap<>();
     
     @XmlElement(name = "administrator")
     public void setItem(EzySimpleAdminSetting item) {
-        adminsByName.put(item.getUsername(), item);
-        adminsByApiAccessToken.put(item.getApiAccessToken(), item);
+        if(!EzyStrings.isNoContent(item.getUsername()))
+            adminsByName.put(item.getUsername(), item);
+        if(!EzyStrings.isNoContent(item.getAccessToken()))
+            adminsByAccessToken.put(item.getAccessToken(), item);
+        admins.add(item);
     }
     
     @Override
@@ -42,8 +48,8 @@ public class EzySimpleAdminsSetting implements EzyAdminsSetting {
     }
     
     @Override
-    public EzyAdminSetting getAdminByApiAccessToken(String token) {
-        return adminsByApiAccessToken.get(token);
+    public EzyAdminSetting getAdminByAccessToken(String token) {
+        return adminsByAccessToken.get(token);
     }
     
     @Override
@@ -52,8 +58,8 @@ public class EzySimpleAdminsSetting implements EzyAdminsSetting {
     }
     
     @Override
-    public boolean containsAdminByApiAccessToken(String token) {
-        return adminsByApiAccessToken.containsKey(token);
+    public boolean containsAdminByAccessToken(String token) {
+        return adminsByAccessToken.containsKey(token);
     }
     
     @Override

@@ -10,10 +10,10 @@ public interface EzyAdminsSetting extends EzyToMap {
 
     EzyAdminSetting getAdminByName(String username);
     
-    EzyAdminSetting getAdminByApiAccessToken(String token);
+    EzyAdminSetting getAdminByAccessToken(String token);
     
     boolean containsAdminByName(String username);
     
-    boolean containsAdminByApiAccessToken(String token);
+    boolean containsAdminByAccessToken(String token);
     
 }

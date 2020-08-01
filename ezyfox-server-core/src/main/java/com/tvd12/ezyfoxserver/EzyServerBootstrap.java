@@ -65,8 +65,10 @@ public abstract class EzyServerBootstrap
 	}
 	
 	protected final void printBanner() {
-	    if(getServerConfig().isPrintBanner())
-	        logger.info("\n{}\n", new EzyBannerPrinter().getBannerText());
+	    if(getServerConfig().isPrintBanner()) {
+	        String bannerFile = getServerConfig().getBannerFile();
+	        logger.info("\n{}\n", new EzyBannerPrinter().getBannerText(bannerFile));
+	    }
 	}
 	
 	protected void notifyServerReady0() {

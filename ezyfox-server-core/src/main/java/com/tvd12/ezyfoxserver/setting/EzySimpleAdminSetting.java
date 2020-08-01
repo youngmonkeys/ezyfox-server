@@ -25,15 +25,15 @@ public class EzySimpleAdminSetting implements EzyAdminSetting {
     @XmlElement(name = "password")
     protected String password;
     
-    @XmlElement(name = "api-access-token")
-    protected String apiAccessToken;
+    @XmlElement(name = "access-token")
+    protected String accessToken;
     
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object>  map = new HashMap<>();
         map.put("username", username);
         map.put("password", "*******");
-        map.put("apiAccessToken", "*******");
+        map.put("accessToken", "*******");
         return map;
     }
     

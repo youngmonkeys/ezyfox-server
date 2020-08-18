@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.testing.setting;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleEzyMaxRequestPerSecond;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond;
 import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleSessionManagementSettingTest extends BaseTest {
@@ -13,7 +13,7 @@ public class EzySimpleSessionManagementSettingTest extends BaseTest {
         EzySimpleSessionManagementSetting setting = new EzySimpleSessionManagementSetting();
         setting.setSessionMaxIdleTime(1);
         setting.setSessionMaxIdleTimeInSecond(1);
-        setting.setSessionMaxRequestPerSecond(new EzySimpleEzyMaxRequestPerSecond());
+        setting.setSessionMaxRequestPerSecond(new EzySimpleMaxRequestPerSecond());
         setting.setSessionMaxWaitingTime(1);
         setting.setSessionMaxWaitingTimeInSecond(1);
     }

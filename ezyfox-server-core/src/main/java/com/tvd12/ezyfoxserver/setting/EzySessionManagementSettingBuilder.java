@@ -2,14 +2,14 @@ package com.tvd12.ezyfoxserver.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleEzyMaxRequestPerSecond;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond;
 
 public class EzySessionManagementSettingBuilder 
         implements EzyBuilder<EzySimpleSessionManagementSetting>{
 
     protected long sessionMaxIdleTimeInSecond = 30;
     protected long sessionMaxWaitingTimeInSecond = 30;
-    protected EzySimpleEzyMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleEzyMaxRequestPerSecond();
+    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleMaxRequestPerSecond();
 
     public EzySessionManagementSettingBuilder sessionMaxIdleTimeInSecond(long sessionMaxIdleTimeInSecond) {
         this.sessionMaxIdleTimeInSecond = sessionMaxIdleTimeInSecond;
@@ -21,7 +21,7 @@ public class EzySessionManagementSettingBuilder
         return this;
     }
 
-    public EzySessionManagementSettingBuilder sessionMaxRequestPerSecond(EzySimpleEzyMaxRequestPerSecond sessionMaxRequestPerSecond) {
+    public EzySessionManagementSettingBuilder sessionMaxRequestPerSecond(EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond) {
         this.sessionMaxRequestPerSecond = sessionMaxRequestPerSecond;
         return this;
     }
@@ -36,7 +36,7 @@ public class EzySessionManagementSettingBuilder
     }
     
     public static class EzyMaxRequestPerSecondBuilder 
-            implements EzyBuilder<EzySimpleEzyMaxRequestPerSecond> {
+            implements EzyBuilder<EzySimpleMaxRequestPerSecond> {
         
         protected int value = 15;
         protected EzyMaxRequestPerSecondAction action = EzyMaxRequestPerSecondAction.DROP_REQUEST;
@@ -52,8 +52,8 @@ public class EzySessionManagementSettingBuilder
         }
         
         @Override
-        public EzySimpleEzyMaxRequestPerSecond build() {
-            EzySimpleEzyMaxRequestPerSecond p = new EzySimpleEzyMaxRequestPerSecond();
+        public EzySimpleMaxRequestPerSecond build() {
+            EzySimpleMaxRequestPerSecond p = new EzySimpleMaxRequestPerSecond();
             p.setValue(value);
             p.setAction(action);
             return p;

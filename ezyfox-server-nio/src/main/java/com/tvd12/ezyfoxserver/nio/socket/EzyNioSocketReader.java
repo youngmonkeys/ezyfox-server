@@ -42,7 +42,7 @@ public class EzyNioSocketReader
 		try {
 			handleAcceptableConnections();
 			processReadyKeys0();
-			Thread.sleep(5L);
+			Thread.sleep(3L);
 		}
 		catch(Exception e) {
 			logger.info("I/O error at socket-reader: {}({})", e.getClass().getName(), e.getMessage());

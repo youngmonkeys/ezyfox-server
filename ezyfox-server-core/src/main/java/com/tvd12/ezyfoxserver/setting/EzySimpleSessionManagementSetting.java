@@ -33,7 +33,7 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
     protected long sessionMaxWaitingTimeInSecond = 30;
     
     @XmlElement(name = "session-max-request-per-second")
-    protected EzySimpleEzyMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleEzyMaxRequestPerSecond();
+    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleMaxRequestPerSecond();
     
     @Override
     public void init() {
@@ -57,7 +57,7 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
     @ToString
     @XmlAccessorType(XmlAccessType.NONE)
     @XmlRootElement(name = "session-max-request-per-second")
-    public static class EzySimpleEzyMaxRequestPerSecond implements EzyMaxRequestPerSecond {
+    public static class EzySimpleMaxRequestPerSecond implements EzyMaxRequestPerSecond {
         
         @XmlElement(name = "value")
         protected int value = 15;

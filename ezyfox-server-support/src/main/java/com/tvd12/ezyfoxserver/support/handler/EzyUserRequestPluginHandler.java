@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.support.handler;
 
 import com.tvd12.ezyfox.reflect.EzyGenerics;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
-public interface EzyUserRequestAppHandler<D> 
-		extends EzyUserRequestHandler<EzyAppContext, D> {
+public interface EzyUserRequestPluginHandler<D> 
+		extends EzyUserRequestHandler<EzyPluginContext, D> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -12,7 +12,7 @@ public interface EzyUserRequestAppHandler<D>
 		try {
 			return EzyGenerics.getGenericInterfacesArguments(
 					getClass(), 
-					EzyUserRequestAppHandler.class, 1)[0];
+					EzyUserRequestPluginHandler.class, 1)[0];
 		}
 		catch (Exception e) {
 			return null; 

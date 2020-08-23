@@ -34,7 +34,7 @@ public abstract class EzyUserRequestPrototypeController<
 	protected EzyUserRequestPrototypeController(Builder<?> builder) {
 		this.beanContext = builder.beanContext;
 		this.unmarshaller = builder.unmarshaller;
-		this.handlers = builder.getHandlers();
+		this.handlers = new HashMap<>(builder.getHandlers());
 	}
 	
 	public void handle(C context, E event) {

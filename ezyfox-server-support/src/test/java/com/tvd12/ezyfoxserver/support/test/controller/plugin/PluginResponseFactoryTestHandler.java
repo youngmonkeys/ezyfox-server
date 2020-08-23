@@ -68,10 +68,5 @@ public class PluginResponseFactoryTestHandler
 			.usernames(Lists.newArrayList(event.getUser().getName()))
 			.execute();
 	}
-
-	@Override
-	public Hello newData() {
-		return new Hello();
-	}
 	
 }

@@ -17,6 +17,7 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
+import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandlerProxy;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class EzyUserRequestSingletonController<
@@ -29,7 +30,7 @@ public abstract class EzyUserRequestSingletonController<
 	
 	protected EzyUserRequestSingletonController(Builder<?> builder) {
 		this.unmarshaller = builder.unmarshaller;
-		this.handlers = builder.getHandlers();
+		this.handlers = new HashMap<>(builder.getHandlers());
 	}
 	
 	public void handle(C context, E event) {
@@ -41,9 +42,11 @@ public abstract class EzyUserRequestSingletonController<
 			logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
 			return;
 		}
-		Object handlerData = handler.newData();
-		if(params != null)
-			unmarshaller.unwrap(params, handlerData);
+		Object handlerData = params;
+		Class requestDataType = handler.getDataType();
+		if(requestDataType != null) {
+			handlerData = unmarshaller.unmarshal(handlerData, requestDataType);
+		}
 		try {
 			preHandle(context, event, data);
 			handler.handle(context, event, handlerData);
@@ -88,7 +91,7 @@ public abstract class EzyUserRequestSingletonController<
 				Class<?> handleType = singleton.getClass();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
 				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
-				handlers.put(command, (EzyUserRequestHandler) singleton);
+				handlers.put(command, new EzyUserRequestHandlerProxy((EzyUserRequestHandler) singleton));
 				logger.debug("add command {} and request handler singleton {}", command, singleton);
 			}
 			return handlers;

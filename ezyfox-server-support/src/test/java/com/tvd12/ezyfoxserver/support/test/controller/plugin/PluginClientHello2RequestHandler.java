@@ -8,8 +8,8 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestPluginHandler;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
-@EzyClientRequestListener("hello")
-public class PluginClientHelloRequestHandler 
+@EzyClientRequestListener("hello2")
+public class PluginClientHello2RequestHandler 
 		implements EzyUserRequestPluginHandler<Hello> {
 
 	@Override

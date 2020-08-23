@@ -17,9 +17,4 @@ public class PluginClientExceptionRequestHandler
 		throw new IllegalStateException("server maintain");
 	}
 
-	@Override
-	public Hello newData() {
-		return new Hello();
-	}
-
 }

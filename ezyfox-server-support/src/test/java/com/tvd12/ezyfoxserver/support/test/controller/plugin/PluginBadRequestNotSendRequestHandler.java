@@ -18,9 +18,4 @@ public class PluginBadRequestNotSendRequestHandler
 		throw new EzyBadRequestException(1, "server maintain", false);
 	}
 
-	@Override
-	public Hello newData() {
-		return new Hello();
-	}
-
 }

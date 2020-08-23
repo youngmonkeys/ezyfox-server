@@ -17,9 +17,4 @@ public class AppClientHelloRequestHandler
 		System.out.println("hello: " + data.getWho());
 	}
 
-	@Override
-	public Hello newData() {
-		return new Hello();
-	}
-
 }

@@ -62,6 +62,10 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
 	        events.add(EzyEventType.valueOf(string));
 	    }
 	    
+	    public void setEvent(EzyConstant event) {
+	        events.add(event);
+	    }
+	    
 	}
 	
 }

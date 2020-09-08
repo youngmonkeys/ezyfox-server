@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting.EzySimpleListenEvents;
 
 public class EzyPluginSettingBuilder extends EzyAbstractSettingBuilder<
@@ -10,6 +11,16 @@ public class EzyPluginSettingBuilder extends EzyAbstractSettingBuilder<
     
     public EzyPluginSettingBuilder priority(int priority) {
         this.priority = priority;
+        return this;
+    }
+    
+    public EzyPluginSettingBuilder addListenEvent(String event) {
+        this.listenEvents.setEvent(event);
+        return this;
+    }
+    
+    public EzyPluginSettingBuilder addListenEvent(EzyConstant event) {
+        this.listenEvents.setEvent(event);
         return this;
     }
     

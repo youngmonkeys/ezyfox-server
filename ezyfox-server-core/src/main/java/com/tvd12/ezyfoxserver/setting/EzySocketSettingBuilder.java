@@ -32,6 +32,7 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     @Override
     protected EzySimpleSocketSetting newSetting() {
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setTcpNoDelay(tcpNoDelay);
         setting.setMaxRequestSize(maxRequestSize);
         setting.setWriterThreadPoolSize(writerThreadPoolSize);
         setting.setCodecCreator(codecCreator);

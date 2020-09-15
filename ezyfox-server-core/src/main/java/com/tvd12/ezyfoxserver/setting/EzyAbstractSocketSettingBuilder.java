@@ -32,9 +32,13 @@ public abstract class EzyAbstractSocketSettingBuilder<
         this.codecCreator = codecCreator;
         return (B)this;
     }
+    
+    public B codecCreator(Class<?> codecCreator) {
+        return codecCreator(codecCreator.getName());
+    }
 
     @Override
-    public EzyAbstractSocketSetting build() {
+    public T build() {
         T p = newSetting();
         p.setPort(port);
         p.setAddress(address);

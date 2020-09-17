@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.testng.annotations.Test;
@@ -25,6 +26,11 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
         assert setting.getAdminByAccessToken("token") != null;
         assert setting.containsAdminByName("user");
         assert setting.containsAdminByAccessToken("token");
+        EzySimpleAdminSetting adminSetting1 = new EzySimpleAdminSetting();
+        adminSetting.setAccessToken("token1");
+        adminSetting.setUsername("user1");
+        adminSetting.setPassword("password1");
+        setting.setAdmins(Arrays.asList(adminSetting1));
     }
 
 }

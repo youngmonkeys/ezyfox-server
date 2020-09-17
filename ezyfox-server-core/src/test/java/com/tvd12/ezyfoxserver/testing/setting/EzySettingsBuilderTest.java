@@ -5,11 +5,18 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.codec.EzyCodecCreator;
+import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
 import com.tvd12.ezyfoxserver.setting.EzyAdminSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder.EzyMaxRequestPerSecondBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySettingsBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleAdminsSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleHttpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleLoggerSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSslConfigSetting;
@@ -17,10 +24,13 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleThreadPoolSizeSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleZonesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySocketSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyUdpSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyZoneSettingBuilder;
 
 public class EzySettingsBuilderTest {
 
@@ -58,6 +68,7 @@ public class EzySettingsBuilderTest {
                 .sslPort(23456)
                 .writerThreadPoolSize(3)
                 .build();
+        EzySimpleAdminsSetting adminsSetting = new EzySimpleAdminsSetting();
         EzySimpleAdminSetting adminSetting = new EzyAdminSettingBuilder()
                 .accessToken("123")
                 .username("admin")
@@ -73,6 +84,20 @@ public class EzySettingsBuilderTest {
                 .streamHandler(6)
                 .systemRequestHandler(7)
                 .build();
+        EzySimpleMaxRequestPerSecond maxRequestPerSecond = new EzyMaxRequestPerSecondBuilder()
+                .value(15)
+                .action(EzyMaxRequestPerSecondAction.DROP_REQUEST)
+                .build();
+        EzySimpleSessionManagementSetting sessionManagementSetting = new EzySessionManagementSettingBuilder()
+                .sessionMaxIdleTimeInSecond(100)
+                .sessionMaxRequestPerSecond(maxRequestPerSecond)
+                .sessionMaxWaitingTimeInSecond(200)
+                .build();
+        EzySimpleEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzySimpleZonesSetting zonesSetting = new EzySimpleZonesSetting();
+        EzySimpleZoneSetting zoneSetting = new EzyZoneSettingBuilder()
+                .name("test")
+                .build();
         EzySimpleSettings settings = new EzySettingsBuilder()
                 .debug(true)
                 .nodeName("test")
@@ -82,9 +107,14 @@ public class EzySettingsBuilderTest {
                 .streaming(streamingSetting)
                 .http(httpSetting)
                 .websocket(webSocketSetting)
+                .admins(adminsSetting)
                 .admin(adminSetting)
                 .logger(loggerSetting)
                 .threadPoolSize(threadPoolSizeSetting)
+                .sessionManagement(sessionManagementSetting)
+                .eventControllers(eventControllersSetting)
+                .zones(zonesSetting)
+                .zone(zoneSetting)
                 .build();
         assertEquals(settings.isDebug(), true);
         assertEquals(settings.getNodeName(), "test");
@@ -121,6 +151,8 @@ public class EzySettingsBuilderTest {
         assertEquals(webSocketSetting.getSslPort(), 23456);
         assertEquals(webSocketSetting.getWriterThreadPoolSize(), 3);
         
+        assertEquals(settings.getAdmins(), adminsSetting);
+        
         adminSetting = (EzySimpleAdminSetting) settings.getAdmins().getAdminByName("admin");
         assertEquals(adminSetting.getAccessToken(), "123");
         assertEquals(adminSetting.getUsername(), "admin");
@@ -136,6 +168,18 @@ public class EzySettingsBuilderTest {
         assertEquals(threadPoolSizeSetting.getStatistics(), 5);
         assertEquals(threadPoolSizeSetting.getStreamHandler(), 6);
         assertEquals(threadPoolSizeSetting.getSystemRequestHandler(), 7);
+        
+        sessionManagementSetting = settings.getSessionManagement();
+        assertEquals(sessionManagementSetting.getSessionMaxIdleTimeInSecond(), 100);
+        assertEquals(sessionManagementSetting.getSessionMaxRequestPerSecond(), maxRequestPerSecond);
+        assertEquals(maxRequestPerSecond.getValue(), 15);
+        assertEquals(maxRequestPerSecond.getAction(), EzyMaxRequestPerSecondAction.DROP_REQUEST);
+        
+        assertEquals(settings.getEventControllers(), eventControllersSetting);
+        
+        assertEquals(settings.getZones().getSize(), 1);
+        
+        assertEquals(zonesSetting.getZoneByName("test"), zoneSetting);
     }
     
     public static class TestCodecCreator implements EzyCodecCreator {

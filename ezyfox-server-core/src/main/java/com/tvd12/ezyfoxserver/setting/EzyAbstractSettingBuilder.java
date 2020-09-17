@@ -24,8 +24,7 @@ public abstract class EzyAbstractSettingBuilder<
     }
     
     public B entryLoader(Class<?> entryLoader) {
-        this.entryLoader = entryLoader.getName();
-        return (B)this;
+        return entryLoader(entryLoader.getName());
     }
 
     public B threadPoolSize(int threadPoolSize) {

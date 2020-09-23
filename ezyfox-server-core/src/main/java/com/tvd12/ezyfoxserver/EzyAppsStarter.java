@@ -78,7 +78,11 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     
     protected EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
          Class<EzyAppEntryLoader> entryLoaderClass = getAppEntryLoaderClass(appName);
-         return entryLoaderClass.newInstance();
+         EzyAppSetting appSetting = getAppByName(appName);
+         if(appSetting.getEntryLoaderArgs() == null)
+             return entryLoaderClass.newInstance();
+         return (EzyAppEntryLoader) entryLoaderClass.getConstructors()[0]
+                 .newInstance(appSetting.getEntryLoaderArgs());
     }
     
     protected ClassLoader getAppClassLoader(String appName, String appFolder) {

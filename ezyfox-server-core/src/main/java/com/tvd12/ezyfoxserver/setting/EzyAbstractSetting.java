@@ -43,6 +43,8 @@ public abstract class EzyAbstractSetting
 	
 	protected String homePath = "";
 	
+	protected Object[] entryLoaderArgs;
+	
 	protected int newId() {
 	    return getIdCounter().incrementAndGet();
 	}
@@ -54,6 +56,10 @@ public abstract class EzyAbstractSetting
 	public void setEntryLoader(String loaderClass) {
         this.entryLoader = loaderClass;
     }
+	
+	public void setEntryLoaderArgs(Object[] args) {
+	    this.entryLoaderArgs = args;
+	}
 	
 	@Override
 	public String getFolder() {

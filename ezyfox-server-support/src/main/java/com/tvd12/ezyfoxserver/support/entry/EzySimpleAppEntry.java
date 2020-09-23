@@ -114,7 +114,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 	
 	protected abstract String[] getScanableBeanPackages();
 	protected abstract String[] getScanableBindingPackages();
-	protected abstract void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder);
+	
+	protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {}
 
 	@Override
 	public void start() throws Exception {}

@@ -68,7 +68,13 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
     }
     
     protected EzyPluginEntryLoader newPluginEntryLoader(String pluginName) throws Exception {
-        return getPluginEntryLoaderClass(pluginName).newInstance();
+        Class<EzyPluginEntryLoader> pluginLoaderClass = 
+                getPluginEntryLoaderClass(pluginName);
+        EzyPluginSetting pluginSetting = getPluginByName(pluginName);
+        if(pluginSetting.getEntryLoaderArgs() == null)
+            return pluginLoaderClass.newInstance();
+        return (EzyPluginEntryLoader) pluginLoaderClass.getConstructors()[0]
+                .newInstance(pluginSetting.getEntryLoaderArgs());
     }
     
     protected EzyPluginContext getPluginContext(String pluginName) {

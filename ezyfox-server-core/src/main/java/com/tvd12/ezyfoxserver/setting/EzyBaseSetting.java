@@ -16,6 +16,8 @@ public interface EzyBaseSetting extends EzyToMap {
     
     String getEntryLoader();
     
+    Object[] getEntryLoaderArgs();
+    
     int getThreadPoolSize();
     
     String getConfigFile();

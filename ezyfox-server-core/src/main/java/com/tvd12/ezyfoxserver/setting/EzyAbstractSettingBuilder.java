@@ -12,6 +12,7 @@ public abstract class EzyAbstractSettingBuilder<
     protected String entryLoader;
     protected int threadPoolSize;
     protected String configFile;
+    protected Object[] entryLoaderArgs;
 
     public B name(String name) {
         this.name = name;
@@ -26,7 +27,7 @@ public abstract class EzyAbstractSettingBuilder<
     public B entryLoader(Class<?> entryLoader) {
         return entryLoader(entryLoader.getName());
     }
-
+    
     public B threadPoolSize(int threadPoolSize) {
         this.threadPoolSize = threadPoolSize;
         return (B)this;
@@ -34,6 +35,11 @@ public abstract class EzyAbstractSettingBuilder<
 
     public B configFile(String configFile) {
         this.configFile = configFile;
+        return (B)this;
+    }
+    
+    public B entryLoaderArgs(Object[] entryLoaderArgs) {
+        this.entryLoaderArgs = entryLoaderArgs;
         return (B)this;
     }
 
@@ -44,6 +50,7 @@ public abstract class EzyAbstractSettingBuilder<
         p.setEntryLoader(entryLoader);
         p.setThreadPoolSize(threadPoolSize);
         p.setConfigFile(configFile);
+        p.setEntryLoaderArgs(entryLoaderArgs);
         return p;
     }
 	

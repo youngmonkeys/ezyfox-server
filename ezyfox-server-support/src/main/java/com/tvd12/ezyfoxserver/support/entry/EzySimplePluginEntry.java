@@ -116,7 +116,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     }
     
 	protected abstract String[] getScanableBeanPackages();
-	protected abstract void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder);
+	
+	protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {}
     
     @Override
 	public void start() throws Exception {}

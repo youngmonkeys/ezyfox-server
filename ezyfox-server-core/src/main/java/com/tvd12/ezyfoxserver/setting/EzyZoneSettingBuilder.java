@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 
 public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
 
@@ -62,7 +63,19 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         this.eventControllers = eventControllers;
         return this;
     }
-
+    
+    public EzyZoneSettingBuilder addEventController(String eventType, String controller) {
+        EzySimpleEventControllerSetting eventController = new EzySimpleEventControllerSetting();
+        eventController.setEventType(eventType);
+        eventController.setController(controller);
+        this.eventControllers.setItem(eventController);
+        return this;
+    }
+    
+    public EzyZoneSettingBuilder addEventController(EzyEventType eventType, Class<?> controller) {
+        return addEventController(eventType.getName(), controller.getName());
+    }
+    
     @Override
     public EzySimpleZoneSetting build() {
         EzySimpleZoneSetting p = new EzySimpleZoneSetting();

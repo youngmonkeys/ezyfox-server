@@ -5,6 +5,9 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.controller.EzyAbstractZoneEventController;
+import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
@@ -30,6 +33,7 @@ public class EzyZoneSettingBuilderTest {
         EzySimpleAppSetting appSetting = new EzyAppSettingBuilder()
                 .configFile("config.properties")
                 .entryLoader(TestAppEntryLoader.class)
+                .entryLoaderArgs(new String[] {"hello"})
                 .maxUsers(100)
                 .name("test")
                 .threadPoolSize(3)
@@ -68,6 +72,7 @@ public class EzyZoneSettingBuilderTest {
                 .streaming(streamingSetting)
                 .eventControllers(eventControllersSetting)
                 .userManagement(userManagementSetting)
+                .addEventController(EzyEventType.SERVER_READY, HelloZoneServerReadyController.class)
                 .build();
         assertEquals(setting.getConfigFile(), "config.properties");
         assertEquals(setting.getMaxUsers(), 1000);
@@ -85,6 +90,7 @@ public class EzyZoneSettingBuilderTest {
         assertEquals(appSetting.getMaxUsers(), 100);
         assertEquals(appSetting.getName(), "test");
         assertEquals(appSetting.getThreadPoolSize(), 3);
+        assertEquals(appSetting.getConfigFileInput(), "config.properties");
         
         pluginSetting = pluginsSetting.getPluginByName("test");
         assertEquals(pluginSetting.getConfigFile(true), "config.properties");
@@ -105,6 +111,10 @@ public class EzyZoneSettingBuilderTest {
     }
     
     public static class TestAppEntryLoader implements EzyAppEntryLoader {
+        
+        public TestAppEntryLoader(String config) {
+            
+        }
 
         @Override
         public EzyAppEntry load() throws Exception {
@@ -120,5 +130,15 @@ public class EzyZoneSettingBuilderTest {
             return null;
         }
         
+    }
+    
+    public static class HelloZoneServerReadyController
+            extends EzyAbstractZoneEventController<EzyServerReadyEvent> {
+        
+        @Override
+        public void handle(EzyZoneContext ctx, EzyServerReadyEvent event) {
+            // add logic here
+        }
+
     }
 }

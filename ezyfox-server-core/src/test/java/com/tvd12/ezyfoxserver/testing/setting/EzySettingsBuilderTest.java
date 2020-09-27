@@ -5,7 +5,11 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.codec.EzyCodecCreator;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.controller.EzyAbstractServerEventController;
+import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 import com.tvd12.ezyfoxserver.setting.EzyAdminSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder.EzyMaxRequestPerSecondBuilder;
@@ -115,6 +119,7 @@ public class EzySettingsBuilderTest {
                 .eventControllers(eventControllersSetting)
                 .zones(zonesSetting)
                 .zone(zoneSetting)
+                .addEventController(EzyEventType.SERVER_INITIALIZING, HelloServerInitializingReadyController.class)
                 .build();
         assertEquals(settings.isDebug(), true);
         assertEquals(settings.getNodeName(), "test");
@@ -194,5 +199,15 @@ public class EzySettingsBuilderTest {
             return null;
         }
         
+    }
+    
+    public static class HelloServerInitializingReadyController
+            extends EzyAbstractServerEventController<EzySimpleServerInitializingEvent> {
+        
+        @Override
+        public void handle(EzyServerContext ctx, EzySimpleServerInitializingEvent event) {
+            // add logic here
+        }
+
     }
 }

@@ -5,6 +5,7 @@ import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
@@ -61,6 +62,8 @@ public class PluginResponseFactoryTestHandler
 			.username(event.getUser().getName())
 			.usernames(event.getUser().getName())
 			.usernames(Lists.newArrayList(event.getUser().getName()))
+			.transportType(EzyTransportType.TCP)
+			.udpTransport()
 			.execute();
 		
 		responseFactory.newObjectResponse()

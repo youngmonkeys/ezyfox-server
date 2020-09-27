@@ -7,7 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
-import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -119,6 +118,14 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
+				.append("hello6")
+				.append(EzyEntityFactory.newObjectBuilder()
+						.append("who", "Mr.Young Monkey!"))
+				.build();
+		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		requestController.handle(context, event);
+		
+		data = EzyEntityFactory.newArrayBuilder()
 				.append("badRequestSend")
 				.build();
 		event = new EzySimpleUserRequestAppEvent(user, session, data);
@@ -165,10 +172,6 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 			};
 		}
 
-		@Override
-		protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
-		}
-		
 		@Override
 		protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
 			return EzyUserRequestAppSingletonController.builder()

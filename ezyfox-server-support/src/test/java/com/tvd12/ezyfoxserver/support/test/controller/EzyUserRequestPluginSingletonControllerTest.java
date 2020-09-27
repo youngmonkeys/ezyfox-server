@@ -7,7 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
-import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -165,10 +164,6 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 			};
 		}
 
-		@Override
-		protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-		}
-		
 		@Override
 		protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
 			return EzyUserRequestPluginSingletonController.builder()

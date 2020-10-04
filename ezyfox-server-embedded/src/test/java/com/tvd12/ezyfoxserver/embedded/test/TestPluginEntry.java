@@ -18,7 +18,7 @@ public class TestPluginEntry extends EzySimplePluginEntry {
 	
 	@Override
 	protected String[] getScanableBeanPackages() {
-		return new String[] {"com.tvd12.ezyfoxserver.embedded.test"};
+		return new String[] {"com.tvd12.ezyfoxserver.embedded.test.plugin"};
 	}
 
 	@Override

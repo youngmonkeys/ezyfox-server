@@ -54,7 +54,7 @@ public class HelloEmbeddedServer2 {
 		@Override
 		protected String[] getScanableBeanPackages() {
 			return new String[] {
-					"com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+					"com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
 			};
 		}
 

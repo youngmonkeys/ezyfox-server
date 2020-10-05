@@ -122,6 +122,16 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 				.append(EzyEntityFactory.newObjectBuilder()
 						.append("who", "Mr.Young Monkey!"))
 				.build();
+		
+		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		requestController.handle(context, event);
+		
+		data = EzyEntityFactory.newArrayBuilder()
+				.append("c_hello")
+				.append(EzyEntityFactory.newObjectBuilder()
+						.append("who", "Mr.Young Monkey!"))
+				.build();
+		
 		event = new EzySimpleUserRequestAppEvent(user, session, data);
 		requestController.handle(context, event);
 		

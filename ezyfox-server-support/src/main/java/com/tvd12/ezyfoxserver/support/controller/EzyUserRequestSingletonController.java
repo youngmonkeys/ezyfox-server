@@ -8,6 +8,7 @@ import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
 import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
 import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
@@ -16,6 +17,7 @@ import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
+import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlersImplementer;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandlerProxy;
 
@@ -85,20 +87,26 @@ public abstract class EzyUserRequestSingletonController<
 		}
 		
 		private Map<String, EzyUserRequestHandler> getHandlers() {
-			List<Object> singletons = filterSingletons();
+			List<Object> clientRequestListeners = getClientRequestListeners();
 			Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
-			for(Object singleton : singletons) {
-				Class<?> handleType = singleton.getClass();
+			for(Object listener : clientRequestListeners) {
+				Class<?> handleType = listener.getClass();
 				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
 				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
-				handlers.put(command, new EzyUserRequestHandlerProxy((EzyUserRequestHandler) singleton));
-				logger.debug("add command {} and request handler singleton {}", command, singleton);
+				handlers.put(command, new EzyUserRequestHandlerProxy((EzyUserRequestHandler) listener));
+				logger.debug("add command {} and request handler singleton {}", command, listener);
 			}
+			handlers.putAll(implementClientRequestListeners());
 			return handlers;
 		}
 		
-		private List<Object> filterSingletons() {
+		private List<Object> getClientRequestListeners() {
 			return singletonFactory.getSingletons(EzyClientRequestListener.class);
+		}
+		
+		private Map<String, EzyUserRequestHandler> implementClientRequestListeners() {
+			EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
+			return implementer.implement(singletonFactory.getSingletons(EzyClientRequestController.class));
 		}
 	}
 }

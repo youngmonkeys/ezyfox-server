@@ -55,7 +55,7 @@ public class EzyRequestHandlerMethod {
 					type != EzyUser.class &&
 					type != EzySession.class) {
 				dataType = type;
-				if(type.isAnnotationPresent(EzyRequestData.class))
+				if(parameter.isAnnotationPresent(EzyRequestData.class))
 					break;
 			}
 		}

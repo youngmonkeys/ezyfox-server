@@ -118,6 +118,14 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 		requestController.handle(context, event);
 		
 		data = EzyEntityFactory.newArrayBuilder()
+				.append("plugin/c_hello")
+				.append(EzyEntityFactory.newObjectBuilder()
+						.append("who", "Mr.Young Monkey!"))
+				.build();
+		event = new EzySimpleUserRequestPluginEvent(user, session, data);
+		requestController.handle(context, event);
+		
+		data = EzyEntityFactory.newArrayBuilder()
 				.append("badRequestSend")
 				.build();
 		event = new EzySimpleUserRequestPluginEvent(user, session, data);

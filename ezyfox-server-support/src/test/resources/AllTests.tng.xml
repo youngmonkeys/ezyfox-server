@@ -4,11 +4,13 @@
 
     <test name="All">
     	<packages>
+    		<package name="com.tvd12.ezyfoxserver.support.test.asm"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.command"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.controller"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.entry"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.factory"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.handler"/>
+    		<package name="com.tvd12.ezyfoxserver.support.test.reflect"/>
     	</packages>
     </test>
 </suite>

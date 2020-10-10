@@ -11,7 +11,7 @@ import com.tvd12.ezyfoxserver.support.test.data.GreetRequest;
 import com.tvd12.ezyfoxserver.support.test.data.GreetResponse;
 
 @EzyClientRequestController("Big")
-public class HelloController {
+public class HelloController2 {
 
 	@EzyAutoBind
 	protected EzyResponseFactory appResponseFactory;
@@ -22,34 +22,10 @@ public class HelloController {
 		System.out.println("HelloController::Big/Hello response: " + response);
 	}
 	
-	@EzyRequestHandle("Hello2")
+	@EzyRequestHandle("Hello")
 	public void greet(
 			@EzyRequestData GreetRequest request, 
 			EzyUser user, EzySession session, Integer nothing) {
-		GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
-		System.out.println("HelloController::Big/Hello response: " + response);
-	}
-	
-	@EzyRequestHandle("Hello3")
-	public void greet(
-			@EzyRequestData GreetRequest request, 
-			EzyUser user, EzySession session, int nothing) {
-		GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
-		System.out.println("HelloController::Big/Hello response: " + response);
-	}
-	
-	@EzyRequestHandle("Hello4")
-	public void greet(
-			@EzyRequestData GreetRequest request, 
-			EzyUser user, EzySession session, boolean nothing) {
-		GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
-		System.out.println("HelloController::Big/Hello response: " + response);
-	}
-	
-	@EzyRequestHandle("Hello5")
-	public void greet(
-			@EzyRequestData GreetRequest request, 
-			EzyUser user, EzySession session, char nothing) {
 		GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
 		System.out.println("HelloController::Big/Hello response: " + response);
 	}

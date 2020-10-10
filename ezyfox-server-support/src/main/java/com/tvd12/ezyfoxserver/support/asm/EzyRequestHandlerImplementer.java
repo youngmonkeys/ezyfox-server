@@ -129,6 +129,14 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 			else if(parameterType == EzySession.class) {
 				instruction.append("arg1.getSession()");
 			}
+			else {
+				if(parameterType == boolean.class)
+					instruction.append("false");
+				else if(parameterType.isPrimitive())
+					instruction.append("0");
+				else 
+					instruction.append("null");
+			}
 			body.append(instruction);
 			++ paramCount;
 			
@@ -149,11 +157,15 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 	}
 	
 	protected String makeGetRequestDataTypeMethodContent() {
+		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n")
+				.answer();
+		if(handlerMethod.getRequestDataType() == null)
+			answerInstruction.append("null");
+		else
+			answerInstruction.clazz(handlerMethod.getRequestDataType(), true);
 		return new EzyFunction(getGetResponseContentTypeMethod())
 				.body()
-					.append(new EzyInstruction("\t", "\n")
-							.answer()
-							.clazz(handlerMethod.getRequestDataType(), true))
+					.append(answerInstruction)
 					.function()
 				.toString();
 	}

@@ -4,6 +4,8 @@ import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
 import com.tvd12.ezyfox.core.annotation.EzyRequestData;
 import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
+import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
+import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
@@ -52,6 +54,19 @@ public class HelloController {
 			EzyUser user, EzySession session, char nothing) {
 		GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
 		System.out.println("HelloController::Big/Hello response: " + response);
+	}
+	
+	@EzyTryCatch({IllegalStateException.class, IllegalArgumentException.class})
+	public void handleException(Exception e) {
+		e.printStackTrace();
+	}
+	
+	@EzyTryCatch({RuntimeException.class})
+	public void handleException(
+			RuntimeException e, 
+			GreetRequest request, 
+			EzyUser user, EzySession session, EzyContext context) {
+		e.printStackTrace();
 	}
 	
 }

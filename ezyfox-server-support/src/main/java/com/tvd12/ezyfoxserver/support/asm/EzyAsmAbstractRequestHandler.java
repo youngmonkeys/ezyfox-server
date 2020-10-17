@@ -13,10 +13,21 @@ public abstract class EzyAsmAbstractRequestHandler implements EzyAsmRequestHandl
 	protected String command;
 	
 	@Override
-	public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
-		handleRequest(context, event, data);
+	public void handle(
+			EzyContext context, EzyUserSessionEvent event, Object data) {
+		try {
+			handleRequest(context, event, data);
+		}
+		catch (Exception e) {
+			handleException(context, event, data, e);
+		}
 	}
 	
-	public abstract void handleRequest(EzyContext context, EzyUserSessionEvent event, Object data);
+	public abstract void handleRequest(
+			EzyContext context, EzyUserSessionEvent event, Object data);
+	
+	public abstract void handleException(
+			EzyContext context, 
+			EzyUserSessionEvent event, Object data, Exception exception);
 	
 }

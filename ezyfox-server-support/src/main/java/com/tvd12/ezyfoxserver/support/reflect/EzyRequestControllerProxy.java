@@ -1,9 +1,12 @@
 package com.tvd12.ezyfoxserver.support.reflect;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
+import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
 import com.tvd12.ezyfox.core.util.EzyClientRequestControllerAnnotations;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyMethod;
@@ -17,12 +20,16 @@ public class EzyRequestControllerProxy {
 	protected final Object instance;
 	protected final String commandGroup;
 	protected final List<EzyRequestHandlerMethod> requestHandlerMethods;
+	protected final List<EzyExceptionHandlerMethod> exceptionHandlerMethods;
+	protected final Map<Class<?>, EzyExceptionHandlerMethod> exceptionHandlerMethodMap;
 	
 	public EzyRequestControllerProxy(Object instance) {
 		this.instance = instance;
 		this.clazz = new EzyClass(instance.getClass());
 		this.commandGroup = getCommandGroup();
 		this.requestHandlerMethods = fetchRequestHandlerMethods();
+		this.exceptionHandlerMethods = fetchExceptionHandlerMethods();
+		this.exceptionHandlerMethodMap = fetchExceptionHandlerMethodMap();
 	}
 	
 	protected String getCommandGroup() {
@@ -38,6 +45,25 @@ public class EzyRequestControllerProxy {
 			list.add(m);
 		}
 		return list;
+	}
+	
+	public List<EzyExceptionHandlerMethod> fetchExceptionHandlerMethods() {
+		List<EzyExceptionHandlerMethod> list = new ArrayList<>();
+		List<EzyMethod> methods = clazz.getMethods(m -> m.isAnnotated(EzyTryCatch.class));
+		for(EzyMethod method : methods) {
+			EzyExceptionHandlerMethod m = new EzyExceptionHandlerMethod(method);
+			list.add(m);
+		}
+		return list;
+	}
+	
+	protected final Map<Class<?>, EzyExceptionHandlerMethod> fetchExceptionHandlerMethodMap() {
+		Map<Class<?>, EzyExceptionHandlerMethod> answer = new HashMap<>();
+		for(EzyExceptionHandlerMethod m : exceptionHandlerMethods) {
+			for(Class<?> exceptionClass : m.getExceptionClasses())
+				answer.put(exceptionClass, m);
+		}
+		return answer;
 	}
 	
 	protected boolean isRequestHandlerMethod(EzyMethod method) {

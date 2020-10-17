@@ -2,6 +2,8 @@ package com.tvd12.ezyfoxserver.support.asm;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.tvd12.ezyfox.asm.EzyFunction;
@@ -10,11 +12,11 @@ import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
-import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
+import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerMethod;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestHandlerMethod;
 
@@ -24,20 +26,19 @@ import javassist.CtField;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
-public class EzyRequestHandlerImplementer extends EzyLoggable {
+public class EzyRequestHandlerImplementer 
+		extends EzyAbstractHandlerImplementer<EzyRequestHandlerMethod> {
 
 	@Setter
 	private static boolean debug;
 	protected final EzyRequestControllerProxy controller;
-	protected final EzyRequestHandlerMethod handlerMethod;
 	
-	protected final static String PARAMETER_PREFIX = "param";
 	protected final static AtomicInteger COUNT = new AtomicInteger(0);
 	
 	public EzyRequestHandlerImplementer(
 			EzyRequestControllerProxy controller, EzyRequestHandlerMethod handlerMethod) {
+		super(handlerMethod);
 		this.controller = controller;
-		this.handlerMethod = handlerMethod;
 	}
 	
 	public EzyAsmRequestHandler implement() {
@@ -58,15 +59,18 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 		String controllerFieldContent = makeControllerFieldContent();
 		String setControllerMethodContent = makeSetControllerMethodContent();
 		String handleRequestMethodContent = makeHandleRequestMethodContent();
+		String handleExceptionMethodContent = makeHandleExceptionMethodContent();
 		String getRequestDataTypeMethodContent = makeGetRequestDataTypeMethodContent();
 		printComponentContent(controllerFieldContent);
 		printComponentContent(setControllerMethodContent);
 		printComponentContent(handleRequestMethodContent);
+		printComponentContent(handleExceptionMethodContent);
 		printComponentContent(getRequestDataTypeMethodContent);
 		implClass.setSuperclass(pool.get(superClass.getName()));
 		implClass.addField(CtField.make(controllerFieldContent, implClass));
 		implClass.addMethod(CtNewMethod.make(setControllerMethodContent, implClass));
 		implClass.addMethod(CtNewMethod.make(handleRequestMethodContent, implClass));
+		implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
 		implClass.addMethod(CtNewMethod.make(getRequestDataTypeMethodContent, implClass));
 		Class answerClass = implClass.toClass();
 		implClass.detach();
@@ -105,42 +109,7 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 		EzyFunction function = new EzyFunction(method)
 				.throwsException();
 		EzyBody body = function.body();
-		int paramCount = 0;
-		Class<?> requestDataType = handlerMethod.getRequestDataType();
-		Parameter[] parameters = handlerMethod.getParameters();
-		for(Parameter parameter : parameters) {
-			Class<?> parameterType = parameter.getType();
-			EzyInstruction instruction = new EzyInstruction("\t", "\n")
-					.clazz(parameterType)
-					.append(" ").append(PARAMETER_PREFIX).append(paramCount)
-					.equal();
-			if(parameterType == requestDataType) {
-				instruction.cast(requestDataType, "arg2");
-			}
-			else if(EzyContext.class.isAssignableFrom(parameterType)) {
-				instruction.append("arg0");
-			}
-			else if(parameterType == EzyUserSessionEvent.class) {
-				instruction.append("arg1");
-			}
-			else if(parameterType == EzyUser.class) {
-				instruction.append("arg1.getUser()");
-			}
-			else if(parameterType == EzySession.class) {
-				instruction.append("arg1.getSession()");
-			}
-			else {
-				if(parameterType == boolean.class)
-					instruction.append("false");
-				else if(parameterType.isPrimitive())
-					instruction.append("0");
-				else 
-					instruction.append("null");
-			}
-			body.append(instruction);
-			++ paramCount;
-			
-		}
+		int paramCount = prepareHandlerMethodArguments(body);
 		EzyInstruction instruction = new EzyInstruction("\t", "\n");
 		StringBuilder answerExpression = new StringBuilder();
 		answerExpression.append("this.controller.").append(handlerMethod.getName())
@@ -154,6 +123,81 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 		instruction.append(answerExpression);
 		body.append(instruction);
 		return function.toString();
+	}
+	
+	protected String makeHandleExceptionMethodContent() {
+		EzyMethod method = getHandleExceptionMethod();
+		EzyFunction function = new EzyFunction(method)
+				.throwsException();
+		EzyBody body = function.body();
+		Map<Class<?>, EzyExceptionHandlerMethod> exceptionHandlerMethodMap 
+				= controller.getExceptionHandlerMethodMap();
+		Set<Class<?>> exceptionClasses = exceptionHandlerMethodMap.keySet();
+		for(Class<?> exceptionClass : exceptionClasses) {
+			EzyExceptionHandlerMethod m = exceptionHandlerMethodMap.get(exceptionClass);
+			EzyInstruction instructionIf = new EzyInstruction("\t", "\n", false)
+					.append("if(arg3 instanceof ")
+						.append(exceptionClass.getName())
+					.append(") {");
+			body.append(instructionIf);
+			EzyInstruction instructionHandle = new EzyInstruction("\t\t", "\n");
+			instructionHandle
+					.append("this.controller.").append(m.getName())
+					.bracketopen();
+			appendHandlerExceptionMethodArguments(m, instructionHandle, exceptionClass);
+			instructionHandle
+					.bracketclose();
+			body.append(instructionHandle);
+			body.append(new EzyInstruction("\t", "\n", false).append("}"));
+		}
+		if(exceptionClasses.size() > 0) {
+			body.append(new EzyInstruction("\t", "\n", false).append("else {"));
+			body.append(new EzyInstruction("\t\t", "\n").append("throw arg3"));
+			body.append(new EzyInstruction("\t", "\n", false).append("}"));
+		}
+		else {
+			body.append(new EzyInstruction("\t", "\n").append("throw arg3"));
+		}
+		return function.toString();
+	}
+	
+	protected void appendHandlerExceptionMethodArguments(
+			EzyExceptionHandlerMethod exceptionMethod,
+			EzyInstruction instruction, Class<?> exceptionClass) {
+		int paramCount = 0;
+		Class<?> requestDataType = handlerMethod.getRequestDataType();
+		Parameter[] parameters = exceptionMethod.getParameters();
+		for(Parameter parameter : parameters) {
+			Class<?> parameterType = parameter.getType();
+			if(parameterType == requestDataType) {
+				instruction.brackets(requestDataType).append("arg2");
+			}
+			else if(EzyContext.class.isAssignableFrom(parameterType)) {
+				instruction.append("arg0");
+			}
+			else if(parameterType == EzyUserSessionEvent.class) {
+				instruction.append("arg1");
+			}
+			else if(parameterType == EzyUser.class) {
+				instruction.append("arg1.getUser()");
+			}
+			else if(parameterType == EzySession.class) {
+				instruction.append("arg1.getSession()");
+			}
+			else if(Throwable.class.isAssignableFrom(parameterType)) {
+				instruction.brackets(exceptionClass).append("arg3");
+			}
+			else {
+				if(parameterType == boolean.class)
+					instruction.append("false");
+				else if(parameterType.isPrimitive())
+					instruction.append("0");
+				else 
+					instruction.append("null");
+			}
+			if((paramCount ++) < (parameters.length - 1))
+				instruction.append(", ");
+		}
 	}
 	
 	protected String makeGetRequestDataTypeMethodContent() {
@@ -181,6 +225,14 @@ public class EzyRequestHandlerImplementer extends EzyLoggable {
 				EzyAsmAbstractRequestHandler.class, 
 				"handleRequest",
 				EzyContext.class, EzyUserSessionEvent.class, Object.class);
+		return new EzyMethod(method);
+	}
+	
+	protected EzyMethod getHandleExceptionMethod() {
+		Method method = EzyMethods.getMethod(
+				EzyAsmAbstractRequestHandler.class, 
+				"handleException",
+				EzyContext.class, EzyUserSessionEvent.class, Object.class, Exception.class);
 		return new EzyMethod(method);
 	}
 	

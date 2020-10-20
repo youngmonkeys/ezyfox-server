@@ -13,6 +13,7 @@ import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
+import com.tvd12.ezyfox.core.annotation.EzyExceptionHandler;
 import com.tvd12.ezyfox.core.annotation.EzyServerEventHandler;
 import com.tvd12.ezyfox.core.util.EzyServerEventHandlerAnnotations;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -92,6 +93,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 			EzyReflection reflection = new EzyReflectionProxy(Arrays.asList(scanablePackages));
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyClientRequestController.class));
+			beanContextBuilder.addSingletonClasses(
+					(Set)reflection.getAnnotatedClasses(EzyExceptionHandler.class));
 			beanContextBuilder.addAllClasses(reflection);
 		}
 		setupBeanContext(context, beanContextBuilder);

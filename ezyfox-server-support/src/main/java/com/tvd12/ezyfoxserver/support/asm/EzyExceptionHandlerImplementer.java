@@ -7,6 +7,7 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyClassTree;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -102,7 +103,8 @@ public class EzyExceptionHandlerImplementer
 		EzyBody body = function.body();
 		int paramCount = prepareHandlerMethodArguments(body);
 		Class<?>[] exceptionClasses = handlerMethod.getExceptionClasses();
-		for(Class<?> exceptionClass : exceptionClasses) {
+		EzyClassTree exceptionTree = new EzyClassTree(exceptionClasses);
+		for(Class<?> exceptionClass : exceptionTree.toList()) {
 			EzyInstruction instructionIf = new EzyInstruction("\t", "\n", false)
 					.append("if(arg3 instanceof ")
 						.append(exceptionClass.getName())

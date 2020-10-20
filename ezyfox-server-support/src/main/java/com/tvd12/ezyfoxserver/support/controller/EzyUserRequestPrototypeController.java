@@ -56,9 +56,9 @@ public abstract class EzyUserRequestPrototypeController<
 				unmarshaller.unwrap(params, handler);
 		}
 		try {
-			preHandle(context, event, handler);
+			preHandle(context, event, cmd, handler);
 			handler.handle();
-			postHandle(context, event, handler, null);
+			postHandle(context, event, cmd, handler);
 		}
 		catch(EzyBadRequestException e) {
 			if(e.isSendToClient()) {
@@ -66,16 +66,17 @@ public abstract class EzyUserRequestPrototypeController<
 				responseError(context, event, errorData);
 			}
 			logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
-			postHandle(context, event, handler, e);
+			postHandle(context, event, cmd, handler, e);
 		}
 		catch(Exception e) {
-			postHandle(context, event, handler, e);
+			postHandle(context, event, cmd, handler, e);
 			throw e;
 		}
 	}
 	
-	protected abstract void preHandle(C context, E event, EzyHandler handler);
-	protected void postHandle(C context, E event, EzyHandler handler, Exception e) {}
+	protected void preHandle(C context, E event, String cmd, EzyHandler handler) {}
+	protected void postHandle(C context, E event, String cmd, EzyHandler handler) {}
+	protected void postHandle(C context, E event, String cmd, EzyHandler handler, Exception e) {}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
 	

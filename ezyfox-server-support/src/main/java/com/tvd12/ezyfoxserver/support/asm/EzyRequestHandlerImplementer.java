@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyClassTree;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -133,7 +134,8 @@ public class EzyRequestHandlerImplementer
 		Map<Class<?>, EzyExceptionHandlerMethod> exceptionHandlerMethodMap 
 				= controller.getExceptionHandlerMethodMap();
 		Set<Class<?>> exceptionClasses = exceptionHandlerMethodMap.keySet();
-		for(Class<?> exceptionClass : exceptionClasses) {
+		EzyClassTree exceptionTree = new EzyClassTree(exceptionClasses);
+		for(Class<?> exceptionClass : exceptionTree.toList()) {
 			EzyExceptionHandlerMethod m = exceptionHandlerMethodMap.get(exceptionClass);
 			EzyInstruction instructionIf = new EzyInstruction("\t", "\n", false)
 					.append("if(arg3 instanceof ")

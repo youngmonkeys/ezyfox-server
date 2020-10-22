@@ -110,7 +110,7 @@ public class EzyRequestHandlerImplementer
 		EzyFunction function = new EzyFunction(method)
 				.throwsException();
 		EzyBody body = function.body();
-		int paramCount = prepareHandlerMethodArguments(body);
+		int paramCount = prepareHandleMethodArguments(body, false);
 		EzyInstruction instruction = new EzyInstruction("\t", "\n");
 		StringBuilder answerExpression = new StringBuilder();
 		answerExpression.append("this.controller.").append(handlerMethod.getName())
@@ -185,6 +185,9 @@ public class EzyRequestHandlerImplementer
 			}
 			else if(parameterType == EzySession.class) {
 				instruction.append("arg1.getSession()");
+			}
+			else if(parameterType == String.class) {
+				instruction.append("this.command");
 			}
 			else if(Throwable.class.isAssignableFrom(parameterType)) {
 				instruction.brackets(exceptionClass).append("arg3");

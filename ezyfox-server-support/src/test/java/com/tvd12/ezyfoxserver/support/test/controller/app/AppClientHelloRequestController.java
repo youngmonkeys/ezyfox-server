@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
+import com.tvd12.ezyfoxserver.support.test.exception.RequestException;
 
 @EzyClientRequestController
 public class AppClientHelloRequestController {
@@ -40,6 +41,16 @@ public class AppClientHelloRequestController {
 	@EzyRequestHandle("c_hello5")
 	public void handleHello5(EzyContext context) {
 		System.out.println("app: c_hello4");
+	}
+	
+	@EzyRequestHandle("requestException")
+	public void handleRequestException(EzyContext context) {
+		throw new RequestException(getClass().getSimpleName() + ":handlerequestException");
+	}
+	
+	@EzyRequestHandle("requestException2")
+	public void handleRequestException2(EzyContext context) throws Exception {
+		throw new Exception(getClass().getSimpleName() + ":handleRequestException2");
 	}
 	
 }

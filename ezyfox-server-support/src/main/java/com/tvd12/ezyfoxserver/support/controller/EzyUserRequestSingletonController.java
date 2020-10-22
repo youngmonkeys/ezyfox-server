@@ -79,7 +79,7 @@ public abstract class EzyUserRequestSingletonController<
 		catch(Exception e) {
 			postHandle(context, event, cmd, handlerData, e);
 			try {
-				if(!handleException(context, event, requestDataType, e))
+				if(!handleException(context, event, cmd, handlerData, e))
 					throw e;
 			}
 			catch (Exception ex) {
@@ -103,11 +103,12 @@ public abstract class EzyUserRequestSingletonController<
 			interceptor.postHandle(context, event, cmd, data, e);
 	}
 	
-	protected boolean handleException(C context, E event, Object data, Exception e) throws Exception {
+	protected boolean handleException(
+			C context, E event, String cmd, Object data, Exception e) throws Exception {
 		for(Class<?> exceptionClass : handledExceptionClasses) {
 			if(exceptionClass.isAssignableFrom(e.getClass())) {
 				EzyUncaughtExceptionHandler exceptionHandler = exceptionHandlers.get(exceptionClass);
-				exceptionHandler.handleException(context, event, data, e);
+				exceptionHandler.handleException(context, event, cmd, data, e);
 				return true;
 			}
 		}

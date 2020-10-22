@@ -147,6 +147,23 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		event = new EzySimpleUserRequestAppEvent(user, session, data);
 		requestController.handle(context, event);
 		
+		data = EzyEntityFactory.newArrayBuilder()
+				.append("requestException")
+				.build();
+		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		requestController.handle(context, event);
+		
+		try {
+			data = EzyEntityFactory.newArrayBuilder()
+					.append("requestException2")
+					.build();
+			event = new EzySimpleUserRequestAppEvent(user, session, data);
+			requestController.handle(context, event);
+		}
+		catch (Exception e) {
+			assert e.getCause().getClass() == Exception.class;
+		}
+		
 		try {
 			data = EzyEntityFactory.newArrayBuilder()
 					.append("exception")

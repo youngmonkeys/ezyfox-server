@@ -101,12 +101,12 @@ public class EzyExceptionHandlerImplementer
 		EzyFunction function = new EzyFunction(method)
 				.throwsException();
 		EzyBody body = function.body();
-		int paramCount = prepareHandlerMethodArguments(body);
+		int paramCount = prepareHandleMethodArguments(body, true);
 		Class<?>[] exceptionClasses = handlerMethod.getExceptionClasses();
 		EzyClassTree exceptionTree = new EzyClassTree(exceptionClasses);
 		for(Class<?> exceptionClass : exceptionTree.toList()) {
 			EzyInstruction instructionIf = new EzyInstruction("\t", "\n", false)
-					.append("if(arg3 instanceof ")
+					.append("if(arg4 instanceof ")
 						.append(exceptionClass.getName())
 					.append(") {");
 			body.append(instructionIf);
@@ -120,18 +120,18 @@ public class EzyExceptionHandlerImplementer
 					.append(", ");
 			}
 			instructionHandle
-					.brackets(exceptionClass).append("arg3")
+					.brackets(exceptionClass).append("arg4")
 					.bracketclose();
 			body.append(instructionHandle);
 			body.append(new EzyInstruction("\t", "\n", false).append("}"));
 		}
 		if(exceptionClasses.length > 0) {
 			body.append(new EzyInstruction("\t", "\n", false).append("else {"));
-			body.append(new EzyInstruction("\t\t", "\n").append("throw arg3"));
+			body.append(new EzyInstruction("\t\t", "\n").append("throw arg4"));
 			body.append(new EzyInstruction("\t", "\n", false).append("}"));
 		}
 		else {
-			body.append(new EzyInstruction("\t", "\n").append("throw arg3"));
+			body.append(new EzyInstruction("\t", "\n").append("throw arg4"));
 		}
 		return function.toString();
 	}
@@ -146,7 +146,7 @@ public class EzyExceptionHandlerImplementer
 		Method method = EzyMethods.getMethod(
 				EzyAbstractUncaughtExceptionHandler.class, 
 				"handleException", 
-				EzyContext.class, EzyUserSessionEvent.class, Object.class, Exception.class);
+				EzyContext.class, EzyUserSessionEvent.class, String.class, Object.class, Exception.class);
 		return new EzyMethod(method);
 	}
 	

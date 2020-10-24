@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.support.test.controller.app;
 
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
+import com.tvd12.ezyfox.core.annotation.EzyRequestData;
 import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyContext;
@@ -40,17 +41,30 @@ public class AppClientHelloRequestController {
 	
 	@EzyRequestHandle("c_hello5")
 	public void handleHello5(EzyContext context) {
-		System.out.println("app: c_hello4");
+		System.out.println("app: c_hello5");
+	}
+	
+	@EzyRequestHandle("c_hello6")
+	public void handleHello6(EzyContext context, String value, Exception e) {
+		System.out.println("app: c_hello6");
 	}
 	
 	@EzyRequestHandle("requestException")
-	public void handleRequestException(EzyContext context) {
+	public void handleRequestException(EzyContext context, Hello data) {
 		throw new RequestException(getClass().getSimpleName() + ":handlerequestException");
 	}
 	
 	@EzyRequestHandle("requestException2")
-	public void handleRequestException2(EzyContext context) throws Exception {
-		throw new Exception(getClass().getSimpleName() + ":handleRequestException2");
+	public void handleRequestException2(
+			EzyContext context, 
+			String cmd, 
+			@EzyRequestData Hello data) throws Exception {
+		throw new Exception(getClass().getSimpleName() + ":handleRequestException2, cmd = " + cmd);
+	}
+	
+	@EzyRequestHandle("requestException3")
+	public void handleRequestException3(EzyContext context) throws Exception {
+		throw new IllegalArgumentException(getClass().getSimpleName() + ":handleRequestException3");
 	}
 	
 }

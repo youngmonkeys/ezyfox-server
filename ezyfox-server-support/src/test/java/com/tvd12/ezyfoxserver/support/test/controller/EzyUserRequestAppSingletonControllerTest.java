@@ -27,6 +27,8 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlerImplementer;
+import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
@@ -39,6 +41,8 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 
 	@Test
 	public void test() throws Exception {
+		EzyRequestHandlerImplementer.setDebug(true);
+		EzyExceptionHandlerImplementer.setDebug(true);
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleServer server = new EzySimpleServer();
 		server.setSettings(settings);
@@ -149,6 +153,8 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		
 		data = EzyEntityFactory.newArrayBuilder()
 				.append("requestException")
+				.append(EzyEntityFactory.newObjectBuilder()
+						.append("who", "Mr.Young Monkey!"))
 				.build();
 		event = new EzySimpleUserRequestAppEvent(user, session, data);
 		requestController.handle(context, event);
@@ -163,6 +169,14 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 		catch (Exception e) {
 			assert e.getCause().getClass() == Exception.class;
 		}
+		
+		data = EzyEntityFactory.newArrayBuilder()
+				.append("requestException3")
+				.append(EzyEntityFactory.newObjectBuilder()
+						.append("who", "Mr.Young Monkey!"))
+				.build();
+		event = new EzySimpleUserRequestAppEvent(user, session, data);
+		requestController.handle(context, event);
 		
 		try {
 			data = EzyEntityFactory.newArrayBuilder()

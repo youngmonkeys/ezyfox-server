@@ -29,6 +29,10 @@ public abstract class EzyHandlerMethod {
 	public Parameter[] getParameters() {
 		return method.getMethod().getParameters();
 	}
+	
+	public Class<?>[] getParameterTypes() {
+		return method.getParameterTypes();
+	}
 
 	public Class<?> getRequestDataType() {
 		Class<?> dataType = null;
@@ -41,7 +45,8 @@ public abstract class EzyHandlerMethod {
 					type != EzyUser.class &&
 					type != EzySession.class &&
 					!Throwable.class.isAssignableFrom(type)) {
-				dataType = type;
+				if(dataType == null || type != String.class)
+					dataType = type;
 				if(parameter.isAnnotationPresent(EzyRequestData.class))
 					break;
 			}

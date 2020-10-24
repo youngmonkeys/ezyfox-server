@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.support.asm;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,8 +13,6 @@ import com.tvd12.ezyfox.reflect.EzyClassTree;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfoxserver.context.EzyContext;
-import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerMethod;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
@@ -146,7 +143,7 @@ public class EzyRequestHandlerImplementer
 			instructionHandle
 					.append("this.controller.").append(m.getName())
 					.bracketopen();
-			appendHandlerExceptionMethodArguments(m, instructionHandle, exceptionClass);
+			appendHandleExceptionMethodArguments(m, instructionHandle, exceptionClass);
 			instructionHandle
 					.bracketclose();
 			body.append(instructionHandle);
@@ -163,46 +160,11 @@ public class EzyRequestHandlerImplementer
 		return function.toString();
 	}
 	
-	protected void appendHandlerExceptionMethodArguments(
-			EzyExceptionHandlerMethod exceptionMethod,
+	protected void appendHandleExceptionMethodArguments(
+			EzyExceptionHandlerMethod method,
 			EzyInstruction instruction, Class<?> exceptionClass) {
-		int paramCount = 0;
-		Class<?> requestDataType = handlerMethod.getRequestDataType();
-		Parameter[] parameters = exceptionMethod.getParameters();
-		for(Parameter parameter : parameters) {
-			Class<?> parameterType = parameter.getType();
-			if(parameterType == requestDataType) {
-				instruction.brackets(requestDataType).append("arg2");
-			}
-			else if(EzyContext.class.isAssignableFrom(parameterType)) {
-				instruction.append("arg0");
-			}
-			else if(parameterType == EzyUserSessionEvent.class) {
-				instruction.append("arg1");
-			}
-			else if(parameterType == EzyUser.class) {
-				instruction.append("arg1.getUser()");
-			}
-			else if(parameterType == EzySession.class) {
-				instruction.append("arg1.getSession()");
-			}
-			else if(parameterType == String.class) {
-				instruction.append("this.command");
-			}
-			else if(Throwable.class.isAssignableFrom(parameterType)) {
-				instruction.brackets(exceptionClass).append("arg3");
-			}
-			else {
-				if(parameterType == boolean.class)
-					instruction.append("false");
-				else if(parameterType.isPrimitive())
-					instruction.append("0");
-				else 
-					instruction.append("null");
-			}
-			if((paramCount ++) < (parameters.length - 1))
-				instruction.append(", ");
-		}
+		super.appendHandleExceptionMethodArguments(
+				method, instruction, exceptionClass, "this.command", "arg2", "arg3");
 	}
 	
 	protected String makeGetRequestDataTypeMethodContent() {

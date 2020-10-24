@@ -57,16 +57,25 @@ public class HelloController {
 	}
 	
 	@EzyTryCatch({IllegalStateException.class, IllegalArgumentException.class})
-	public void handleException(Exception e) {
+	public void handleException1(Exception e) {
 		e.printStackTrace();
 	}
 	
 	@EzyTryCatch({RuntimeException.class})
-	public void handleException(
+	public void handleException2(
 			RuntimeException e, 
 			GreetRequest request, 
 			EzyUser user, EzySession session, EzyContext context) {
 		e.printStackTrace();
+	}
+	
+	@EzyTryCatch({IllegalArgumentException.class})
+	public void handleException3(
+			IllegalArgumentException e, 
+			String cmd,
+			GreetRequest request, 
+			EzyUser user, EzySession session, EzyContext context) {
+		System.out.println("HelloController:handleException:IllegalArgumentException, cmd = " + cmd);
 	}
 	
 }

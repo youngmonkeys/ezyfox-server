@@ -74,7 +74,7 @@ public abstract class EzyUserRequestPrototypeController<
 		}
 	}
 	
-	protected void preHandle(C context, E event, String cmd, EzyHandler handler) {}
+	protected abstract void preHandle(C context, E event, String cmd, EzyHandler handler);
 	protected void postHandle(C context, E event, String cmd, EzyHandler handler) {}
 	protected void postHandle(C context, E event, String cmd, EzyHandler handler, Exception e) {}
 	

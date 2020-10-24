@@ -40,6 +40,7 @@ public class EzyRequestHandlersImplementerTest {
 		}
 		EzyRequestHandlerImplementer.setDebug(false);
 		implementer = new EzyRequestHandlersImplementer();
+		implementer.implement(new HelloController());
 	}
 	
 	@Test(expectedExceptions = IllegalStateException.class)

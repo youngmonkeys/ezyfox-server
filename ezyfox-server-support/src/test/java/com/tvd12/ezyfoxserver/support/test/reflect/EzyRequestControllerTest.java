@@ -9,8 +9,11 @@ public class EzyRequestControllerTest {
 
 	@Test
 	public void test() {
+		Object instance = new HelloController();
 		EzyRequestControllerProxy controllerProxy = 
-				new EzyRequestControllerProxy(new HelloController());
+				new EzyRequestControllerProxy(instance);
+		assert controllerProxy.getInstance() == instance;
+		assert controllerProxy.getExceptionHandlerMethods().size() >= 0;
 		System.out.println(controllerProxy);
 	}
 	

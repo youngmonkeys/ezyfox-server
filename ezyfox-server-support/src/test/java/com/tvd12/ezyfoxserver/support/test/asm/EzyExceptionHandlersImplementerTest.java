@@ -17,6 +17,8 @@ public class EzyExceptionHandlersImplementerTest {
 		EzyExceptionHandlerImplementer.setDebug(true);
 		EzyExceptionHandlersImplementer implementer = new EzyExceptionHandlersImplementer();
 		implementer.implement(Arrays.asList(new ExExceptionHandler()));
+		EzyExceptionHandlerImplementer.setDebug(false);
+		implementer.implement(Arrays.asList(new ExExceptionHandler()));
 	}
 	
 	@EzyExceptionHandler

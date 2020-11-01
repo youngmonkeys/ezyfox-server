@@ -14,6 +14,7 @@ import com.tvd12.ezyfox.core.annotation.EzyClientRequestInterceptor;
 import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
 import com.tvd12.ezyfox.core.annotation.EzyExceptionHandler;
 import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
+import com.tvd12.ezyfox.core.util.EzyClientRequestInterceptorAnnotations;
 import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
@@ -68,22 +69,26 @@ public abstract class EzyUserRequestSingletonController<
 			handler.handle(context, event, handlerData);
 			postHandle(context, event, cmd, handlerData);
 		}
-		catch(EzyBadRequestException e) {
+		catch (Exception e) {
 			postHandle(context, event, cmd, handlerData, e);
-			if(e.isSendToClient()) {
-				EzyData errorData = newErrorData(e);
-				responseError(context, event, errorData);
+			if(e instanceof EzyBadRequestException) {
+				EzyBadRequestException ex = (EzyBadRequestException)e;
+				if(ex.isSendToClient()) {
+					EzyData errorData = newErrorData(ex);
+					responseError(context, event, errorData);
+				}
+				logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
 			}
-			logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
-		}
-		catch(Exception e) {
-			postHandle(context, event, cmd, handlerData, e);
-			try {
-				if(!handleException(context, event, cmd, handlerData, e))
-					throw e;
-			}
-			catch (Exception ex) {
-				throw new EzyUserRequestException(cmd, handlerData, ex);
+			else {
+				EzyUncaughtExceptionHandler exceptionHandler = getExceptionHandler(e.getClass());
+				if(exceptionHandler == null)
+					throw new EzyUserRequestException(cmd, handlerData, e);
+				try {
+					exceptionHandler.handleException(context, event, cmd, handlerData, e);
+				}
+				catch (Exception ex) {
+					throw new EzyUserRequestException(cmd, handlerData, ex);
+				}
 			}
 		}
 	}
@@ -103,16 +108,12 @@ public abstract class EzyUserRequestSingletonController<
 			interceptor.postHandle(context, event, cmd, data, e);
 	}
 	
-	protected boolean handleException(
-			C context, E event, String cmd, Object data, Exception e) throws Exception {
-		for(Class<?> exceptionClass : handledExceptionClasses) {
-			if(exceptionClass.isAssignableFrom(e.getClass())) {
-				EzyUncaughtExceptionHandler exceptionHandler = exceptionHandlers.get(exceptionClass);
-				exceptionHandler.handleException(context, event, cmd, data, e);
-				return true;
-			}
+	protected EzyUncaughtExceptionHandler getExceptionHandler(Class<?> exceptionClass) {
+		for(Class<?> exc : handledExceptionClasses) {
+			if(exc.isAssignableFrom(exceptionClass))
+				return exceptionHandlers.get(exc);
 		}
-		return false;
+		return null;
 	}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
@@ -152,8 +153,15 @@ public abstract class EzyUserRequestSingletonController<
 		private List<EzyUserRequestInterceptor> getRequestInterceptors() {
 			List<EzyUserRequestInterceptor> interceptors =
 					singletonFactory.getSingletons(EzyClientRequestInterceptor.class);
-			for(EzyUserRequestInterceptor interceptor : interceptors)
+			List<EzyUserRequestInterceptor> answer = new ArrayList<>();
+			for(EzyUserRequestInterceptor interceptor : interceptors) {
 				logger.debug("add interceptor {}", interceptor);
+				answer.add(interceptor);
+			}
+			answer.sort((a, b) -> 
+				EzyClientRequestInterceptorAnnotations.getPriority(a.getClass()) 
+					- EzyClientRequestInterceptorAnnotations.getPriority(b.getClass())
+			);
 			return interceptors;
 		}
 		

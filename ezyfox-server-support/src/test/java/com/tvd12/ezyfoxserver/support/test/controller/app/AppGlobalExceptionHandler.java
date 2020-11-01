@@ -31,4 +31,12 @@ public class AppGlobalExceptionHandler extends EzyLoggable {
 		logger.error("try cath IllegalArgumentException, cmd = {}, data = {}", cmd, data, e);
 	}
 	
+	@EzyTryCatch(Exception.class)
+	public void handleException(
+			Exception e,
+			String cmd, 
+			@EzyRequestData Object data) throws Exception {
+		throw e;
+	}
+	
 }

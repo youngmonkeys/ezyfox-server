@@ -12,7 +12,6 @@ import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
-import com.tvd12.ezyfoxserver.support.handler.EzyAbstractUncaughtExceptionHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUncaughtExceptionHandler;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerMethod;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerProxy;
@@ -67,12 +66,12 @@ public class EzyExceptionHandlerImplementer
 		implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
 		Class answerClass = implClass.toClass();
 		implClass.detach();
-		EzyUncaughtExceptionHandler handler = (EzyUncaughtExceptionHandler) answerClass.newInstance();
+		EzyAsmUncaughtExceptionHandler handler = (EzyAsmUncaughtExceptionHandler) answerClass.newInstance();
 		setRepoComponent(handler);
 		return handler;
 	}
 	
-	protected void setRepoComponent(EzyUncaughtExceptionHandler handler) {
+	protected void setRepoComponent(EzyAsmUncaughtExceptionHandler handler) {
 		handler.setExceptionHandler(exceptionHandler.getInstance());
 	}
 	
@@ -134,20 +133,20 @@ public class EzyExceptionHandlerImplementer
 	
 	protected EzyMethod getSetExceptionHandlerMethod() {
 		Method method = EzyMethods.getMethod(
-				EzyAbstractUncaughtExceptionHandler.class, "setExceptionHandler", Object.class);
+				EzyAsmAbstractUncaughtExceptionHandler.class, "setExceptionHandler", Object.class);
 		return new EzyMethod(method);
 	}
 	
 	protected EzyMethod getHandleExceptionMethod() {
 		Method method = EzyMethods.getMethod(
-				EzyAbstractUncaughtExceptionHandler.class, 
+				EzyAsmAbstractUncaughtExceptionHandler.class, 
 				"handleException", 
 				EzyContext.class, EzyUserSessionEvent.class, String.class, Object.class, Exception.class);
 		return new EzyMethod(method);
 	}
 	
 	protected Class<?> getSuperClass() {
-		return EzyAbstractUncaughtExceptionHandler.class;
+		return EzyAsmAbstractUncaughtExceptionHandler.class;
 	}
 	
 	protected String getImplClassName() {

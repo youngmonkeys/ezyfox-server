@@ -11,7 +11,5 @@ public interface EzyUncaughtExceptionHandler<C extends EzyContext, D> {
 			String command,
 			D data, 
 			Exception exception) throws Exception;
-	
-	void setExceptionHandler(Object exceptionHandler);
 
 }

@@ -23,7 +23,7 @@ public class EzyAbstractHandlerImplementer<H extends EzyHandlerMethod>
 		this.handlerMethod = handlerMethod;
 	}
 
-	protected int prepareHandleMethodArguments(EzyBody body, boolean exceptionHandle) {
+	protected int prepareHandleMethodArguments(EzyBody body) {
 		int paramCount = 0;
 		Class<?> requestDataType = handlerMethod.getRequestDataType();
 		Parameter[] parameters = handlerMethod.getParameters();
@@ -34,7 +34,7 @@ public class EzyAbstractHandlerImplementer<H extends EzyHandlerMethod>
 					.append(" ").append(PARAMETER_PREFIX).append(paramCount)
 					.equal();
 			if(parameterType == requestDataType) {
-				instruction.cast(requestDataType, exceptionHandle ? "arg3" : "arg2");
+				instruction.cast(requestDataType, "arg2");
 			}
 			else if(EzyContext.class.isAssignableFrom(parameterType)) {
 				instruction.append("arg0");
@@ -47,15 +47,6 @@ public class EzyAbstractHandlerImplementer<H extends EzyHandlerMethod>
 			}
 			else if(parameterType == EzySession.class) {
 				instruction.append("arg1.getSession()");
-			}
-			else if(parameterType == String.class) {
-				instruction.append(exceptionHandle ? "arg2" : "null");
-			}
-			else if(Throwable.class.isAssignableFrom(parameterType)) {
-				if(exceptionHandle)
-					continue;
-				else 
-					instruction.append("null");
 			}
 			else if(parameterType == boolean.class) {
 				instruction.append("false");

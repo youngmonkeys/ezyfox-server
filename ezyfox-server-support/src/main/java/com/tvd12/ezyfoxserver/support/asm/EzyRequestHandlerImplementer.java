@@ -107,7 +107,7 @@ public class EzyRequestHandlerImplementer
 		EzyFunction function = new EzyFunction(method)
 				.throwsException();
 		EzyBody body = function.body();
-		int paramCount = prepareHandleMethodArguments(body, false);
+		int paramCount = prepareHandleMethodArguments(body);
 		EzyInstruction instruction = new EzyInstruction("\t", "\n");
 		StringBuilder answerExpression = new StringBuilder();
 		answerExpression.append("this.controller.").append(handlerMethod.getName())

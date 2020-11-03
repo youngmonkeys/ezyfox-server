@@ -100,7 +100,6 @@ public class EzyExceptionHandlerImplementer
 		EzyFunction function = new EzyFunction(method)
 				.throwsException();
 		EzyBody body = function.body();
-		prepareHandleMethodArguments(body, true);
 		Class<?>[] exceptionClasses = handlerMethod.getExceptionClasses();
 		EzyClassTree exceptionTree = new EzyClassTree(exceptionClasses);
 		for(Class<?> exceptionClass : exceptionTree.toList()) {

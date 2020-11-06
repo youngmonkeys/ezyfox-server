@@ -39,7 +39,7 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting,
     protected String guestNamePrefix = "Guest#";
     
     @XmlElement(name = "user-name-pattern")
-    protected String userNamePattern = "^[a-z0-9_.]{3,36}$";
+    protected String userNamePattern = "^[a-zA-Z0-9_.#]{3,36}$";
     
     @Override
     public void init() {

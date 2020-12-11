@@ -19,7 +19,7 @@ public class EzySocketDisconnectionHandlerTest {
     public void test() {
         EzySocketDisconnectionHandler handler = new EzySocketDisconnectionHandler();
         
-        EzySocketDisconnectionQueue disconnectionQueue = EzyBlockingSocketDisconnectionQueue.getInstance();
+        EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
         
         EzySocketDataHandlerGroupRemover dataHandlerGroupRemover = mock(EzySocketDataHandlerGroupRemover.class);
         EzySocketDataHandlerGroup handlerGroup = mock(EzySocketDataHandlerGroup.class);
@@ -39,7 +39,7 @@ public class EzySocketDisconnectionHandlerTest {
     public void hasNoHandlerGroupCaseTest() {
         EzySocketDisconnectionHandler handler = new EzySocketDisconnectionHandler();
         
-        EzySocketDisconnectionQueue disconnectionQueue = EzyBlockingSocketDisconnectionQueue.getInstance();
+        EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
         
         EzySocketDataHandlerGroupRemover dataHandlerGroupRemover = mock(EzySocketDataHandlerGroupRemover.class);
         EzySocketDataHandlerGroup handlerGroup = null;
@@ -58,7 +58,7 @@ public class EzySocketDisconnectionHandlerTest {
     public void processDisconnectionQueueExceptionCaseTest() {
         EzySocketDisconnectionHandler handler = new EzySocketDisconnectionHandler();
         
-        EzySocketDisconnectionQueue disconnectionQueue = EzyBlockingSocketDisconnectionQueue.getInstance();
+        EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
         
         EzySocketDataHandlerGroupRemover dataHandlerGroupRemover = mock(EzySocketDataHandlerGroupRemover.class);
         when(dataHandlerGroupRemover.removeHandlerGroup(any(EzySession.class))).thenThrow(new IllegalArgumentException());
@@ -76,7 +76,7 @@ public class EzySocketDisconnectionHandlerTest {
     public void processDisconnectionQueueInterrupTest() throws Exception {
         EzySocketDisconnectionHandler handler = new EzySocketDisconnectionHandler();
         
-        EzySocketDisconnectionQueue disconnectionQueue = EzyBlockingSocketDisconnectionQueue.getInstance();
+        EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
         
         EzySocketDataHandlerGroupRemover dataHandlerGroupRemover = mock(EzySocketDataHandlerGroupRemover.class);
         EzySocketDataHandlerGroup handlerGroup = mock(EzySocketDataHandlerGroup.class);

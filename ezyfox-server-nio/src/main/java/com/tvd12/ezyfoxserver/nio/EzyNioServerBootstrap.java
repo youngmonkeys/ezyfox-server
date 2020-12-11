@@ -32,6 +32,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandlingLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalHandlingLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
 
 import lombok.Setter;
 
@@ -210,7 +211,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 	private EzySocketEventLoopOneHandler newSocketUserRemovalHandlingLoopHandler() {
 		EzySocketEventLoopOneHandler loopHandler = new EzySocketUserRemovalHandlingLoopHandler();
 		loopHandler.setThreadPoolSize(getSocketUserRemovalHandlerPoolSize());
-		EzySocketUserRemovalHandler eventHandler = new EzySocketUserRemovalHandler();
+		EzySocketUserRemovalQueue userRemovalQueue = context.get(EzySocketUserRemovalQueue.class);
+		EzySocketUserRemovalHandler eventHandler = new EzySocketUserRemovalHandler(userRemovalQueue);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;
 	}

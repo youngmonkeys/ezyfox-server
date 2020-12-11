@@ -5,7 +5,6 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketUserRemoval;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemoval;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
@@ -19,10 +18,6 @@ public class EzySimpleUserDelegate
 
     protected final EzyServerContext serverContext;
     protected final EzySocketUserRemovalQueue userRemovalQueue;
-    
-    public EzySimpleUserDelegate(EzyServerContext serverContext) {
-        this(serverContext, EzyBlockingSocketUserRemovalQueue.getInstance());
-    }
     
     public EzySimpleUserDelegate(
             EzyServerContext serverContext,

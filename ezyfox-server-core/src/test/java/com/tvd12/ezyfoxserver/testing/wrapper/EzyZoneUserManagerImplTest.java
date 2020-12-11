@@ -22,7 +22,7 @@ public class EzyZoneUserManagerImplTest {
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         when(serverContext.getZoneContext(1)).thenReturn(zoneContext);
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
-        EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext);
+        EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext, queue);
         userDelegate = new EzySimpleUserDelegate(serverContext, queue);
         
         EzyZoneUserManagerImpl manager = (EzyZoneUserManagerImpl) EzyZoneUserManagerImpl.builder()

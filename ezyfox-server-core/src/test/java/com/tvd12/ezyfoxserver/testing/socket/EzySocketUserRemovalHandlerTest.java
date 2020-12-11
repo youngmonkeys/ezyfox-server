@@ -22,9 +22,11 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserEvent;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
+import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketUserRemoval;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemoval;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 public class EzySocketUserRemovalHandlerTest {
@@ -51,7 +53,8 @@ public class EzySocketUserRemovalHandlerTest {
         user.setName("test");
         EzySocketUserRemoval item = new EzySimpleSocketUserRemoval(zoneContext, user, EzyUserRemoveReason.EXIT_APP);
         queue.add(item);
-        EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler();
+        EzySocketUserRemovalQueue userRemovalQueue = new EzyBlockingSocketUserRemovalQueue();
+        EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler(userRemovalQueue);
         handler = new EzySocketUserRemovalHandler(queue);
         handler.handleEvent();
         handler.destroy();
@@ -157,7 +160,8 @@ public class EzySocketUserRemovalHandlerTest {
         user.setName("test");
         EzySocketUserRemoval item = new EzySimpleSocketUserRemoval(zoneContext, user, EzyUserRemoveReason.EXIT_APP);
         queue.add(item);
-        EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler();
+        EzySocketUserRemovalQueue userRemovalQueue = new EzyBlockingSocketUserRemovalQueue();
+        EzySocketUserRemovalHandler handler = new EzySocketUserRemovalHandler(userRemovalQueue);
         handler = new EzySocketUserRemovalHandler(queue);
         handler.handleEvent();
         handler.destroy();

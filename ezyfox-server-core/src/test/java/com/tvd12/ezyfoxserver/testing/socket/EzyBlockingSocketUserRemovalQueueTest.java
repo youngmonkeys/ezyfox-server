@@ -11,7 +11,7 @@ public class EzyBlockingSocketUserRemovalQueueTest {
 
     @Test
     public void test() {
-        EzyBlockingSocketUserRemovalQueue queue = EzyBlockingSocketUserRemovalQueue.getInstance();
+        EzyBlockingSocketUserRemovalQueue queue = new EzyBlockingSocketUserRemovalQueue();
         queue.clear();
         assert queue.isEmpty();
         assert queue.size() == 0;

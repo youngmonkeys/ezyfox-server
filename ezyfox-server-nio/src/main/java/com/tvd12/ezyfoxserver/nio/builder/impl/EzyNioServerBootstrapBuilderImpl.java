@@ -132,7 +132,7 @@ public class EzyNioServerBootstrapBuilderImpl
 	}
 	
 	private EzySocketDisconnectionQueue newSocketDisconnectionQueue() {
-	    return EzyBlockingSocketDisconnectionQueue.getInstance();
+	    return new EzyBlockingSocketDisconnectionQueue();
 	}
 
 	private EzyCodecFactory newCodecFactory() {

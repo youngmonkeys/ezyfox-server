@@ -26,12 +26,14 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
+import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
@@ -97,6 +99,7 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		server.setConfig(config);
 		server.setSettings(settings);
 		EzySimpleServerContext serverContext = new EzySimpleServerContext();
+		serverContext.setProperty(EzySocketUserRemovalQueue.class, new EzyBlockingSocketUserRemovalQueue());
 		serverContext.setServer(server);
 		serverContext.init();
 		

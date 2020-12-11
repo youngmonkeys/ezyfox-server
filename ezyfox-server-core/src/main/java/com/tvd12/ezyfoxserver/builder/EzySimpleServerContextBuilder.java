@@ -32,6 +32,8 @@ import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzyUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
+import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketUserRemovalQueue;
+import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
@@ -44,6 +46,11 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         implements EzyServerContextBuilder<B> {
 
     protected EzyServer server;
+    protected EzySocketUserRemovalQueue socketUserRemovalQueue;
+    
+    {
+        socketUserRemovalQueue = new EzyBlockingSocketUserRemovalQueue();
+    }
     
     @Override
     public B server(EzyServer server) {
@@ -56,6 +63,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
         context.addZoneContexts(newZoneContexts(context));
+        context.setProperty(EzySocketUserRemovalQueue.class, socketUserRemovalQueue);
         context.init();
         return context;
     }
@@ -89,7 +97,7 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     }
     
     protected EzyUserDelegate newUserDelegate(EzyServerContext context) {
-        return new EzySimpleUserDelegate(context);
+        return new EzySimpleUserDelegate(context, socketUserRemovalQueue);
     }
     
     protected EzyZoneUserManager newZoneUserManager(

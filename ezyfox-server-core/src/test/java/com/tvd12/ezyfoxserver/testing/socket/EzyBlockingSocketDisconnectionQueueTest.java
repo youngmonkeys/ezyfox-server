@@ -11,7 +11,7 @@ public class EzyBlockingSocketDisconnectionQueueTest {
 
     @Test
     public void test() {
-        EzyBlockingSocketDisconnectionQueue queue = EzyBlockingSocketDisconnectionQueue.getInstance();
+        EzyBlockingSocketDisconnectionQueue queue = new EzyBlockingSocketDisconnectionQueue();
         assert queue.isEmpty();
         assert queue.size() == 0;
         

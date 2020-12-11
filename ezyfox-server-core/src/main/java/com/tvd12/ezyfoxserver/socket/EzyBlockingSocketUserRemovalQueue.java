@@ -10,16 +10,11 @@ public class EzyBlockingSocketUserRemovalQueue
         implements EzySocketUserRemovalQueue {
 
 	private final BlockingQueue<EzySocketUserRemoval> queue;
-	private static final EzyBlockingSocketUserRemovalQueue INSTANCE = new EzyBlockingSocketUserRemovalQueue();
 	
-	private EzyBlockingSocketUserRemovalQueue() {
+	public EzyBlockingSocketUserRemovalQueue() {
 	    this.queue = new LinkedBlockingQueue<EzySocketUserRemoval>();
 	}
 	
-	public static EzyBlockingSocketUserRemovalQueue getInstance() {
-	    return INSTANCE;
-	}
-
 	@Override
 	public int size() {
 	    return queue.size();

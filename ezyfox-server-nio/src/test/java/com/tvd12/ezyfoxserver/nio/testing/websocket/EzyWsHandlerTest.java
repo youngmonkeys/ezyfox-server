@@ -48,7 +48,7 @@ public class EzyWsHandlerTest extends BaseTest {
 		ExecutorService codecThreadPool = EzyExecutors.newSingleThreadExecutor("codec");
 		EzySocketRequestQueues requestQueues = new EzySimpleSocketRequestQueues();
 		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
-		EzySocketDisconnectionQueue disconnectionQueue = EzyBlockingSocketDisconnectionQueue.getInstance();
+		EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
 		
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleStreamingSetting streaming = settings.getStreaming();

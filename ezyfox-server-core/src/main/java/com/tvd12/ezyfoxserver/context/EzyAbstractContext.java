@@ -4,10 +4,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyInitable;
+import com.tvd12.ezyfox.util.EzyStoppable;
 import com.tvd12.ezyfoxserver.EzyComponent;
 import com.tvd12.ezyfoxserver.command.EzyAddCommand;
 import com.tvd12.ezyfoxserver.command.EzyAddExceptionHandler;
@@ -27,6 +31,7 @@ public abstract class EzyAbstractContext
     protected EzyComponent component;
 	protected Map<Class, Supplier> commandSuppliers;
 	protected EzyHandleException handleException;
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Override
 	public final void init() {
@@ -66,11 +71,22 @@ public abstract class EzyAbstractContext
 	
 	@Override
 	public void destroy() {
+	    preDestroy();
+	    for(Object property : properties.values()) {
+	        if(property instanceof EzyStoppable)
+	            ((EzyStoppable)property).stop();
+	        if(property instanceof EzyDestroyable)
+	            ((EzyDestroyable)property).destroy();
+	    }
 	    this.properties.clear();
 	    this.commandSuppliers.clear();
 	    this.component = null;
 	    this.commandSuppliers = null;
 	    this.handleException = null;
 	}
+	
+	protected void preDestroy() {}
+	
+	protected void postDestroy() {}
 	
 }

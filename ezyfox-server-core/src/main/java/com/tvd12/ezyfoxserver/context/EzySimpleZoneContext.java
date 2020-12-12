@@ -220,5 +220,10 @@ public class EzySimpleZoneContext
     public int hashCode() {
         return new EzyHashCodes().append(zone).toHashCode();
     }
+    
+    @Override
+    protected void preDestroy() {
+        logger.debug("destroy ZoneContext({})", zone);
+    }
 	
 }

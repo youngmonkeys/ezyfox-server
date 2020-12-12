@@ -97,5 +97,10 @@ public class EzySimplePluginContext
     public int hashCode() {
         return new EzyHashCodes().append(plugin).toHashCode();
     }
-	
+    
+    @Override
+    protected void preDestroy() {
+        logger.debug("destroy PluginContext({})", plugin);
+    }
+    
 }

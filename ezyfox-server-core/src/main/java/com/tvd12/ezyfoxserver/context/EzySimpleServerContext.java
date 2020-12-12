@@ -174,4 +174,13 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	    processWithLogException(() -> ((EzyDestroyable)zoneContext).destroy());
 	}
 	
+	@Override
+	protected void preDestroy() {
+	    logger.debug("destroy ServerContext ...");
+	}
+	
+	@Override
+	protected void postDestroy() {
+	    logger.debug("ServerContext has destroyed");
+	}
 }

@@ -35,5 +35,10 @@ public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyab
     public int hashCode() {
         return new EzyHashCodes().append(setting).toHashCode();
     }
+    
+    @Override
+    public String toString() {
+        return setting.getName() + "(id = " + setting.getId() + ")";
+    }
 
 }

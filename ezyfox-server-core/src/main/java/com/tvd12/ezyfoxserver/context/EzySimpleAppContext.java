@@ -96,5 +96,10 @@ public class EzySimpleAppContext
     public int hashCode() {
         return new EzyHashCodes().append(app).toHashCode();
     }
-	
+    
+    @Override
+    protected void preDestroy() {
+        logger.debug("destroy AppContext({})", app);
+    }
+    
 }

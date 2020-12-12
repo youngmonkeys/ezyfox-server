@@ -49,4 +49,9 @@ public class EzySimpleApplication
         this.userManager = null;
         this.requestController = null;
     }
+    
+    @Override
+    public String toString() {
+        return setting.getName() + "(id = " + setting.getId() + ")";
+    }
 }

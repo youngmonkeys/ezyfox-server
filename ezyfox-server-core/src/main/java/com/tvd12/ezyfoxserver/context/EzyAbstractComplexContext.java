@@ -69,6 +69,7 @@ public abstract class EzyAbstractComplexContext
         super.destroy();
         destroyComponents();
         clearProperties();
+        postDestroy();
     }
     
     protected void clearProperties() {
@@ -78,7 +79,6 @@ public abstract class EzyAbstractComplexContext
         this.pluginContextsById.clear();
     }
     
-    protected void destroyComponents() {
-    }
+    protected void destroyComponents() {}
     
 }

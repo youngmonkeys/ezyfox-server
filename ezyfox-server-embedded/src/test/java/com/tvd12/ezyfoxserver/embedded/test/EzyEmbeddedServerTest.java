@@ -79,6 +79,8 @@ public class EzyEmbeddedServerTest {
 				.configFile("test-config/config.properties")
 				.build();
 		server.start();
+		Thread.sleep(1000);
+		server.stop();
 	}
 	
 	@Test

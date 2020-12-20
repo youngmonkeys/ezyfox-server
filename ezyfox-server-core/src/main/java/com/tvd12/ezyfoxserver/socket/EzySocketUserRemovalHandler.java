@@ -38,7 +38,7 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 			processUserRemoval(removal);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("user-removal-handler thread interrupted: {}", Thread.currentThread());
+			logger.info("user-removal-handler thread interrupted: {}", Thread.currentThread());
 		}
 		catch(Throwable throwable) {
 			logger.warn("problems in user-removal-handler, thread: {}", Thread.currentThread(), throwable);

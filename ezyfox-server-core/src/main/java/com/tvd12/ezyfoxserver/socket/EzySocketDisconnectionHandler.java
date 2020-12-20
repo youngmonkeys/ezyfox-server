@@ -30,7 +30,7 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
 			processDisconnection(disconnection);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("disconnection-handler thread interrupted: {}", Thread.currentThread());
+			logger.info("disconnection-handler thread interrupted: {}", Thread.currentThread());
 		}
 		catch(Throwable throwable) {
 			logger.warn("problems in disconnection-handler, thread: {}", Thread.currentThread(), throwable);

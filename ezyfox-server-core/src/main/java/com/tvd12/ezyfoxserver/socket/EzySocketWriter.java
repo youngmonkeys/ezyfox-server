@@ -31,7 +31,7 @@ public class EzySocketWriter
 			processSessionQueue(session);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("socket-writer thread interrupted: {}", Thread.currentThread());
+			logger.info("socket-writer thread interrupted: {}", Thread.currentThread());
 		}
 		catch(Throwable throwable) {
 			logger.warn("problems in socket-writer, thread: {}", Thread.currentThread(), throwable);

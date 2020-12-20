@@ -50,7 +50,7 @@ public abstract class EzySocketEventLoop
 	
 	protected void destroy0() throws Exception {
 		setActive(false);
-		logger.error("{} stopped", getClass().getSimpleName());
+		threadPool.interrupt();
 	}
 	
 }

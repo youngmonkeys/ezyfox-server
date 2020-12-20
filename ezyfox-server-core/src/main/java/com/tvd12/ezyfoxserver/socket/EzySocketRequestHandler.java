@@ -32,7 +32,7 @@ public abstract class EzySocketRequestHandler
 			processRequestQueue(request);
 		} 
 		catch (InterruptedException e) {
-			logger.warn("{}-request-handler thread interrupted: {}", getRequestType(), Thread.currentThread());
+			logger.info("{}-request-handler thread interrupted: {}", getRequestType(), Thread.currentThread());
 		}
 		catch(Throwable throwable) {
 			logger.warn("problems in {}-request-handler, thread: {}", getRequestType(), Thread.currentThread(), throwable);

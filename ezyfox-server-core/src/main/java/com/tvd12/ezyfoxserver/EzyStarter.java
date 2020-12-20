@@ -65,6 +65,7 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
         serverBoostrap.start();
         serverContext = serverBoostrap.getContext();
+        serverContext.setProperty(EzyServerBootstrap.class, serverBoostrap);
     }
 
     protected EzyServerBootstrap newServerBoostrap(EzyServer server) {

@@ -16,6 +16,10 @@ import com.tvd12.ezyfoxserver.setting.EzyZoneSettingBuilder;
 
 public class EzyEmbeddedServerTest {
 
+	public static void main(String[] args) throws Exception {
+		new EzyEmbeddedServerTest().test();
+	}
+	
 	@Test
 	public void test() throws Exception {
 		EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()

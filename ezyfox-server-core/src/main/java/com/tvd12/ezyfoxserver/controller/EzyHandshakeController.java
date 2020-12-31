@@ -44,10 +44,10 @@ public class EzyHandshakeController
 		session.setClientVersion(params.getClientVersion());
 		boolean enableEncryption = params.isEnableEncryption();
 		if(enableEncryption) {
-        		KeyPair keyPair = newKeyPair();
-        		PublicKey publicKey = keyPair.getPublic();
-        		PrivateKey privateKey = keyPair.getPrivate();
-        		session.setPublicKey(publicKey.getEncoded());
+    		KeyPair keyPair = newKeyPair();
+    		PublicKey publicKey = keyPair.getPublic();
+    		PrivateKey privateKey = keyPair.getPrivate();
+    		session.setPublicKey(publicKey.getEncoded());
             session.setPrivateKey(privateKey.getEncoded());
 		}
 	}

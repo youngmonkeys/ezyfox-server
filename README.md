@@ -4,93 +4,94 @@
 
 # Documentation
 
-[https://tvd12.com/](https://tvd12.com/)
+[https://youngmonkeys.org/ezyfox-sever/](https://youngmonkeys.org/project/ezyfox-sever/)
 
 # Synopsis
 
-Ezyfox server is a socket server. It supports both tcp socket and websocket. It also provides manipulation beans,
-auto binding, auto implementation and more utilities.
+Ezyfox server is a socket server. It supports TCP, UDP and Websocket protocol. It also provides manipulation beans, auto binding, auto implementation and more utilities.
 
 # Code Example
 
 **1. Create an app entry**
 
 ```java
-public class EzyChatEntryLoader extends EzyAbstractAppEntryLoader {
+public static class HelloAppEntry extends EzySimpleAppEntry {
 
-	@Override
-	public EzyAppEntry load() throws Exception {
-		return new EzyChatEntry();
-	}
-	
+    @Override
+    protected String[] getScanableBeanPackages() {
+        return new String[] {
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+        };
+    }
+
+    @Override
+    protected String[] getScanableBindingPackages() {
+        return new String[] {
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+        };
+    }
+    
+    @Override
+    protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
+        return EzyUserRequestAppSingletonController.builder()
+                .beanContext(beanContext)
+                .build();
+    }
+    
 }
 ```
 
-**2. Create bean context**
+**2. Create a plugin entry**
 
 ```java
-private EzyBeanContext createBeanContext(
-			EzyPluginContext context, EzyApply<EzyBeanContextBuilder> applier) {
-    	EzyBindingContext bindingContext = createBindingContext();
-    	EzyMarshaller marshaller = bindingContext.newMarshaller();
-    	EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
-    	EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
-    			.addSingleton("pluginContext", context)
-    			.addSingleton("marshaller", marshaller)
-    			.addSingleton("unmarshaller", unmarshaller)
-    			.scan("vn.team.freechat.plugin")
-    			.scan("vn.team.freechat.common.repo")
-    			.scan("vn.team.freechat.common.service");
-    	
-    	applier.apply(beanContextBuilder);
+public static class HelloPluginEntry extends EzySimplePluginEntry {
 
-		return beanContextBuilder.build();
+    @Override
+    protected String[] getScanableBeanPackages() {
+        return new String[] {
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+        };
+    }
+
 }
 ```
 
-**3. Auto implementation**
+**3. Setup**
 
 ```java
-@EzyAutoImpl
-public interface EzyChatMessageRepo 
-	extends EzyMongoRepository<ObjectId, EzyChatMessage> {
+EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()
+        .name("hello")
+        .addListenEvent(EzyEventType.USER_LOGIN)
+        .entryLoader(HelloPluginEntryLoader.class);
 
-}
+EzyAppSettingBuilder appSettingBuilder = new EzyAppSettingBuilder()
+        .name("hello")
+        .entryLoader(HelloAppEntryLoader.class);
+
+EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
+        .name("hello")
+        .application(appSettingBuilder.build())
+        .plugin(pluginSettingBuilder.build());
+
+EzySimpleSettings settings = new EzySettingsBuilder()
+        .zone(zoneSettingBuilder.build())
+        .build();
 ```
 
-**4. Auto binding**
+**4. Create and start a server**
 
 ```java
-@EzyPrototype(properties = { @EzyKeyValue(key = "type", value = "REQUEST_HANDLER"),
-		@EzyKeyValue(key = "cmd", value = "2") })
-@EzyArrayBinding(indexes = { "message", "receiver" })
-@Setter
-public class EzyChatUserRequestHandler extends EzyClientRequestHandler implements EzyDataBinding {
-
-	private String message;
-	private String receiver;
-
-	@EzyAutoBind
-	private EzyChatMessageRepo ezyChatMessageRepo;
-
-	@EzyAutoBind
-	private EzyResponseFactory responseFactory;
-}
+EzyEmbeddedServer server = EzyEmbeddedServer.builder()
+        .settings(settings)
+        .build();
+server.start();
 ```
 
-**5. Auto serialize**
+You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 
-```java
-@Getter
-@Setter
-@EzyObjectBinding(read = false)
-public class EzyChatError {
-
-	private final int code;
-	private final String message;
-	
-}
-```
+# Used by
+1. [Space Game](https://youngmonkeys.org/asset/space-game/)
+2. [Free Chat](https://youngmonkeys.org/asset/freechat/)
 
 # Motivation
 
@@ -106,8 +107,7 @@ mvn test
 
 # Contributors
 
-- Project development
-  - [DungTV](mailto:itprono3@gmail.com)
+ - [DungTV](mailto:itprono3@gmail.com)
 
 # License
 

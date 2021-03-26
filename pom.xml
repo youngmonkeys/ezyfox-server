@@ -11,14 +11,14 @@
 	<packaging>pom</packaging>
 
 	<name>ezyfox-server</name>
-	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
+	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	<description>
 		EzyFox Server maven project configuration 
 	</description>
 
 	<organization>
 		<name>Young Monkeys</name>
-		<url>http://www.tvd12.com</url>
+		<url>https://youngmonkeys.org/</url>
 	</organization>
 
 	<licenses>
@@ -57,7 +57,7 @@
 			<name>Ta Van Dung</name>
 			<email>itprono3@gmail.com</email>
 			<organization>Young Monkeys</organization>
-			<organizationUrl>http://www.tvd12.com</organizationUrl>
+			<organizationUrl>https://youngmonkeys.org/</organizationUrl>
 		</developer>
 	</developers>
 </project>

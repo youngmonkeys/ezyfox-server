@@ -7,10 +7,10 @@
 		<version>0.0.3</version>
 	</parent>
 	<artifactId>ezyfox-server-boot</artifactId>
-	<version>1.1.4</version> <!-- ${project.version} -->
+	<version>1.1.5</version> <!-- ${project.version} -->
 
 	<name>ezyfox-server-boot</name>
-	<url>http://www.tvd12.com/java/projects/ezyfox-server</url>
+	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
 	<dependencies>
 		<dependency>

@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;

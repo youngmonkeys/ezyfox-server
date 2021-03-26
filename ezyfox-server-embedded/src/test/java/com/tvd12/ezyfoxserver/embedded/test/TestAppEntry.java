@@ -30,5 +30,4 @@ public class TestAppEntry extends EzySimpleAppEntry {
 	protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
 	}
 	
-	
 }

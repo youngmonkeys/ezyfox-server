@@ -10,6 +10,16 @@
 
 Ezyfox server is a socket server. It supports TCP, UDP and Websocket protocol. It also provides manipulation beans, auto binding, auto implementation and more utilities.
 
+# Dependency
+
+```xml
+<dependency>
+    <groupId>com.tvd12</groupId>
+    <artifactId>ezyfox-server-embedded</artifactId>
+    <version>1.1.4</version>
+</dependency>
+```
+
 # Code Example
 
 **1. Create an app entry**

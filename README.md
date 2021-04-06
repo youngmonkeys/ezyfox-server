@@ -24,7 +24,7 @@ Ezyfox Server is a socket server. It supports TCP, UDP and Websocket protocol. I
 
 Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS ram 512MB, CPU 1 core
 
-<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="420" />
+<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
 
 # Code Example
 

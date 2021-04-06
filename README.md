@@ -8,7 +8,7 @@
 
 # Synopsis
 
-Ezyfox server is a socket server. It supports TCP, UDP and Websocket protocol. It also provides manipulation beans, auto binding, auto implementation and more utilities.
+Ezyfox Server is a socket server. It supports TCP, UDP and Websocket protocol. It also provides manipulation beans, auto binding, auto implementation and more utilities.
 
 # Dependency
 
@@ -19,6 +19,12 @@ Ezyfox server is a socket server. It supports TCP, UDP and Websocket protocol. I
     <version>1.1.4</version>
 </dependency>
 ```
+
+# Benchmark
+
+Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS ram 512MB, CPU 1 core
+
+<img src="https://github.com/youngmonkeys/ezyfox-server/images/master/ezyfox_1h.png" width="747" height="420" />
 
 # Code Example
 

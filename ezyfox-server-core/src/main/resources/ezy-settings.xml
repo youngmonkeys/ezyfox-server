@@ -27,7 +27,7 @@
 		<address>0.0.0.0</address>
 		<active>true</active>
 		<tcp-no-delay>true</tcp-no-delay>
-		<max-request-size>65536</max-request-size>
+		<max-request-size>4096</max-request-size>
 		<writer-thread-pool-size>8</writer-thread-pool-size>
 		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
 	</socket>
@@ -46,7 +46,7 @@
 		<address>0.0.0.0</address>
 		<active>true</active>
 		<ssl-port>2812</ssl-port>
-		<max-frame-size>65536</max-frame-size>
+		<max-frame-size>4096</max-frame-size>
 		<writer-thread-pool-size>8</writer-thread-pool-size>
 		<ssl-active>false</ssl-active>
 		<ssl-config>

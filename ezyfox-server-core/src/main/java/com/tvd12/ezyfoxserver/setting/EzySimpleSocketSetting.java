@@ -30,7 +30,7 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
-        setMaxRequestSize(32768);
+        setMaxRequestSize(4096);
         setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }

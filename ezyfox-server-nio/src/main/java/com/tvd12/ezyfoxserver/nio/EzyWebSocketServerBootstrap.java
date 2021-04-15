@@ -43,6 +43,7 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 				.sessionManager(getSessionManager())
 				.handlerGroupManager(handlerGroupManager)
 				.sessionManagementSetting(getSessionManagementSetting())
+				.socketDataReceiver(socketDataReceiver)
 				.create();
 	}
 	

@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
@@ -20,10 +21,16 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 
 public class EzyWebSocketServerCreator {
 
+	protected EzySocketDataReceiver socketDataReceiver;
 	protected EzyWebSocketSetting setting;
 	protected EzyNioSessionManager sessionManager;
 	protected EzyHandlerGroupManager handlerGroupManager;
 	protected EzySessionManagementSetting sessionManagementSetting;
+	
+	public EzyWebSocketServerCreator socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+		this.socketDataReceiver = socketDataReceiver;
+		return this;
+	}
 	
 	public EzyWebSocketServerCreator setting(EzyWebSocketSetting setting) {
 		this.setting = setting;
@@ -75,6 +82,7 @@ public class EzyWebSocketServerCreator {
 				.sessionManager(sessionManager)
 				.handlerGroupManager(handlerGroupManager)
 				.sessionManagementSetting(sessionManagementSetting)
+				.socketDataReceiver(socketDataReceiver)
 				.build();
 	}
 	

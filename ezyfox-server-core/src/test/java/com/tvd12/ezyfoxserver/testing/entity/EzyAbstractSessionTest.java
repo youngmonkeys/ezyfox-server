@@ -105,9 +105,9 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         assert !session.isActivated();
         session.send(mock(EzyPacket.class));
         session.setActivated(true);
-        session.send(mock(EzyPacket.class));
         EzyPacketQueue packetQueue = new EzyNonBlockingPacketQueue(3);
         session.setPacketQueue(packetQueue);
+        session.send(mock(EzyPacket.class));
         assert session.getPacketQueue() != null;
         session.send(mock(EzyPacket.class));
         session.sendNow(mock(EzyPacket.class));

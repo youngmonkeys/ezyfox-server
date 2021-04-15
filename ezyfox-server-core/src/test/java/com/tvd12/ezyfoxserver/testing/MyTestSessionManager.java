@@ -4,6 +4,7 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession> {
@@ -33,6 +34,9 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
         @Override
         protected EzyObjectFactory<MyTestSession> newObjectFactory() {
             return new EzyAbstractSessionFactory<MyTestSession>() {
+            	{
+            		maxRequestPerSecond = new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond();
+            	}
                 @Override
                 protected MyTestSession newSession() {
                     return new MyTestSession();

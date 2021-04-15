@@ -9,8 +9,6 @@ public interface EzySocketRequest extends EzyReleasable {
 
     EzyArray getData();
     
-    long getTimestamp();
-    
     EzyCommand getCommand();
     
     EzySession getSession();

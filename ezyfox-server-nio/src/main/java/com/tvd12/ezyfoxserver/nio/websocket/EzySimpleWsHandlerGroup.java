@@ -54,12 +54,12 @@ public class EzySimpleWsHandlerGroup
 	
 	@SuppressWarnings("unused")
 	private void executeHandleReceivedBytes(String bytes) {
-		codecThreadPool.execute(() -> handleReceivedBytes(bytes));
+		handleReceivedBytes(bytes);
 	}
 	
 	@SuppressWarnings("unused")
 	private void executeHandleReceivedBytes(byte[] bytes) {
-		codecThreadPool.execute(() -> handleReceivedBytes(bytes));
+		handleReceivedBytes(bytes);
 	}
 	
 	private void handleReceivedBytes(String bytes) {

@@ -7,12 +7,10 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import lombok.Setter;
 
-public abstract class EzySocketRequestHandler 
-        extends EzySocketAbstractEventHandler
-        implements EzySocketRequestQueueAware {
+public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHandler {
 
     @Setter
-	protected EzySocketRequestQueue requestQueue;
+	protected EzySessionTicketsQueue sessionTicketsQueue;
     @Setter
     protected EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher;
 	
@@ -23,12 +21,19 @@ public abstract class EzySocketRequestHandler
 	
 	@Override
 	public void destroy() {
-	    processWithLogException(() -> requestQueue.clear());
+	    processWithLogException(() -> sessionTicketsQueue.clear());
 	}
 	
 	private void processRequestQueue0() {
+		EzySocketRequest request = null;
 		try {
-			EzySocketRequest request = requestQueue.take();
+			EzySession session = sessionTicketsQueue.take();
+			EzyRequestQueue requestQueue = getRequestQueue(session);
+			synchronized (requestQueue) {
+				request = requestQueue.take();	
+				if(requestQueue.size() > 0)
+					sessionTicketsQueue.add(session);
+			}
 			processRequestQueue(request);
 		} 
 		catch (InterruptedException e) {
@@ -37,7 +42,13 @@ public abstract class EzySocketRequestHandler
 		catch(Throwable throwable) {
 			logger.warn("problems in {}-request-handler, thread: {}", getRequestType(), Thread.currentThread(), throwable);
 		}
+		finally {
+			if(request != null)
+				request.release();
+		}
 	}
+	
+	protected abstract EzyRequestQueue getRequestQueue(EzySession session);
 	
 	protected abstract String getRequestType();
 	

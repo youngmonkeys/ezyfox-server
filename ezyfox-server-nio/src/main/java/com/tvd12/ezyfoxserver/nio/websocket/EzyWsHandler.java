@@ -12,11 +12,12 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
@@ -24,7 +25,7 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 @WebSocket
 public class EzyWsHandler extends EzyLoggable {
-
+	private final EzySocketDataReceiver socketDataReceiver;
 	private final EzyNioSessionManager sessionManager;
 	private final EzyHandlerGroupManager handlerGroupManager;
 	private final EzySessionManagementSetting sessionManagementSetting;
@@ -34,6 +35,7 @@ public class EzyWsHandler extends EzyLoggable {
 	);
 
 	public EzyWsHandler(Builder builder) {
+		this.socketDataReceiver = builder.socketDataReceiver;
 		this.sessionManager = builder.sessionManager;
 		this.handlerGroupManager = builder.handlerGroupManager;
 		this.sessionManagementSetting = builder.sessionManagementSetting;
@@ -49,9 +51,7 @@ public class EzyWsHandler extends EzyLoggable {
 		if(isIgnoreStatusCode(statusCode)) 
 			return;
 		setChannelClosed(session);
-		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		if(dataHandler != null)
-			dataHandler.enqueueDisconnection();
+		socketDataReceiver.wsCloseConnection(session);
 	}
 	
 	@OnWebSocketError
@@ -79,20 +79,12 @@ public class EzyWsHandler extends EzyLoggable {
 
 	@OnWebSocketMessage
 	public void onMessage(Session session, String message) throws Exception {
-		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		if(dataHandler == null)
-			logger.debug("session: {} disconnected, data handler = null", session.getRemoteAddress());
-		else
-			dataHandler.fireBytesReceived(message);
+		socketDataReceiver.wsReceive(session, message);
 	}
 
 	@OnWebSocketMessage
 	public void onMessage(Session session, byte[] payload, int offset, int len) throws Exception {
-		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		if(dataHandler == null)
-			logger.debug("session: {} disconnected, data handler = null", session.getRemoteAddress());
-		else
-			dataHandler.fireBytesReceived(payload, offset, len);
+		socketDataReceiver.wsReceive(session, payload, offset, len);
 	}
 
 	private void setChannelClosed(Session connection) {
@@ -110,9 +102,15 @@ public class EzyWsHandler extends EzyLoggable {
 
 	public static class Builder implements EzyBuilder<EzyWsHandler> {
 
+		private EzySocketDataReceiver socketDataReceiver;
 		private EzyNioSessionManager sessionManager;
 		private EzyHandlerGroupManager handlerGroupManager;
 		private EzySessionManagementSetting sessionManagementSetting;
+		
+		public Builder socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+			this.socketDataReceiver = socketDataReceiver;
+			return this;
+		}
 
 		public Builder sessionManager(EzyNioSessionManager sessionManager) {
 			this.sessionManager = sessionManager;

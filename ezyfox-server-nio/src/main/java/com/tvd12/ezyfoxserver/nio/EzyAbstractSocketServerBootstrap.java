@@ -6,6 +6,7 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
@@ -16,12 +17,14 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
 	protected EzyServerContext serverContext;
+	protected EzySocketDataReceiver socketDataReceiver;
 	protected EzyHandlerGroupManager handlerGroupManager;
 	protected EzySessionTicketsQueue sessionTicketsQueue;
 	protected EzySocketEventLoopHandler writingLoopHandler;
 
 	public EzyAbstractSocketServerBootstrap(Builder<?,?> builder) {
 		this.serverContext = builder.serverContext;
+		this.socketDataReceiver = builder.socketDataReceiver;
 		this.handlerGroupManager = builder.handlerGroupManager;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
 	}
@@ -49,12 +52,18 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 			implements EzyBuilder<T> {
 
 		protected EzyServerContext serverContext;
+		private EzySocketDataReceiver socketDataReceiver;
 		protected EzyHandlerGroupManager handlerGroupManager;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
 		
 		public B serverContext(EzyServerContext context) {
 			this.serverContext = context;
 			return (B) this;
+		}
+		
+		public B socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+			this.socketDataReceiver = socketDataReceiver;
+			return (B)this;
 		}
 		
 		public B handlerGroupManager(EzyHandlerGroupManager manager) {

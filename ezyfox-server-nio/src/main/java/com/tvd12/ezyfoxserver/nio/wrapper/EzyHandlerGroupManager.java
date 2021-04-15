@@ -21,10 +21,10 @@ public interface EzyHandlerGroupManager
 	
 	<T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type);
 	
-	<T extends EzyHandlerGroup> T getHandlerGroup(SocketAddress udpAddress);
-	
 	void unmapHandlerGroup(SocketAddress udpAddress);
 	
-	void mapHandlerGroup(SocketAddress udpAddress, EzySession session);
+	void mapSocketChannel(SocketAddress udpAddress, EzySession session);
+	
+	Object getSocketChannel(SocketAddress udpAddress);
 	
 }

@@ -40,9 +40,9 @@
 	
 	<xs:complexType name="thread-pool-size-type">
 		<xs:all>
-			<xs:element name="codec" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="statistics" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="stream-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
+			<xs:element name="socket-data-receiver" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="system-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="extension-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="socket-disconnection-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />

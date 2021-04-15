@@ -28,10 +28,9 @@ import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketUserRemovalQueue;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
@@ -47,11 +46,11 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		SSLContext sslContext = SSLContext.getDefault();
 		EzyResponseApi responseApi = mock(EzyResponseApi.class);
 		EzyStreamingApi streamingApi = mock(EzyStreamingApi.class);
-		EzySocketRequestQueues requestQueues = new EzySimpleSocketRequestQueues();
 		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
 		EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
 		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
 		EzySessionTicketsQueue websocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
 		EzySocketDisconnectionQueue socketDisconnectionQueue = new EzySocketDisconnectionQueue() {
 			
 			BlockingQueue<EzySocketDisconnection> queue = new LinkedBlockingQueue<>();
@@ -112,12 +111,12 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		bootstrap.setSslContext(sslContext);
 		bootstrap.setResponseApi(responseApi);
 		bootstrap.setStreamingApi(streamingApi);
-		bootstrap.setRequestQueues(requestQueues);
 		bootstrap.setStreamQueue(streamQueue);
 		bootstrap.setHandlerGroupManager(handlerGroupManager);
 		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
 		bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
 		bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
+		bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
 		bootstrap.start();
 		bootstrap.destroy();
 		bootstrap.destroy();

@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
 import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioUdpDataHandler;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReader;
 import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReadingLoopHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
@@ -30,14 +31,17 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	private EzyNioUdpDataHandler udpDataHandler;
 	private EzySocketEventLoopHandler readingLoopHandler;
 	
-	protected EzyServerContext serverContext;
-	protected EzyHandlerGroupManager handlerGroupManager;
+	private final EzyServerContext serverContext;
+	private final EzySocketDataReceiver socketDataReceiver;
+	private final EzyHandlerGroupManager handlerGroupManager;
 	
 	public EzyUdpServerBootstrap(Builder builder) {
 		this.serverContext = builder.serverContext;
+		this.socketDataReceiver = builder.socketDataReceiver;
 		this.handlerGroupManager = builder.handlerGroupManager;
 		this.udpChannelPool = newChannelPool();
 		this.udpDataHandler = newUdpDataHandler();
+		this.serverContext.setProperty(EzyNioUdpDataHandler.class, udpDataHandler);
 	}
 	
 	@Override
@@ -88,6 +92,7 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 		handler.setResponseApi(getResponseApi());
 		handler.setDatagramChannelPool(udpChannelPool);
 		handler.setSessionManager(getSessionManager());
+		handler.setSocketDataReceiver(socketDataReceiver);
 		handler.setHandlerGroupManager(handlerGroupManager);
 		return handler;
 	}
@@ -139,11 +144,17 @@ public class EzyUdpServerBootstrap implements EzyStartable, EzyDestroyable {
 	
 	public static class Builder implements EzyBuilder<EzyUdpServerBootstrap> {
 
-		protected EzyServerContext serverContext;
-		protected EzyHandlerGroupManager handlerGroupManager;
+		private EzyServerContext serverContext;
+		private EzySocketDataReceiver socketDataReceiver;
+		private EzyHandlerGroupManager handlerGroupManager;
 		
 		public Builder serverContext(EzyServerContext context) {
 			this.serverContext = context;
+			return this;
+		}
+		
+		public Builder socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+			this.socketDataReceiver = socketDataReceiver;
 			return this;
 		}
 		

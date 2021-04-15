@@ -29,8 +29,6 @@ import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.statistics.EzyRequestFrame;
-import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
@@ -55,11 +53,8 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected Set<EzyConstant> unloggableCommands;
     protected EzySessionManagementSetting sessionManagementSetting;
     
-    //===== for measure max request per second =====
-    protected EzyRequestFrame requestFrameInSecond;
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
-    //=====  =====
-
+    
     protected volatile boolean active = true;
     protected volatile boolean destroyed = false;
     protected final Lock lock = new ReentrantLock();
@@ -76,10 +71,8 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         
         this.settings = server.getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
-        this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
-        this.requestFrameInSecond = new EzyRequestFrameSecond(maxRequestPerSecond.getValue());
-        
+        this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
         ((EzyAbstractSession)this.session).setDelegate(this);
     }
     
@@ -132,8 +125,6 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.settings = null;
         this.unloggableCommands = null;
         this.sessionManagementSetting = null;
-        this.requestFrameInSecond = null;
-        this.maxRequestPerSecond = null;
         if(exceptionHandlers != null)
             this.exceptionHandlers.clear();
         this.exceptionHandlers = null;
@@ -158,8 +149,6 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
                 .append("\n\tsettings: ").append(settings)
                 .append("\n\tunloggableCommands: ").append(unloggableCommands)
                 .append("\n\tsessionManagementSetting: ").append(sessionManagementSetting)
-                .append("\n\trequestFrameInSecond: ").append(requestFrameInSecond)
-                .append("\n\tmaxRequestPerSecond: ").append(maxRequestPerSecond)
                 .append("\n\texceptionHandlers: ").append(exceptionHandlers)
                 .append("\n)")
                 .toString();

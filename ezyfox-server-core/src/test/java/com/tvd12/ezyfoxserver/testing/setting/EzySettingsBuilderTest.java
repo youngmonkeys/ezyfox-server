@@ -80,7 +80,7 @@ public class EzySettingsBuilderTest {
                 .build();
         EzySimpleLoggerSetting loggerSetting = new EzySimpleLoggerSetting();
         EzySimpleThreadPoolSizeSetting threadPoolSizeSetting = new EzyThreadPoolSizeSettingBuilder()
-                .codec(1)
+                .socketDataReceiver(1)
                 .extensionRequestHandler(2)
                 .socketDisconnectionHandler(3)
                 .socketUserRemovalHandler(4)
@@ -166,7 +166,7 @@ public class EzySettingsBuilderTest {
         assertEquals(settings.getLogger(), loggerSetting);
         
         threadPoolSizeSetting = settings.getThreadPoolSize();
-        assertEquals(threadPoolSizeSetting.getCodec(), 1);
+        assertEquals(threadPoolSizeSetting.getSocketDataReceiver(), 1);
         assertEquals(threadPoolSizeSetting.getExtensionRequestHandler(), 2);
         assertEquals(threadPoolSizeSetting.getSocketDisconnectionHandler(), 3);
         assertEquals(threadPoolSizeSetting.getSocketUserRemovalHandler(), 4);

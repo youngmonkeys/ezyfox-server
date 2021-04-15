@@ -26,14 +26,14 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.testing.handler.EzySimpleNioHandlerGroupTest.ExEzyByteToObjectDecoder;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyNioSessionManagerImpl;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
-import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
-import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
@@ -59,6 +59,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 		serverContext.init();
 		
 		EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
+				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
 				.tokenGenerator(new EzySimpleSessionTokenGenerator())
 				.build();
 		EzyChannel channel = mock(EzyChannel.class);
@@ -67,9 +68,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 		when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
 		EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
 		ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
-		ExecutorService codecThreadPool = EzyExecutors.newFixedThreadPool(1, "codec");
 		ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
-		EzySocketRequestQueues requestQueues = new EzySimpleSocketRequestQueues();
+		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
 		
 		when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 		
@@ -80,9 +80,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 				.networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
 				.sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
 				.serverContext(serverContext)
-				.codecThreadPool(codecThreadPool)
 				.statsThreadPool(statsThreadPool)
-				.requestQueues(requestQueues)
+				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
 				.build();
 		
 		EzyChannel channelX = mock(EzyChannel.class);
@@ -97,8 +96,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 			.param(EzyChannel.class, channelX)
 			.invoke();
 		
-		requestQueues = mock(EzySocketRequestQueues.class);
-		when(requestQueues.add(any())).thenReturn(false);
+		sessionTicketsRequestQueues = mock(EzySessionTicketsRequestQueues.class);
+		when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
 		group = (ExHandlerGroup) new ExHandlerGroup.Builder()
 				.session(session)
 				.decoder(decoder)
@@ -106,9 +105,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 				.networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
 				.sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
 				.serverContext(serverContext)
-				.codecThreadPool(codecThreadPool)
 				.statsThreadPool(statsThreadPool)
-				.requestQueues(requestQueues)
+				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
 				.build();
 		
 		MethodInvoker.create()

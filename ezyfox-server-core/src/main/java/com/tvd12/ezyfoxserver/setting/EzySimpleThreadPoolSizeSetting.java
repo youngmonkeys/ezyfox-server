@@ -19,14 +19,14 @@ import lombok.ToString;
 @XmlRootElement(name = "thread-pool-size")
 public class EzySimpleThreadPoolSizeSetting implements EzyThreadPoolSizeSetting {
 
-    @XmlElement(name = "codec")
-    protected int codec                      = 3;
-    
     @XmlElement(name = "statistics")
     protected int statistics                 = 1;
     
     @XmlElement(name = "stream-handler")
     protected int streamHandler              = 8;
+    
+    @XmlElement(name = "socket-data-receiver")
+    protected int socketDataReceiver         = 8;
     
     @XmlElement(name = "system-request-handler")
     protected int systemRequestHandler       = 8;
@@ -43,9 +43,9 @@ public class EzySimpleThreadPoolSizeSetting implements EzyThreadPoolSizeSetting 
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
-        map.put("codec", codec);
         map.put("statistics", statistics);
         map.put("streamHandler", streamHandler);
+        map.put("socketDataReceiver", socketDataReceiver);
         map.put("systemRequestHandler", systemRequestHandler);
         map.put("extensionRequestHandler", extensionRequestHandler);
         map.put("socketDisconnectionHandler", socketDisconnectionHandler);

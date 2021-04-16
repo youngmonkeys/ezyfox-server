@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
+import static com.tvd12.ezyfox.util.EzyProcessor.*;
 
 import lombok.Setter;
 
@@ -35,7 +36,7 @@ public class EzyNioSocketAcceptor
 	
 	@Override
 	public void destroy() {
-//		processWithLogException(() -> ownSelector.close());
+		processWithLogException(() -> ownSelector.close());
 	}
 
 	@Override
@@ -108,9 +109,9 @@ public class EzyNioSocketAcceptor
 		
 		EzyChannel channel = new EzyNioSocketChannel(clientChannel);
 		
-		EzyNioHandlerGroup dataHandler = handlerGroupManager
+		EzyNioHandlerGroup handlerGroup = handlerGroupManager
 				.newHandlerGroup(channel, EzyConnectionType.SOCKET);
-		EzyNioSession session = dataHandler.getSession();
+		EzyNioSession session = handlerGroup.getSession();
 
 		SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
 		session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);

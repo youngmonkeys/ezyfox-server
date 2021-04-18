@@ -31,6 +31,7 @@ public class EzySocketRequestHandlerTest {
         when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(handlerGroup);
         
         EzySession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         EzyRequestQueue requestQueue = new EzyNonBlockingRequestQueue();
         when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
         EzyArray array = EzyEntityFactory.newArrayBuilder()
@@ -55,6 +56,7 @@ public class EzySocketRequestHandlerTest {
         when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(handlerGroup);
         
         EzySession session = spy(EzyAbstractSession.class);
+        when(session.isActivated()).thenReturn(Boolean.TRUE);
         EzyRequestQueue requestQueue = new EzyNonBlockingRequestQueue();
         when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
         EzyArray array = EzyEntityFactory.newArrayBuilder()
@@ -77,6 +79,7 @@ public class EzySocketRequestHandlerTest {
         when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenThrow(new IllegalArgumentException());
         
         EzySession session = spy(EzyAbstractSession.class);
+        when(session.isActivated()).thenReturn(Boolean.TRUE);
         EzyRequestQueue requestQueue = new EzyNonBlockingRequestQueue();
         when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
         EzyArray array = EzyEntityFactory.newArrayBuilder()

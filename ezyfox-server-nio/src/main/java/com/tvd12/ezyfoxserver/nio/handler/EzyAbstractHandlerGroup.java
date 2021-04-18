@@ -166,6 +166,10 @@ public abstract class EzyAbstractHandlerGroup
 			logger.debug("request queue of session: {} is full, drop incomming request", session);
 			return;
 		}
+		if(!session.isActivated()) {
+			logger.debug("session: {} maybe destroyed, drop incomming request", session);
+			return;
+		}
 		EzySocketRequest request = newSocketRequest(data);
 		boolean success = sessionTicketsRequestQueues.addRequest(request);
 		if(!success) {

@@ -40,6 +40,7 @@ public class EzySocketWriterTest extends BaseTest {
         packetQueue.add(packet);
         
         EzyAbstractSession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
         session.setPacketQueue(packetQueue);
         sessionTicketsQueue.add(session);
@@ -66,6 +67,7 @@ public class EzySocketWriterTest extends BaseTest {
         EzyPacketQueue packetQueue = new EzyNonBlockingPacketQueue();
 
         EzyAbstractSession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
         session.setPacketQueue(packetQueue);
         sessionTicketsQueue.add(session);
@@ -88,6 +90,7 @@ public class EzySocketWriterTest extends BaseTest {
         EzyPacketQueue packetQueue = null;
 
         EzyAbstractSession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
         session.setPacketQueue(packetQueue);
         sessionTicketsQueue.add(session);
@@ -108,6 +111,7 @@ public class EzySocketWriterTest extends BaseTest {
         socketWriter.setWriterGroupFetcher(writerGroupFetcher);
         
         EzyAbstractSession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
         sessionTicketsQueue.add(session);
 
@@ -130,6 +134,7 @@ public class EzySocketWriterTest extends BaseTest {
         packetQueue.add(packet);
         
         EzyAbstractSession session = spy(EzyAbstractSession.class);
+        session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
         session.setPacketQueue(packetQueue);
         sessionTicketsQueue.add(session);

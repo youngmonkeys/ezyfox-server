@@ -173,14 +173,12 @@ public abstract class EzyAbstractSession
     	boolean empty = false;
         boolean success = false;
         synchronized (packetQueue) {
-            if(activated) {
-                empty = packetQueue.isEmpty();
-                success = packetQueue.add(packet);
-                if(success && empty) {
-                	EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
-                	if(ticketsQueue != null)
-                		sessionTicketsQueue.add(this);
-                }
+        	empty = packetQueue.isEmpty();
+            success = packetQueue.add(packet);
+            if(success && empty) {
+            	EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
+            	if(ticketsQueue != null)
+            		sessionTicketsQueue.add(this);
             }
         }
         if(!success) {
@@ -261,14 +259,18 @@ public abstract class EzyAbstractSession
 	    if(packetQueue != null) {
 		    synchronized (packetQueue) {
 	            this.packetQueue.clear();
-	            if(sessionTicketsQueue != null)
-	                this.sessionTicketsQueue.remove(this);
 	        }
 	    }
-	    if(systemRequestQueue != null)
-	    	systemRequestQueue.clear();
-	    if(extensionRequestQueue != null)
-	    	extensionRequestQueue.clear();
+	    if(systemRequestQueue != null) {
+	    	synchronized (systemRequestQueue) {
+	    		systemRequestQueue.clear();	
+			}
+	    }
+	    if(extensionRequestQueue != null) {
+	    	synchronized (extensionRequestQueue) {
+	    		extensionRequestQueue.clear();	
+			}
+	    }
 	    this.sessionTicketsQueue = null;
 	    this.disconnectionQueue = null;
 	    this.udpClientAddress = null;

@@ -64,7 +64,7 @@ public class EzyHandlerGroupManagerImpl
 			return;
 		if(groupsByConnection.containsKey(connection))
 			socketChannelByUdpAddress.put(udpAddress, connection);
-		logger.debug("map socket channel to: {}, groupsByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
+		logger.debug("map socket channel to: {}, socketChannelByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
 	}
 	
 	@Override

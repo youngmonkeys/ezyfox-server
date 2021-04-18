@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
-import com.tvd12.ezyfoxserver.nio.upd.EzyNioUdpReader;
+import com.tvd12.ezyfoxserver.nio.udp.EzyNioUdpReader;
 
 public class EzyNioUdpReaderTest {
 

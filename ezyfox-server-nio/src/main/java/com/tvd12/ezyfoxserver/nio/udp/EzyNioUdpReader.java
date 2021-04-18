@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.upd;
+package com.tvd12.ezyfoxserver.nio.udp;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 

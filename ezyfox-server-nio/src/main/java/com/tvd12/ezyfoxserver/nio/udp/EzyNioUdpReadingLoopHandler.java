@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.upd;
+package com.tvd12.ezyfoxserver.nio.udp;
 
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 

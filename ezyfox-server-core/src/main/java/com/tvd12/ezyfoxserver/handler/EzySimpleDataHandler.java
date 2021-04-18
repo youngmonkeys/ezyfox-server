@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.handler;
 
-import static com.tvd12.ezyfoxserver.constant.EzyCommand.PING;
 import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
@@ -18,8 +17,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleSessionRemovedEvent;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
-import com.tvd12.ezyfoxserver.request.EzyStreamingRequest;
 import com.tvd12.ezyfoxserver.request.EzyRequest;
+import com.tvd12.ezyfoxserver.request.EzyStreamingRequest;
 
 @SuppressWarnings("unchecked")
 public abstract class EzySimpleDataHandler<S extends EzySession> 
@@ -32,7 +31,6 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
         if(!validateState()) return;
         if(!validateSession()) return;
-        if(cmd != PING && checkMaxRequestPerSecond()) return;
         handleReceivedData(cmd, msg);
     }
     
@@ -50,18 +48,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         return session != null && session.isActivated();
     }
     
-    protected boolean checkMaxRequestPerSecond() {
-        if(requestFrameInSecond.isExpired())
-            requestFrameInSecond = requestFrameInSecond.nextFrame();
-        boolean hasMaxRequest = requestFrameInSecond.addRequests(1);
-        if(hasMaxRequest) { 
-            processMaxRequestPerSecond();
-            return true;
-        }
-        return false;
-    }
-    
-    protected void processMaxRequestPerSecond() {
+    public void processMaxRequestPerSecond() {
         responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
         if(maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             this.active = false;

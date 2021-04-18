@@ -98,7 +98,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 		loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
 		EzyNioSocketReader eventHandler = new EzyNioSocketReader();
 		eventHandler.setOwnSelector(readSelector);
-		eventHandler.setHandlerGroupManager(handlerGroupManager);
+		eventHandler.setSocketDataReceiver(socketDataReceiver);
 		eventHandler.setAcceptableConnectionsHandler(acceptableConnectionsHandler);
 		loopHandler.setEventHandler(eventHandler);
 		return loopHandler;

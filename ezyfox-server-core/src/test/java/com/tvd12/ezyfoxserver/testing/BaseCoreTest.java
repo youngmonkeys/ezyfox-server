@@ -77,16 +77,16 @@ public class BaseCoreTest extends BaseTest {
     protected EzyServer loadEzyFox(EzyConfig config) {
         return new EzyLoader() {
 
-                    @SuppressWarnings({ "rawtypes" })
-                    @Override
-                    protected Builder createSessionManagerBuilder(EzySettings settings) {
-                        return MyTestSessionManager.builder();
-                    }
+            @SuppressWarnings({ "rawtypes" })
+            @Override
+            protected Builder createSessionManagerBuilder(EzySettings settings) {
+                return MyTestSessionManager.builder();
+            }
             
-                }
-                .config(config)
-                .classLoader(getClassLoader())
-                .load();
+        }
+        .config(config)
+        .classLoader(getClassLoader())
+        .load();
     }
     
     protected EzyXmlReader getXmlReader() {

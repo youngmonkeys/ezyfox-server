@@ -10,7 +10,6 @@ import lombok.Getter;
 public class EzySimpleSocketRequest implements EzySocketRequest {
 
     private EzyArray data;
-    private long timestamp;
     private EzyCommand command;
     private boolean systemRequest;
     private EzySession session;
@@ -20,7 +19,6 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
         this.session = session;
         int cmdId = data.get(0, int.class);
         this.command = EzyCommand.valueOf(cmdId);
-        this.timestamp = System.currentTimeMillis();
         this.systemRequest = command.isSystemCommand();
     }
     

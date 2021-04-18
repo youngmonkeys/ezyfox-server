@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.nio.handler;
+ package com.tvd12.ezyfoxserver.nio.handler;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -49,7 +49,7 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	private void executeHandleReceivedMessage(EzyMessage message) {
-		codecThreadPool.execute(() -> handleReceivedMesssage(message));
+		handleReceivedMesssage(message);
 	}
 	
 	private void handleReceivedMesssage(EzyMessage message) {

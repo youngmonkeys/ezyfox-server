@@ -17,19 +17,18 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
-import com.tvd12.ezyfoxserver.entity.EzyDroppedPacketsAware;
 import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
-import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliverAware;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
-import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
@@ -55,13 +54,12 @@ public abstract class EzyAbstractHandlerGroup
 	protected final EzyNetworkStats networkStats;
 	
 	protected final ExecutorService statsThreadPool;
-	protected final ExecutorService codecThreadPool;
 
 	protected final EzyNioSession session;
-	protected final EzySocketRequestQueues requestQueues;
 	protected final EzySocketStreamQueue streamQueue;
 	protected final EzySessionTicketsQueue sessionTicketsQueue;
 	protected final EzySocketDisconnectionQueue disconnectionQueue;
+	protected final EzySessionTicketsRequestQueues sessionTicketsRequestQueues;
 	
 	public EzyAbstractHandlerGroup(Builder builder) {
 		this.session = builder.session;
@@ -69,22 +67,21 @@ public abstract class EzyAbstractHandlerGroup
 		this.sessionStats = builder.sessionStats;
 		this.networkStats = builder.networkStats;
 		this.statsThreadPool = builder.statsThreadPool;
-		this.codecThreadPool = builder.codecThreadPool;
-		this.requestQueues = builder.requestQueues;
 		this.streamQueue = builder.streamQueue;
 		this.streamingEnable = builder.isStreamingEnable();
 		this.disconnectionQueue = builder.disconnectionQueue;
 		this.sessionTicketsQueue = builder.sessionTicketsQueue;
+		this.sessionTicketsRequestQueues = builder.sessionTicketsRequestQueues;
 
 		this.channel = session.getChannel();
 		
 		this.decoder = newDecoder(builder.decoder);
 		this.handler = newDataHandler(builder);
 
-		session.setDisconnectionQueue(disconnectionQueue);
-		session.setSessionTicketsQueue(sessionTicketsQueue);
-		((EzyDroppedPacketsAware)session).setDroppedPackets(this);
-		((EzyImmediateDeliverAware)session).setImmediateDeliver(this);
+		((EzyAbstractSession)session).setDisconnectionQueue(disconnectionQueue);
+		((EzyAbstractSession)session).setSessionTicketsQueue(sessionTicketsQueue);
+		((EzyAbstractSession)session).setDroppedPackets(this);
+		((EzyAbstractSession)session).setImmediateDeliver(this);
 		sessionStats.addSessions(1);
 		sessionStats.setCurrentSessions(sessionCount.incrementAndGet());
 	}
@@ -161,8 +158,20 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	protected final void handleReceivedData(Object data, int dataSize) {
+		boolean hasMaxRequestPerSecond = session.addReceviedRequests(1);
+		if(hasMaxRequestPerSecond) {
+			handler.processMaxRequestPerSecond();
+			networkStats.addDroppedInPackets(1);
+			networkStats.addDroppedInBytes(dataSize);
+			logger.debug("request queue of session: {} is full, drop incomming request", session);
+			return;
+		}
+		if(!session.isActivated()) {
+			logger.debug("session: {} maybe destroyed, drop incomming request", session);
+			return;
+		}
 		EzySocketRequest request = newSocketRequest(data);
-		boolean success = requestQueues.add(request);
+		boolean success = sessionTicketsRequestQueues.addRequest(request);
 		if(!success) {
 			networkStats.addDroppedInPackets(1);
 			networkStats.addDroppedInBytes(dataSize);
@@ -292,15 +301,14 @@ public abstract class EzyAbstractHandlerGroup
 		protected EzyNetworkStats networkStats;
 		
 		protected ExecutorService statsThreadPool;
-		protected ExecutorService codecThreadPool;
 		
 		protected Object decoder;
 		protected EzyNioSession session;
 		protected EzyServerContext serverContext;
-		protected EzySocketRequestQueues requestQueues;
 		protected EzySocketStreamQueue streamQueue;
 		protected EzySessionTicketsQueue sessionTicketsQueue;
 		protected EzySocketDisconnectionQueue disconnectionQueue;
+		protected EzySessionTicketsRequestQueues sessionTicketsRequestQueues;
 		
 		public Builder decoder(Object decoder) {
 			this.decoder = decoder;
@@ -327,11 +335,6 @@ public abstract class EzyAbstractHandlerGroup
 			return this;
 		}
 		
-		public Builder codecThreadPool(ExecutorService codecThreadPool) {
-			this.codecThreadPool = codecThreadPool;
-			return this;
-		}
-		
 		public Builder statsThreadPool(ExecutorService statsThreadPool) {
 			this.statsThreadPool = statsThreadPool;
 			return this;
@@ -339,11 +342,6 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder serverContext(EzyServerContext serverContext) {
 			this.serverContext = serverContext;
-			return this;
-		}
-		
-		public Builder requestQueues(EzySocketRequestQueues requestQueues) {
-			this.requestQueues = requestQueues;
 			return this;
 		}
 		
@@ -359,6 +357,11 @@ public abstract class EzyAbstractHandlerGroup
 		
 		public Builder disconnectionQueue(EzySocketDisconnectionQueue disconnectionQueue) {
 			this.disconnectionQueue = disconnectionQueue;
+			return this;
+		}
+		
+		public Builder sessionTicketsRequestQueues(EzySessionTicketsRequestQueues sessionTicketsRequestQueues) {
+			this.sessionTicketsRequestQueues = sessionTicketsRequestQueues;
 			return this;
 		}
 		

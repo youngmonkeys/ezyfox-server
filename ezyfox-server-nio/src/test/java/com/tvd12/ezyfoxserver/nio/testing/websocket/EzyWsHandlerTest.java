@@ -14,6 +14,7 @@ import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
@@ -27,9 +28,8 @@ import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySimpleSocketRequestQueues;
+import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketRequestQueues;
 import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
@@ -41,14 +41,14 @@ public class EzyWsHandlerTest extends BaseTest {
 	public void test() throws Exception {
 		EzySimpleSessionManagementSetting sessionManagementSetting = new EzySimpleSessionManagementSetting();
 		EzyNioSessionManager sessionManager = (EzyNioSessionManager)EzyNioSessionManagerImpl.builder()
+				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
 				.tokenGenerator(new EzySimpleSessionTokenGenerator())
 				.build();
 		EzyCodecFactory codecFactory = mock(EzyCodecFactory.class);
 		ExecutorService statsThreadPool = EzyExecutors.newSingleThreadExecutor("stats");
-		ExecutorService codecThreadPool = EzyExecutors.newSingleThreadExecutor("codec");
-		EzySocketRequestQueues requestQueues = new EzySimpleSocketRequestQueues();
 		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
 		EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
+		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
 		
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleStreamingSetting streaming = settings.getStreaming();
@@ -65,25 +65,30 @@ public class EzyWsHandlerTest extends BaseTest {
 		EzyStatistics statistics = new EzySimpleStatistics();
 		EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
 				.statistics(statistics)
-				.socketSessionTicketsQueue(socketSessionTicketsQueue)
-				.webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-				.build();
-		
-		EzyHandlerGroupManager handlerGroupManager = EzyHandlerGroupManagerImpl.builder()
 				.statsThreadPool(statsThreadPool)
-				.codecThreadPool(codecThreadPool)
 				.streamQueue(streamQueue)
-				.requestQueues(requestQueues)
 				.disconnectionQueue(disconnectionQueue)
 				.codecFactory(codecFactory)
 				.serverContext(serverContext)
+				.socketSessionTicketsQueue(socketSessionTicketsQueue)
+				.webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+				.build();
+		
+		EzyHandlerGroupManager handlerGroupManager = EzyHandlerGroupManagerImpl.builder()
 				.handlerGroupBuilderFactory(handlerGroupBuilderFactory)
+				.build();
+		
+		EzySocketDataReceiver socketDataReceiver = EzySocketDataReceiver.builder()
+				.threadPoolSize(1)
+				.handlerGroupManager(handlerGroupManager)
 				.build();
 				
 		EzyWsHandler handler = EzyWsHandler.builder()
 				.sessionManagementSetting(sessionManagementSetting)
 				.sessionManager(sessionManager)
 				.handlerGroupManager(handlerGroupManager)
+				.socketDataReceiver(socketDataReceiver)
 				.build();
 		
 		Session session = mock(Session.class);

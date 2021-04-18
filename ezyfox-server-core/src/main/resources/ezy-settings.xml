@@ -9,9 +9,9 @@
 	<max-sessions>30000</max-sessions>
 	
 	<thread-pool-size>
-		<codec>3</codec>
 		<statistics>1</statistics>
 		<stream-handler>8</stream-handler>
+		<socket-data-receiver>8</socket-data-receiver>
 		<system-request-handler>8</system-request-handler>
 		<extension-request-handler>8</extension-request-handler>
 		<socket-disconnection-handler>2</socket-disconnection-handler>

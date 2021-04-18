@@ -11,8 +11,6 @@ import java.util.concurrent.locks.Lock;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.function.EzyFunctions;
-import com.tvd12.ezyfox.util.EzyEquals;
-import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyNameAware;
 import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
@@ -134,16 +132,20 @@ public class EzySimpleUser
 	}
 	
 	@Override
-    public boolean equals(Object obj) {
-	    return new EzyEquals<EzySimpleUser>()
-	            .function(c -> c.id)
-	            .isEquals(this, obj);
-    }
-    
-    @Override
-    public int hashCode() {
-        return new EzyHashCodes().append(id).toHashCode();
-    }
+	public boolean equals(Object obj) {
+		if(obj == null)
+			return false;
+		if(obj == this)
+			return true;
+		if(obj instanceof EzySimpleUser)
+			return id == ((EzySimpleUser)obj).id;
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+	    return Long.hashCode(id);
+	}
     
     @Override
     public String toString() {

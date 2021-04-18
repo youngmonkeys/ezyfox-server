@@ -3,7 +3,10 @@ package com.tvd12.ezyfoxserver.nio.handler;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
+
+import org.eclipse.jetty.websocket.api.Session;
 
 import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfox.codec.EzyMessageHeader;
@@ -15,12 +18,13 @@ import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfox.io.EzyInts;
 import com.tvd12.ezyfox.io.EzyLongs;
 import com.tvd12.ezyfox.net.EzySocketAddresses;
+import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
@@ -41,7 +45,8 @@ public class EzySimpleNioUdpDataHandler
 			EzyNioUdpDataHandler, 
 			EzySessionManagerAware,
 			EzyHandlerGroupManagerAware,
-			EzyDatagramChannelPoolAware {
+			EzyDatagramChannelPoolAware,
+			EzyDestroyable {
 
 	@Setter
 	protected EzyResponseApi responseApi;
@@ -50,7 +55,9 @@ public class EzySimpleNioUdpDataHandler
 	@Setter
 	protected EzyHandlerGroupManager handlerGroupManager;
 	@Setter
-	protected EzyDatagramChannelPool datagramChannelPool; 
+	protected EzyDatagramChannelPool datagramChannelPool;
+	@Setter
+	protected EzySocketDataReceiver socketDataReceiver;
 	
 	protected final ExecutorService executorService;
 	
@@ -70,12 +77,13 @@ public class EzySimpleNioUdpDataHandler
 			if(message == null)
 				return;
 			InetSocketAddress udpAddress = packet.getAddress();
-			EzyNioHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(udpAddress);
-			if(handlerGroup != null) {
-				EzyNioSession session = handlerGroup.getSession();
-				SocketAddress tcpAddress = session.getClientAddress();
+			Object socketChannel = handlerGroupManager.getSocketChannel(udpAddress);
+			if(socketChannel != null) {
+				SocketAddress tcpAddress = (socketChannel instanceof SocketChannel)
+					? ((SocketChannel)socketChannel).getRemoteAddress()
+					: ((Session)socketChannel).getRemoteAddress();
 				if(isOneClient(tcpAddress, udpAddress))
-					handlerGroup.fireMessageReceived(message);
+					socketDataReceiver.udpReceive(socketChannel, message);
 			}
 			else {
 				EzyMessageHeader header = message.getHeader();
@@ -111,7 +119,7 @@ public class EzySimpleNioUdpDataHandler
 			responseCode = 200;
 			SocketAddress oldUdpAddress = session.getUdpClientAddress();
 			handlerGroupManager.unmapHandlerGroup(oldUdpAddress);
-			handlerGroupManager.mapHandlerGroup(address, session);
+			handlerGroupManager.mapSocketChannel(address, session);
 			((EzyDatagramChannelAware)session).setDatagramChannel(channel);
 			((EzyUdpClientAddressAware)session).setUdpClientAddress(address);
 			((EzyDatagramChannelPoolAware)session).setDatagramChannelPool(datagramChannelPool);
@@ -138,6 +146,11 @@ public class EzySimpleNioUdpDataHandler
 		String udpHost = EzySocketAddresses.getHost(udpAddress);
 		boolean answer = tcpHost.equals(udpHost);
 		return answer;
+	}
+	
+	@Override
+	public void destroy() {
+		this.executorService.shutdownNow();
 	}
 	
 }

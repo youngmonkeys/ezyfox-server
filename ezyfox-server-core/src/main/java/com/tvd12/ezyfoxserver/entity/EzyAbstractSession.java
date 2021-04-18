@@ -9,8 +9,6 @@ import java.util.concurrent.locks.Lock;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.function.EzyFunctions;
-import com.tvd12.ezyfox.util.EzyEquals;
-import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
@@ -19,11 +17,13 @@ import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
+import com.tvd12.ezyfoxserver.statistics.EzyRequestFrame;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -82,11 +82,15 @@ public abstract class EzyAbstractSession
 	protected long maxIdleTime     = 3 * 60 * 1000;
 	
 	protected EzyChannel channel;
-	protected EzyPacketQueue packetQueue;
 	protected EzyDroppedPackets droppedPackets;
 	protected EzyImmediateDeliver immediateDeliver;
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzySocketDisconnectionQueue disconnectionQueue;
+
+    protected EzyPacketQueue packetQueue;
+    protected EzyRequestQueue systemRequestQueue;
+    protected EzyRequestQueue extensionRequestQueue;
+    protected EzyRequestFrame requestFrameInSecond;
 	
 	protected transient EzySessionDelegate delegate;
 	
@@ -118,6 +122,13 @@ public abstract class EzyAbstractSession
 	}
 	
 	@Override
+	public boolean addReceviedRequests(int requests) {
+		if(requestFrameInSecond.isExpired())
+            requestFrameInSecond = requestFrameInSecond.nextFrame();
+        return requestFrameInSecond.addRequests(1);
+	}
+	
+	@Override
 	public void addWrittenResponses(int responses) {
 	    this.writtenResponses += responses;
 	}
@@ -146,8 +157,8 @@ public abstract class EzyAbstractSession
 	@Override
 	public final void send(EzyPacket packet) {
 	    if(activated) {
-        	    addWrittenResponses(1);
-        	    setLastWriteTime(System.currentTimeMillis());
+    	    addWrittenResponses(1);
+    	    setLastWriteTime(System.currentTimeMillis());
             setLastActivityTime(System.currentTimeMillis());
             addPacketToSessionQueue(packet);
 	    }
@@ -159,24 +170,22 @@ public abstract class EzyAbstractSession
 	}
 	
     private void addPacketToSessionQueue(EzyPacket packet) {
-        EzyPacketQueue packetQueueNow = packetQueue;
-        if(packetQueueNow != null) {
-            boolean empty = false;
-            boolean success = false;
-            synchronized (packetQueueNow) {
-                if(activated) {
-                    empty = packetQueueNow.isEmpty();
-                    success = packetQueueNow.add(packet);
-                    if(success && empty)
-                        sessionTicketsQueue.add(this);
-                }
+    	boolean empty = false;
+        boolean success = false;
+        synchronized (packetQueue) {
+        	empty = packetQueue.isEmpty();
+            success = packetQueue.add(packet);
+            if(success && empty) {
+            	EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
+            	if(ticketsQueue != null)
+            		sessionTicketsQueue.add(this);
             }
-            if(!success) {
-                EzyDroppedPackets droppedPacketsNow = droppedPackets;
-                if(droppedPacketsNow != null)
-                    droppedPackets.addDroppedPacket(packet);
-                packet.release();
-            }
+        }
+        if(!success) {
+            EzyDroppedPackets droppedPacketsNow = droppedPackets;
+            if(droppedPacketsNow != null)
+                droppedPackets.addDroppedPacket(packet);
+            packet.release();
         }
     }
     
@@ -185,7 +194,9 @@ public abstract class EzyAbstractSession
         synchronized (disconnectionLock) {
             if(!disconnectionRegistered) {
                 this.disconnectReason = disconnectReason;
-                this.disconnectionQueue.add(newDisconnection(disconnectReason));
+                EzySocketDisconnectionQueue queue = this.disconnectionQueue;
+                if(queue != null)
+                	queue.add(newDisconnection(disconnectReason));
                 this.disconnectionRegistered = true;
             }
         } 
@@ -246,13 +257,20 @@ public abstract class EzyAbstractSession
 	    this.droppedPackets = null;
 	    this.immediateDeliver = null;
 	    if(packetQueue != null) {
-            synchronized (packetQueue) {
-                this.packetQueue.clear();
-                if(sessionTicketsQueue != null)
-                    this.sessionTicketsQueue.remove(this);
-            }
-        }
-	    this.packetQueue = null;
+		    synchronized (packetQueue) {
+	            this.packetQueue.clear();
+	        }
+	    }
+	    if(systemRequestQueue != null) {
+	    	synchronized (systemRequestQueue) {
+	    		systemRequestQueue.clear();	
+			}
+	    }
+	    if(extensionRequestQueue != null) {
+	    	synchronized (extensionRequestQueue) {
+	    		extensionRequestQueue.clear();	
+			}
+	    }
 	    this.sessionTicketsQueue = null;
 	    this.disconnectionQueue = null;
 	    this.udpClientAddress = null;
@@ -261,14 +279,18 @@ public abstract class EzyAbstractSession
 	
 	@Override
 	public boolean equals(Object obj) {
-	    return new EzyEquals<EzyAbstractSession>()
-	            .function(c -> c.id)
-	            .isEquals(this, obj);
+		if(obj == null)
+			return false;
+		if(obj == this)
+			return true;
+		if(obj instanceof EzyAbstractSession)
+			return id == ((EzyAbstractSession)obj).id;
+		return false;
 	}
 	
 	@Override
 	public int hashCode() {
-	    return new EzyHashCodes().append(id).toHashCode();
+	    return Long.hashCode(id);
 	}
 	
 	@Override

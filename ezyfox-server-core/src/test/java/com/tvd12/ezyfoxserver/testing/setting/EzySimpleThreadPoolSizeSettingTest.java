@@ -9,8 +9,8 @@ public class EzySimpleThreadPoolSizeSettingTest {
     @Test
     public void test() {
         EzySimpleThreadPoolSizeSetting setting = new EzySimpleThreadPoolSizeSetting();
-        setting.setCodec(1);
-        assert setting.getCodec() == 1;
+        setting.setSocketDataReceiver(1);
+        assert setting.getSocketDataReceiver() == 1;
         setting.setStatistics(2);
         assert setting.getStatistics() == 2;
         setting.setStreamHandler(3);

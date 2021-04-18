@@ -13,8 +13,7 @@ import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
+import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
 
 public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
 
@@ -236,6 +235,14 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	 * @param requests number of read requests
 	 */
 	void addReadRequests(int requests);
+	
+	/**
+	 * add received requests
+	 * 
+	 * @param requests number of received requests
+	 * @return max request per second or not
+	 */
+	boolean addReceviedRequests(int requests);
 
 	/**
 	 * Get written responses
@@ -395,6 +402,20 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     EzyPacketQueue getPacketQueue();
     
     /**
+     * Get system request queue
+     * 
+     * @return the system request queue
+     */
+    EzyRequestQueue getSystemRequestQueue();
+    
+    /**
+     * Get extension request queue
+     * 
+     * @return the extension request queue
+     */
+    EzyRequestQueue getExtensionRequestQueue();
+    
+    /**
      * Get udp client address
      * 
      * @return the udp client address
@@ -414,20 +435,6 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @return the datagram channel pool
      */
     EzyDatagramChannelPool getDatagramChannelPool();
-    
-    /**
-     * set session tickets queue
-     * 
-     * @param queue the queue
-     */
-    void setSessionTicketsQueue(EzySessionTicketsQueue queue);
-    
-    /**
-     * set disconnection queue
-     * 
-     * @param queue the disconnection queue
-     */
-    void setDisconnectionQueue(EzySocketDisconnectionQueue queue);
     
     /**
      * disconnect

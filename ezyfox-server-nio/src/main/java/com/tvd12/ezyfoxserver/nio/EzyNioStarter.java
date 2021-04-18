@@ -21,7 +21,8 @@ public class EzyNioStarter extends EzyStarter {
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	protected EzySimpleSessionManager.Builder newSessionManagerBuilder(EzySettings settings) {
-		return EzyNioSessionManagerImpl.builder();
+		return EzyNioSessionManagerImpl.builder()
+				.maxRequestPerSecond(settings.getSessionManagement().getSessionMaxRequestPerSecond());
 	}
 
 	public static Builder builder() {

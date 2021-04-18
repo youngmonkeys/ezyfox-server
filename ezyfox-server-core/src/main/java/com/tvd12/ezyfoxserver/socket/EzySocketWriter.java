@@ -40,9 +40,9 @@ public class EzySocketWriter
 	
 	private void processSessionQueue(EzySession session) throws Exception {
 	    EzySocketWriterGroup group = getWriterGroup(session);
-		if(group == null) return;
+		if(group == null) 
+			return;
 		EzyPacketQueue queue = session.getPacketQueue();
-		if(queue == null) return;
 		synchronized (queue) {
 		    boolean emptyQueue = processSessionQueue(group, queue);
 	        if(!emptyQueue) { 

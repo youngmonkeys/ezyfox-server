@@ -1,19 +1,17 @@
 package com.tvd12.ezyfoxserver.socket;
 
-public interface EzySocketRequestQueue {
+public interface EzyRequestQueue {
 
     int size();
     
 	void clear();
 	
+	EzySocketRequest take();
+	
 	boolean isFull();
 	
 	boolean isEmpty();
-	
+
 	boolean add(EzySocketRequest request);
-	
-	void remove(EzySocketRequest request);
-	
-	EzySocketRequest take() throws InterruptedException;
 	
 }

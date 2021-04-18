@@ -36,16 +36,15 @@ public class EzyBlockingSessionTicketsQueue
 		return result;
 	}
 	
-	@Override
-	public void remove(EzySession session) {
-	    queue.remove(session);
-	}
-	
 	@SuppressWarnings("unchecked")
     @Override
 	public <T extends EzySession> T take() throws InterruptedException {
-		T session = (T) queue.take();
-		return session;
+		while(true) {
+			T session = (T) queue.take();
+			if(session.isActivated())
+				return session;
+			logger.debug("session: {} maybe destroyed");
+		}
 	}
 	
 }

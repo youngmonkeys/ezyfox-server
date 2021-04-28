@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.embedded.test.plugin;
 
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
-import com.tvd12.ezyfox.core.annotation.EzyServerEventHandler;
+import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfoxserver.constant.EzyEventNames;
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
@@ -10,7 +10,7 @@ import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 
 @EzySingleton
-@EzyServerEventHandler(EzyEventNames.USER_LOGIN)
+@EzyEventHandler(EzyEventNames.USER_LOGIN)
 public class HelloUserLoginController 
 		extends EzyAbstractPluginEventController<EzyUserLoginEvent> {
 

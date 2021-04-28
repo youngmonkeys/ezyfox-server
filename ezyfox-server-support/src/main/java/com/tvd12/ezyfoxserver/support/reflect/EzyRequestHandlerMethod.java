@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.support.reflect;
 
-import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
-import com.tvd12.ezyfox.core.util.EzyRequestHandleAnnotations;
+import com.tvd12.ezyfox.core.annotation.EzyDoHandle;
+import com.tvd12.ezyfox.core.util.EzyDoHandleAnnotations;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
@@ -18,8 +18,8 @@ public class EzyRequestHandlerMethod extends EzyHandlerMethod {
 	}
 	
 	protected String fetchCommand(String group) {
-		String methodCommand = EzyRequestHandleAnnotations
-				.getCommand(method.getAnnotation(EzyRequestHandle.class));
+		String methodCommand = EzyDoHandleAnnotations
+				.getCommand(method.getAnnotation(EzyDoHandle.class));
 		if(EzyStrings.isNoContent(group))
 			return methodCommand;
 		return group + "/" + methodCommand;

@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.support.test.controller.plugin;
 
-import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
+import com.tvd12.ezyfox.core.annotation.EzyDoHandle;
+import com.tvd12.ezyfox.core.annotation.EzyRequestController;
 import com.tvd12.ezyfox.core.annotation.EzyRequestData;
-import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
 import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
@@ -11,10 +11,10 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 import com.tvd12.ezyfoxserver.support.test.exception.RequestException4;
 
-@EzyClientRequestController("plugin")
+@EzyRequestController("plugin")
 public class PluginClientHelloRequestController {
 
-	@EzyRequestHandle("c_hello")
+	@EzyDoHandle("c_hello")
 	public void handleHello(
 			EzyPluginContext context,
 			@EzyRequestData Hello data,
@@ -22,7 +22,7 @@ public class PluginClientHelloRequestController {
 		System.out.println("plugin: c_hello: " + data.getWho());
 	}
 	
-	@EzyRequestHandle("requestException4")
+	@EzyDoHandle("requestException4")
 	public void handleRequestException4(
 			EzyContext context, 
 			String cmd, 

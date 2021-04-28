@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.support.test.entry;
 
 import com.tvd12.ezyfox.bean.annotation.EzyPrototype;
-import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.annotation.EzyRequestListener;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Setter
 @EzyPrototype
-@EzyClientRequestListener("exception")
+@EzyRequestListener("exception")
 public class ClientExceptionRequestHandler
 		extends EzyLoggable
 		implements 

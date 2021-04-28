@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tvd12.ezyfox.core.annotation.EzyRequestHandle;
+import com.tvd12.ezyfox.core.annotation.EzyDoHandle;
 import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
-import com.tvd12.ezyfox.core.util.EzyClientRequestControllerAnnotations;
+import com.tvd12.ezyfox.core.util.EzyRequestControllerAnnotations;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
@@ -33,7 +33,7 @@ public class EzyRequestControllerProxy {
 	}
 	
 	protected String getCommandGroup() {
-		String uri = EzyClientRequestControllerAnnotations.getGroup(clazz.getClazz());
+		String uri = EzyRequestControllerAnnotations.getGroup(clazz.getClazz());
 		return uri;
 	}
 	
@@ -67,7 +67,7 @@ public class EzyRequestControllerProxy {
 	}
 	
 	protected boolean isRequestHandlerMethod(EzyMethod method) {
-		return method.isAnnotated(EzyRequestHandle.class);
+		return method.isAnnotated(EzyDoHandle.class);
 	}
 	
 	public String getControllerName() {

@@ -10,9 +10,9 @@ import com.tvd12.ezyfox.bean.EzyPrototypeSupplier;
 import com.tvd12.ezyfox.binding.EzyDataBinding;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.core.annotation.EzyClientRequestListener;
+import com.tvd12.ezyfox.core.annotation.EzyRequestListener;
 import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
-import com.tvd12.ezyfox.core.util.EzyClientRequestListenerAnnotations;
+import com.tvd12.ezyfox.core.util.EzyRequestListenerAnnotations;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.function.EzyHandler;
@@ -102,8 +102,8 @@ public abstract class EzyUserRequestPrototypeController<
 			Map<String, EzyPrototypeSupplier> handlers = new HashMap<>();
 			for(EzyPrototypeSupplier supplier : suppliers) {
 				Class<?> handleType = supplier.getObjectType();
-				EzyClientRequestListener annotation = handleType.getAnnotation(EzyClientRequestListener.class);
-				String command = EzyClientRequestListenerAnnotations.getCommand(annotation);
+				EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
+				String command = EzyRequestListenerAnnotations.getCommand(annotation);
 				handlers.put(command, supplier);
 				logger.debug("add command {} and request handler supplier {}", command, supplier);
 			}
@@ -111,7 +111,7 @@ public abstract class EzyUserRequestPrototypeController<
 		}
 		
 		private List<EzyPrototypeSupplier> filterSuppliers() {
-			return prototypeFactory.getSuppliers(EzyClientRequestListener.class);
+			return prototypeFactory.getSuppliers(EzyRequestListener.class);
 		}
 	}
 }

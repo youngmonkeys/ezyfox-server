@@ -12,11 +12,11 @@ import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
-import com.tvd12.ezyfox.core.annotation.EzyClientRequestController;
-import com.tvd12.ezyfox.core.annotation.EzyClientRequestInterceptor;
+import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfox.core.annotation.EzyExceptionHandler;
-import com.tvd12.ezyfox.core.annotation.EzyServerEventHandler;
-import com.tvd12.ezyfox.core.util.EzyServerEventHandlerAnnotations;
+import com.tvd12.ezyfox.core.annotation.EzyRequestController;
+import com.tvd12.ezyfox.core.annotation.EzyRequestInterceptor;
+import com.tvd12.ezyfox.core.util.EzyEventHandlerAnnotations;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
@@ -48,11 +48,11 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	
 	private void addEventControllers(EzyPluginContext context, EzyBeanContext beanContext) {
 		EzySetup setup = context.get(EzySetup.class);
-		List<Object> eventControllers = beanContext.getSingletons(EzyServerEventHandler.class);
+		List<Object> eventControllers = beanContext.getSingletons(EzyEventHandler.class);
 		for(Object controller : eventControllers) {
 			Class<?> handlerType = controller.getClass();
-			EzyServerEventHandler annotation = handlerType.getAnnotation(EzyServerEventHandler.class);
-			String eventName = EzyServerEventHandlerAnnotations.getEvent(annotation);
+			EzyEventHandler annotation = handlerType.getAnnotation(EzyEventHandler.class);
+			String eventName = EzyEventHandlerAnnotations.getEvent(annotation);
 			setup.addEventController(EzyEventType.valueOf(eventName), (EzyEventController) controller);
 			logger.info("add  event {} controller {}", eventName, controller);
 		}
@@ -92,11 +92,11 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		if(scanablePackages.length > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(Arrays.asList(scanablePackages));
 			beanContextBuilder.addSingletonClasses(
-					(Set)reflection.getAnnotatedClasses(EzyClientRequestController.class));
+					(Set)reflection.getAnnotatedClasses(EzyRequestController.class));
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyExceptionHandler.class));
 			beanContextBuilder.addSingletonClasses(
-					(Set)reflection.getAnnotatedClasses(EzyClientRequestInterceptor.class));
+					(Set)reflection.getAnnotatedClasses(EzyRequestInterceptor.class));
 			beanContextBuilder.addAllClasses(reflection);
 		}
 		setupBeanContext(context, beanContextBuilder);

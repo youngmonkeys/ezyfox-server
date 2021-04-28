@@ -9,8 +9,10 @@ import com.tvd12.ezyfoxserver.setting.EzyPluginSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySettingsBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
+import com.tvd12.ezyfoxserver.setting.EzySimpleUdpSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
 import com.tvd12.ezyfoxserver.setting.EzySocketSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyUdpSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSettingBuilder;
 
@@ -35,8 +37,13 @@ public class EzyEmbeddedServerTest {
 				.application(appSettingBuilder.build())
 				.plugin(pluginSettingBuilder.build());
 		
+		EzySimpleUdpSetting udpSetting = new EzyUdpSettingBuilder()
+				.active(true)
+				.build();
+		
 		EzySimpleSettings settings = new EzySettingsBuilder()
 				.zone(zoneSettingBuilder.build())
+				.udp(udpSetting)
 				.build();
 		
 		EzyEmbeddedServer server = EzyEmbeddedServer.builder()

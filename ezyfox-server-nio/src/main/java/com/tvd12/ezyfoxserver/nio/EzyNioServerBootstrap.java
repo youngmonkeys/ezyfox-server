@@ -250,6 +250,8 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 			processWithLogException(() -> socketServerBootstrap.destroy());
 		if(websocketServerBootstrap != null)
 			processWithLogException(() -> websocketServerBootstrap.destroy());
+		if(udpServerBootstrap != null)
+			processWithLogException(() -> udpServerBootstrap.destroy());
 		if(socketDataReceiver != null)
 			processWithLogException(() -> socketDataReceiver.destroy());
 		if(handlerGroupManager != null)

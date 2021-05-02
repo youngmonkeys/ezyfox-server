@@ -28,6 +28,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginPrototypeController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
@@ -74,6 +75,7 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     	EzyBindingContext bindingContext = createBindingContext();
     	EzyMarshaller marshaller = bindingContext.newMarshaller();
     	EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
+    	EzyResponseFactory pluginResponseFactory = createPluginResponseFactory(context, marshaller);
     	ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
     	EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
     			.addSingleton("pluginContext", context)
@@ -81,9 +83,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     			.addSingleton("unmarshaller", unmarshaller)
     			.addSingleton("executorService", executorService)
     			.addSingleton("zoneContext", context.getParent())
-			.addSingleton("serverContext", context.getParent().getParent());
-		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
-		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
+    			.addSingleton("serverContext", context.getParent().getParent())
+    			.addSingleton("pluginResponseFactory", pluginResponseFactory);
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);
 		Class[] prototypeClasses = getPrototypeClasses();
@@ -112,11 +113,13 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		return answer;
 	}
     
-    protected Class[] getDefaultSingletonClasses() {
-    		return new Class[] {
-    				EzyPluginResponseFactory.class
-    		};
-    }
+    private EzyResponseFactory createPluginResponseFactory(
+			EzyPluginContext pluginContext, EzyMarshaller marshaller) {
+		EzyPluginResponseFactory factory = new EzyPluginResponseFactory();
+		factory.setPluginContext(pluginContext);
+		factory.setMarshaller(marshaller);
+		return factory;
+	}
 
     protected Class[] getSingletonClasses() {
 		return new Class[0];

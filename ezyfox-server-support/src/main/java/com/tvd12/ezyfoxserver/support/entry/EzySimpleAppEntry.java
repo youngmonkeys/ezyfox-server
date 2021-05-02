@@ -28,6 +28,7 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppPrototypeController;
 import com.tvd12.ezyfoxserver.support.factory.EzyAppResponseFactory;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
@@ -74,6 +75,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		EzyBindingContext bindingContext = createBindingContext();
 		EzyMarshaller marshaller = bindingContext.newMarshaller();
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
+		EzyResponseFactory appResponseFactory = createAppResponseFactory(context, marshaller);
 		ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
 		EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
 				.addSingleton("appContext", context)
@@ -82,9 +84,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 				.addSingleton("executorService", executorService)
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
-				.addSingleton("userManager", context.getApp().getUserManager());
-		Class[] defaultSingletonClasses = getDefaultSingletonClasses();
-		beanContextBuilder.addSingletonClasses(defaultSingletonClasses);
+				.addSingleton("userManager", context.getApp().getUserManager())
+				.addSingleton("appResponseFactory", appResponseFactory);
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);
 		Class[] prototypeClasses = getPrototypeClasses();
@@ -113,10 +114,12 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		return answer;
 	}
 	
-	protected final Class[] getDefaultSingletonClasses() {
-		return new Class[] {
-				EzyAppResponseFactory.class
-		};
+	private EzyResponseFactory createAppResponseFactory(
+			EzyAppContext appContext, EzyMarshaller marshaller) {
+		EzyAppResponseFactory factory = new EzyAppResponseFactory();
+		factory.setAppContext(appContext);
+		factory.setMarshaller(marshaller);
+		return factory;
 	}
 	
 	protected Class[] getSingletonClasses() {

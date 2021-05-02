@@ -2,14 +2,13 @@ package com.tvd12.ezyfoxserver.embedded;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfox.util.EzyStoppable;
 import com.tvd12.ezyfoxserver.EzyRunner;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 
-public class EzyEmbeddedServer implements EzyStartable, EzyStoppable {
+public class EzyEmbeddedServer implements EzyStoppable {
 
 	protected final EzyConfig config;
 	protected final String configFile;
@@ -22,14 +21,14 @@ public class EzyEmbeddedServer implements EzyStartable, EzyStoppable {
 		this.configFile = builder.configFile;
 	}
 	
-	@Override
-	public void start() throws Exception {
+	public EzyServerContext start() throws Exception {
 		EzyRunner runner = EzyEmbeddedRunner.builder()
 				.config(config)
 				.settings(settings)
 				.build();
 		runner.run(new String[] {configFile});
 		serverContext = runner.getServerContext();
+		return serverContext;
 	}
 	
 	@Override

@@ -55,11 +55,11 @@ public class EzyZonesStarter extends EzyComponentsStater {
     protected void startAllApps(EzyZoneContext zoneContext) {
         logger.info("start all apps ...");
         EzyServer server = serverContext.getServer();
-        EzyAppsStarter.Builder appClassLoaders = newAppsStarterBuilder()
+        EzyAppsStarter.Builder appsStarterBuilder = newAppsStarterBuilder()
                 .classLoader(server.getClassLoader())
                 .appClassLoaders(getAppClassLoaders())
                 .enableAppClassLoader(server.getConfig().isEnableAppClassLoader());
-        startComponents(appClassLoaders, zoneContext);
+        startComponents(appsStarterBuilder, zoneContext);
     }
     
     protected EzyAppsStarter.Builder newAppsStarterBuilder() {

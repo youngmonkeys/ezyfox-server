@@ -14,7 +14,7 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
 	
 	String getPassword();
 	
-	EzyData getData();
+	<T extends EzyData> T getData();
 	
 	Map<Object, Object> getUserProperties();
 	

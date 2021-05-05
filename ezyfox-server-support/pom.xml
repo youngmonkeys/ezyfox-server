@@ -7,14 +7,14 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>ezyfox-server-support</artifactId>
-	<version>1.1.5</version> <!-- ${project.version} -->
+	<version>1.1.6</version> <!-- ${project.version} -->
 	<name>ezyfox-server-support</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
 	<properties>
 		<ezy.core.version>2.1.0</ezy.core.version>
-		<ezy.bean.version>1.1.5</ezy.bean.version>
-		<ezy.binding.version>1.1.5</ezy.binding.version>
+		<ezy.bean.version>1.1.6</ezy.bean.version>
+		<ezy.binding.version>1.1.6</ezy.binding.version>
 	</properties>
 	
 	<dependencies>

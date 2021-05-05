@@ -8,13 +8,13 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>ezyfox-server-nio</artifactId>
-	<version>1.1.5</version> <!-- ${project.version} -->
+	<version>1.1.6</version> <!-- ${project.version} -->
 
 	<name>ezyfox-server-nio</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 
 	<properties>
-		<jetty.version>9.4.39.v20210325</jetty.version>
+		<jetty.version>9.4.40.v20210413</jetty.version>
 	</properties>
 
 	<dependencies>

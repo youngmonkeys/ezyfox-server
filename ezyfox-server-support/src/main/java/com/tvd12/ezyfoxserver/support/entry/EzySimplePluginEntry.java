@@ -93,6 +93,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		if(scanablePackages.length > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(Arrays.asList(scanablePackages));
 			beanContextBuilder.addSingletonClasses(
+					(Set)reflection.getAnnotatedClasses(EzyEventHandler.class));
+			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyRequestController.class));
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyExceptionHandler.class));

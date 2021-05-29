@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
@@ -89,9 +90,10 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		beanContextBuilder.addSingletonClasses(singletonClasses);
 		Class[] prototypeClasses = getPrototypeClasses();
 		beanContextBuilder.addPrototypeClasses(prototypeClasses);
-		String[] scanablePackages = getScanableBeanPackages();
-		if(scanablePackages.length > 0) {
-			EzyReflection reflection = new EzyReflectionProxy(Arrays.asList(scanablePackages));
+		
+		Set<String> scanablePackages = internalGetScanableBeanPackages();
+		if(scanablePackages.size() > 0) {
+			EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyEventHandler.class));
 			beanContextBuilder.addSingletonClasses(
@@ -108,8 +110,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     
     protected EzyBindingContext createBindingContext() {
 		EzyBindingContextBuilder builder = EzyBindingContext.builder();
-		String[] scanablePackages = getScanableBindingPackages();
-		if(scanablePackages.length > 0)
+		Set<String> scanablePackages = internalGetScanableBindingPackages();
+		if(scanablePackages.size() > 0)
 			builder.scan(scanablePackages);
 		EzySimpleBindingContext answer = builder.build();
 		return answer;
@@ -131,11 +133,30 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     	return new Class[0];
     }
     
-    protected String[] getScanableBindingPackages() {
-    		return new String[0];
-    }
-    
-	protected abstract String[] getScanableBeanPackages();
+    protected String[] getScanablePackages() {
+		return new String[0];
+	}
+	
+	protected String[] getScanableBeanPackages() {
+		return new String[0];
+	}
+	protected String[] getScanableBindingPackages() {
+		return new String[0];
+	}
+	
+	private Set<String> internalGetScanableBeanPackages() {
+		Set<String> scanablePackages = new HashSet<String>();
+		scanablePackages.addAll(Arrays.asList(getScanablePackages()));
+		scanablePackages.addAll(Arrays.asList(getScanableBeanPackages()));
+		return scanablePackages;
+	}
+	
+	private Set<String> internalGetScanableBindingPackages() {
+		Set<String> scanablePackages = new HashSet<String>();
+		scanablePackages.addAll(Arrays.asList(getScanablePackages()));
+		scanablePackages.addAll(Arrays.asList(getScanableBindingPackages()));
+		return scanablePackages;
+	}
 	
 	protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {}
     

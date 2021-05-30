@@ -15,8 +15,8 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
 		implements EzyResponse<T>, EzyDestroyable {
 
 	protected Object data;
-	
-    protected com.tvd12.ezyfoxserver.command.EzyResponse response;
+
+	protected com.tvd12.ezyfoxserver.command.EzyResponse response;
     
     protected EzyContext context;
     protected EzyMarshaller marshaller;
@@ -25,6 +25,11 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
         this.context = context;
         this.marshaller = marshaller;
         this.response = newResponse();
+    }
+    
+    public T encrypted() {
+    	this.response.encrypted();
+    	return (T)this;
     }
     
 	public T command(String command) {
@@ -37,7 +42,7 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
         this.data = data;
         return (T) this;
     }
-
+	
     public T user(EzyUser user, boolean exclude) {
         this.response.user(user, exclude);
         return (T) this;

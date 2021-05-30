@@ -9,17 +9,19 @@ import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class EzySimplePackage implements EzyPackage {
     
-    @Getter
-    @Setter
     protected EzyArray data;
-    @Getter
-    @Setter
+    protected boolean encrypted;
     protected EzyConstant transportType = EzyTransportType.TCP;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     protected EzyHashMapList<EzyConstant, EzySession> recipients = new EzyHashMapList<>();
     
     public void addRecipients(Collection<EzySession> recipients) {

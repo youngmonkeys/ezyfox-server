@@ -62,6 +62,7 @@ public abstract class EzyAbstractSession
 	protected byte[] privateKey;
 	protected byte[] publicKey;
 	protected byte[] clientKey;
+	protected byte[] sessionKey;
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;

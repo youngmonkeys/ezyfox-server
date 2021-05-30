@@ -64,8 +64,8 @@ public class EzySimpleZoneContextTest extends BaseTest {
         
         EzyResponse response = mock(EzyResponse.class);
         EzySession recipient = spy(EzyAbstractSession.class);
-        context.send(response, recipient);
-        context.send(response, Lists.newArrayList(recipient));
+        context.send(response, recipient, false);
+        context.send(response, Lists.newArrayList(recipient), false);
         context.stream(new byte[0], recipient);
         context.stream(new byte[0], Lists.newArrayList(recipient));
         

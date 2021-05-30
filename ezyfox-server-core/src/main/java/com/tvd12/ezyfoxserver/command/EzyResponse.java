@@ -7,6 +7,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public interface EzyResponse extends EzyVoidCommand {
+	
+	EzyResponse encrypted();
     
     EzyResponse command(String command);
     

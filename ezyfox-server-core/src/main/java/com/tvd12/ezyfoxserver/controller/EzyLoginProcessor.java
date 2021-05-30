@@ -83,7 +83,7 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         }
         fireUserAddedEvent(zoneContext, user, session, event.getData(), alreadyLoggedIn);
         EzyResponse response = newLoginReponse(zoneContext, user, event.getOutput());
-        serverContext.send(response, session);
+        serverContext.send(response, session, false);
     }
     
     protected String checkUsername(

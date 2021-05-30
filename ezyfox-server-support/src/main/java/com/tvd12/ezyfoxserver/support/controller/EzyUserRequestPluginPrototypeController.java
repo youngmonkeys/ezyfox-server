@@ -27,7 +27,7 @@ public class EzyUserRequestPluginPrototypeController
 	protected void responseError(
 			EzyPluginContext context, 
 			EzyUserRequestPluginEvent event, EzyData errorData) {
-		context.send(errorData, event.getSession());
+		context.send(errorData, event.getSession(), false);
 	}
 	
 	public static Builder builder() {

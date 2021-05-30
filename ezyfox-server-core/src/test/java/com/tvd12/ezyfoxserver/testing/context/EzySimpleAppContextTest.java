@@ -54,10 +54,10 @@ public class EzySimpleAppContextTest extends BaseTest {
         
         EzyData data = EzyEntityFactory.newArrayBuilder()
                 .build();
-        appContext.send(data, session);
-        appContext.send(data, Lists.newArrayList(session));
-        appContext.send(data, user);
-        appContext.send(data, Lists.newArrayList(user));
+        appContext.send(data, session, false);
+        appContext.send(data, Lists.newArrayList(session), false);
+        appContext.send(data, user, false);
+        appContext.send(data, Lists.newArrayList(user), false);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         appContext.setExecutorService(executorService);

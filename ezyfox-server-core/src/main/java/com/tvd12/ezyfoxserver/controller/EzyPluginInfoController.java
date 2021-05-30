@@ -25,7 +25,7 @@ public class EzyPluginInfoController
 	    if(pluginCtx != null) {
     	    EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
     	    EzyResponse response = newPluginInfoResponse(setting);
-    	    ctx.send(response, session);
+    	    ctx.send(response, session, false);
 	    }
 	}
 	

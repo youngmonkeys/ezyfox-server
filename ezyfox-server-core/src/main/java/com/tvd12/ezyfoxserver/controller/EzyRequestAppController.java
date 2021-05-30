@@ -63,6 +63,6 @@ public class EzyRequestAppController
     protected void responseRequestAppError(
             EzyServerContext ctx, EzySession session, EzyIRequestAppError error) {
         EzyResponse response = newRequestAppErrorReponse(error);
-        ctx.send(response, session);
+        ctx.send(response, session, false);
     }
 }

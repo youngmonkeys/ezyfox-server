@@ -11,6 +11,8 @@ public interface EzyPackage extends EzyReleasable {
 
     EzyArray getData();
     
+    boolean isEncrypted();
+    
     EzyConstant getTransportType();
     
     Collection<EzySession> getRecipients(EzyConstant connectionType);

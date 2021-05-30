@@ -46,10 +46,10 @@ public class EzySimplePluginContextTest extends BaseTest {
         
         EzyData data = EzyEntityFactory.newArrayBuilder()
                 .build();
-        pluginContext.send(data, session);
-        pluginContext.send(data, Lists.newArrayList(session));
-        pluginContext.send(data, user);
-        pluginContext.send(data, Lists.newArrayList(user));
+        pluginContext.send(data, session, false);
+        pluginContext.send(data, Lists.newArrayList(session), false);
+        pluginContext.send(data, user, false);
+        pluginContext.send(data, Lists.newArrayList(user), false);
     }
     
 }

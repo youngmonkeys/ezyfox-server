@@ -4,13 +4,13 @@ public interface EzyHandshakeParams extends EzyRequestParams {
 
     String getClientId();
     
-    String getClientKey();
+    byte[] getClientKey();
     
     String getClientType();
     
     String getClientVersion();
     
-    String getToken();
+    String getReconnectToken();
     
     boolean isEnableEncryption();
     

@@ -15,42 +15,46 @@ public interface EzyZoneChildContext extends EzyContext {
     
     void send(
             EzyData data, 
-            EzySession recipient, EzyTransportType transportType);
+            EzySession recipient,
+            boolean encrypted, EzyTransportType transportType);
     
     void send(
             EzyData data, 
-            Collection<EzySession> recipients, EzyTransportType transportType);
+            Collection<EzySession> recipients, 
+            boolean encrypted, EzyTransportType transportType);
     
     default void send(
             EzyData data, 
-            EzyUser recipient, EzyTransportType transportType) {
-        send(data, recipient.getSessions(), transportType);
+            EzyUser recipient, 
+            boolean encrypted, EzyTransportType transportType) {
+        send(data, recipient.getSessions(), encrypted, transportType);
     }
     
     default void send(
             EzyData data, 
-            Iterable<EzyUser> recipients, EzyTransportType transportType) {
+            Iterable<EzyUser> recipients, 
+            boolean encrypted, EzyTransportType transportType) {
         Set<EzySession> sessions = new HashSet<>();
         for(EzyUser user : recipients)
             sessions.addAll(user.getSessions());
-        send(data, sessions, transportType);
+        send(data, sessions, encrypted, transportType);
     }
     
     // ======================= tcp/send =================
-    default void send(EzyData data, EzySession recipient) {
-        send(data, recipient, EzyTransportType.TCP);
+    default void send(EzyData data, EzySession recipient, boolean encrypted) {
+        send(data, recipient, encrypted, EzyTransportType.TCP);
     }
     
-    default void send(EzyData data, Collection<EzySession> recipients) {
-        send(data, recipients, EzyTransportType.TCP);
+    default void send(EzyData data, Collection<EzySession> recipients, boolean encrypted) {
+        send(data, recipients, encrypted, EzyTransportType.TCP);
     }
     
-    default void send(EzyData data, EzyUser recipient) {
-        send(data, recipient, EzyTransportType.TCP);
+    default void send(EzyData data, EzyUser recipient, boolean encrypted) {
+        send(data, recipient, encrypted, EzyTransportType.TCP);
     }
     
-    default void send(EzyData data, Iterable<EzyUser> recipients) {
-        send(data, recipients, EzyTransportType.TCP);
+    default void send(EzyData data, Iterable<EzyUser> recipients, boolean encrypted) {
+        send(data, recipients, encrypted, EzyTransportType.TCP);
     }
     
 }

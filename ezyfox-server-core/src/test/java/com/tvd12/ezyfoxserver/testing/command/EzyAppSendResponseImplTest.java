@@ -38,8 +38,8 @@ public class EzyAppSendResponseImplTest extends BaseTest {
                 .build();
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         
-        cmd.execute(data, session);
-        cmd.execute(data, Lists.newArrayList(session));
+        cmd.execute(data, session, false);
+        cmd.execute(data, Lists.newArrayList(session), false);
     }
     
 }

@@ -169,6 +169,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="SERVER_INITIALIZING" />
 					<xs:enumeration value="SERVER_READY" />
+					<xs:enumeration value="USER_HANDSHAKE" />
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:list>

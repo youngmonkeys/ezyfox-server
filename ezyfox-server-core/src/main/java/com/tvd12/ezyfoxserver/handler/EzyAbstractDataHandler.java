@@ -83,7 +83,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     
     protected void response(EzyResponse response) {
         if(context != null)
-            context.send(response, session);
+            context.send(response, session, false);
     }
     
     protected void responseError(EzyIError error) {

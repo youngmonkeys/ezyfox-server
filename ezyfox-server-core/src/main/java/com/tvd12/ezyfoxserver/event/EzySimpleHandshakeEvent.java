@@ -10,12 +10,12 @@ public class EzySimpleHandshakeEvent
 		extends EzySimpleSessionEvent 
 		implements EzyHandshakeEvent {
 
-	protected String clientId;
-	protected byte[] clientKey;
-	protected String clientType;
-	protected String clientVersion;
-	protected String reconnectToken;
-	protected boolean enableEncryption;
+	protected final String clientId;
+	protected final byte[] clientKey;
+	protected final String clientType;
+	protected final String clientVersion;
+	protected final String reconnectToken;
+	protected final boolean enableEncryption;
 	@Setter
 	protected byte[] sessionKey;
 	@Setter

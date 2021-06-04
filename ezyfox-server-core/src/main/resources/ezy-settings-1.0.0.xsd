@@ -61,6 +61,7 @@
 			<xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+			<xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
 			<xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
 			<xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
 			<xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0" />
@@ -169,7 +170,6 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="SERVER_INITIALIZING" />
 					<xs:enumeration value="SERVER_READY" />
-					<xs:enumeration value="USER_HANDSHAKE" />
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:list>

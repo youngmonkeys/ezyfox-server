@@ -5,6 +5,7 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
 
     protected int maxRequestSize;
     protected boolean tcpNoDelay;
+    protected boolean sslActive;
     protected int writerThreadPoolSize;
     
     public EzySocketSettingBuilder() {
@@ -24,6 +25,11 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         return this;
     }
     
+    public EzySocketSettingBuilder sslActive(boolean sslActive) {
+        this.sslActive = sslActive;
+        return this;
+    }
+    
     public EzySocketSettingBuilder writerThreadPoolSize(int writerThreadPoolSize) {
         this.writerThreadPoolSize = writerThreadPoolSize;
         return this;
@@ -33,6 +39,7 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     protected EzySimpleSocketSetting newSetting() {
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setTcpNoDelay(tcpNoDelay);
+        setting.setSslActive(sslActive);
         setting.setMaxRequestSize(maxRequestSize);
         setting.setWriterThreadPoolSize(writerThreadPoolSize);
         setting.setCodecCreator(codecCreator);

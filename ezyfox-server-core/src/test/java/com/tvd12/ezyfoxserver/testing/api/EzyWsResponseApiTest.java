@@ -34,7 +34,7 @@ public class EzyWsResponseApiTest {
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
         
-        int sessionCount = RandomUtil.randomSmallInt();
+        int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
         	EzySession session = mock(EzySession.class);
         	when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);

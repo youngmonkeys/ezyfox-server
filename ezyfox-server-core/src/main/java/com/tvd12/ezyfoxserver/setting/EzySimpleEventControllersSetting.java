@@ -25,10 +25,6 @@ public class EzySimpleEventControllersSetting implements EzyEventControllersSett
     
     @XmlElement(name = "event-controller")
     public void setItem(EzySimpleEventControllerSetting item) {
-    	for(EzyEventControllerSetting existed : eventControllers) {
-    		if(existed.getEventType().equals(item.getEventType()))
-    			return;
-    	}
     	eventControllers.add(item);
     }
     

@@ -25,16 +25,18 @@ public class EzySocketResponseApiTest {
 	@Test
 	public void normalResponseTest() throws Exception {
 		// given
+		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
 		EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+		byte[] bytes = RandomUtil.randomShortByteArray();
+		when(encoder.encode(data)).thenReturn(bytes);
 		EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
 		
-		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
 		EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(false);
         pack.setTransportType(EzyTransportType.TCP);
         
-        int sessionCount = RandomUtil.randomSmallInt();
+        int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
         	EzySession session = mock(EzySession.class);
         	when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
@@ -56,16 +58,18 @@ public class EzySocketResponseApiTest {
 	@Test
 	public void secureResponseTest() throws Exception {
 		// given
+		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+		byte[] bytes = RandomUtil.randomShortByteArray();
 		EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+		when(encoder.toMessageContent(data)).thenReturn(bytes);
 		EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
 		
-		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
 		EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
         
-        int sessionCount = RandomUtil.randomSmallInt();
+        int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
         	EzySession session = mock(EzySession.class);
         	when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
@@ -85,16 +89,18 @@ public class EzySocketResponseApiTest {
 	@Test
 	public void secureResponseImmediateTest() throws Exception {
 		// given
+		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+		byte[] bytes = RandomUtil.randomShortByteArray();
 		EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+		when(encoder.toMessageContent(data)).thenReturn(bytes);
 		EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
 		
-		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
 		EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
         
-        int sessionCount = RandomUtil.randomSmallInt();
+        int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
         	EzySession session = mock(EzySession.class);
         	when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);

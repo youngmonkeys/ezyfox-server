@@ -46,7 +46,7 @@ public class EzySimpleAppUserDelegate
     protected void responseUserRemoved(EzyUser user, EzyConstant reason) {
         EzyResponse response = newExitedAppResponse(reason);
         EzyZoneContext zoneContext = appContext.getParent();
-        zoneContext.send(response, user);
+        zoneContext.send(response, user, false);
     }
     
     protected EzyResponse newExitedAppResponse(EzyConstant reason) {

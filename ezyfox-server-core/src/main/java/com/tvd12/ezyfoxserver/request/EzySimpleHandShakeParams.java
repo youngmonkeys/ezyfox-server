@@ -10,21 +10,21 @@ public class EzySimpleHandShakeParams
         implements EzyHandshakeParams {
     private static final long serialVersionUID = 8042927639638762414L;
     
-    protected String token;
     protected String clientId;
-    protected String clientKey;
+    protected byte[] clientKey;
     protected String clientType;
     protected String clientVersion;
+    protected String reconnectToken;
     protected boolean enableEncryption;
     
     @Override
     public void deserialize(EzyArray t) {
         this.clientId = t.get(0, String.class);
-        this.clientKey = t.get(1, String.class);
+        this.clientKey = t.get(1, byte[].class);
         this.clientType = t.get(2, String.class);
         this.clientVersion = t.get(3, String.class);
         this.enableEncryption = t.get(4, boolean.class);
-        this.token = t.get(5, String.class);
+        this.reconnectToken = t.get(5, String.class);
     }
     
 }

@@ -42,7 +42,7 @@ public class EzyCloseSessionImpl
 	
 	protected void sendToClients0(EzySession session, EzyConstant reason) {
 	    EzyResponse response = newResponse(reason);
-	    context.send(response, session, true);
+	    context.send(response, session, false, true);
 	}
 	
 	protected EzyResponse newResponse(EzyConstant reason) {

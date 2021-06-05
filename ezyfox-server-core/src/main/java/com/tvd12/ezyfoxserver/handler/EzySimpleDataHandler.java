@@ -71,7 +71,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
             EzyStreamingController controller = controllers.getStreamingController();
             controller.handle(zoneContext, request);
         }
-        catch(Exception e) {
+        catch(Throwable e) {
             context.handleException(Thread.currentThread(), e);
         }
         finally {

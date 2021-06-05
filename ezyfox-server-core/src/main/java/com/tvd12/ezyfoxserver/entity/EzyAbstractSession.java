@@ -62,6 +62,7 @@ public abstract class EzyAbstractSession
 	protected byte[] privateKey;
 	protected byte[] publicKey;
 	protected byte[] clientKey;
+	protected byte[] sessionKey;
 	
 	protected volatile boolean loggedIn;
     protected volatile boolean activated;
@@ -125,7 +126,7 @@ public abstract class EzyAbstractSession
 	public boolean addReceviedRequests(int requests) {
 		if(requestFrameInSecond.isExpired())
             requestFrameInSecond = requestFrameInSecond.nextFrame();
-        return requestFrameInSecond.addRequests(1);
+        return requestFrameInSecond.addRequests(requests);
 	}
 	
 	@Override

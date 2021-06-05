@@ -1,10 +1,17 @@
 package com.tvd12.ezyfoxserver.testing.handler;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.HashSet;
+
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
@@ -598,6 +605,46 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
             .param(EzyConstant.class, EzyDisconnectReason.ADMIN_BAN)
             .invoke();
         
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+    public void processMaxRequestPerSecondDisconnect() {
+    	// given
+    	EzySession session = spy(EzyAbstractSession.class);
+    	EzyServerContext serverContext = mock(EzyServerContext.class);
+    	EzyServer server = mock(EzyServer.class);
+    	EzySessionManager sessionManager = mock(EzySessionManager.class);
+    	when(server.getSessionManager()).thenReturn(sessionManager);
+    	when(serverContext.getServer()).thenReturn(server);
+    	
+    	
+    	EzySessionManagementSetting sessionManagementSetting = 
+    			mock(EzySessionManagementSetting.class);
+    	EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
+    			mock(EzySessionManagementSetting.EzyMaxRequestPerSecond.class);
+    	when(maxRequestPerSecond.getAction()).thenReturn(EzyMaxRequestPerSecondAction.DISCONNECT_SESSION);
+    	when(sessionManagementSetting.getSessionMaxRequestPerSecond())
+    		.thenReturn(maxRequestPerSecond);
+    	
+    	EzySettings settings = mock(EzySettings.class);
+    	when(server.getSettings()).thenReturn(settings);
+    	when(settings.getSessionManagement()).thenReturn(sessionManagementSetting);
+    	
+    	EzyLoggerSetting loggerSetting = mock(EzyLoggerSetting.class);
+    	EzyLoggerSetting.EzyIgnoredCommandsSetting ignoredCommandsSetting =
+    			mock(EzyLoggerSetting.EzyIgnoredCommandsSetting.class);
+    	when(ignoredCommandsSetting.getCommands()).thenReturn(Collections.emptySet());
+    	when(loggerSetting.getIgnoredCommands()).thenReturn(ignoredCommandsSetting);
+    	when(settings.getLogger()).thenReturn(loggerSetting);
+    	
+    	MyTestDataHandler sut = new MyTestDataHandler(serverContext, session);
+    	
+    	// when
+    	sut.processMaxRequestPerSecond();
+    	
+    	// then
+    	verify(sessionManager, times(1)).removeSession(session, EzyDisconnectReason.MAX_REQUEST_PER_SECOND);;
     }
     
     public static class MyTestDataHandler extends EzySimpleDataHandler<EzySession> {

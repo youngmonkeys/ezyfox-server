@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
@@ -54,10 +53,7 @@ public class EzySimpleAppContextTest extends BaseTest {
         
         EzyData data = EzyEntityFactory.newArrayBuilder()
                 .build();
-        appContext.send(data, session);
-        appContext.send(data, Lists.newArrayList(session));
-        appContext.send(data, user);
-        appContext.send(data, Lists.newArrayList(user));
+        appContext.send(data, session, false);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         appContext.setExecutorService(executorService);

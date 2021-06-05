@@ -27,7 +27,7 @@ public class EzyUserRequestAppPrototypeController
 	protected void responseError(
 			EzyAppContext context, 
 			EzyUserRequestAppEvent event, EzyData errorData) {
-		context.send(errorData, event.getSession());
+		context.send(errorData, event.getSession(), false);
 	}
 	
 	public static Builder builder() {

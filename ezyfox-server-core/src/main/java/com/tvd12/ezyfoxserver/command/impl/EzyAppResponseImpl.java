@@ -22,7 +22,7 @@ public class EzyAppResponseImpl
     
     @Override
     protected void sendData(EzyData data, EzyTransportType transportType) {
-        context.send(data, recipients, transportType);
+        context.send(data, recipients, encrypted, transportType);
     }
     
 }

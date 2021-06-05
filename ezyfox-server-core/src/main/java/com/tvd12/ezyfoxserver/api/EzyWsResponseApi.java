@@ -18,6 +18,11 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
 	}
 	
 	@Override
+	public void response(EzyPackage pack, boolean immediate) throws Exception {
+		normalResponse(pack, immediate);
+	}
+	
+	@Override
 	protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
 	    EzySimplePacket packet = super.createPacket(bytes, pack);
 	    packet.setBinary(false);

@@ -66,7 +66,7 @@ public class EzyAccessAppController
             
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
-            ctx.send(accessAppResponse, session);
+            ctx.send(accessAppResponse, session, false);
         }
         finally {
             lock.unlock();
@@ -114,7 +114,7 @@ public class EzyAccessAppController
 	protected void responseAccessAppError(
 	        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
 	    EzyResponse response = newAccessAppErrorReponse(exception.getError());
-	    ctx.send(response, session);
+	    ctx.send(response, session, false);
     }
     
 }

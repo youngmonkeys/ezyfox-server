@@ -30,8 +30,8 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, recipient);
-        cmd.execute(response, Lists.newArrayList(recipient));
+        cmd.execute(response, recipient, false);
+        cmd.execute(response, Lists.newArrayList(recipient), false);
     }
     
     @Test
@@ -46,8 +46,8 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, Lists.newArrayList(recipient));
-        cmd.execute(response, Lists.newArrayList(recipient), true);
+        cmd.execute(response, Lists.newArrayList(recipient), false);
+        cmd.execute(response, Lists.newArrayList(recipient), false, true);
     }
     
     @Test
@@ -62,8 +62,8 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, recipient);
-        cmd.execute(response, recipient, true);
+        cmd.execute(response, recipient, false);
+        cmd.execute(response, recipient, false, true);
     }
     
 }

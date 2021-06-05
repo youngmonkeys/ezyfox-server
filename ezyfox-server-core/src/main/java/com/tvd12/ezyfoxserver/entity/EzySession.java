@@ -53,6 +53,22 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 	 */
 	void setClientKey(byte[] key);
 	
+	/**
+	 * 
+	 * Set session key
+	 * 
+	 * @param key the session key
+	 */
+	void setSessionKey(byte[] key);
+	
+	
+	/**
+	 * Get session key to encrypt data send to client
+	 * 
+	 * @return the session key
+	 */
+	byte[] getSessionKey();
+	
 
 	/**
 	 * Get client type

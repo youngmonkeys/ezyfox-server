@@ -33,7 +33,7 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         request.deserializeParams(data);
         request.setSession(session);
         EzyHandshakeParams requestParams = request.getParams();
-        assertEquals(first.getToken(), requestParams.getToken());
+        assertEquals(first.getToken(), requestParams.getReconnectToken());
         EzyHandshakeController controller = new EzyHandshakeController();
         controller.handle(ctx, request);
     }

@@ -85,15 +85,17 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 	public void send(
 	        EzyResponse response, 
 	        EzySession recipient, 
+	        boolean encrypted,
 	        boolean immediate, EzyTransportType transportType) {
-	    sendResponse.execute(response, recipient, immediate, transportType);
+	    sendResponse.execute(response, recipient, encrypted, immediate, transportType);
 	}
 	
 	@Override
 	public void send(EzyResponse response, 
 	        Collection<EzySession> recipients, 
+	        boolean encrypted,
 	        boolean immediate, EzyTransportType transportType) {
-	    sendResponse.execute(response, recipients, immediate, transportType);
+	    sendResponse.execute(response, recipients, encrypted, immediate, transportType);
 	}
 	
 	@Override

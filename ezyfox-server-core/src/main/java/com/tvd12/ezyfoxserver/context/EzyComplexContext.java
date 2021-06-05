@@ -1,8 +1,6 @@
 package com.tvd12.ezyfoxserver.context;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
@@ -61,16 +59,6 @@ public interface EzyComplexContext
         send(response, recipient.getSessions(), encrypted, transportType);
     }
     
-    default void send(
-            EzyResponse response, 
-            Iterable<EzyUser> recipients, 
-            boolean encrypted, EzyTransportType transportType) {
-        Set<EzySession> sessions = new HashSet<>();
-        for(EzyUser user : recipients)
-            sessions.addAll(user.getSessions());
-        send(response, sessions, encrypted, transportType);
-    }
-    
     // ======================= tcp/send =================
     default void send(
     		EzyResponse response, 
@@ -98,20 +86,8 @@ public interface EzyComplexContext
     
     default void send(
     		EzyResponse response, 
-    		Iterable<EzyUser> recipients, boolean encrypted) {
-        send(response, recipients, encrypted, EzyTransportType.TCP);
-    }
-    
-    default void send(
-    		EzyResponse response, 
     		EzySession recipient, boolean encrypted, boolean immediate) {
         send(response, recipient, encrypted, immediate, EzyTransportType.TCP);
-    }
-    
-    default void send(
-    		EzyResponse response, 
-    		Collection<EzySession> recipients, boolean encrypted, boolean immediate) {
-        send(response, recipients, encrypted, immediate, EzyTransportType.TCP);
     }
     
 }

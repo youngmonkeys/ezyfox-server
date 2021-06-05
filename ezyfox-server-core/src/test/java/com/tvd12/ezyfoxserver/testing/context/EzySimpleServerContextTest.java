@@ -98,7 +98,6 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         EzyResponse response = mock(EzyResponse.class);
         EzySession recipient = spy(EzyAbstractSession.class);
         context.send(response, recipient, false);
-        context.send(response, Lists.newArrayList(recipient), false, true);
         context.stream(new byte[0], recipient);
         context.stream(new byte[0], Lists.newArrayList(recipient));
         
@@ -106,7 +105,6 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         user.setName("test");
         user.addSession(recipient);
         context.send(response, user, false);
-        context.send(response, Lists.newArrayList(user), false);
         
         assert context.getZoneContext(zoneContext.getZone().getSetting().getId()) != null;
         try {

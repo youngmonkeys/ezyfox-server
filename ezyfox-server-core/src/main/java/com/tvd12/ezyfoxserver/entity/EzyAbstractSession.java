@@ -126,7 +126,7 @@ public abstract class EzyAbstractSession
 	public boolean addReceviedRequests(int requests) {
 		if(requestFrameInSecond.isExpired())
             requestFrameInSecond = requestFrameInSecond.nextFrame();
-        return requestFrameInSecond.addRequests(1);
+        return requestFrameInSecond.addRequests(requests);
 	}
 	
 	@Override

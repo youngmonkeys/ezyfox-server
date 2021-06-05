@@ -9,6 +9,8 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
 	
 	T encrypted();
+	
+	T encrypted(boolean value);
 
 	T data(Object data);
 	

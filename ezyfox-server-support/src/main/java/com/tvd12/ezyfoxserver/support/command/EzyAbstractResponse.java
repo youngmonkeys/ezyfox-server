@@ -32,6 +32,11 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
     	return (T)this;
     }
     
+    public T encrypted(boolean value) {
+    	this.response.encrypted(value);
+    	return (T)this;
+    }
+    
 	public T command(String command) {
 		this.response.command(command);
         return (T) this;

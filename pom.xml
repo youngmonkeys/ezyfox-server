@@ -45,13 +45,6 @@
 		<url>https://travis-ci.org/youngmonkeys/ezyfox-server</url>
 	</ciManagement>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>oss.sonatype.org</id>
-			<url>https://oss.sonatype.org/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<developers>
 		<developer>
 			<name>Ta Van Dung</name>

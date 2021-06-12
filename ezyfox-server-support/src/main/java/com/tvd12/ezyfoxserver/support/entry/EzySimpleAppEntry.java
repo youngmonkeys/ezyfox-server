@@ -27,7 +27,7 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
-import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppPrototypeController;
+import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyAppResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
@@ -67,7 +67,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 	}
 	
 	protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
-		return EzyUserRequestAppPrototypeController.builder()
+		return EzyUserRequestAppSingletonController.builder()
 				.beanContext(beanContext)
 				.build();
 	}

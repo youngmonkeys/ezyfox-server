@@ -41,9 +41,11 @@ public abstract class EzyUserRequestSingletonController<
 	protected final Map<String, EzyUserRequestHandler> requestHandlers;
 	protected final List<EzyUserRequestInterceptor> requestInterceptors;
 	protected final Map<Class<?>, EzyUncaughtExceptionHandler> exceptionHandlers;
+	protected final EzyUserRequestPrototypeController prototypeController;
 	
 	protected EzyUserRequestSingletonController(Builder<?> builder) {
 		this.unmarshaller = builder.unmarshaller;
+		this.prototypeController = builder.getPrototypeController();
 		this.requestHandlers = new HashMap<>(builder.getRequestHandlers());
 		this.exceptionHandlers = new HashMap<>(builder.getExceptionHandlers());
 		this.requestInterceptors = new ArrayList<>(builder.getRequestInterceptors());
@@ -53,13 +55,12 @@ public abstract class EzyUserRequestSingletonController<
 	public void handle(C context, E event) {
 		EzyArray data = event.getData();
 		String cmd = data.get(0, String.class);
-		EzyData params = data.get(1, EzyData.class, null);
 		EzyUserRequestHandler handler = requestHandlers.get(cmd);
 		if(handler == null) {
-			logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
+			prototypeController.handle(context, event);
 			return;
 		}
-		Object handlerData = params;
+		Object handlerData = data.get(1, EzyData.class, null);
 		Class requestDataType = handler.getDataType();
 		if(requestDataType != null) {
 			handlerData = unmarshaller.unmarshal(handlerData, requestDataType);
@@ -121,15 +122,19 @@ public abstract class EzyUserRequestSingletonController<
 	public abstract static class Builder<B extends Builder>
 			extends EzyLoggable
 			implements EzyBuilder<EzyUserRequestSingletonController> {
-		
-		private EzySingletonFactory singletonFactory;
-		private EzyUnmarshaller unmarshaller;
+
+		protected EzyBeanContext beanContext;
+		protected EzyUnmarshaller unmarshaller;
+		protected EzySingletonFactory singletonFactory;
 		
 		public B beanContext(EzyBeanContext beanContext) {
+			this.beanContext = beanContext;
 			this.singletonFactory = beanContext.getSingletonFactory();
 			this.unmarshaller = beanContext.getSingleton("unmarshaller", EzyUnmarshaller.class);
 			return (B)this;
 		}
+		
+		protected abstract EzyUserRequestPrototypeController getPrototypeController();
 		
 		private Map<String, EzyUserRequestHandler> getRequestHandlers() {
 			List<Object> clientRequestHandlers = getClientRequestHandlers();

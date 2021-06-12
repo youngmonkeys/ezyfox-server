@@ -40,7 +40,6 @@ public abstract class EzyUserRequestPrototypeController<
 	public void handle(C context, E event) {
 		EzyArray data = event.getData();
 		String cmd = data.get(0, String.class);
-		EzyData params = data.get(1, EzyData.class, null);
 		EzyPrototypeSupplier supplier = handlers.get(cmd);
 		if(supplier == null) {
 			logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
@@ -52,6 +51,7 @@ public abstract class EzyUserRequestPrototypeController<
 		if(handler instanceof EzySessionAware)
 			((EzySessionAware)handler).setSession(event.getSession());
 		if(handler instanceof EzyDataBinding) {
+			EzyData params = data.get(1, EzyData.class, null);
 			if(params != null)
 				unmarshaller.unwrap(params, handler);
 		}

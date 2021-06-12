@@ -235,16 +235,6 @@ public class EzySimpleAppEntryTest {
 	public static class EzyAppEntryEx2 extends EzySimpleAppEntry {
 
 		@Override
-		protected String[] getScanableBeanPackages() {
-			return new String[0];
-		}
-
-		@Override
-		protected String[] getScanableBindingPackages() {
-			return new String[0];
-		}
-
-		@Override
 		protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
 		}
 		

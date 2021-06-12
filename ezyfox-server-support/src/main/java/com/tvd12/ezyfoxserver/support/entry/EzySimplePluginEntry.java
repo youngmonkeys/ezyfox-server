@@ -27,7 +27,7 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
-import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginPrototypeController;
+import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
@@ -67,7 +67,7 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	}
 	
 	protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
-		return EzyUserRequestPluginPrototypeController.builder()
+		return EzyUserRequestPluginSingletonController.builder()
 				.beanContext(beanContext)
 				.build();
 	}

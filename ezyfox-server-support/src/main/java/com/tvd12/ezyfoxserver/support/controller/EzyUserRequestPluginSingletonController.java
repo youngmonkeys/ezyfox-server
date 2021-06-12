@@ -31,5 +31,13 @@ public class EzyUserRequestPluginSingletonController
 			return new EzyUserRequestPluginSingletonController(this);
 		}
 		
+		@SuppressWarnings("rawtypes")
+		@Override
+		protected EzyUserRequestPrototypeController getPrototypeController() {
+			return EzyUserRequestPluginPrototypeController.builder()
+					.beanContext(beanContext)
+					.build();
+		}
+		
 	}
 }

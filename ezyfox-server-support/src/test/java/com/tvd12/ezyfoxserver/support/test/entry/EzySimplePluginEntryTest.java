@@ -225,11 +225,6 @@ public class EzySimplePluginEntryTest {
 	public static class EzyPluginEntryEx2 extends EzySimplePluginEntry {
 
 		@Override
-		protected String[] getScanableBeanPackages() {
-			return new String[0];
-		}
-
-		@Override
 		protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
 		}
 		

@@ -22,13 +22,13 @@ public interface EzyComplexContext
     
     void send(EzyResponse response, 
             EzySession recipient, 
-            boolean encrypted,
-            boolean immediate, EzyTransportType transportType);
+            boolean encrypted, 
+            EzyTransportType transportType);
     
     void send(EzyResponse response, 
             Collection<EzySession> recipients, 
             boolean encrypted,
-            boolean immediate, EzyTransportType transportType);
+            EzyTransportType transportType);
     
     void stream(
             byte[] bytes, 
@@ -37,20 +37,6 @@ public interface EzyComplexContext
     void stream(
             byte[] bytes, 
             Collection<EzySession> recipients, EzyTransportType transportType);
-    
-    default void send(
-            EzyResponse response, 
-            EzySession recipient, 
-            boolean encrypted, EzyTransportType transportType) {
-        send(response, recipient, encrypted, false, transportType);
-    }
-    
-    default void send(
-            EzyResponse response, 
-            Collection<EzySession> recipients, 
-            boolean encrypted, EzyTransportType transportType) {
-        send(response, recipients, encrypted, false, transportType);
-    }
     
     default void send(
             EzyResponse response, 
@@ -82,12 +68,6 @@ public interface EzyComplexContext
     default void send(
     		EzyResponse response, EzyUser recipient, boolean encrypted) {
         send(response, recipient, encrypted, EzyTransportType.TCP);
-    }
-    
-    default void send(
-    		EzyResponse response, 
-    		EzySession recipient, boolean encrypted, boolean immediate) {
-        send(response, recipient, encrypted, immediate, EzyTransportType.TCP);
     }
     
 }

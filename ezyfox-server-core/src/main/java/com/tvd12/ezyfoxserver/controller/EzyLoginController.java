@@ -87,7 +87,7 @@ public class EzyLoginController
 	
     protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
         EzyResponse response = newLoginErrorReponse(error);
-        ctx.send(response, session);
+        ctx.send(response, session, false);
     }
     
     protected EzyResponse newLoginErrorReponse(EzyILoginError error) {

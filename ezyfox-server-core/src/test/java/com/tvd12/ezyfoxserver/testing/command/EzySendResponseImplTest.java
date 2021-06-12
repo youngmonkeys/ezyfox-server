@@ -1,21 +1,25 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.api.EzyAbstractResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.response.EzySimpleResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-
-import static org.mockito.Mockito.*;
 
 public class EzySendResponseImplTest {
 
@@ -30,8 +34,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, recipient);
-        cmd.execute(response, Lists.newArrayList(recipient));
+        cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
     }
     
     @Test
@@ -46,8 +49,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, Lists.newArrayList(recipient));
-        cmd.execute(response, Lists.newArrayList(recipient), true);
+        cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
     }
     
     @Test
@@ -62,8 +64,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        cmd.execute(response, recipient);
-        cmd.execute(response, recipient, true);
+        cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
     }
     
 }

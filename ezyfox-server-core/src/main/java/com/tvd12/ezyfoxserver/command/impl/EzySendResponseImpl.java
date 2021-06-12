@@ -30,11 +30,12 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     @Override
     public void execute(EzyResponse response, 
             EzySession recipient, 
+            boolean encrypted,
             boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
-        EzySimplePackage pack = newPackage(data, transportType);
+        EzySimplePackage pack = newPackage(data, encrypted, transportType);
         pack.addRecipient(recipient);
         try {
             responseApi.response(pack, immediate);
@@ -55,11 +56,12 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     public void execute(
             EzyResponse response, 
             Collection<EzySession> recipients, 
+            boolean encrypted,
             boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
-        EzySimplePackage pack = newPackage(data, transportType);
+        EzySimplePackage pack = newPackage(data, encrypted, transportType);
         pack.addRecipients(recipients);
         try {
             responseApi.response(pack, immediate);
@@ -76,9 +78,12 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
             logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
     }
     
-    protected EzySimplePackage newPackage(EzyArray data, EzyTransportType transportType) {
+    protected EzySimplePackage newPackage(
+    		EzyArray data, 
+    		boolean encrypted, EzyTransportType transportType) {
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
+        pack.setEncrypted(encrypted);
         pack.setTransportType(transportType);
         return pack;
     }

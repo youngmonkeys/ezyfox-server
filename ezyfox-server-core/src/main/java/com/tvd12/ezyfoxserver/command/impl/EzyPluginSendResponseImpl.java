@@ -24,17 +24,19 @@ public class EzyPluginSendResponseImpl
     @Override
     public void execute(
             EzyData data, 
-            EzySession recipient, EzyTransportType transportType) {
+            EzySession recipient,
+            boolean encrypted, EzyTransportType transportType) {
         EzyResponse response = newResponse(data);
-        serverContext.send(response, recipient, transportType);
+        serverContext.send(response, recipient, encrypted, transportType);
     }
 
     @Override
     public void execute(
             EzyData data, 
-            Collection<EzySession> recipients, EzyTransportType transportType) {
+            Collection<EzySession> recipients,
+            boolean encrypted, EzyTransportType transportType) {
         EzyResponse response = newResponse(data);
-        serverContext.send(response, recipients, transportType);
+        serverContext.send(response, recipients, encrypted, transportType);
     }
     
     protected EzyResponse newResponse(EzyData data) {

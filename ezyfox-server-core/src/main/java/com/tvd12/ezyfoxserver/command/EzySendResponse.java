@@ -11,37 +11,12 @@ public interface EzySendResponse {
     void execute(
             EzyResponse response, 
             EzySession recipient, 
+            boolean encrypted,
             boolean immediate, EzyTransportType transportType);
     
     void execute(EzyResponse response, 
             Collection<EzySession> recipients, 
+            boolean encrypted,
             boolean immediate, EzyTransportType transportType);
-    
-    default void execute(EzyResponse response, 
-            EzySession recipient, EzyTransportType transportType) {
-        execute(response, recipient, false, transportType);
-    }
-    
-    default void execute(EzyResponse response, 
-            Collection<EzySession> recipients, EzyTransportType transportType) {
-        execute(response, recipients, false, transportType);
-    }
-
-    default void execute(EzyResponse response, EzySession recipient) {
-        execute(response, recipient, EzyTransportType.TCP);
-    }
-    
-    default void execute(EzyResponse response, Collection<EzySession> recipients) {
-        execute(response, recipients, EzyTransportType.TCP);
-    }
-    
-    default void execute(EzyResponse response, EzySession recipient, boolean immediate) {
-        execute(response, recipient, immediate, EzyTransportType.TCP);
-    }
-    
-    default void execute(EzyResponse response, Collection<EzySession> recipients, boolean immediate) {
-        execute(response, recipients, immediate, EzyTransportType.TCP);
-    }
-    
     
 }

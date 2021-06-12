@@ -79,7 +79,7 @@ public class EzySimpleNioHandlerGroup
 	}
 	
 	private Object decodeMessage(EzyMessage message) throws Exception {
-		Object answer = decoder.decode(message);
+		Object answer = decoder.decode(message, session.getSessionKey());
 		return answer;
 	}
 	

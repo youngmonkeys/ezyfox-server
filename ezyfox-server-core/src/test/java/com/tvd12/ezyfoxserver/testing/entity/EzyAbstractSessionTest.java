@@ -18,10 +18,14 @@ import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyNonBlockingPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
+import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSession;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.util.RandomUtil;
 
 public class EzyAbstractSessionTest extends BaseCoreTest {
 
@@ -154,6 +158,31 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         catch (Exception e) {
             e.printStackTrace();
         }
+        privateSession.setRequestFrameInSecond(new EzyRequestFrameSecond(2));
+        Asserts.assertFalse(privateSession.addReceviedRequests(1));
+        Asserts.assertTrue(privateSession.addReceviedRequests(3));
+        
+        privateSession.setRequestFrameInSecond(new EzyRequestFrameSecond(5, System.currentTimeMillis() - 2 * 1000));
+        Asserts.assertFalse(privateSession.addReceviedRequests(1));
+        Asserts.assertFalse(privateSession.addReceviedRequests(3));
+        Asserts.assertFalse(privateSession.getRequestFrameInSecond().isExpired());
+        
+        byte[] clientKey = RandomUtil.randomShortByteArray();
+        privateSession.setClientKey(clientKey);
+        Asserts.assertEquals(clientKey, privateSession.getClientKey());
+        
+        byte[] sessionKey = RandomUtil.randomShortByteArray();
+        privateSession.setSessionKey(sessionKey);
+        Asserts.assertEquals(sessionKey, privateSession.getSessionKey());
+        
+        EzyRequestQueue systemRquestQueue = mock(EzyRequestQueue.class);
+        privateSession.setSystemRequestQueue(systemRquestQueue);
+        Asserts.assertEquals(systemRquestQueue, privateSession.getSystemRequestQueue());
+        
+        EzyRequestQueue extensionRequestQueue = mock(EzyRequestQueue.class);
+        privateSession.setExtensionRequestQueue(extensionRequestQueue);
+        Asserts.assertEquals(extensionRequestQueue, privateSession.getExtensionRequestQueue());
+        privateSession.destroy();
     }
     
     private static class PrivateSession extends EzyAbstractSession {

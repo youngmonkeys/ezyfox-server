@@ -17,7 +17,7 @@ public class EzyUserRequestAppSingletonController
 	protected void responseError(
 			EzyAppContext context, 
 			EzyUserRequestAppEvent event, EzyData errorData) {
-		context.send(errorData, event.getSession());
+		context.send(errorData, event.getSession(), false);
 	}
 	
 	public static Builder builder() {
@@ -29,6 +29,14 @@ public class EzyUserRequestAppSingletonController
 		@Override
 		public EzyUserRequestAppSingletonController build() {
 			return new EzyUserRequestAppSingletonController(this);
+		}
+		
+		@SuppressWarnings("rawtypes")
+		@Override
+		protected EzyUserRequestPrototypeController getPrototypeController() {
+			return EzyUserRequestAppPrototypeController.builder()
+					.beanContext(beanContext)
+					.build();
 		}
 		
 	}

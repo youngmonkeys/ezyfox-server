@@ -24,6 +24,9 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     @XmlElement(name = "tcp-no-delay")
     protected boolean tcpNoDelay;
     
+    @XmlElement(name = "ssl-active")
+    protected boolean sslActive;
+    
     @XmlElement(name = "writer-thread-pool-size")
     protected int writerThreadPoolSize;
     
@@ -39,6 +42,7 @@ public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements 
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
         map.put("tcpNoDelay", tcpNoDelay);
+        map.put("sslActive", sslActive);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);
         return map;

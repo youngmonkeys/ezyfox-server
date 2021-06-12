@@ -17,7 +17,7 @@ public class EzyUserRequestPluginSingletonController
 	protected void responseError(
 			EzyPluginContext context, 
 			EzyUserRequestPluginEvent event, EzyData errorData) {
-		context.send(errorData, event.getSession());
+		context.send(errorData, event.getSession(), false);
 	}
 	
 	public static Builder builder() {
@@ -29,6 +29,14 @@ public class EzyUserRequestPluginSingletonController
 		@Override
 		public EzyUserRequestPluginSingletonController build() {
 			return new EzyUserRequestPluginSingletonController(this);
+		}
+		
+		@SuppressWarnings("rawtypes")
+		@Override
+		protected EzyUserRequestPrototypeController getPrototypeController() {
+			return EzyUserRequestPluginPrototypeController.builder()
+					.beanContext(beanContext)
+					.build();
 		}
 		
 	}

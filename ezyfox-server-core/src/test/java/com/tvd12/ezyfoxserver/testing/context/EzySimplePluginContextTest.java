@@ -1,10 +1,11 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
@@ -46,10 +47,7 @@ public class EzySimplePluginContextTest extends BaseTest {
         
         EzyData data = EzyEntityFactory.newArrayBuilder()
                 .build();
-        pluginContext.send(data, session);
-        pluginContext.send(data, Lists.newArrayList(session));
-        pluginContext.send(data, user);
-        pluginContext.send(data, Lists.newArrayList(user));
+        pluginContext.send(data, session, false);
     }
     
 }

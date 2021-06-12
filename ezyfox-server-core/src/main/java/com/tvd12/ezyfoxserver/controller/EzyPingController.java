@@ -14,7 +14,7 @@ public class EzyPingController
     public void handle(EzyServerContext ctx, EzyPingRequest request) {
         EzyResponse response = EzyPongResponse.getInstance();
         EzySession session = request.getSession();
-        ctx.send(response, session);
+        ctx.send(response, session, false);
     }
     
 }

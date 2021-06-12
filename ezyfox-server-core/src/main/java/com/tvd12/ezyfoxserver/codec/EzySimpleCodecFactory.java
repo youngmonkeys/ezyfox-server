@@ -54,8 +54,12 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
 	}
 	
 	private EzyCodecCreator newSocketCodecCreator() {
-	    if(socketSetting.isActive())
-	        return EzyClasses.newInstance(socketSetting.getCodecCreator());
+	    if(socketSetting.isActive()) {
+	        return EzyClasses.newInstance(
+	        		socketSetting.getCodecCreator(),
+	        		new Class<?>[] {boolean.class},
+	        		new Object[] {socketSetting.isSslActive()});
+	    }
 	    return null;
 	}
 	

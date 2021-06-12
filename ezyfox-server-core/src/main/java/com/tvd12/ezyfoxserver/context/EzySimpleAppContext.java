@@ -47,15 +47,17 @@ public class EzySimpleAppContext
 	@Override
 	public void send(
 	        EzyData data, 
-	        EzySession recipient, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipient, transportType);
+	        EzySession recipient,
+	        boolean encrypted, EzyTransportType transportType) {
+	    this.sendResponse.execute(data, recipient, encrypted, transportType);
 	}
 	
 	@Override
 	public void send(
 	        EzyData data, 
-	        Collection<EzySession> recipients, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipients, transportType);
+	        Collection<EzySession> recipients, 
+	        boolean encrypted, EzyTransportType transportType) {
+	    this.sendResponse.execute(data, recipients, encrypted, transportType);
 	}
 	
 	public void setApp(EzyApplication app) {

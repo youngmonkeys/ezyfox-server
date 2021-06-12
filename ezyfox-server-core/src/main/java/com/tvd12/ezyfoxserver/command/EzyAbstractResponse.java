@@ -18,6 +18,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
 
     protected String command;
     protected EzyData params;
+    protected boolean encrypted;
     protected EzyTransportType transportType;
     protected Set<EzySession> recipients = new HashSet<>();
     protected Set<EzySession> exrecipients = new HashSet<>();
@@ -32,6 +33,18 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     }
     
     protected abstract EzyUserManager getUserManager(C context);
+    
+    @Override
+    public EzyResponse encrypted() {
+    	this.encrypted = true;
+    	return this;
+    }
+    
+    @Override
+    public EzyResponse encrypted(boolean value) {
+    	this.encrypted = value;
+    	return this;
+    }
     
     @Override
     public EzyResponse command(String command) {

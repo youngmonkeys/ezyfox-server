@@ -142,16 +142,18 @@ public class EzySimpleZoneContext
 	public void send(
 	        EzyResponse response, 
 	        EzySession recipient,
-	        boolean immediate, EzyTransportType transportType) {
-	    parent.send(response, recipient, immediate, transportType);
+	        boolean encrypted,
+	        EzyTransportType transportType) {
+	    parent.send(response, recipient, encrypted, transportType);
 	}
 	
 	@Override
 	public void send(
 	        EzyResponse response, 
 	        Collection<EzySession> recipients, 
-	        boolean immediate, EzyTransportType transportType) {
-	    parent.send(response, recipients, immediate, transportType);
+	        boolean encrypted,
+	        EzyTransportType transportType) {
+	    parent.send(response, recipients, encrypted, transportType);
 	}
 	
 	@Override

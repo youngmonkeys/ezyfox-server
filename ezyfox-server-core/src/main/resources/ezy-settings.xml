@@ -26,6 +26,7 @@
 		<port>3005</port>
 		<address>0.0.0.0</address>
 		<active>true</active>
+		<ssl-active>true</ssl-active>
 		<tcp-no-delay>true</tcp-no-delay>
 		<max-request-size>4096</max-request-size>
 		<writer-thread-pool-size>8</writer-thread-pool-size>

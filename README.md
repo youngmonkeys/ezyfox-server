@@ -1,5 +1,4 @@
 
-
 # ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
 
 [![Build Status](https://travis-ci.org/youngmonkeys/ezyfox-server.svg?branch=master)](https://travis-ci.org/youngmonkeys/ezyfox-server)
@@ -16,6 +15,7 @@
 * [Contributors](#contributors)
 
 # Features
+
 * **Core container & dependency injection**: bean manipulation, auto binding, auto implementation, etc.
 * **Multiple Communication Protocols**: supports TCP, UDP, WebSocket, HTTP.
 * **Traffic Encryption**: traffic between clients and servers can be encrypted using SSL.
@@ -27,7 +27,10 @@ Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS 
 
 <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
 
+https://youtu.be/TiSLOWIid5o
+
 # Introduction
+
 To rapidly develop online games, developers often have to use a game server engine like SmartFoxServer or Photon, but unfortunately, they come with really high price, especially when more and more users are engaging in our products. Therefore, we develop EzyFox ecosystem aiming to make everything free and open for everyone who are keen on building multi-players games and applications.
 
 EzyFox ecosystem supports a wide range of most important components to develop an enterprise product including TCP, UDP, WebSocket protocols with SSL encryption, HTTP RESTful API, Remote procedure call RPC protocol, Database interaction, Memory caching, Message Queue. 
@@ -122,13 +125,18 @@ server.start();
 You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 
 # Demos
-1. [Space Game](https://youngmonkeys.org/asset/space-game/)
-2. [Free Chat](https://youngmonkeys.org/asset/freechat/)
+
+1. [Free Chat](https://youngmonkeys.org/asset/freechat/)
+2. [Space Game Cocos2d-x](https://youngmonkeys.org/asset/space-game/)
+3. [Space Shooter Unity](https://youngmonkeys.org/asset/space-shooter/)
+4. [Lucky Wheel Phaser HTML5](https://youngmonkeys.org/asset/lucky-wheel/)
 
 # Tutorials:
+
 1. EzyChat: https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G
 
 # Tests
+
 Navigate to the source folder and run:
 ```
 mvn test

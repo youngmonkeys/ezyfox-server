@@ -23,11 +23,9 @@
 
 # Benchmark
 
-Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS ram 512MB, CPU 1 core
+Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS ram 512MB, CPU 1 core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how did we test.
 
 <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
-
-https://youtu.be/TiSLOWIid5o
 
 # Introduction
 

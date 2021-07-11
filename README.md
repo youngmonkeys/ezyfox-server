@@ -35,9 +35,8 @@ EzyFox ecosystem supports a wide range of most important components to develop a
 With EzyFox ecosystem, we can stay away from the headache of choosing which technologies to use to manage and scale up an application, so we can just focus on implementing business logics.
 
 # Get Started
-```
-https://youngmonkeys.org/get-started/
-```
+
+[https://youngmonkeys.org/get-started/](https://youngmonkeys.org/get-started/)
 
 # Documentation
 

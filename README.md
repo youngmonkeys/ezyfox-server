@@ -124,7 +124,7 @@ You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 
 # Client SDKs
 
-1.  [Android(https://github.com/youngmonkeys/ezyfox-server-android-client)
+1.  [Android](https://github.com/youngmonkeys/ezyfox-server-android-client)
 2.  [C/C++](https://github.com/youngmonkeys/ezyfox-server-cpp-client)
 3.  [CSharp](https://github.com/youngmonkeys/ezyfox-server-csharp-client)
 4.  [Flutter](https://github.com/youngmonkeys/ezyfox-server-flutter-client)

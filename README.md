@@ -12,14 +12,14 @@
 * [Demos](#demos)
 * [Tutorials](#tutorials)
 * [Tests](#tests)
-* [Contributors](#contributors)
+* [Contact us](#contact-us)
 
 # Features
 
 * **Core container & dependency injection**: bean manipulation, auto binding, auto implementation, etc.
 * **Multiple Communication Protocols**: supports TCP, UDP, WebSocket, HTTP.
 * **Traffic Encryption**: traffic between clients and servers can be encrypted using SSL.
-* **Multiple Client SDKs**: Android, IOS, Unity, ReactJS, C++.
+* **Multiple Client SDKs**: Android, IOS, Unity, React, C++, Flutter, ...
 
 # Benchmark
 

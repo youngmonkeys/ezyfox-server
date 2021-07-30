@@ -103,7 +103,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 					(Set)reflection.getAnnotatedClasses(EzyExceptionHandler.class));
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyRequestInterceptor.class));
-			beanContextBuilder.addAllClasses(reflection);
+			beanContextBuilder.scan(scanablePackages);
 		}
 		setupBeanContext(context, beanContextBuilder);
 		return beanContextBuilder.build();

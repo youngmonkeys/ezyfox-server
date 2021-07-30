@@ -5,13 +5,11 @@ import com.tvd12.ezyfox.bean.EzyPackagesToScanAware;
 import com.tvd12.ezyfox.bean.annotation.EzyConfigurationBefore;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 import com.tvd12.ezyfox.collect.Sets;
-import com.tvd12.ezyfoxserver.EzyApplication;
-import com.tvd12.ezyfoxserver.command.EzyAppSetup;
-import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
+import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
-import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
-import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
+import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.test.assertion.Asserts;
 import lombok.Setter;
 import org.testng.annotations.Test;
@@ -22,30 +20,26 @@ import java.util.concurrent.ScheduledExecutorService;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class EzySimpleAppEntryTest {
+public class EzySimplePluginEntryTest {
 	
 	@Test
 	public void scanPackages() {
 		// given
-		EzyAppContext appContext = mock(EzyAppContext.class);
+		EzyPluginContext pluginContext = mock(EzyPluginContext.class);
 		ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
 		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
 		EzyServerContext serverContext = mock(EzyServerContext.class);
-		EzyApplication application = mock(EzyApplication.class);
-		EzyAppUserManager appUserManager = mock(EzyAppUserManager.class);
-		EzyAppSetup appSetup = mock(EzyAppSetup.class);
+		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
 		
-		InternalAppEntry sut = new InternalAppEntry();
+		InteralPluginEngtry sut = new InteralPluginEngtry();
 		
 		// when
-		when(appContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
-		when(appContext.getParent()).thenReturn(zoneContext);
+		when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
+		when(pluginContext.getParent()).thenReturn(zoneContext);
 		when(zoneContext.getParent()).thenReturn(serverContext);
-		when(appContext.getApp()).thenReturn(application);
-		when(application.getUserManager()).thenReturn(appUserManager);
-		when(appContext.get(EzyAppSetup.class)).thenReturn(appSetup);
+		when(pluginContext.get(EzyPluginSetup.class)).thenReturn(pluginSetup);
 		
-		sut.config(appContext);
+		sut.config(pluginContext);
 		
 		// then
 		EzyBeanContext beanContext = sut.beanContext;
@@ -71,7 +65,7 @@ public class EzySimpleAppEntryTest {
 		public Set<String> packagesToScan;
 	}
 	
-	private static class InternalAppEntry extends EzySimpleAppEntry {
+	private static class InteralPluginEngtry extends EzySimplePluginEntry {
 		public EzyBeanContext beanContext;
 		
 		@Override
@@ -80,8 +74,9 @@ public class EzySimpleAppEntryTest {
 		}
 		
 		@Override
-		protected void postConfig(EzyAppContext context, EzyBeanContext beanContext) {
+		protected void postConfig(EzyPluginContext ctx, EzyBeanContext beanContext) {
 			this.beanContext = beanContext;
 		}
 	}
+	
 }

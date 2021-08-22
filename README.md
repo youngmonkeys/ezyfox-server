@@ -145,7 +145,7 @@ You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 
 # Tutorials:
 
-1. EzyChat: https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G
+1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G)
 
 # Tests
 
@@ -156,7 +156,9 @@ mvn test
 
 # Contact us
 
- - [DungTV](mailto:itprono3@gmail.com)
+- Touch us on [Facebook](https://www.facebook.com/youngmonkeys.org)
+- Ask us on [stackask.com](https://stackask.com)
+- Email to me [Dzung](mailto:itprono3@gmail.com)
 
 # License
 

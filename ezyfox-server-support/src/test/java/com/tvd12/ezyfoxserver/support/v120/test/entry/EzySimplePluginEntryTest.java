@@ -1,5 +1,15 @@
 package com.tvd12.ezyfoxserver.support.v120.test.entry;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.testng.annotations.Test;
+
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPackagesToScanAware;
 import com.tvd12.ezyfox.bean.annotation.EzyConfigurationBefore;
@@ -9,16 +19,11 @@ import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.test.assertion.Asserts;
+
 import lombok.Setter;
-import org.testng.annotations.Test;
-
-import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class EzySimplePluginEntryTest {
 	
@@ -55,6 +60,52 @@ public class EzySimplePluginEntryTest {
 		Asserts.assertNotNull(singleton);
 	}
 	
+	@Test
+	public void notAllowRequestTest() {
+		// given
+		EzyPluginContext pluginContext = mock(EzyPluginContext.class);
+		ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
+		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+		EzyServerContext serverContext = mock(EzyServerContext.class);
+		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
+		
+		NotAllowRequestEngtry sut = new NotAllowRequestEngtry();
+		
+		// when
+		when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
+		when(pluginContext.getParent()).thenReturn(zoneContext);
+		when(zoneContext.getParent()).thenReturn(serverContext);
+		when(pluginContext.get(EzyPluginSetup.class)).thenReturn(pluginSetup);
+		
+		sut.config(pluginContext);
+		
+		// then
+		verify(pluginContext, times(0)).get(EzyPluginSetup.class);
+	}
+	
+	@Test
+	public void disallowRequestTest() {
+		// given
+		EzyPluginContext pluginContext = mock(EzyPluginContext.class);
+		ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
+		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+		EzyServerContext serverContext = mock(EzyServerContext.class);
+		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
+		
+		DisAllowRequestEngtry sut = new DisAllowRequestEngtry();
+		
+		// when
+		when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
+		when(pluginContext.getParent()).thenReturn(zoneContext);
+		when(zoneContext.getParent()).thenReturn(serverContext);
+		when(pluginContext.get(EzyPluginSetup.class)).thenReturn(pluginSetup);
+		
+		sut.config(pluginContext);
+		
+		// then
+		verify(pluginContext, times(0)).get(EzyPluginSetup.class);
+	}
+	
 	@EzySingleton
 	public static class Singleton {
 	}
@@ -79,4 +130,14 @@ public class EzySimplePluginEntryTest {
 		}
 	}
 	
+	private static class NotAllowRequestEngtry extends EzySimplePluginEntry {
+		@Override
+		protected boolean allowRequest() {
+			return false;
+		}
+	}
+	
+	@EzyDisallowRequest
+	private static class DisAllowRequestEngtry extends EzySimplePluginEntry {
+	}
 }

@@ -25,8 +25,10 @@ import com.tvd12.ezyfoxserver.command.EzySetup;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
+import com.tvd12.ezyfoxserver.controller.EzyPluginEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
+import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
@@ -38,6 +40,7 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	public void config(EzyPluginContext context) {
 		preConfig(context);
 		EzyBeanContext beanContext = createBeanContext(context);
+		context.setProperty(EzyBeanContext.class, beanContext);
 		addEventControllers(context, beanContext);
 		setPluginRequestController(context, beanContext);
 		postConfig(context);
@@ -66,9 +69,16 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	}
 	
 	private void setPluginRequestController(EzyPluginContext pluginContext, EzyBeanContext beanContext) {
+		if(!allowRequest() || getClass().isAnnotationPresent(EzyDisallowRequest.class)) {
+			return;
+		}
 		EzyPluginSetup setup = pluginContext.get(EzyPluginSetup.class);
 		EzyPluginRequestController controller = newUserRequestController(beanContext);
 		setup.setRequestController(controller);
+	}
+	
+	protected boolean allowRequest() {
+		return true;
 	}
 	
 	protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
@@ -100,7 +110,9 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		if (scanablePackages.size() > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
 			beanContextBuilder.addSingletonClasses(
-					(Set) reflection.getAnnotatedClasses(EzyEventHandler.class));
+					(Set) reflection.getAnnotatedExtendsClasses(
+							EzyEventHandler.class,
+							EzyPluginEventController.class));
 			beanContextBuilder.addSingletonClasses(
 					(Set) reflection.getAnnotatedClasses(EzyRequestController.class));
 			beanContextBuilder.addSingletonClasses(

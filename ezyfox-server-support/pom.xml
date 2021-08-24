@@ -13,8 +13,8 @@
 	
 	<properties>
 		<ezy.core.version>2.1.0</ezy.core.version>
-		<ezy.bean.version>1.1.9</ezy.bean.version>
-		<ezy.binding.version>1.1.9</ezy.binding.version>
+		<ezy.bean.version>1.2.0</ezy.bean.version>
+		<ezy.binding.version>1.2.0</ezy.binding.version>
 	</properties>
 	
 	<dependencies>

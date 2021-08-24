@@ -25,6 +25,7 @@ import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.command.EzySetup;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
+import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
@@ -38,6 +39,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 	public final void config(EzyAppContext context) {
 		preConfig(context);
 		EzyBeanContext beanContext = createBeanContext(context);
+		context.setProperty(EzyBeanContext.class, beanContext);
 		addEventControllers(context, beanContext);
 		setAppRequestController(context, beanContext);
 		postConfig(context);
@@ -96,7 +98,9 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		if(scanablePackages.size() > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
 			beanContextBuilder.addSingletonClasses(
-					(Set)reflection.getAnnotatedClasses(EzyEventHandler.class));
+					(Set)reflection.getAnnotatedExtendsClasses(
+							EzyEventHandler.class,
+							EzyAppEventController.class));
 			beanContextBuilder.addSingletonClasses(
 					(Set)reflection.getAnnotatedClasses(EzyRequestController.class));
 			beanContextBuilder.addSingletonClasses(

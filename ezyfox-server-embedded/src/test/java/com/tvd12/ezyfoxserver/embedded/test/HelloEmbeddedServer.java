@@ -38,7 +38,8 @@ public class HelloEmbeddedServer {
 				.plugin(pluginSettingBuilder.build());
 		
 		EzyWebSocketSettingBuilder webSocketSettingBuilder = new EzyWebSocketSettingBuilder()
-				.active(false);
+				.active(true)
+				.managementEnable(true);
 		
 		EzySimpleSettings settings = new EzySettingsBuilder()
 				.zone(zoneSettingBuilder.build())

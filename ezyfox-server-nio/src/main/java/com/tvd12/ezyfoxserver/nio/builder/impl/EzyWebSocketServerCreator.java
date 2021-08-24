@@ -1,9 +1,18 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
@@ -53,14 +62,18 @@ public class EzyWebSocketServerCreator {
 	}
 	
 	public Server create() {
-		ContextHandler contextHandler = new ContextHandler("/ws");
-		contextHandler.setAllowNullPathInfo(true);
+		ContextHandler wsContextHandler = new ContextHandler("/ws");
+		wsContextHandler.setAllowNullPathInfo(true);
 		EzyWsHandler wsHandler = newWsHandler();
-		contextHandler.setHandler(newWebSocketHandler(wsHandler));
+		wsContextHandler.setHandler(newWebSocketHandler(wsHandler));
 		QueuedThreadPool threadPool = new QueuedThreadPool(16, 8);
 		threadPool.setName("ezyfox-ws-handler");
 		Server server = new Server(threadPool);
-		server.setHandler(contextHandler);
+		ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
+		contextHandlers.addHandler(wsContextHandler);
+		if(setting.isManagementEnable())
+			contextHandlers.addHandler(managementHandler());
+		server.setHandler(contextHandlers);
 		HttpConfiguration httpConfig = new HttpConfiguration();
 		httpConfig.setSecureScheme("https");
 		httpConfig.setSecurePort(setting.getSslPort());
@@ -70,6 +83,13 @@ public class EzyWebSocketServerCreator {
 		server.addConnector(wsConnector);
 		configServer(server, httpConfig, wsConnector);
 		return server;
+	}
+	
+	private ContextHandler managementHandler() {
+		ServletContextHandler contextHandler = new ServletContextHandler();
+		contextHandler.setContextPath("/management");
+		contextHandler.addServlet(HealthCheckServlet.class, "/health-check");
+		return contextHandler;
 	}
 	
 	protected void configServer(
@@ -97,6 +117,7 @@ public class EzyWebSocketServerCreator {
 	
 	private WebSocketHandler newWebSocketHandler(EzyWsHandler handler) {
 		return new WebSocketHandler() {
+			@Override
 			public void configure(WebSocketServletFactory factory) {
 				WebSocketPolicy policy = factory.getPolicy();
 				factory.setCreator(newWebSocketCreator(handler));
@@ -106,6 +127,15 @@ public class EzyWebSocketServerCreator {
 				policy.setMaxBinaryMessageBufferSize(setting.getMaxFrameSize());
 			}
 		};
+	}
+	
+	public static class HealthCheckServlet extends HttpServlet {
+		private static final long serialVersionUID = -5456527539188272097L;
+		
+		@Override
+		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			resp.setStatus(200);
+		}
 	}
 	
 }

@@ -6,15 +6,15 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     protected int sslPort;
     protected int maxFrameSize;
     protected int writerThreadPoolSize;
-    protected boolean sslActive;
     protected EzySimpleSslConfigSetting sslConfig;
+    protected boolean managementEnable;
     
     public EzyWebSocketSettingBuilder() {
         this.port = 2208;
         this.sslPort = 2812;
-        this.sslActive = false;
         this.maxFrameSize = 32678;
         this.writerThreadPoolSize = 8;
+        this.managementEnable = false;
         this.sslConfig = new EzySimpleSslConfigSetting();
         this.codecCreator = "com.tvd12.ezyfox.codec.JacksonCodecCreator";
     }
@@ -34,14 +34,14 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         return this;
     }
 
-    public EzyWebSocketSettingBuilder sslActive(boolean sslActive) {
-        this.sslActive = sslActive;
-        return this;
-    }
-
     public EzyWebSocketSettingBuilder sslConfig(EzySimpleSslConfigSetting sslConfig) {
         this.sslConfig = sslConfig;
         return this;
+    }
+    
+    public EzyWebSocketSettingBuilder managementEnable(boolean managementEnable) {
+    	this.managementEnable = managementEnable;
+    	return this;
     }
 
     @Override
@@ -52,6 +52,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         p.setWriterThreadPoolSize(writerThreadPoolSize);
         p.setSslActive(sslActive);
         p.setSslConfig(sslConfig);
+        p.setManagementEnable(managementEnable);
         return p;
     }
     

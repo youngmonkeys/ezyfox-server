@@ -12,6 +12,10 @@
 
 	<name>ezyfox-server-embedded</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
+	
+	<properties>
+		<ezy.version>1.2.0</ezy.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -27,12 +31,12 @@
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-msgpack</artifactId>
-			<version>${project.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-jackson</artifactId>
-			<version>${project.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 	</dependencies>
 

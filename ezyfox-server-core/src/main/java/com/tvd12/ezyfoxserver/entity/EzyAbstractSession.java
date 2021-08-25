@@ -252,8 +252,7 @@ public abstract class EzyAbstractSession
 	    this.disconnectionLock = null;
 	    if(locks != null)
 	        this.locks.clear();
-	    if(properties != null)
-            this.properties.clear();
+        this.properties.clear();
 	    this.locks = null;
 	    this.droppedPackets = null;
 	    this.immediateDeliver = null;

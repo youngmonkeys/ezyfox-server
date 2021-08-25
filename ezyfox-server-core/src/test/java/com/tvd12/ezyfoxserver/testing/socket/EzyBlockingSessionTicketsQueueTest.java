@@ -7,7 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 
 public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
@@ -42,6 +44,32 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         
         assert queue.add(sessions.get(0));
         
+    }
+    
+    @Test
+    public void takeInactiveSession() throws Exception {
+    	// given
+    	EzyBlockingSessionTicketsQueue sut = new EzyBlockingSessionTicketsQueue();
+    	
+    	MySession session = new MySession();
+    	session.setActivated(false);
+    	sut.add(session);
+    	
+    	Thread newThread = new Thread(() -> {
+    		// when
+        	EzySession takeSession;
+			try {
+				takeSession = sut.take();
+			} catch (InterruptedException e) {
+				return;
+			}
+        	
+        	// then
+        	Asserts.assertEquals(session, takeSession);
+    	});
+    	newThread.start();
+    	Thread.sleep(300L);
+    	newThread.interrupt();
     }
     
     public static class MySession extends EzyAbstractSession {

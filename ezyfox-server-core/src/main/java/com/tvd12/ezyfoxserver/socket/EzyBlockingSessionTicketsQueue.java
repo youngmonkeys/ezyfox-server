@@ -43,7 +43,7 @@ public class EzyBlockingSessionTicketsQueue
 			T session = (T) queue.take();
 			if(session.isActivated())
 				return session;
-			logger.debug("session: {} maybe destroyed");
+			logger.debug("session: {} maybe destroyed", session);
 		}
 	}
 	

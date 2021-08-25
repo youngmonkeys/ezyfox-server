@@ -1,9 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -14,13 +19,18 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
+import com.tvd12.ezyfoxserver.command.EzyAppSendResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.FieldUtil;
+import com.tvd12.test.util.RandomUtil;
 
 public class EzySimpleAppContextTest extends BaseTest {
 
@@ -62,4 +72,24 @@ public class EzySimpleAppContextTest extends BaseTest {
         appContext.handleException(Thread.currentThread(), new Exception());
     }
     
+    @Test
+    public void sendMultiTest() {
+    	// given
+    	EzyData data = mock(EzyData.class);
+    	EzySession recipient = mock(EzySession.class);
+    	List<EzySession> recipients = Arrays.asList(recipient);
+    	boolean encrypted = RandomUtil.randomBoolean();
+    	
+    	EzyAppSendResponse sendResponse = mock(EzyAppSendResponse.class);
+    	doNothing().when(sendResponse).execute(data, recipients, encrypted, EzyTransportType.TCP);
+    	
+    	EzySimpleAppContext sut = new EzySimpleAppContext();
+    	FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
+    	
+    	// when
+    	sut.send(data, recipients, encrypted, EzyTransportType.TCP);
+    	
+    	// then
+    	verify(sendResponse, times(1)).execute(data, recipients, encrypted, EzyTransportType.TCP);
+    }
 }

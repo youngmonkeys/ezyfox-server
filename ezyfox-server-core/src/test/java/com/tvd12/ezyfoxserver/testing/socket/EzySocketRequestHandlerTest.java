@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroupFetcher;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
 import com.tvd12.ezyfoxserver.socket.EzySocketRequestHandler;
+import com.tvd12.test.assertion.Asserts;
 
 public class EzySocketRequestHandlerTest {
 
@@ -109,6 +110,37 @@ public class EzySocketRequestHandlerTest {
         thread.start();
         Thread.sleep(100L);
         thread.interrupt();
+    }
+    
+    @Test
+    public void processRequestQueue0RemainTest() {
+    	// given
+        ExEzySocketRequestHandler handler = new ExEzySocketRequestHandler();
+        
+        EzySocketDataHandlerGroup handlerGroup = mock(EzySocketDataHandlerGroup.class);
+        EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);
+        when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(handlerGroup);
+        
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.isActivated()).thenReturn(Boolean.TRUE);
+        EzyRequestQueue requestQueue = new EzyNonBlockingRequestQueue();
+        when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
+        EzyArray array = EzyEntityFactory.newArrayBuilder()
+                .append(10)
+                .build();
+        EzySocketRequest request = new EzySimpleSocketRequest(session, array);
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
+        handler.setSessionTicketsQueue(sessionTicketsRequestQueues.getExtensionQueue());
+        sessionTicketsRequestQueues.addRequest(request);
+        sessionTicketsRequestQueues.addRequest(request);
+        
+        handler.setDataHandlerGroupFetcher(dataHandlerGroupFetcher);
+        
+        // when
+        handler.handleEvent();
+        
+        // then
+        Asserts.assertEquals(sessionTicketsRequestQueues.getExtensionQueue().size(), 1);
     }
     
     public static class ExEzySocketRequestHandler extends EzySocketRequestHandler {

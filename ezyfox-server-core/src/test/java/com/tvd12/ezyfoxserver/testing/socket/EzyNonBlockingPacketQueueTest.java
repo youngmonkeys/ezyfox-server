@@ -3,8 +3,12 @@ package com.tvd12.ezyfoxserver.testing.socket;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.socket.EzyNonBlockingPacketQueue;
+import com.tvd12.ezyfoxserver.socket.EzyNonBlockingRequestQueue;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
+import com.tvd12.ezyfoxserver.socket.EzySocketRequest;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import static org.mockito.Mockito.*;
 
 public class EzyNonBlockingPacketQueueTest extends BaseTest {
 
@@ -29,8 +33,34 @@ public class EzyNonBlockingPacketQueueTest extends BaseTest {
         assert !queue.add(new Packet());
     }
     
-    public static class Packet extends EzySimplePacket {
+    @Test
+    public void clearTest() {
+    	// given
+    	EzyNonBlockingRequestQueue sut = new EzyNonBlockingRequestQueue();
+    	EzySocketRequest socketRequest = mock(EzySocketRequest.class);
+    	sut.add(socketRequest);
+    	
+    	// when
+    	sut.clear();
+    	
+    	// then
+    	Asserts.assertTrue(sut.isEmpty());
     }
     
+    @Test
+    public void isFullTest() {
+    	// given
+    	EzyNonBlockingRequestQueue sut = new EzyNonBlockingRequestQueue(0);
+    	EzySocketRequest socketRequest = mock(EzySocketRequest.class);
+    	
+    	// when
+    	boolean result = sut.add(socketRequest);
+    	
+    	// then
+    	Asserts.assertTrue(sut.isFull());
+    	Asserts.assertFalse(result);
+    }
     
+    public static class Packet extends EzySimplePacket {
+    }
 }

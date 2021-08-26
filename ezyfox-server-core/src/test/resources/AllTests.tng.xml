@@ -4,6 +4,7 @@
 	<test name="All">
 		<packages>
 			<package name="com.tvd12.ezyfoxserver.testing"></package>
+			<package name="com.tvd12.ezyfoxserver.testing.ext"></package>
 		</packages>
 	</test>
 	<test name="Api">

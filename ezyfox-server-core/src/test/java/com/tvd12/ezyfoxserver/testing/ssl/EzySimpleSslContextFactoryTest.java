@@ -8,6 +8,10 @@ import com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder;
 import com.tvd12.ezyfoxserver.ssl.EzySslConfig;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextFactory;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.reflect.MethodInvoker;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimpleSslContextFactoryTest extends BaseCoreTest {
 
@@ -29,4 +33,24 @@ public class EzySimpleSslContextFactoryTest extends BaseCoreTest {
         factory.newSslContext(sslConfig);
     }
     
+    @Test
+    public void getAlgorithmTest() {
+    	// given
+    	EzySimpleSslContextFactory sut = new EzySimpleSslContextFactory() {
+    		protected String getDefaultAlgorithm() {
+    			return null;
+    		};
+    	};
+    	EzySslConfig sslConfig = mock(EzySslConfig.class);
+    	
+    	// when
+    	String algorithm = MethodInvoker.create()
+    			.object(sut)
+    			.method("getAlgorithm")
+    			.param(EzySslConfig.class, sslConfig)
+    			.call();
+    	
+    	// then
+    	Asserts.assertEquals("SunX509", algorithm);
+    }
 }

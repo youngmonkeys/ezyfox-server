@@ -96,8 +96,7 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	public final void enqueueDisconnection(EzyConstant reason) {
-		if(session != null)
-			session.disconnect(reason);
+		session.disconnect(reason);
 	}
 	
 	public final void fireChannelInactive() {
@@ -184,12 +183,6 @@ public abstract class EzyAbstractHandlerGroup
 	}
 	
 	protected final void executeSendingPacket(EzyPacket packet, Object writeBuffer) {
-		if(isSessionConnected()) {
-			sendPacketToClient0(packet, writeBuffer);
-		}
-	}
-	
-	private void sendPacketToClient0(EzyPacket packet, Object writeBuffer) {
 		try {
 			EzyChannel channel = session.getChannel();
 			if(canWriteBytes(channel)) {
@@ -279,11 +272,7 @@ public abstract class EzyAbstractHandlerGroup
 		networkStats.addWrittenBytes(count);
 		networkStats.addWrittenPackets(1);
 	}
-	
-	protected final boolean isSessionConnected() {
-		return session != null;
-	}
-	
+
 	public EzyNioSession getSession() {
 		return session;
 	}

@@ -2,9 +2,10 @@ package com.tvd12.ezyfoxserver.nio.testing.wrapper;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.concurrent.ExecutorService;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -111,6 +112,145 @@ public class EzyHandlerGroupManagerImplTest extends BaseTest {
 		handlerGroupManager.unmapHandlerGroup(udpAddress);
 		handlerGroupManager.removeHandlerGroup(session3);
 		handlerGroupManager.destroy();
+	}
+	
+	@Test
+	public void unmapHandlerGroupNullAddress() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		// when
+		// then
+		sut.unmapHandlerGroup(null);
+	}
+	
+	@Test
+	public void mapSocketChannelSessionNull() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		// when
+		// then
+		sut.mapSocketChannel(null, null);
+	}
+	
+	@Test
+	public void mapSocketChannelChannelNull() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		EzySession session = mock(EzySession.class);
+		
+		// when
+		sut.mapSocketChannel(null, session);
+		
+		// then
+		verify(session, times(1)).getChannel();
+	}
+	
+	@Test
+	public void mapSocketChannelConnectionNull() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		EzySession session = mock(EzySession.class);
+		EzyChannel channel = mock(EzyChannel.class);
+		when(session.getChannel()).thenReturn(channel);
+		
+		// when
+		sut.mapSocketChannel(null, session);
+		
+		// then
+		verify(session, times(1)).getChannel();
+	}
+	
+	@Test
+	public void mapSocketChannelNonContainsConnection() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		EzySession session = mock(EzySession.class);
+		EzyChannel channel = mock(EzyChannel.class);
+		when(session.getChannel()).thenReturn(channel);
+		
+		Object connection = new Object();
+		when(channel.getConnection()).thenReturn(connection);
+		
+		// when
+		sut.mapSocketChannel(null, session);
+		
+		// then
+		verify(session, times(1)).getChannel();
+		verify(channel, times(1)).getConnection();
+	}
+	
+	@Test
+	public void removeHandlerGroupUdpClientAddressIsNull() {
+		// given
+		EzyHandlerGroupManager sut = newHandlerGroupManager();
+		
+		EzySession session = mock(EzySession.class);
+		EzyChannel channel = mock(EzyChannel.class);
+		when(session.getChannel()).thenReturn(channel);
+		
+		Object connection = new Object();
+		when(channel.getConnection()).thenReturn(connection);
+		
+		SocketAddress udpClientAddress = mock(SocketAddress.class);
+		when(session.getUdpClientAddress()).thenReturn(udpClientAddress);
+		
+		// when
+		sut.removeHandlerGroup(session);
+		
+		// then
+		verify(session, times(1)).getChannel();
+		verify(session, times(1)).getUdpClientAddress();
+		verify(channel, times(1)).getConnection();
+	}
+	
+	public EzyHandlerGroupManager newHandlerGroupManager() {
+		EzyNioSessionManager sessionManager = (EzyNioSessionManager)EzyNioSessionManagerImpl.builder()
+				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+				.tokenGenerator(new EzySimpleSessionTokenGenerator())
+				.build();
+		ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
+		EzyCodecFactory codecFactory = mock(EzyCodecFactory.class);
+		when(codecFactory.newDecoder(any())).thenReturn(decoder);
+		ExecutorService statsThreadPool = EzyExecutors.newSingleThreadExecutor("stats");
+		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
+		EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
+		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
+		
+		EzySimpleSettings settings = new EzySimpleSettings();
+		EzySimpleStreamingSetting streaming = settings.getStreaming();
+		streaming.setEnable(true);
+		EzySimpleServer server = new EzySimpleServer();
+		server.setSettings(settings);
+		server.setSessionManager(sessionManager);
+		EzySimpleServerContext serverContext = new EzySimpleServerContext();
+		serverContext.setServer(server);
+		serverContext.init();
+		
+		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+		EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+		EzyStatistics statistics = new EzySimpleStatistics();
+		EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
+				.statistics(statistics)
+				.statsThreadPool(statsThreadPool)
+				.streamQueue(streamQueue)
+				.disconnectionQueue(disconnectionQueue)
+				.codecFactory(codecFactory)
+				.serverContext(serverContext)
+				.socketSessionTicketsQueue(socketSessionTicketsQueue)
+				.webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+				.socketSessionTicketsQueue(webSocketSessionTicketsQueue)
+				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+				.build();
+		
+		EzyHandlerGroupManager handlerGroupManager = EzyHandlerGroupManagerImpl.builder()
+				.handlerGroupBuilderFactory(handlerGroupBuilderFactory)
+				.build();
+		return handlerGroupManager;
 	}
 	
 	public static class ExEzyByteToObjectDecoder implements EzyStringToObjectDecoder {

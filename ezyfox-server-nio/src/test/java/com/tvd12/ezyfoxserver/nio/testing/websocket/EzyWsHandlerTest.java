@@ -1,6 +1,9 @@
 package com.tvd12.ezyfoxserver.nio.testing.websocket;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeoutException;
@@ -13,6 +16,7 @@ import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
+import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
@@ -34,6 +38,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyWsHandlerTest extends BaseTest {
 
@@ -108,4 +113,28 @@ public class EzyWsHandlerTest extends BaseTest {
 		handler.onClose(session2, 3000, "test");
 	}
 	
+	@Test
+	public void setChannelClosedWithChannelNull() {
+		// given
+		EzyNioSessionManager sessionManager = mock(EzyNioSessionManager.class);
+		
+		EzyWsHandler sut = EzyWsHandler.builder()
+				.sessionManager(sessionManager)
+				.build();
+		Session connection = mock(Session.class);
+		EzyNioSession session = mock(EzyNioSession.class);
+		
+		when(sessionManager.getSession(connection)).thenReturn(session);
+		
+		// when
+		MethodInvoker.create()
+			.object(sut)
+			.method("setChannelClosed")
+			.param(Session.class, connection)
+			.call();
+		
+		// then
+		verify(sessionManager, times(1)).getSession(connection);
+		verify(session, times(1)).getChannel();
+	}
 }

@@ -12,7 +12,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     public EzyWebSocketSettingBuilder() {
         this.port = 2208;
         this.sslPort = 2812;
-        this.maxFrameSize = 32678;
+        this.maxFrameSize = 2048;
         this.writerThreadPoolSize = 8;
         this.managementEnable = false;
         this.sslConfig = new EzySimpleSslConfigSetting();

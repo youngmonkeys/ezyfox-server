@@ -37,7 +37,7 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
         super();
         setPort(2208);
         setSslPort(2812);
-        setMaxFrameSize(4096);
+        setMaxFrameSize(2048);
         setWriterThreadPoolSize(8);
         setSslConfig(new EzySimpleSslConfigSetting());
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");

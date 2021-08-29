@@ -109,7 +109,9 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         int sessionCount = user.getSessionCount();
         if(sessionCount >= maxSessionPerUser) {
-            if((maxSessionPerUser > 1) || (maxSessionPerUser == 1 && !allowChangeSession))
+            if(sessionCount > maxSessionPerUser 
+            		|| maxSessionPerUser > 1 
+            		|| !allowChangeSession)
                 throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         }
         session.setLoggedIn(true);

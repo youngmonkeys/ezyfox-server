@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.testing;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
@@ -37,7 +38,10 @@ import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.FieldUtil;
+import com.tvd12.test.reflect.MethodUtil;
 
 public class EzyNioServerBootstrapTest extends BaseTest {
 
@@ -120,7 +124,106 @@ public class EzyNioServerBootstrapTest extends BaseTest {
 		bootstrap.start();
 		bootstrap.destroy();
 		bootstrap.destroy();
+	}
+	
+	@Test
+	public void startSocketServerBootstrapNotActive() {
+		// given
+		EzySimpleServer server = new EzySimpleServer();
+		EzySimpleSettings settings = new EzySimpleSettings();
+		settings.getSocket().setActive(false);
+		server.setSettings(settings);
 		
+		EzyServerContext context = mock(EzyServerContext.class);
+		when(context.getServer()).thenReturn(server);
+		
+		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+		sut.setContext(context);
+		
+		// when
+		MethodUtil.invokeMethod("startSocketServerBootstrap", sut);
+		
+		// then
+		Asserts.assertNull(FieldUtil.getFieldValue(sut, "socketServerBootstrap"));
+	}
+	
+	@Test
+	public void startUdpServerBootstrapNotActive() {
+		// given
+		EzySimpleServer server = new EzySimpleServer();
+		EzySimpleSettings settings = new EzySimpleSettings();
+		settings.getUdp().setActive(false);
+		server.setSettings(settings);
+		
+		EzyServerContext context = mock(EzyServerContext.class);
+		when(context.getServer()).thenReturn(server);
+		
+		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+		sut.setContext(context);
+		
+		// when
+		MethodUtil.invokeMethod("startUdpServerBootstrap", sut);
+		
+		// then
+		Asserts.assertNull(FieldUtil.getFieldValue(sut, "udpServerBootstrap"));
+		sut.destroy();
+	}
+	
+	@Test
+	public void startWebSocketServerBootstrapNotActive() {
+		// given
+		EzySimpleServer server = new EzySimpleServer();
+		EzySimpleSettings settings = new EzySimpleSettings();
+		settings.getWebsocket().setActive(false);
+		server.setSettings(settings);
+		
+		EzyServerContext context = mock(EzyServerContext.class);
+		when(context.getServer()).thenReturn(server);
+		
+		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+		sut.setContext(context);
+		
+		// when
+		MethodUtil.invokeMethod("startWebSocketServerBootstrap", sut);
+		
+		// then
+		Asserts.assertNull(FieldUtil.getFieldValue(sut, "websocketServerBootstrap"));
+	}
+	
+	@Test
+	public void startStreamHandlingLoopHandlersNotActive() {
+		// given
+		EzySimpleServer server = new EzySimpleServer();
+		EzySimpleSettings settings = new EzySimpleSettings();
+		settings.getStreaming().setEnable(false);
+		server.setSettings(settings);
+		
+		EzyServerContext context = mock(EzyServerContext.class);
+		when(context.getServer()).thenReturn(server);
+		
+		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+		sut.setContext(context);
+		
+		// when
+		MethodUtil.invokeMethod("startStreamHandlingLoopHandlers", sut);
+		
+		// then
+		Asserts.assertNull(FieldUtil.getFieldValue(sut, "streamHandlingLoopHandler"));
+	}
+	
+	@Test
+	public void destroySocketDataReceiver() {
+		// given
+		EzySocketDataReceiver dataReceiver = mock(EzySocketDataReceiver.class);
+		
+		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+		sut.setSocketDataReceiver(dataReceiver);
+		
+		// when
+		sut.destroy();
+		
+		// then
+		verify(dataReceiver, times(1)).destroy();
 	}
 	
 	public static class ExBootstrap extends EzyBootstrap {

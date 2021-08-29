@@ -1,16 +1,21 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
+import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzyStarter;
 import com.tvd12.ezyfoxserver.builder.EzyAbtractServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
+import com.tvd12.test.reflect.MethodInvoker;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyStarterTest {
@@ -21,6 +26,32 @@ public class EzyStarterTest {
                 .configFile("test-data/settings/config.properties")
                 .build();
         starter.start();
+    }
+    
+    @Test
+    public void notPrintSettings() {
+    	// given
+    	EzyStarter starter = new ExEzyStarter.Builder()
+                .build();
+    	
+    	EzyConfig config = mock(EzyConfig.class);
+    	when(config.isPrintSettings()).thenReturn(false);
+    	
+    	EzySimpleServer server = new EzySimpleServer();
+    	server.setConfig(config);
+    	
+    	EzySimpleSettings settings = new EzySimpleSettings();
+    	server.setSettings(settings);
+    	
+    	// when
+    	MethodInvoker.create()
+    		.object(starter)
+    		.method("startEzyFox")
+    		.param(EzyServer.class, server)
+    		.call();
+    	
+    	// then
+    	verify(config, times(1)).isPrintSettings();
     }
     
     public static class ExEzyStarter extends EzyStarter {
@@ -68,7 +99,6 @@ public class EzyStarterTest {
             }
             
         }
-        
     }
     
     public static class ExEzySimpleSessionManager extends EzySimpleSessionManager {
@@ -93,6 +123,5 @@ public class EzyStarterTest {
         }
         
     }
-    
-    
 }
+

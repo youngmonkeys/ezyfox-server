@@ -8,8 +8,8 @@ public interface EzyWebSocketSetting extends EzyBaseSocketSetting {
     
     int getWriterThreadPoolSize();
     
-    boolean isSslActive();
-    
     EzySslConfigSetting getSslConfig();
+    
+    boolean isManagementEnable();
     
 }

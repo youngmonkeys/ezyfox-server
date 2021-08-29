@@ -1,8 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.testng.annotations.Test;
 
@@ -11,13 +17,18 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.command.EzyPluginResponse;
+import com.tvd12.ezyfoxserver.command.EzyPluginSendResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.FieldUtil;
+import com.tvd12.test.util.RandomUtil;
 
 public class EzySimplePluginContextTest extends BaseTest {
 
@@ -50,4 +61,24 @@ public class EzySimplePluginContextTest extends BaseTest {
         pluginContext.send(data, session, false);
     }
     
+    @Test
+    public void sendMultiTest() {
+    	// given
+    	EzyData data = mock(EzyData.class);
+    	EzySession recipient = mock(EzySession.class);
+    	List<EzySession> recipients = Arrays.asList(recipient);
+    	boolean encrypted = RandomUtil.randomBoolean();
+    	
+    	EzyPluginSendResponse sendResponse = mock(EzyPluginSendResponse.class);
+    	doNothing().when(sendResponse).execute(data, recipients, encrypted, EzyTransportType.TCP);
+    	
+    	EzySimplePluginContext sut = new EzySimplePluginContext();
+    	FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
+    	
+    	// when
+    	sut.send(data, recipients, encrypted, EzyTransportType.TCP);
+    	
+    	// then
+    	verify(sendResponse, times(1)).execute(data, recipients, encrypted, EzyTransportType.TCP);
+    }
 }

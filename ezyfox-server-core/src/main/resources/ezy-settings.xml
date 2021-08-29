@@ -49,6 +49,7 @@
 		<ssl-port>2812</ssl-port>
 		<max-frame-size>2048</max-frame-size>
 		<writer-thread-pool-size>8</writer-thread-pool-size>
+		<management-enable>true</management-enable>
 		<ssl-active>false</ssl-active>
 		<ssl-config>
 			<file>ssl-config.properties</file>

@@ -10,6 +10,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimplePluginsSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.test.assertion.Asserts;
 
 public class EzySimpleZoneSettingTest {
 
@@ -44,4 +45,16 @@ public class EzySimpleZoneSettingTest {
         setting.setEventControllers(new EzySimpleEventControllersSetting());
     }
     
+    @Test
+    public void configFileIsNull() {
+    	// given
+    	EzySimpleZoneSetting sut = new EzySimpleZoneSetting();
+    	
+    	// when
+    	String configFile = sut.getConfigFile();
+    	
+    	// then
+    	Asserts.assertNull(configFile);
+    	System.out.println(sut.toMap());
+    }
 }

@@ -25,7 +25,6 @@ public class EzyHandshakeController
 	    EzyHandshakeEvent event = newHandshakeEvent(session, params);
 	    handleSocketSSL(ctx, event);
 		updateSession(session, event);
-		process(ctx, request);
 		EzyResponse response = newHandShakeResponse(session, event);
 	    ctx.send(response, session, false);
 	    event.release();
@@ -58,19 +57,13 @@ public class EzyHandshakeController
 		event.setEncryptedSessionKey(encryptedSessionKey);
 	}
 	
-	protected void process(EzyServerContext ctx, EzyHandShakeRequest request) {
-	    EzySession session = request.getSession();
-	    EzyHandshakeParams params = request.getParams();
-	    String reconnectToken = params.getReconnectToken();
-	    ((EzyAbstractSession)session).setBeforeToken(reconnectToken);
-	}
-	
 	protected void updateSession(EzySession session, EzyHandshakeEvent event) {
 		session.setClientId(event.getClientId());
 		session.setClientKey(event.getClientKey());
 		session.setClientType(event.getClientType());
 		session.setClientVersion(event.getClientVersion());
 		session.setSessionKey(event.getSessionKey());
+		((EzyAbstractSession)session).setBeforeToken(event.getReconnectToken());
 	}
 	
 	protected EzyHandshakeEvent newHandshakeEvent(

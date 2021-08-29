@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleAppSettingTest extends BaseTest {
@@ -22,6 +23,20 @@ public class EzySimpleAppSettingTest extends BaseTest {
         assertEquals(setting.getEntryLoader(), TestAppEntryLoader.class.getName());
     }
     
+    @Test
+    public void configFileIsNull() {
+    	// given
+    	EzySimpleAppSetting sut = new EzySimpleAppSetting();
+    	sut.setConfigFile(null);
+    	
+    	// when
+    	String configFile = sut.getConfigFile(true);
+    	
+    	// then
+    	Asserts.assertNull(configFile);
+    	System.out.println(sut.toMap());
+    }
+    
     public static class TestAppEntryLoader implements EzyAppEntryLoader {
 
         @Override
@@ -30,5 +45,4 @@ public class EzySimpleAppSettingTest extends BaseTest {
         }
         
     }
-
 }

@@ -27,17 +27,16 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
     @XmlElement(name = "writer-thread-pool-size")
     protected int writerThreadPoolSize;
     
-    @XmlElement(name = "ssl-active")
-    protected boolean sslActive;
-    
     @XmlElement(name = "ssl-config")
     protected EzySimpleSslConfigSetting sslConfig;
+    
+    @XmlElement(name = "management-enable")
+    protected boolean managementEnable;
     
     public EzySimpleWebSocketSetting() {
         super();
         setPort(2208);
         setSslPort(2812);
-        setSslActive(false);
         setMaxFrameSize(4096);
         setWriterThreadPoolSize(8);
         setSslConfig(new EzySimpleSslConfigSetting());
@@ -47,10 +46,11 @@ public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implemen
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
-        map.put("sslPort", sslPort);
         map.put("maxFrameSize", maxFrameSize);
+        map.put("sslPort", sslPort);
         map.put("sslActive", sslActive);
         map.put("sslConfig", sslConfig.toMap());
+        map.put("managementEnable", managementEnable);
         map.put("writerThreadPoolSize", writerThreadPoolSize);
         return map;
     }

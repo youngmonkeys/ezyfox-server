@@ -6,56 +6,37 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>ezyfox-server-core</artifactId>
-	<version>1.1.9</version> <!-- ${project.version} -->
+	<version>1.2.0</version> <!-- ${project.version} -->
 	<name>ezyfox-server-core</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
 	<properties>
-		<ezy.codec.version>1.1.9</ezy.codec.version>
-		<ezy.mapping.version>1.1.9</ezy.mapping.version>
-		<ezy.tools.version>1.1.9</ezy.tools.version>
+		<ezy.version>1.2.0</ezy.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-codec</artifactId>
-			<version>${ezy.codec.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-mapping</artifactId>
-			<version>${ezy.mapping.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-tools</artifactId>
-			<version>${ezy.tools.version}</version>
+			<version>${ezy.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.20</version>
-					<configuration>
-						<suiteXmlFiles>
-							<suiteXmlFile>src/test/resources/AllTests.tng.xml</suiteXmlFile>
-						</suiteXmlFiles>
-						<additionalClasspathElements>
-							<additionalClasspathElement>${project.basedir}/test-data/plugins/ezyfox-auth-plugin/ezyfox-auth-plugin.jar</additionalClasspathElement>
-						</additionalClasspathElements>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

@@ -3,6 +3,8 @@ package com.tvd12.ezyfoxserver.nio.testing.socket;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.Socket;
@@ -33,13 +35,16 @@ import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
+import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyNioSessionManagerImpl;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
+import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
@@ -53,6 +58,7 @@ import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
+import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyNioSocketAcceptorTest extends BaseTest {
 
@@ -125,6 +131,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 	
 	private EzyHandlerGroupManager newHandlerGroupManager() {
 		EzyNioSessionManager sessionManager = (EzyNioSessionManager)EzyNioSessionManagerImpl.builder()
+				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
 				.tokenGenerator(new EzySimpleSessionTokenGenerator())
 				.build();
 		ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
@@ -138,6 +145,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleStreamingSetting streaming = settings.getStreaming();
 		streaming.setEnable(true);
+		
 		EzySimpleServer server = new EzySimpleServer();
 		server.setSettings(settings);
 		server.setSessionManager(sessionManager);
@@ -164,6 +172,34 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 				.handlerGroupBuilderFactory(handlerGroupBuilderFactory)
 				.build();
 		return handlerGroupManager;
+	}
+	
+	@Test
+	public void acceptConnectionTest() throws Exception {
+		// given
+		EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+		EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+		
+		Selector readSelector = Selector.open();
+		EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
+		sut.setReadSelector(readSelector);
+		SocketChannel clientChannel = SocketChannel.open();
+		
+		when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+		sut.setHandlerGroupManager(handlerGroupManager);
+		
+		EzyNioSession session = mock(EzyNioSession.class);
+		when(handlerGroup.getSession()).thenReturn(session);
+		
+		// when
+		MethodInvoker.create()
+			.object(sut)
+			.method("acceptConnection")
+			.param(SocketChannel.class, clientChannel)
+			.call();
+		
+		// then
+		verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
 	}
 	
 	public static abstract class ExServerSocketChannel extends ServerSocketChannel {

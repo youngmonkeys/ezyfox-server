@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import org.testng.annotations.Test;
@@ -13,9 +14,13 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
+import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSetting;
+import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
+import com.tvd12.test.reflect.ReflectMethodUtil;
 
 public class EzyServerBootstrapTest extends BaseCoreTest {
 
@@ -62,6 +67,40 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
         bootstrap.setLocalBootstrap(localBootstrap);
         
         bootstrap.start();
+    }
+    
+    @Test
+    public void commonTest() throws Exception {
+    	// given
+    	EzySimpleConfig config = new EzySimpleConfig();
+    	config.setPrintBanner(false);
+    	
+    	EzySimpleSettings settings = new EzySimpleSettings();
+    	EzySimpleServer server = new EzySimpleServer();
+    	server.setSettings(settings);
+    	server.setConfig(config);
+    	
+    	EzyServerContext serverContext = mock(EzyServerContext.class);
+    	when(serverContext.getServer()).thenReturn(server);
+    	
+    	EzyServerBootstrap sut = new EzyServerBootstrap() {
+            @Override
+            protected void startOtherBootstraps(Runnable callback) throws Exception {
+                callback.run();
+            }
+        };
+        sut.setContext(serverContext);
+        
+        // when
+        ReflectMethodUtil.invokeMethod("printBanner", sut);
+        EzyUdpSetting udpSetting = 
+        		(EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", sut);
+        EzyThreadPoolSizeSetting threadPoolSizeSetting = 
+        		(EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", sut);
+        
+        // then
+        Asserts.assertEquals(server.getSettings().getUdp(), udpSetting);
+        Asserts.assertEquals(server.getSettings().getThreadPoolSize(), threadPoolSizeSetting);
     }
     
     public static class ExEzySimpleSessionManager extends EzySimpleSessionManager<EzySession> {

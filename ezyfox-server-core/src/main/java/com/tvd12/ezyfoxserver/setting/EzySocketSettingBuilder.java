@@ -5,7 +5,6 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
 
     protected int maxRequestSize;
     protected boolean tcpNoDelay;
-    protected boolean sslActive;
     protected int writerThreadPoolSize;
     
     public EzySocketSettingBuilder() {
@@ -22,11 +21,6 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     
     public EzySocketSettingBuilder tcpNoDelay(boolean tcpNoDelay) {
         this.tcpNoDelay = tcpNoDelay;
-        return this;
-    }
-    
-    public EzySocketSettingBuilder sslActive(boolean sslActive) {
-        this.sslActive = sslActive;
         return this;
     }
     

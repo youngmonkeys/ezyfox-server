@@ -12,6 +12,7 @@ public abstract class EzyAbstractSocketSettingBuilder<
     protected String address = "0.0.0.0";
     protected boolean active = true;
     protected String codecCreator = null;
+    protected boolean sslActive = false;
 
     public B port(int port) {
         this.port = port;
@@ -25,6 +26,11 @@ public abstract class EzyAbstractSocketSettingBuilder<
 
     public B active(boolean active) {
         this.active = active;
+        return (B)this;
+    }
+    
+    public B sslActive(boolean sslActive) {
+        this.sslActive = sslActive;
         return (B)this;
     }
 

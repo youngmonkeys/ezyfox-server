@@ -94,7 +94,7 @@ public class EzySimpleWsHandlerGroup
 				EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
 				streamQueue.add(stream);
 			}
-			else if(len > 1) {
+			else {
 				int newLen = len - 1;
 				int newOffset = offset + 1;
 				byte[] messageBytes = EzyBytes.copy(bytes, newOffset, newLen);

@@ -24,11 +24,15 @@ public abstract class EzyAbstractSocketSetting implements EzyBaseSocketSetting {
     @XmlElement(name = "active")
     protected boolean active;
     
+    @XmlElement(name = "ssl-active")
+    protected boolean sslActive;
+    
 	@XmlElement(name = "codec-creator")
 	protected String codecCreator;
 	
 	public EzyAbstractSocketSetting() {
 	    setActive(true);
+	    setSslActive(false);
 	    setAddress("0.0.0.0");
 	}
 	

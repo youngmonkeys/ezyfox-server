@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminsSetting;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleAdminsSettingTest extends BaseTest {
@@ -31,6 +32,20 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
         adminSetting.setUsername("user1");
         adminSetting.setPassword("password1");
         setting.setAdmins(Arrays.asList(adminSetting1));
+    }
+    
+    @Test
+    public void setItemUsernameNull() {
+    	// given
+    	EzySimpleAdminSetting item = new EzySimpleAdminSetting();
+    	item.setUsername("");
+    	EzySimpleAdminsSetting sut = new EzySimpleAdminsSetting();
+    	
+    	// when
+    	sut.setItem(item);
+    	
+    	// then
+    	Asserts.assertNull(sut.getAdminByName(""));
     }
 
 }

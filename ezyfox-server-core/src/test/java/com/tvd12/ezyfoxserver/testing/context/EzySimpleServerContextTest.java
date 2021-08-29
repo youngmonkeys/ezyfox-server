@@ -1,7 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 import org.testng.annotations.Test;
 
@@ -13,7 +14,9 @@ import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
 import com.tvd12.ezyfoxserver.command.EzyCommand;
+import com.tvd12.ezyfoxserver.command.EzySendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
@@ -28,6 +31,7 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import com.tvd12.test.reflect.FieldUtil;
 
 public class EzySimpleServerContextTest extends BaseCoreTest {
 
@@ -149,6 +153,25 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
     public void test5() {
         EzyZoneContext zoneContext = context.getZoneContext("example");
         zoneContext.getPluginContext("noone");
+    }
+    
+    @Test
+    public void sendNowTest() {
+    	// given
+    	EzyResponse response = mock(EzyResponse.class);
+    	EzySession recipient = mock(EzySession.class);
+    	
+    	EzySendResponse sendResponse = mock(EzySendResponse.class);
+    	doNothing().when(sendResponse).execute(response, recipient, false, true, EzyTransportType.TCP);
+    	
+    	EzySimpleServerContext sut = new EzySimpleServerContext();
+    	FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
+    	
+    	// when
+    	sut.sendNow(response, recipient);
+    	
+    	// then
+    	verify(sendResponse, times(1)).execute(response, recipient, false, true, EzyTransportType.TCP);
     }
     
     public static class ExCommand implements EzyCommand<Boolean> {

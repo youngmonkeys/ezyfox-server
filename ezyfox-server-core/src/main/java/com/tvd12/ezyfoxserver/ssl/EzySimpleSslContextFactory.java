@@ -26,9 +26,9 @@ public class EzySimpleSslContextFactory
     protected SecureRandom secureRandom;
     protected TrustManager[] trustManagers;
     
-    private static final String SUNX509             = "SunX509";
-    private static final String PROTOCOL            = "TLS";
-    private static final String JKS_KEYSTORE        = "JKS";
+    protected static final String SUNX509             = "SunX509";
+    protected static final String PROTOCOL            = "TLS";
+    protected static final String JKS_KEYSTORE        = "JKS";
     
     @Override
     public SSLContext newSslContext(EzySslConfig config) throws Exception {
@@ -103,8 +103,12 @@ public class EzySimpleSslContextFactory
     }
 
     protected String getAlgorithm(EzySslConfig config) {
-        String algorithm = KeyManagerFactory.getDefaultAlgorithm();
+        String algorithm = getDefaultAlgorithm();
         return algorithm != null ? algorithm : SUNX509;
+    }
+    
+    protected String getDefaultAlgorithm() {
+    	return KeyManagerFactory.getDefaultAlgorithm();
     }
     
     protected EzyInputStreamLoader newInputStreamLoader() {

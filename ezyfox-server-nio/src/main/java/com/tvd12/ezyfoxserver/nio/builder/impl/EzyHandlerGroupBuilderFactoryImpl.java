@@ -164,6 +164,11 @@ private final ExecutorService statsThreadPool;
 			return this;
 		}
 		
+		public Builder sessionCreator(EzySessionCreator sessionCreator) {
+			this.sessionCreator = sessionCreator;
+			return this;
+		}
+		
 		public Builder socketSessionTicketsQueue(EzySessionTicketsQueue socketSessionTicketsQueue) {
 			this.socketSessionTicketsQueue = socketSessionTicketsQueue;
 			return this;

@@ -12,9 +12,8 @@
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
 	<properties>
+		<ezy.version>1.2.0</ezy.version>
 		<ezy.core.version>2.1.1</ezy.core.version>
-		<ezy.bean.version>1.2.0</ezy.bean.version>
-		<ezy.binding.version>1.2.0</ezy.binding.version>
 	</properties>
 	
 	<dependencies>
@@ -26,12 +25,12 @@
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-bean</artifactId>
-			<version>${ezy.bean.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-binding</artifactId>
-			<version>${ezy.binding.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>

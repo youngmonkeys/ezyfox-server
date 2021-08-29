@@ -51,7 +51,7 @@ public class EzyHandshakeController
 			}
 		}
 		catch (Exception e) {
-			logger.debug("cannot encrypte session key for session: {}", session, e);
+			logger.debug("cannot encrypt session key for session: {}", session, e);
 		}
 		event.setSessionKey(sessionKey);
 		event.setEncryptedSessionKey(encryptedSessionKey);

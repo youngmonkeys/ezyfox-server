@@ -20,6 +20,7 @@ import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 import lombok.Getter;
@@ -31,12 +32,14 @@ import lombok.Getter;
 @SuppressWarnings("rawtypes")
 public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
-    private final String configFile;
     @Getter
     private EzyServerContext serverContext;
+    private final String configFile;
+    private final EzySettingsDecorator settingsDecorator;
 
     protected EzyStarter(Builder<?> builder) {
         this.configFile = builder.configFile;
+        this.settingsDecorator = builder.settingsDecorator;
     }
 
     @Override
@@ -84,7 +87,11 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     }
 
     protected EzyServer loadEzyFox(EzyConfig config) {
-        return newLoader().config(config).classLoader(getClassLoader()).load();
+        return newLoader()
+                .config(config)
+                .classLoader(getClassLoader())
+                .settingsDecorator(settingsDecorator)
+                .load();
     }
 
     protected EzyLoader newLoader() {
@@ -127,11 +134,16 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     public abstract static class Builder<B extends Builder<B>> implements EzyBuilder<EzyStarter> {
 
         protected String configFile;
+        protected EzySettingsDecorator settingsDecorator;
 
         public B configFile(String configFile) {
             this.configFile = configFile;
             return (B) this;
         }
-
+        
+        public B settingsDecorator(EzySettingsDecorator settingsDecorator) {
+            this.settingsDecorator = settingsDecorator;
+            return (B) this;
+        }
     }
 }

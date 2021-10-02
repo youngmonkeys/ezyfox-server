@@ -15,10 +15,12 @@ import com.tvd12.ezyfox.bean.EzyPackagesToScanAware;
 import com.tvd12.ezyfox.bean.annotation.EzyConfigurationBefore;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfoxserver.EzyPlugin;
 import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.test.assertion.Asserts;
@@ -35,6 +37,12 @@ public class EzySimplePluginEntryTest {
 		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
 		EzyServerContext serverContext = mock(EzyServerContext.class);
 		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
+
+		EzyPlugin plugin = mock(EzyPlugin.class);
+		when(pluginContext.getPlugin()).thenReturn(plugin);
+		
+		EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
+		when(plugin.getSetting()).thenReturn(pluginSetting);
 		
 		InteralPluginEngtry sut = new InteralPluginEngtry();
 		
@@ -69,6 +77,12 @@ public class EzySimplePluginEntryTest {
 		EzyServerContext serverContext = mock(EzyServerContext.class);
 		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
 		
+		EzyPlugin plugin = mock(EzyPlugin.class);
+        when(pluginContext.getPlugin()).thenReturn(plugin);
+        
+        EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
+        when(plugin.getSetting()).thenReturn(pluginSetting);
+		
 		NotAllowRequestEngtry sut = new NotAllowRequestEngtry();
 		
 		// when
@@ -91,6 +105,12 @@ public class EzySimplePluginEntryTest {
 		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
 		EzyServerContext serverContext = mock(EzyServerContext.class);
 		EzyPluginSetup pluginSetup = mock(EzyPluginSetup.class);
+		
+		EzyPlugin plugin = mock(EzyPlugin.class);
+        when(pluginContext.getPlugin()).thenReturn(plugin);
+        
+        EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
+        when(plugin.getSetting()).thenReturn(pluginSetting);
 		
 		DisAllowRequestEngtry sut = new DisAllowRequestEngtry();
 		

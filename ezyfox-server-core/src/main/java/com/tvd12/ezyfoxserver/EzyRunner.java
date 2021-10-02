@@ -4,6 +4,7 @@
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
+import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 
 import lombok.Getter;
 
@@ -34,9 +35,16 @@ public abstract class EzyRunner {
     }
     
     protected EzyStarter newStarter(String configFile) {
-        return newStarterBuilder().configFile(configFile).build();
+        return newStarterBuilder()
+                .configFile(configFile)
+                .settingsDecorator(newSettingsDecorator())
+                .build();
     }
     
     protected abstract EzyStarter.Builder<?> newStarterBuilder();
+    
+    protected EzySettingsDecorator newSettingsDecorator() {
+        return null;
+    }
     
 }

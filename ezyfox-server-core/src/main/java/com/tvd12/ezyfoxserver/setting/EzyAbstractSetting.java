@@ -29,6 +29,12 @@ public abstract class EzyAbstractSetting
 	
 	@XmlElement(name = "folder")
     protected String folder;
+
+	@XmlElement(name = "active-profiles")
+    protected String activeProfiles;
+	
+	@XmlElement(name = "package-name")
+    protected String packageName;
 	
 	protected int zoneId;
 	
@@ -109,6 +115,8 @@ public abstract class EzyAbstractSetting
 	    map.put("id", id);
 	    map.put("name", name);
 	    map.put("folder", getFolder());
+	    map.put("packageName", packageName);
+	    map.put("activeProfiles", activeProfiles);
 	    map.put("entryLoader", entryLoader);
 	    map.put("threadPoolSize", threadPoolSize);
 	    map.put("configFile", configFile != null ? configFile : "");

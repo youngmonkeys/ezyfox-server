@@ -10,7 +10,7 @@ public class EzyUserManagementSettingBuilder
     protected boolean allowGuestLogin = false;
     protected boolean allowChangeSession = true;
     protected String guestNamePrefix = "Guest#";
-    protected String userNamePattern = "^[a-zA-Z0-9_.#]{3,36}$";
+    protected String userNamePattern = "^[a-zA-Z0-9_.#]{3,64}$";
 
     /**
      * Set live time to keep an user when this user has no connected sessions

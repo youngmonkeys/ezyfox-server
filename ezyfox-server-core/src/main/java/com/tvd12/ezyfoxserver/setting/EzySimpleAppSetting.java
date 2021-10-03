@@ -37,8 +37,10 @@ public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSet
 	
 	@Override
 	protected String getParentFolder() {
-	    Path path = Paths.get(APPS, ENTRIES);
-	    return (Files.exists(path) ? path : Paths.get(APPS)).toString();
+	    Path path = Paths.get(homePath, APPS, ENTRIES);
+	    return (Files.exists(path) 
+	            ? Paths.get(APPS, ENTRIES) 
+	            : Paths.get(APPS)).toString();
 	}
 	
 	@Override

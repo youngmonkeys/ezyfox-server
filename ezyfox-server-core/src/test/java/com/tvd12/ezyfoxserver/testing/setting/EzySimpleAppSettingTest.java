@@ -37,6 +37,38 @@ public class EzySimpleAppSettingTest extends BaseTest {
     	System.out.println(sut.toMap());
     }
     
+    @Test
+    public void getParentFolderWithEntries() {
+        // given
+        EzySimpleAppSetting sut = new EzySimpleAppSetting();
+        sut.setName("test");
+        sut.setFolder("test");
+        sut.setHomePath("test-data");
+        sut.setConfigFile("config.properties");
+        
+        // when
+        String configFile = sut.getConfigFile();
+        
+        // then
+        Asserts.assertEquals("test-data/apps/entries/test/config.properties", configFile);
+    }
+    
+    @Test
+    public void getParentFolderNoEntries() {
+        // given
+        EzySimpleAppSetting sut = new EzySimpleAppSetting();
+        sut.setName("test");
+        sut.setFolder("test");
+        sut.setHomePath("test-data1");
+        sut.setConfigFile("config.properties");
+        
+        // when
+        String configFile = sut.getConfigFile();
+        
+        // then
+        Asserts.assertEquals("test-data1/apps/test/config.properties", configFile);
+    }
+    
     public static class TestAppEntryLoader implements EzyAppEntryLoader {
 
         @Override

@@ -55,6 +55,8 @@ public class EzyDefaultAppEntryTest {
 		
 		EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
 		appSetting.setName("test");
+		appSetting.setActiveProfiles("hello,world");
+		appSetting.setPackageName("x.z.y");
 		
 		EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
 				.build();

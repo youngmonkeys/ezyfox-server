@@ -1,29 +1,29 @@
 package com.tvd12.ezyfoxserver.support.v120.test.entry;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.testng.annotations.Test;
+
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPackagesToScanAware;
 import com.tvd12.ezyfox.bean.annotation.EzyConfigurationBefore;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.EzyApplication;
-import com.tvd12.ezyfoxserver.EzyPlugin;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.test.assertion.Asserts;
+
 import lombok.Setter;
-import org.testng.annotations.Test;
-
-import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class EzySimpleAppEntryTest {
 	

@@ -7,7 +7,9 @@ import com.tvd12.ezyfox.core.exception.EzyBadRequestException;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-public class EzyAbstractUserRequestController extends EzyLoggable {
+public abstract class EzyAbstractUserRequestController 
+        extends EzyLoggable
+        implements EzyCommandsAware {
 	
 	protected EzyData newErrorData(EzyBadRequestException e) {
 		EzyData errorData = newArray(e.getCode(), e.getReason());

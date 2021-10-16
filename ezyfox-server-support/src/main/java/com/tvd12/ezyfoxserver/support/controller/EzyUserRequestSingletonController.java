@@ -2,8 +2,10 @@ package com.tvd12.ezyfoxserver.support.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
@@ -118,6 +120,14 @@ public abstract class EzyUserRequestSingletonController<
 	}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
+	
+	@Override
+	public Set<String> getCommands() {
+	    Set<String> commands = new HashSet<>();
+	    commands.addAll(requestHandlers.keySet());
+	    commands.addAll(prototypeController.getCommands());
+	    return commands;
+	}
 	
 	public abstract static class Builder<B extends Builder>
 			extends EzyLoggable

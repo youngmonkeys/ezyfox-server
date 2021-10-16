@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
+import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.COMMANDS;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +32,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
+import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
@@ -73,6 +76,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		EzyPluginSetup setup = pluginContext.get(EzyPluginSetup.class);
 		EzyPluginRequestController controller = newUserRequestController(beanContext);
 		setup.setRequestController(controller);
+		Set<String> commands = ((EzyCommandsAware)controller).getCommands();
+		pluginContext.setProperty(COMMANDS, commands);
 	}
 	
 	protected boolean allowRequest() {

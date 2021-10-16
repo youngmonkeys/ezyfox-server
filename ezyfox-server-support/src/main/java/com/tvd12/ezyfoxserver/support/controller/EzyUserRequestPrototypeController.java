@@ -1,8 +1,10 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPrototypeFactory;
@@ -79,6 +81,11 @@ public abstract class EzyUserRequestPrototypeController<
 	protected void postHandle(C context, E event, String cmd, EzyHandler handler, Exception e) {}
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
+	
+	@Override
+    public Set<String> getCommands() {
+        return new HashSet<>(handlers.keySet());
+    }
 	
 	@SuppressWarnings("rawtypes")
 	public abstract static class Builder<B extends Builder>

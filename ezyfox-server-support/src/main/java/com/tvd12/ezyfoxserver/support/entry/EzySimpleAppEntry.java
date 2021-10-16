@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
+import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.COMMANDS;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,7 @@ import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyAppResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
@@ -67,6 +70,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		EzyAppSetup setup = appContext.get(EzyAppSetup.class);
 		EzyAppRequestController controller = newUserRequestController(beanContext);
 		setup.setRequestController(controller);
+		Set<String> commands = ((EzyCommandsAware)controller).getCommands();
+		appContext.setProperty(COMMANDS, commands);
 	}
 	
 	protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {

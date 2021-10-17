@@ -1,6 +1,11 @@
 package com.tvd12.ezyfoxserver.support.test.asm;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -17,30 +22,52 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.asm.EzyAsmRequestHandler;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlersImplementer;
+import com.tvd12.ezyfoxserver.support.command.EzyObjectResponse;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController2;
 import com.tvd12.ezyfoxserver.support.test.data.GreetRequest;
+import com.tvd12.ezyfoxserver.support.test.data.GreetResponse;
 
 public class EzyRequestHandlersImplementerTest {
 
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void test() {
+	    // given
 		EzyAppContext context = mock(EzyAppContext.class);
 		EzySession session = mock(EzyAbstractSession.class);
 		EzyUser user = new EzySimpleUser();
 		EzyUserSessionEvent event = new EzySimpleUserSessionEvent(user, session);
 		EzyRequestHandlerImplementer.setDebug(true);
 		EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
+		
+		EzyResponseFactory responseFactory = mock(EzyResponseFactory.class);
+		EzyObjectResponse objectResponse = mock(EzyObjectResponse.class);
+		when(responseFactory.newObjectResponse()).thenReturn(objectResponse);
+		when(objectResponse.command("Big/Hello6")).thenReturn(objectResponse);
+		when(objectResponse.data(new GreetResponse("Hello Dzung!"))).thenReturn(objectResponse);
+		when(objectResponse.session(any())).thenReturn(objectResponse);
+		doNothing().when(objectResponse).execute();
+		
+		implementer.setResponseFactory(responseFactory);
+		
 		Map<String, EzyUserRequestHandler> handlers = implementer.implement(new HelloController());
 		for(EzyUserRequestHandler handler : handlers.values()) {
 			handler.handle(context, event, new GreetRequest("Dzung"));
 		}
 		EzyRequestHandlerImplementer.setDebug(false);
 		implementer = new EzyRequestHandlersImplementer();
+		
+		// when
 		implementer.implement(new HelloController());
+		
+		// then
+		verify(responseFactory, times(1)).newObjectResponse();
+		verify(objectResponse, times(1)).command("Big/Hello6");
+		verify(objectResponse, times(1)).data(new GreetResponse("Hello Dzung!"));
 	}
 	
 	@Test(expectedExceptions = IllegalStateException.class)

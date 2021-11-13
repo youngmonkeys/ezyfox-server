@@ -142,6 +142,7 @@ You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 2. [Space Game Cocos2d-x](https://youngmonkeys.org/asset/space-game/)
 3. [Space Shooter Unity](https://youngmonkeys.org/asset/space-shooter/)
 4. [Lucky Wheel Phaser HTML5](https://youngmonkeys.org/asset/lucky-wheel/)
+5. [Easy Smashers Unity](https://github.com/vu-luong/EzySmashers)
 
 # Tutorials:
 

@@ -38,7 +38,7 @@ import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
+public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	
 	@Override
 	public void config(EzyPluginContext context) {

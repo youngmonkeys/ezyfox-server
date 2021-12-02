@@ -11,11 +11,6 @@
 	<name>ezyfox-server-support</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
-	<properties>
-		<ezy.version>1.2.1</ezy.version>
-		<ezy.core.version>2.1.2</ezy.core.version>
-	</properties>
-	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>

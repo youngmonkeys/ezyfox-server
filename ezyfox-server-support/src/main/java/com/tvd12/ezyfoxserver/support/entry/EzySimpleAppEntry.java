@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
+import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.COMMANDS;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,12 +30,14 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
+import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyAppResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
+public class EzySimpleAppEntry extends EzyAbstractAppEntry {
 
 	@Override
 	public final void config(EzyAppContext context) {
@@ -66,6 +70,8 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		EzyAppSetup setup = appContext.get(EzyAppSetup.class);
 		EzyAppRequestController controller = newUserRequestController(beanContext);
 		setup.setRequestController(controller);
+		Set<String> commands = ((EzyCommandsAware)controller).getCommands();
+		appContext.setProperty(COMMANDS, commands);
 	}
 	
 	protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
@@ -80,6 +86,7 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
 		EzyResponseFactory appResponseFactory = createAppResponseFactory(context, marshaller);
 		ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
+		EzyAppSetting appSetting = context.getApp().getSetting();
 		EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
 				.addSingleton("appContext", context)
 				.addSingleton("marshaller", marshaller)
@@ -88,13 +95,16 @@ public abstract class EzySimpleAppEntry extends EzyAbstractAppEntry {
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
 				.addSingleton("userManager", context.getApp().getUserManager())
-				.addSingleton("appResponseFactory", appResponseFactory);
+				.addSingleton("appResponseFactory", appResponseFactory)
+				.activeProfiles(appSetting.getActiveProfiles());
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);
 		Class[] prototypeClasses = getPrototypeClasses();
 		beanContextBuilder.addPrototypeClasses(prototypeClasses);
 
 		Set<String> scanablePackages = internalGetScanableBeanPackages();
+		if(appSetting.getPackageName() != null)
+		    scanablePackages.add(appSetting.getPackageName());
 		if(scanablePackages.size() > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
 			beanContextBuilder.addSingletonClasses(

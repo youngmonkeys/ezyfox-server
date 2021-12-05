@@ -10,6 +10,10 @@ public interface EzyBaseSetting extends EzyToMap {
     
     String getFolder();
     
+    String getActiveProfiles();
+    
+    String getPackageName();
+    
     int getZoneId();
 
     String getLocation();

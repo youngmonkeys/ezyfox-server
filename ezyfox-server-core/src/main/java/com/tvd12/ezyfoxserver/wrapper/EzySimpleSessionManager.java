@@ -176,14 +176,13 @@ public class EzySimpleSessionManager<S extends EzySession>
 	}
 	
 	@Override
-	protected void removeStaleObjects() {
-	    checkAndRemoveSessions();
+	protected void removeStaleObjects(List<S> buffer) {
+	    checkAndRemoveSessions(buffer);
 	}
 	
-	protected void checkAndRemoveSessions() {
+	protected void checkAndRemoveSessions(List<S> sessions) {
 	    List<S> idleSessions = new ArrayList<>();
         List<S> unloggedInSessions = new ArrayList<>();
-        List<S> sessions = getAllSessions();
         for(S session : sessions) {
             boolean unloggedIn = isUnloggedInSession(session);
             if(unloggedIn) {

@@ -66,6 +66,8 @@
 		<xs:all>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
 			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
@@ -102,6 +104,8 @@
 		<xs:all>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
 			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
 			<xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
 			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />

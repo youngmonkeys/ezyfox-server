@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
+import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 import com.tvd12.ezyfoxserver.setting.EzySettingsReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettingsReader;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
@@ -37,6 +38,7 @@ public abstract class EzyLoader extends EzyLoggable {
     
     protected EzyConfig config;
     protected ClassLoader classLoader;
+    protected EzySettingsDecorator settingsDecorator;
     
     public EzyServer load() {
         EzySettings settings = readSettings();
@@ -60,6 +62,7 @@ public abstract class EzyLoader extends EzyLoggable {
         return EzySimpleSettingsReader.builder()
                 .homePath(getHomePath())
                 .classLoader(classLoader)
+                .settingsDecorator(settingsDecorator)
                 .build();
     }
     
@@ -147,5 +150,8 @@ public abstract class EzyLoader extends EzyLoggable {
 	    return this;
     }
     
-    
+    public EzyLoader settingsDecorator(EzySettingsDecorator settingsDecorator) {
+        this.settingsDecorator = settingsDecorator;
+        return this;
+    }
 }

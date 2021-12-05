@@ -72,7 +72,7 @@ public class EzySimpleSettings implements EzySettings {
         map.put("debug", debug);
         map.put("nodeName", nodeName);
         map.put("maxSessions", maxSessions);
-        map.put("threadPoolSize", threadPoolSize);
+        map.put("threadPoolSize", threadPoolSize.toMap());
         map.put("streaming", streaming.toMap());
         map.put("socket", socket.toMap());
         map.put("udp", udp.toMap());

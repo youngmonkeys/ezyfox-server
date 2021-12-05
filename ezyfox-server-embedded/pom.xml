@@ -5,18 +5,14 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox-server</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 	<artifactId>ezyfox-server-embedded</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 
 	<name>ezyfox-server-embedded</name>
 	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 	
-	<properties>
-		<ezy.version>1.2.0</ezy.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>

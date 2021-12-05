@@ -14,10 +14,12 @@ public class EzySimpleSettingsReader
 
     protected String homePath;
     protected ClassLoader classLoader; 
+    protected EzySettingsDecorator settingsDecorator;
     
     protected EzySimpleSettingsReader(Builder builder) {
         this.homePath = builder.homePath;
         this.classLoader = builder.classLoader;
+        this.settingsDecorator = builder.settingsDecorator;
     }
     
     @Override
@@ -41,6 +43,9 @@ public class EzySimpleSettingsReader
             zoneSetting.init();
             settings.addZone(zoneSetting);
         });
+        if(settingsDecorator != null) {
+            settingsDecorator.decorate(homePath, settings);
+        }
         return settings;
     }
     
@@ -110,7 +115,8 @@ public class EzySimpleSettingsReader
     public static class Builder implements EzyBuilder<EzySettingsReader> {
         
         protected String homePath;
-        protected ClassLoader classLoader; 
+        protected ClassLoader classLoader;
+        protected EzySettingsDecorator settingsDecorator;
         
         public Builder homePath(String homePath) {
             this.homePath = homePath;
@@ -119,6 +125,11 @@ public class EzySimpleSettingsReader
         
         public Builder classLoader(ClassLoader classLoader) {
             this.classLoader = classLoader;
+            return this;
+        }
+        
+        public Builder settingsDecorator(EzySettingsDecorator settingsDecorator) {
+            this.settingsDecorator = settingsDecorator;
             return this;
         }
         

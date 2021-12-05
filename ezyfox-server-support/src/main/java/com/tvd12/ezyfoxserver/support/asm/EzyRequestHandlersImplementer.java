@@ -6,12 +6,18 @@ import java.util.Map;
 
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.support.exception.EzyDuplicateRequestHandlerException;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestHandlerMethod;
 
+import lombok.Setter;
+
 @SuppressWarnings("rawtypes")
 public class EzyRequestHandlersImplementer extends EzyLoggable {
+    
+    @Setter
+    private EzyResponseFactory responseFactory;
 	
 	public Map<String, EzyUserRequestHandler> implement(Collection<Object> controllers) {
 		Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
@@ -43,7 +49,10 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
 	
 	protected EzyRequestHandlerImplementer newImplementer(
 			EzyRequestControllerProxy controller, EzyRequestHandlerMethod method) {
-		return new EzyRequestHandlerImplementer(controller, method);
+	    EzyRequestHandlerImplementer implementer = 
+	            new EzyRequestHandlerImplementer(controller, method);
+	    implementer.setResponseFactory(responseFactory);
+	    return implementer;
 	}
 	
 }

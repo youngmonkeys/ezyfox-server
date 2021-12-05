@@ -2,8 +2,10 @@ package com.tvd12.ezyfoxserver.support.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
@@ -25,6 +27,7 @@ import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
 import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlersImplementer;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlersImplementer;
 import com.tvd12.ezyfoxserver.support.exception.EzyUserRequestException;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUncaughtExceptionHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandlerProxy;
@@ -37,6 +40,7 @@ public abstract class EzyUserRequestSingletonController<
 		extends EzyAbstractUserRequestController{
 
 	protected final EzyUnmarshaller unmarshaller;
+	protected final EzyResponseFactory responseFactory;
 	protected final List<Class<?>> handledExceptionClasses;
 	protected final Map<String, EzyUserRequestHandler> requestHandlers;
 	protected final List<EzyUserRequestInterceptor> requestInterceptors;
@@ -45,6 +49,7 @@ public abstract class EzyUserRequestSingletonController<
 	
 	protected EzyUserRequestSingletonController(Builder<?> builder) {
 		this.unmarshaller = builder.unmarshaller;
+		this.responseFactory = builder.responseFactory;
 		this.prototypeController = builder.getPrototypeController();
 		this.requestHandlers = new HashMap<>(builder.getRequestHandlers());
 		this.exceptionHandlers = new HashMap<>(builder.getExceptionHandlers());
@@ -119,17 +124,27 @@ public abstract class EzyUserRequestSingletonController<
 	
 	protected abstract void responseError(C context, E event, EzyData errorData);
 	
+	@Override
+	public Set<String> getCommands() {
+	    Set<String> commands = new HashSet<>();
+	    commands.addAll(requestHandlers.keySet());
+	    commands.addAll(prototypeController.getCommands());
+	    return commands;
+	}
+	
 	public abstract static class Builder<B extends Builder>
 			extends EzyLoggable
 			implements EzyBuilder<EzyUserRequestSingletonController> {
 
 		protected EzyBeanContext beanContext;
 		protected EzyUnmarshaller unmarshaller;
+		protected EzyResponseFactory responseFactory;
 		protected EzySingletonFactory singletonFactory;
 		
 		public B beanContext(EzyBeanContext beanContext) {
 			this.beanContext = beanContext;
 			this.singletonFactory = beanContext.getSingletonFactory();
+			this.responseFactory = beanContext.getSingleton(EzyResponseFactory.class);
 			this.unmarshaller = beanContext.getSingleton("unmarshaller", EzyUnmarshaller.class);
 			return (B)this;
 		}
@@ -187,6 +202,7 @@ public abstract class EzyUserRequestSingletonController<
 		
 		private Map<String, EzyUserRequestHandler> implementClientRequestHandlers() {
 			EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
+			implementer.setResponseFactory(responseFactory);
 			return implementer.implement(singletonFactory.getSingletons(EzyRequestController.class));
 		}
 		

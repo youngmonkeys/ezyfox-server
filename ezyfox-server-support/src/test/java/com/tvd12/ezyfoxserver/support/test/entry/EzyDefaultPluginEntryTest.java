@@ -53,6 +53,8 @@ public class EzyDefaultPluginEntryTest {
 		
 		EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
 		pluginSetting.setName("test");
+		pluginSetting.setActiveProfiles("hello,world");
+		pluginSetting.setPackageName("x.z.y");
 		
 		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
 		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);

@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.support.entry;
 
+import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.COMMANDS;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,13 +30,15 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.controller.EzyPluginEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
+import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
+public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 	
 	@Override
 	public void config(EzyPluginContext context) {
@@ -47,14 +51,11 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		postConfig(context, beanContext);
 	}
 	
-	protected void preConfig(EzyPluginContext ctx) {
-	}
+	protected void preConfig(EzyPluginContext ctx) {}
 	
-	protected void postConfig(EzyPluginContext ctx) {
-	}
+	protected void postConfig(EzyPluginContext ctx) {}
 	
-	protected void postConfig(EzyPluginContext ctx, EzyBeanContext beanContext) {
-	}
+	protected void postConfig(EzyPluginContext ctx, EzyBeanContext beanContext) {}
 	
 	private void addEventControllers(EzyPluginContext context, EzyBeanContext beanContext) {
 		EzySetup setup = context.get(EzySetup.class);
@@ -75,6 +76,8 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		EzyPluginSetup setup = pluginContext.get(EzyPluginSetup.class);
 		EzyPluginRequestController controller = newUserRequestController(beanContext);
 		setup.setRequestController(controller);
+		Set<String> commands = ((EzyCommandsAware)controller).getCommands();
+		pluginContext.setProperty(COMMANDS, commands);
 	}
 	
 	protected boolean allowRequest() {
@@ -93,6 +96,7 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
 		EzyResponseFactory pluginResponseFactory = createPluginResponseFactory(context, marshaller);
 		ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
+		EzyPluginSetting pluginSetting = context.getPlugin().getSetting();
 		EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
 				.addSingleton("pluginContext", context)
 				.addSingleton("marshaller", marshaller)
@@ -100,13 +104,17 @@ public abstract class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 				.addSingleton("executorService", executorService)
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
-				.addSingleton("pluginResponseFactory", pluginResponseFactory);
+				.addSingleton("pluginResponseFactory", pluginResponseFactory)
+				.activeProfiles(pluginSetting.getActiveProfiles());
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);
 		Class[] prototypeClasses = getPrototypeClasses();
 		beanContextBuilder.addPrototypeClasses(prototypeClasses);
 		
 		Set<String> scanablePackages = internalGetScanableBeanPackages();
+		if(pluginSetting.getPackageName() != null) {
+		    scanablePackages.add(pluginSetting.getPackageName());
+		}
 		if (scanablePackages.size() > 0) {
 			EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
 			beanContextBuilder.addSingletonClasses(

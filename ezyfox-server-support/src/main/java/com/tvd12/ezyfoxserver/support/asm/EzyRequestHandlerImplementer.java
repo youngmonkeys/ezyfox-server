@@ -14,6 +14,7 @@ import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
+import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerMethod;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestHandlerMethod;
@@ -29,6 +30,10 @@ public class EzyRequestHandlerImplementer
 
 	@Setter
 	private static boolean debug;
+	
+	@Setter
+    protected EzyResponseFactory responseFactory;
+	
 	protected final EzyRequestControllerProxy controller;
 	
 	protected final static AtomicInteger COUNT = new AtomicInteger(0);
@@ -74,6 +79,7 @@ public class EzyRequestHandlerImplementer
 		implClass.detach();
 		EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass.newInstance();
 		handler.setCommand(handlerMethod.getCommand());
+		handler.setResponseFactory(responseFactory);
 		setRepoComponent(handler);
 		return handler;
 	}
@@ -110,6 +116,10 @@ public class EzyRequestHandlerImplementer
 		int paramCount = prepareHandleMethodArguments(body);
 		EzyInstruction instruction = new EzyInstruction("\t", "\n");
 		StringBuilder answerExpression = new StringBuilder();
+		if (handlerMethod.getReturnType() != void.class) {
+		    answerExpression.append(Object.class.getName())
+		        .append(" data = ");
+		}
 		answerExpression.append("this.controller.").append(handlerMethod.getName())
 				.append("(");
 		for(int i = 0 ; i < paramCount ; ++i) {
@@ -120,6 +130,11 @@ public class EzyRequestHandlerImplementer
 		answerExpression.append(")");
 		instruction.append(answerExpression);
 		body.append(instruction);
+		if (handlerMethod.getReturnType() != void.class) {
+		    EzyInstruction responseInstruction = new EzyInstruction("\t", "\n")
+		            .invoke("this", "responseToSession", "arg1", "data");
+		    body.append(responseInstruction);
+		}
 		return function.toString();
 	}
 	

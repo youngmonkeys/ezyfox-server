@@ -3,6 +3,8 @@ package com.tvd12.ezyfoxserver.setting;
 import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.APPS;
 import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.ENTRIES;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +37,10 @@ public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSet
 	
 	@Override
 	protected String getParentFolder() {
-	    return Paths.get(APPS, ENTRIES).toString();
+	    Path path = Paths.get(homePath, APPS, ENTRIES);
+	    return (Files.exists(path) 
+	            ? Paths.get(APPS, ENTRIES) 
+	            : Paths.get(APPS)).toString();
 	}
 	
 	@Override

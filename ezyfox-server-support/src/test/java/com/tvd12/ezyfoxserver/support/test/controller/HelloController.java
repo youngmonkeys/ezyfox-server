@@ -56,6 +56,11 @@ public class HelloController {
 		System.out.println("HelloController::Big/Hello response: " + response);
 	}
 	
+	@EzyDoHandle("Hello6")
+    public Object greetAndReturn(GreetRequest request) {
+        return new GreetResponse("Hello " + request.getWho() + "!");
+    }
+	
 	@EzyTryCatch({IllegalStateException.class, IllegalArgumentException.class})
 	public void handleException1(Exception e) {
 		e.printStackTrace();

@@ -13,7 +13,7 @@
 		<user-max-idle-time>15000</user-max-idle-time>
 		<allow-change-session>true</allow-change-session>
 		<max-session-per-user>15</max-session-per-user>
-		<user-name-pattern>^[a-zA-Z0-9_.#]{3,36}$</user-name-pattern>
+		<user-name-pattern>^[a-zA-Z0-9_.#]{3,64}$</user-name-pattern>
 	</user-management>
 	
 	<streaming>

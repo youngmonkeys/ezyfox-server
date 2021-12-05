@@ -25,6 +25,10 @@ public class EzyRequestHandlerMethod extends EzyHandlerMethod {
 		return group + "/" + methodCommand;
 	}
 	
+    public Class<?> getReturnType() {
+        return method.getReturnType();
+    }
+	
 	@Override
 	public String toString() {
 		return new StringBuilder()
@@ -34,4 +38,5 @@ public class EzyRequestHandlerMethod extends EzyHandlerMethod {
 				.append(")")
 				.toString();
 	}
+   
 }

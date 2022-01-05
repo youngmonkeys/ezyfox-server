@@ -68,8 +68,8 @@
 	</administrators>
 	
 	<session-management>
-		<session-max-idle-time>15000</session-max-idle-time>
-		<session-max-waiting-time>30000</session-max-waiting-time>
+		<session-max-idle-time>60</session-max-idle-time>
+		<session-max-waiting-time>15</session-max-waiting-time>
 		<session-max-request-per-second>
 			<value>20</value>
 			<action>DISCONNECT_SESSION</action>

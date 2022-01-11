@@ -1,3 +1,3 @@
-### What is your issue?
+### What is the purpose of this pull request?
 
-### What's your expected deadline?
+### When do you want to merge?

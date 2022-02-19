@@ -3,25 +3,23 @@
  */
 package com.tvd12.ezyfoxserver;
 
-import static com.tvd12.ezyfoxserver.setting.EzyFolderNamesSetting.SETTINGS;
+import java.io.IOException;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.io.EzyStrings;
-import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
+import com.tvd12.ezyfoxserver.config.EzyLoggerConfig;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
-import ch.qos.logback.classic.util.ContextInitializer;
 import lombok.Getter;
 
 /**
@@ -29,7 +27,7 @@ import lombok.Getter;
  *
  */
 @SuppressWarnings("rawtypes")
-public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
+public abstract class EzyStarter implements EzyStartable {
 
     @Getter
     private EzyServerContext serverContext;
@@ -43,7 +41,12 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     @Override
     public void start() throws Exception {
+        configLogger();
         startSystem();
+    }
+    
+    protected void configLogger() throws IOException {
+        EzyLoggerConfig.getInstance().config(configFile);
     }
 
     protected void startSystem() throws Exception {
@@ -62,8 +65,9 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     protected void startEzyFox(EzyServer server) throws Exception {
         EzyConfig config = server.getConfig();
-        if(config.isPrintSettings())
-            logger.info("settings: \n{}", server.toString());
+        if(config.isPrintSettings()) {
+            getLogger().info("settings: \n{}", server.toString());
+        }
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
         serverBoostrap.start();
         serverContext = serverBoostrap.getContext();
@@ -76,12 +80,7 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
 
     protected abstract EzyServerBootstrapBuilder newServerBootstrapBuilder();
 
-    protected void setSystemProperties(EzyConfig config) {
-    	String loggerConfigFile = getLoggerConfigFile(config);
-    	if(!Files.exists(Paths.get(loggerConfigFile)))
-    		return;
-        System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, loggerConfigFile);
-    }
+    protected void setSystemProperties(EzyConfig config) {}
 
     protected EzyServer loadEzyFox(EzyConfig config) {
         return newLoader()
@@ -115,16 +114,9 @@ public abstract class EzyStarter extends EzyLoggable implements EzyStartable {
     protected EzyConfig readConfig(String configFile) throws Exception {
         return getConfigLoader().load(configFile);
     }
-
-    protected String getLoggerConfigFile(EzyConfig config) {
-    	String loggerFile = config.getLoggerConfigFile();
-    	if(EzyStrings.isNoContent(loggerFile))
-    		loggerFile = "log4j.properties";
-        return getPath(config.getEzyfoxHome(), SETTINGS, loggerFile);
-    }
-
-    protected String getPath(String first, String... more) {
-        return Paths.get(first, more).toString();
+    
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
     }
 
     @SuppressWarnings("unchecked")

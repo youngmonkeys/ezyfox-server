@@ -55,7 +55,7 @@
 	</developers>
 	
 	<properties>
-		<ezy.version>1.2.1</ezy.version>
+		<ezy.version>1.2.2</ezy.version>
 		<ezy.core.version>2.1.2</ezy.core.version>
 	</properties>
 </project>

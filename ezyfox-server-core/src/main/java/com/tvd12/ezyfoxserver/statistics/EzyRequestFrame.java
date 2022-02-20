@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.statistics;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.tvd12.ezyfox.io.EzyDates;
 
@@ -15,9 +14,6 @@ public abstract class EzyRequestFrame implements Serializable {
     protected final long endTime;
     protected final long startTime;
     protected final int maxRequests;
-    protected final long id = COUNTER.incrementAndGet();
-    
-    private static final AtomicLong COUNTER  = new AtomicLong(0);
     
     public EzyRequestFrame(int maxRequests) {
         this(maxRequests, System.currentTimeMillis());
@@ -48,8 +44,8 @@ public abstract class EzyRequestFrame implements Serializable {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append(id)
-                .append(" : ")
+                .append(getClass().getSimpleName())
+                .append(": ")
                 .append(EzyDates.format(startTime))
                 .append(" -> ")
                 .append(EzyDates.format(endTime))

@@ -16,7 +16,6 @@ public class EzyRequestFrameSecondTest extends BaseTest {
         System.out.println(frame.getStartTime());
         assert frame.getStartTime() < frame.getEndTime();
         assert frame.getMaxRequests() == 20;
-        assert frame.getId() > 0;
         assert frame.getRequests() == 0;
         System.out.println(frame);
     }

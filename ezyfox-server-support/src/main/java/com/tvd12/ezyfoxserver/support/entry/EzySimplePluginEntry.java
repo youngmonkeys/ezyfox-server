@@ -36,6 +36,8 @@ import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.factory.EzyPluginResponseFactory;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
+import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
@@ -105,6 +107,8 @@ public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
 				.addSingleton("zoneContext", context.getParent())
 				.addSingleton("serverContext", context.getParent().getParent())
 				.addSingleton("pluginResponseFactory", pluginResponseFactory)
+				.addSingleton("featureCommandManager", new EzyFeatureCommandManager())
+                .addSingleton("requestCommandManager", new EzyRequestCommandManager())
 				.activeProfiles(pluginSetting.getActiveProfiles());
 		Class[] singletonClasses = getSingletonClasses();
 		beanContextBuilder.addSingletonClasses(singletonClasses);

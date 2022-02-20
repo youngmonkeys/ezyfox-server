@@ -1,5 +1,7 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import static com.tvd12.ezyfox.io.EzyStrings.isNotBlank;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.tvd12.ezyfox.annotation.EzyFeature;
+import com.tvd12.ezyfox.annotation.EzyManagement;
+import com.tvd12.ezyfox.annotation.EzyPayment;
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzySingletonFactory;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
@@ -32,6 +37,8 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUncaughtExceptionHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandlerProxy;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestInterceptor;
+import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class EzyUserRequestSingletonController<
@@ -51,7 +58,7 @@ public abstract class EzyUserRequestSingletonController<
 		this.unmarshaller = builder.unmarshaller;
 		this.responseFactory = builder.responseFactory;
 		this.prototypeController = builder.getPrototypeController();
-		this.requestHandlers = new HashMap<>(builder.getRequestHandlers());
+		this.requestHandlers = new HashMap<>(builder.extractRequestHandlers());
 		this.exceptionHandlers = new HashMap<>(builder.getExceptionHandlers());
 		this.requestInterceptors = new ArrayList<>(builder.getRequestInterceptors());
 		this.handledExceptionClasses = new EzyClassTree(exceptionHandlers.keySet()).toList();
@@ -140,35 +147,60 @@ public abstract class EzyUserRequestSingletonController<
 		protected EzyUnmarshaller unmarshaller;
 		protected EzyResponseFactory responseFactory;
 		protected EzySingletonFactory singletonFactory;
+		protected EzyFeatureCommandManager featureCommandManager; 
+		protected EzyRequestCommandManager requestCommandManager;
 		
 		public B beanContext(EzyBeanContext beanContext) {
 			this.beanContext = beanContext;
 			this.singletonFactory = beanContext.getSingletonFactory();
 			this.responseFactory = beanContext.getSingleton(EzyResponseFactory.class);
 			this.unmarshaller = beanContext.getSingleton("unmarshaller", EzyUnmarshaller.class);
+			this.featureCommandManager = beanContext.getSingleton(EzyFeatureCommandManager.class);
+            this.requestCommandManager = beanContext.getSingleton(EzyRequestCommandManager.class);
 			return (B)this;
 		}
 		
 		protected abstract EzyUserRequestPrototypeController getPrototypeController();
 		
-		private Map<String, EzyUserRequestHandler> getRequestHandlers() {
-			List<Object> clientRequestHandlers = getClientRequestHandlers();
-			Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
-			for(Object handler : clientRequestHandlers) {
-				Class<?> handleType = handler.getClass();
-				EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
-				String command = EzyRequestListenerAnnotations.getCommand(annotation);
-				handlers.put(command, new EzyUserRequestHandlerProxy((EzyUserRequestHandler) handler));
-				logger.debug("add command {} and request handler {}", command, handler);
-			}
-			Map<String, EzyUserRequestHandler> implementedHandlers = implementClientRequestHandlers();
-			for(String command : implementedHandlers.keySet()) {
-				EzyUserRequestHandler handler = implementedHandlers.get(command);
-				logger.debug("add command {} and request handler {}", command, handler);
-				handlers.put(command, handler);
-			}
+		private Map<String, EzyUserRequestHandler> extractRequestHandlers() {
+			Map<String, EzyUserRequestHandlerProxy> fromListeners =
+			    extractRequestHandlersFromListener();
+			extractRequestCommands(fromListeners);
+			Map<String, EzyUserRequestHandler> handlers = new HashMap<>(fromListeners);			
+			handlers.putAll(implementClientRequestHandlers());
 			return handlers;
 		}
+		
+		private Map<String, EzyUserRequestHandlerProxy> extractRequestHandlersFromListener() {
+		    List<Object> clientRequestHandlers = getClientRequestHandlers();
+            Map<String, EzyUserRequestHandlerProxy> handlers = new HashMap<>();
+            for(Object handler : clientRequestHandlers) {
+                Class<?> handleType = handler.getClass();
+                EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
+                String command = EzyRequestListenerAnnotations.getCommand(annotation);
+                handlers.put(command, new EzyUserRequestHandlerProxy((EzyUserRequestHandler) handler));
+                logger.debug("add command {} and request handler {}", command, handler);
+            }
+            return handlers;
+		}
+		
+		private void extractRequestCommands(Map<String, EzyUserRequestHandlerProxy> handlers) {
+            for(String command : handlers.keySet()) {
+                EzyUserRequestHandlerProxy handler = handlers.get(command);
+                Class<?> handleType = handler.getHandler().getClass();
+                this.requestCommandManager.addCommand(command);
+                if (handleType.isAnnotationPresent(EzyManagement.class)) {
+                    this.requestCommandManager.addManagementCommand(command);
+                }
+                if (handleType.isAnnotationPresent(EzyPayment.class)) {
+                    this.requestCommandManager.addPaymentCommand(command);
+                }
+                EzyFeature featureAnno = handleType.getAnnotation(EzyFeature.class);
+                if (featureAnno != null && isNotBlank(featureAnno.value())) {
+                    this.featureCommandManager.addFeatureCommand(featureAnno.value(), command);
+                }
+            }
+        }
 		
 		private List<EzyUserRequestInterceptor> getRequestInterceptors() {
 			List<EzyUserRequestInterceptor> interceptors =
@@ -203,7 +235,15 @@ public abstract class EzyUserRequestSingletonController<
 		private Map<String, EzyUserRequestHandler> implementClientRequestHandlers() {
 			EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
 			implementer.setResponseFactory(responseFactory);
-			return implementer.implement(singletonFactory.getSingletons(EzyRequestController.class));
+			implementer.setFeatureCommandManager(featureCommandManager);
+			implementer.setRequestCommandManager(requestCommandManager);
+			Map<String, EzyUserRequestHandler> implementedHandlers =
+			    implementer.implement(singletonFactory.getSingletons(EzyRequestController.class));
+			for(String command : implementedHandlers.keySet()) {
+                EzyUserRequestHandler handler = implementedHandlers.get(command);
+                logger.debug("add command {} and request handler {}", command, handler);
+            }
+			return implementedHandlers;
 		}
 		
 		private Map<Class<?>, EzyUncaughtExceptionHandler> implementExceptionHandlers() {

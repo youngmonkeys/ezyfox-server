@@ -29,10 +29,13 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
+import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 
 public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
@@ -78,6 +81,15 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 		entry.config(pluginContext);
 		entry.start();
 		handleClientRequest(pluginContext);
+		EzyBeanContext beanContext = pluginContext.get(EzyBeanContext.class);
+        EzyRequestCommandManager requestCommandManager =
+            beanContext.getSingleton(EzyRequestCommandManager.class);
+        EzyFeatureCommandManager featureCommandManager =
+            beanContext.getSingleton(EzyFeatureCommandManager.class);
+        Asserts.assertTrue(requestCommandManager.containsCommand("v1.2.2/hello"));
+        Asserts.assertTrue(requestCommandManager.isManagementCommand("v1.2.2/hello"));
+        Asserts.assertTrue(requestCommandManager.isPaymentCommand("v1.2.2/hello"));
+        Asserts.assertEquals(featureCommandManager.getFeatureByCommand("v1.2.2/hello"), "hello.world");
 		entry.destroy();
 	}
 	

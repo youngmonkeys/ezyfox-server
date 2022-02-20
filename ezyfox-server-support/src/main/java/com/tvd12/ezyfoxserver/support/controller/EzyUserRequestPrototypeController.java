@@ -1,11 +1,16 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
+import static com.tvd12.ezyfox.io.EzyStrings.isNotBlank;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.tvd12.ezyfox.annotation.EzyFeature;
+import com.tvd12.ezyfox.annotation.EzyManagement;
+import com.tvd12.ezyfox.annotation.EzyPayment;
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPrototypeFactory;
 import com.tvd12.ezyfox.bean.EzyPrototypeSupplier;
@@ -23,6 +28,8 @@ import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestEvent;
+import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 
 public abstract class EzyUserRequestPrototypeController<
 		C extends EzyZoneChildContext, 
@@ -36,7 +43,7 @@ public abstract class EzyUserRequestPrototypeController<
 	protected EzyUserRequestPrototypeController(Builder<?> builder) {
 		this.beanContext = builder.beanContext;
 		this.unmarshaller = builder.unmarshaller;
-		this.handlers = new HashMap<>(builder.getHandlers());
+		this.handlers = new HashMap<>(builder.extractHandlers());
 	}
 	
 	public void handle(C context, E event) {
@@ -104,21 +111,47 @@ public abstract class EzyUserRequestPrototypeController<
 			return (B)this;
 		}
 		
-		private Map<String, EzyPrototypeSupplier> getHandlers() {
-			List<EzyPrototypeSupplier> suppliers = filterSuppliers();
-			Map<String, EzyPrototypeSupplier> handlers = new HashMap<>();
-			for(EzyPrototypeSupplier supplier : suppliers) {
-				Class<?> handleType = supplier.getObjectType();
-				EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
-				String command = EzyRequestListenerAnnotations.getCommand(annotation);
-				handlers.put(command, supplier);
-				logger.debug("add command {} and request handler supplier {}", command, supplier);
-			}
+		private Map<String, EzyPrototypeSupplier> extractHandlers() {
+			Map<String, EzyPrototypeSupplier> handlers = getHandlers();
+			extractRequestCommands(handlers);
 			return handlers;
 		}
 		
-		private List<EzyPrototypeSupplier> filterSuppliers() {
-			return prototypeFactory.getSuppliers(EzyRequestListener.class);
-		}
+		private Map<String, EzyPrototypeSupplier> getHandlers() {
+            List<EzyPrototypeSupplier> suppliers =
+                prototypeFactory.getSuppliers(EzyRequestListener.class);
+            Map<String, EzyPrototypeSupplier> handlers = new HashMap<>();
+            for(EzyPrototypeSupplier supplier : suppliers) {
+                Class<?> handleType = supplier.getObjectType();
+                EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
+                String command = EzyRequestListenerAnnotations.getCommand(annotation);
+                handlers.put(command, supplier);
+                logger.debug("add command {} and request handler supplier {}", command, supplier);
+            }
+            extractRequestCommands(handlers);
+            return handlers;
+        }
+		
+		private void extractRequestCommands(Map<String, EzyPrototypeSupplier> handlers) {
+	        EzyFeatureCommandManager featureCommandManager = 
+	            beanContext.getSingleton(EzyFeatureCommandManager.class);
+	        EzyRequestCommandManager requestCommandManager =
+	            beanContext.getSingleton(EzyRequestCommandManager.class);
+	        for(String command : handlers.keySet()) {
+	            EzyPrototypeSupplier handler = handlers.get(command);
+	            Class<?> handleType = handler.getObjectType();
+	            requestCommandManager.addCommand(command);
+	            if (handleType.isAnnotationPresent(EzyManagement.class)) {
+	                requestCommandManager.addManagementCommand(command);
+	            }
+	            if (handleType.isAnnotationPresent(EzyPayment.class)) {
+	                requestCommandManager.addPaymentCommand(command);
+	            }
+	            EzyFeature featureAnno = handleType.getAnnotation(EzyFeature.class);
+	            if (featureAnno != null && isNotBlank(featureAnno.value())) {
+	                featureCommandManager.addFeatureCommand(featureAnno.value(), command);
+	            }
+	        }
+	    }
 	}
 }

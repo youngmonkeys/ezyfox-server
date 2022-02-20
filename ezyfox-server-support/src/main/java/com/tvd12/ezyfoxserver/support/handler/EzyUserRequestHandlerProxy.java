@@ -5,10 +5,10 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 
 import lombok.Getter;
 
+@Getter
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyUserRequestHandlerProxy implements EzyUserRequestHandler {
 
-	@Getter
 	protected final Class dataType;
 	protected final EzyUserRequestHandler handler;
 	

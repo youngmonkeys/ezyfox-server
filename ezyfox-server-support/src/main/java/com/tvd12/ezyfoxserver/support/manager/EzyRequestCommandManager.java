@@ -19,28 +19,28 @@ public class EzyRequestCommandManager implements EzyDestroyable {
         this.paymentCommands = ConcurrentHashMap.newKeySet();
     }
     
-    public void addCommand(String uri) {
-        this.commands.add(uri);
+    public void addCommand(String command) {
+        this.commands.add(command);
     }
     
-    public boolean containsCommand(String uri) {
-        return this.commands.contains(uri);
+    public boolean containsCommand(String command) {
+        return this.commands.contains(command);
     }
 
-    public void addManagementCommand(String uri) {
-        this.managementCommands.add(uri);
+    public void addManagementCommand(String command) {
+        this.managementCommands.add(command);
     }
 
-    public boolean isManagementCommand(String uri) {
-        return managementCommands.contains(uri);
+    public boolean isManagementCommand(String command) {
+        return managementCommands.contains(command);
     }
     
-    public void addPaymentCommand(String uri) {
-        this.paymentCommands.add(uri);
+    public void addPaymentCommand(String command) {
+        this.paymentCommands.add(command);
     }
 
-    public boolean isPaymentCommand(String uri) {
-        return paymentCommands.contains(uri);
+    public boolean isPaymentCommand(String command) {
+        return paymentCommands.contains(command);
     }
     
     public List<String> getCommands() {

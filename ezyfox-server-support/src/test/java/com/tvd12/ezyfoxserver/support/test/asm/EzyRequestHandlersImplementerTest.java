@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -23,13 +24,17 @@ import com.tvd12.ezyfoxserver.support.asm.EzyAsmRequestHandler;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlersImplementer;
 import com.tvd12.ezyfoxserver.support.command.EzyObjectResponse;
+import com.tvd12.ezyfoxserver.support.exception.EzyDuplicateRequestHandlerException;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
+import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController2;
 import com.tvd12.ezyfoxserver.support.test.data.GreetRequest;
 import com.tvd12.ezyfoxserver.support.test.data.GreetResponse;
+import com.tvd12.test.assertion.Asserts;
 
 public class EzyRequestHandlersImplementerTest {
 
@@ -54,17 +59,28 @@ public class EzyRequestHandlersImplementerTest {
 		
 		implementer.setResponseFactory(responseFactory);
 		
-		Map<String, EzyUserRequestHandler> handlers = implementer.implement(new HelloController());
+		EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
+        EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
+        
+        implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
+		
+		Map<String, EzyUserRequestHandler> handlers = implementer.implement(
+		    Collections.singletonList(new HelloController())
+	    );
 		for(EzyUserRequestHandler handler : handlers.values()) {
 			handler.handle(context, event, new GreetRequest("Dzung"));
 		}
 		EzyRequestHandlerImplementer.setDebug(false);
 		implementer = new EzyRequestHandlersImplementer();
+		implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
 		
 		// when
-		implementer.implement(new HelloController());
+		handlers = implementer.implement(Collections.singletonList(new HelloController()));
 		
 		// then
+		Asserts.assertTrue(handlers.containsKey("Big/Hello"));
 		verify(responseFactory, times(1)).newObjectResponse();
 		verify(objectResponse, times(1)).command("Big/Hello6");
 		verify(objectResponse, times(1)).data(new GreetResponse("Hello Dzung!"));
@@ -86,17 +102,25 @@ public class EzyRequestHandlersImplementerTest {
 		implementer.implement();
 	}
 	
-	@Test(expectedExceptions = IllegalStateException.class)
+	@Test
 	public void testImplementFailedCase2() {
 		EzyRequestHandlerImplementer.setDebug(true);
 		EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
-		implementer.implement(new HelloController2());
+		EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
+        EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
+        implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
+		implementer.implement(Collections.singletonList(new HelloController2()));
 	}
 	
-	@Test(expectedExceptions = IllegalStateException.class)
+	@Test(expectedExceptions = EzyDuplicateRequestHandlerException.class)
 	public void testImplementFailedCase3() {
 		EzyRequestHandlerImplementer.setDebug(true);
 		EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
+		EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
+        EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
+        implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
 		implementer.implement(Arrays.asList(new HelloController(), new HelloController()));
 	}
 	

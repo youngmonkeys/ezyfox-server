@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tvd12.ezyfox.annotation.EzyFeature;
+import com.tvd12.ezyfox.annotation.EzyManagement;
+import com.tvd12.ezyfox.annotation.EzyPayment;
 import com.tvd12.ezyfox.core.annotation.EzyDoHandle;
 import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
 import com.tvd12.ezyfox.core.util.EzyRequestControllerAnnotations;
@@ -73,6 +76,19 @@ public class EzyRequestControllerProxy {
 	public String getControllerName() {
 		return clazz.getClazz().getSimpleName();
 	}
+	
+	public boolean isManagement() {
+	    return clazz.isAnnotated(EzyManagement.class);
+    }
+    
+    public boolean isPayment() {
+        return clazz.isAnnotated(EzyPayment.class);
+    }
+    
+    public String getFeature() {
+        EzyFeature annotation = clazz.getAnnotation(EzyFeature.class);
+        return annotation != null ? annotation.value() : null;
+    }
 	
 	@Override
 	public String toString() {

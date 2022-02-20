@@ -12,6 +12,7 @@
     		<package name="com.tvd12.ezyfoxserver.support.test.handler"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.reflect"/>
     		<package name="com.tvd12.ezyfoxserver.support.test.exception"/>
+    		<package name="com.tvd12.ezyfoxserver.support.test.manager"/>
 			<package name="com.tvd12.ezyfoxserver.support.v120.test.entry"/>
     	</packages>
     </test>

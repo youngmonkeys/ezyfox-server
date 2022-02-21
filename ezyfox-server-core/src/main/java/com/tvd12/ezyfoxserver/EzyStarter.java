@@ -3,8 +3,6 @@
  */
 package com.tvd12.ezyfoxserver;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +11,6 @@ import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzyConfigLoader;
-import com.tvd12.ezyfoxserver.config.EzyLoggerConfig;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -41,14 +38,9 @@ public abstract class EzyStarter implements EzyStartable {
 
     @Override
     public void start() throws Exception {
-        configLogger();
         startSystem();
     }
     
-    protected void configLogger() throws IOException {
-        EzyLoggerConfig.getInstance().config(configFile);
-    }
-
     protected void startSystem() throws Exception {
         EzyConfig config = readConfig(configFile);
         startSystem(config);

@@ -1,5 +1,8 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +17,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 public class EzyEventControllersImpl implements EzyEventControllers {
 
 	@SuppressWarnings("rawtypes")
-	protected final Map<EzyConstant, EzyEventController> controllers 
+	protected final Map<EzyConstant, List<EzyEventController>> controllers 
 	        = new ConcurrentHashMap<>();
 	
 	@SuppressWarnings("rawtypes")
@@ -31,13 +34,19 @@ public class EzyEventControllersImpl implements EzyEventControllers {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void addController(EzyConstant eventType, EzyEventController controller) {
-		controllers.put(eventType, controller);
+		controllers.compute(eventType, (k, v) -> {
+		    List<EzyEventController> list = v != null 
+		        ? new ArrayList<>(v)
+	            : new ArrayList<>();
+		    list.add(controller);
+		    return list;
+		});
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public EzyEventController getController(EzyConstant eventType) {
-		return controllers.get(eventType);
+	public List<EzyEventController> getControllers(EzyConstant eventType) {
+		return controllers.getOrDefault(eventType, Collections.emptyList());
 	}
 	
 	@Override

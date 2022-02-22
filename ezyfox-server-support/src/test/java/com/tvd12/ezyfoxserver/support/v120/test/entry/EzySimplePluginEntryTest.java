@@ -22,6 +22,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
+import com.tvd12.ezyfoxserver.support.constant.EzySupportConstants;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.test.assertion.Asserts;
 
@@ -59,7 +60,8 @@ public class EzySimplePluginEntryTest {
 		MongoConfig mongoConfig = (MongoConfig) beanContext.getBean(MongoConfig.class);
 		
 		Set<String> expectedPackages = Sets.newHashSet(
-				"com.tvd12.ezyfoxserver.support.v120.test.entry"
+		    EzySupportConstants.DEFAULT_PACKAGE_TO_SCAN,
+			"com.tvd12.ezyfoxserver.support.v120.test.entry"
 		);
 		
 		Asserts.assertEquals(expectedPackages, mongoConfig.packagesToScan);

@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
+import com.tvd12.ezyfoxserver.support.constant.EzySupportConstants;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.test.assertion.Asserts;
@@ -58,7 +59,8 @@ public class EzySimpleAppEntryTest {
 		MongoConfig mongoConfig = (MongoConfig) beanContext.getBean(MongoConfig.class);
 		
 		Set<String> expectedPackages = Sets.newHashSet(
-				"com.tvd12.ezyfoxserver.support.v120.test.entry"
+		    EzySupportConstants.DEFAULT_PACKAGE_TO_SCAN,
+			"com.tvd12.ezyfoxserver.support.v120.test.entry"
 		);
 		
 		Asserts.assertEquals(expectedPackages, mongoConfig.packagesToScan);
@@ -68,8 +70,7 @@ public class EzySimpleAppEntryTest {
 	}
 	
 	@EzySingleton
-	public static class Singleton {
-	}
+	public static class Singleton {}
 	
 	@Setter
 	@EzyConfigurationBefore

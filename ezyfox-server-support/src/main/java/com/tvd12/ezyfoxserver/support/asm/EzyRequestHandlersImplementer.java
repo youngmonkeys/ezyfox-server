@@ -20,6 +20,7 @@ import lombok.Setter;
 @SuppressWarnings("rawtypes")
 public class EzyRequestHandlersImplementer extends EzyLoggable {
     
+    private boolean allowOverrideCommand;
     private EzyResponseFactory responseFactory;
     private EzyFeatureCommandManager featureCommandManager; 
     private EzyRequestCommandManager requestCommandManager;
@@ -31,7 +32,7 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
 			for(String command : map.keySet()) {
 				EzyUserRequestHandler handler = map.get(command);
 				EzyUserRequestHandler old = handlers.put(command, handler);
-				if(old != null) {
+				if(old != null && !allowOverrideCommand) {
 					throw new EzyDuplicateRequestHandlerException(command, old, handler);
 				}
 			}

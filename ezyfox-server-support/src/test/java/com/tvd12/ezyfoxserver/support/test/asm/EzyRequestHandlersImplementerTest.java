@@ -123,5 +123,16 @@ public class EzyRequestHandlersImplementerTest {
         implementer.setRequestCommandManager(requestCommandManager);
 		implementer.implement(Arrays.asList(new HelloController(), new HelloController()));
 	}
-	
+
+	@Test
+    public void testImplementDuplicateCommandButAllowOverride() {
+        EzyRequestHandlerImplementer.setDebug(true);
+        EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer();
+        EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
+        EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
+        implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
+        implementer.setAllowOverrideCommand(true);
+        implementer.implement(Arrays.asList(new HelloController(), new HelloController()));
+    }
 }

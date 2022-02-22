@@ -2,8 +2,10 @@ package com.tvd12.ezyfoxserver.support.test.entry;
 
 import static org.mockito.Mockito.spy;
 
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
@@ -13,10 +15,12 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
@@ -33,7 +37,8 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 
 public class EzySimplePluginEntryTest {
 
-	@Test
+	@SuppressWarnings("rawtypes")
+    @Test
 	public void test() throws Exception {
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleServer server = new EzySimpleServer();
@@ -70,6 +75,13 @@ public class EzySimplePluginEntryTest {
 		entry.config(pluginContext);
 		entry.start();
 		handleClientRequest(pluginContext);
+		
+		List<EzyEventController> loginEventHandlers = pluginContext
+            .getPlugin()
+            .getEventControllers()
+            .getControllers(EzyEventType.USER_LOGIN);
+        Assert.assertEquals(loginEventHandlers.size(), 1);
+        Assert.assertEquals(loginEventHandlers.get(0).getClass(), PluginUserLoginRequestController.class);
 		entry.destroy();
 	}
 	

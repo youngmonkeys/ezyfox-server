@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.support.controller;
 
 import static com.tvd12.ezyfox.io.EzyStrings.isNotBlank;
+import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.PROPERTY_NAME_MODULE_ALLOW_OVERRIDE_URI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -237,6 +238,9 @@ public abstract class EzyUserRequestSingletonController<
 			implementer.setResponseFactory(responseFactory);
 			implementer.setFeatureCommandManager(featureCommandManager);
 			implementer.setRequestCommandManager(requestCommandManager);
+			implementer.setAllowOverrideCommand(
+			    beanContext.getProperty(PROPERTY_NAME_MODULE_ALLOW_OVERRIDE_URI, boolean.class, false)
+		    );
 			Map<String, EzyUserRequestHandler> implementedHandlers =
 			    implementer.implement(singletonFactory.getSingletons(EzyRequestController.class));
 			for(String command : implementedHandlers.keySet()) {

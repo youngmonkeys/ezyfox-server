@@ -8,8 +8,8 @@ import com.tvd12.ezyfoxserver.controller.EzyServerReadyController;
 import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 
 @EzySingleton
-@EzyEventHandler(value = EzyEventNames.SERVER_READY, priority = Integer.MAX_VALUE)
-public class ServerReadyEventHandler implements EzyServerReadyController {
+@EzyEventHandler(EzyEventNames.SERVER_READY)
+public class ServerReadyEventHandler2 implements EzyServerReadyController {
 
 	@Override
 	public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {

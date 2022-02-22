@@ -2,8 +2,10 @@ package com.tvd12.ezyfoxserver.support.test.entry;
 
 import static org.mockito.Mockito.spy;
 
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
@@ -14,10 +16,12 @@ import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleZoneContext;
+import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
@@ -35,6 +39,7 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 
 public class EzySimpleAppEntryTest {
 
+    @SuppressWarnings({ "rawtypes" })
 	@Test
 	public void test() throws Exception {
 		EzySimpleSettings settings = new EzySimpleSettings();
@@ -76,6 +81,22 @@ public class EzySimpleAppEntryTest {
 		entry.config(appContext);
 		entry.start();
 		handleClientRequest(appContext);
+		
+        List<EzyEventController> serverReadyHandlers = appContext
+            .getApp()
+            .getEventControllers()
+            .getControllers(EzyEventType.SERVER_READY);
+        Assert.assertEquals(serverReadyHandlers.size(), 2);
+        Assert.assertEquals(serverReadyHandlers.get(0).getClass(), ServerReadyEventHandler2.class);
+        Assert.assertEquals(serverReadyHandlers.get(1).getClass(), ServerReadyEventHandler.class);
+        
+        List<EzyEventController> loginEventHandlers = appContext
+            .getApp()
+            .getEventControllers()
+            .getControllers(EzyEventType.USER_LOGIN);
+        Assert.assertEquals(loginEventHandlers.size(), 1);
+        Assert.assertEquals(loginEventHandlers.get(0).getClass(), AppUserLoginRequestController.class);
+		
 		entry.destroy();
 	}
 	
@@ -159,7 +180,7 @@ public class EzySimpleAppEntryTest {
 		requestController.handle(context, event);
 	}
 	
-	@Test
+    @Test
 	public void test2() throws Exception {
 		EzySimpleSettings settings = new EzySimpleSettings();
 		EzySimpleServer server = new EzySimpleServer();

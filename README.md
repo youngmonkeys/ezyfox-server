@@ -44,6 +44,10 @@ With EzyFox ecosystem, we can stay away from the headache of choosing which tech
 
 [https://youngmonkeys.org/ezyfox-sever/](https://youngmonkeys.org/project/ezyfox-sever/)
 
+# Latest version
+
+You can [download it here](https://resources.tvd12.com/)
+
 # Code Example
 
 **1. Create an app entry**
@@ -52,26 +56,11 @@ With EzyFox ecosystem, we can stay away from the headache of choosing which tech
 public static class HelloAppEntry extends EzySimpleAppEntry {
 
     @Override
-    protected String[] getScanableBeanPackages() {
+    protected String[] getScanablePackages() {
         return new String[] {
                 "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
         };
     }
-
-    @Override
-    protected String[] getScanableBindingPackages() {
-        return new String[] {
-                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
-        };
-    }
-    
-    @Override
-    protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
-        return EzyUserRequestAppSingletonController.builder()
-                .beanContext(beanContext)
-                .build();
-    }
-    
 }
 ```
 
@@ -81,7 +70,7 @@ public static class HelloAppEntry extends EzySimpleAppEntry {
 public static class HelloPluginEntry extends EzySimplePluginEntry {
 
     @Override
-    protected String[] getScanableBeanPackages() {
+    protected String[] getScanablePackages() {
         return new String[] {
                 "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
         };

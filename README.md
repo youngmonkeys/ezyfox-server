@@ -8,6 +8,7 @@
 * [Introduction](#introduction)
 * [Get started](#get-started)
 * [Documentation](#documentation)
+* [Latest Version](#latest-version)
 * [Code Example](#code-example)
 * [Client SDKs](#client-sdks)
 * [Demos](#demos)

@@ -90,6 +90,7 @@ public class EzyUserManagementSettingBuilder
         p.setAllowChangeSession(allowChangeSession);
         p.setGuestNamePrefix(guestNamePrefix);
         p.setUserNamePattern(userNamePattern);
+        p.init();
         return p;
     }
 

@@ -87,6 +87,7 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         p.setApplications(applications);
         p.setUserManagement(userManagement);
         p.setEventControllers(eventControllers);
+        p.init();
         return p;
     }
     

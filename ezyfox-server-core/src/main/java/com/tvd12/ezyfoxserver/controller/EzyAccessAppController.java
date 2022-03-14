@@ -105,7 +105,7 @@ public class EzyAccessAppController
 	    return new EzyAccessAppResponse(params);
 	}
 	
-	protected EzyResponse newAccessAppErrorReponse(EzyIAccessAppError error) {
+	protected EzyResponse newAccessAppErrorResponse(EzyIAccessAppError error) {
 	    EzyErrorParams params = new EzyErrorParams();
 	    params.setError(error);
         return new EzyAccessAppErrorResponse(params);
@@ -113,7 +113,7 @@ public class EzyAccessAppController
 	
 	protected void responseAccessAppError(
 	        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
-	    EzyResponse response = newAccessAppErrorReponse(exception.getError());
+	    EzyResponse response = newAccessAppErrorResponse(exception.getError());
 	    ctx.send(response, session, false);
     }
     

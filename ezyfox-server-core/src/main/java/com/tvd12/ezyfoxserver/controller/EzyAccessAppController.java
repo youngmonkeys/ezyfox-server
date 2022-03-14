@@ -11,6 +11,8 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.event.EzyAppUserAddedEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleAppUserAddedEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.exception.EzyAccessAppException;
@@ -67,6 +69,11 @@ public class EzyAccessAppController
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
             ctx.send(accessAppResponse, session, false);
+
+			if(hasNotAccessed) {
+				EzyAppUserAddedEvent appUserAddEvent = newAppUserAddedEvent(user);
+				appContext.handleEvent(EzyEventType.APP_USER_ADDED, appUserAddEvent);
+			}
         }
         finally {
             lock.unlock();
@@ -117,4 +124,5 @@ public class EzyAccessAppController
 	    ctx.send(response, session, false);
     }
     
+	protected EzyAppUserAddedEvent newAppUserAddedEvent(EzyUser user) { return new EzySimpleAppUserAddedEvent(user); }
 }

@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.testing.context;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.spy;
 
+import com.tvd12.ezyfoxserver.event.*;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.collect.Lists;
@@ -17,10 +18,6 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
-import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
-import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
-import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
-import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
@@ -54,6 +51,12 @@ public class EzySimpleZoneContextTest extends BaseTest {
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, "dungtv", true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, user, true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, EzyPredicates.ALWAY_TRUE, true);
+
+        EzySimpleUserAccessedAppEvent accessedAppEvent = new EzySimpleUserAccessedAppEvent(user);
+        context.broadcastApps(EzyEventType.USER_ACCESSED_APP, accessedAppEvent, "dungtv", true);
+        context.broadcastApps(EzyEventType.USER_ACCESSED_APP, accessedAppEvent, user, true);
+        context.broadcastApps(EzyEventType.USER_ACCESSED_APP, accessedAppEvent, EzyPredicates.ALWAY_TRUE, true);
+
         assert context.equals(context);
         EzyZoneContext zoneContext2 = mock(EzyZoneContext.class);
         EzySimpleZone zone2 = new EzySimpleZone();

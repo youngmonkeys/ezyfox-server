@@ -14,7 +14,7 @@ public enum EzyEventType implements EzyConstant {
     USER_REMOVED(27),
     SESSION_REMOVED(35),
     STREAMING(36),
-    APP_USER_ADDED(37);
+	USER_ACCESSED_APP(37);
 
 	@Getter
 	private final int id;

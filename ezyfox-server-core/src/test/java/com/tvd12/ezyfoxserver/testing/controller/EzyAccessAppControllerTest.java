@@ -20,11 +20,14 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
 import com.tvd12.ezyfoxserver.delegate.EzySimpleAppUserDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessedAppEvent;
 import com.tvd12.ezyfoxserver.exception.EzyAccessAppException;
+import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.request.EzySimpleAccessAppRequest;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
@@ -79,6 +82,11 @@ public class EzyAccessAppControllerTest extends BaseTest {
         verify(appContext, times(1)).getApp();
         verify(app, times(1)).getSetting();
         verify(app, times(1)).getUserManager();
+        verify(serverContext, times(1)).send(
+            any(EzyResponse.class),
+            any(EzySession.class),
+            any(boolean.class)
+        );
     }
     
     @Test
@@ -128,6 +136,11 @@ public class EzyAccessAppControllerTest extends BaseTest {
         verify(appContext, times(2)).getApp();
         verify(app, times(2)).getSetting();
         verify(app, times(2)).getUserManager();
+        verify(serverContext, times(2)).send(
+            any(EzyResponse.class),
+            any(EzySession.class),
+            any(boolean.class)
+        );
     }
 
     @Test
@@ -169,6 +182,7 @@ public class EzyAccessAppControllerTest extends BaseTest {
         
         // then
         Asserts.assertEqualsType(e, EzyAccessAppException.class);
+        Asserts.assertEqualsType(e.getCause(), EzyMaxUserException.class);
         
         verify(appContext, times(1)).handleEvent(
             eq(EzyEventType.USER_ACCESS_APP),
@@ -183,6 +197,11 @@ public class EzyAccessAppControllerTest extends BaseTest {
         verify(appContext, times(2)).getApp();
         verify(app, times(2)).getSetting();
         verify(app, times(2)).getUserManager();
+        verify(serverContext, times(2)).send( // 1 for success, 1 for failure
+            any(EzyResponse.class),
+            any(EzySession.class),
+            any(boolean.class)
+        );
     }
     
     protected EzySimpleAccessAppRequest newRequest(int index) {

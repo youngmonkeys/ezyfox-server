@@ -57,23 +57,22 @@ public class EzyAccessAppController
         try {
             boolean hasNotAccessed = !appUserManger.containsUser(user);
             
-            if(hasNotAccessed)
+            if(hasNotAccessed) {
                 checkAppUserMangerAvailable(appUserManger);
+            }
             
             EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
             appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
             
-            if(hasNotAccessed)
+            if(hasNotAccessed) {
                 addUser(appUserManger, user, appSetting);
-            
+                EzyUserAccessedAppEvent accessedAppEvent = newAccessedAppEvent(user);
+                appContext.handleEvent(EzyEventType.USER_ACCESSED_APP, accessedAppEvent);
+            }
+			
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
             ctx.send(accessAppResponse, session, false);
-
-			if(hasNotAccessed) {
-				EzyUserAccessedAppEvent appUserAddEvent = newAccessedAppEvent(user);
-				appContext.handleEvent(EzyEventType.USER_ACCESSED_APP, appUserAddEvent);
-			}
         }
         finally {
             lock.unlock();
@@ -104,6 +103,10 @@ public class EzyAccessAppController
 	    return new EzySimpleUserAccessAppEvent(user);
 	}
 	
+	protected EzyUserAccessedAppEvent newAccessedAppEvent(EzyUser user) {
+	    return new EzySimpleUserAccessedAppEvent(user);
+    }
+	
 	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
 	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
 	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
@@ -123,6 +126,4 @@ public class EzyAccessAppController
 	    EzyResponse response = newAccessAppErrorResponse(exception.getError());
 	    ctx.send(response, session, false);
     }
-    
-	protected EzyUserAccessedAppEvent newAccessedAppEvent(EzyUser user) { return new EzySimpleUserAccessedAppEvent(user); }
 }

@@ -11,6 +11,8 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
+import com.tvd12.ezyfoxserver.event.EzyUserAccessedAppEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessedAppEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.exception.EzyAccessAppException;
@@ -55,15 +57,19 @@ public class EzyAccessAppController
         try {
             boolean hasNotAccessed = !appUserManger.containsUser(user);
             
-            if(hasNotAccessed)
+            if(hasNotAccessed) {
                 checkAppUserMangerAvailable(appUserManger);
+            }
             
             EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
             appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
             
-            if(hasNotAccessed)
+            if(hasNotAccessed) {
                 addUser(appUserManger, user, appSetting);
-            
+                EzyUserAccessedAppEvent accessedAppEvent = newAccessedAppEvent(user);
+                appContext.handleEvent(EzyEventType.USER_ACCESSED_APP, accessedAppEvent);
+            }
+			
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
             ctx.send(accessAppResponse, session, false);
@@ -97,6 +103,10 @@ public class EzyAccessAppController
 	    return new EzySimpleUserAccessAppEvent(user);
 	}
 	
+	protected EzyUserAccessedAppEvent newAccessedAppEvent(EzyUser user) {
+	    return new EzySimpleUserAccessedAppEvent(user);
+    }
+	
 	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
 	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
 	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
@@ -116,5 +126,4 @@ public class EzyAccessAppController
 	    EzyResponse response = newAccessAppErrorResponse(exception.getError());
 	    ctx.send(response, session, false);
     }
-    
 }

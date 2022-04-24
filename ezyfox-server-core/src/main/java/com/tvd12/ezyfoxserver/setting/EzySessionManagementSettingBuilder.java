@@ -32,6 +32,7 @@ public class EzySessionManagementSettingBuilder
         p.setSessionMaxIdleTimeInSecond(sessionMaxIdleTimeInSecond);
         p.setSessionMaxWaitingTimeInSecond(sessionMaxWaitingTimeInSecond);
         p.setSessionMaxRequestPerSecond(sessionMaxRequestPerSecond);
+        p.init();
         return p;
     }
     

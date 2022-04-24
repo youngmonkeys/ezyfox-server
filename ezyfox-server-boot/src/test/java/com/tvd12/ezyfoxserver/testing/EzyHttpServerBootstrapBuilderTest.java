@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyHttpServerBootstrapBuilderTest extends BaseTest {
 
@@ -12,13 +11,13 @@ public class EzyHttpServerBootstrapBuilderTest extends BaseTest {
     public void test() {
         new ExEzyHttpServerBootstrapBuilder();
     }
-    
-    public static class ExEzyHttpServerBootstrapBuilder extends EzyHttpServerBootstrapBuilder {
+
+    public static class ExEzyHttpServerBootstrapBuilder
+        extends EzyHttpServerBootstrapBuilder {
 
         @Override
         protected EzyServerBootstrap newServerBootstrap() {
             return null;
         }
-        
     }
 }

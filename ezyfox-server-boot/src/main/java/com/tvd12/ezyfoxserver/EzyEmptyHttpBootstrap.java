@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-
 import lombok.Setter;
 
 public class EzyEmptyHttpBootstrap implements EzyHttpBootstrap {
@@ -14,5 +13,4 @@ public class EzyEmptyHttpBootstrap implements EzyHttpBootstrap {
 
     @Override
     public void destroy() {}
-
 }

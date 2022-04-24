@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzyEmptyHttpBootstrap;
 import com.tvd12.ezyfoxserver.EzyHttpServerBootstrap;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
@@ -9,8 +7,10 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyHttpServerBootstrapTest extends BaseTest {
 
@@ -29,7 +29,7 @@ public class EzyHttpServerBootstrapTest extends BaseTest {
             .object(bootstrap)
             .method("startHttpBootstrap")
             .invoke();
-        
+
         settings.getHttp().setActive(true);
         MethodInvoker.create()
             .object(bootstrap)
@@ -38,13 +38,11 @@ public class EzyHttpServerBootstrapTest extends BaseTest {
         bootstrap.destroy();
         bootstrap.destroy();
     }
-    
-    public static class ExEzyHttpServerBootstrap extends EzyHttpServerBootstrap {
+
+    public static class ExEzyHttpServerBootstrap
+        extends EzyHttpServerBootstrap {
 
         @Override
-        protected void startOtherBootstraps(Runnable callback) throws Exception {
-        }
-        
+        protected void startOtherBootstraps(Runnable callback) {}
     }
-    
 }

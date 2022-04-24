@@ -1,19 +1,19 @@
 package com.tvd12.ezyfoxserver.statistics;
 
-import java.io.Serializable;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 @Getter
 public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     private static final long serialVersionUID = 6439136315133894536L;
-    
+
     protected long readBytes;
     protected long writtenBytes;
     protected long droppedInBytes;
     protected long droppedOutBytes;
     protected long writeErrorBytes;
-    
+
     protected long readPackets;
     protected long writtenPackets;
     protected long droppedInPackets;
@@ -23,24 +23,27 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     protected EzyNetworkBytesFrame frameHour = new EzyNetworkBytesFrameHour();
     protected EzyNetworkBytesFrame frameMinute = new EzyNetworkBytesFrameMinute();
     protected EzyNetworkBytesFrame frameSecond = new EzyNetworkBytesFrameSecond();
-    
+
     @Override
     public void addReadBytes(long bytes) {
         this.readBytes += bytes;
         this.addReadBytesToFrames(bytes);
     }
-    
+
     private void addReadBytesToFrames(long bytes) {
-        if(frameSecond.isExpired())
+        if (frameSecond.isExpired()) {
             frameSecond = frameSecond.nextFrame();
+        }
         frameSecond.addReadBytes(bytes);
-        
-        if(frameMinute.isExpired())
+
+        if (frameMinute.isExpired()) {
             frameMinute = frameMinute.nextFrame();
+        }
         frameMinute.addReadBytes(bytes);
-        
-        if(frameHour.isExpired())
+
+        if (frameHour.isExpired()) {
             frameHour = frameHour.nextFrame();
+        }
         frameHour.addReadBytes(bytes);
     }
 
@@ -49,18 +52,21 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
         this.writtenBytes += bytes;
         this.addWrittenBytesToFrames(bytes);
     }
-    
+
     private void addWrittenBytesToFrames(long bytes) {
-        if(frameSecond.isExpired())
+        if (frameSecond.isExpired()) {
             frameSecond = frameSecond.nextFrame();
+        }
         frameSecond.addWrittenBytes(bytes);
-        
-        if(frameMinute.isExpired())
+
+        if (frameMinute.isExpired()) {
             frameMinute = frameMinute.nextFrame();
+        }
         frameMinute.addWrittenBytes(bytes);
-        
-        if(frameHour.isExpired())
+
+        if (frameHour.isExpired()) {
             frameHour = frameHour.nextFrame();
+        }
         frameHour.addWrittenBytes(bytes);
     }
 
@@ -68,47 +74,47 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     public void addDroppedInBytes(long bytes) {
         this.droppedInBytes += bytes;
     }
-    
+
     @Override
     public void addDroppedOutBytes(long bytes) {
         this.droppedOutBytes += bytes;
     }
-    
+
     @Override
     public void addWriteErrorBytes(long bytes) {
         this.writeErrorBytes += bytes;
     }
-    
+
     @Override
     public long getReadBytesPerHour() {
         return frameHour.getReadBytes();
     }
-    
+
     @Override
     public long getReadBytesPerMinute() {
         return frameMinute.getReadBytes();
     }
-    
+
     @Override
     public long getReadBytesPerSecond() {
         return frameSecond.getReadBytes();
     }
-    
+
     @Override
     public long getWrittenBytesPerHour() {
         return frameHour.getWrittenBytes();
     }
-    
+
     @Override
     public long getWrittenBytesPerMinute() {
         return frameMinute.getWrittenBytes();
     }
-    
+
     @Override
     public long getWrittenBytesPerSecond() {
         return frameSecond.getWrittenBytes();
     }
-    
+
     //=============== packets =================
 
     @Override
@@ -125,7 +131,7 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     public void addDroppedInPackets(long packets) {
         this.droppedInPackets += packets;
     }
-    
+
     @Override
     public void addDroppedOutPackets(long packets) {
         this.droppedOutPackets += packets;
@@ -136,5 +142,5 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
         this.writeErrorPackets += packets;
     }
 
-    
+
 }

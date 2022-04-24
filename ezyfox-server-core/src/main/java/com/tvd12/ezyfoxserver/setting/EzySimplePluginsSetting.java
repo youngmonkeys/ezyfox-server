@@ -1,20 +1,15 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Setter
 @Getter
@@ -47,16 +42,18 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
     @Override
     public EzySimplePluginSetting getPluginByName(String name) {
         EzySimplePluginSetting pluginSetting = pluginsByNames.get(name);
-        if(pluginSetting != null)
+        if (pluginSetting != null) {
             return pluginSetting;
+        }
         throw new IllegalArgumentException("has no plugin with name: " + name);
     }
 
     @Override
     public EzySimplePluginSetting getPluginById(Integer id) {
         EzySimplePluginSetting pluginSetting = pluginsByIds.get(id);
-        if(pluginSetting != null)
+        if (pluginSetting != null) {
             return pluginSetting;
+        }
         throw new IllegalArgumentException("has no plugin with id: " + id);
     }
 
@@ -66,15 +63,16 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
     }
 
     public void setZoneId(int zoneId) {
-        plugins.forEach(p -> ((EzyZoneIdAware)p).setZoneId(zoneId));
+        plugins.forEach(p -> ((EzyZoneIdAware) p).setZoneId(zoneId));
     }
 
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
         List<Object> pluginMaps = new ArrayList<>();
-        for(EzyPluginSetting plugin : plugins)
+        for (EzyPluginSetting plugin : plugins) {
             pluginMaps.add(plugin.toMap());
+        }
         map.put("size", plugins.size());
         map.put("plugins", pluginMaps);
         return map;

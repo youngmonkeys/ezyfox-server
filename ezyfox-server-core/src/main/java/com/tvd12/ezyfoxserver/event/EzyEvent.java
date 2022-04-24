@@ -6,6 +6,6 @@ public interface EzyEvent extends EzyReleasable {
 
     @Override
     default void release() {
-        
+
     }
 }

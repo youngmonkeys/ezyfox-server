@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleThreadPoolSizeSetting;
+import org.testng.annotations.Test;
 
 public class EzySimpleThreadPoolSizeSettingTest {
 
@@ -24,5 +23,5 @@ public class EzySimpleThreadPoolSizeSettingTest {
         setting.setExtensionRequestHandler(8);
         assert setting.getExtensionRequestHandler() == 8;
     }
-    
+
 }

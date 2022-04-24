@@ -1,15 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.api;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.codec.EzyObjectToByteEncoder;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -19,6 +9,12 @@ import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
 import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
+
+import java.util.List;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class EzySocketResponseApiTest {
 
@@ -35,7 +31,7 @@ public class EzySocketResponseApiTest {
         pack.setData(data);
         pack.setEncrypted(false);
         pack.setTransportType(EzyTransportType.TCP);
-        
+
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
@@ -68,7 +64,7 @@ public class EzySocketResponseApiTest {
         pack.setData(data);
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
-        
+
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
@@ -99,7 +95,7 @@ public class EzySocketResponseApiTest {
         pack.setData(data);
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
-        
+
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);

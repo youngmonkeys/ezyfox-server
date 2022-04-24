@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.statistics;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.statistics.EzySimpleSessionStats;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimpleSessionStatsTest extends BaseTest {
 
@@ -20,5 +19,5 @@ public class EzySimpleSessionStatsTest extends BaseTest {
         assert stats.getMaxSessions() == 2;
         assert stats.getCurrentSessions() == 1;
     }
-    
+
 }

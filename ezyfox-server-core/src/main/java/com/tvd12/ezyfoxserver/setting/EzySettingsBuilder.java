@@ -54,7 +54,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         this.udp = udp;
         return this;
     }
-    
+
     public EzySettingsBuilder admin(EzySimpleAdminSetting admin) {
         this.admins.setItem(admin);
         return this;
@@ -89,7 +89,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         this.eventControllers = eventControllers;
         return this;
     }
-    
+
     public EzySettingsBuilder addEventController(String eventType, String controller) {
         EzySimpleEventControllerSetting eventController = new EzySimpleEventControllerSetting();
         eventController.setEventType(eventType);
@@ -97,11 +97,11 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         this.eventControllers.setItem(eventController);
         return this;
     }
-    
+
     public EzySettingsBuilder addEventController(EzyEventType eventType, Class<?> controller) {
         return addEventController(eventType.getName(), controller.getName());
     }
-    
+
     public EzySettingsBuilder zone(EzySimpleZoneSetting zone) {
         this.zones.setItem(zone);
         return this;
@@ -111,7 +111,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         this.zones = zones;
         return this;
     }
-    
+
     @Override
     public EzySimpleSettings build() {
         EzySimpleSettings p = new EzySimpleSettings();
@@ -128,9 +128,10 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         p.setThreadPoolSize(threadPoolSize);
         p.setSessionManagement(sessionManagement);
         p.setEventControllers(eventControllers);
-        for(EzyZoneSetting zone : zones.getZones())
+        for (EzyZoneSetting zone : zones.getZones()) {
             p.addZone((EzySimpleZoneSetting) zone);
+        }
         return p;
     }
-    
+
 }

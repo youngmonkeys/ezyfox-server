@@ -1,27 +1,26 @@
 package com.tvd12.ezyfoxserver.factory;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 import com.tvd12.ezyfoxserver.socket.EzyNonBlockingPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzyNonBlockingRequestQueue;
 import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
-
 import lombok.Setter;
 
-public abstract class EzyAbstractSessionFactory<S extends EzySession> 
-        implements EzySessionFactory<S> {
+import java.util.concurrent.atomic.AtomicInteger;
 
+public abstract class EzyAbstractSessionFactory<S extends EzySession>
+    implements EzySessionFactory<S> {
+
+    protected final AtomicInteger counter = new AtomicInteger(0);
     @Setter
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
-    protected final AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public final S newProduct() {
         S session = newSession();
-        initSession((EzyAbstractSession)session);
+        initSession((EzyAbstractSession) session);
         return session;
     }
 

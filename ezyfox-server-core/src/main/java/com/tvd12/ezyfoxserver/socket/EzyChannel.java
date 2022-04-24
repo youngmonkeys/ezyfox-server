@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import java.net.SocketAddress;
-
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+
+import java.net.SocketAddress;
 
 public interface EzyChannel {
 

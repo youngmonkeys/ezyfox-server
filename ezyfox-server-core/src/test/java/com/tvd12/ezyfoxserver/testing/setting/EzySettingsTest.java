@@ -1,22 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfoxserver.setting.EzySimpleAdminsSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleHttpSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleLoggerSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleThreadPoolSizeSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleUdpSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneFilesSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZonesSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySettingsTest extends BaseTest {
 
@@ -42,5 +28,5 @@ public class EzySettingsTest extends BaseTest {
         settings.setUdp(new EzySimpleUdpSetting());
         settings.setThreadPoolSize(new EzySimpleThreadPoolSizeSetting());
     }
-    
+
 }

@@ -1,13 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContexts;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.base.BaseTest;
-import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyZoneContextsTest extends BaseTest {
 
@@ -20,10 +21,10 @@ public class EzyZoneContextsTest extends BaseTest {
         zone.setSetting(zoneSetting);
         assert EzyZoneContexts.getUserManagementSetting(zoneContext) == zoneSetting.getUserManagement();
     }
-    
+
     @Override
     public Class<?> getTestClass() {
         return EzyZoneContexts.class;
     }
-    
+
 }

@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.testng.Assert.assertEquals;
-
-import java.security.KeyPair;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.sercurity.EzyBase64;
@@ -16,6 +10,11 @@ import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;
+import org.testng.annotations.Test;
+
+import java.security.KeyPair;
+
+import static org.testng.Assert.assertEquals;
 
 public class EzyHandShakeController2Test extends EzyBaseControllerTest {
 
@@ -37,19 +36,19 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         EzyHandshakeController controller = new EzyHandshakeController();
         controller.handle(ctx, request);
     }
-    
+
     private EzyArray newHandShakeData(String reconnectToken) {
         KeyPair keyPair = newRSAKeys();
         return newArrayBuilder()
-                .append("adroid#1")
-                .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
-                .append("android")
-                .append("1.0.0")
-                .append(true)
-                .append(reconnectToken)
-                .build();
+            .append("adroid#1")
+            .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
+            .append("android")
+            .append("1.0.0")
+            .append(true)
+            .append(reconnectToken)
+            .build();
     }
-    
+
     protected EzySession newSession(String reconnectToken) {
         KeyPair keyPair = newRSAKeys();
         EzySession session = super.newSession();
@@ -57,10 +56,10 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }
-    
+
     @Override
     protected EzyConstant getCommand() {
         return EzyCommand.HANDSHAKE;
     }
-    
+
 }

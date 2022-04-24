@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import com.tvd12.ezyfox.util.EzyLoggable;
-
-public class EzyBlockingSocketStreamQueue 
-        extends EzyLoggable 
-        implements EzySocketStreamQueue {
+public class EzyBlockingSocketStreamQueue
+    extends EzyLoggable
+    implements EzySocketStreamQueue {
 
     private final int capacity;
     private final BlockingQueue<EzySocketStream> queue;
@@ -47,8 +47,9 @@ public class EzyBlockingSocketStreamQueue
 
     @Override
     public boolean add(EzySocketStream stream) {
-        if(queue.size() >= capacity)
+        if (queue.size() >= capacity) {
             return false;
+        }
         return queue.offer(stream);
     }
 

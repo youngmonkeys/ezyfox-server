@@ -4,5 +4,5 @@ public interface EzySessionManagerAware {
 
     @SuppressWarnings("rawtypes")
     void setSessionManager(EzySessionManager sessionManager);
-    
+
 }

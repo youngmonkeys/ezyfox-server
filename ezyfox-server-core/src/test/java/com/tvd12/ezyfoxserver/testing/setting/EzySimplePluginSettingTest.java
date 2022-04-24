@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting.EzySimpleListenEvents;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimplePluginSettingTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzySimplePluginSetting setting = new EzySimplePluginSetting();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings
-    xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
           ezy-zone-settings-1.0.0.xsd"
-    xmlns="http://www.tvd12.com/schema/ezyfox/settings"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        xmlns="http://www.tvd12.com/schema/ezyfox/settings">
 
     <max-users>10000</max-users>
 
@@ -53,4 +53,4 @@
     </plugins>
 </settings>
 
-<!-- http://localhost:8080/schema/ezyfox/settings/ -->
+        <!-- http://localhost:8080/schema/ezyfox/settings/ -->

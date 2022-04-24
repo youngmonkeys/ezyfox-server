@@ -1,9 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.*;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
@@ -16,6 +12,9 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyStarterTest {
@@ -23,16 +22,16 @@ public class EzyStarterTest {
     @Test
     public void normalCaseTest() throws Exception {
         EzyStarter starter = new ExEzyStarter.Builder()
-                .configFile("test-data/settings/config.properties")
-                .build();
+            .configFile("test-data/settings/config.properties")
+            .build();
         starter.start();
     }
-    
+
     @Test
     public void notPrintSettings() {
         // given
         EzyStarter starter = new ExEzyStarter.Builder()
-                .build();
+            .build();
 
         EzyConfig config = mock(EzyConfig.class);
         when(config.isPrintSettings()).thenReturn(false);
@@ -53,13 +52,13 @@ public class EzyStarterTest {
         // then
         verify(config, times(1)).isPrintSettings();
     }
-    
+
     public static class ExEzyStarter extends EzyStarter {
-        
+
         protected ExEzyStarter(Builder builder) {
             super(builder);
         }
-        
+
         @Override
         protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
             EzyAbtractServerBootstrapBuilder builder = new EzyAbtractServerBootstrapBuilder() {
@@ -71,15 +70,15 @@ public class EzyStarterTest {
                         @Override
                         protected void startOtherBootstraps(Runnable callback) throws Exception {
                         }
-                        
+
                         @Override
                         protected void startLocalBootstrap() throws Exception {
                         }
-                        
+
                     };
                     return bootstrap;
                 }
-                
+
             };
             return builder;
         }
@@ -87,41 +86,41 @@ public class EzyStarterTest {
 
         @Override
         protected EzySimpleSessionManager.Builder newSessionManagerBuilder(
-                EzySettings settings) {
+            EzySettings settings) {
             return new ExEzySimpleSessionManager.Builder();
         }
-         
+
         public static class Builder extends EzyStarter.Builder<Builder> {
 
             @Override
             public EzyStarter build() {
                 return new ExEzyStarter(this);
             }
-            
+
         }
     }
-    
+
     public static class ExEzySimpleSessionManager extends EzySimpleSessionManager {
-        
+
         protected ExEzySimpleSessionManager(Builder builder) {
             super(builder);
         }
-        
+
         public static class Builder extends EzySimpleSessionManager.Builder {
 
             @Override
             public EzySimpleSessionManager build() {
                 return new ExEzySimpleSessionManager(this);
             }
-            
+
             @Override
             protected EzyObjectFactory newObjectFactory() {
                 EzyObjectFactory factory = mock(EzyObjectFactory.class);
                 return factory;
             }
-            
+
         }
-        
+
     }
 }
 

@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.statistics;
 
-import java.io.Serializable;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 @Getter
 public class EzySimpleUserStats implements EzyUserStatistics, Serializable {
@@ -11,7 +11,7 @@ public class EzySimpleUserStats implements EzyUserStatistics, Serializable {
     protected int maxUsers;
     protected int totalUsers;
     protected int currentUsers;
-    
+
     @Override
     public void addUsers(int users) {
         this.totalUsers += users;
@@ -20,10 +20,10 @@ public class EzySimpleUserStats implements EzyUserStatistics, Serializable {
     @Override
     public void setCurrentUsers(int users) {
         this.currentUsers = users;
-        if(users > maxUsers)
+        if (users > maxUsers) {
             this.maxUsers = users;
+        }
     }
 
-    
-    
+
 }

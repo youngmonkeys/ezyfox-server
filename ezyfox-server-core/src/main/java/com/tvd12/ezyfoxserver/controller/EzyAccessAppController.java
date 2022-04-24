@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import java.util.concurrent.locks.Lock;
-
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
@@ -11,10 +9,10 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
-import com.tvd12.ezyfoxserver.event.EzyUserAccessedAppEvent;
-import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessedAppEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessAppEvent;
+import com.tvd12.ezyfoxserver.event.EzySimpleUserAccessedAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserAccessedAppEvent;
 import com.tvd12.ezyfoxserver.exception.EzyAccessAppException;
 import com.tvd12.ezyfoxserver.exception.EzyMaxUserException;
 import com.tvd12.ezyfoxserver.request.EzyAccessAppParams;
@@ -26,19 +24,20 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
-public class EzyAccessAppController 
-        extends EzyAbstractServerController
-        implements EzyServerController<EzyAccessAppRequest> {
+import java.util.concurrent.locks.Lock;
+
+public class EzyAccessAppController
+    extends EzyAbstractServerController
+    implements EzyServerController<EzyAccessAppRequest> {
 
     @Override
     public void handle(EzyServerContext ctx, EzyAccessAppRequest request) {
-       try {
-           handle0(ctx, request);
-       }
-       catch(EzyAccessAppException e) {
-           responseAccessAppError(ctx, request.getSession(), e);
-           throw e;
-       }
+        try {
+            handle0(ctx, request);
+        } catch (EzyAccessAppException e) {
+            responseAccessAppError(ctx, request.getSession(), e);
+            throw e;
+        }
     }
 
     protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
@@ -56,15 +55,15 @@ public class EzyAccessAppController
         lock.lock();
         try {
             boolean hasNotAccessed = !appUserManger.containsUser(user);
-            
-            if(hasNotAccessed) {
+
+            if (hasNotAccessed) {
                 checkAppUserMangerAvailable(appUserManger);
             }
-            
+
             EzyUserAccessAppEvent accessAppEvent = newAccessAppEvent(user);
             appContext.handleEvent(EzyEventType.USER_ACCESS_APP, accessAppEvent);
-            
-            if(hasNotAccessed) {
+
+            if (hasNotAccessed) {
                 addUser(appUserManger, user, appSetting);
                 EzyUserAccessedAppEvent accessedAppEvent = newAccessedAppEvent(user);
                 appContext.handleEvent(EzyEventType.USER_ACCESSED_APP, accessedAppEvent);
@@ -73,28 +72,27 @@ public class EzyAccessAppController
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
             ctx.send(accessAppResponse, session, false);
-        }
-        finally {
+        } finally {
             lock.unlock();
             appUserManger.removeLock(username);
         }
-        
+
     }
 
     protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {
         int current = appUserManger.getUserCount();
         int max = appUserManger.getMaxUsers();
         String appName = appUserManger.getAppName();
-        if(current >= max)
+        if (current >= max) {
             throw EzyAccessAppException.maximumUser(appName, current, max);
+        }
     }
 
     protected void addUser(
-            EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
+        EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
         try {
             appUserManger.addUser(user);
-        }
-        catch(EzyMaxUserException e) {
+        } catch (EzyMaxUserException e) {
             throw EzyAccessAppException.maximumUser(setting.getName(), e);
         }
     }
@@ -109,7 +107,7 @@ public class EzyAccessAppController
 
     protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
         com.tvd12.ezyfoxserver.response.EzyAccessAppParams params =
-                new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
+            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
         params.setApp(app);
         params.setData(data);
         return new EzyAccessAppResponse(params);
@@ -122,7 +120,7 @@ public class EzyAccessAppController
     }
 
     protected void responseAccessAppError(
-            EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
+        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
         EzyResponse response = newAccessAppErrorResponse(exception.getError());
         ctx.send(response, session, false);
     }

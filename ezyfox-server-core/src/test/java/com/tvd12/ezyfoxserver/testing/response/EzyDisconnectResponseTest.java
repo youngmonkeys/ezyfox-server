@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyDisconnectResponseTest extends BaseTest {
 
@@ -18,5 +17,5 @@ public class EzyDisconnectResponseTest extends BaseTest {
         response.serialize();
         response.release();
     }
-    
+
 }

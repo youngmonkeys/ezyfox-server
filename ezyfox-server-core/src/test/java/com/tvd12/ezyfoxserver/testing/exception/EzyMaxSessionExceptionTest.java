@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.exception;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyMaxSessionExceptionTest extends BaseTest {
 
@@ -12,5 +11,5 @@ public class EzyMaxSessionExceptionTest extends BaseTest {
         EzyMaxSessionException exception = new EzyMaxSessionException(1, 2);
         System.out.print(exception.getMessage());
     }
-    
+
 }

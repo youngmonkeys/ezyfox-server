@@ -5,7 +5,7 @@ import com.tvd12.ezyfox.entity.EzyData;
 public interface EzyAccessAppParams extends EzyRequestParams {
 
     String getAppName();
-    
+
     EzyData getData();
-    
+
 }

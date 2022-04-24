@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.ssl;
 
-import java.nio.file.Paths;
-
 import com.tvd12.ezyfox.mapping.properties.EzyPropertiesFileReader;
 import com.tvd12.ezyfox.mapping.properties.EzySimplePropertiesFileMapper;
 
+import java.nio.file.Paths;
+
 public class EzySimpleSslConfigLoader implements EzySslConfigLoader {
-    
+
     @Override
     public EzySslConfig load(String filePath) {
         EzySimpleSslConfig answer = readConfig(filePath);
@@ -16,15 +16,15 @@ public class EzySimpleSslConfigLoader implements EzySslConfigLoader {
         answer.setCertificatePasswordFile(getPath(parent, answer.getCertificatePasswordFile()));
         return answer;
     }
-    
+
     protected EzySimpleSslConfig readConfig(String filePath) {
         return newPropertiesReader().read(filePath, EzySimpleSslConfig.class);
     }
-    
+
     protected EzyPropertiesFileReader newPropertiesReader() {
         return EzySimplePropertiesFileMapper.builder()
-                .context(getClass())
-                .build();
+            .context(getClass())
+            .build();
     }
 
     protected String getParentFolder(String filePath) {

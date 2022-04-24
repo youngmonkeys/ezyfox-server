@@ -8,7 +8,7 @@ public abstract class EzySimpleSocketEventLoop extends EzySocketEventLoop {
     protected String threadName;
     @Setter
     protected int threadPoolSize;
-    
+
     @Override
     protected String threadName() {
         return threadName;
@@ -18,15 +18,15 @@ public abstract class EzySimpleSocketEventLoop extends EzySocketEventLoop {
     protected int threadPoolSize() {
         return threadPoolSize;
     }
-    
+
     protected final void eventLoop() {
         logger.debug("{} event loop has started", currentThreadName());
         eventLoop0();
         logger.debug("{} event loop has stopped", currentThreadName());
     }
-    
+
     protected abstract void eventLoop0();
-    
+
     private String currentThreadName() {
         return Thread.currentThread().getName();
     }

@@ -33,7 +33,7 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         this.streaming = streaming;
         return this;
     }
-    
+
     public EzyZoneSettingBuilder plugin(EzySimplePluginSetting plugin) {
         this.plugins.setItem(plugin);
         return this;
@@ -43,7 +43,7 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         this.plugins = plugins;
         return this;
     }
-    
+
     public EzyZoneSettingBuilder application(EzySimpleAppSetting application) {
         this.applications.setItem(application);
         return this;
@@ -63,7 +63,7 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         this.eventControllers = eventControllers;
         return this;
     }
-    
+
     public EzyZoneSettingBuilder addEventController(String eventType, String controller) {
         EzySimpleEventControllerSetting eventController = new EzySimpleEventControllerSetting();
         eventController.setEventType(eventType);
@@ -71,11 +71,11 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         this.eventControllers.setItem(eventController);
         return this;
     }
-    
+
     public EzyZoneSettingBuilder addEventController(EzyEventType eventType, Class<?> controller) {
         return addEventController(eventType.getName(), controller.getName());
     }
-    
+
     @Override
     public EzySimpleZoneSetting build() {
         EzySimpleZoneSetting p = new EzySimpleZoneSetting();
@@ -90,5 +90,5 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         p.init();
         return p;
     }
-    
+
 }

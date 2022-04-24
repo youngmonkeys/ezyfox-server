@@ -1,17 +1,16 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminsSetting;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class EzySimpleAdminsSettingTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzySimpleAdminsSetting setting = new EzySimpleAdminsSetting();
@@ -33,7 +32,7 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
         adminSetting.setPassword("password1");
         setting.setAdmins(Arrays.asList(adminSetting1));
     }
-    
+
     @Test
     public void setItemUsernameNull() {
         // given

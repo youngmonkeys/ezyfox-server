@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -11,9 +11,8 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
 
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class EzyDatagramChannelPoolTest {
 
@@ -39,7 +38,7 @@ public class EzyDatagramChannelPoolTest {
         }
         assert pool.getChannel() != null;
     }
-    
+
     @Test(expectedExceptions = IllegalStateException.class)
     public void testNewChannelException() {
         new EzyDatagramChannelPool(16) {
@@ -49,7 +48,7 @@ public class EzyDatagramChannelPoolTest {
             }
         };
     }
-    
+
     @Test
     public void testBindRegisterCloseChannelException() {
         EzyDatagramChannelPool pool = new EzyDatagramChannelPool(2) {
@@ -79,23 +78,23 @@ public class EzyDatagramChannelPoolTest {
             e.printStackTrace();
         }
     }
-    
+
     public static abstract class MyDatagramChannel1 extends DatagramChannel {
 
         protected MyDatagramChannel1() {
             super(SelectorProvider.provider());
         }
-        
+
         @Override
         public DatagramChannel bind(SocketAddress local) throws IOException {
             throw new IOException("bind test");
         }
-        
+
         @Override
         protected void implCloseSelectableChannel() throws IOException {
             throw new IOException("close test");
         }
-        
+
     }
 
 }

@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.request;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.request.EzySimplePingRequest;
+import org.testng.annotations.Test;
 
 public class EzySimplePingRequestTest {
 
@@ -12,5 +11,5 @@ public class EzySimplePingRequestTest {
         rq.deserializeParams(null);
         rq.release();
     }
-    
+
 }

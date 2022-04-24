@@ -1,15 +1,14 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketSystemRequestHandler;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzySocketSystemRequestHandlerTest {
 
@@ -33,10 +32,10 @@ public class EzySocketSystemRequestHandlerTest {
 
         // when
         EzyRequestQueue result = MethodInvoker.create()
-                .object(sut)
-                .method("getRequestQueue")
-                .param(EzySession.class, session)
-                .call();
+            .object(sut)
+            .method("getRequestQueue")
+            .param(EzySession.class, session)
+            .call();
 
         // then
         Asserts.assertEquals(requestQueue, result);

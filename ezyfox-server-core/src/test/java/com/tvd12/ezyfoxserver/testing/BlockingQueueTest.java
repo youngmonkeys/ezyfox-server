@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
+import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
-import com.tvd12.test.base.BaseTest;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class BlockingQueueTest extends BaseTest {
 
@@ -18,5 +17,5 @@ public class BlockingQueueTest extends BaseTest {
         System.out.println(queue.offer("5"));
         System.out.println(queue);
     }
-    
+
 }

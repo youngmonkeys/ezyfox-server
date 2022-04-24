@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.ext;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
+import org.testng.annotations.Test;
 
 public class EzyAbstractPluginEntryTest {
 

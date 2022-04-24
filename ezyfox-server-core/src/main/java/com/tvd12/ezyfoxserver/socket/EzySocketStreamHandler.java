@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import com.tvd12.ezyfoxserver.entity.EzySession;
-
 import lombok.Setter;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
 
@@ -27,11 +26,9 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
         try {
             EzySocketStream stream = streamQueue.take();
             processStreamQueue(stream);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             logger.warn("socket-stream-handler thread interrupted: {}", Thread.currentThread());
-        }
-        catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             logger.warn("problems in socket-stream-handler, thread: {}", Thread.currentThread(), throwable);
         }
     }
@@ -39,8 +36,7 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
     private void processStreamQueue(EzySocketStream stream) throws Exception {
         try {
             processStreamQueue0(stream);
-        }
-        finally {
+        } finally {
             stream.release();
         }
     }
@@ -49,10 +45,11 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
         byte[] bytes = stream.getBytes();
         EzySession session = stream.getSession();
         EzySocketDataHandlerGroup handlerGroup = getDataHandlerGroup(session);
-        if(handlerGroup != null)
+        if (handlerGroup != null) {
             handlerGroup.fireStreamBytesReceived(bytes);
-        else
+        } else {
             logger.warn("has no handler group with session: {}, drop: {} bytes", session, bytes.length);
+        }
     }
 
     protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {

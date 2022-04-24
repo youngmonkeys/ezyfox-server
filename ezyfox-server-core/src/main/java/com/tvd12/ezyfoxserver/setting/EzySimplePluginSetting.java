@@ -1,21 +1,19 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfoxserver.constant.EzyEventType;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Setter
 @Getter
@@ -24,13 +22,11 @@ import lombok.ToString;
 @XmlRootElement(name = "plugin")
 public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPluginSetting {
 
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
     @XmlElement(name = "priority")
     protected int priority;
-
     @XmlElement(name = "listen-events")
     protected EzySimpleListenEvents listenEvents = new EzySimpleListenEvents();
-
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
     @Override
     protected AtomicInteger getIdCounter() {
@@ -44,12 +40,12 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
 
     @Override
     public Map<Object, Object> toMap() {
-         Map<Object, Object> map = super.toMap();
-         map.put("priority", priority);
-         map.put("listenEvents", listenEvents.getEvents());
-         return map;
+        Map<Object, Object> map = super.toMap();
+        map.put("priority", priority);
+        map.put("listenEvents", listenEvents.getEvents());
+        return map;
     }
-    
+
     @Getter
     @ToString
     @XmlAccessorType(XmlAccessType.NONE)

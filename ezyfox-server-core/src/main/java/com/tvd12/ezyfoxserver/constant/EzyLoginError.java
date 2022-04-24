@@ -14,21 +14,21 @@ public enum EzyLoginError implements EzyILoginError {
     ZONE_NOT_FOUND(7, "zone not found"),
     SERVER_ERROR(8, "server error"),
     TOO_MANY_REQUEST(9, "too many request");
-    
+
     @Getter
     private final int id;
-    
+
     @Getter
     private final String message;
-    
+
     private EzyLoginError(int id, String message) {
         this.id = id;
         this.message = message;
     }
-    
+
     @Override
     public String getName() {
         return toString();
     }
-    
+
 }

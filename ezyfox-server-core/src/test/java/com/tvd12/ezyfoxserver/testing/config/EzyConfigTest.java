@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing.config;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
 
 public class EzyConfigTest extends BaseCoreTest {
 
@@ -15,7 +14,7 @@ public class EzyConfigTest extends BaseCoreTest {
         config.setLoggerConfigFile("abc");
         assert config.toString() != null;
     }
-    
+
     @Test
     public void getEzyfoxHomeTest() {
         // given
@@ -30,5 +29,5 @@ public class EzyConfigTest extends BaseCoreTest {
         Asserts.assertEquals("", home);
         System.out.println(sut.toMap());
     }
-    
+
 }

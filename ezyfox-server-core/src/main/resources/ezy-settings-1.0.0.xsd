@@ -1,143 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://www.tvd12.com/schema/ezyfox/settings" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.tvd12.com/schema/ezyfox/settings" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.tvd12.com/schema/ezyfox/settings"
+           xmlns="http://www.tvd12.com/schema/ezyfox/settings" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
 
     <xs:element name="settings">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="debug" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="node-name" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="max-sessions" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="thread-pool-size" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="http" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="socket" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="udp" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="web-socket" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="administrators" minOccurs="1" maxOccurs="1" />
-                <xs:element ref="session-management" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="zones" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="debug" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="node-name" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="max-sessions" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="thread-pool-size" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="streaming" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="http" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="socket" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="udp" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="web-socket" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="administrators" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="session-management" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="event-controllers" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="zones" minOccurs="0" maxOccurs="1"/>
             </xs:all>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="debug" type="xs:boolean" />
-    <xs:element name="node-name" type="xs:string" />
-    <xs:element name="max-sessions" type="xs:integer" />
-    <xs:element name="http" type="http-type" />
-    <xs:element name="socket" type="socket-type" />
-    <xs:element name="udp" type="udp-type" />
-    <xs:element name="web-socket" type="web-socket-type" />
-    <xs:element name="streaming" type="streaming-type" />
-    <xs:element name="thread-pool-size" type="thread-pool-size-type" />
-    <xs:element name="administrators" type="administrators-type" />
-    <xs:element name="session-management" type="session-management-type" />
-    <xs:element name="event-controllers" type="event-controllers-type" />
-    <xs:element name="event-controller" type="event-controller-type" />
-    <xs:element name="zone" type="zone-type" />
-    <xs:element name="zones" type="zones-type" />
+    <xs:element name="debug" type="xs:boolean"/>
+    <xs:element name="node-name" type="xs:string"/>
+    <xs:element name="max-sessions" type="xs:integer"/>
+    <xs:element name="http" type="http-type"/>
+    <xs:element name="socket" type="socket-type"/>
+    <xs:element name="udp" type="udp-type"/>
+    <xs:element name="web-socket" type="web-socket-type"/>
+    <xs:element name="streaming" type="streaming-type"/>
+    <xs:element name="thread-pool-size" type="thread-pool-size-type"/>
+    <xs:element name="administrators" type="administrators-type"/>
+    <xs:element name="session-management" type="session-management-type"/>
+    <xs:element name="event-controllers" type="event-controllers-type"/>
+    <xs:element name="event-controller" type="event-controller-type"/>
+    <xs:element name="zone" type="zone-type"/>
+    <xs:element name="zones" type="zones-type"/>
 
     <xs:complexType name="thread-pool-size-type">
         <xs:all>
-            <xs:element name="statistics" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="stream-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="socket-data-receiver" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="system-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="extension-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="socket-disconnection-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="socket-user-removal-handler" type="xs:integer" maxOccurs="1" minOccurs="0" />
+            <xs:element name="statistics" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="stream-handler" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="socket-data-receiver" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="system-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="extension-request-handler" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="socket-disconnection-handler" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="socket-user-removal-handler" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="streaming-type">
         <xs:all>
-            <xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+            <xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="socket-type">
         <xs:all>
-            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
+            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="udp-type">
         <xs:all>
-            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="channel-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="handler-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
+            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="channel-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="handler-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="web-socket-type">
         <xs:all>
-            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="ssl-port" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="ssl-config" type="ssl-config-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="max-frame-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0" />
+            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-config" type="ssl-config-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="max-frame-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="management-enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="ssl-config-type">
         <xs:all>
-            <xs:element name="file" type="file-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="loader" type="class-type" maxOccurs="1" minOccurs="0" />
-            <xs:element name="context-factory-builder" type="class-type" maxOccurs="1" minOccurs="0" />
+            <xs:element name="file" type="file-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="loader" type="class-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="context-factory-builder" type="class-type" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="http-type">
         <xs:all>
-            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0" />
-            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-            <xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0" />
+            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="max-threads" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="administrators-type">
         <xs:sequence>
-            <xs:element name="administrator" type="administrator-type" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="administrator" type="administrator-type" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="administrator-type">
         <xs:all>
-            <xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-            <xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-            <xs:element name="access-token" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="access-token" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="session-management-type">
         <xs:all>
-            <xs:element name="session-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1" />
-            <xs:element name="session-max-waiting-time" type="xs:long" minOccurs="0" maxOccurs="1" />
-            <xs:element name="session-max-request-per-second" type="session-max-request-per-second-type" minOccurs="0" maxOccurs="1" />
+            <xs:element name="session-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="session-max-waiting-time" type="xs:long" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="session-max-request-per-second" type="session-max-request-per-second-type" minOccurs="0"
+                        maxOccurs="1"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="session-max-request-per-second-type">
         <xs:all>
-            <xs:element name="value" type="xs:integer" minOccurs="0" maxOccurs="1" />
-            <xs:element name="action" type="session-max-request-per-second-action-type" />
+            <xs:element name="value" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="action" type="session-max-request-per-second-action-type"/>
         </xs:all>
     </xs:complexType>
 
@@ -145,8 +147,8 @@
         <xs:list>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="DROP_REQUEST" />
-                    <xs:enumeration value="DISCONNECT_SESSION" />
+                    <xs:enumeration value="DROP_REQUEST"/>
+                    <xs:enumeration value="DISCONNECT_SESSION"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:list>
@@ -154,14 +156,14 @@
 
     <xs:complexType name="event-controllers-type">
         <xs:all>
-            <xs:element ref="event-controller" />
+            <xs:element ref="event-controller"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="event-controller-type">
         <xs:all>
-            <xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1" />
-            <xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1" />
+            <xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1"/>
         </xs:all>
     </xs:complexType>
 
@@ -169,8 +171,8 @@
         <xs:list>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="SERVER_INITIALIZING" />
-                    <xs:enumeration value="SERVER_READY" />
+                    <xs:enumeration value="SERVER_INITIALIZING"/>
+                    <xs:enumeration value="SERVER_READY"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:list>
@@ -178,33 +180,33 @@
 
     <xs:complexType name="zones-type">
         <xs:all>
-            <xs:element ref="zone" minOccurs="0" />
+            <xs:element ref="zone" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
     <xs:complexType name="zone-type">
         <xs:all>
-            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-            <xs:element name="config-file" type="xs:anyURI" minOccurs="1" maxOccurs="1" />
-            <xs:element name="active" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="config-file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="active" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:complexType>
 
     <xs:simpleType name="codec-creator-type">
-        <xs:restriction base="class-type" />
+        <xs:restriction base="class-type"/>
     </xs:simpleType>
 
     <xs:simpleType name="class-type">
-        <xs:restriction base="not-empty-type" />
+        <xs:restriction base="not-empty-type"/>
     </xs:simpleType>
 
     <xs:simpleType name="file-type">
-        <xs:restriction base="not-empty-type" />
+        <xs:restriction base="not-empty-type"/>
     </xs:simpleType>
 
     <xs:simpleType name="not-empty-type">
         <xs:restriction base="xs:string">
-            <xs:minLength value="1" />
+            <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
 

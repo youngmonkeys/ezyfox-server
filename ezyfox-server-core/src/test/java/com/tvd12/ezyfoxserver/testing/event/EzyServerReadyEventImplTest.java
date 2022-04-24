@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.event;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import org.testng.annotations.Test;
 
 public class EzyServerReadyEventImplTest extends BaseCoreTest {
 
@@ -11,5 +10,5 @@ public class EzyServerReadyEventImplTest extends BaseCoreTest {
     public void test() {
         new EzySimpleServerReadyEvent();
     }
-    
+
 }

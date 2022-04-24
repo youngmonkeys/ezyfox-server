@@ -1,22 +1,17 @@
 package com.tvd12.ezyfoxserver.builder;
 
-import javax.net.ssl.SSLContext;
-
 import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
-import com.tvd12.ezyfoxserver.setting.EzySettings;
-import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
-import com.tvd12.ezyfoxserver.setting.EzySslConfigSetting;
-import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSetting;
-import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
-import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
 
-public abstract class EzyAbtractServerBootstrapBuilder 
-        implements EzyServerBootstrapBuilder {
+import javax.net.ssl.SSLContext;
+
+public abstract class EzyAbtractServerBootstrapBuilder
+    implements EzyServerBootstrapBuilder {
 
     protected EzyServer server;
     protected EzyServerContext serverContext;
@@ -46,21 +41,22 @@ public abstract class EzyAbtractServerBootstrapBuilder
 
     protected EzyServerContext newServerContext(EzyServer server) {
         return newServerContextBuilder()
-                .server(server)
-                .build();
+            .server(server)
+            .build();
     }
 
     protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
-        if(getWebsocketSetting().isSslActive())
+        if (getWebsocketSetting().isSslActive()) {
             return newSslContextInitializer(sslConfig).init();
+        }
         return null;
     }
 
     protected EzySslContextInitializer newSslContextInitializer(EzySslConfigSetting sslConfig) {
         return newSslContextInitializerBuilder()
-                .sslConfig(sslConfig)
-                .homeFolderPath(getConfig().getEzyfoxHome())
-                .build();
+            .sslConfig(sslConfig)
+            .homeFolderPath(getConfig().getEzyfoxHome())
+            .build();
     }
 
     protected EzySslContextInitializer.Builder newSslContextInitializerBuilder() {
@@ -80,23 +76,23 @@ public abstract class EzyAbtractServerBootstrapBuilder
     protected EzyConfig getConfig() {
         return server.getConfig();
     }
-    
+
     protected EzySettings getSettings() {
         return server.getSettings();
     }
-    
+
     protected EzyUdpSetting getUdpSetting() {
         return getSettings().getUdp();
     }
-    
+
     protected EzySocketSetting getSocketSetting() {
         return getSettings().getSocket();
     }
-    
+
     protected EzyWebSocketSetting getWebsocketSetting() {
         return getSettings().getWebsocket();
     }
-    
+
     protected EzyThreadPoolSizeSetting getThreadPoolSizeSetting() {
         return getSettings().getThreadPoolSize();
     }

@@ -1,17 +1,12 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.xml.bind.annotation.XmlElement;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Setter
 @Getter
@@ -42,16 +37,18 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
     @Override
     public EzySimpleZoneSetting getZoneByName(String name) {
         EzySimpleZoneSetting zoneSetting = zonesByNames.get(name);
-        if(zoneSetting != null)
+        if (zoneSetting != null) {
             return zoneSetting;
+        }
         throw new IllegalArgumentException("has no zone with name: " + name);
     }
 
     @Override
     public EzySimpleZoneSetting getZoneById(Integer id) {
         EzySimpleZoneSetting zoneSetting = zonesByIds.get(id);
-        if(zoneSetting != null)
+        if (zoneSetting != null) {
             return zoneSetting;
+        }
         throw new IllegalArgumentException("has no zone with id: " + id);
     }
 
@@ -64,8 +61,9 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
         List<Object> zoneMaps = new ArrayList<>();
-        for(EzyZoneSetting zone : zones)
+        for (EzyZoneSetting zone : zones) {
             zoneMaps.add(zone.toMap());
+        }
         map.put("size", zones.size());
         map.put("zones", zoneMaps);
         return map;

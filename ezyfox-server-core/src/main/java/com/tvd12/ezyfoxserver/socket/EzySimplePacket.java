@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.socket;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,9 +25,10 @@ public class EzySimplePacket implements EzyPacket {
 
     @Override
     public int getSize() {
-        if(data instanceof String)
-            return ((String)data).length();
-        return ((byte[])data).length;
+        if (data instanceof String) {
+            return ((String) data).length();
+        }
+        return ((byte[]) data).length;
     }
 
     @Override
@@ -40,12 +40,12 @@ public class EzySimplePacket implements EzyPacket {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("(")
-                .append("transportType: ")
-                    .append(transportType)
-                .append(", data: ")
-                    .append(data)
-                .append(")")
-                .toString();
+            .append("(")
+            .append("transportType: ")
+            .append(transportType)
+            .append(", data: ")
+            .append(data)
+            .append(")")
+            .toString();
     }
 }

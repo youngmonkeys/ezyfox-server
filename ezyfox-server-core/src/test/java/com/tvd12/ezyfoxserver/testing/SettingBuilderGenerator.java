@@ -7,8 +7,8 @@ public class SettingBuilderGenerator {
 
     public static void main(String[] args) throws Exception {
         System.out.println(new EzyBuilderCreator()
-                .buildBySetter(true)
-                .create(EzySimpleAdminSetting.class, "EzyAdminSettingBuilder"));
+            .buildBySetter(true)
+            .create(EzySimpleAdminSetting.class, "EzyAdminSettingBuilder"));
     }
-    
+
 }

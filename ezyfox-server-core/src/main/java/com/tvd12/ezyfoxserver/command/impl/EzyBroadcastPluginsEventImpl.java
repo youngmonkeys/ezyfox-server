@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.util.EzyHashMapSet;
 import com.tvd12.ezyfox.util.EzyMapSet;
@@ -12,6 +9,9 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
+
+import java.util.Collection;
+import java.util.Set;
 
 public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements EzyBroadcastPluginsEvent {
 
@@ -28,22 +28,21 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
     public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
         logger.debug("zone: {} broadcast to plugins event: {}", getZoneName(), type);
         Set<EzyPluginContext> pluginContexts = pluginContextss.get(type);
-        if(pluginContexts != null) {
-            for(EzyPluginContext pluginContext : pluginContexts)
+        if (pluginContexts != null) {
+            for (EzyPluginContext pluginContext : pluginContexts) {
                 firePluginEvent(pluginContext, type, event, catchException);
+            }
         }
     }
 
     protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
-        if(catchException) {
+        if (catchException) {
             try {
                 ctx.handleEvent(type, event);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 ctx.handleException(Thread.currentThread(), e);
             }
-        }
-        else {
+        } else {
             ctx.handleEvent(type, event);
         }
     }
@@ -55,11 +54,12 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
     private EzyMapSet<EzyConstant, EzyPluginContext> getPluginContextss() {
         Collection<EzyPluginContext> pluginContexts = context.getPluginContexts();
         EzyMapSet<EzyConstant, EzyPluginContext> pluginContextss = new EzyHashMapSet<>();
-        for(EzyPluginContext pluginContext : pluginContexts) {
+        for (EzyPluginContext pluginContext : pluginContexts) {
             EzyPluginSetting pluginSetting = pluginContext.getPlugin().getSetting();
             Set<EzyConstant> listenEvents = pluginSetting.getListenEvents().getEvents();
-            for(EzyConstant listenEvent : listenEvents)
+            for (EzyConstant listenEvent : listenEvents) {
                 pluginContextss.addItem(listenEvent, pluginContext);
+            }
         }
         return pluginContextss;
     }

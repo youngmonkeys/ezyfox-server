@@ -1,14 +1,14 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
+
 import java.util.LinkedList;
 import java.util.Queue;
-
-import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQueue {
 
     private final int capacity;
-    private final Queue<EzyPacket> queue ;
+    private final Queue<EzyPacket> queue;
 
     public EzyNonBlockingPacketQueue() {
         this(128);
@@ -54,8 +54,9 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
 
     @Override
     public boolean add(EzyPacket packet) {
-        if(isFull())
+        if (isFull()) {
             return false;
+        }
         boolean answer = queue.offer(packet);
         return answer;
     }

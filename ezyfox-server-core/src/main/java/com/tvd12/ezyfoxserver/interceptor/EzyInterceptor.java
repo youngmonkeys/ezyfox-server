@@ -1,9 +1,7 @@
 package com.tvd12.ezyfoxserver.interceptor;
 
 /**
- * 
  * @author tavandung12
- *
  */
 public interface EzyInterceptor<C, R> {
 

@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.context;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -22,16 +14,23 @@ import com.tvd12.ezyfoxserver.command.impl.EzyAddExceptionHandlerImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 @SuppressWarnings("rawtypes")
-public abstract class EzyAbstractContext 
-        extends EzyEntity 
-        implements EzyInitable, EzyDestroyable {
+public abstract class EzyAbstractContext
+    extends EzyEntity
+    implements EzyInitable, EzyDestroyable {
 
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected EzyComponent component;
     protected Map<Class, Supplier> commandSuppliers;
     protected EzyHandleException handleException;
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public final void init() {
@@ -74,11 +73,13 @@ public abstract class EzyAbstractContext
     @Override
     public void destroy() {
         preDestroy();
-        for(Object property : properties.values()) {
-            if(property instanceof EzyStoppable)
-                ((EzyStoppable)property).stop();
-            if(property instanceof EzyDestroyable)
-                ((EzyDestroyable)property).destroy();
+        for (Object property : properties.values()) {
+            if (property instanceof EzyStoppable) {
+                ((EzyStoppable) property).stop();
+            }
+            if (property instanceof EzyDestroyable) {
+                ((EzyDestroyable) property).destroy();
+            }
         }
         this.properties.clear();
         this.commandSuppliers.clear();

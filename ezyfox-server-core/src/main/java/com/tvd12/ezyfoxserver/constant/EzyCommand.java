@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.constant;
 
+import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import lombok.Getter;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.tvd12.ezyfox.collect.Sets;
-import com.tvd12.ezyfox.constant.EzyConstant;
-
-import lombok.Getter;
 
 public enum EzyCommand implements EzyConstant {
 
@@ -27,26 +26,16 @@ public enum EzyCommand implements EzyConstant {
     PLUGIN_REQUEST(41, 10),
     UDP_HANDSHAKE(50, 10);
 
+    private static final Set<EzyCommand> SYSTEM_COMMANDS = systemCommands();
+    private static final Map<Integer, EzyCommand> COMMANDS_BY_ID = commandsById();
     @Getter
     private final int id;
     @Getter
     private final int priority;
 
-    private static final Set<EzyCommand> SYSTEM_COMMANDS = systemCommands();
-    private static final Map<Integer, EzyCommand> COMMANDS_BY_ID = commandsById();
-
     private EzyCommand(int id, int priority) {
         this.id = id;
         this.priority = priority;
-    }
-
-    public boolean isSystemCommand() {
-        return SYSTEM_COMMANDS.contains(this);
-    }
-
-    @Override
-    public String getName() {
-        return toString();
     }
 
     public static EzyCommand valueOf(int id) {
@@ -60,9 +49,19 @@ public enum EzyCommand implements EzyConstant {
 
     private static final Map<Integer, EzyCommand> commandsById() {
         Map<Integer, EzyCommand> map = new ConcurrentHashMap<>();
-        for(EzyCommand cmd : values())
+        for (EzyCommand cmd : values()) {
             map.put(cmd.getId(), cmd);
+        }
         return map;
+    }
+
+    public boolean isSystemCommand() {
+        return SYSTEM_COMMANDS.contains(this);
+    }
+
+    @Override
+    public String getName() {
+        return toString();
     }
 
 }

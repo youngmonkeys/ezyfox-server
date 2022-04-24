@@ -7,7 +7,6 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -23,39 +22,37 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
     }
 
     protected void fireAppsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
-        for(EzyAppContext appContext : context.getAppContexts())
+        for (EzyAppContext appContext : context.getAppContexts()) {
             fireAppEvent(appContext, type, event, catchException);
+        }
     }
 
     protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
-        if(catchException) {
+        if (catchException) {
             try {
                 ctx.handleEvent(type, event);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 ctx.handleException(Thread.currentThread(), e);
             }
-        }
-        else {
+        } else {
             ctx.handleEvent(type, event);
         }
     }
 
     protected void firePluginsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
-        for(EzyPluginContext pluginContext : context.getPluginContexts())
+        for (EzyPluginContext pluginContext : context.getPluginContexts()) {
             firePluginEvent(pluginContext, type, event, catchException);
+        }
     }
 
     protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
-        if(catchException) {
+        if (catchException) {
             try {
                 ctx.handleEvent(type, event);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 ctx.handleException(Thread.currentThread(), e);
             }
-        }
-        else {
+        } else {
             ctx.handleEvent(type, event);
         }
     }

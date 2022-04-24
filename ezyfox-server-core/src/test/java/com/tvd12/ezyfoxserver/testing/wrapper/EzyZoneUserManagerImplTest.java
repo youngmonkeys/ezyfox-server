@@ -1,12 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.wrapper;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -21,6 +14,12 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodUtil;
+import org.testng.annotations.Test;
+
+import java.util.Map;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyZoneUserManagerImplTest {
 
@@ -32,14 +31,14 @@ public class EzyZoneUserManagerImplTest {
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
         EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext, queue);
         userDelegate = new EzySimpleUserDelegate(serverContext, queue);
-        
+
         EzyZoneUserManagerImpl manager = (EzyZoneUserManagerImpl) EzyZoneUserManagerImpl.builder()
-                .idleValidationDelay(10)
-                .idleValidationInterval(10)
-                .idleValidationThreadPoolSize(1)
-                .userDelegate(userDelegate)
-                .maxIdleTime(10)
-                .build();
+            .idleValidationDelay(10)
+            .idleValidationInterval(10)
+            .idleValidationThreadPoolSize(1)
+            .userDelegate(userDelegate)
+            .maxIdleTime(10)
+            .build();
         EzyAbstractSession session1 = mock(EzyAbstractSession.class);
         EzySimpleUser user1 = new EzySimpleUser();
         user1.setZoneId(1);
@@ -52,7 +51,7 @@ public class EzyZoneUserManagerImplTest {
         manager.bind(session12, user1);
         manager.unmapSessionUser(session12, EzyUserRemoveReason.EXIT_APP);
         assert manager.getUserCount() == 0;
-        
+
         EzyAbstractSession session2 = mock(EzyAbstractSession.class);
         EzySimpleUser user2 = new EzySimpleUser();
         user2.setZoneId(1);
@@ -61,22 +60,22 @@ public class EzyZoneUserManagerImplTest {
         user2.addSession(session2);
         manager.addUser(session2, user2);
         assert manager.getUserCount() == 1;
-        
+
         newAndAddIdleUser("user3", manager);
         assert manager.getUserCount() == 2;
-        
+
         newAndAddIdleUser("user4", manager);
         assert manager.getUserCount() == 3;
-        
+
         manager.start();
-        
+
         Thread.sleep(300);
-        
+
         assert manager.getUserCount() == 1;
-        
+
         manager.destroy();
     }
-    
+
     @Test
     public void unmapSessionUserWithUserIsNull() {
         // given
@@ -89,7 +88,7 @@ public class EzyZoneUserManagerImplTest {
         // then
         Asserts.assertNull(sut.getUser(session));
     }
-    
+
     @Test
     public void unmapSessionUserWithSessionCountGreaterThan1() {
         // given
@@ -108,7 +107,7 @@ public class EzyZoneUserManagerImplTest {
         // then
         Asserts.assertNull(sut.getUser(session));
     }
-    
+
     @Test
     public void unmapSessionUserWithmaxIdleTimeGreaterThan0() {
         // given
@@ -127,7 +126,7 @@ public class EzyZoneUserManagerImplTest {
         // then
         Asserts.assertNull(sut.getUser(session));
     }
-    
+
     @Test
     public void startIdleValidationServiceWithIdleValidationService() {
         // given
@@ -139,7 +138,7 @@ public class EzyZoneUserManagerImplTest {
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
     }
-    
+
     @Test
     public void destroyWithIdleValidationService() {
         // given
@@ -151,7 +150,7 @@ public class EzyZoneUserManagerImplTest {
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
     }
-    
+
     private EzySimpleUser newAndAddIdleUser(String username, EzyZoneUserManagerImpl manager) {
         EzyAbstractSession session = mock(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
@@ -163,7 +162,7 @@ public class EzyZoneUserManagerImplTest {
         user.setMaxIdleTime(0);
         return user;
     }
-    
+
     private EzyZoneUserManagerImpl newZoneUserManager() {
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -171,12 +170,12 @@ public class EzyZoneUserManagerImplTest {
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
         EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext, queue);
         userDelegate = new EzySimpleUserDelegate(serverContext, queue);
-        
+
         return (EzyZoneUserManagerImpl) EzyZoneUserManagerImpl.builder()
-                .idleValidationDelay(10)
-                .idleValidationInterval(10)
-                .idleValidationThreadPoolSize(1)
-                .userDelegate(userDelegate)
-                .build();
+            .idleValidationDelay(10)
+            .idleValidationInterval(10)
+            .idleValidationThreadPoolSize(1)
+            .userDelegate(userDelegate)
+            .build();
     }
 }

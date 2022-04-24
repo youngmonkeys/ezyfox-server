@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyTransportTypeTest extends BaseTest {
 
@@ -12,5 +11,5 @@ public class EzyTransportTypeTest extends BaseTest {
         assert EzyTransportType.TCP.getId() == 1;
         System.out.println(EzyTransportType.UDP.getName());
     }
-    
+
 }

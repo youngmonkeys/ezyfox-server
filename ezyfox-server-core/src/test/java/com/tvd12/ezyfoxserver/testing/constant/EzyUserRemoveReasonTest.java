@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
+import org.testng.annotations.Test;
 
 public class EzyUserRemoveReasonTest {
 
@@ -10,5 +9,5 @@ public class EzyUserRemoveReasonTest {
     public void test() {
         System.out.println(EzyUserRemoveReason.EXIT_APP.getName());
     }
-    
+
 }

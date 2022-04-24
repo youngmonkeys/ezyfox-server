@@ -7,9 +7,9 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.request.EzyExitAppRequest;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
-public class EzyExitAppController 
-        extends EzyAbstractServerController 
-        implements EzyServerController<EzyExitAppRequest> {
+public class EzyExitAppController
+    extends EzyAbstractServerController
+    implements EzyServerController<EzyExitAppRequest> {
 
     @Override
     public void handle(EzyServerContext ctx, EzyExitAppRequest request) {
@@ -19,5 +19,5 @@ public class EzyExitAppController
         EzyAppUserManager userManager = app.getUserManager();
         userManager.removeUser(request.getUser(), EzyUserRemoveReason.EXIT_APP);
     }
-    
+
 }

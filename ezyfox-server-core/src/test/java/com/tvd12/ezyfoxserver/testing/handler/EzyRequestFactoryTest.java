@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing.handler;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.handler.EzySimpleRequestFactory;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import org.testng.annotations.Test;
 
 public class EzyRequestFactoryTest extends BaseCoreTest {
 
@@ -16,5 +15,5 @@ public class EzyRequestFactoryTest extends BaseCoreTest {
         factory.newRequest(EzyCommand.APP_REQUEST);
         factory.newRequest(EzyCommand.HANDSHAKE);
     }
-    
+
 }

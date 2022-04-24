@@ -2,16 +2,16 @@ package com.tvd12.ezyfoxserver.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 
-public class EzyThreadPoolSizeSettingBuilder 
-        implements EzyBuilder<EzySimpleThreadPoolSizeSetting> {
-    
-    protected int statistics                 = 1;
-    protected int streamHandler              = 8;
-    protected int socketDataReceiver         = 8;
-    protected int systemRequestHandler       = 8;
-    protected int extensionRequestHandler    = 8;
+public class EzyThreadPoolSizeSettingBuilder
+    implements EzyBuilder<EzySimpleThreadPoolSizeSetting> {
+
+    protected int statistics = 1;
+    protected int streamHandler = 8;
+    protected int socketDataReceiver = 8;
+    protected int systemRequestHandler = 8;
+    protected int extensionRequestHandler = 8;
     protected int socketDisconnectionHandler = 2;
-    protected int socketUserRemovalHandler   = 3;
+    protected int socketUserRemovalHandler = 3;
 
     public EzyThreadPoolSizeSettingBuilder statistics(int statistics) {
         this.statistics = statistics;
@@ -22,7 +22,7 @@ public class EzyThreadPoolSizeSettingBuilder
         this.streamHandler = streamHandler;
         return this;
     }
-    
+
     public EzyThreadPoolSizeSettingBuilder socketDataReceiver(int socketDataReceiver) {
         this.socketDataReceiver = socketDataReceiver;
         return this;

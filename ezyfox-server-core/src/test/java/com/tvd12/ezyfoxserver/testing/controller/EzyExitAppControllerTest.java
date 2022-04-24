@@ -1,10 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -13,6 +8,10 @@ import com.tvd12.ezyfoxserver.controller.EzyExitAppController;
 import com.tvd12.ezyfoxserver.request.EzySimpleExitAppRequest;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyExitAppControllerTest extends BaseTest {
 
@@ -28,9 +27,9 @@ public class EzyExitAppControllerTest extends BaseTest {
         when(serverContext.getAppContext(1)).thenReturn(appContext);
         EzySimpleExitAppRequest request = new EzySimpleExitAppRequest();
         request.deserializeParams(EzyEntityFactory.newArrayBuilder()
-                .append(1)
-                .build());
+            .append(1)
+            .build());
         controller.handle(serverContext, request);
     }
-    
+
 }

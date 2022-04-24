@@ -1,10 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketStream;
-import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
 
 public class EzyBlockingSocketStreamQueueTest {
 
@@ -22,5 +22,5 @@ public class EzyBlockingSocketStreamQueueTest {
         queue.remove(stream);
         assert queue.size() == 1;
     }
-    
+
 }

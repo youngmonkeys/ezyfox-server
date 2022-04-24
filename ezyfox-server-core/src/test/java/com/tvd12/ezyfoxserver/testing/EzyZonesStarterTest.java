@@ -1,19 +1,6 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfoxserver.EzySimpleApplication;
-import com.tvd12.ezyfoxserver.EzySimplePlugin;
-import com.tvd12.ezyfoxserver.EzySimpleServer;
-import com.tvd12.ezyfoxserver.EzySimpleZone;
-import com.tvd12.ezyfoxserver.EzyZonesStarter;
+import com.tvd12.ezyfoxserver.*;
 import com.tvd12.ezyfoxserver.ccl.EzyAppClassLoader;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -24,14 +11,16 @@ import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntryLoader;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginsSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZonesSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyZonesStarterTest extends BaseTest {
 
@@ -42,7 +31,7 @@ public class EzyZonesStarterTest extends BaseTest {
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         zoneSetting.setName("test");
         zonesSetting.setItem(zoneSetting);
-        
+
         EzySimpleAppsSetting appsSetting = new EzySimpleAppsSetting();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("apps");
@@ -50,7 +39,7 @@ public class EzyZonesStarterTest extends BaseTest {
         appSetting.setEntryLoader(ExEntryLoader.class.getName());
         appsSetting.setItem(appSetting);
         zoneSetting.setApplications(appsSetting);
-        
+
         EzySimplePluginsSetting pluginsSetting = new EzySimplePluginsSetting();
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
         pluginSetting.setName("plugins");
@@ -58,25 +47,25 @@ public class EzyZonesStarterTest extends BaseTest {
         pluginSetting.setEntryLoader(ExPluginEntryLoader.class.getName());
         pluginsSetting.setItem(pluginSetting);
         zoneSetting.setPlugins(pluginsSetting);
-        
+
         EzySimpleServer server = new EzySimpleServer();
         server.setSettings(settings);
         server.setConfig(new EzySimpleConfig());
         EzyServerContext serverContext = mock(EzyServerContext.class);
         when(serverContext.getServer()).thenReturn(server);
-        
+
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         when(zoneContext.getZone()).thenReturn(zone);
         when(serverContext.getZoneContext("test")).thenReturn(zoneContext);
-        
+
         EzySimpleApplication app = new EzySimpleApplication();
         app.setSetting(appSetting);
         EzyAppContext appContext = mock(EzyAppContext.class);
         when(appContext.getApp()).thenReturn(app);
         when(zoneContext.getAppContext("apps")).thenReturn(appContext);
-        
+
         EzySimplePlugin plugin = new EzySimplePlugin();
         plugin.setSetting(pluginSetting);
         EzyPluginContext pluginContext = mock(EzyPluginContext.class);
@@ -86,13 +75,13 @@ public class EzyZonesStarterTest extends BaseTest {
         Map<String, ClassLoader> appClassLoaders = new HashMap<>();
         appClassLoaders.put("apps", new EzyAppClassLoader(new File("test-data"), getClass().getClassLoader()));
         server.setAppClassLoaders(appClassLoaders);
-        
+
         EzyZonesStarter starter = EzyZonesStarter.builder()
-                .serverContext(serverContext)
-                .build();
+            .serverContext(serverContext)
+            .build();
         starter.start();
     }
-    
+
     public static class ExEntryLoader implements EzyAppEntryLoader {
 
         @Override
@@ -100,9 +89,9 @@ public class EzyZonesStarterTest extends BaseTest {
             EzyAppEntry enry = mock(EzyAppEntry.class);
             return enry;
         }
-        
+
     }
-    
+
     public static class ExPluginEntryLoader implements EzyPluginEntryLoader {
 
         @Override
@@ -110,7 +99,7 @@ public class EzyZonesStarterTest extends BaseTest {
             EzyPluginEntry entry = mock(EzyPluginEntry.class);
             return entry;
         }
-        
+
     }
-    
+
 }

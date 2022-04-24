@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing.config;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import org.testng.annotations.Test;
 
 public class EzyAppsTest extends BaseCoreTest {
 
@@ -16,5 +15,5 @@ public class EzyAppsTest extends BaseCoreTest {
         apps.setItem(app);
         apps.getAppById(-1);
     }
-    
+
 }

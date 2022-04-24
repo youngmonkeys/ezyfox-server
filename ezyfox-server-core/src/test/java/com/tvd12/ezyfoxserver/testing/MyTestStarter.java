@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import java.net.SocketAddress;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.EzyStarter;
@@ -10,10 +8,16 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
+import java.net.SocketAddress;
+
 public class MyTestStarter extends EzyStarter {
 
     protected MyTestStarter(Builder builder) {
         super(builder);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -21,15 +25,11 @@ public class MyTestStarter extends EzyStarter {
         return new MyTestServerBootstrapBuilder();
     }
 
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({"rawtypes"})
     @Override
-    protected EzySimpleSessionManager.Builder 
-            newSessionManagerBuilder(EzySettings settings) {
+    protected EzySimpleSessionManager.Builder
+    newSessionManagerBuilder(EzySettings settings) {
         return new ExSessionManager.SBuilder();
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder extends EzyStarter.Builder<Builder> {
@@ -44,7 +44,7 @@ public class MyTestStarter extends EzyStarter {
         protected ExSessionManager(SBuilder builder) {
             super(builder);
         }
-        
+
         public static class SBuilder extends EzySimpleSessionManager.Builder<ExSession> {
 
             @Override

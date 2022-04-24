@@ -5,5 +5,5 @@ import java.util.Collection;
 public interface EzyAppContextsFetcher {
 
     Collection<EzyAppContext> getAppContexts();
-    
+
 }

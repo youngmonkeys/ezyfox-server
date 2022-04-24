@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
@@ -40,6 +32,11 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.*;
 
 public class EzyLoginControllerTest extends EzyBaseControllerTest {
 
@@ -57,7 +54,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = {EzyLoginErrorException.class})
     public void test1() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -77,7 +74,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = {EzyLoginErrorException.class})
     public void test2() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -97,7 +94,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test
     public void allowGuestLoginTest() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -113,7 +110,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = EzyLoginErrorException.class)
     public void invalidUsernameTest() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -133,7 +130,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = EzyLoginErrorException.class)
     public void maximumSession1Test() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -153,7 +150,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = EzyLoginErrorException.class)
     public void maximumSession2Test() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -178,7 +175,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(newSession(3));
         controller.handle(ctx, request);
     }
-    
+
     @Test(expectedExceptions = EzyLoginErrorException.class)
     public void maximumSession3Test() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -200,7 +197,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         controller.handle(ctx, request);
         controller.handle(ctx, request);
     }
-    
+
     @Test
     public void processChangeSessionTest() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -222,7 +219,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         controller.handle(ctx, request);
         controller.handle(ctx, request);
     }
-    
+
     @Test
     public void fireUserAddedEvent0ExceptionCase() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -239,7 +236,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
             .param(EzyEvent.class, mock(EzyEvent.class))
             .invoke();
     }
-    
+
     @Test(expectedExceptions = EzyZoneNotFoundException.class)
     public void testEzyZoneNotFoundException() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -255,20 +252,20 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Test(expectedExceptions = EzyMaxUserException.class)
     public void testEzyMaxUserExceptionCase() {
         EzyServerContext ctx = mock(EzyServerContext.class);
         EzyStatistics userStats = new EzySimpleStatistics();
-        
+
         EzySimpleServer server = new EzySimpleServer();
         server.setStatistics(userStats);
         when(ctx.getServer()).thenReturn(server);
         server.setResponseApi(mock(EzyResponseApi.class));
         EzySessionManager sessionManager = mock(EzySessionManager.class);
         server.setSessionManager(sessionManager);
-        
+
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         when(ctx.getZoneContext("example")).thenReturn(zoneContext);
         EzySimpleZone zone = new EzySimpleZone();
@@ -276,10 +273,10 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         zone.setSetting(zoneSetting);
         when(zoneContext.getZone()).thenReturn(zone);
         EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
-                .maxUsers(1)
-                .build();
+            .maxUsers(1)
+            .build();
         zone.setUserManager(zoneUserManager);
-        
+
         EzySession session = newSession();
         session.setToken("abcdef");
         EzyArray data = newLoginData();
@@ -288,12 +285,12 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.deserializeParams(data);
         request.setSession(session);
         controller.handle(ctx, request);
-        
+
         data.set(1, "test1");
         request.deserializeParams(data);
         controller.handle(ctx, request);
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Test(expectedExceptions = IllegalStateException.class)
     public void testExceptionCase() {
@@ -302,14 +299,14 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
             .when(ctx)
             .send(any(EzyResponse.class), any(EzySession.class), any(boolean.class));
         EzyStatistics userStats = new EzySimpleStatistics();
-        
+
         EzySimpleServer server = new EzySimpleServer();
         server.setStatistics(userStats);
         when(ctx.getServer()).thenReturn(server);
         server.setResponseApi(mock(EzyResponseApi.class));
         EzySessionManager sessionManager = mock(EzySessionManager.class);
         server.setSessionManager(sessionManager);
-        
+
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         when(ctx.getZoneContext("example")).thenReturn(zoneContext);
         EzySimpleZone zone = new EzySimpleZone();
@@ -317,10 +314,10 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         zone.setSetting(zoneSetting);
         when(zoneContext.getZone()).thenReturn(zone);
         EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
-                .maxUsers(1)
-                .build();
+            .maxUsers(1)
+            .build();
         zone.setUserManager(zoneUserManager);
-        
+
         EzySession session = newSession();
         session.setToken("abcdef");
         EzyArray data = newLoginData();
@@ -334,7 +331,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test
     public void testSetUserProperties() {
         EzySimpleServerContext ctx = (EzySimpleServerContext) newServerContext();
@@ -350,40 +347,40 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
         EzyZoneContext zoneContext = ctx.getZoneContext("example");
         EzyLoginParams params = request.getParams();
         EzySimpleUserLoginEvent event = new EzySimpleUserLoginEvent(
-                session,
-                params.getZoneName(),
-                params.getUsername(),
-                params.getPassword(), params.getData());
-        event.setUserProperty("dataId",123L);
+            session,
+            params.getZoneName(),
+            params.getUsername(),
+            params.getPassword(), params.getData());
+        event.setUserProperty("dataId", 123L);
         processor.apply(zoneContext, event);
         event.release();
         EzyZoneUserManager userManager = zoneContext.getZone().getUserManager();
         EzyUser user = userManager.getUser("dungtv");
         assert user.getProperty("dataId").equals(123L);
     }
-    
+
     private EzyArray newLoginData() {
         return newArrayBuilder()
-                .append("example")
-                .append("dungtv")
-                .append("123456")
-                .append(newArrayBuilder()
-                        .append("123456"))
-                .build();
+            .append("example")
+            .append("dungtv")
+            .append("123456")
+            .append(newArrayBuilder()
+                .append("123456"))
+            .build();
     }
-    
+
     private EzyArray newLoginData1() {
         return newArrayBuilder()
-                .append("example")
-                .append("dungtv")
-                .append("123456")
-                .append(newArrayBuilder())
-                .build();
+            .append("example")
+            .append("dungtv")
+            .append("123456")
+            .append(newArrayBuilder())
+            .build();
     }
-    
+
     @Override
     protected EzyConstant getCommand() {
         return EzyCommand.LOGIN;
     }
-    
+
 }

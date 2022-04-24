@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.handler;
 
-import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SIZE;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.exception.EzyMaxRequestSizeException;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -33,11 +25,20 @@ import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
-@SuppressWarnings("rawtypes")
-public abstract class EzyAbstractDataHandler<S extends EzySession> 
-        extends EzyLoggable
-        implements EzySessionDelegate, EzyDestroyable {
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SIZE;
+
+@SuppressWarnings("rawtypes")
+public abstract class EzyAbstractDataHandler<S extends EzySession>
+    extends EzyLoggable
+    implements EzySessionDelegate, EzyDestroyable {
+
+    protected final Lock lock = new ReentrantLock();
     protected S session;
     protected EzyChannel channel;
     protected EzyUser user;
@@ -48,18 +49,14 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyServerControllers controllers;
     protected EzyZoneUserManager userManager;
     protected EzySessionManager sessionManager;
-    
     protected EzySettings settings;
     protected Set<EzyConstant> unloggableCommands;
     protected EzySessionManagementSetting sessionManagementSetting;
-    
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
-    
     protected volatile boolean active = true;
     protected volatile boolean destroyed = false;
-    protected final Lock lock = new ReentrantLock();
     protected Map<Class<?>, EzyExceptionHandler> exceptionHandlers = newExceptionHandlers();
-    
+
     public EzyAbstractDataHandler(EzyServerContext ctx, S session) {
         this.context = ctx;
         this.session = session;
@@ -68,50 +65,53 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.controllers = server.getControllers();
         this.sessionManager = server.getSessionManager();
         this.closeSession = context.get(EzyCloseSession.class);
-        
+
         this.settings = server.getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
         this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
-        ((EzyAbstractSession)this.session).setDelegate(this);
+        ((EzyAbstractSession) this.session).setDelegate(this);
     }
-    
+
     protected EzyZoneUserManager getUserManager(int zoneId) {
         EzyZoneContext zoneContext = context.getZoneContext(zoneId);
         return zoneContext.getZone().getUserManager();
     }
-    
+
     protected void response(EzyResponse response) {
-        if(context != null)
+        if (context != null) {
             context.send(response, session, false);
+        }
     }
-    
+
     protected void responseError(EzyIError error) {
         EzyErrorParams params = new EzyErrorParams();
         params.setError(error);
         response(new EzyErrorResponse(params));
     }
-    
+
     @SuppressWarnings("unchecked")
     private Map<Class<?>, EzyExceptionHandler> newExceptionHandlers() {
         Map<Class<?>, EzyExceptionHandler> handlers = new ConcurrentHashMap<>();
         handlers.put(EzyMaxRequestSizeException.class, (thread, throwable) -> {
-            if(sessionManager != null) 
+            if (sessionManager != null) {
                 sessionManager.removeSession(session, MAX_REQUEST_SIZE);
+            }
         });
         addExceptionHandlers(handlers);
         return handlers;
     }
-    
+
     protected void addExceptionHandlers(Map<Class<?>, EzyExceptionHandler> handlers) {
     }
-    
+
     @Override
     public void destroy() {
         this.active = false;
         this.destroyed = true;
-        if(session != null)
+        if (session != null) {
             session.destroy();
+        }
         this.session = null;
         this.channel = null;
         this.server = null;
@@ -125,33 +125,34 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.settings = null;
         this.unloggableCommands = null;
         this.sessionManagementSetting = null;
-        if(exceptionHandlers != null)
+        if (exceptionHandlers != null) {
             this.exceptionHandlers.clear();
+        }
         this.exceptionHandlers = null;
     }
-    
+
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("(")
-                .append("\n\tactive: ").append(active)
-                .append("\n\tsession: ").append(session)
-                .append("\n\tchannel: ").append(channel)
-                .append("\n\tserver: ").append(server)
-                .append("\n\tuser: ").append(user)
-                .append("\n\tcontext: ").append(context)
-                .append("\n\tzoneContext: ").append(zoneContext)
-                .append("\n\tcontrollers: ").append(controllers)
-                .append("\n\tuserManager: ").append(userManager)
-                .append("\n\tcloseSession: ").append(closeSession)
-                .append("\n\tsessionManager: ").append(sessionManager)
-                .append("\n\tlock: ").append(lock)
-                .append("\n\tsettings: ").append(settings)
-                .append("\n\tunloggableCommands: ").append(unloggableCommands)
-                .append("\n\tsessionManagementSetting: ").append(sessionManagementSetting)
-                .append("\n\texceptionHandlers: ").append(exceptionHandlers)
-                .append("\n)")
-                .toString();
+            .append("(")
+            .append("\n\tactive: ").append(active)
+            .append("\n\tsession: ").append(session)
+            .append("\n\tchannel: ").append(channel)
+            .append("\n\tserver: ").append(server)
+            .append("\n\tuser: ").append(user)
+            .append("\n\tcontext: ").append(context)
+            .append("\n\tzoneContext: ").append(zoneContext)
+            .append("\n\tcontrollers: ").append(controllers)
+            .append("\n\tuserManager: ").append(userManager)
+            .append("\n\tcloseSession: ").append(closeSession)
+            .append("\n\tsessionManager: ").append(sessionManager)
+            .append("\n\tlock: ").append(lock)
+            .append("\n\tsettings: ").append(settings)
+            .append("\n\tunloggableCommands: ").append(unloggableCommands)
+            .append("\n\tsessionManagementSetting: ").append(sessionManagementSetting)
+            .append("\n\texceptionHandlers: ").append(exceptionHandlers)
+            .append("\n)")
+            .toString();
     }
-    
+
 }

@@ -1,14 +1,13 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.sercurity.EzyAesCrypt;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyHandShakeResponseTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzyHandShakeParams params = new EzyHandShakeParams();

@@ -6,5 +6,5 @@ public class EzySocketExtensionRequestHandlingLoopHandler extends EzySocketReque
     protected String getRequestType() {
         return "extension";
     }
-    
+
 }

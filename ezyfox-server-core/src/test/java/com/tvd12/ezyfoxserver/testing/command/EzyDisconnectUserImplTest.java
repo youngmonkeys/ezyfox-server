@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestUser;
+import org.testng.annotations.Test;
 
 public class EzyDisconnectUserImplTest extends BaseCoreTest {
 
@@ -24,7 +23,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
 //            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
 //            .execute();
     }
-    
+
     @Test
     public void test1() {
         EzySession session = newSession();
@@ -40,7 +39,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
 //            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
 //            .execute();
     }
-    
+
     @Test
     public void test2() {
         MyTestUser user = new MyTestUser();
@@ -56,7 +55,7 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
 //            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
 //            .execute();
     }
-    
+
     @Test
     public void test3() {
         MyTestUser user = new MyTestUser();
@@ -72,5 +71,5 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
 //            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
 //            .execute();
     }
-    
+
 }

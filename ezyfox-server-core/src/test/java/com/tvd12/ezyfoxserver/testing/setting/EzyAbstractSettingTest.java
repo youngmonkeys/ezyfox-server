@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzyAbstractSetting;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EzyAbstractSettingTest extends BaseTest {
 
@@ -24,18 +23,18 @@ public class EzyAbstractSettingTest extends BaseTest {
         setting.setHomePath("home");
         setting.setPackageName("x.y.z");
         setting.setActiveProfiles("hello,world");
-        
+
         // when
         // then
         Asserts.assertNotEquals(new Setting(), setting);
         Assert.assertEquals("x.y.z", setting.getPackageName());
         Asserts.assertEquals("hello,world", setting.getActiveProfiles());
     }
-    
+
     public static class Setting extends EzyAbstractSetting {
 
         protected static final AtomicInteger GENTER = new AtomicInteger();
-        
+
         @Override
         protected String getParentFolder() {
             return "";
@@ -45,7 +44,7 @@ public class EzyAbstractSettingTest extends BaseTest {
         protected AtomicInteger getIdCounter() {
             return GENTER;
         }
-        
+
     }
-    
+
 }

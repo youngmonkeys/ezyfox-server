@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.socket.EzySocketExtensionRequestHandlingLoopHandler;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
 
 public class EzySocketExtensionRequestHandlingLoopHandlerTest {
 

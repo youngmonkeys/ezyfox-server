@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-
 import lombok.Setter;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHandler {
 
@@ -31,20 +30,19 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
             EzyRequestQueue requestQueue = getRequestQueue(session);
             synchronized (requestQueue) {
                 request = requestQueue.take();
-                if(requestQueue.size() > 0)
+                if (requestQueue.size() > 0) {
                     sessionTicketsQueue.add(session);
+                }
             }
             processRequestQueue(request);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             logger.info("{}-request-handler thread interrupted: {}", getRequestType(), Thread.currentThread());
-        }
-        catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             logger.warn("problems in {}-request-handler, thread: {}", getRequestType(), Thread.currentThread(), throwable);
-        }
-        finally {
-            if(request != null)
+        } finally {
+            if (request != null) {
                 request.release();
+            }
         }
     }
 
@@ -55,8 +53,7 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
     private void processRequestQueue(EzySocketRequest request) throws Exception {
         try {
             processRequestQueue0(request);
-        }
-        finally {
+        } finally {
             request.release();
         }
     }
@@ -65,10 +62,11 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
         EzyArray data = request.getData();
         EzySession session = request.getSession();
         EzySocketDataHandlerGroup handlerGroup = getDataHandlerGroup(session);
-        if(handlerGroup != null)
+        if (handlerGroup != null) {
             handlerGroup.fireChannelRead(request.getCommand(), data);
-        else
+        } else {
             logger.warn("has no handler group with session: {}, drop request: {}", session, request);
+        }
     }
 
     protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {

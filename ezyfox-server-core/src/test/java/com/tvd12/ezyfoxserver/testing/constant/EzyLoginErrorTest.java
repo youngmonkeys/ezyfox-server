@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyLoginError;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyLoginErrorTest extends BaseTest {
 
@@ -14,5 +13,5 @@ public class EzyLoginErrorTest extends BaseTest {
         assert value.getName().equals("ALREADY_LOGIN");
         EzyLoginError.valueOf("ALREADY_LOGIN");
     }
-    
+
 }

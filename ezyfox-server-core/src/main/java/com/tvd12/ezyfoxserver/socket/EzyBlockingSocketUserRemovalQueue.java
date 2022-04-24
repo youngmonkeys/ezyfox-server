@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.tvd12.ezyfox.util.EzyLoggable;
-
-public class EzyBlockingSocketUserRemovalQueue 
-        extends EzyLoggable 
-        implements EzySocketUserRemovalQueue {
+public class EzyBlockingSocketUserRemovalQueue
+    extends EzyLoggable
+    implements EzySocketUserRemovalQueue {
 
     private final BlockingQueue<EzySocketUserRemoval> queue;
 

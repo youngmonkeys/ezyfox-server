@@ -9,8 +9,9 @@ public class EzyServerUserInterceptor<D> extends EzyAbstractServerInterceptor<Ez
 
     @Override
     public void intercept(EzyServerContext ctx, EzyUserRequest request) throws Exception {
-        if(request.getUser() == null)
+        if (request.getUser() == null) {
             throw new EzyNotAuthorizedException("user has not logged in");
+        }
     }
 
 }

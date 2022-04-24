@@ -1,10 +1,7 @@
 /**
- * 
+ *
  */
 package com.tvd12.ezyfoxserver;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyStartable;
@@ -16,8 +13,9 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
-
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author tavandung12
@@ -26,10 +24,10 @@ import lombok.Getter;
 @SuppressWarnings("rawtypes")
 public abstract class EzyStarter implements EzyStartable {
 
-    @Getter
-    private EzyServerContext serverContext;
     private final String configFile;
     private final EzySettingsDecorator settingsDecorator;
+    @Getter
+    private EzyServerContext serverContext;
 
     protected EzyStarter(Builder<?> builder) {
         this.configFile = builder.configFile;
@@ -40,7 +38,7 @@ public abstract class EzyStarter implements EzyStartable {
     public void start() throws Exception {
         startSystem();
     }
-    
+
     protected void startSystem() throws Exception {
         EzyConfig config = readConfig(configFile);
         startSystem(config);
@@ -57,7 +55,7 @@ public abstract class EzyStarter implements EzyStartable {
 
     protected void startEzyFox(EzyServer server) throws Exception {
         EzyConfig config = server.getConfig();
-        if(config.isPrintSettings()) {
+        if (config.isPrintSettings()) {
             getLogger().info("settings: \n{}", server.toString());
         }
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
@@ -76,24 +74,24 @@ public abstract class EzyStarter implements EzyStartable {
 
     protected EzyServer loadEzyFox(EzyConfig config) {
         return newLoader()
-                .config(config)
-                .classLoader(getClassLoader())
-                .settingsDecorator(settingsDecorator)
-                .load();
+            .config(config)
+            .classLoader(getClassLoader())
+            .settingsDecorator(settingsDecorator)
+            .load();
     }
 
     protected EzyLoader newLoader() {
         return new EzyLoader() {
             @Override
-            protected EzySimpleSessionManager.Builder 
-                    createSessionManagerBuilder(EzySettings settings) {
+            protected EzySimpleSessionManager.Builder
+            createSessionManagerBuilder(EzySettings settings) {
                 return newSessionManagerBuilder(settings);
             }
         };
     }
 
-    protected abstract EzySimpleSessionManager.Builder 
-            newSessionManagerBuilder(EzySettings settings);
+    protected abstract EzySimpleSessionManager.Builder
+    newSessionManagerBuilder(EzySettings settings);
 
     protected EzyConfigLoader getConfigLoader() {
         return new EzySimpleConfigLoader();
@@ -106,7 +104,7 @@ public abstract class EzyStarter implements EzyStartable {
     protected EzyConfig readConfig(String configFile) throws Exception {
         return getConfigLoader().load(configFile);
     }
-    
+
     protected Logger getLogger() {
         return LoggerFactory.getLogger(getClass());
     }
@@ -121,7 +119,7 @@ public abstract class EzyStarter implements EzyStartable {
             this.configFile = configFile;
             return (B) this;
         }
-        
+
         public B settingsDecorator(EzySettingsDecorator settingsDecorator) {
             this.settingsDecorator = settingsDecorator;
             return (B) this;

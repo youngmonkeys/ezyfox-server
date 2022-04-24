@@ -7,8 +7,8 @@ import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 public interface EzyApplication extends EzyServerChild {
 
     EzyAppSetting getSetting();
-    
+
     EzyAppUserManager getUserManager();
-    
+
     EzyAppRequestController getRequestController();
 }

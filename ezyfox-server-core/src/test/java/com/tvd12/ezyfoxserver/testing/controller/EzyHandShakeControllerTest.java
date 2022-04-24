@@ -1,16 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.security.KeyPair;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.sercurity.EzyBase64;
@@ -30,6 +19,12 @@ import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.performance.Performance;
 import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
+
+import java.security.KeyPair;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
 
@@ -44,20 +39,20 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         request.setSession(session);
         controller.handle(ctx, request);
     }
-    
+
     @Test
     public void testDeserializeParamsPerformance() {
         EzyArray data = newHandShakeData();
         long time = Performance.create()
-                .test(() -> {
-                    EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
-                    request.deserializeParams(data);
-                })
-                .getTime();
+            .test(() -> {
+                EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();
+                request.deserializeParams(data);
+            })
+            .getTime();
         System.out.println("testDeserializeParamsPerformance, time = " + time);
-                
+
     }
-    
+
     @Test
     public void handleSocketSSLTest() throws Exception {
         // given
@@ -85,8 +80,8 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         String clientVersion = RandomUtil.randomShortAlphabetString();
         String reconnectToken = RandomUtil.randomShortHexString();
         KeyPair keyPair = EzyKeysGenerator.builder()
-                .build()
-                .generate();
+            .build()
+            .generate();
         byte[] clientKey = keyPair.getPublic().getEncoded();
         when(params.getClientId()).thenReturn(clientId);
         when(params.getClientKey()).thenReturn(clientKey);
@@ -107,7 +102,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         verify(session, times(1)).setSessionKey(any(byte[].class));
         Asserts.assertNotNull(session.getSessionKey());
     }
-    
+
     @Test
     public void handleSocketSSLButWebsocketTest() {
         // given
@@ -129,7 +124,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         // then
         Asserts.assertNull(session.getSessionKey());
     }
-    
+
     @Test
     public void handleSocketSSLButEventNoEncryptionTest() {
         // given
@@ -161,7 +156,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         // then
         Asserts.assertNull(session.getSessionKey());
     }
-    
+
     @Test
     public void handleSocketSSLButClientKeyEmptyTest() {
         // given
@@ -207,7 +202,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         verify(session, times(1)).setClientVersion(clientVersion);
         verify(session, times(1)).setSessionKey(any(byte[].class));
     }
-    
+
     @Test
     public void handleSocketSSLButInvalidClientKeyEmptyTest() {
         // given
@@ -234,7 +229,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         String clientType = RandomUtil.randomShortAlphabetString();
         String clientVersion = RandomUtil.randomShortAlphabetString();
         String reconnectToken = RandomUtil.randomShortHexString();
-        byte[] clientKey = new byte[] {1, 2, 3};
+        byte[] clientKey = new byte[]{1, 2, 3};
         when(params.getClientId()).thenReturn(clientId);
         when(params.getClientKey()).thenReturn(clientKey);
         when(params.getClientType()).thenReturn(clientType);
@@ -253,19 +248,19 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         verify(session, times(1)).setClientVersion(clientVersion);
         verify(session, times(1)).setSessionKey(any(byte[].class));
     }
-    
+
     private EzyArray newHandShakeData() {
         KeyPair keyPair = newRSAKeys();
         return newArrayBuilder()
-                .append("adroid#1")
-                .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
-                .append("android")
-                .append("1.0.0")
-                .append(true)
-                .append("reconnectToken#1")
-                .build();
+            .append("adroid#1")
+            .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
+            .append("android")
+            .append("1.0.0")
+            .append(true)
+            .append("reconnectToken#1")
+            .build();
     }
-    
+
     @Override
     protected EzySession newSession() {
         KeyPair keyPair = newRSAKeys();
@@ -274,10 +269,10 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }
-    
+
     @Override
     protected EzyConstant getCommand() {
         return EzyCommand.HANDSHAKE;
     }
-    
+
 }

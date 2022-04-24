@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.command.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.EzyServer;
@@ -15,23 +12,26 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyLoggerSetting;
 import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
 
+import java.util.Collection;
+import java.util.Set;
+
 public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendResponse {
 
     protected final EzyServer server;
     protected final EzyLoggerSetting loggerSetting;
     protected final Set<EzyConstant> unloggableCommands;
-    
+
     public EzySendResponseImpl(EzyServer server) {
         this.server = server;
         this.loggerSetting = server.getSettings().getLogger();
-        this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands(); 
+        this.unloggableCommands = loggerSetting.getIgnoredCommands().getCommands();
     }
-    
+
     @Override
-    public void execute(EzyResponse response, 
-            EzySession recipient, 
-            boolean encrypted,
-            boolean immediate, EzyTransportType transportType) {
+    public void execute(EzyResponse response,
+                        EzySession recipient,
+                        boolean encrypted,
+                        boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
@@ -40,24 +40,23 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         try {
             responseApi.response(pack, immediate);
             success = true;
-        } 
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("send data: {}, to client: {} error", pack.getData(), recipient.getName(), e);
-        }
-        finally {
+        } finally {
             pack.release();
         }
         boolean debug = server.getSettings().isDebug();
-        if(debug && success && !unloggableCommands.contains(response.getCommand()))
+        if (debug && success && !unloggableCommands.contains(response.getCommand())) {
             logger.debug("send to: {} data: {}", recipient.getName(), data);
+        }
     }
-    
+
     @Override
     public void execute(
-            EzyResponse response, 
-            Collection<EzySession> recipients, 
-            boolean encrypted,
-            boolean immediate, EzyTransportType transportType) {
+        EzyResponse response,
+        Collection<EzySession> recipients,
+        boolean encrypted,
+        boolean immediate, EzyTransportType transportType) {
         boolean success = false;
         EzyResponseApi responseApi = server.getResponseApi();
         EzyArray data = response.serialize();
@@ -66,34 +65,34 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
         try {
             responseApi.response(pack, immediate);
             success = true;
-        } 
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("send data: {}, to client: {} error", pack.getData(), getRecipientsNames(recipients), e);
-        }
-        finally {
+        } finally {
             pack.release();
         }
         boolean debug = server.getSettings().isDebug();
-        if(debug && success && !unloggableCommands.contains(response.getCommand()))
+        if (debug && success && !unloggableCommands.contains(response.getCommand())) {
             logger.debug("send to: {} data: {}", getRecipientsNames(recipients), data);
+        }
     }
-    
+
     protected EzySimplePackage newPackage(
-            EzyArray data,
-            boolean encrypted, EzyTransportType transportType) {
+        EzyArray data,
+        boolean encrypted, EzyTransportType transportType) {
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(encrypted);
         pack.setTransportType(transportType);
         return pack;
     }
-    
+
     protected String getRecipientsNames(Collection<EzySession> recipients) {
         StringBuilder builder = new StringBuilder()
-                .append("[ ");
-        for(EzySession recv : recipients)
+            .append("[ ");
+        for (EzySession recv : recipients) {
             builder.append(recv.getName()).append(" ");
+        }
         return builder.append("]").toString();
     }
-    
+
 }

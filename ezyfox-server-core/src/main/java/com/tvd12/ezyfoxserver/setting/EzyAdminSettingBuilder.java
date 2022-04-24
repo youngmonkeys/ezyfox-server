@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.setting;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 
 public class EzyAdminSettingBuilder implements EzyBuilder<EzySimpleAdminSetting> {
-    
+
     protected String username;
     protected String password;
     protected String accessToken;

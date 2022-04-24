@@ -6,9 +6,9 @@ public class BaseCoreContextTest extends BaseCoreTest {
 
     protected EzyServerContext context;
 
-     public BaseCoreContextTest() {
-         super();
-         context = newServerContext();
-     }
-    
+    public BaseCoreContextTest() {
+        super();
+        context = newServerContext();
+    }
+
 }

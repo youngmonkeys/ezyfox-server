@@ -10,8 +10,8 @@ public final class EzyEventNames {
     public static final String USER_REMOVED = "USER_REMOVED";
     public static final String SESSION_REMOVED = "SESSION_REMOVED";
     public static final String STREAMING = "STREAMING";
-    
+
     private EzyEventNames() {
     }
-    
+
 }

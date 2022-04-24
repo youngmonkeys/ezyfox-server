@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.statistics;
 
-import java.io.Serializable;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 @Getter
 public class EzySimpleSessionStats implements EzySessionStats, Serializable {
@@ -11,7 +11,7 @@ public class EzySimpleSessionStats implements EzySessionStats, Serializable {
     protected int maxSessions;
     protected int totalSessions;
     protected int currentSessions;
-    
+
     @Override
     public void addSessions(int sessions) {
         this.totalSessions += sessions;
@@ -20,10 +20,10 @@ public class EzySimpleSessionStats implements EzySessionStats, Serializable {
     @Override
     public void setCurrentSessions(int sessions) {
         this.currentSessions = sessions;
-        if(sessions > maxSessions)
+        if (sessions > maxSessions) {
             this.maxSessions = sessions;
+        }
     }
 
-    
-    
+
 }

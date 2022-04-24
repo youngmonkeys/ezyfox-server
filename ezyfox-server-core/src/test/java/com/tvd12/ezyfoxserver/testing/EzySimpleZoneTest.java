@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimpleZoneTest extends BaseTest {
 

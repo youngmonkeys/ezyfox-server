@@ -1,14 +1,15 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.test.base.BaseTest;
-import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class EzyCloseSessionImplTest extends BaseTest {
 
@@ -21,7 +22,7 @@ public class EzyCloseSessionImplTest extends BaseTest {
         session.setChannel(channel);
         cmd.close(session, EzyDisconnectReason.ADMIN_BAN);
     }
-    
+
     @Test
     public void noSendToClient() {
         EzyServerContext serverContext = mock(EzyServerContext.class);
@@ -31,5 +32,5 @@ public class EzyCloseSessionImplTest extends BaseTest {
         session.setChannel(channel);
         cmd.close(session, EzyDisconnectReason.UNKNOWN);
     }
-    
+
 }

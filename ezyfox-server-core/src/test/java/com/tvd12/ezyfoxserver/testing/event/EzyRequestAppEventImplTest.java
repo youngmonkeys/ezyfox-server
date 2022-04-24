@@ -1,12 +1,11 @@
 package com.tvd12.ezyfoxserver.testing.event;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import org.testng.annotations.Test;
 
 public class EzyRequestAppEventImplTest extends BaseCoreTest {
 
@@ -18,5 +17,5 @@ public class EzyRequestAppEventImplTest extends BaseCoreTest {
         assert event.getData() == data;
         assert event.getUser() == user;
     }
-    
+
 }

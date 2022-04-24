@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.*;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
@@ -32,19 +26,22 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.test.reflect.FieldUtil;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimpleServerContextTest extends BaseCoreTest {
 
     private EzySimpleServerContext context;
-    
+
     public EzySimpleServerContextTest() {
         super();
         context = (EzySimpleServerContext) newServerContext();
     }
-    
+
     @Test
     public void test() {
-        EzySimpleServerContext ctx = ((EzySimpleServerContext)context);
+        EzySimpleServerContext ctx = ((EzySimpleServerContext) context);
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzyZoneContext zoneContext = ctx.getZoneContexts().get(0);
@@ -55,15 +52,15 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         appSetting.setName("abcxyz");
         ctx.addAppContext(appSetting, appContext);
         assert ctx.getAppContext(appSetting.getId()) != null;
-        
+
         context.setProperty("test.1", "abc");
         assert context.getProperty("test.1") != null;
         assert appContext.getProperty("test.1") == null;
-        
+
         appContext.setProperty("test.2", "abc");
         assert context.getProperty("test.2") == null;
         assert appContext.getProperty("test.2") != null;
-        
+
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
         pluginSetting.setName("plugin.1");
         EzySimplePluginContext pluginContext = new EzySimplePluginContext();
@@ -73,88 +70,85 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         pluginContext.init();
         ctx.addPluginContext(pluginSetting, pluginContext);
         assert ctx.getPluginContext(pluginSetting.getId()) != null;
-        
+
         context.setProperty("test.1", "abc");
         assert context.getProperty("test.1") != null;
         assert pluginContext.getProperty("test.1") == null;
-        
+
         pluginContext.setProperty("test.2", "abc");
         assert context.getProperty("test.2") == null;
         assert pluginContext.getProperty("test.2") != null;
-        
+
         assert context.get(EzyBroadcastEvent.class) != null;
         context.addCommand(ExCommand.class, () -> new ExCommand());
         assert context.cmd(ExCommand.class) != null;
         try {
             context.cmd(Void.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalArgumentException;
         }
-        
+
         EzyServerReadyEvent serverReadyEvent = new EzySimpleServerReadyEvent();
         context.broadcast(EzyEventType.SERVER_READY, serverReadyEvent, true);
-        
-        EzySimpleServer server = (EzySimpleServer)context.getServer();
+
+        EzySimpleServer server = (EzySimpleServer) context.getServer();
         server.setResponseApi(mock(EzyResponseApi.class));
         server.setStreamingApi(mock(EzyStreamingApi.class));
-        
+
         EzyResponse response = mock(EzyResponse.class);
         EzySession recipient = spy(EzyAbstractSession.class);
         context.send(response, recipient, false);
         context.stream(new byte[0], recipient);
         context.stream(new byte[0], Lists.newArrayList(recipient));
-        
+
         EzySimpleUser user = new EzySimpleUser();
         user.setName("test");
         user.addSession(recipient);
         context.send(response, user, false);
-        
+
         assert context.getZoneContext(zoneContext.getZone().getSetting().getId()) != null;
         try {
             context.getZoneContext(-1);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof EzyZoneNotFoundException;
         }
-        
+
         try {
             context.getZoneContext("not found");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof EzyZoneNotFoundException;
         }
-        
+
         context.destroy();
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test1() {
         context.get(Class.class);
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test2() {
         context.getAppContext(-100);
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test3() {
         context.getPluginContext(-1000);
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test4() {
         EzyZoneContext zoneContext = context.getZoneContext("example");
         zoneContext.getAppContext("noone");
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void test5() {
         EzyZoneContext zoneContext = context.getZoneContext("example");
         zoneContext.getPluginContext("noone");
     }
-    
+
     @Test
     public void sendNowTest() {
         // given
@@ -173,13 +167,13 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         // then
         verify(sendResponse, times(1)).execute(response, recipient, false, true, EzyTransportType.TCP);
     }
-    
+
     public static class ExCommand implements EzyCommand<Boolean> {
 
         @Override
         public Boolean execute() {
             return Boolean.TRUE;
         }
-        
+
     }
 }

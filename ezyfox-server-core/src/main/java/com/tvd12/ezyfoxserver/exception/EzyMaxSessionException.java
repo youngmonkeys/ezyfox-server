@@ -6,15 +6,15 @@ public class EzyMaxSessionException extends IllegalStateException {
     public EzyMaxSessionException(int current, int max) {
         super(getMessage(current, max));
     }
-    
+
     private static String getMessage(int current, int max) {
         return new StringBuilder()
-                .append("max sessions (max = ")
-                .append(max)
-                .append(", current = ")
-                .append(current)
-                .append(")")
-                .toString();
+            .append("max sessions (max = ")
+            .append(max)
+            .append(", current = ")
+            .append(current)
+            .append(")")
+            .toString();
     }
-       
+
 }

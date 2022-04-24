@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
+import org.testng.annotations.Test;
 
 public class EzySimplePacketTest {
 
@@ -21,5 +20,5 @@ public class EzySimplePacketTest {
         assert packet.getSize() == "hello".length();
         System.out.println(packet);
     }
-    
+
 }

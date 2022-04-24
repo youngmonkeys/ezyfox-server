@@ -10,14 +10,14 @@ public class EzyConfigBuilder implements EzyBuilder<EzyConfig> {
     protected String bannerFile;
     protected String loggerConfigFile;
     protected boolean enableAppClassLoader;
-    
+
     public EzyConfigBuilder() {
         this.printSettings = true;
         this.printBanner = true;
         this.enableAppClassLoader = false;
         this.bannerFile = "ezyfox-banner.txt";
     }
-    
+
     public EzyConfigBuilder ezyfoxHome(String ezyfoxHome) {
         this.ezyfoxHome = ezyfoxHome;
         return this;
@@ -32,7 +32,7 @@ public class EzyConfigBuilder implements EzyBuilder<EzyConfig> {
         this.printBanner = printBanner;
         return this;
     }
-    
+
     public EzyConfigBuilder bannerFile(String bannerFile) {
         this.bannerFile = bannerFile;
         return this;
@@ -59,5 +59,5 @@ public class EzyConfigBuilder implements EzyBuilder<EzyConfig> {
         p.setEnableAppClassLoader(enableAppClassLoader);
         return p;
     }
-    
+
 }

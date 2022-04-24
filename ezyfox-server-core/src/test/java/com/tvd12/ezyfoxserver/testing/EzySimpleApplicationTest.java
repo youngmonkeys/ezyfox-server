@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.mock;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
 
 public class EzySimpleApplicationTest extends BaseTest {
 
@@ -18,12 +17,12 @@ public class EzySimpleApplicationTest extends BaseTest {
         app.setSetting(setting);
         assert app.equals(app);
         assert !app.equals(new EzySimpleApplication());
-        
+
         EzyAppRequestController controller = mock(EzyAppRequestController.class);
         app.setRequestController(controller);
         assert app.getRequestController() == controller;
         app.destroy();
         app.destroy();
     }
-    
+
 }

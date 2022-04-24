@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.constant;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
-
 import lombok.Getter;
 
 public enum EzyMaxRequestPerSecondAction implements EzyConstant {
@@ -11,14 +10,14 @@ public enum EzyMaxRequestPerSecondAction implements EzyConstant {
 
     @Getter
     private final int id;
-    
+
     private EzyMaxRequestPerSecondAction(int id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return toString();
     }
-    
+
 }

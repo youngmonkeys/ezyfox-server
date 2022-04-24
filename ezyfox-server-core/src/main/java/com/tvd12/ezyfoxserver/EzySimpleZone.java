@@ -5,7 +5,6 @@ import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +14,7 @@ public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyab
 
     protected EzyZoneSetting setting;
     protected EzyZoneUserManager userManager;
-    
+
     @Override
     public void destroy() {
         super.destroy();
@@ -23,19 +22,19 @@ public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyab
         this.userManager = null;
         this.setting = null;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleZone>()
-                .function(t -> t.setting)
-                .isEquals(this, obj);
+            .function(t -> t.setting)
+            .isEquals(this, obj);
     }
-    
+
     @Override
     public int hashCode() {
         return new EzyHashCodes().append(setting).toHashCode();
     }
-    
+
     @Override
     public String toString() {
         return setting.getName() + "(id = " + setting.getId() + ")";

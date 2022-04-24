@@ -6,9 +6,9 @@ public class EzyZoneNotFoundException extends IllegalArgumentException {
     public EzyZoneNotFoundException(String zoneName) {
         super("zone: " + zoneName + " not found");
     }
-    
+
     public EzyZoneNotFoundException(int zoneId) {
         super("zone with id: " + zoneId + " not found");
     }
-    
+
 }

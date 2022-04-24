@@ -1,48 +1,36 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.function.EzyFunctions;
+import com.tvd12.ezyfox.util.EzyProcessor;
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
+import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.statistics.EzyRequestFrame;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.entity.EzyEntity;
-import com.tvd12.ezyfox.function.EzyFunctions;
-import com.tvd12.ezyfox.util.EzyProcessor;
-import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
-import com.tvd12.ezyfoxserver.socket.EzyPacket;
-import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
-import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySimpleSocketDisconnection;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
-import com.tvd12.ezyfoxserver.statistics.EzyRequestFrame;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 @Setter
-public abstract class EzyAbstractSession 
-        extends EzyEntity 
-        implements 
-            EzySession,
-            EzyDisconnectReasonAware,
-            EzyDatagramChannelAware,
-            EzyUdpClientAddressAware,
-            EzyImmediateDeliverAware, 
-            EzyDroppedPacketsAware,
-            EzyDatagramChannelPoolAware {
+public abstract class EzyAbstractSession
+    extends EzyEntity
+    implements
+    EzySession,
+    EzyDisconnectReasonAware,
+    EzyDatagramChannelAware,
+    EzyUdpClientAddressAware,
+    EzyImmediateDeliverAware,
+    EzyDroppedPacketsAware,
+    EzyDatagramChannelPoolAware {
     private static final long serialVersionUID = -4112736666616219904L;
-    
+
     protected long id;
     protected String name;
     protected String clientId;
@@ -79,8 +67,8 @@ public abstract class EzyAbstractSession
     protected DatagramChannel datagramChannel;
     protected EzyDatagramChannelPool datagramChannelPool;
 
-    protected long maxWaitingTime  = 5 * 1000;
-    protected long maxIdleTime     = 3 * 60 * 1000;
+    protected long maxWaitingTime = 5 * 1000;
+    protected long maxIdleTime = 3 * 60 * 1000;
 
     protected EzyChannel channel;
     protected EzyDroppedPackets droppedPackets;
@@ -124,8 +112,9 @@ public abstract class EzyAbstractSession
 
     @Override
     public boolean addReceviedRequests(int requests) {
-        if(requestFrameInSecond.isExpired())
+        if (requestFrameInSecond.isExpired()) {
             requestFrameInSecond = requestFrameInSecond.nextFrame();
+        }
         return requestFrameInSecond.addRequests(requests);
     }
 
@@ -141,7 +130,7 @@ public abstract class EzyAbstractSession
 
     @Override
     public boolean isIdle() {
-        if(loggedIn) {
+        if (loggedIn) {
             long offset = System.currentTimeMillis() - lastReadTime;
             boolean idle = maxIdleTime < offset;
             return idle;
@@ -157,7 +146,7 @@ public abstract class EzyAbstractSession
 
     @Override
     public final void send(EzyPacket packet) {
-        if(activated) {
+        if (activated) {
             addWrittenResponses(1);
             setLastWriteTime(System.currentTimeMillis());
             setLastActivityTime(System.currentTimeMillis());
@@ -176,67 +165,70 @@ public abstract class EzyAbstractSession
         synchronized (packetQueue) {
             empty = packetQueue.isEmpty();
             success = packetQueue.add(packet);
-            if(success && empty) {
+            if (success && empty) {
                 EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
-                if(ticketsQueue != null)
+                if (ticketsQueue != null) {
                     sessionTicketsQueue.add(this);
+                }
             }
         }
-        if(!success) {
+        if (!success) {
             EzyDroppedPackets droppedPacketsNow = droppedPackets;
-            if(droppedPacketsNow != null)
+            if (droppedPacketsNow != null) {
                 droppedPackets.addDroppedPacket(packet);
+            }
             packet.release();
         }
     }
-    
+
     @Override
     public void disconnect(EzyConstant disconnectReason) {
         synchronized (disconnectionLock) {
-            if(!disconnectionRegistered) {
+            if (!disconnectionRegistered) {
                 this.disconnectReason = disconnectReason;
                 EzySocketDisconnectionQueue queue = this.disconnectionQueue;
-                if(queue != null)
+                if (queue != null) {
                     queue.add(newDisconnection(disconnectReason));
+                }
                 this.disconnectionRegistered = true;
             }
-        } 
+        }
     }
-    
+
     @Override
     public void close() {
         EzyProcessor.processWithLogException(() -> channel.close());
     }
-    
+
     private EzySocketDisconnection newDisconnection(EzyConstant reason) {
         return new EzySimpleSocketDisconnection(this, disconnectReason);
     }
-    
+
     @Override
     public <T> T getConnection() {
         return channel != null ? channel.getConnection() : null;
     }
-    
+
     @Override
     public SocketAddress getServerAddress() {
         return channel != null ? channel.getServerAddress() : null;
     }
-    
+
     @Override
     public SocketAddress getClientAddress() {
         return channel != null ? channel.getClientAddress() : null;
     }
-    
+
     @Override
     public String getName() {
         return new StringBuilder()
-                .append(name)
-                .append("(")
-                    .append("owner: ").append(ownerName)
-                    .append(", ")
-                    .append("address: ").append(getClientAddress())
-                .append(")")
-                .toString();
+            .append(name)
+            .append("(")
+            .append("owner: ").append(ownerName)
+            .append(", ")
+            .append("address: ").append(getClientAddress())
+            .append(")")
+            .toString();
     }
 
     @Override
@@ -250,23 +242,24 @@ public abstract class EzyAbstractSession
         this.writtenBytes = 0L;
         this.connectionType = null;
         this.disconnectionLock = null;
-        if(locks != null)
+        if (locks != null) {
             this.locks.clear();
+        }
         this.properties.clear();
         this.locks = null;
         this.droppedPackets = null;
         this.immediateDeliver = null;
-        if(packetQueue != null) {
+        if (packetQueue != null) {
             synchronized (packetQueue) {
                 this.packetQueue.clear();
             }
         }
-        if(systemRequestQueue != null) {
+        if (systemRequestQueue != null) {
             synchronized (systemRequestQueue) {
                 systemRequestQueue.clear();
             }
         }
-        if(extensionRequestQueue != null) {
+        if (extensionRequestQueue != null) {
             synchronized (extensionRequestQueue) {
                 extensionRequestQueue.clear();
             }
@@ -279,12 +272,15 @@ public abstract class EzyAbstractSession
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null)
+        if (obj == null) {
             return false;
-        if(obj == this)
+        }
+        if (obj == this) {
             return true;
-        if(obj instanceof EzyAbstractSession)
-            return id == ((EzyAbstractSession)obj).id;
+        }
+        if (obj instanceof EzyAbstractSession) {
+            return id == ((EzyAbstractSession) obj).id;
+        }
         return false;
     }
 
@@ -296,14 +292,14 @@ public abstract class EzyAbstractSession
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("(")
-                .append("id: ").append(id)
-                .append(", type: ").append(clientType)
-                .append(", version: ").append(clientVersion)
-                .append(", address: ").append(getClientAddress())
-                .append(", token: ").append(token)
-                .append(")")
-                .toString();
+            .append("(")
+            .append("id: ").append(id)
+            .append(", type: ").append(clientType)
+            .append(", version: ").append(clientVersion)
+            .append(", address: ").append(getClientAddress())
+            .append(", token: ").append(token)
+            .append(")")
+            .toString();
     }
 
 }

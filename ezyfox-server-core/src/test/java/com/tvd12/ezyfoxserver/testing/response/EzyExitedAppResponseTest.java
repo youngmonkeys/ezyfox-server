@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyUserRemoveReason;
 import com.tvd12.ezyfoxserver.response.EzyExitedAppParams;
 import com.tvd12.ezyfoxserver.response.EzyExitedAppResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyExitedAppResponseTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzySimpleAppSetting setting = new EzySimpleAppSetting();

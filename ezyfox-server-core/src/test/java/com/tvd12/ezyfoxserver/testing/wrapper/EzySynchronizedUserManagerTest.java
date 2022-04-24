@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.wrapper;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.wrapper.EzySynchronizedUserManager;
+import org.testng.annotations.Test;
 
 public class EzySynchronizedUserManagerTest {
 
@@ -11,13 +10,13 @@ public class EzySynchronizedUserManagerTest {
     public void test() {
         new EzySynchronizedUserManager(100);
         EzySynchronizedUserManager userManager = EzySynchronizedUserManager.builder()
-                .maxUsers(2)
-                .build();
+            .maxUsers(2)
+            .build();
         EzySimpleUser user1 = new EzySimpleUser();
         user1.setName("user1");
         EzySimpleUser user2 = new EzySimpleUser();
         user2.setName("user2");
-        
+
         assert userManager.addUser(user1) == null;
         assert userManager.addUser(user1) != null;
         assert userManager.addUser(user2) == null;
@@ -34,7 +33,7 @@ public class EzySynchronizedUserManagerTest {
         userManager.removeLock(user1.getName());
         userManager.clear();
         userManager.destroy();
-        
+
     }
-    
+
 }

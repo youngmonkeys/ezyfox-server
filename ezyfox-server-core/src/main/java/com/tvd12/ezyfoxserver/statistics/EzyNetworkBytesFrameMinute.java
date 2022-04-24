@@ -8,16 +8,16 @@ public class EzyNetworkBytesFrameMinute extends EzyNetworkBytesFrame {
     public EzyNetworkBytesFrameMinute() {
         super();
     }
-    
+
     public EzyNetworkBytesFrameMinute(long startTime) {
         super(startTime);
     }
-    
+
     @Override
     protected long getExistsTime() {
         return EzyTimes.MILLIS_OF_MINUTE;
     }
-    
+
     public EzyNetworkBytesFrame nextFrame() {
         return new EzyNetworkBytesFrameMinute(endTime);
     }

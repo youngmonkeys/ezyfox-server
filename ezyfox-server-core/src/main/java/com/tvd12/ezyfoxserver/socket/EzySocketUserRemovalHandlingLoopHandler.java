@@ -6,5 +6,5 @@ public class EzySocketUserRemovalHandlingLoopHandler extends EzySocketEventLoopO
     protected final String getThreadName() {
         return "user-removal-handler";
     }
-    
+
 }

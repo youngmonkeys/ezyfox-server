@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.statistics;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyRequestFrameSecondTest extends BaseTest {
 
@@ -19,7 +18,7 @@ public class EzyRequestFrameSecondTest extends BaseTest {
         assert frame.getRequests() == 0;
         System.out.println(frame);
     }
-    
+
     @Test
     public void test2() {
         EzyRequestFrameSecond frame = new EzyRequestFrameSecond(20);
@@ -30,11 +29,11 @@ public class EzyRequestFrameSecondTest extends BaseTest {
         frame.addRequests(1);
         assert frame.isInvalid();
     }
-    
+
     @Test
     public void test3() {
         EzyRequestFrameSecond frame = new EzyRequestFrameSecond(20, System.currentTimeMillis() - 10000);
         assert frame.isExpired();
     }
-    
+
 }

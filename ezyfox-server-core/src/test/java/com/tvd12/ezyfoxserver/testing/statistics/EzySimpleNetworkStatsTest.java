@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.testing.statistics;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkBytesFrameHour;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkBytesFrameMinute;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkBytesFrameSecond;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleNetworkStats;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
+import org.testng.annotations.Test;
 
 public class EzySimpleNetworkStatsTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzySimpleNetworkStats stats = new EzySimpleNetworkStats();
@@ -20,11 +19,11 @@ public class EzySimpleNetworkStatsTest extends BaseTest {
         assert stats.getDroppedInPackets() == 0;
         assert stats.getDroppedOutPackets() == 0;
         assert stats.getWriteErrorPackets() == 0;
-        
+
         assert stats.getFrameHour() != null;
         assert stats.getFrameMinute() != null;
         assert stats.getFrameSecond() != null;
-        
+
         stats.addDroppedInBytes(1);
         assert stats.getDroppedInBytes() == 1;
         stats.addDroppedOutBytes(2);
@@ -43,21 +42,21 @@ public class EzySimpleNetworkStatsTest extends BaseTest {
         assert stats.getDroppedOutPackets() == 5;
         stats.addWriteErrorPackets(6);
         assert stats.getWriteErrorPackets() == 6;
-        
+
         EzyNetworkBytesFrameHour frameHour = new EzyNetworkBytesFrameHour(System.currentTimeMillis() - 2 * 60 * 60 * 1000);
         EzyNetworkBytesFrameMinute frameMinute = new EzyNetworkBytesFrameMinute(System.currentTimeMillis() - 2 * 60 * 1000);
         EzyNetworkBytesFrameSecond frameSecond = new EzyNetworkBytesFrameSecond(System.currentTimeMillis() - 2 * 1000);
-        
+
         FieldUtil.setFieldValue(stats, "frameHour", frameHour);
         FieldUtil.setFieldValue(stats, "frameMinute", frameMinute);
         FieldUtil.setFieldValue(stats, "frameSecond", frameSecond);
-        
+
         stats.addReadBytes(1);
-        
+
         frameHour = new EzyNetworkBytesFrameHour(System.currentTimeMillis() - 2 * 60 * 60 * 1000);
         frameMinute = new EzyNetworkBytesFrameMinute(System.currentTimeMillis() - 2 * 60 * 1000);
         frameSecond = new EzyNetworkBytesFrameSecond(System.currentTimeMillis() - 2 * 1000);
-        
+
         FieldUtil.setFieldValue(stats, "frameHour", frameHour);
         FieldUtil.setFieldValue(stats, "frameMinute", frameMinute);
         FieldUtil.setFieldValue(stats, "frameSecond", frameSecond);

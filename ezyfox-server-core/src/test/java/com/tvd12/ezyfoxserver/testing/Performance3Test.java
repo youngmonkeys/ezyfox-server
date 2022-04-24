@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyObject;
 import com.tvd12.ezyfox.reflect.EzyClasses;
@@ -10,6 +8,8 @@ import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.command.EzyCommand;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Performance3Test extends BaseTest {
 
@@ -25,7 +25,7 @@ public class Performance3Test extends BaseTest {
         strs.put(EzySimpleServer.class, EzyObject.class);
         strs.put(EzyLoggable.class, EzyObject.class);
         strs.put(EzyClasses.class, EzyObject.class);
-        for(int i = 0 ; i < 10000000 ; ++i) {
+        for (int i = 0; i < 10000000; ++i) {
             Object abc = strs.get(EzyLoggable.class);
         }
         long end = System.currentTimeMillis();

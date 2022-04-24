@@ -1,34 +1,29 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.Supplier;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyEquals;
 import com.tvd12.ezyfox.util.EzyHashCodes;
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.EzyComponent;
-import com.tvd12.ezyfoxserver.command.EzyAppResponse;
-import com.tvd12.ezyfoxserver.command.EzyAppSendResponse;
-import com.tvd12.ezyfoxserver.command.EzyAppSetup;
-import com.tvd12.ezyfoxserver.command.EzyHandleException;
-import com.tvd12.ezyfoxserver.command.EzySetup;
+import com.tvd12.ezyfoxserver.command.*;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppSendResponseImpl;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppSetupImpl;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-
 import lombok.Getter;
 
-public class EzySimpleAppContext 
-        extends EzyAbstractZoneChildContext
-        implements EzyAppContext {
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
+public class EzySimpleAppContext
+    extends EzyAbstractZoneChildContext
+    implements EzyAppContext {
 
     @Getter
     protected EzyApplication app;
@@ -46,23 +41,23 @@ public class EzySimpleAppContext
 
     @Override
     public void send(
-            EzyData data,
-            EzySession recipient,
-            boolean encrypted, EzyTransportType transportType) {
+        EzyData data,
+        EzySession recipient,
+        boolean encrypted, EzyTransportType transportType) {
         this.sendResponse.execute(data, recipient, encrypted, transportType);
     }
 
     @Override
     public void send(
-            EzyData data,
-            Collection<EzySession> recipients,
-            boolean encrypted, EzyTransportType transportType) {
+        EzyData data,
+        Collection<EzySession> recipients,
+        boolean encrypted, EzyTransportType transportType) {
         this.sendResponse.execute(data, recipients, encrypted, transportType);
     }
 
     public void setApp(EzyApplication app) {
         this.app = app;
-        this.component = (EzyComponent)app;
+        this.component = (EzyComponent) app;
     }
 
     @SuppressWarnings("rawtypes")
@@ -84,24 +79,24 @@ public class EzySimpleAppContext
     }
 
     protected void destroyApp() {
-        processWithLogException(( )-> ((EzyDestroyable)app).destroy());
+        processWithLogException(() -> ((EzyDestroyable) app).destroy());
     }
 
     @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleAppContext>()
-                .function(t -> t.app)
-                .isEquals(this, obj);
+            .function(t -> t.app)
+            .isEquals(this, obj);
     }
-    
+
     @Override
     public int hashCode() {
         return new EzyHashCodes().append(app).toHashCode();
     }
-    
+
     @Override
     protected void preDestroy() {
         logger.debug("destroy AppContext({})", app);
     }
-    
+
 }

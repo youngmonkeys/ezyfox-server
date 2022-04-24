@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.handler;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.handler.EzySimpleRequestFactory;
+import org.testng.annotations.Test;
 
 public class EzySimpleRequestFactoryTest {
 
@@ -15,5 +14,5 @@ public class EzySimpleRequestFactoryTest {
         factory.newRequest(EzyCommand.PLUGIN_INFO);
         factory.newRequest(EzyCommand.PLUGIN_REQUEST);
     }
-    
+
 }

@@ -1,26 +1,24 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import com.tvd12.ezyfox.io.EzyStrings;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-
-import com.tvd12.ezyfox.io.EzyStrings;
-import com.tvd12.ezyfox.util.EzyEquals;
-import com.tvd12.ezyfox.util.EzyHashCodes;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.NONE)
-public abstract class EzyAbstractSetting 
-        implements EzyBaseSetting, EzyZoneIdAware, EzyHomePathAware {
+public abstract class EzyAbstractSetting
+    implements EzyBaseSetting, EzyZoneIdAware, EzyHomePathAware {
 
     protected final int id = newId();
 
@@ -89,19 +87,21 @@ public abstract class EzyAbstractSetting
 
     @Override
     public String getConfigFile(boolean noParent) {
-        if(noParent)
+        if (noParent) {
             return configFile;
+        }
         return Paths.get(getLocation(), configFile).toString();
     }
 
     protected abstract String getParentFolder();
+
     protected abstract AtomicInteger getIdCounter();
 
     @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzyAbstractSetting>()
-                .function(t -> t.id)
-                .isEquals(this, obj);
+            .function(t -> t.id)
+            .isEquals(this, obj);
     }
 
     @Override

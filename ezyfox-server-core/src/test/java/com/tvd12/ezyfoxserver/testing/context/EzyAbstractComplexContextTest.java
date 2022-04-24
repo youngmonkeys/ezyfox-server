@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.spy;
-
+import com.tvd12.ezyfoxserver.context.EzyAbstractComplexContext;
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.context.EzyAbstractComplexContext;
+import static org.mockito.Mockito.spy;
 
 public class EzyAbstractComplexContextTest {
 
@@ -14,5 +13,5 @@ public class EzyAbstractComplexContextTest {
         ctx.init();
         ctx.destroy();
     }
-    
+
 }

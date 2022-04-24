@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.socket;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.entity.EzySession;
-
 import lombok.Getter;
 
 @Getter
@@ -13,7 +12,7 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
     private EzyCommand command;
     private boolean systemRequest;
     private EzySession session;
-    
+
     public EzySimpleSocketRequest(EzySession session, EzyArray data) {
         this.data = data;
         this.session = session;
@@ -21,12 +20,12 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
         this.command = EzyCommand.valueOf(cmdId);
         this.systemRequest = command.isSystemCommand();
     }
-    
+
     @Override
     public void release() {
         this.data = null;
         this.command = null;
         this.session = null;
     }
-    
+
 }

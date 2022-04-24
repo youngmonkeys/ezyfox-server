@@ -1,17 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
@@ -29,6 +17,12 @@ import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimplePluginContextTest extends BaseTest {
 
@@ -50,17 +44,17 @@ public class EzySimplePluginContextTest extends BaseTest {
         EzySimplePluginContext pluginContext2 = new EzySimplePluginContext();
         assert !pluginContext.equals(pluginContext2);
         assert pluginContext.cmd(EzyPluginResponse.class) != null;
-        
+
         EzySimpleUser user = new EzySimpleUser();
         user.setName("test");
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         user.addSession(session);
-        
+
         EzyData data = EzyEntityFactory.newArrayBuilder()
-                .build();
+            .build();
         pluginContext.send(data, session, false);
     }
-    
+
     @Test
     public void sendMultiTest() {
         // given

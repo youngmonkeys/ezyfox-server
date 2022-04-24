@@ -3,8 +3,8 @@ package com.tvd12.ezyfoxserver.setting;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 
-public class EzyEventControllerSettingBuilder 
-        implements EzyBuilder<EzySimpleEventControllerSetting> {
+public class EzyEventControllerSettingBuilder
+    implements EzyBuilder<EzySimpleEventControllerSetting> {
 
     private String eventType;
     private String controller;

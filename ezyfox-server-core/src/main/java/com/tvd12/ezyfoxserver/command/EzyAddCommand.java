@@ -6,5 +6,5 @@ public interface EzyAddCommand {
 
     @SuppressWarnings("rawtypes")
     void add(Class commandType, Supplier commandSupplier);
-    
+
 }

@@ -4,8 +4,8 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond;
 
-public class EzySessionManagementSettingBuilder 
-        implements EzyBuilder<EzySimpleSessionManagementSetting>{
+public class EzySessionManagementSettingBuilder
+    implements EzyBuilder<EzySimpleSessionManagementSetting> {
 
     protected long sessionMaxIdleTimeInSecond = 30;
     protected long sessionMaxWaitingTimeInSecond = 30;
@@ -35,23 +35,23 @@ public class EzySessionManagementSettingBuilder
         p.init();
         return p;
     }
-    
-    public static class EzyMaxRequestPerSecondBuilder 
-            implements EzyBuilder<EzySimpleMaxRequestPerSecond> {
-        
+
+    public static class EzyMaxRequestPerSecondBuilder
+        implements EzyBuilder<EzySimpleMaxRequestPerSecond> {
+
         protected int value = 15;
         protected EzyMaxRequestPerSecondAction action = EzyMaxRequestPerSecondAction.DROP_REQUEST;
-        
+
         public EzyMaxRequestPerSecondBuilder value(int value) {
             this.value = value;
             return this;
         }
-        
+
         public EzyMaxRequestPerSecondBuilder action(EzyMaxRequestPerSecondAction action) {
             this.action = action;
             return this;
         }
-        
+
         @Override
         public EzySimpleMaxRequestPerSecond build() {
             EzySimpleMaxRequestPerSecond p = new EzySimpleMaxRequestPerSecond();
@@ -59,7 +59,7 @@ public class EzySessionManagementSettingBuilder
             p.setAction(action);
             return p;
         }
-        
+
     }
-    
+
 }

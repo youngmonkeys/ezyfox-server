@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.delegate;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.delegate.EzyAbstractSessionDelegate;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySessionAdapterTest extends BaseTest {
 
@@ -15,5 +14,5 @@ public class EzySessionAdapterTest extends BaseTest {
         };
         delegate.onSessionLoggedIn(new EzySimpleUser());
     }
-    
+
 }

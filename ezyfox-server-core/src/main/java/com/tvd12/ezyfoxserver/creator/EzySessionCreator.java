@@ -6,5 +6,5 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 public interface EzySessionCreator {
 
     <S extends EzySession> S create(EzyChannel channel);
-    
+
 }

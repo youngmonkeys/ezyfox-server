@@ -21,7 +21,7 @@ public class EzyBootstrapTest extends BaseCoreTest {
 //            .param("abc")
 //            .invoke();
     }
-    
+
 //    private Method getMethod(String name) {
 //        return MethodBuilder.create()
 //                .method(name)
@@ -29,5 +29,5 @@ public class EzyBootstrapTest extends BaseCoreTest {
 //                .argument(String.class)
 //                .build();
 //    }
-    
+
 }

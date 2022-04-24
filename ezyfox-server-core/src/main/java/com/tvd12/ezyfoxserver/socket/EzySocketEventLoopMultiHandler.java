@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import lombok.Setter;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopHandler {
 
@@ -17,24 +17,25 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
     @Override
     protected EzySimpleSocketEventLoop newEventLoop() {
         return new EzySimpleSocketEventLoop() {
-            
+
             @Override
             protected void eventLoop0() {
                 EzySocketEventHandler eventHandler = eventHandlerSupplier.get();
                 eventHandlers.add(eventHandler);
-                while(active) {
+                while (active) {
                     eventHandler.handleEvent();
                 }
             }
-            
+
         };
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        for(EzySocketEventHandler eventHandler : eventHandlers)
+        for (EzySocketEventHandler eventHandler : eventHandlers) {
             processWithLogException(() -> eventHandler.destroy());
+        }
     }
 
 }

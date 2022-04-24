@@ -17,15 +17,15 @@ public class EzyProxyResponseApi implements EzyResponseApi {
     }
 
     private EzyResponseApi newSocketResponseApi(Object socketEncoder) {
-        return socketEncoder != null 
-                ? new EzySocketResponseApi(socketEncoder) 
-                : EzyEmptyResponseApi.getInstance();
+        return socketEncoder != null
+            ? new EzySocketResponseApi(socketEncoder)
+            : EzyEmptyResponseApi.getInstance();
     }
 
     private EzyResponseApi newWebsocketResponseApi(Object wsEncoder) {
         return wsEncoder != null
-                ? new EzyWsResponseApi(wsEncoder)
-                : EzyEmptyResponseApi.getInstance();
+            ? new EzyWsResponseApi(wsEncoder)
+            : EzyEmptyResponseApi.getInstance();
     }
 
     @Override

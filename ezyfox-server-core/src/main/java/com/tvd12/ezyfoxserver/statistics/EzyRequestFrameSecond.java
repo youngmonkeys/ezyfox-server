@@ -6,11 +6,11 @@ public class EzyRequestFrameSecond extends EzyRequestFrame {
     public EzyRequestFrameSecond(int maxRequests) {
         super(maxRequests);
     }
-    
+
     public EzyRequestFrameSecond(int maxRequests, long startTime) {
         super(maxRequests, startTime);
     }
-    
+
     @Override
     protected long getExistsTime() {
         return 1000;

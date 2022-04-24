@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.socket;
 
 import com.tvd12.ezyfoxserver.entity.EzySession;
-
 import lombok.Getter;
 
 @Getter
@@ -19,11 +18,10 @@ public class EzySessionTicketsRequestQueues {
         EzyRequestQueue queue;
         EzySessionTicketsQueue ticketsQueue;
         EzySession session = request.getSession();
-        if(request.isSystemRequest()) {
+        if (request.isSystemRequest()) {
             ticketsQueue = systemQueue;
             queue = session.getSystemRequestQueue();
-        }
-        else {
+        } else {
             ticketsQueue = extensionQueue;
             queue = session.getExtensionRequestQueue();
         }
@@ -31,8 +29,9 @@ public class EzySessionTicketsRequestQueues {
         synchronized (queue) {
             boolean empty = queue.isEmpty();
             success = queue.add(request);
-            if(empty && success)
+            if (empty && success) {
                 ticketsQueue.add(session);
+            }
         }
         return success;
     }

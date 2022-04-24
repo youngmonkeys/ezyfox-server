@@ -10,9 +10,9 @@ import com.tvd12.ezyfoxserver.response.EzyDisconnectParams;
 import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
-public class EzyCloseSessionImpl 
-        extends EzyMessageController
-        implements EzyCloseSession {
+public class EzyCloseSessionImpl
+    extends EzyMessageController
+    implements EzyCloseSession {
 
     private final EzyServerContext context;
 
@@ -27,8 +27,9 @@ public class EzyCloseSessionImpl
     }
 
     protected void sendToClients(EzySession session, EzyConstant reason) {
-        if(shouldSendToClient(reason))
+        if (shouldSendToClient(reason)) {
             sendToClients0(session, reason);
+        }
     }
 
     protected boolean shouldSendToClient(EzyConstant reason) {

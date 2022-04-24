@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.command.EzyAbstractResponse;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
@@ -9,8 +7,9 @@ import com.tvd12.ezyfoxserver.context.EzyZoneChildContext;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
+import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class EzyAbstractResponseTest {
 

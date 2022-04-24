@@ -14,41 +14,38 @@ import com.tvd12.ezyfoxserver.response.EzyExitedAppParams;
 import com.tvd12.ezyfoxserver.response.EzyExitedAppResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
-
 import lombok.Setter;
 
 @Setter
 public class EzySimpleAppUserDelegate
-        extends EzyLoggable
-        implements EzyAppUserDelegate, EzyAppContextAware, EzyDestroyable {
+    extends EzyLoggable
+    implements EzyAppUserDelegate, EzyAppContextAware, EzyDestroyable {
 
     @Setter
     protected EzyAppContext appContext;
-    
+
     @Override
     public void onUserRemoved(EzyUser user, EzyConstant reason) {
         try {
             handleUserRemovedEvent(user, reason);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.warn("handle user {} error", user, e);
-        }
-        finally {
+        } finally {
             responseUserRemoved(user, reason);
         }
     }
-    
+
     protected void handleUserRemovedEvent(EzyUser user, EzyConstant reason) {
-        EzyEvent event = new EzySimpleUserRemovedEvent(user, reason); 
+        EzyEvent event = new EzySimpleUserRemovedEvent(user, reason);
         appContext.handleEvent(EzyEventType.USER_REMOVED, event);
     }
-    
+
     protected void responseUserRemoved(EzyUser user, EzyConstant reason) {
         EzyResponse response = newExitedAppResponse(reason);
         EzyZoneContext zoneContext = appContext.getParent();
         zoneContext.send(response, user, false);
     }
-    
+
     protected EzyResponse newExitedAppResponse(EzyConstant reason) {
         EzyExitedAppParams params = new EzyExitedAppParams();
         EzyAppSetting appSetting = appContext.getApp().getSetting();
@@ -56,10 +53,10 @@ public class EzySimpleAppUserDelegate
         params.setReason(reason);
         return new EzyExitedAppResponse(params);
     }
-    
+
     @Override
     public void destroy() {
         this.appContext = null;
     }
-    
+
 }

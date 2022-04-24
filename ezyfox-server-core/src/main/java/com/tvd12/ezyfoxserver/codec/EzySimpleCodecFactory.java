@@ -23,29 +23,33 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
         this.websocketCodecCreator = newWebsocketCodecCreator();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Object newEncoder(EzyConstant type) {
-        if(type == EzyConnectionType.SOCKET) {
-            if(socketCodecCreator != null)
+        if (type == EzyConnectionType.SOCKET) {
+            if (socketCodecCreator != null) {
                 return socketCodecCreator.newEncoder();
-        }
-        else {
-            if(websocketCodecCreator != null)
+            }
+        } else {
+            if (websocketCodecCreator != null) {
                 return websocketCodecCreator.newEncoder();
+            }
         }
         return null;
     }
 
     @Override
     public Object newDecoder(EzyConstant type) {
-        if(type == EzyConnectionType.SOCKET) {
-            if(socketCodecCreator != null) {
+        if (type == EzyConnectionType.SOCKET) {
+            if (socketCodecCreator != null) {
                 int maxRequestSize = socketSetting.getMaxRequestSize();
                 return socketCodecCreator.newDecoder(maxRequestSize);
             }
-        }
-        else {
-            if(websocketCodecCreator != null) {
+        } else {
+            if (websocketCodecCreator != null) {
                 int maxFrameSize = websocketSetting.getMaxFrameSize();
                 return websocketCodecCreator.newDecoder(maxFrameSize);
             }
@@ -54,23 +58,20 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
     }
 
     private EzyCodecCreator newSocketCodecCreator() {
-        if(socketSetting.isActive()) {
+        if (socketSetting.isActive()) {
             return EzyClasses.newInstance(
-                    socketSetting.getCodecCreator(),
-                    new Class<?>[] {boolean.class},
-                    new Object[] {socketSetting.isSslActive()});
+                socketSetting.getCodecCreator(),
+                new Class<?>[]{boolean.class},
+                new Object[]{socketSetting.isSslActive()});
         }
         return null;
     }
 
     private EzyCodecCreator newWebsocketCodecCreator() {
-        if(websocketSetting.isActive())
+        if (websocketSetting.isActive()) {
             return EzyClasses.newInstance(websocketSetting.getCodecCreator());
+        }
         return null;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyCodecFactory> {

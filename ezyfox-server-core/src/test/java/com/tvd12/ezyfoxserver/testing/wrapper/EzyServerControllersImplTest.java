@@ -1,14 +1,13 @@
 package com.tvd12.ezyfoxserver.testing.wrapper;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyServerControllersImplTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzyServerControllers controller = EzyServerControllersImpl.builder().build();

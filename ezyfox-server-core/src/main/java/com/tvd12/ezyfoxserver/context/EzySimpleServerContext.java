@@ -1,6 +1,18 @@
 package com.tvd12.ezyfoxserver.context;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyDestroyable;
+import com.tvd12.ezyfoxserver.EzyComponent;
+import com.tvd12.ezyfoxserver.EzyServer;
+import com.tvd12.ezyfoxserver.command.*;
+import com.tvd12.ezyfoxserver.command.impl.*;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
+import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.event.EzyEvent;
+import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
+import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,42 +21,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.util.EzyDestroyable;
-import com.tvd12.ezyfoxserver.EzyComponent;
-import com.tvd12.ezyfoxserver.EzyServer;
-import com.tvd12.ezyfoxserver.command.EzyBroadcastEvent;
-import com.tvd12.ezyfoxserver.command.EzyCloseSession;
-import com.tvd12.ezyfoxserver.command.EzySendResponse;
-import com.tvd12.ezyfoxserver.command.EzyShutdown;
-import com.tvd12.ezyfoxserver.command.EzyStreamBytes;
-import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastEventImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyCloseSessionImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzySendResponseImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyServerShutdownImpl;
-import com.tvd12.ezyfoxserver.command.impl.EzyStreamBytesImpl;
-import com.tvd12.ezyfoxserver.constant.EzyTransportType;
-import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.event.EzyEvent;
-import com.tvd12.ezyfoxserver.exception.EzyZoneNotFoundException;
-import com.tvd12.ezyfoxserver.response.EzyResponse;
-import com.tvd12.ezyfoxserver.setting.EzyZoneSetting;
-
-import lombok.Getter;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzySimpleServerContext extends EzyAbstractComplexContext implements EzyServerContext {
-
-    @Getter
-    protected EzyServer server;
-    protected EzyStreamBytes streamBytes;
-    protected EzySendResponse sendResponse;
-    protected EzyBroadcastEvent broadcastEvent;
 
     @Getter
     protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
     protected final Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
     protected final Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
-
+    @Getter
+    protected EzyServer server;
+    protected EzyStreamBytes streamBytes;
+    protected EzySendResponse sendResponse;
+    protected EzyBroadcastEvent broadcastEvent;
 
     @Override
     protected void init0() {
@@ -57,42 +46,44 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
         this.properties.put(EzyShutdown.class, new EzyServerShutdownImpl(this));
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
     }
-    
+
     @Override
     public <T> T get(Class<T> clazz) {
         T property = getProperty(clazz);
-        if(property != null)
+        if (property != null) {
             return property;
+        }
         throw new IllegalArgumentException("has no instance of " + clazz);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public <T> T cmd(Class<T> clazz) {
         Supplier supplier = commandSuppliers.get(clazz);
-        if(supplier != null)
+        if (supplier != null) {
             return (T) supplier.get();
+        }
         throw new IllegalArgumentException("has no command of " + clazz);
     }
 
     @Override
     public void broadcast(
-            EzyConstant eventType, EzyEvent event, boolean catchException) {
+        EzyConstant eventType, EzyEvent event, boolean catchException) {
         broadcastEvent.fire(eventType, event, catchException);
     }
 
     @Override
     public void send(
-            EzyResponse response,
-            EzySession recipient,
-            boolean encrypted, EzyTransportType transportType) {
+        EzyResponse response,
+        EzySession recipient,
+        boolean encrypted, EzyTransportType transportType) {
         sendResponse.execute(response, recipient, encrypted, false, transportType);
     }
 
     @Override
     public void send(EzyResponse response,
-            Collection<EzySession> recipients,
-            boolean encrypted, EzyTransportType transportType) {
+                     Collection<EzySession> recipients,
+                     boolean encrypted, EzyTransportType transportType) {
         sendResponse.execute(response, recipients, encrypted, false, transportType);
     }
 
@@ -103,50 +94,53 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 
     @Override
     public void stream(
-            byte[] bytes,
-            EzySession recipient, EzyTransportType transportType) {
+        byte[] bytes,
+        EzySession recipient, EzyTransportType transportType) {
         streamBytes.execute(bytes, recipient, transportType);
     }
 
     @Override
     public void stream(
-            byte[] bytes,
-            Collection<EzySession> recipients, EzyTransportType transportType) {
+        byte[] bytes,
+        Collection<EzySession> recipients, EzyTransportType transportType) {
         streamBytes.execute(bytes, recipients, transportType);
     }
 
     public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
-        for(EzyZoneContext ctx : zoneContexts)
+        for (EzyZoneContext ctx : zoneContexts) {
             addZoneContext(ctx.getZone().getSetting(), ctx);
+        }
     }
 
     public void addZoneContext(EzyZoneSetting zone, EzyZoneContext zoneContext) {
         zoneContexts.add(zoneContext);
         zoneContextsById.put(zone.getId(), zoneContext);
         zoneContextsByName.put(zone.getName(), zoneContext);
-        addAppContexts(((EzyAppContextsFetcher)zoneContext).getAppContexts());
-        addPluginContexts(((EzyPluginContextsFetcher)zoneContext).getPluginContexts());
+        addAppContexts(((EzyAppContextsFetcher) zoneContext).getAppContexts());
+        addPluginContexts(((EzyPluginContextsFetcher) zoneContext).getPluginContexts());
     }
 
     @Override
     public EzyZoneContext getZoneContext(int zoneId) {
         EzyZoneContext zoneContext = zoneContextsById.get(zoneId);
-        if(zoneContext != null)
+        if (zoneContext != null) {
             return zoneContext;
+        }
         throw new EzyZoneNotFoundException(zoneId);
     }
 
     @Override
     public EzyZoneContext getZoneContext(String zoneName) {
         EzyZoneContext zoneContext = zoneContextsByName.get(zoneName);
-        if(zoneContext != null)
+        if (zoneContext != null) {
             return zoneContext;
+        }
         throw new EzyZoneNotFoundException(zoneName);
     }
 
     public void setServer(EzyServer server) {
         this.server = server;
-        this.component = (EzyComponent)server;
+        this.component = (EzyComponent) server;
     }
 
     @Override
@@ -167,16 +161,17 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     }
 
     private void destroyServer() {
-        processWithLogException(() -> ((EzyDestroyable)server).destroy());
+        processWithLogException(() -> ((EzyDestroyable) server).destroy());
     }
 
     private void destroyZoneContexts() {
-        for(EzyZoneContext zc : zoneContextsById.values())
+        for (EzyZoneContext zc : zoneContextsById.values()) {
             this.destroyZoneContext(zc);
+        }
     }
 
     private void destroyZoneContext(EzyZoneContext zoneContext) {
-        processWithLogException(() -> ((EzyDestroyable)zoneContext).destroy());
+        processWithLogException(() -> ((EzyDestroyable) zoneContext).destroy());
     }
 
     @Override

@@ -1,25 +1,28 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
+import com.tvd12.ezyfoxserver.entity.EzyUser;
+import lombok.Getter;
+
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-
-import com.tvd12.ezyfoxserver.entity.EzyUser;
-
-import lombok.Getter;
 
 public class EzySynchronizedUserManager extends EzyAbstractUserManager {
 
     @Getter
     protected final Object synchronizedLock = new Object();
-    
+
     public EzySynchronizedUserManager(int maxUser) {
         super(maxUser);
     }
-    
+
     protected EzySynchronizedUserManager(Builder<?> builder) {
         super(builder);
     }
-    
+
+    public static Builder<?> builder() {
+        return new Builder<>();
+    }
+
     @Override
     public EzyUser addUser(EzyUser user) {
         EzyUser answer = null;
@@ -29,7 +32,7 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
         logger.info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return answer;
     }
-    
+
     @Override
     public EzyUser getUser(long userId) {
         synchronized (synchronizedLock) {
@@ -73,7 +76,7 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
         logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
         return user;
     }
-    
+
     @Override
     public int getUserCount() {
         synchronized (synchronizedLock) {
@@ -108,14 +111,10 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
             super.clear();
         }
     }
-    
+
     @Override
     public void destroy() {
         clear();
-    }
-    
-    public static Builder<?> builder() {
-        return new Builder<>();
     }
 
     public static class Builder<B extends Builder<B>> extends EzyAbstractUserManager.Builder<B> {
@@ -124,7 +123,7 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
         public EzySynchronizedUserManager build() {
             return new EzySynchronizedUserManager(this);
         }
-        
+
     }
 
 }

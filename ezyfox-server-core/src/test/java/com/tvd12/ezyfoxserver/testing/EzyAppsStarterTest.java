@@ -1,10 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.EzyAppsStarter;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
@@ -19,6 +14,10 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EzyAppsStarterTest extends BaseTest {
 
@@ -29,23 +28,27 @@ public class EzyAppsStarterTest extends BaseTest {
             @Override
             public EzyAppsStarter build() {
                 return new EzyAppsStarter(this) {
-                    
+
                     public EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
                         throw new RuntimeException();
-                    };
-                    
+                    }
+
+                    ;
+
                     public java.util.Set<String> getAppNames() {
                         return Sets.newHashSet("test");
-                    };
+                    }
+
+                    ;
                 };
             }
         }
-        .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
-        .appClassLoaders(loaders)
-        .build();
+            .zoneContext(EzyZoneContextsTest.newDefaultZoneContext())
+            .appClassLoaders(loaders)
+            .build();
         starter.start();
     }
-    
+
     @Test
     public void test2() {
         Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
@@ -62,12 +65,12 @@ public class EzyAppsStarterTest extends BaseTest {
         zoneSetting.setApplications(appsSetting);
         zoneContext.addAppContext(appSetting, appContext);
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-                .zoneContext(zoneContext)
-                .appClassLoaders(loaders)
-                .build();
+            .zoneContext(zoneContext)
+            .appClassLoaders(loaders)
+            .build();
         starter.start();
     }
-    
+
     @Test
     public void getClassLoaderErrorCaseTest() {
         Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
@@ -84,9 +87,9 @@ public class EzyAppsStarterTest extends BaseTest {
         zoneSetting.setApplications(appsSetting);
         zoneContext.addAppContext(appSetting, appContext);
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-                .zoneContext(zoneContext)
-                .appClassLoaders(loaders)
-                .build();
+            .zoneContext(zoneContext)
+            .appClassLoaders(loaders)
+            .build();
         try {
             MethodInvoker.create()
                 .object(starter)
@@ -94,13 +97,12 @@ public class EzyAppsStarterTest extends BaseTest {
                 .param("abc")
                 .param("hello")
                 .invoke();
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
             assert e.getCause().getCause() instanceof IllegalArgumentException;
         }
     }
-    
+
     @Test
     public void newAppEntryLoaderArgsNotNullTest() {
         // given
@@ -110,37 +112,37 @@ public class EzyAppsStarterTest extends BaseTest {
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("abc");
         appSetting.setEntryLoader(InternalAppEntryLoader.class);
-        appSetting.setEntryLoaderArgs(new String[] { "Hello" });
+        appSetting.setEntryLoaderArgs(new String[]{"Hello"});
         app.setSetting(appSetting);
-        
+
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
-        
-        
+
+
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         EzySimpleAppsSetting appsSetting = new EzySimpleAppsSetting();
         appsSetting.setItem(appSetting);
         zoneSetting.setApplications(appsSetting);
         zoneContext.addAppContext(appSetting, appContext);
-        
+
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
         zoneContext.setZone(zone);
-        
+
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-                .zoneContext(zoneContext)
-                .appClassLoaders(loaders)
-                .enableAppClassLoader(false)
-                .classLoader(Thread.currentThread().getContextClassLoader())
-                .build();
-        
+            .zoneContext(zoneContext)
+            .appClassLoaders(loaders)
+            .enableAppClassLoader(false)
+            .classLoader(Thread.currentThread().getContextClassLoader())
+            .build();
+
         // when
         starter.start();
-        
+
         // then
         Asserts.assertNotNull(app.getEntry());
     }
-    
+
     @Test
     public void newAppEntryLoaderClassLoaderIsNull() {
         // given
@@ -150,34 +152,34 @@ public class EzyAppsStarterTest extends BaseTest {
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("abc");
         app.setSetting(appSetting);
-        
+
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(app);
-        
-        
+
+
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         EzySimpleAppsSetting appsSetting = new EzySimpleAppsSetting();
         appsSetting.setItem(appSetting);
         zoneSetting.setApplications(appsSetting);
         zoneContext.addAppContext(appSetting, appContext);
-        
+
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
         zoneContext.setZone(zone);
-        
+
         EzyAppsStarter starter = new EzyAppsStarter.Builder()
-                .zoneContext(zoneContext)
-                .appClassLoaders(loaders)
-                .enableAppClassLoader(true)
-                .build();
-        
+            .zoneContext(zoneContext)
+            .appClassLoaders(loaders)
+            .enableAppClassLoader(true)
+            .build();
+
         // when
         starter.start();
-        
+
         // then
         Asserts.assertNull(app.getEntry());
     }
-    
+
     public static class InternalAppEntryLoader implements EzyAppEntryLoader {
 
         public InternalAppEntryLoader(String arg) {

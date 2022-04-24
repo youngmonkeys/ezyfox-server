@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleSslConfigSetting;
 import com.tvd12.ezyfoxserver.setting.EzySslConfigSettingBuilder;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
 
 public class EzySslConfigSettingBuilderTest {
 
@@ -16,9 +15,9 @@ public class EzySslConfigSettingBuilderTest {
         String loader = RandomUtil.randomShortAlphabetString();
         String contextFactoryBuilder = RandomUtil.randomShortAlphabetString();
         EzySslConfigSettingBuilder sut = new EzySslConfigSettingBuilder()
-                .file(file)
-                .loader(loader)
-                .contextFactoryBuilder(contextFactoryBuilder);
+            .file(file)
+            .loader(loader)
+            .contextFactoryBuilder(contextFactoryBuilder);
 
         // when
         EzySimpleSslConfigSetting setting = sut.build();

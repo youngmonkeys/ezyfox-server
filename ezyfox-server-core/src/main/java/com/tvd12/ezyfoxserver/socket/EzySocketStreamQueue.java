@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.socket;
 public interface EzySocketStreamQueue {
 
     int size();
-    
+
     void clear();
 
     boolean isFull();

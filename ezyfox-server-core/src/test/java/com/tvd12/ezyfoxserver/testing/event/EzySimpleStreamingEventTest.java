@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.event;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.event.EzySimpleStreamingEvent;
+import org.testng.annotations.Test;
 
 public class EzySimpleStreamingEventTest {
 
@@ -11,5 +10,5 @@ public class EzySimpleStreamingEventTest {
         EzySimpleStreamingEvent event = new EzySimpleStreamingEvent(null, null, null);
         assert event.getBytes() == null;
     }
-    
+
 }

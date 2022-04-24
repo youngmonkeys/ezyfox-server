@@ -2,9 +2,9 @@ package com.tvd12.ezyfoxserver.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 
-public class EzyUserManagementSettingBuilder 
-        implements EzyBuilder<EzySimpleUserManagementSetting> {
-    
+public class EzyUserManagementSettingBuilder
+    implements EzyBuilder<EzySimpleUserManagementSetting> {
+
     protected long userMaxIdleTimeInSecond = 0;
     protected int maxSessionPerUser = 5;
     protected boolean allowGuestLogin = false;
@@ -14,9 +14,9 @@ public class EzyUserManagementSettingBuilder
 
     /**
      * Set live time to keep an user when this user has no connected sessions
-     * 
+     *
      * @param userMaxIdleTimeInSecond the max idle time of user in second
-     * @return 
+     * @return
      */
     public EzyUserManagementSettingBuilder userMaxIdleTimeInSecond(long userMaxIdleTimeInSecond) {
         this.userMaxIdleTimeInSecond = userMaxIdleTimeInSecond;
@@ -24,9 +24,9 @@ public class EzyUserManagementSettingBuilder
     }
 
     /**
-     * Set maximum number of sessions per user, 
+     * Set maximum number of sessions per user,
      * If the maximum = 1, we need care about {@code allowChangeSession}
-     * 
+     *
      * @param maxSessionPerUser the maximum number of sessions per user
      * @return this pointer for chaining
      */
@@ -37,7 +37,7 @@ public class EzyUserManagementSettingBuilder
 
     /**
      * When login error, allowGuestLogin = true allow server create a guest user
-     * 
+     *
      * @param allowGuestLogin allow guest login or not
      * @return this pointer for chaining
      */
@@ -49,8 +49,8 @@ public class EzyUserManagementSettingBuilder
     /**
      * Allow change session of an user when max sessions per user is 1
      * If allowChangeSession = true, replaced session will be disconnected
-     * If allowChangeSession = false, incoming session will get login error: MAXIMUM_SESSION 
-     * 
+     * If allowChangeSession = false, incoming session will get login error: MAXIMUM_SESSION
+     *
      * @param allowChangeSession allow change session or not
      * @return this pointer for chaining
      */
@@ -61,7 +61,7 @@ public class EzyUserManagementSettingBuilder
 
     /**
      * Set prefix for guest user when allowGuestLogin = true
-     * 
+     *
      * @param guestNamePrefix prefix name for guest
      * @return this pointer for chaining
      */
@@ -72,7 +72,7 @@ public class EzyUserManagementSettingBuilder
 
     /**
      * Set username pattern for login pre-checking
-     * 
+     *
      * @param userNamePattern the username pattern
      * @return this pointer for chaining
      */

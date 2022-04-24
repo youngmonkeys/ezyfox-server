@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.response.EzyRequestAppResponse;
 import com.tvd12.ezyfoxserver.response.EzyRequestAppResponseParams;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyRequestAppResponseTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzyRequestAppResponseParams params = new EzyRequestAppResponseParams();

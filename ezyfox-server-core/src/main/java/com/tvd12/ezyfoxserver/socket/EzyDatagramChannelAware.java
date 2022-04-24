@@ -5,5 +5,5 @@ import java.nio.channels.DatagramChannel;
 public interface EzyDatagramChannelAware {
 
     void setDatagramChannel(DatagramChannel channel);
-    
+
 }

@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.handler;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.EzyServer;
@@ -31,6 +25,9 @@ import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzyUserDataHandlerTest {
 
@@ -39,14 +36,14 @@ public class EzyUserDataHandlerTest {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "user", null);
-        
+
         // when
         MethodInvoker.create()
             .object(sut)
             .method("checkToUnmapUser")
             .param(EzyConstant.class, mock(EzyConstant.class))
             .invoke();
-        
+
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "user"));
     }
@@ -91,14 +88,14 @@ public class EzyUserDataHandlerTest {
         when(loggerSetting.getIgnoredCommands()).thenReturn(ignoredCommandsSetting);
         when(ignoredCommandsSetting.getCommands()).thenReturn(Sets.newHashSet(EzyCommand.PING));
         EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
-                mock(EzySessionManagementSetting.EzyMaxRequestPerSecond.class);
+            mock(EzySessionManagementSetting.EzyMaxRequestPerSecond.class);
         when(maxRequestPerSecond.getValue()).thenReturn(3);
         when(maxRequestPerSecond.getAction()).thenReturn(EzyMaxRequestPerSecondAction.DISCONNECT_SESSION);
         when(sessionManagementSetting.getSessionMaxRequestPerSecond()).thenReturn(maxRequestPerSecond);
-        
+
         return new MyTestDataHandler(serverContext, session);
     }
-    
+
     public static class MyTestDataHandler extends EzyUserDataHandler<EzySession> {
 
         public MyTestDataHandler(EzyServerContext ctx, EzySession session) {

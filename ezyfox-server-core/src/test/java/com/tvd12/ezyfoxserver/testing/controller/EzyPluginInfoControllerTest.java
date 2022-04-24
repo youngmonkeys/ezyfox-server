@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
@@ -18,9 +12,12 @@ import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.request.EzySimplePluginInfoRequest;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzyPluginInfoControllerTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzyPluginInfoController controller = new EzyPluginInfoController();
@@ -34,11 +31,11 @@ public class EzyPluginInfoControllerTest extends BaseTest {
         request.setSession(session);
         request.setUser(user);
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("test")
-                .build();
+            .append("test")
+            .build();
         request.deserializeParams(data);
         controller.handle(serverContext, request);
-        
+
         EzyPluginContext pluginContext = mock(EzyPluginContext.class);
         EzySimplePlugin plugin = new EzySimplePlugin();
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();

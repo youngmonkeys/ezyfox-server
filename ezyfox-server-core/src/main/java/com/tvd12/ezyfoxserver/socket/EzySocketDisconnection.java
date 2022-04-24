@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 public interface EzySocketDisconnection extends EzyReleasable {
 
     EzySession getSession();
-    
+
     EzyConstant getDisconnectReason();
-    
+
 }

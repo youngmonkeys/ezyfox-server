@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyDisconnectReasonTest extends BaseTest {
 
@@ -15,5 +14,5 @@ public class EzyDisconnectReasonTest extends BaseTest {
         assert value.getName().equals("IDLE");
         EzyDisconnectReason.valueOf("IDLE");
     }
-    
+
 }

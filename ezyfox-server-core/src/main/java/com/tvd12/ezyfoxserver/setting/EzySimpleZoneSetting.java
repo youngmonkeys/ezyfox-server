@@ -1,22 +1,20 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.tvd12.ezyfox.util.EzyEquals;
+import com.tvd12.ezyfox.util.EzyHashCodes;
+import com.tvd12.ezyfox.util.EzyInitable;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.tvd12.ezyfox.util.EzyEquals;
-import com.tvd12.ezyfox.util.EzyHashCodes;
-import com.tvd12.ezyfox.util.EzyInitable;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Setter
@@ -25,32 +23,23 @@ import lombok.ToString;
 @XmlRootElement(name = "zone")
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
     protected final int id = COUNTER.incrementAndGet();
-    
     protected String name = "default";
-    
     protected String configFile;
-    
     @XmlElement(name = "max-users")
     protected int maxUsers = 999999;
-    
     @XmlElement(name = "streaming")
     protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
-
     @XmlElement(name = "plugins")
     protected EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
-    
     @XmlElement(name = "applications")
     protected EzySimpleAppsSetting applications = new EzySimpleAppsSetting();
-    
     @XmlElement(name = "user-management")
     protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
-    
     @XmlElement(name = "event-controllers")
     protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
-    
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
-    
+
     @Override
     public void init() {
         plugins.setZoneId(id);
@@ -100,15 +89,15 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleZoneSetting>()
-                .function(t -> t.id)
-                .isEquals(this, obj);
+            .function(t -> t.id)
+            .isEquals(this, obj);
     }
-    
+
     @Override
     public int hashCode() {
         return new EzyHashCodes().append(id).toHashCode();
     }
-    
+
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();

@@ -1,10 +1,5 @@
 package com.tvd12.ezyfoxserver.wrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectProvider;
 import com.tvd12.ezyfox.util.EzyTimes;
@@ -15,17 +10,21 @@ import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
-public class EzySimpleSessionManager<S extends EzySession> 
-        extends EzyObjectProvider<S>
-        implements EzySessionManager<S> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
+public class EzySimpleSessionManager<S extends EzySession>
+    extends EzyObjectProvider<S>
+    implements EzySessionManager<S> {
+
+    protected static final AtomicInteger COUNTER = new AtomicInteger(0);
     protected final int maxSessions;
     protected final EzySessionTokenGenerator tokenGenerator;
     protected final ConcurrentHashMap<Long, S> loggedInSession = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
     protected final ConcurrentHashMap<Object, S> sessionsByConnection = new ConcurrentHashMap<>();
-
-    protected static final AtomicInteger COUNTER = new AtomicInteger(0);
 
     protected EzySimpleSessionManager(Builder<S> builder) {
         super(builder);
@@ -50,7 +49,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 
     @Override
     public void clearSession(S session) {
-        if(session != null) {
+        if (session != null) {
             unmapSession(session);
             logger.info(getRemoveSessionMessage(session));
         }
@@ -58,22 +57,24 @@ public class EzySimpleSessionManager<S extends EzySession>
 
     private String getRemoveSessionMessage(S session) {
         StringBuilder builder = new StringBuilder()
-                .append("remove session: ").append(session.getName())
-                .append(", remain sessions = ").append(providedObjects.size())
-                .append(", login sessions = ").append(loggedInSession.size())
-                .append(", sessions by id = ").append(sessionsById.size())
-                .append(", sessions by connection = ").append(sessionsByConnection.size());
+            .append("remove session: ").append(session.getName())
+            .append(", remain sessions = ").append(providedObjects.size())
+            .append(", login sessions = ").append(loggedInSession.size())
+            .append(", sessions by id = ").append(sessionsById.size())
+            .append(", sessions by connection = ").append(sessionsByConnection.size());
         return builder.toString();
     }
 
     protected void checkToRemoveSession(S session, EzyConstant reason) {
-        if(shouldRemoveSession(session))
+        if (shouldRemoveSession(session)) {
             session.disconnect(reason);
+        }
     }
 
     protected boolean shouldRemoveSession(S session) {
-        if(session == null)
+        if (session == null) {
             return false;
+        }
         boolean contains = containsSession(session.getId());
         return contains;
     }
@@ -99,7 +100,7 @@ public class EzySimpleSessionManager<S extends EzySession>
     @SuppressWarnings("unchecked")
     protected S provideSession(EzyConstant connectionType) {
         checkMaxSessions(connectionType);
-        EzyAbstractSession session = (EzyAbstractSession)provideObject();
+        EzyAbstractSession session = (EzyAbstractSession) provideObject();
         session.setLoggedIn(false);
         session.setName("Session#" + COUNTER.incrementAndGet());
         session.setConnectionType(connectionType);
@@ -110,15 +111,16 @@ public class EzySimpleSessionManager<S extends EzySession>
         session.setLastActivityTime(System.currentTimeMillis());
         session.setLastReadTime(System.currentTimeMillis());
         session.setLastWriteTime(System.currentTimeMillis());
-        S complete = (S)session;
+        S complete = (S) session;
         sessionsById.put(complete.getId(), complete);
         return complete;
     }
 
     protected void checkMaxSessions(EzyConstant connectionType) {
         int current = providedObjects.size();
-        if(current >= maxSessions)
+        if (current >= maxSessions) {
             throw new EzyMaxSessionException(current, maxSessions);
+        }
     }
 
     @Override
@@ -143,7 +145,9 @@ public class EzySimpleSessionManager<S extends EzySession>
     public List<S> getAliveSessions() {
         List<S> sessions = new ArrayList<>(sessionsById.values());
         return sessions;
-    };
+    }
+
+    ;
 
     @Override
     public List<S> getLoggedInSessions() {
@@ -183,21 +187,23 @@ public class EzySimpleSessionManager<S extends EzySession>
     protected void checkAndRemoveSessions(List<S> sessions) {
         List<S> idleSessions = new ArrayList<>();
         List<S> unloggedInSessions = new ArrayList<>();
-        for(S session : sessions) {
+        for (S session : sessions) {
             boolean unloggedIn = isUnloggedInSession(session);
-            if(unloggedIn) {
+            if (unloggedIn) {
                 unloggedInSessions.add(session);
                 continue;
             }
             boolean idle = isIdleSession(session);
-            if(idle) {
+            if (idle) {
                 idleSessions.add(session);
             }
         }
-        for(S session : idleSessions)
+        for (S session : idleSessions) {
             removeSession(session, EzyDisconnectReason.IDLE);
-        for(S session : unloggedInSessions)
+        }
+        for (S session : unloggedInSessions) {
             removeSession(session, EzyDisconnectReason.NOT_LOGGED_IN);
+        }
     }
 
     protected boolean isIdleSession(S session) {
@@ -206,10 +212,12 @@ public class EzySimpleSessionManager<S extends EzySession>
     }
 
     protected boolean isUnloggedInSession(EzySession session) {
-        if(session.isLoggedIn())
+        if (session.isLoggedIn()) {
             return false;
-        if(!session.isActivated())
+        }
+        if (!session.isActivated()) {
             return false;
+        }
         long remainTime = getSessionRemainWaitingTime(session);
         boolean answer = remainTime <= 0;
         return answer;
@@ -235,7 +243,7 @@ public class EzySimpleSessionManager<S extends EzySession>
     }
 
     public abstract static class Builder<S extends EzySession>
-            extends EzyObjectProvider.Builder<S, Builder<S>> {
+        extends EzyObjectProvider.Builder<S, Builder<S>> {
 
         protected int maxSessions = 999999;
         protected EzySessionTokenGenerator tokenGenerator;

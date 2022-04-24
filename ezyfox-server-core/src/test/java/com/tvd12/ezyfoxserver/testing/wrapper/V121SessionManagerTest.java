@@ -1,12 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.wrapper;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
@@ -15,6 +8,12 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDisconnection;
 import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class V121SessionManagerTest {
 
@@ -22,13 +21,13 @@ public class V121SessionManagerTest {
     public void inspectTest() throws Exception {
         // given
         EzySocketDisconnectionQueue disconnectionQueue =
-                new EzyBlockingSocketDisconnectionQueue();
+            new EzyBlockingSocketDisconnectionQueue();
         SessionManager sut = (SessionManager) new SessionManager.Builder()
-                .validationInterval(100)
-                .validationDelay(100)
-                .objectFactory(() -> new Session(disconnectionQueue))
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+            .validationInterval(100)
+            .validationDelay(100)
+            .objectFactory(() -> new Session(disconnectionQueue))
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         EzyChannel channel1 = mock(EzyChannel.class);
         when(channel1.getConnection()).thenReturn(new Object());
         EzyChannel channel2 = mock(EzyChannel.class);
@@ -47,11 +46,11 @@ public class V121SessionManagerTest {
         session3.setLastReadTime(System.currentTimeMillis());
 
         Thread[] threads = new Thread[10];
-        for(int i = 0 ; i < threads.length ; ++i) {
+        for (int i = 0; i < threads.length; ++i) {
             threads[i] = new Thread(() -> {
                 long start = System.currentTimeMillis();
                 long elapsedTime = 0;
-                while(elapsedTime < 100) {
+                while (elapsedTime < 100) {
                     EzyChannel channel = mock(EzyChannel.class);
                     when(channel.getConnection()).thenReturn(new Object());
                     sut.provideSession(channel);
@@ -61,12 +60,11 @@ public class V121SessionManagerTest {
         }
 
         Thread disconnectionThread = new Thread(() -> {
-            while(true) {
+            while (true) {
                 try {
                     EzySocketDisconnection item = disconnectionQueue.take();
                     sut.clearSession((Session) item.getSession());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -76,7 +74,7 @@ public class V121SessionManagerTest {
         // when
         sut.start();
 
-        for(int i = 0 ; i < threads.length ; ++i) {
+        for (int i = 0; i < threads.length; ++i) {
             threads[i].start();
         }
         Thread.sleep(1000);

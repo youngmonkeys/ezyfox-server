@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -17,6 +11,9 @@ import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzyAppSendResponseImplTest extends BaseTest {
 
@@ -33,13 +30,13 @@ public class EzyAppSendResponseImplTest extends BaseTest {
         EzyServerContext serverContext = mock(EzyServerContext.class);
         when(zoneContext.getParent()).thenReturn(serverContext);
         EzyAppSendResponseImpl cmd = new EzyAppSendResponseImpl(appContext);
-        
+
         EzyData data = EzyEntityFactory.newArrayBuilder()
-                .build();
+            .build();
         EzyAbstractSession session = spy(EzyAbstractSession.class);
-        
+
         cmd.execute(data, session, false);
         cmd.execute(data, Lists.newArrayList(session), false);
     }
-    
+
 }

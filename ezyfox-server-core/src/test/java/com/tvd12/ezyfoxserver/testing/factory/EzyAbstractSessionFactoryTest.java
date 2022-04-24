@@ -1,10 +1,9 @@
 package com.tvd12.ezyfoxserver.testing.factory;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.testing.MyTestSessionFactory;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyAbstractSessionFactoryTest extends BaseTest {
 
@@ -14,5 +13,5 @@ public class EzyAbstractSessionFactoryTest extends BaseTest {
         factory.setMaxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond());
         assert factory.newProduct() != null;
     }
-    
+
 }

@@ -8,11 +8,11 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 public interface EzySocketRequest extends EzyReleasable {
 
     EzyArray getData();
-    
+
     EzyCommand getCommand();
-    
+
     EzySession getSession();
-    
+
     boolean isSystemRequest();
-    
+
 }

@@ -1,18 +1,17 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,16 +22,16 @@ public class EzySimpleSettings implements EzySettings {
 
     @XmlElement(name = "debug")
     protected boolean debug;
-    
+
     @XmlElement(name = "node-name")
     protected String nodeName = "ezyfox";
-    
+
     @XmlElement(name = "max-sessions")
     protected int maxSessions = 999999;
-    
+
     @XmlElement(name = "streaming")
     protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
-    
+
     @XmlElement(name = "http")
     protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
 
@@ -62,10 +61,10 @@ public class EzySimpleSettings implements EzySettings {
 
     @Setter(AccessLevel.NONE)
     protected EzySimpleZonesSetting zones = new EzySimpleZonesSetting();
-    
+
     @XmlElement(name = "zones")
     protected EzySimpleZoneFilesSetting zoneFiles = new EzySimpleZoneFilesSetting();
-    
+
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
@@ -89,7 +88,7 @@ public class EzySimpleSettings implements EzySettings {
     public void addZone(EzySimpleZoneSetting zone) {
         this.zones.setItem(zone);
     }
-    
+
     @Override
     public Set<String> getZoneNames() {
         return zones.getZoneNames();

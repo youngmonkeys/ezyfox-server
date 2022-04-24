@@ -8,12 +8,12 @@ import com.tvd12.ezyfoxserver.command.EzyAbstractSetup;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
-public class EzyAppSetupImpl 
-        extends EzyAbstractSetup
-        implements EzyAppSetup {
-    
+public class EzyAppSetupImpl
+    extends EzyAbstractSetup
+    implements EzyAppSetup {
+
     private final EzySimpleApplication app;
-    
+
     public EzyAppSetupImpl(EzyServerChild app) {
         super(app);
         this.app = (EzySimpleApplication) app;
@@ -24,7 +24,7 @@ public class EzyAppSetupImpl
         app.setRequestController(controller);
         return this;
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Override
     public EzyAppSetup addEventController(EzyConstant eventType, EzyEventController controller) {

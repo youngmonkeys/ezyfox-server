@@ -1,5 +1,15 @@
 package com.tvd12.ezyfoxserver.entity;
 
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.entity.EzyEntity;
+import com.tvd12.ezyfox.function.EzyFunctions;
+import com.tvd12.ezyfox.util.EzyNameAware;
+import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,24 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
-import com.tvd12.ezyfox.entity.EzyEntity;
-import com.tvd12.ezyfox.function.EzyFunctions;
-import com.tvd12.ezyfox.util.EzyNameAware;
-import com.tvd12.ezyfoxserver.setting.EzyZoneIdAware;
-import com.tvd12.ezyfoxserver.socket.EzyPacket;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
 @Setter
 @Getter
-public class EzySimpleUser 
-        extends EzyEntity 
-        implements EzyUser, EzyNameAware, EzyZoneIdAware, Serializable {
+public class EzySimpleUser
+    extends EzyEntity
+    implements EzyUser, EzyNameAware, EzyZoneIdAware, Serializable {
     private static final long serialVersionUID = -7846882289922504595L;
-
+    private transient static final AtomicLong COUNTER = new AtomicLong(0);
     protected long id = COUNTER.incrementAndGet();
     protected String name = "";
     protected String password = "";
@@ -38,8 +37,6 @@ public class EzySimpleUser
     protected Map<String, Lock> locks = new ConcurrentHashMap<>();
     @Setter(AccessLevel.NONE)
     protected Map<Long, EzySession> sessionMap = new ConcurrentHashMap<>();
-
-    private transient static final AtomicLong COUNTER = new AtomicLong(0);
 
     @Override
     public void addSession(EzySession session) {
@@ -74,8 +71,9 @@ public class EzySimpleUser
     public List<EzySession> getSessions() {
         List<EzySession> sessions = new ArrayList<>();
         Map<Long, EzySession> sessionMapNow = sessionMap;
-        if(sessionMapNow != null)
+        if (sessionMapNow != null) {
             sessions.addAll(sessionMapNow.values());
+        }
         return sessions;
     }
 
@@ -93,19 +91,21 @@ public class EzySimpleUser
 
     @Override
     public void send(EzyPacket packet) {
-        for(EzySession session : getSessions())
+        for (EzySession session : getSessions()) {
             session.send(packet);
+        }
     }
 
     @Override
     public void sendNow(EzyPacket packet) {
-        for(EzySession session : getSessions())
+        for (EzySession session : getSessions()) {
             session.sendNow(packet);
+        }
     }
 
     @Override
     public boolean isIdle() {
-        if(sessionMap.isEmpty()) {
+        if (sessionMap.isEmpty()) {
             long offset = System.currentTimeMillis() - startIdleTime;
             boolean idle = maxIdleTime < offset;
             return idle;
@@ -115,17 +115,20 @@ public class EzySimpleUser
 
     @Override
     public void disconnect(EzyConstant reason) {
-        for(EzySession session : getSessions())
+        for (EzySession session : getSessions()) {
             session.disconnect(reason);
+        }
     }
 
     @Override
     public void destroy() {
         this.destroyed = true;
-        if(locks != null)
+        if (locks != null) {
             locks.clear();
-        if(sessionMap != null)
+        }
+        if (sessionMap != null) {
             this.sessionMap.clear();
+        }
         this.properties.clear();
         this.locks = null;
         this.sessionMap = null;
@@ -133,12 +136,15 @@ public class EzySimpleUser
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null)
+        if (obj == null) {
             return false;
-        if(obj == this)
+        }
+        if (obj == this) {
             return true;
-        if(obj instanceof EzySimpleUser)
-            return id == ((EzySimpleUser)obj).id;
+        }
+        if (obj instanceof EzySimpleUser) {
+            return id == ((EzySimpleUser) obj).id;
+        }
         return false;
     }
 
@@ -146,7 +152,7 @@ public class EzySimpleUser
     public int hashCode() {
         return Long.hashCode(id);
     }
-    
+
     @Override
     public String toString() {
         return name;

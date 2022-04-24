@@ -8,8 +8,9 @@ public class EzyRawBytesInterceptor extends EzyAbstractServerInterceptor<EzyStre
 
     @Override
     public void intercept(EzyServerContext ctx, EzyStreamingRequest request) throws Exception {
-        if(request.getUser() == null)
+        if (request.getUser() == null) {
             throw new EzyNotAuthorizedException("user has not logged in");
+        }
     }
 
 }

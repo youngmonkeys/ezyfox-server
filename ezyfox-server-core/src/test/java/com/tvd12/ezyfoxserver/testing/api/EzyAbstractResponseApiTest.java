@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.api;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -11,9 +9,11 @@ import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.reflect.MethodUtil;
-import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
 
 import java.util.Collections;
+
+import static org.mockito.Mockito.*;
 
 public class EzyAbstractResponseApiTest {
 
@@ -27,11 +27,11 @@ public class EzyAbstractResponseApiTest {
 
         // when
         MethodInvoker.create()
-        .object(sut)
-        .method("secureResponse")
-        .param(EzyPackage.class, packet)
-        .param(boolean.class, true)
-        .invoke();
+            .object(sut)
+            .method("secureResponse")
+            .param(EzyPackage.class, packet)
+            .param(boolean.class, true)
+            .invoke();
 
         // then
         verify(packet, times(1)).getRecipients(EzyConnectionType.SOCKET);

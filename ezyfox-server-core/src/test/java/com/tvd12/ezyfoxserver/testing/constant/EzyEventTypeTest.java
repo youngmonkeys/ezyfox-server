@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyEventTypeTest extends BaseTest {
 
@@ -14,10 +13,10 @@ public class EzyEventTypeTest extends BaseTest {
         EzyEventType.values();
         EzyEventType.valueOf("USER_LOGIN");
     }
-    
+
     @Test()
     public void test1() {
-        
+
     }
-    
+
 }

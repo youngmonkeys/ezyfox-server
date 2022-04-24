@@ -1,10 +1,5 @@
 package com.tvd12.ezyfoxserver.entity;
 
-import java.io.Serializable;
-import java.net.SocketAddress;
-import java.nio.channels.DatagramChannel;
-import java.util.concurrent.locks.Lock;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -14,6 +9,11 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzyPacketQueue;
 import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
+
+import java.io.Serializable;
+import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
+import java.util.concurrent.locks.Lock;
 
 public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
 
@@ -27,7 +27,7 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     /**
      * Get client id
      *
-     * @return  the client id
+     * @return the client id
      */
     String getClientId();
 
@@ -46,21 +46,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     byte[] getClientKey();
 
     /**
-     *
      * Set client key
      *
      * @param key the client key
      */
     void setClientKey(byte[] key);
-
-    /**
-     *
-     * Set session key
-     *
-     * @param key the session key
-     */
-    void setSessionKey(byte[] key);
-
 
     /**
      * Get session key to encrypt data send to client
@@ -69,6 +59,12 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      */
     byte[] getSessionKey();
 
+    /**
+     * Set session key
+     *
+     * @param key the session key
+     */
+    void setSessionKey(byte[] key);
 
     /**
      * Get client type
@@ -113,13 +109,6 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     String getToken();
 
     /**
-     * Get before reconnect token
-     *
-     * @return before reconnect token
-     */
-    String getBeforeToken();
-
-    /**
      * Set reconnect token
      *
      * @param token the reconnect token
@@ -127,11 +116,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     void setToken(String token);
 
     /**
-     * The private key that decrypt data
+     * Get before reconnect token
      *
-     * @param key the key
+     * @return before reconnect token
      */
-    void setPrivateKey(byte[] key);
+    String getBeforeToken();
 
     /**
      * Get private key
@@ -141,11 +130,11 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     byte[] getPrivateKey();
 
     /**
-     * Set public key that encrypt data
+     * The private key that decrypt data
      *
-     * @param key the public key
+     * @param key the key
      */
-    void setPublicKey(byte[] key);
+    void setPrivateKey(byte[] key);
 
     /**
      * Get public key
@@ -153,6 +142,13 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @return the public key
      */
     byte[] getPublicKey();
+
+    /**
+     * Set public key that encrypt data
+     *
+     * @param key the public key
+     */
+    void setPublicKey(byte[] key);
 
     /**
      * Get creation time in long
@@ -282,10 +278,14 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     long getMaxIdleTime();
 
     /**
-     *
      * @param time the max idle time
      */
     void setMaxIdleTime(long time);
+
+    /**
+     * @return true of user has logged in
+     */
+    boolean isLoggedIn();
 
     /**
      * Set logged in or not
@@ -295,9 +295,9 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     void setLoggedIn(boolean value);
 
     /**
-     * @return true of user has logged in
+     * @return the logged in time
      */
-    boolean isLoggedIn();
+    long getLoggedInTime();
 
     /**
      * @param time the logged time
@@ -305,9 +305,9 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     void setLoggedInTime(long time);
 
     /**
-     * @return the logged in time
+     * @return time the max waiting for user login time
      */
-    long getLoggedInTime();
+    long getMaxWaitingTime();
 
     /**
      * @param time the max waiting for user login time
@@ -315,20 +315,14 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     void setMaxWaitingTime(long time);
 
     /**
-     *
-     * @return time the max waiting for user login time
+     * @return session is active or not
      */
-    long getMaxWaitingTime();
+    boolean isActivated();
 
     /**
      * @param activated session is active or not
      */
     void setActivated(boolean activated);
-
-    /**
-     * @return session is active or not
-     */
-    boolean isActivated();
 
     /**
      * @return session is idle or not
@@ -356,7 +350,6 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     EzyConstant getDisconnectReason();
 
     /**
-     *
      * @param name the lock name
      * @return the lock
      */
@@ -390,21 +383,21 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 
     /**
      * Get the channel mapped to this session
-     * 
+     *
      * @return the channel
      */
     EzyChannel getChannel();
-    
+
     /**
      * Map this session to the channel
-     * 
+     *
      * @param channel the channel
      */
     void setChannel(EzyChannel channel);
-    
+
     /**
      * Get connection
-     * 
+     *
      * @param <T> the connection type
      * @return the connection
      */
@@ -412,46 +405,46 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
 
     /**
      * Get packet queue
-     * 
+     *
      * @return the packet queue
      */
     EzyPacketQueue getPacketQueue();
-    
+
     /**
      * Get system request queue
-     * 
+     *
      * @return the system request queue
      */
     EzyRequestQueue getSystemRequestQueue();
-    
+
     /**
      * Get extension request queue
-     * 
+     *
      * @return the extension request queue
      */
     EzyRequestQueue getExtensionRequestQueue();
-    
+
     /**
      * Get udp client address
-     * 
+     *
      * @return the udp client address
      */
-    SocketAddress getUdpClientAddress(); 
-    
+    SocketAddress getUdpClientAddress();
+
     /**
      * Get upd channel
-     * 
+     *
      * @return the udp channel
      */
     DatagramChannel getDatagramChannel();
-    
+
     /**
      * Get datagram channel pool
-     * 
+     *
      * @return the datagram channel pool
      */
     EzyDatagramChannelPool getDatagramChannelPool();
-    
+
     /**
      * disconnect
      */

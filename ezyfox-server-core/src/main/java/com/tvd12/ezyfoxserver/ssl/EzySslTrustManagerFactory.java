@@ -1,27 +1,24 @@
 package com.tvd12.ezyfoxserver.ssl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.ManagerFactoryParameters;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactorySpi;
+import javax.net.ssl.X509TrustManager;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.ManagerFactoryParameters;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactorySpi;
-import javax.net.ssl.X509TrustManager;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class EzySslTrustManagerFactory extends TrustManagerFactorySpi {
-    
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     private static final TrustManager TRUST_MANAGER = new X509TrustManager() {
-        
+
         private final Logger logger = LoggerFactory.getLogger(getClass());
-        
+
         @Override
         public X509Certificate[] getAcceptedIssuers() {
             logger.debug("ssl: get accepted issuers");
@@ -40,6 +37,7 @@ public class EzySslTrustManagerFactory extends TrustManagerFactorySpi {
             logger.debug("ssl: check server trusted, chain = {}, authType = {}", chain, authType);
         }
     };
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     protected TrustManager[] engineGetTrustManagers() {

@@ -1,12 +1,12 @@
 package com.tvd12.ezyfoxserver.setting;
 
 public class EzyUdpSettingBuilder extends EzyAbstractSocketSettingBuilder<
-        EzySimpleUdpSetting, EzyUdpSettingBuilder> {
+    EzySimpleUdpSetting, EzyUdpSettingBuilder> {
 
     protected int maxRequestSize;
     protected int channelPoolSize;
     protected int handlerThreadPoolSize;
-    
+
     public EzyUdpSettingBuilder() {
         this.port = 2611;
         this.active = false;
@@ -39,5 +39,5 @@ public class EzyUdpSettingBuilder extends EzyAbstractSocketSettingBuilder<
         p.setHandlerThreadPoolSize(handlerThreadPoolSize);
         return p;
     }
-    
+
 }

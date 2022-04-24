@@ -9,5 +9,5 @@ public class MyTestServerBootstrapBuilder extends EzyAbtractServerBootstrapBuild
     protected EzyServerBootstrap newServerBootstrap() {
         return new MyTestServerBootstrap();
     }
-    
+
 }

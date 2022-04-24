@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.controller.EzyAbstractPluginEventController;
+import org.testng.annotations.Test;
 
 public class EzyAbstractPluginEventControllerTest {
 

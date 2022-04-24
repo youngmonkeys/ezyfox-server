@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-
-import java.io.File;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzyLoader;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
@@ -16,13 +8,20 @@ import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager.Builder;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodUtil;
+import org.testng.annotations.Test;
+
+import java.io.File;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
 
 public class EzyLoaderTest extends BaseCoreTest {
-    
+
     @Test
     public void test() throws Exception {
         EzySimpleServer server = newServer();
-        
+
         EzyConfig config = server.getConfig();
         assertEquals(config.getEzyfoxHome(), "test-data");
         assertEquals(config.getLoggerConfigFile(), "logback.groovy");
@@ -44,7 +43,7 @@ public class EzyLoaderTest extends BaseCoreTest {
         // then
         Asserts.assertEquals(Thread.currentThread().getContextClassLoader(), classLoader);
     }
-    
+
     @Test
     public void getEntryFoldersEmptyTest() {
         // given
@@ -60,7 +59,7 @@ public class EzyLoaderTest extends BaseCoreTest {
         // then
         Asserts.assertEquals(new File[0], folders);
     }
-    
+
     private static class InternalLoader extends EzyLoader {
 
         @SuppressWarnings("rawtypes")

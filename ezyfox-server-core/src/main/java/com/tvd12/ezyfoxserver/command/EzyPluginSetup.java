@@ -8,8 +8,8 @@ import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 public interface EzyPluginSetup extends EzySetup {
 
     EzyPluginSetup setRequestController(EzyPluginRequestController controller);
-    
+
     @Override
     EzyPluginSetup addEventController(EzyConstant eventType, EzyEventController controller);
-    
+
 }

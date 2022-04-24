@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.command.impl.EzyBroadcastEventImpl;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -10,6 +8,8 @@ import com.tvd12.ezyfoxserver.event.EzyServerInitializingEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 import com.tvd12.reflections.util.Lists;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
 import static org.mockito.Mockito.*;
 
 public class EzyBroadcastEventImplTest extends BaseTest {
@@ -26,10 +26,9 @@ public class EzyBroadcastEventImplTest extends BaseTest {
         cmd.fire(EzyEventType.SERVER_INITIALIZING, event, true);
         try {
             cmd.fire(EzyEventType.SERVER_INITIALIZING, event, false);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
     }
-    
+
 }

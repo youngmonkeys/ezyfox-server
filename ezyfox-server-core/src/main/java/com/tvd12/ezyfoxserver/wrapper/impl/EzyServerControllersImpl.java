@@ -1,27 +1,16 @@
 package com.tvd12.ezyfoxserver.wrapper.impl;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.controller.EzyAccessAppController;
-import com.tvd12.ezyfoxserver.controller.EzyController;
-import com.tvd12.ezyfoxserver.controller.EzyExitAppController;
-import com.tvd12.ezyfoxserver.controller.EzyHandshakeController;
-import com.tvd12.ezyfoxserver.controller.EzyLoginController;
-import com.tvd12.ezyfoxserver.controller.EzyPingController;
-import com.tvd12.ezyfoxserver.controller.EzyPluginInfoController;
-import com.tvd12.ezyfoxserver.controller.EzyRequestAppController;
-import com.tvd12.ezyfoxserver.controller.EzyRequestPluginController;
-import com.tvd12.ezyfoxserver.controller.EzySimpleStreamingController;
-import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
+import com.tvd12.ezyfoxserver.controller.*;
 import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyRawBytesInterceptor;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
-
 import lombok.Getter;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("rawtypes")
 public class EzyServerControllersImpl implements EzyServerControllers {
@@ -40,6 +29,10 @@ public class EzyServerControllersImpl implements EzyServerControllers {
         this.streamingController = new EzySimpleStreamingController();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public EzyController getController(EzyConstant cmd) {
         EzyController controller = controllers.get(cmd);
@@ -50,10 +43,6 @@ public class EzyServerControllersImpl implements EzyServerControllers {
     public EzyInterceptor getInterceptor(EzyConstant cmd) {
         EzyInterceptor interceptor = interceptors.get(cmd);
         return interceptor;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

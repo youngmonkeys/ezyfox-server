@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppSetupImpl;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyAppSetupImplTest extends BaseTest {
 
@@ -21,5 +20,5 @@ public class EzyAppSetupImplTest extends BaseTest {
             }
         });
     }
-    
+
 }

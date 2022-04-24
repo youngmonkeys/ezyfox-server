@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.socket;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
-public class EzyBlockingSessionTicketsQueue 
-        extends EzyLoggable 
-        implements EzySessionTicketsQueue {
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class EzyBlockingSessionTicketsQueue
+    extends EzyLoggable
+    implements EzySessionTicketsQueue {
 
     private final LinkedBlockingQueue<EzySession> queue;
 
@@ -39,10 +39,11 @@ public class EzyBlockingSessionTicketsQueue
     @SuppressWarnings("unchecked")
     @Override
     public <T extends EzySession> T take() throws InterruptedException {
-        while(true) {
+        while (true) {
             T session = (T) queue.take();
-            if(session.isActivated())
+            if (session.isActivated()) {
                 return session;
+            }
             logger.debug("session: {} maybe destroyed", session);
         }
     }

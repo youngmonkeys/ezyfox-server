@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleUserAccessedAppEvent
-        implements EzyUserAccessedAppEvent, EzyUserEvent {
+    implements EzyUserAccessedAppEvent, EzyUserEvent {
 
     protected EzyUser user;
 

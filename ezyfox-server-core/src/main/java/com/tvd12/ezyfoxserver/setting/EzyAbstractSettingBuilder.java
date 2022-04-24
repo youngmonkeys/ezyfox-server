@@ -4,9 +4,9 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 
 @SuppressWarnings("unchecked")
 public abstract class EzyAbstractSettingBuilder<
-        T extends EzyAbstractSetting, 
-        B extends EzyAbstractSettingBuilder<T, B>> 
-        implements EzyBuilder<T> {
+    T extends EzyAbstractSetting,
+    B extends EzyAbstractSettingBuilder<T, B>>
+    implements EzyBuilder<T> {
 
     protected String name;
     protected String entryLoader;
@@ -16,31 +16,31 @@ public abstract class EzyAbstractSettingBuilder<
 
     public B name(String name) {
         this.name = name;
-        return (B)this;
+        return (B) this;
     }
 
     public B entryLoader(String entryLoader) {
         this.entryLoader = entryLoader;
-        return (B)this;
+        return (B) this;
     }
-    
+
     public B entryLoader(Class<?> entryLoader) {
         return entryLoader(entryLoader.getName());
     }
-    
+
     public B threadPoolSize(int threadPoolSize) {
         this.threadPoolSize = threadPoolSize;
-        return (B)this;
+        return (B) this;
     }
 
     public B configFile(String configFile) {
         this.configFile = configFile;
-        return (B)this;
+        return (B) this;
     }
-    
+
     public B entryLoaderArgs(Object[] entryLoaderArgs) {
         this.entryLoaderArgs = entryLoaderArgs;
-        return (B)this;
+        return (B) this;
     }
 
     @Override
@@ -55,5 +55,5 @@ public abstract class EzyAbstractSettingBuilder<
     }
 
     protected abstract T newSetting();
-    
+
 }

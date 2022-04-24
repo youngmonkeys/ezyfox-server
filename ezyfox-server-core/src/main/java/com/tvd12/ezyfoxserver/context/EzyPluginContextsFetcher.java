@@ -5,5 +5,5 @@ import java.util.Collection;
 public interface EzyPluginContextsFetcher {
 
     Collection<EzyPluginContext> getPluginContexts();
-    
+
 }

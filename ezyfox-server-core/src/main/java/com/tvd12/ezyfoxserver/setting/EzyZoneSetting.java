@@ -1,8 +1,8 @@
 package com.tvd12.ezyfoxserver.setting;
 
-import java.util.Set;
-
 import com.tvd12.ezyfox.util.EzyToMap;
+
+import java.util.Set;
 
 public interface EzyZoneSetting extends EzyToMap {
 
@@ -13,7 +13,7 @@ public interface EzyZoneSetting extends EzyToMap {
     String getConfigFile();
 
     int getMaxUsers();
-    
+
     EzyStreamingSetting getStreaming();
 
     EzyPluginsSetting getPlugins();
@@ -35,9 +35,9 @@ public interface EzyZoneSetting extends EzyToMap {
     EzyPluginSetting getPluginById(Integer id);
 
     EzyPluginSetting getPluginByName(String name);
-    
+
     EzyUserManagementSetting getUserManagement();
-    
+
     EzyEventControllersSetting getEventControllers();
 
 }

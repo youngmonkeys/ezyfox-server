@@ -8,7 +8,7 @@ public final class EzyZoneContextsTest {
 
     private EzyZoneContextsTest() {
     }
-    
+
     public static EzySimpleZoneContext newDefaultZoneContext() {
         EzySimpleZoneContext context = new EzySimpleZoneContext();
         EzySimpleZone zone = new EzySimpleZone();
@@ -16,5 +16,5 @@ public final class EzyZoneContextsTest {
         context.setZone(zone);
         return context;
     }
-    
+
 }

@@ -17,9 +17,9 @@ import com.tvd12.ezyfoxserver.response.EzyRequestAppErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
-public class EzyRequestAppController 
-        extends EzyAbstractServerController
-        implements EzyServerController<EzyRequestAppRequest> {
+public class EzyRequestAppController
+    extends EzyAbstractServerController
+    implements EzyServerController<EzyRequestAppRequest> {
 
     @Override
     public void handle(EzyServerContext ctx, EzyRequestAppRequest request) {
@@ -36,12 +36,11 @@ public class EzyRequestAppController
         // check user joined app or not to prevent spam request
         boolean hasAccessed = userManger.containsUser(user);
 
-        if(hasAccessed) {
+        if (hasAccessed) {
             // redirect handling to app
             EzyUserRequestAppEvent event = newRequestAppEvent(request);
             requestController.handle(appCtx, event);
-        }
-        else {
+        } else {
             EzySession session = request.getSession();
             responseRequestAppError(ctx, session, EzyRequestAppError.HAS_NOT_ACCESSED);
         }
@@ -49,9 +48,9 @@ public class EzyRequestAppController
 
     protected EzyUserRequestAppEvent newRequestAppEvent(EzyRequestAppRequest request) {
         return new EzySimpleUserRequestAppEvent(
-                request.getUser(),
-                request.getSession(),
-                request.getParams().getData());
+            request.getUser(),
+            request.getSession(),
+            request.getParams().getData());
     }
 
     protected EzyResponse newRequestAppErrorReponse(EzyIRequestAppError error) {
@@ -59,9 +58,9 @@ public class EzyRequestAppController
         params.setError(error);
         return new EzyRequestAppErrorResponse(params);
     }
-    
+
     protected void responseRequestAppError(
-            EzyServerContext ctx, EzySession session, EzyIRequestAppError error) {
+        EzyServerContext ctx, EzySession session, EzyIRequestAppError error) {
         EzyResponse response = newRequestAppErrorReponse(error);
         ctx.send(response, session, false);
     }

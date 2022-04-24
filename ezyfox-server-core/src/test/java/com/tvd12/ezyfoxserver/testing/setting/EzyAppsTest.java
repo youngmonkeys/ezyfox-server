@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyAppsTest extends BaseTest {
 
@@ -12,5 +11,5 @@ public class EzyAppsTest extends BaseTest {
         EzySimpleAppsSetting apps = new EzySimpleAppsSetting();
         apps.getAppByName("zzz");
     }
-    
+
 }

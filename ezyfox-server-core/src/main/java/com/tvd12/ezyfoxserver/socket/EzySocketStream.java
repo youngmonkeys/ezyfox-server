@@ -6,9 +6,9 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 public interface EzySocketStream extends EzyReleasable {
 
     byte[] getBytes();
-    
+
     long getTimestamp();
-    
+
     EzySession getSession();
-    
+
 }

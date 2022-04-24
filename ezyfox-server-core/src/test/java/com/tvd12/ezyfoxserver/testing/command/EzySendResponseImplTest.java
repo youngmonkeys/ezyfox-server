@@ -1,16 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.api.EzyAbstractResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
@@ -23,6 +12,14 @@ import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.response.EzySimpleResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.*;
 
 public class EzySendResponseImplTest {
 
@@ -39,7 +36,7 @@ public class EzySendResponseImplTest {
         EzySession recipient = spy(EzyAbstractSession.class);
         cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
     }
-    
+
     @Test
     public void responseOneSuccessButNotDebug() throws Exception {
         // given
@@ -52,14 +49,14 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        
+
         // when
         cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
     @Test
     public void responseOneSuccessButIsPong() throws Exception {
         // given
@@ -72,14 +69,14 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.PONG);
         EzySession recipient = spy(EzyAbstractSession.class);
-        
+
         // when
         cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
     @Test
     public void responseOneExceptionCase() throws Exception {
         EzySimpleSettings settings = new EzySimpleSettings();
@@ -94,7 +91,7 @@ public class EzySendResponseImplTest {
         EzySession recipient = spy(EzyAbstractSession.class);
         cmd.execute(response, recipient, false, false, EzyTransportType.TCP);
     }
-    
+
     @Test
     public void responseMultiSuccessCase() throws Exception {
         // when
@@ -108,14 +105,14 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
         List<EzySession> recipients = Arrays.asList(recipient);
-        
+
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
     @Test
     public void responseMultiSuccessCaseButNotDebug() throws Exception {
         // when
@@ -129,14 +126,14 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
         List<EzySession> recipients = Arrays.asList(recipient);
-        
+
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
     @Test
     public void responseMultiSuccessCaseButIsPong() throws Exception {
         // when
@@ -150,14 +147,14 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.PONG);
         EzySession recipient = spy(EzyAbstractSession.class);
         List<EzySession> recipients = Arrays.asList(recipient);
-        
+
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
     @Test
     public void responseMultiErrorTest() throws Exception {
         // given
@@ -172,12 +169,12 @@ public class EzySendResponseImplTest {
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
         List<EzySession> recipients = Arrays.asList(recipient);
-        
+
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
-        
+
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-    
+
 }

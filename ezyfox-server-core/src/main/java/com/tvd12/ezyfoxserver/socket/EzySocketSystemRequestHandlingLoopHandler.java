@@ -6,5 +6,5 @@ public class EzySocketSystemRequestHandlingLoopHandler extends EzySocketRequestH
     protected String getRequestType() {
         return "system";
     }
-    
+
 }

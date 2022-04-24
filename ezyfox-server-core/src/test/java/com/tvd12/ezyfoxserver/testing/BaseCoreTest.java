@@ -36,14 +36,14 @@ import java.security.KeyPair;
 import static org.mockito.Mockito.mock;
 
 public class BaseCoreTest extends BaseTest {
-    
+
     protected EzyServerContext newServerContext() {
         EzyServerContext serverContext = newServerContextBuilder().build();
-        for(EzyZoneContext zoneContext : serverContext.getZoneContexts()) {
-            ((EzyInitable)zoneContext).init();
+        for (EzyZoneContext zoneContext : serverContext.getZoneContexts()) {
+            ((EzyInitable) zoneContext).init();
         }
-        for(EzyAppContext appContext : serverContext.getAppContexts()) {
-            ((EzyInitable)appContext).init();
+        for (EzyAppContext appContext : serverContext.getAppContexts()) {
+            ((EzyInitable) appContext).init();
         }
         EzySimpleServerContext ctx = (EzySimpleServerContext) serverContext;
         EzySimpleServer server = (EzySimpleServer) ctx.getServer();
@@ -53,53 +53,52 @@ public class BaseCoreTest extends BaseTest {
 
     protected EzyServerContextBuilder<?> newServerContextBuilder() {
         return new MyTestServerContextBuilder()
-                .server(newServer()); 
+            .server(newServer());
     }
-    
+
     protected EzySimpleServer newServer() {
         try {
             EzySimpleServer answer = (EzySimpleServer) loadEzyFox(readConfig("test-data/settings/config.properties"));
             return answer;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     protected EzyConfig readConfig(String configFile) throws Exception {
         return getConfigLoader().load(configFile);
     }
-    
+
     protected EzyConfigLoader getConfigLoader() {
         return new EzySimpleConfigLoader();
     }
-    
+
     protected EzyServer loadEzyFox(EzyConfig config) {
         return new EzyLoader() {
 
-            @SuppressWarnings({ "rawtypes" })
+            @SuppressWarnings({"rawtypes"})
             @Override
             protected Builder createSessionManagerBuilder(EzySettings settings) {
                 return MyTestSessionManager.builder();
             }
-            
+
         }
-        .config(config)
-        .classLoader(getClassLoader())
-        .load();
+            .config(config)
+            .classLoader(getClassLoader())
+            .load();
     }
-    
+
     protected EzyXmlReader getXmlReader() {
         return EzySimpleXmlMapper.builder()
-                .classLoader(getClassLoader())
-                .contextPath("com.tvd12.ezyfoxserver.mapping")
-                .build();
+            .classLoader(getClassLoader())
+            .contextPath("com.tvd12.ezyfoxserver.mapping")
+            .build();
     }
-    
+
     protected EzyJsonMapper getJsonMapper() {
         return EzySimpleJsonMapper.builder().build();
     }
-    
+
     public EzyServerControllers newControllers() {
         return EzyServerControllersImpl.builder().build();
     }
@@ -107,26 +106,26 @@ public class BaseCoreTest extends BaseTest {
     protected ClassLoader getClassLoader() {
         return EzySimpleServer.class.getClassLoader();
     }
-    
+
     protected EzySession newSession() {
         MyTestSession session = new MyTestSession();
         session.setDelegate(new SessionDelegate());
         return session;
     }
-    
+
     protected EzySession newSession(int id) {
         MyTestSession session = new MyTestSession();
         session.setId(id);
         session.setDelegate(new SessionDelegate());
         return session;
     }
-    
+
     protected KeyPair newRSAKeys() {
         return EzyKeysGenerator.builder()
-                .build()
-                .generate();
+            .build()
+            .generate();
     }
-    
+
     protected EzySession newSessionHasKey(String token) {
         KeyPair keyPair = newRSAKeys();
         EzySession session = newSession();
@@ -134,24 +133,24 @@ public class BaseCoreTest extends BaseTest {
         session.setPublicKey(keyPair.getPublic().getEncoded());
         return session;
     }
-    
+
     protected EzySimpleUser newUser() {
         return new EzySimpleUser();
     }
-    
+
     protected EzyArrayBuilder newArrayBuilder() {
         return EzyEntityFactory.create(EzyArrayBuilder.class);
     }
-    
+
     protected EzyObjectBuilder newObjectBuilder() {
         return EzyEntityFactory.create(EzyObjectBuilder.class);
     }
-    
+
     public static class SessionDelegate implements EzySessionDelegate {
 
         @Override
         public void onSessionLoggedIn(EzyUser user) {
         }
-        
+
     }
 }

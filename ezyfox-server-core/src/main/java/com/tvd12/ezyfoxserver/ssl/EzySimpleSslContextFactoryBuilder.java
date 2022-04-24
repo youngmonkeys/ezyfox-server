@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.ssl;
 
+import javax.net.ssl.TrustManager;
 import java.security.SecureRandom;
 
-import javax.net.ssl.TrustManager;
-
-public class EzySimpleSslContextFactoryBuilder 
-        implements EzySslContextFactoryBuilder {
+public class EzySimpleSslContextFactoryBuilder
+    implements EzySslContextFactoryBuilder {
 
     @Override
     public EzySslContextFactory build() {
@@ -14,13 +13,13 @@ public class EzySimpleSslContextFactoryBuilder
         factory.setTrustManagers(getTrustManagers());
         return factory;
     }
-    
+
     protected TrustManager[] getTrustManagers() {
         return new EzySslTrustManagerFactory().engineGetTrustManagers();
     }
-    
+
     protected SecureRandom getSecureRandom() {
         return new SecureRandom();
     }
-    
+
 }

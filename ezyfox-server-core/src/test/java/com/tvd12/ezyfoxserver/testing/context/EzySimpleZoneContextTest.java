@@ -1,10 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.spy;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.function.EzyPredicates;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
@@ -25,6 +20,9 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimpleZoneContextTest extends BaseTest {
 
@@ -61,37 +59,37 @@ public class EzySimpleZoneContextTest extends BaseTest {
         assert !zoneContext2.equals(context);
         System.out.println(context.hashCode() + ", " + context.hashCode());
         assert context.hashCode() == context.hashCode();
-        
+
         EzyResponse response = mock(EzyResponse.class);
         EzySession recipient = spy(EzyAbstractSession.class);
         context.send(response, recipient, false);
         context.send(response, Lists.newArrayList(recipient), false);
         context.stream(new byte[0], recipient);
         context.stream(new byte[0], Lists.newArrayList(recipient));
-        
+
         context.destroy();
     }
-    
+
     @Test
     public void equalsCaseTest() {
         EzySimpleZoneContext zoneContext1 = new EzySimpleZoneContext();
         EzySimpleZone zone1 = new EzySimpleZone();
         zoneContext1.setZone(zone1);
-        
+
         EzySimpleZoneContext zoneContext2 = new EzySimpleZoneContext();
         EzySimpleZone zone2 = new EzySimpleZone();
         zoneContext1.setZone(zone2);
-        
+
         assert !zoneContext1.equals(zoneContext2);
     }
-    
+
     public static class ExCommand implements EzyCommand<Boolean> {
 
         @Override
         public Boolean execute() {
             return Boolean.TRUE;
         }
-        
+
     }
-    
+
 }

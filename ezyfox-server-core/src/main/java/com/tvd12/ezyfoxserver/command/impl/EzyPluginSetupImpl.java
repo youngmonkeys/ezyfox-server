@@ -8,12 +8,12 @@ import com.tvd12.ezyfoxserver.command.EzyPluginSetup;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 
-public class EzyPluginSetupImpl 
-        extends EzyAbstractSetup
-        implements EzyPluginSetup {
-    
+public class EzyPluginSetupImpl
+    extends EzyAbstractSetup
+    implements EzyPluginSetup {
+
     private final EzySimplePlugin plugin;
-    
+
     public EzyPluginSetupImpl(EzyServerChild plugin) {
         super(plugin);
         this.plugin = (EzySimplePlugin) plugin;
@@ -24,7 +24,7 @@ public class EzyPluginSetupImpl
         plugin.setRequestController(controller);
         return this;
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Override
     public EzyPluginSetup addEventController(EzyConstant eventType, EzyEventController controller) {

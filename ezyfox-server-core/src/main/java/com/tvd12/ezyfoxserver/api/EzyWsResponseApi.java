@@ -14,7 +14,7 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
     protected final EzyStringDataEncoder encoder;
 
     public EzyWsResponseApi(Object encoder) {
-        this.encoder = new EzySimpleStringDataEncoder((EzyObjectToStringEncoder)encoder);
+        this.encoder = new EzySimpleStringDataEncoder((EzyObjectToStringEncoder) encoder);
     }
 
     @Override

@@ -1,16 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppsSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginsSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleUserManagementSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
 
 public class EzySimpleZoneSettingTest {
 
@@ -18,11 +10,11 @@ public class EzySimpleZoneSettingTest {
     public void test() {
         EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
         setting.setConfigFile("config.properties");
-        EzySimpleAppsSetting appsSetting = (EzySimpleAppsSetting)setting.getApplications();
+        EzySimpleAppsSetting appsSetting = (EzySimpleAppsSetting) setting.getApplications();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("app");
         appsSetting.setItem(appSetting);
-        EzySimplePluginsSetting pluginsSetting = (EzySimplePluginsSetting)setting.getPlugins();
+        EzySimplePluginsSetting pluginsSetting = (EzySimplePluginsSetting) setting.getPlugins();
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
         pluginSetting.setName("plugin");
         pluginsSetting.setItem(pluginSetting);
@@ -44,7 +36,7 @@ public class EzySimpleZoneSettingTest {
         setting.setUserManagement(new EzySimpleUserManagementSetting());
         setting.setEventControllers(new EzySimpleEventControllersSetting());
     }
-    
+
     @Test
     public void configFileIsNull() {
         // given

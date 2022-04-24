@@ -11,12 +11,16 @@ public class EzySimpleSessionCreator implements EzySessionCreator {
 
     protected final EzySessionManager sessionManager;
     protected final EzySessionManagementSetting sessionSetting;
-    
+
     public EzySimpleSessionCreator(Builder builder) {
         this.sessionManager = builder.sessionManager;
         this.sessionSetting = builder.sessionSetting;
     }
-    
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <S extends EzySession> S create(EzyChannel channel) {
@@ -30,21 +34,17 @@ public class EzySimpleSessionCreator implements EzySessionCreator {
     protected EzySession newSession(EzyChannel channel) {
         return sessionManager.provideSession(channel);
     }
-    
-    public static Builder builder() {
-        return new Builder();
-    }
-    
+
     public static class Builder implements EzyBuilder<EzySessionCreator> {
-        
+
         private EzySessionManager sessionManager;
         private EzySessionManagementSetting sessionSetting;
-        
+
         public Builder sessionManager(EzySessionManager sessionManager) {
             this.sessionManager = sessionManager;
             return this;
         }
-        
+
         public Builder sessionSetting(EzySessionManagementSetting sessionSetting) {
             this.sessionSetting = sessionSetting;
             return this;
@@ -54,6 +54,6 @@ public class EzySimpleSessionCreator implements EzySessionCreator {
         public EzySessionCreator build() {
             return new EzySimpleSessionCreator(this);
         }
-        
+
     }
 }

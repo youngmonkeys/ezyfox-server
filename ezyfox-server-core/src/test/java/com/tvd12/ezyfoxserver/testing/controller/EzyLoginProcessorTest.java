@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -23,6 +17,9 @@ import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzyLoginProcessorTest {
 
@@ -79,7 +76,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         zone.setUserManager(userManager);
 
         EzyStatistics statistics = mock(EzyStatistics.class);
@@ -127,7 +124,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         zone.setUserManager(userManager);
 
         EzyStatistics statistics = mock(EzyStatistics.class);
@@ -175,7 +172,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         EzyUser user = mock(EzyUser.class);
         when(user.getName()).thenReturn("monkey");
         when(user.getSessionCount()).thenReturn(2);
@@ -227,7 +224,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         EzyUser user = mock(EzyUser.class);
         when(user.getName()).thenReturn("monkey");
         when(user.getSessionCount()).thenReturn(2);
@@ -280,7 +277,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         EzyUser user = mock(EzyUser.class);
         when(user.getName()).thenReturn("monkey");
         when(user.getSessionCount()).thenReturn(1);
@@ -333,7 +330,7 @@ public class EzyLoginProcessorTest {
         server.setSessionManager(sessionManager);
 
         EzyZoneUserManager userManager = EzyZoneUserManagerImpl.builder()
-                .build();
+            .build();
         EzyUser user = mock(EzyUser.class);
         when(user.getName()).thenReturn("monkey");
         when(user.getSessionCount()).thenReturn(1);

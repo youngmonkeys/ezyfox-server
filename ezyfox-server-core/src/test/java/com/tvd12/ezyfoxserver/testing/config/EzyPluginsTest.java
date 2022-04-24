@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.config;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginsSetting;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
+import org.testng.annotations.Test;
 
 public class EzyPluginsTest extends BaseCoreTest {
 
@@ -12,5 +11,5 @@ public class EzyPluginsTest extends BaseCoreTest {
         EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
         plugins.getPluginById(-1);
     }
-    
+
 }

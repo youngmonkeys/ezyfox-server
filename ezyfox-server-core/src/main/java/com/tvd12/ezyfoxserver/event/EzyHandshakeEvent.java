@@ -9,16 +9,16 @@ public interface EzyHandshakeEvent extends EzySessionEvent {
     String getClientType();
 
     String getClientVersion();
-    
+
     String getReconnectToken();
 
     boolean isEnableEncryption();
-    
+
     byte[] getSessionKey();
-    
+
     void setSessionKey(byte[] sessionKey);
-    
-    void setEncryptedSessionKey(byte[] sessionKey);
-    
+
     byte[] getEncryptedSessionKey();
+
+    void setEncryptedSessionKey(byte[] sessionKey);
 }

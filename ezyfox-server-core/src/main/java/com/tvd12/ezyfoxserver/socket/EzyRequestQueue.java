@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.socket;
 public interface EzyRequestQueue {
 
     int size();
-    
+
     void clear();
 
     EzySocketRequest take();

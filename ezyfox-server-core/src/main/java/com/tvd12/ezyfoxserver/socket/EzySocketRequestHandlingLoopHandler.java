@@ -6,7 +6,7 @@ public abstract class EzySocketRequestHandlingLoopHandler extends EzySocketEvent
     protected final String getThreadName() {
         return getRequestType() + "-request-handler";
     }
-    
+
     protected abstract String getRequestType();
-    
+
 }

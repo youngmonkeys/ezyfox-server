@@ -4,7 +4,7 @@
 
     <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
          Remove this if you use the .htaccess -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
     <title>WebSocket ChatServer</title>
     <style type="text/css">
@@ -15,6 +15,7 @@
         #ui textarea {
             height: 15em;
         }
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript">
@@ -73,6 +74,7 @@
                 })
             }
         })
+
     </script>
 </head>
 
@@ -91,25 +93,25 @@
     <tr>
         <td>
             <div>Enter a message below to send</div>
-            <input type="text" id="msg"/>
-            <input type="submit" value="Send" id="send"/>
+            <input id="msg" type="text"/>
+            <input id="send" type="submit" value="Send"/>
         </td>
         <td id="ui">
-            <input type="text" id="url"/>
-            <textarea id="log" disabled></textarea>
-            <input type="submit" id="connect" value="Connect"/>
+            <input id="url" type="text"/>
+            <textarea disabled id="log"></textarea>
+            <input id="connect" type="submit" value="Connect"/>
         </td>
     </tr>
 </table>
 <div style="float: left; width: 600px; margin-left: 10px;">
     <p><br><strong>Instructions:</strong></p>
-    <table class="instructions" cellspacing="0px" cellpadding="2px">
+    <table cellpadding="2px" cellspacing="0px" class="instructions">
         <tr>
-            <td valign="top" nowrap>Step 1: &nbsp;</td>
+            <td nowrap valign="top">Step 1: &nbsp;</td>
             <td valign="top">Press the <strong>Connect</strong> button.</td>
         </tr>
         <tr>
-            <td valign="top" nowrap>Step 2: &nbsp;</td>
+            <td nowrap valign="top">Step 2: &nbsp;</td>
             <td valign="top">Once connected, enter a message and press the <strong>Send</strong> button. The server's
                 response will
                 appear in the <strong>Log</strong> section. You can send as many messages as you like

@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyCommandTest extends BaseTest {
 
@@ -15,5 +14,5 @@ public class EzyCommandTest extends BaseTest {
         assert value.getName().equals("APP_ACCESS");
         EzyCommand.valueOf("APP_ACCESS");
     }
-    
+
 }

@@ -8,9 +8,9 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 public interface EzySocketUserRemoval extends EzyReleasable {
 
     EzyUser getUser();
-    
+
     EzyConstant getReason();
-    
+
     EzyZoneContext getZoneContext();
-    
+
 }

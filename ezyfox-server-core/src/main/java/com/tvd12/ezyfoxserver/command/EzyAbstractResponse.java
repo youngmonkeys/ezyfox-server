@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.command;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
@@ -12,9 +9,12 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.wrapper.EzyUserManager;
 
-public abstract class EzyAbstractResponse<C extends EzyZoneChildContext> 
-        extends EzyMessageController 
-        implements EzyResponse, EzyDestroyable {
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
+    extends EzyMessageController
+    implements EzyResponse, EzyDestroyable {
 
     protected String command;
     protected EzyData params;
@@ -22,30 +22,30 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     protected EzyTransportType transportType;
     protected Set<EzySession> recipients = new HashSet<>();
     protected Set<EzySession> exrecipients = new HashSet<>();
-    
+
     protected C context;
     protected EzyUserManager userManager;
-    
+
     public EzyAbstractResponse(C context) {
         this.context = context;
         this.userManager = getUserManager(context);
         this.transportType = EzyTransportType.TCP;
     }
-    
+
     protected abstract EzyUserManager getUserManager(C context);
-    
+
     @Override
     public EzyResponse encrypted() {
         this.encrypted = true;
         return this;
     }
-    
+
     @Override
     public EzyResponse encrypted(boolean value) {
         this.encrypted = value;
         return this;
     }
-    
+
     @Override
     public EzyResponse command(String command) {
         this.command = command;
@@ -59,78 +59,86 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
 
     @Override
     public EzyResponse user(EzyUser user, boolean exclude) {
-        if(user != null) {
-            if(exclude)
+        if (user != null) {
+            if (exclude) {
                 this.exrecipients.addAll(user.getSessions());
-            else
+            } else {
                 this.recipients.addAll(user.getSessions());
+            }
         }
         return this;
     }
-    
+
     @Override
     public EzyResponse users(EzyUser[] users, boolean exclude) {
-        for(EzyUser u : users)
+        for (EzyUser u : users) {
             user(u, exclude);
+        }
         return this;
     }
 
     @Override
     public EzyResponse users(Iterable<EzyUser> users, boolean exclude) {
-        for(EzyUser u : users)
+        for (EzyUser u : users) {
             user(u, exclude);
+        }
         return this;
     }
-    
+
     @Override
     public EzyResponse username(String username, boolean exclude) {
         EzyUser user = userManager.getUser(username);
         return user(user, exclude);
     }
-    
+
     @Override
     public EzyResponse usernames(String[] usernames, boolean exclude) {
-        for(String un : usernames)
+        for (String un : usernames) {
             username(un, exclude);
+        }
         return this;
     }
-    
+
     @Override
     public EzyResponse usernames(Iterable<String> usernames, boolean exclude) {
-        for(String un : usernames)
+        for (String un : usernames) {
             username(un, exclude);
+        }
         return this;
     }
 
     @Override
     public EzyResponse session(EzySession session, boolean exclude) {
-        if(exclude)
+        if (exclude) {
             this.exrecipients.add(session);
-        else
+        } else {
             this.recipients.add(session);
+        }
         return this;
     }
-    
+
     @Override
     public EzyResponse sessions(EzySession[] sessions, boolean exclude) {
-        for(EzySession s : sessions)
+        for (EzySession s : sessions) {
             session(s, exclude);
+        }
         return this;
     }
-    
+
     @Override
     public EzyResponse sessions(Iterable<EzySession> sessions, boolean exclude) {
-        for(EzySession s : sessions)
+        for (EzySession s : sessions) {
             session(s, exclude);
+        }
         return this;
     }
-    
+
     @Override
     public EzyResponse transportType(EzyTransportType transportType) {
         this.transportType = transportType;
         return this;
     }
-    
+
     @Override
     public void execute() {
         recipients.removeAll(exrecipients);
@@ -138,13 +146,13 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
         sendData(data, transportType);
         destroy();
     }
-    
+
     protected abstract void sendData(EzyData data, EzyTransportType transportType);
 
     protected final EzyData newResponseData() {
         return newArrayBuilder().append(command).append(params).build();
     }
-    
+
     @Override
     public void destroy() {
         this.command = null;

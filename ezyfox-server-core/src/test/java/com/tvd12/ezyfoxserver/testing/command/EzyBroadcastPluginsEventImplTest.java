@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfoxserver.EzyPlugin;
 import com.tvd12.ezyfoxserver.EzyZone;
@@ -15,6 +13,8 @@ import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting.EzySimpleListenEvents;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
 import static org.mockito.Mockito.*;
 
 public class EzyBroadcastPluginsEventImplTest extends BaseTest {
@@ -31,7 +31,7 @@ public class EzyBroadcastPluginsEventImplTest extends BaseTest {
         EzyServerReadyEvent event = new EzySimpleServerReadyEvent();
         cmd.fire(EzyEventType.SERVER_READY, event, true);
     }
-    
+
     @Test
     public void firePluginEventExceptionCase() {
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -40,7 +40,7 @@ public class EzyBroadcastPluginsEventImplTest extends BaseTest {
         EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
         setting.setName("test");
         when(zone.getSetting()).thenReturn(setting);
-        
+
         EzyPluginContext pluginContext = mock(EzyPluginContext.class);
         EzyPlugin plugin = mock(EzyPlugin.class);
         when(pluginContext.getPlugin()).thenReturn(plugin);
@@ -49,12 +49,12 @@ public class EzyBroadcastPluginsEventImplTest extends BaseTest {
         EzySimpleListenEvents listenEvents = pluginSetting.getListenEvents();
         listenEvents.setEvent("SERVER_READY");
         doThrow(new IllegalStateException("server maintain")).when(pluginContext).handleEvent(any(), any());
-        
+
         when(zoneContext.getPluginContexts()).thenReturn(Lists.newArrayList(pluginContext));
-        
+
         EzyBroadcastPluginsEventImpl cmd = new EzyBroadcastPluginsEventImpl(zoneContext);
         EzyServerReadyEvent event = new EzySimpleServerReadyEvent();
         cmd.fire(EzyEventType.SERVER_READY, event, true);
     }
-    
+
 }

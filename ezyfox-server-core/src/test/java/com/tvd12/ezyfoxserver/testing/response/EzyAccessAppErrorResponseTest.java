@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.constant.EzyAccessAppError;
 import com.tvd12.ezyfoxserver.response.EzyAccessAppErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyErrorParams;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyAccessAppErrorResponseTest extends BaseTest {
 
@@ -20,5 +19,5 @@ public class EzyAccessAppErrorResponseTest extends BaseTest {
         EzyAccessAppErrorResponse response = new EzyAccessAppErrorResponse(params);
         response.release();
     }
-    
+
 }

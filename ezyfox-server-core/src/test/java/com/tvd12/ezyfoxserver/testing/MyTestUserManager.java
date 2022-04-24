@@ -7,11 +7,11 @@ public class MyTestUserManager extends EzyZoneUserManagerImpl {
     protected MyTestUserManager(Builder builder) {
         super(builder);
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
-    
+
     public static class Builder extends EzyZoneUserManagerImpl.Builder {
         @Override
         public MyTestUserManager build() {

@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.socket;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyRoundRobin;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-
-import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfox.util.EzyRoundRobin;
 
 public class EzyDatagramChannelPool extends EzyLoggable {
 
@@ -23,8 +23,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
             chan.configureBlocking(false);
             chan.socket().setReuseAddress(true);
             return chan;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
@@ -37,8 +36,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.bind(address);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         });
@@ -48,8 +46,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.register(selector, SelectionKey.OP_READ);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         });
@@ -64,8 +61,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 logger.warn("close datagram channel: {} error", channel, e);
             }
         });

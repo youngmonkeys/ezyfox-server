@@ -1,13 +1,13 @@
 package com.tvd12.ezyfoxserver.entity;
 
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.constant.EzyHasName;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyProperties;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
+
+import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable {
 
@@ -55,14 +55,14 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
 
     /**
      * Get the session count
-     * 
+     *
      * @return the session count
      */
     int getSessionCount();
-    
+
     /**
      * Get the first session
-     * 
+     *
      * @return the first session
      */
     EzySession getSession();
@@ -83,29 +83,29 @@ public interface EzyUser extends EzyDeliver, EzyHasName, EzyProperties, EzyDestr
 
     /**
      * remove a session
-     * 
+     *
      * @param session the session to remove
      */
     void removeSession(EzySession session);
-    
+
     /**
      * change current session
-     * 
+     *
      * @param session the session to change
      * @return the old sessions
      */
     List<EzySession> changeSession(EzySession session);
-    
+
     /**
      * @return is idle or not
      */
     boolean isIdle();
-    
+
     /**
      * @return destroyed or not
      */
     boolean isDestroyed();
-    
+
     /**
      * @param name the lock name
      * @return the lock

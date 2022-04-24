@@ -9,5 +9,5 @@ public class EzyFileNamesTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzyFileNames.class;
     }
-    
+
 }

@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimpleSessionManagementSettingTest extends BaseTest {
-    
+
     @Test
     public void test() {
         EzySimpleSessionManagementSetting setting = new EzySimpleSessionManagementSetting();

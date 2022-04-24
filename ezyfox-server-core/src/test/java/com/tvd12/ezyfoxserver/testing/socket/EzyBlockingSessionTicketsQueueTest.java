@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
 
@@ -30,22 +29,22 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         sessions.add(new MySession());
         sessions.add(new MySession());
         sessions.add(new MySession());
-        
+
         assert queue.isEmpty();
         assert queue.size() == 0;
-        
-        for(int i = 0 ; i < 10 ; ++i) {
+
+        for (int i = 0; i < 10; ++i) {
             queue.add(sessions.get(0));
         }
-        
-        for(int i = 0 ; i < 10 ; ++i) {
+
+        for (int i = 0; i < 10; ++i) {
             queue.add(sessions.get(i));
         }
-        
+
         assert queue.add(sessions.get(0));
-        
+
     }
-    
+
     @Test
     public void takeInactiveSession() throws Exception {
         // given
@@ -71,17 +70,16 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
         Thread.sleep(300L);
         newThread.interrupt();
     }
-    
+
     public static class MySession extends EzyAbstractSession {
+        public static final AtomicInteger ID_GENTOR = new AtomicInteger();
         private static final long serialVersionUID = -6353939578697084098L;
-        
-        public static final AtomicInteger ID_GENTOR = new AtomicInteger(); 
-        
+
         public MySession() {
             super();
             this.id = ID_GENTOR.incrementAndGet();
         }
-        
+
     }
-    
+
 }

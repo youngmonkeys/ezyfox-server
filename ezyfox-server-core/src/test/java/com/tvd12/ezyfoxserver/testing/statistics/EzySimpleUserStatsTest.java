@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.statistics;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.statistics.EzySimpleUserStats;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimpleUserStatsTest extends BaseTest {
 
@@ -18,5 +17,5 @@ public class EzySimpleUserStatsTest extends BaseTest {
         assert stats.getMaxUsers() == 2;
         assert stats.getCurrentUsers() == 1;
     }
-    
+
 }

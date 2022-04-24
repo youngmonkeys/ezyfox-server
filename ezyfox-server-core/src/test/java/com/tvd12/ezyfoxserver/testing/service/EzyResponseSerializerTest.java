@@ -7,5 +7,5 @@ public class EzyResponseSerializerTest {
     @Test
     public void test() {
     }
-    
+
 }

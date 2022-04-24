@@ -11,9 +11,9 @@ import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginParams;
 import com.tvd12.ezyfoxserver.request.EzyRequestPluginRequest;
 
-public class EzyRequestPluginController 
-        extends EzyAbstractServerController
-        implements EzyServerController<EzyRequestPluginRequest> {
+public class EzyRequestPluginController
+    extends EzyAbstractServerController
+    implements EzyServerController<EzyRequestPluginRequest> {
 
     @Override
     public void handle(EzyServerContext ctx, EzyRequestPluginRequest request) {
@@ -28,7 +28,7 @@ public class EzyRequestPluginController
     }
 
     protected EzyPluginContext getPluginContext(
-            EzyZoneContext zoneCtx, EzyRequestPluginParams requestParams) {
+        EzyZoneContext zoneCtx, EzyRequestPluginParams requestParams) {
         int pluginId = requestParams.getPluginId();
         EzyPluginContext pluginContext = zoneCtx.getPluginContext(pluginId);
         return pluginContext;
@@ -36,9 +36,9 @@ public class EzyRequestPluginController
 
     protected EzyUserRequestPluginEvent newRequestPluginEvent(EzyRequestPluginRequest request) {
         return new EzySimpleUserRequestPluginEvent(
-                request.getUser(),
-                request.getSession(),
-                request.getParams().getData());
+            request.getUser(),
+            request.getSession(),
+            request.getParams().getData());
     }
 
 }

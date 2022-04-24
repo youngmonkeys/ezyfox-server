@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.event;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.event.EzySimpleUserSessionEvent;
+import org.testng.annotations.Test;
 
 public class EzySimpleUserSessionEventTest {
 
@@ -11,5 +10,5 @@ public class EzySimpleUserSessionEventTest {
         EzySimpleUserSessionEvent event = new EzySimpleUserSessionEvent(null, null);
         assert event.getSession() == null;
     }
-    
+
 }

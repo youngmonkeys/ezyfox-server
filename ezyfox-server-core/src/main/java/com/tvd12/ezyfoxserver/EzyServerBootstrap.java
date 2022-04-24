@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
@@ -10,21 +8,17 @@ import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.event.EzyEvent;
 import com.tvd12.ezyfoxserver.event.EzySimpleServerReadyEvent;
-import com.tvd12.ezyfoxserver.setting.EzyHttpSetting;
-import com.tvd12.ezyfoxserver.setting.EzySettings;
-import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
-import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSetting;
-import com.tvd12.ezyfoxserver.setting.EzyUdpSetting;
-import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
-
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
 
 public abstract class EzyServerBootstrap
-        extends EzyLoggable
-        implements EzyStartable, EzyDestroyable {
+    extends EzyLoggable
+    implements EzyStartable, EzyDestroyable {
 
     @Setter
     @Getter
@@ -65,7 +59,7 @@ public abstract class EzyServerBootstrap
     }
 
     protected final void printBanner() {
-        if(getServerConfig().isPrintBanner()) {
+        if (getServerConfig().isPrintBanner()) {
             String bannerFile = getServerConfig().getBannerFile();
             logger.info("\n{}\n", new EzyBannerPrinter().getBannerText(bannerFile));
         }

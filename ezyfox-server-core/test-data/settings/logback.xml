@@ -7,7 +7,7 @@
             <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %blue(%-5p) %green(%c{1}:%L) - %m%n</pattern>
         </encoder>
     </appender>
-    
+
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/ezyfox.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -16,10 +16,10 @@
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-        <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %blue(%-5p) %green(%c{1}:%L) - %m%n</pattern>
+            <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %blue(%-5p) %green(%c{1}:%L) - %m%n</pattern>
         </encoder>
     </appender>
-    
+
     <appender name="http" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/http/ezyfox-http.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -28,53 +28,53 @@
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-        <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %blue(%-5p) %green(%c{1}:%L) - %m%n</pattern>
+            <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %blue(%-5p) %green(%c{1}:%L) - %m%n</pattern>
         </encoder>
-    </appender>  
-    
-    <root level="INFO">          
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
-    </root>  
-    
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
+    </root>
+
     <logger name="org.springboot" level="DEBUG" additivity="false">
-        <appender-ref ref="http" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="http"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="com.tvd12.ezyfoxserver.webapi" level="DEBUG" additivity="false">
-        <appender-ref ref="http" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="http"/>
+        <appender-ref ref="stdout"/>
     </logger>
 
     <logger name="com.tvd12" level="DEBUG" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="org.eclipse.jetty" level="INFO" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="vn.team" level="DEBUG" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="com.hazelcast" level="DEBUG" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="com.hazelcast.spi.ExecutionService" level="INFO" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-    
+
     <logger name="com.hazelcast.map.impl.journal.RingbufferMapEventJournalImpl" level="INFO" additivity="false">
-        <appender-ref ref="file" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </logger>
-  
+
 </configuration>

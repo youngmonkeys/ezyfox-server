@@ -7,5 +7,5 @@ public interface EzyServerChild extends EzyEventComponent {
 
     @SuppressWarnings("rawtypes")
     void addEventController(EzyConstant eventType, EzyEventController ctrl);
-    
+
 }

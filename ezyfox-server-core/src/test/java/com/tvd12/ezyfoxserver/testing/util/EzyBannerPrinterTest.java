@@ -1,12 +1,11 @@
 package com.tvd12.ezyfoxserver.testing.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.util.EzyBannerPrinter;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class EzyBannerPrinterTest extends BaseTest {
 
@@ -16,7 +15,7 @@ public class EzyBannerPrinterTest extends BaseTest {
             @Override
             protected InputStream getBannerInputStream(String file) {
                 return new InputStream() {
-                    
+
                     @Override
                     public int read() throws IOException {
                         throw new IOException();
@@ -25,5 +24,5 @@ public class EzyBannerPrinterTest extends BaseTest {
             }
         }.getBannerText("ezyfox-banner.txt");
     }
-    
+
 }

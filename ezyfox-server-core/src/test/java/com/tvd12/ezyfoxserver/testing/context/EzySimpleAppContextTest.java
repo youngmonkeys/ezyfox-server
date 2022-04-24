@@ -1,19 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.context;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
@@ -31,6 +17,14 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimpleAppContextTest extends BaseTest {
 
@@ -53,25 +47,26 @@ public class EzySimpleAppContextTest extends BaseTest {
         EzySimpleAppContext appContext2 = new EzySimpleAppContext();
         assert !appContext.equals(appContext2);
         assert appContext.cmd(EzyAppResponse.class) != null;
-        
-        assert appContext.cmd(Void.class) == null;;
-        
+
+        assert appContext.cmd(Void.class) == null;
+        ;
+
         EzySimpleUser user = new EzySimpleUser();
         user.setName("test");
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         user.addSession(session);
-        
+
         EzyData data = EzyEntityFactory.newArrayBuilder()
-                .build();
+            .build();
         appContext.send(data, session, false);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         appContext.setExecutorService(executorService);
         assert appContext.getExecutorService() != null;
-        
+
         appContext.handleException(Thread.currentThread(), new Exception());
     }
-    
+
     @Test
     public void sendMultiTest() {
         // given

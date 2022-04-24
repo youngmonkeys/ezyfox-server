@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySimpleSocketSettingTest extends BaseTest {
 
@@ -21,5 +20,5 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         setting.setTcpNoDelay(true);
         assert setting.isTcpNoDelay();
     }
-    
+
 }

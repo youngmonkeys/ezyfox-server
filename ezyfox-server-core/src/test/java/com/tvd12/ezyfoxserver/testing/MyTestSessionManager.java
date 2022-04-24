@@ -12,17 +12,16 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
     protected MyTestSessionManager(Builder builder) {
         super(builder);
     }
-    
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public MyTestSession provideSession(EzyConstant type) {
         return super.provideSession(type);
     }
-    
-    
-    public static Builder builder() {
-        return new Builder();
-    }
-    
+
     public static class Builder extends EzySimpleSessionManager.Builder<MyTestSession> {
 
         @Override
@@ -37,13 +36,14 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
                 {
                     maxRequestPerSecond = new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond();
                 }
+
                 @Override
                 protected MyTestSession newSession() {
                     return new MyTestSession();
                 }
             };
         }
-        
+
     }
 
 }

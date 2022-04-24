@@ -1,9 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.setting.EzySimpleSslConfigSetting;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzySslConfigTest extends BaseTest {
 
@@ -14,5 +13,5 @@ public class EzySslConfigTest extends BaseTest {
         config.setLoader("loader");
         config.setContextFactoryBuilder("builder");
     }
-    
+
 }

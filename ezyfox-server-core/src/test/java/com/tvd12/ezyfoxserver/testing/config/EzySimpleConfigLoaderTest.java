@@ -1,11 +1,10 @@
 package com.tvd12.ezyfoxserver.testing.config;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfigLoader;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
 
 public class EzySimpleConfigLoaderTest {
 

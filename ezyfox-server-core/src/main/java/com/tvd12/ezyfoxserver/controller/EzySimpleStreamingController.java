@@ -11,9 +11,9 @@ public class EzySimpleStreamingController implements EzyStreamingController {
     @Override
     public void handle(EzyZoneContext ctx, EzyStreamingRequest request) {
         EzyStreamingEvent event = new EzySimpleStreamingEvent(
-                request.getUser(), 
-                request.getSession(),
-                request.getBytes());
+            request.getUser(),
+            request.getSession(),
+            request.getBytes());
         ctx.handleEvent(EzyEventType.STREAMING, event);
     }
 

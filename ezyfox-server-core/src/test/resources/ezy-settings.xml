@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings
-    xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
           ezy-settings-1.0.0.xsd"
-    xmlns="http://www.tvd12.com/schema/ezyfox/settings"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        xmlns="http://www.tvd12.com/schema/ezyfox/settings">
 
     <node-name>localhost</node-name>
     <max-sessions>30000</max-sessions>
@@ -30,7 +30,8 @@
         <ssl-config>
             <file>ssl-config.properties</file>
             <loader>com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader</loader>
-            <context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder</context-factory-builder>
+            <context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder
+            </context-factory-builder>
         </ssl-config>
         <codec-creator>com.tvd12.ezyfoxserver.netty.codec.JacksonWsCodecCreator</codec-creator>
     </web-socket>
@@ -69,4 +70,4 @@
 
 </settings>
 
-<!-- http://localhost:8080/schema/ezyfox/settings/ -->
+        <!-- http://localhost:8080/schema/ezyfox/settings/ -->

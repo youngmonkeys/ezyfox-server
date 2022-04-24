@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.tvd12.ezyfox.json.EzyJsonWriter;
 import com.tvd12.ezyfox.json.EzySimpleJsonWriter;
 import com.tvd12.ezyfox.util.EzyDestroyable;
@@ -16,20 +13,21 @@ import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManagerAware;
-
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Hello world!
- *
  */
 @Setter
 @Getter
 @SuppressWarnings("rawtypes")
-public class EzySimpleServer 
-        extends EzyComponent 
-        implements EzyServer, EzyResponseApiAware, EzyStreamingApiAware, EzySessionManagerAware, EzyDestroyable {
+public class EzySimpleServer
+    extends EzyComponent
+    implements EzyServer, EzyResponseApiAware, EzyStreamingApiAware, EzySessionManagerAware, EzyDestroyable {
 
     protected EzyConfig config;
     protected EzySettings settings;
@@ -40,25 +38,25 @@ public class EzySimpleServer
     protected EzyStreamingApi streamingApi;
     protected EzySessionManager sessionManager;
     protected Map<String, ClassLoader> appClassLoaders;
-    
+
     @Override
     public String getVersion() {
         return "1.0.0";
     }
-    
+
     @Override
     public void destroy() {
         super.destroy();
-        ((EzyDestroyable)sessionManager).destroy();
+        ((EzyDestroyable) sessionManager).destroy();
     }
-    
+
     @Override
     public String toString() {
         EzyJsonWriter writer = new EzySimpleJsonWriter();
         String json = writer.writeAsString(this);
         return json;
     }
-    
+
     @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
@@ -67,5 +65,5 @@ public class EzySimpleServer
         map.put("settings", settings.toMap());
         return map;
     }
-    
+
 }

@@ -11,9 +11,9 @@ import com.tvd12.ezyfoxserver.response.EzyPluginInfoResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
-public class EzyPluginInfoController 
-        extends EzyAbstractServerController
-        implements EzyServerController<EzyPluginInfoRequest> {
+public class EzyPluginInfoController
+    extends EzyAbstractServerController
+    implements EzyServerController<EzyPluginInfoRequest> {
 
     @Override
     public void handle(EzyServerContext ctx, EzyPluginInfoRequest request) {
@@ -22,7 +22,7 @@ public class EzyPluginInfoController
         EzyPluginInfoParams params = request.getParams();
         EzyZoneContext zoneCtx = ctx.getZoneContext(user.getZoneId());
         EzyPluginContext pluginCtx = zoneCtx.getPluginContext(params.getPluginName());
-        if(pluginCtx != null) {
+        if (pluginCtx != null) {
             EzyPluginSetting setting = pluginCtx.getPlugin().getSetting();
             EzyResponse response = newPluginInfoResponse(setting);
             ctx.send(response, session, false);
@@ -30,8 +30,8 @@ public class EzyPluginInfoController
     }
 
     protected EzyResponse newPluginInfoResponse(EzyPluginSetting pluginSetting) {
-        com.tvd12.ezyfoxserver.response.EzyPluginInfoParams params = 
-                new com.tvd12.ezyfoxserver.response.EzyPluginInfoParams();
+        com.tvd12.ezyfoxserver.response.EzyPluginInfoParams params =
+            new com.tvd12.ezyfoxserver.response.EzyPluginInfoParams();
         params.setPlugin(pluginSetting);
         return new EzyPluginInfoResponse(params);
     }

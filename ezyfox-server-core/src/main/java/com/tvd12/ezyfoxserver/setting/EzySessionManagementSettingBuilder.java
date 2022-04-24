@@ -59,6 +59,5 @@ public class EzySessionManagementSettingBuilder
             p.setAction(action);
             return p;
         }
-
     }
 }

@@ -54,5 +54,4 @@ public abstract class EzyAbstractSocketSettingBuilder<
     }
 
     protected abstract T newSetting();
-
 }

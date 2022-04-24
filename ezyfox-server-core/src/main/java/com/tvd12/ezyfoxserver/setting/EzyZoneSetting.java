@@ -39,5 +39,4 @@ public interface EzyZoneSetting extends EzyToMap {
     EzyUserManagementSetting getUserManagement();
 
     EzyEventControllersSetting getEventControllers();
-
 }

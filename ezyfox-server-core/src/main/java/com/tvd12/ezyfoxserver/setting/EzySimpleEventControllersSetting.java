@@ -18,9 +18,11 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "event-controllers")
-public class EzySimpleEventControllersSetting implements EzyEventControllersSetting {
+public class EzySimpleEventControllersSetting
+    implements EzyEventControllersSetting {
 
-    private List<EzyEventControllerSetting> eventControllers = new ArrayList<>();
+    private List<EzyEventControllerSetting> eventControllers
+        = new ArrayList<>();
 
     @XmlElement(name = "event-controller")
     public void setItem(EzySimpleEventControllerSetting item) {

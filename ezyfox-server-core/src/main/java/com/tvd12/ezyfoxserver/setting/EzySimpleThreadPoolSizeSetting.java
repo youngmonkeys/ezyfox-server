@@ -16,7 +16,8 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "thread-pool-size")
-public class EzySimpleThreadPoolSizeSetting implements EzyThreadPoolSizeSetting {
+public class EzySimpleThreadPoolSizeSetting
+    implements EzyThreadPoolSizeSetting {
 
     @XmlElement(name = "statistics")
     protected int statistics = 1;

@@ -30,59 +30,52 @@ public class EzySimpleSettings implements EzySettings {
     protected int maxSessions = 999999;
 
     @XmlElement(name = "streaming")
-    protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
+    protected EzySimpleStreamingSetting streaming
+        = new EzySimpleStreamingSetting();
 
     @XmlElement(name = "http")
-    protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
+    protected EzySimpleHttpSetting http
+        = new EzySimpleHttpSetting();
 
     @XmlElement(name = "socket")
-    protected EzySimpleSocketSetting socket = new EzySimpleSocketSetting();
+    protected EzySimpleSocketSetting socket
+        = new EzySimpleSocketSetting();
 
     @XmlElement(name = "udp")
-    protected EzySimpleUdpSetting udp = new EzySimpleUdpSetting();
+    protected EzySimpleUdpSetting udp
+        = new EzySimpleUdpSetting();
 
     @XmlElement(name = "administrators")
-    protected EzySimpleAdminsSetting admins = new EzySimpleAdminsSetting();
+    protected EzySimpleAdminsSetting admins
+        = new EzySimpleAdminsSetting();
 
     @XmlElement(name = "logger")
-    protected EzySimpleLoggerSetting logger = new EzySimpleLoggerSetting();
+    protected EzySimpleLoggerSetting logger
+        = new EzySimpleLoggerSetting();
 
     @XmlElement(name = "web-socket")
-    protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
+    protected EzySimpleWebSocketSetting websocket
+        = new EzySimpleWebSocketSetting();
 
     @XmlElement(name = "thread-pool-size")
-    protected EzySimpleThreadPoolSizeSetting threadPoolSize = new EzySimpleThreadPoolSizeSetting();
+    protected EzySimpleThreadPoolSizeSetting threadPoolSize
+        = new EzySimpleThreadPoolSizeSetting();
 
     @XmlElement(name = "session-management")
-    protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
+    protected EzySimpleSessionManagementSetting sessionManagement
+        = new EzySimpleSessionManagementSetting();
 
     @XmlElement(name = "event-controllers")
-    protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
+    protected EzySimpleEventControllersSetting eventControllers
+        = new EzySimpleEventControllersSetting();
 
     @Setter(AccessLevel.NONE)
-    protected EzySimpleZonesSetting zones = new EzySimpleZonesSetting();
+    protected EzySimpleZonesSetting zones
+        = new EzySimpleZonesSetting();
 
     @XmlElement(name = "zones")
-    protected EzySimpleZoneFilesSetting zoneFiles = new EzySimpleZoneFilesSetting();
-
-    @Override
-    public Map<Object, Object> toMap() {
-        Map<Object, Object> map = new HashMap<>();
-        map.put("debug", debug);
-        map.put("nodeName", nodeName);
-        map.put("maxSessions", maxSessions);
-        map.put("threadPoolSize", threadPoolSize.toMap());
-        map.put("streaming", streaming.toMap());
-        map.put("socket", socket.toMap());
-        map.put("udp", udp.toMap());
-        map.put("websocket", websocket.toMap());
-        map.put("logger", logger.toMap());
-        map.put("admins", admins.toMap());
-        map.put("sessionManagement", sessionManagement.toMap());
-        map.put("eventControllers", eventControllers.toMap());
-        map.put("zones", zones.toMap());
-        return map;
-    }
+    protected EzySimpleZoneFilesSetting zoneFiles
+        = new EzySimpleZoneFilesSetting();
 
     //==================== apps ================//
     public void addZone(EzySimpleZoneSetting zone) {
@@ -108,6 +101,23 @@ public class EzySimpleSettings implements EzySettings {
     public EzySimpleZoneSetting getZoneById(Integer id) {
         return zones.getZoneById(id);
     }
-    //=============================================//
 
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("debug", debug);
+        map.put("nodeName", nodeName);
+        map.put("maxSessions", maxSessions);
+        map.put("threadPoolSize", threadPoolSize.toMap());
+        map.put("streaming", streaming.toMap());
+        map.put("socket", socket.toMap());
+        map.put("udp", udp.toMap());
+        map.put("websocket", websocket.toMap());
+        map.put("logger", logger.toMap());
+        map.put("admins", admins.toMap());
+        map.put("sessionManagement", sessionManagement.toMap());
+        map.put("eventControllers", eventControllers.toMap());
+        map.put("zones", zones.toMap());
+        return map;
+    }
 }

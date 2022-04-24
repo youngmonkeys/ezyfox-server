@@ -34,6 +34,5 @@ public class EzyPluginSettingBuilder extends EzyAbstractSettingBuilder<
         setting.setPriority(priority);
         setting.setListenEvents(listenEvents);
         return setting;
-
     }
 }

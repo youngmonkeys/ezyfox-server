@@ -11,5 +11,4 @@ public interface EzyWebSocketSetting extends EzyBaseSocketSetting {
     EzySslConfigSetting getSslConfig();
 
     boolean isManagementEnable();
-
 }

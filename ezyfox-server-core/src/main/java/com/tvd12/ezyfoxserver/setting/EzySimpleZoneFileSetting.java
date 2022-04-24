@@ -24,5 +24,4 @@ public class EzySimpleZoneFileSetting {
 
     @XmlElement(name = "active")
     protected boolean active = true;
-
 }

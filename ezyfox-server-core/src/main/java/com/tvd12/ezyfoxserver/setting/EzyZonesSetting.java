@@ -18,5 +18,4 @@ public interface EzyZonesSetting extends EzyToMap {
     EzyZoneSetting getZoneById(Integer id);
 
     EzyZoneSetting getZoneByName(String name);
-
 }

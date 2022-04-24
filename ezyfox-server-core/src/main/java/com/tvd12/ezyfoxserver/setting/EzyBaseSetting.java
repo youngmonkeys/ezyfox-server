@@ -27,7 +27,7 @@ public interface EzyBaseSetting extends EzyToMap {
     /**
      * return the path of configuration file which you input
      * if noParent is true see {@code getConfigFileInput} function
-     * if noParent is false see {@code getConfigFile} function
+     * if noParent is false see {@code getConfigFile} function.
      *
      * @param noParent include parent path or not
      * @return the path of configuration file
@@ -35,7 +35,7 @@ public interface EzyBaseSetting extends EzyToMap {
     String getConfigFile(boolean noParent);
 
     /**
-     * return the full path configuration file which you input
+     * return the full path configuration file which you input.
      *
      * @return the full path of configuration file
      */
@@ -43,8 +43,8 @@ public interface EzyBaseSetting extends EzyToMap {
 
     /**
      * return the input configuration file which you input
-     * let's say you setup the configuration file is config.properties
-     * so this function will return config.properties
+     * let's say you setting up the configuration file is config.properties
+     * so this function will return config.properties.
      *
      * @return the input configuration file
      */

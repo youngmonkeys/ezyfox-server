@@ -14,7 +14,7 @@ public interface EzyPluginSetting extends EzyBaseSetting {
      * return the full path configuration file which you input
      * let's say you setup the configuration file is config.properties
      * so this function will return
-     * {ezyfox_server_home_path}/plugins/{plugin_folder}/config.properties
+     * {ezyfox_server_home_path}/plugins/{plugin_folder}/config.properties.
      *
      * @return the full path of configuration file
      */
@@ -24,6 +24,5 @@ public interface EzyPluginSetting extends EzyBaseSetting {
     interface EzyListenEvents {
 
         Set<EzyConstant> getEvents();
-
     }
 }

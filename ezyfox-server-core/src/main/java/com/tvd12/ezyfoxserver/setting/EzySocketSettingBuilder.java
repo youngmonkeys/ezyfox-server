@@ -1,7 +1,9 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
-    EzySimpleSocketSetting, EzySocketSettingBuilder> {
+public class EzySocketSettingBuilder extends
+    EzyAbstractSocketSettingBuilder<
+        EzySimpleSocketSetting,
+        EzySocketSettingBuilder> {
 
     protected int maxRequestSize;
     protected boolean tcpNoDelay;

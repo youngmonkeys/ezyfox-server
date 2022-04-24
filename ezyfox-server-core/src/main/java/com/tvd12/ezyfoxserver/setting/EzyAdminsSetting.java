@@ -15,5 +15,4 @@ public interface EzyAdminsSetting extends EzyToMap {
     boolean containsAdminByName(String username);
 
     boolean containsAdminByAccessToken(String token);
-
 }

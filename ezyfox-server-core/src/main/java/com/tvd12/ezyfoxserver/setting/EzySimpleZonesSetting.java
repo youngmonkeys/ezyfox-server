@@ -13,9 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @ToString
 public class EzySimpleZonesSetting implements EzyZonesSetting {
 
-    protected final List<EzyZoneSetting> zones = new ArrayList<>();
-    protected final Map<Integer, EzySimpleZoneSetting> zonesByIds = new ConcurrentHashMap<>();
-    protected final Map<String, EzySimpleZoneSetting> zonesByNames = new ConcurrentHashMap<>();
+    protected final List<EzyZoneSetting> zones
+        = new ArrayList<>();
+    protected final Map<Integer, EzySimpleZoneSetting> zonesByIds
+        = new ConcurrentHashMap<>();
+    protected final Map<String, EzySimpleZoneSetting> zonesByNames
+        = new ConcurrentHashMap<>();
 
     @XmlElement(name = "zone")
     public void setItem(EzySimpleZoneSetting item) {

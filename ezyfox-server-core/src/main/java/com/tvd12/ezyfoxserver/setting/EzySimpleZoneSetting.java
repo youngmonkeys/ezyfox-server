@@ -23,22 +23,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 @XmlRootElement(name = "zone")
 public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
 
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
     protected final int id = COUNTER.incrementAndGet();
+
     protected String name = "default";
+
     protected String configFile;
+
     @XmlElement(name = "max-users")
     protected int maxUsers = 999999;
+
     @XmlElement(name = "streaming")
-    protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
+    protected EzySimpleStreamingSetting streaming
+        = new EzySimpleStreamingSetting();
+
     @XmlElement(name = "plugins")
-    protected EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
+    protected EzySimplePluginsSetting plugins
+        = new EzySimplePluginsSetting();
+
     @XmlElement(name = "applications")
-    protected EzySimpleAppsSetting applications = new EzySimpleAppsSetting();
+    protected EzySimpleAppsSetting applications
+        = new EzySimpleAppsSetting();
+
     @XmlElement(name = "user-management")
-    protected EzySimpleUserManagementSetting userManagement = new EzySimpleUserManagementSetting();
+    protected EzySimpleUserManagementSetting userManagement
+        = new EzySimpleUserManagementSetting();
+
     @XmlElement(name = "event-controllers")
-    protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
+    protected EzySimpleEventControllersSetting eventControllers
+        = new EzySimpleEventControllersSetting();
+
+    private static final AtomicInteger COUNTER
+        = new AtomicInteger(0);
 
     @Override
     public void init() {

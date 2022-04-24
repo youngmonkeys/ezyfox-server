@@ -22,12 +22,10 @@ public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator 
 
     @Override
     public String generate() {
-        String token = new StringBuilder()
-            .append(serverNodeName).append("#")
-            .append(getCount()).append("#")
-            .append(UUID.randomUUID()).append("#")
-            .append(System.currentTimeMillis())
-            .toString();
+        String token = serverNodeName + "#" +
+            getCount() + "#" +
+            UUID.randomUUID() + "#" +
+            System.currentTimeMillis();
         return EzySHA256.cryptUtfToLowercase(token);
     }
 

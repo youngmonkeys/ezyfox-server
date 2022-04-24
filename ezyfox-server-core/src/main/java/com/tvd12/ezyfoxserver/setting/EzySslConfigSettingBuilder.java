@@ -4,9 +4,12 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 
 public class EzySslConfigSettingBuilder implements EzyBuilder<EzySimpleSslConfigSetting> {
 
-    protected String file = "ssl-config.properties";
-    protected String loader = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader";
-    protected String contextFactoryBuilder = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder";
+    protected String file
+        = "ssl-config.properties";
+    protected String loader
+        = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader";
+    protected String contextFactoryBuilder
+        = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder";
 
     public EzySslConfigSettingBuilder file(String file) {
         this.file = file;

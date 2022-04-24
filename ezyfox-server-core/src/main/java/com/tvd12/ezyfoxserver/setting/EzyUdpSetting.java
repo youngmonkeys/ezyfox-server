@@ -7,5 +7,4 @@ public interface EzyUdpSetting extends EzyBaseSocketSetting {
     int getChannelPoolSize();
 
     int getHandlerThreadPoolSize();
-
 }

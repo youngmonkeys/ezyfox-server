@@ -9,5 +9,4 @@ public interface EzySslConfigSetting extends EzyToMap {
     String getLoader();
 
     String getContextFactoryBuilder();
-
 }

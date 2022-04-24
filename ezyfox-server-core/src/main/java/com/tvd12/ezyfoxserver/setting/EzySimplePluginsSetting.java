@@ -18,9 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @XmlRootElement(name = "plugins")
 public class EzySimplePluginsSetting implements EzyPluginsSetting {
 
-    protected final List<EzyPluginSetting> plugins = new ArrayList<>();
-    protected final Map<Integer, EzySimplePluginSetting> pluginsByIds = new ConcurrentHashMap<>();
-    protected final Map<String, EzySimplePluginSetting> pluginsByNames = new ConcurrentHashMap<>();
+    protected final List<EzyPluginSetting> plugins
+        = new ArrayList<>();
+    protected final Map<Integer, EzySimplePluginSetting> pluginsByIds
+        = new ConcurrentHashMap<>();
+    protected final Map<String, EzySimplePluginSetting> pluginsByNames
+        = new ConcurrentHashMap<>();
 
     @XmlElement(name = "plugin")
     public void setItem(EzySimplePluginSetting item) {
@@ -45,7 +48,9 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
         if (pluginSetting != null) {
             return pluginSetting;
         }
-        throw new IllegalArgumentException("has no plugin with name: " + name);
+        throw new IllegalArgumentException(
+            "has no plugin with name: " + name
+        );
     }
 
     @Override
@@ -54,7 +59,9 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
         if (pluginSetting != null) {
             return pluginSetting;
         }
-        throw new IllegalArgumentException("has no plugin with id: " + id);
+        throw new IllegalArgumentException(
+            "has no plugin with id: " + id
+        );
     }
 
     @Override

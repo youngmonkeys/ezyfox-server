@@ -9,5 +9,4 @@ public interface EzyHttpSetting extends EzyToMap {
     boolean isActive();
 
     int getMaxThreads();
-
 }

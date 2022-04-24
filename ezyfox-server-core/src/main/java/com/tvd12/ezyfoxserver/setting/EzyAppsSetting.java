@@ -18,5 +18,4 @@ public interface EzyAppsSetting extends EzyToMap {
     EzyAppSetting getAppById(Integer id);
 
     EzyAppSetting getAppByName(String name);
-
 }

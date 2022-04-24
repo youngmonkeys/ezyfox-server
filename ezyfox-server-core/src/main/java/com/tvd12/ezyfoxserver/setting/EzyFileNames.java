@@ -4,6 +4,5 @@ public final class EzyFileNames {
 
     public static final String SETTINGS = "ezy-settings.xml";
 
-    private EzyFileNames() {
-    }
+    private EzyFileNames() {}
 }

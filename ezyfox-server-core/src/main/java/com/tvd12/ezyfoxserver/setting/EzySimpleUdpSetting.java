@@ -15,7 +15,9 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "udp")
-public class EzySimpleUdpSetting extends EzyAbstractSocketSetting implements EzyUdpSetting {
+public class EzySimpleUdpSetting
+    extends EzyAbstractSocketSetting
+    implements EzyUdpSetting {
 
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;

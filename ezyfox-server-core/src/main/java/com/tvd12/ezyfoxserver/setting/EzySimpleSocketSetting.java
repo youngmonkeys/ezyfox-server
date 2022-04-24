@@ -15,7 +15,9 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "socket")
-public class EzySimpleSocketSetting extends EzyAbstractSocketSetting implements EzySocketSetting {
+public class EzySimpleSocketSetting
+    extends EzyAbstractSocketSetting
+    implements EzySocketSetting {
 
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;

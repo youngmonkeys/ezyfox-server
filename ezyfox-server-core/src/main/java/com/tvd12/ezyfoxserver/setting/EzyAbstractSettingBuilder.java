@@ -55,5 +55,4 @@ public abstract class EzyAbstractSettingBuilder<
     }
 
     protected abstract T newSetting();
-
 }

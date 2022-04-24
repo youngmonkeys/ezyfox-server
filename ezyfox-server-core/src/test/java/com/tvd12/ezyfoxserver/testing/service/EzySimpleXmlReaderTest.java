@@ -2,10 +2,10 @@ package com.tvd12.ezyfoxserver.testing.service;
 
 import java.io.File;
 
+import com.tvd12.ezyfox.mapping.jaxb.EzySimpleXmlMapper;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezyfox.json.EzySimpleJsonWriter;
-import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.testing.jaxberror.ClassA;
@@ -15,7 +15,7 @@ public class EzySimpleXmlReaderTest extends BaseTest {
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void test1() {
-        EzyXmlReader reader = EzySimplXmlMapper.builder()
+        EzyXmlReader reader = EzySimpleXmlMapper.builder()
                 .contextClass(ClassA.class)
                 .build();
         reader.read(new File("pom.xml"), ClassB.class);
@@ -23,7 +23,7 @@ public class EzySimpleXmlReaderTest extends BaseTest {
     
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void test2() {
-        EzyXmlReader reader = EzySimplXmlMapper.builder()
+        EzyXmlReader reader = EzySimpleXmlMapper.builder()
                 .contextPath("com.tvd12.ezyfoxserver.mapping")
                 .classLoader(getClass().getClassLoader())
                 .build();
@@ -32,7 +32,7 @@ public class EzySimpleXmlReaderTest extends BaseTest {
     
     @Test
     public void test3() {
-        EzyXmlReader reader = EzySimplXmlMapper.builder()
+        EzyXmlReader reader = EzySimpleXmlMapper.builder()
                 .contextPath("com.tvd12.ezyfoxserver")
                 .classLoader(getClass().getClassLoader())
                 .build();

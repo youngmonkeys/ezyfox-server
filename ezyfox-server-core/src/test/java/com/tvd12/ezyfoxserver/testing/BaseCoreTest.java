@@ -1,15 +1,11 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import static org.mockito.Mockito.mock;
-
-import java.security.KeyPair;
-
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyObjectBuilder;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.json.EzyJsonMapper;
 import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
-import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzySimpleXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfox.util.EzyInitable;
@@ -34,6 +30,10 @@ import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager.Builder;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 import com.tvd12.test.base.BaseTest;
+
+import java.security.KeyPair;
+
+import static org.mockito.Mockito.mock;
 
 public class BaseCoreTest extends BaseTest {
     
@@ -90,7 +90,7 @@ public class BaseCoreTest extends BaseTest {
     }
     
     protected EzyXmlReader getXmlReader() {
-        return EzySimplXmlMapper.builder()
+        return EzySimpleXmlMapper.builder()
                 .classLoader(getClassLoader())
                 .contextPath("com.tvd12.ezyfoxserver.mapping")
                 .build();

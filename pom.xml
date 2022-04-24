@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>ezyfox-server</artifactId>
+	<version>1.2.3</version>
 	<packaging>pom</packaging>
 
 	<name>ezyfox-server</name>
@@ -53,9 +55,17 @@
 			<organizationUrl>https://youngmonkeys.org/</organizationUrl>
 		</developer>
 	</developers>
-	
+
 	<properties>
-		<ezy.version>1.2.2</ezy.version>
-		<ezy.core.version>2.1.3</ezy.core.version>
+		<ezy.core.version>2.1.4</ezy.core.version>
 	</properties>
+
+	<modules>
+		<module>ezyfox-server-core</module>
+		<module>ezyfox-server-boot</module>
+		<module>ezyfox-server-nio</module>
+		<module>ezyfox-server-niorunner</module>
+		<module>ezyfox-server-support</module>
+		<module>ezyfox-server-embedded</module>
+	</modules>
 </project>

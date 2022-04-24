@@ -53,7 +53,7 @@ public class EzySimpleZoneContextTest extends BaseTest {
         EzyUserAccessAppEvent accessAppEvent = new EzySimpleUserAccessAppEvent(user);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, "dungtv", true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, user, true);
-        context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, EzyPredicates.ALWAY_TRUE, true);
+        context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, EzyPredicates.ALWAYS_TRUE, true);
         assert context.equals(context);
         EzyZoneContext zoneContext2 = mock(EzyZoneContext.class);
         EzySimpleZone zone2 = new EzySimpleZone();

@@ -15,7 +15,7 @@ public class EzyNetworkBytesFrameMinute extends EzyNetworkBytesFrame {
     
     @Override
     protected long getExistsTime() {
-        return EzyTimes.MILIS_OF_MINUTE;
+        return EzyTimes.MILLIS_OF_MINUTE;
     }
     
     public EzyNetworkBytesFrame nextFrame() {

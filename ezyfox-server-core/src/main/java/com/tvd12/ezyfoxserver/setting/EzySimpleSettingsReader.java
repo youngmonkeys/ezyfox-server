@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.setting;
 import java.nio.file.Paths;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.mapping.jaxb.EzySimplXmlMapper;
+import com.tvd12.ezyfox.mapping.jaxb.EzySimpleXmlMapper;
 import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -86,7 +86,7 @@ public class EzySimpleSettingsReader
     }
     
     protected EzyXmlReader newXmlReader() {
-        return EzySimplXmlMapper.builder()
+        return EzySimpleXmlMapper.builder()
                 .classLoader(classLoader)
                 .contextPath("com.tvd12.ezyfoxserver")
                 .build();

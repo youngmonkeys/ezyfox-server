@@ -11,7 +11,10 @@ import java.util.Collection;
 public abstract class EzyAbstractResponseApi implements EzyResponseApi {
 
     @Override
-    public void response(EzyPackage pack, boolean immediate) throws Exception {
+    public void response(
+        EzyPackage pack,
+        boolean immediate
+    ) throws Exception {
         if (pack.isEncrypted()) {
             secureResponse(pack, immediate);
         } else {
@@ -40,7 +43,10 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         }
     }
 
-    protected final void secureResponse(EzyPackage pack, boolean immediate) throws Exception {
+    protected final void secureResponse(
+        EzyPackage pack,
+        boolean immediate
+    ) throws Exception {
         EzyConstant connectionType = getConnectionType();
         Collection<EzySession> recipients = pack.getRecipients(connectionType);
         if (recipients.isEmpty()) {
@@ -76,7 +82,9 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
     }
 
     protected byte[] encryptMessageContent(
-        byte[] messageContent, byte[] encryptionKey) throws Exception {
+        byte[] messageContent,
+        byte[] encryptionKey
+    ) throws Exception {
         throw new UnsupportedOperationException("unsupported");
     }
 }

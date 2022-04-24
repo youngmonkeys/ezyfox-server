@@ -11,8 +11,11 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyAbstractServerEventController;
 import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 import com.tvd12.ezyfoxserver.setting.EzyAdminSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyAppSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyPluginSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySessionManagementSettingBuilder.EzyMaxRequestPerSecondBuilder;
+import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySettingsBuilder;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAdminsSetting;
@@ -33,8 +36,11 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleZonesSetting;
 import com.tvd12.ezyfoxserver.setting.EzySocketSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyThreadPoolSizeSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyUdpSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.EzyUserManagementSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSettingBuilder;
 import com.tvd12.ezyfoxserver.setting.EzyZoneSettingBuilder;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.util.RandomUtil;
 
 public class EzySettingsBuilderTest {
 
@@ -185,6 +191,69 @@ public class EzySettingsBuilderTest {
         assertEquals(settings.getZones().getSize(), 1);
         
         assertEquals(zonesSetting.getZoneByName("test"), zoneSetting);
+    }
+    
+    @Test
+    public void initCallTest() {
+        // given
+        int sessionMaxIdleTimeInSecond = RandomUtil.randomSmallInt();
+        int sessionMaxWaitingTimeInSecond = RandomUtil.randomSmallInt();
+        
+        EzySessionManagementSettingBuilder sessionManagementSettingBuilder =
+            new EzySessionManagementSettingBuilder()
+            .sessionMaxIdleTimeInSecond(sessionMaxIdleTimeInSecond)
+            .sessionMaxWaitingTimeInSecond(sessionMaxWaitingTimeInSecond);
+        
+        int userMaxIdleTimeInSecond = RandomUtil.randomSmallInt();
+        EzyUserManagementSettingBuilder userManagementSettingBuilder =
+            new EzyUserManagementSettingBuilder()
+            .userMaxIdleTimeInSecond(userMaxIdleTimeInSecond);
+        
+        String appName = RandomUtil.randomShortAlphabetString();
+        EzyAppSettingBuilder appSettingBuilder = new EzyAppSettingBuilder()
+            .name(appName);
+        
+        String pluginName = RandomUtil.randomShortAlphabetString();
+        EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()
+            .name(pluginName);
+        
+        String zoneName = RandomUtil.randomShortAlphabetString();
+        EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
+            .name(zoneName)
+            .userManagement(userManagementSettingBuilder.build())
+            .application(appSettingBuilder.build())
+            .plugin(pluginSettingBuilder.build());
+        
+        // when
+        EzySettings settings = new EzySettingsBuilder()
+            .sessionManagement(sessionManagementSettingBuilder.build())
+            .zone(zoneSettingBuilder.build())
+            .build();
+        
+        // then
+        Asserts.assertEquals(
+            settings.getSessionManagement().getSessionMaxIdleTime(),
+            sessionMaxIdleTimeInSecond * 1000,
+            false
+        );
+        Asserts.assertEquals(
+            settings.getSessionManagement().getSessionMaxWaitingTime(),
+            sessionMaxWaitingTimeInSecond * 1000,
+            false
+        );
+        Asserts.assertEquals(
+            settings.getZoneByName(zoneName).getUserManagement().getUserMaxIdleTime(),
+            userMaxIdleTimeInSecond * 1000,
+            false
+        );
+        Asserts.assertEquals(
+            settings.getZoneByName(zoneName).getAppByName(appName).getZoneId(),
+            settings.getZoneByName(zoneName).getId()
+        );
+        Asserts.assertEquals(
+            settings.getZoneByName(zoneName).getPluginByName(pluginName).getZoneId(),
+            settings.getZoneByName(zoneName).getId()
+        );
     }
     
     public static class TestCodecCreator implements EzyCodecCreator {

@@ -24,66 +24,66 @@ public interface EzySessionManager<S extends EzySession> {
      */
     boolean containsSession(long id); 
     
-	/**
+    /**
      * Get session by id
      * 
      * @param id the id
      * @return the session mapped to the id
      */
     EzySession getSession(long id);
-	
-	/**
-	 * Add session to disconnect queue
-	 * 
-	 * @param session the session
-	 * @param reason the reason
-	 */
-	void removeSession(S session, EzyConstant reason);
-	
-	/**
-	 * clear session
-	 * 
-	 * @param session the session
-	 */
-	void clearSession(S session);
-	
-	/**
+
+    /**
+     * Add session to disconnect queue
+     *
+     * @param session the session
+     * @param reason the reason
+     */
+    void removeSession(S session, EzyConstant reason);
+
+    /**
+     * clear session
+     *
+     * @param session the session
+     */
+    void clearSession(S session);
+
+    /**
      * Get all sessions
      * 
      * @return all sessions
      */
     List<S> getAllSessions();
-	
-	/**
-	 * Get all alive sessions
-	 * 
-	 * @return all alive sessions
-	 */
-	List<S> getAliveSessions();
-	
-	/**
+
+    /**
+     * Get all alive sessions
+     *
+     * @return all alive sessions
+     */
+    List<S> getAliveSessions();
+
+    /**
      * Get logged in sessions
      * 
      * @return all logged in sessions
      */
-	List<S> getLoggedInSessions();
-	
-	/**
-	 * @return all sessions count
-	 */
-	int getAllSessionCount();
-	
-	/**
-	 * @return alive sessions count
-	 */
-	int getAliveSessionCount();
-	
-	/**
-	 * @return logged in session count
-	 */
-	int getLoggedInSessionCount();
-	
-	/**
+    List<S> getLoggedInSessions();
+
+    /**
+     * @return all sessions count
+     */
+    int getAllSessionCount();
+
+    /**
+     * @return alive sessions count
+     */
+    int getAliveSessionCount();
+
+    /**
+     * @return logged in session count
+     */
+    int getLoggedInSessionCount();
+
+    /**
      * Provide session from pool and map the session to channel 
      * 
      * @param channel the channel
@@ -107,5 +107,5 @@ public interface EzySessionManager<S extends EzySession> {
     default void removeSession(S session) {
         removeSession(session, EzyDisconnectReason.UNKNOWN);
     }
-	
+
 }

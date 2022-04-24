@@ -17,73 +17,73 @@ import java.util.Collections;
 
 public class EzyAbstractResponseApiTest {
 
-	@Test
-	public void secureResponseNoRecipients() {
-		// given
-		EzyPackage packet = mock(EzyPackage.class);
-		when(packet.getRecipients(EzyConnectionType.SOCKET)).thenReturn(Collections.emptyList());
-		
-		InternalResponseApi sut = new InternalResponseApi();
-		
-		// when
-		MethodInvoker.create()
-		.object(sut)
-		.method("secureResponse")
-		.param(EzyPackage.class, packet)
-		.param(boolean.class, true)
-		.invoke();
-		
-		// then
-		verify(packet, times(1)).getRecipients(EzyConnectionType.SOCKET);
-	}
-	
-	@Test
-	public void dataToMessageContentTest() {
-		// given
-		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
-		
-		InternalResponseApi sut = new InternalResponseApi();
-		
-		// when
-		Throwable e = Asserts.assertThrows(() ->
-			MethodInvoker.create()
-				.object(sut)
-				.method("dataToMessageContent")
-				.param(EzyArray.class, data)
-				.invoke()
-		);
-		
-		// then
-		Asserts.assertEquals(UnsupportedOperationException.class, e.getCause().getCause().getClass());
-	}
-	
-	@Test
-	public void encrypteMessageContentTest() {
-		// given
-		byte[] messageContent = new byte[0];
-		byte[] encryptionKey = new byte[0];
-		
-		InternalResponseApi sut = new InternalResponseApi();
-		
-		// when
-		Throwable e = Asserts.assertThrows(() -> 
-			MethodUtil.invokeMethod("encrypteMessageContent", sut, messageContent, encryptionKey));
-		
-		// then
-		Asserts.assertEquals(UnsupportedOperationException.class, e.getCause().getCause().getClass());
-	}
-	
-	private static class InternalResponseApi extends EzyAbstractResponseApi {
+    @Test
+    public void secureResponseNoRecipients() {
+        // given
+        EzyPackage packet = mock(EzyPackage.class);
+        when(packet.getRecipients(EzyConnectionType.SOCKET)).thenReturn(Collections.emptyList());
 
-		@Override
-		protected EzyConstant getConnectionType() {
-			return EzyConnectionType.SOCKET;
-		}
+        InternalResponseApi sut = new InternalResponseApi();
 
-		@Override
-		protected Object encodeData(EzyArray data) throws Exception {
-			return null;
-		}
-		
-	}
+        // when
+        MethodInvoker.create()
+        .object(sut)
+        .method("secureResponse")
+        .param(EzyPackage.class, packet)
+        .param(boolean.class, true)
+        .invoke();
+
+        // then
+        verify(packet, times(1)).getRecipients(EzyConnectionType.SOCKET);
+    }
+
+    @Test
+    public void dataToMessageContentTest() {
+        // given
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+
+        InternalResponseApi sut = new InternalResponseApi();
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            MethodInvoker.create()
+                .object(sut)
+                .method("dataToMessageContent")
+                .param(EzyArray.class, data)
+                .invoke()
+        );
+
+        // then
+        Asserts.assertEquals(UnsupportedOperationException.class, e.getCause().getCause().getClass());
+    }
+
+    @Test
+    public void encrypteMessageContentTest() {
+        // given
+        byte[] messageContent = new byte[0];
+        byte[] encryptionKey = new byte[0];
+
+        InternalResponseApi sut = new InternalResponseApi();
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            MethodUtil.invokeMethod("encrypteMessageContent", sut, messageContent, encryptionKey));
+
+        // then
+        Asserts.assertEquals(UnsupportedOperationException.class, e.getCause().getCause().getClass());
+    }
+
+    private static class InternalResponseApi extends EzyAbstractResponseApi {
+
+        @Override
+        protected EzyConstant getConnectionType() {
+            return EzyConnectionType.SOCKET;
+        }
+
+        @Override
+        protected Object encodeData(EzyArray data) throws Exception {
+            return null;
+        }
+
+    }
 }

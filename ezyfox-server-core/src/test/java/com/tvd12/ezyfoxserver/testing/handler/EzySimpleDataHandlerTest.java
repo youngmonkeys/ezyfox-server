@@ -612,49 +612,49 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
+    @Test
     public void processMaxRequestPerSecondDisconnect() {
-    	// given
-    	EzySession session = spy(EzyAbstractSession.class);
-    	EzyServerContext serverContext = mock(EzyServerContext.class);
-    	EzyServer server = mock(EzyServer.class);
-    	EzySessionManager sessionManager = mock(EzySessionManager.class);
-    	when(server.getSessionManager()).thenReturn(sessionManager);
-    	when(serverContext.getServer()).thenReturn(server);
-    	
-    	
-    	EzySessionManagementSetting sessionManagementSetting = 
-    			mock(EzySessionManagementSetting.class);
-    	EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
-    			mock(EzySessionManagementSetting.EzyMaxRequestPerSecond.class);
-    	when(maxRequestPerSecond.getAction()).thenReturn(EzyMaxRequestPerSecondAction.DISCONNECT_SESSION);
-    	when(sessionManagementSetting.getSessionMaxRequestPerSecond())
-    		.thenReturn(maxRequestPerSecond);
-    	
-    	EzySettings settings = mock(EzySettings.class);
-    	when(server.getSettings()).thenReturn(settings);
-    	when(settings.getSessionManagement()).thenReturn(sessionManagementSetting);
-    	
-    	EzyLoggerSetting loggerSetting = mock(EzyLoggerSetting.class);
-    	EzyLoggerSetting.EzyIgnoredCommandsSetting ignoredCommandsSetting =
-    			mock(EzyLoggerSetting.EzyIgnoredCommandsSetting.class);
-    	when(ignoredCommandsSetting.getCommands()).thenReturn(Collections.emptySet());
-    	when(loggerSetting.getIgnoredCommands()).thenReturn(ignoredCommandsSetting);
-    	when(settings.getLogger()).thenReturn(loggerSetting);
-    	
-    	MyTestDataHandler sut = new MyTestDataHandler(serverContext, session);
-    	
-    	// when
-    	sut.processMaxRequestPerSecond();
-    	
-    	// then
-    	verify(sessionManager, times(1)).removeSession(session, EzyDisconnectReason.MAX_REQUEST_PER_SECOND);;
+        // given
+        EzySession session = spy(EzyAbstractSession.class);
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyServer server = mock(EzyServer.class);
+        EzySessionManager sessionManager = mock(EzySessionManager.class);
+        when(server.getSessionManager()).thenReturn(sessionManager);
+        when(serverContext.getServer()).thenReturn(server);
+
+
+        EzySessionManagementSetting sessionManagementSetting =
+                mock(EzySessionManagementSetting.class);
+        EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
+                mock(EzySessionManagementSetting.EzyMaxRequestPerSecond.class);
+        when(maxRequestPerSecond.getAction()).thenReturn(EzyMaxRequestPerSecondAction.DISCONNECT_SESSION);
+        when(sessionManagementSetting.getSessionMaxRequestPerSecond())
+            .thenReturn(maxRequestPerSecond);
+
+        EzySettings settings = mock(EzySettings.class);
+        when(server.getSettings()).thenReturn(settings);
+        when(settings.getSessionManagement()).thenReturn(sessionManagementSetting);
+
+        EzyLoggerSetting loggerSetting = mock(EzyLoggerSetting.class);
+        EzyLoggerSetting.EzyIgnoredCommandsSetting ignoredCommandsSetting =
+                mock(EzyLoggerSetting.EzyIgnoredCommandsSetting.class);
+        when(ignoredCommandsSetting.getCommands()).thenReturn(Collections.emptySet());
+        when(loggerSetting.getIgnoredCommands()).thenReturn(ignoredCommandsSetting);
+        when(settings.getLogger()).thenReturn(loggerSetting);
+
+        MyTestDataHandler sut = new MyTestDataHandler(serverContext, session);
+
+        // when
+        sut.processMaxRequestPerSecond();
+
+        // then
+        verify(sessionManager, times(1)).removeSession(session, EzyDisconnectReason.MAX_REQUEST_PER_SECOND);;
     }
     
     
     @Test
     public void dataReceivedValidateStateFalse() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         sut.destroy();
         
@@ -669,7 +669,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void dataReceivedValidateSessionIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "session", null);
         
@@ -684,7 +684,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void dataReceivedValidateSessionInActive() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         EzySession session = FieldUtil.getFieldValue(sut, "session");
         session.setActivated(false);
@@ -700,7 +700,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void streamingReceivedValidateStateFalse() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         sut.destroy();
         
@@ -713,7 +713,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void streamingReceivedValidateSessionIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "session", null);
         
@@ -726,10 +726,10 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void processMaxRequestPerSecondActionDiffDisconnection() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
-        		FieldUtil.getFieldValue(sut, "maxRequestPerSecond");
+                FieldUtil.getFieldValue(sut, "maxRequestPerSecond");
         when(maxRequestPerSecond.getAction()).thenReturn(EzyMaxRequestPerSecondAction.DROP_REQUEST);
         
         // when
@@ -741,7 +741,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void processMaxRequestPerSecondWithSessionManagerIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "sessionManager", null);
         
@@ -754,18 +754,18 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void debugLogReceivedDataIsNotDebug() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         EzySettings settings = FieldUtil.getFieldValue(sut, "settings");
         when(settings.isDebug()).thenReturn(false);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("debugLogReceivedData")
-        	.param(EzyConstant.class, EzyCommand.APP_ACCESS)
-        	.param(EzyArray.class, EzyEntityFactory.EMPTY_ARRAY)
-        	.call();
+            .object(sut)
+            .method("debugLogReceivedData")
+            .param(EzyConstant.class, EzyCommand.APP_ACCESS)
+            .param(EzyArray.class, EzyEntityFactory.EMPTY_ARRAY)
+            .call();
         
         // then
         verify(settings, times(1)).isDebug();
@@ -773,18 +773,18 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void debugLogReceivedDataUnloggableCommandsIsPing() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         EzySettings settings = FieldUtil.getFieldValue(sut, "settings");
         when(settings.isDebug()).thenReturn(true);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("debugLogReceivedData")
-        	.param(EzyConstant.class, EzyCommand.PING)
-        	.param(EzyArray.class, EzyEntityFactory.EMPTY_ARRAY)
-        	.call();
+            .object(sut)
+            .method("debugLogReceivedData")
+            .param(EzyConstant.class, EzyCommand.PING)
+            .param(EzyArray.class, EzyEntityFactory.EMPTY_ARRAY)
+            .call();
         
         // then
         verify(settings, times(1)).isDebug();
@@ -792,7 +792,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void exceptionCaughtHandlerNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         Throwable e = new Exception("just test");
         
@@ -803,7 +803,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void removeSessionWithSessionManagerIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "sessionManager", null);
         
@@ -816,16 +816,16 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void notifySessionRemovedZoneContextIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "zoneContext", null);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("notifySessionRemoved")
-        	.param(EzyConstant.class, EzyDisconnectReason.ADMIN_BAN)
-        	.invoke();
+            .object(sut)
+            .method("notifySessionRemoved")
+            .param(EzyConstant.class, EzyDisconnectReason.ADMIN_BAN)
+            .invoke();
         
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "zoneContext"));
@@ -833,16 +833,16 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void notifyAppsSessionRemovedUserNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "user", null);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("notifyAppsSessionRemoved")
-        	.param(EzyEvent.class, mock(EzyEvent.class))
-        	.invoke();
+            .object(sut)
+            .method("notifyAppsSessionRemoved")
+            .param(EzyEvent.class, mock(EzyEvent.class))
+            .invoke();
         
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "user"));
@@ -850,16 +850,16 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void responseContextIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "context", null);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("response")
-        	.param(EzyResponse.class, mock(EzyResponse.class))
-        	.invoke();
+            .object(sut)
+            .method("response")
+            .param(EzyResponse.class, mock(EzyResponse.class))
+            .invoke();
         
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "context"));
@@ -867,7 +867,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     
     @Test
     public void exceptionCaughtSessionManagerIsNull() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         Throwable e = new EzyMaxRequestSizeException("just test");
         FieldUtil.setFieldValue(sut, "sessionManager", null);
@@ -880,8 +880,8 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
     
     @SuppressWarnings("rawtypes")
-	private MyTestDataHandler createHandler() {
-    	int zoneId = 1;
+    private MyTestDataHandler createHandler() {
+        int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         EzyZone zone = mock(EzyZone.class);

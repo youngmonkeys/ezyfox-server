@@ -4,16 +4,16 @@ public interface EzyPacketQueue {
 
     int size();
     
-	void clear();
-	
-	EzyPacket take();
-	
-	EzyPacket peek();
-	
-	boolean isFull();
-	
-	boolean isEmpty();
+    void clear();
+    
+    EzyPacket take();
+    
+    EzyPacket peek();
+    
+    boolean isFull();
+    
+    boolean isEmpty();
 
-	boolean add(EzyPacket packet);
-	
+    boolean add(EzyPacket packet);
+    
 }

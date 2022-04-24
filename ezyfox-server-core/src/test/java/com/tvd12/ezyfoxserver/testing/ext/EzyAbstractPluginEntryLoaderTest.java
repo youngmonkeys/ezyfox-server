@@ -7,13 +7,13 @@ import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 
 public class EzyAbstractPluginEntryLoaderTest {
 
-	@Test
-	public void newTest() {
-		new EzyAbstractPluginEntryLoader() {
-			@Override
-			public EzyPluginEntry load() throws Exception {
-				return null;
-			}
-		};
-	}
+    @Test
+    public void newTest() {
+        new EzyAbstractPluginEntryLoader() {
+            @Override
+            public EzyPluginEntry load() throws Exception {
+                return null;
+            }
+        };
+    }
 }

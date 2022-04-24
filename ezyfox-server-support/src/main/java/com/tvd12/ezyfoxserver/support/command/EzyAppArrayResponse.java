@@ -7,13 +7,13 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 
 public class EzyAppArrayResponse extends EzyAbstractArrayResponse {
 
-	public EzyAppArrayResponse(EzyAppContext context, EzyMarshaller marshaller) {
-		super(context, marshaller);
-	}
+    public EzyAppArrayResponse(EzyAppContext context, EzyMarshaller marshaller) {
+        super(context, marshaller);
+    }
 
-	@Override
-	protected EzyResponse newResponse() {
-		return context.cmd(EzyAppResponse.class);
-	}
-	
+    @Override
+    protected EzyResponse newResponse() {
+        return context.cmd(EzyAppResponse.class);
+    }
+
 }

@@ -9,5 +9,5 @@ public class EzyRequestPluginResponse
     public EzyRequestPluginResponse(EzyRequestPluginResponseParams params) {
         super(EzyCommand.PLUGIN_REQUEST, params);
     }
-	
+    
 }

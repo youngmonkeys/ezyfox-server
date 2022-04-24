@@ -13,54 +13,54 @@ import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 public class Websock {
-	private static class Adapter extends WebSocketAdapter {
-		@Override
-		public void onWebSocketConnect(Session sess) {
-			System.out.print("client connected");
-		}
-		
-		@Override
-		public void onWebSocketBinary(byte[] payload, int offset, int len) {
-			System.out.println("onWebSocketBinary");
-		}
-		
-		@Override
-		public void onWebSocketText(String message) {
-			System.out.println("onWebSocketText");
-		}
-	}
+    private static class Adapter extends WebSocketAdapter {
+        @Override
+        public void onWebSocketConnect(Session sess) {
+            System.out.print("client connected");
+        }
 
-	public static void main(String[] args) throws Exception {
-		Server server = new Server(2208);
+        @Override
+        public void onWebSocketBinary(byte[] payload, int offset, int len) {
+            System.out.println("onWebSocketBinary");
+        }
 
-																	// needed.
+        @Override
+        public void onWebSocketText(String message) {
+            System.out.println("onWebSocketText");
+        }
+    }
 
-		ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
-		handlerCollection.addHandler(createWebsocketHandler());
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(2208);
 
-		server.setHandler(handlerCollection);
+                                                                    // needed.
 
-		server.start();
-	}
+        ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
+        handlerCollection.addHandler(createWebsocketHandler());
 
-	private static ContextHandler createWebsocketHandler() {
-		ContextHandler contextHandler = new ContextHandler("/ws");
-		contextHandler.setAllowNullPathInfo(true); // disable redirect from /ws
-													// to /ws/
+        server.setHandler(handlerCollection);
 
-		final WebSocketCreator webSocketcreator = new WebSocketCreator() {
-			public Object createWebSocket(ServletUpgradeRequest request, ServletUpgradeResponse response) {
-				return new Adapter();
-			}
-		};
+        server.start();
+    }
 
-		Handler webSocketHandler = new WebSocketHandler() {
-			public void configure(WebSocketServletFactory factory) {
-				factory.setCreator(webSocketcreator);
-			}
-		};
+    private static ContextHandler createWebsocketHandler() {
+        ContextHandler contextHandler = new ContextHandler("/ws");
+        contextHandler.setAllowNullPathInfo(true); // disable redirect from /ws
+                                                    // to /ws/
 
-		contextHandler.setHandler(webSocketHandler);
-		return contextHandler;
-	}
+        final WebSocketCreator webSocketcreator = new WebSocketCreator() {
+            public Object createWebSocket(ServletUpgradeRequest request, ServletUpgradeResponse response) {
+                return new Adapter();
+            }
+        };
+
+        Handler webSocketHandler = new WebSocketHandler() {
+            public void configure(WebSocketServletFactory factory) {
+                factory.setCreator(webSocketcreator);
+            }
+        };
+
+        contextHandler.setHandler(webSocketHandler);
+        return contextHandler;
+    }
 }

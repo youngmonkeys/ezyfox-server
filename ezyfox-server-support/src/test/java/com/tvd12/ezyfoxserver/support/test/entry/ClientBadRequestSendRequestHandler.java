@@ -12,13 +12,13 @@ import lombok.Setter;
 @EzyPrototype
 @EzyRequestListener("badRequestSend")
 public class ClientBadRequestSendRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler {
+        extends EzyLoggable
+        implements
+            EzyHandler {
 
-	@Override
-	public void handle() {
-		throw new EzyBadRequestException(1, "test", true);
-	}
+    @Override
+    public void handle() {
+        throw new EzyBadRequestException(1, "test", true);
+    }
 
 }

@@ -74,22 +74,22 @@ public class EzySimpleAppContextTest extends BaseTest {
     
     @Test
     public void sendMultiTest() {
-    	// given
-    	EzyData data = mock(EzyData.class);
-    	EzySession recipient = mock(EzySession.class);
-    	List<EzySession> recipients = Arrays.asList(recipient);
-    	boolean encrypted = RandomUtil.randomBoolean();
-    	
-    	EzyAppSendResponse sendResponse = mock(EzyAppSendResponse.class);
-    	doNothing().when(sendResponse).execute(data, recipients, encrypted, EzyTransportType.TCP);
-    	
-    	EzySimpleAppContext sut = new EzySimpleAppContext();
-    	FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
-    	
-    	// when
-    	sut.send(data, recipients, encrypted, EzyTransportType.TCP);
-    	
-    	// then
-    	verify(sendResponse, times(1)).execute(data, recipients, encrypted, EzyTransportType.TCP);
+        // given
+        EzyData data = mock(EzyData.class);
+        EzySession recipient = mock(EzySession.class);
+        List<EzySession> recipients = Arrays.asList(recipient);
+        boolean encrypted = RandomUtil.randomBoolean();
+
+        EzyAppSendResponse sendResponse = mock(EzyAppSendResponse.class);
+        doNothing().when(sendResponse).execute(data, recipients, encrypted, EzyTransportType.TCP);
+
+        EzySimpleAppContext sut = new EzySimpleAppContext();
+        FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
+
+        // when
+        sut.send(data, recipients, encrypted, EzyTransportType.TCP);
+
+        // then
+        verify(sendResponse, times(1)).execute(data, recipients, encrypted, EzyTransportType.TCP);
     }
 }

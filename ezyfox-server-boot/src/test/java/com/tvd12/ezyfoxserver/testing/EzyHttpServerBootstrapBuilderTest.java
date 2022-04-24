@@ -8,17 +8,17 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyHttpServerBootstrapBuilderTest extends BaseTest {
 
-	@Test
-	public void test() {
-		new ExEzyHttpServerBootstrapBuilder();
-	}
-	
-	public static class ExEzyHttpServerBootstrapBuilder extends EzyHttpServerBootstrapBuilder {
+    @Test
+    public void test() {
+        new ExEzyHttpServerBootstrapBuilder();
+    }
+    
+    public static class ExEzyHttpServerBootstrapBuilder extends EzyHttpServerBootstrapBuilder {
 
-		@Override
-		protected EzyServerBootstrap newServerBootstrap() {
-			return null;
-		}
-		
-	}
+        @Override
+        protected EzyServerBootstrap newServerBootstrap() {
+            return null;
+        }
+        
+    }
 }

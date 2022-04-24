@@ -13,21 +13,21 @@ public class EzyAccessAppParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = -2355811939162393678L;
     
     protected EzyData data;
-	protected EzyAppSetting app;
-	
-	@Override
-	protected EzyArrayBuilder serialize0() {
-	    return newArrayBuilder()
+    protected EzyAppSetting app;
+
+    @Override
+    protected EzyArrayBuilder serialize0() {
+        return newArrayBuilder()
                 .append(app.getId())
                 .append(app.getName())
                 .append(data);
-	}
-	
-	@Override
-	public void release() {
-	    super.release();
-	    this.data = null;
-	    this.app = null;
-	}
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        this.data = null;
+        this.app = null;
+    }
 
 }

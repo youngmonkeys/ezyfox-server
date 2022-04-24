@@ -45,8 +45,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
     
     public EzyLoginProcessor(EzyServerContext serverContext) {
         this.serverContext = serverContext;
-    	this.sessionManager = getSessionManager(serverContext);
-    	this.userStats = getStatistics(serverContext).getUserStats();
+        this.sessionManager = getSessionManager(serverContext);
+        this.userStats = getStatistics(serverContext).getUserStats();
     }
     
     public void apply(EzyZoneContext zoneContext, EzyUserLoginEvent event) {
@@ -110,8 +110,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         int sessionCount = user.getSessionCount();
         if(sessionCount >= maxSessionPerUser) {
             if(sessionCount > maxSessionPerUser 
-            		|| maxSessionPerUser > 1 
-            		|| !allowChangeSession)
+                    || maxSessionPerUser > 1
+                    || !allowChangeSession)
                 throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         }
         session.setLoggedIn(true);

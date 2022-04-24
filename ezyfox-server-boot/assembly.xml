@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-	<id>bin</id>
-	<includeBaseDirectory>false</includeBaseDirectory>
-	<formats>
-		<format>dir</format>
-	</formats>
+    <id>bin</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>dir</format>
+    </formats>
 
-	<dependencySets>
-		<dependencySet>
-			<useProjectArtifact>true</useProjectArtifact>
-			<outputDirectory>lib</outputDirectory>
-		</dependencySet>
-	</dependencySets>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
 
 </assembly>

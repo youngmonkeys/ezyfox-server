@@ -22,7 +22,7 @@ public class EzyComponent implements EzyExceptionHandlersFetcher, EzyDestroyable
     
     @Override
     public void destroy() {
-    	if(eventControllers != null)
+        if(eventControllers != null)
             processWithLogException(() -> eventControllers.destroy());
         this.eventControllers = null;
     }

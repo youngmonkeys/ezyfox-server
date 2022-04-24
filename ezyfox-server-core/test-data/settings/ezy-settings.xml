@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings
-	xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
-  		ezy-settings-1.0.0.xsd"
-	xmlns="http://www.tvd12.com/schema/ezyfox/settings" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	
-	<max-sessions>30000</max-sessions>
-	
-	<socket>
-		<port>3005</port>
-		<address>0.0.0.0</address>
-		<active>true</active>
-		<max-request-size>65536</max-request-size>
-		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
-	</socket>
-	
-	<web-socket>
-		<port>2208</port>
-		<address>0.0.0.0</address>
-		<active>true</active>
-		<ssl-port>2812</ssl-port>
-		<max-frame-size>65536</max-frame-size>
-		<ssl-active>false</ssl-active>
-		<ssl-config>
-			<file>ssl-config.properties</file>
-			<loader>com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader</loader>
-			<context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder</context-factory-builder>
-		</ssl-config>
-		<codec-creator>com.tvd12.ezyfoxserver.netty.codec.JacksonWsCodecCreator</codec-creator>
-	</web-socket>
-	
-	<administrators>
-		<administrator>
-			<username>admin</username>
-			<password>admin</password>
-			<api-access-token>admin</api-access-token>
-		</administrator>
-	</administrators>
-	
-	<session-management>
-		<session-allow-reconnect>true</session-allow-reconnect>
-		<session-max-idle-time>15000</session-max-idle-time>
-		<session-max-waiting-time>30000</session-max-waiting-time>
-		<session-max-request-per-second>
-			<value>20</value>
-			<action>DISCONNECT_SESSION</action>
-		</session-max-request-per-second>
-	</session-management>
-	
-	<zones>
-		<zone>
-			<name>example</name>
-			<config-file>ezy-zone-settings.xml</config-file>
-			<active>true</active>
-		</zone>
-		<zone>
-			<name>example2</name>
-			<config-file>ezy-zone-settings.xml</config-file>
-			<active>false</active>
-		</zone>
-	</zones>
-	
+    xsi:schemaLocation="http://www.tvd12.com/schema/ezyfox/settings
+          ezy-settings-1.0.0.xsd"
+    xmlns="http://www.tvd12.com/schema/ezyfox/settings"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <max-sessions>30000</max-sessions>
+
+    <socket>
+        <port>3005</port>
+        <address>0.0.0.0</address>
+        <active>true</active>
+        <max-request-size>65536</max-request-size>
+        <codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
+    </socket>
+
+    <web-socket>
+        <port>2208</port>
+        <address>0.0.0.0</address>
+        <active>true</active>
+        <ssl-port>2812</ssl-port>
+        <max-frame-size>65536</max-frame-size>
+        <ssl-active>false</ssl-active>
+        <ssl-config>
+            <file>ssl-config.properties</file>
+            <loader>com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader</loader>
+            <context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder</context-factory-builder>
+        </ssl-config>
+        <codec-creator>com.tvd12.ezyfoxserver.netty.codec.JacksonWsCodecCreator</codec-creator>
+    </web-socket>
+
+    <administrators>
+        <administrator>
+            <username>admin</username>
+            <password>admin</password>
+            <api-access-token>admin</api-access-token>
+        </administrator>
+    </administrators>
+
+    <session-management>
+        <session-allow-reconnect>true</session-allow-reconnect>
+        <session-max-idle-time>15000</session-max-idle-time>
+        <session-max-waiting-time>30000</session-max-waiting-time>
+        <session-max-request-per-second>
+            <value>20</value>
+            <action>DISCONNECT_SESSION</action>
+        </session-max-request-per-second>
+    </session-management>
+
+    <zones>
+        <zone>
+            <name>example</name>
+            <config-file>ezy-zone-settings.xml</config-file>
+            <active>true</active>
+        </zone>
+        <zone>
+            <name>example2</name>
+            <config-file>ezy-zone-settings.xml</config-file>
+            <active>false</active>
+        </zone>
+    </zones>
+
 </settings>
 
 <!-- http://localhost:8080/schema/ezyfox/settings/ -->

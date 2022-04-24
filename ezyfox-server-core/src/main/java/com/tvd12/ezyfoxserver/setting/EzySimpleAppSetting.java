@@ -28,25 +28,25 @@ public class EzySimpleAppSetting extends EzyAbstractSetting implements EzyAppSet
     @XmlElement(name = "max-users")
     protected int maxUsers = 999999;
     
-	private static final AtomicInteger COUNTER = new AtomicInteger(0);
-	
-	@Override
-	protected AtomicInteger getIdCounter() {
-		return COUNTER;
-	}
-	
-	@Override
-	protected String getParentFolder() {
-	    Path path = Paths.get(homePath, APPS, ENTRIES);
-	    return (Files.exists(path) 
-	            ? Paths.get(APPS, ENTRIES) 
-	            : Paths.get(APPS)).toString();
-	}
-	
-	@Override
-	public Map<Object, Object> toMap() {
-	     Map<Object, Object> map = super.toMap();
-	     map.put("maxUsers", maxUsers);
-	     return map;
-	}
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
+
+    @Override
+    protected AtomicInteger getIdCounter() {
+        return COUNTER;
+    }
+
+    @Override
+    protected String getParentFolder() {
+        Path path = Paths.get(homePath, APPS, ENTRIES);
+        return (Files.exists(path)
+                ? Paths.get(APPS, ENTRIES)
+                : Paths.get(APPS)).toString();
+    }
+
+    @Override
+    public Map<Object, Object> toMap() {
+         Map<Object, Object> map = super.toMap();
+         map.put("maxUsers", maxUsers);
+         return map;
+    }
 }

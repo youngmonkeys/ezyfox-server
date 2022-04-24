@@ -12,25 +12,25 @@ import com.tvd12.test.assertion.Asserts;
 
 public class EzyEventControllerSettingBuilderTest {
 
-	@Test
-	public void test() {
-		// given
-		EzyEventControllerSettingBuilder sut = new EzyEventControllerSettingBuilder()
-				.controller(A.class)
-				.eventType(EzyEventType.SERVER_READY);
-		
-		// when
-		EzyEventControllerSetting eventController = sut.build();
-		
-		// then
-		Asserts.assertEquals(A.class.getName(), eventController.getController());
-		Asserts.assertEquals(EzyEventType.SERVER_READY.toString(), eventController.getEventType());;
-	}
-	
-	private static class A implements EzyEventController<EzyServerContext, EzyEvent> {
-		@Override
-		public void handle(EzyServerContext ctx, EzyEvent event) {
-		}
-	}
-	
+    @Test
+    public void test() {
+        // given
+        EzyEventControllerSettingBuilder sut = new EzyEventControllerSettingBuilder()
+                .controller(A.class)
+                .eventType(EzyEventType.SERVER_READY);
+
+        // when
+        EzyEventControllerSetting eventController = sut.build();
+
+        // then
+        Asserts.assertEquals(A.class.getName(), eventController.getController());
+        Asserts.assertEquals(EzyEventType.SERVER_READY.toString(), eventController.getEventType());;
+    }
+
+    private static class A implements EzyEventController<EzyServerContext, EzyEvent> {
+        @Override
+        public void handle(EzyServerContext ctx, EzyEvent event) {
+        }
+    }
+
 }

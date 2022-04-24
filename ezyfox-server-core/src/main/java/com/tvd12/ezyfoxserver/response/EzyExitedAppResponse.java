@@ -6,8 +6,8 @@ public class EzyExitedAppResponse
         extends EzySimpleParamsResponse<EzyExitedAppParams> {
     private static final long serialVersionUID = 1179311642566987837L;
     
-	public EzyExitedAppResponse(EzyExitedAppParams params) {
-	    super(EzyCommand.APP_EXIT, params);
-	}
+    public EzyExitedAppResponse(EzyExitedAppParams params) {
+        super(EzyCommand.APP_EXIT, params);
+    }
 
 }

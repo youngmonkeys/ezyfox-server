@@ -6,20 +6,20 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 
 public interface EzyChannel {
 
-	void close();
-	
-	void disconnect();
-	
-	boolean isConnected();
-	
-	int write(Object data, boolean binary) throws Exception;
-	
-	<T> T getConnection();
-	
-	EzyConnectionType getConnectionType();
-	
-	SocketAddress getServerAddress();
-	
-	SocketAddress getClientAddress();
-	
+    void close();
+
+    void disconnect();
+
+    boolean isConnected();
+
+    int write(Object data, boolean binary) throws Exception;
+
+    <T> T getConnection();
+
+    EzyConnectionType getConnectionType();
+
+    SocketAddress getServerAddress();
+
+    SocketAddress getClientAddress();
+
 }

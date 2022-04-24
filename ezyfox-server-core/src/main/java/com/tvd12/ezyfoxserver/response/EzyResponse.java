@@ -8,6 +8,6 @@ import com.tvd12.ezyfox.util.EzyReleasable;
 
 public interface EzyResponse extends EzyArraySerializable, EzyReleasable, Serializable {
 
-	EzyConstant getCommand();
-	
+    EzyConstant getCommand();
+    
 }

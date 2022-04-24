@@ -12,28 +12,28 @@ import com.tvd12.ezyfoxserver.statistics.EzyRequestFrameSecond;
 import lombok.Setter;
 
 public abstract class EzyAbstractSessionFactory<S extends EzySession> 
-		implements EzySessionFactory<S> {
+        implements EzySessionFactory<S> {
 
-	@Setter
-	protected EzyMaxRequestPerSecond maxRequestPerSecond;
-	protected final AtomicInteger counter = new AtomicInteger(0);
+    @Setter
+    protected EzyMaxRequestPerSecond maxRequestPerSecond;
+    protected final AtomicInteger counter = new AtomicInteger(0);
 
-	@Override
-	public final S newProduct() {
-		S session = newSession();
-		initSession((EzyAbstractSession)session);
-		return session;
-	}
-	
-	protected void initSession(EzyAbstractSession session) {
-		session.setId(counter.incrementAndGet());
-		session.setCreationTime(System.currentTimeMillis());
-		session.setPacketQueue(new EzyNonBlockingPacketQueue());
-		session.setSystemRequestQueue(new EzyNonBlockingRequestQueue());
-		session.setExtensionRequestQueue(new EzyNonBlockingRequestQueue());
-		session.setRequestFrameInSecond(new EzyRequestFrameSecond(maxRequestPerSecond.getValue()));
-	}
-	
-	protected abstract S newSession();
-	
+    @Override
+    public final S newProduct() {
+        S session = newSession();
+        initSession((EzyAbstractSession)session);
+        return session;
+    }
+
+    protected void initSession(EzyAbstractSession session) {
+        session.setId(counter.incrementAndGet());
+        session.setCreationTime(System.currentTimeMillis());
+        session.setPacketQueue(new EzyNonBlockingPacketQueue());
+        session.setSystemRequestQueue(new EzyNonBlockingRequestQueue());
+        session.setExtensionRequestQueue(new EzyNonBlockingRequestQueue());
+        session.setRequestFrameInSecond(new EzyRequestFrameSecond(maxRequestPerSecond.getValue()));
+    }
+
+    protected abstract S newSession();
+
 }

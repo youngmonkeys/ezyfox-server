@@ -36,8 +36,8 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
     
     @XmlElement(name = "streaming")
     protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
-	
-	@XmlElement(name = "plugins")
+
+    @XmlElement(name = "plugins")
     protected EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
     
     @XmlElement(name = "applications")
@@ -56,48 +56,48 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
         plugins.setZoneId(id);
         applications.setZoneId(id);
     }
-	
-	//==================== apps ================//
-	public Set<String> getAppNames() {
-		return applications.getAppNames();
-	}
-	
-	public Set<Integer> getAppIds() {
-		return applications.getAppIds();
-	}
-	
-	public EzySimpleAppSetting getAppByName(String name) {
-		return applications.getAppByName(name);
-	}
-	
-	public EzySimpleAppSetting getAppById(Integer id) {
-		return applications.getAppById(id);
-	}
-	//=============================================//
-	
-	//==================== plugins ================//
-	@Override
-	public Set<String> getPluginNames() {
-		return plugins.getPluginNames();
-	}
-	
-	@Override
-	public Set<Integer> getPluginIds() {
-		return plugins.getPluginIds();
-	}
-	
-	@Override
-	public EzySimplePluginSetting getPluginByName(String name) {
-		return plugins.getPluginByName(name);
-	}
-	
-	@Override
-	public EzySimplePluginSetting getPluginById(Integer id) {
-		return plugins.getPluginById(id);
-	}
-	//=============================================//
-	
-	@Override
+
+    //==================== apps ================//
+    public Set<String> getAppNames() {
+        return applications.getAppNames();
+    }
+
+    public Set<Integer> getAppIds() {
+        return applications.getAppIds();
+    }
+
+    public EzySimpleAppSetting getAppByName(String name) {
+        return applications.getAppByName(name);
+    }
+
+    public EzySimpleAppSetting getAppById(Integer id) {
+        return applications.getAppById(id);
+    }
+    //=============================================//
+
+    //==================== plugins ================//
+    @Override
+    public Set<String> getPluginNames() {
+        return plugins.getPluginNames();
+    }
+
+    @Override
+    public Set<Integer> getPluginIds() {
+        return plugins.getPluginIds();
+    }
+
+    @Override
+    public EzySimplePluginSetting getPluginByName(String name) {
+        return plugins.getPluginByName(name);
+    }
+
+    @Override
+    public EzySimplePluginSetting getPluginById(Integer id) {
+        return plugins.getPluginById(id);
+    }
+    //=============================================//
+
+    @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleZoneSetting>()
                 .function(t -> t.id)
@@ -123,5 +123,5 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
         map.put("applications", applications.toMap());
         return map;
     }
-	
+
 }

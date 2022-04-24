@@ -7,17 +7,17 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSettingBuilder;
 import com.tvd12.test.assertion.Asserts;
 
 public class EzyWebSocketSettingBuilderTest {
-	
-	@Test
-	public void test() {
-		// given
-		EzyWebSocketSettingBuilder sut = new EzyWebSocketSettingBuilder()
-			.managementEnable(true);
-		
-		// when
-		EzySimpleWebSocketSetting setting = sut.build();
-		
-		// then
-		Asserts.assertEquals(true, setting.isManagementEnable());
-	}
+
+    @Test
+    public void test() {
+        // given
+        EzyWebSocketSettingBuilder sut = new EzyWebSocketSettingBuilder()
+            .managementEnable(true);
+
+        // when
+        EzySimpleWebSocketSetting setting = sut.build();
+
+        // then
+        Asserts.assertEquals(true, setting.isManagementEnable());
+    }
 }

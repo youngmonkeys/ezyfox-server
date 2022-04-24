@@ -47,44 +47,44 @@ public abstract class EzyAbstractSession
     protected String name;
     protected String clientId;
     protected String ownerName;
-	protected long creationTime;
-	protected long lastReadTime;
-	protected long lastWriteTime;
-	@Setter(AccessLevel.NONE)
-	protected long readBytes;
-	@Setter(AccessLevel.NONE)
-	protected long writtenBytes;
-	protected long lastActivityTime;
-	protected long loggedInTime;
-	protected int readRequests;
-	protected int writtenResponses;
-	
-	protected byte[] privateKey;
-	protected byte[] publicKey;
-	protected byte[] clientKey;
-	protected byte[] sessionKey;
-	
-	protected volatile boolean loggedIn;
+    protected long creationTime;
+    protected long lastReadTime;
+    protected long lastWriteTime;
+    @Setter(AccessLevel.NONE)
+    protected long readBytes;
+    @Setter(AccessLevel.NONE)
+    protected long writtenBytes;
+    protected long lastActivityTime;
+    protected long loggedInTime;
+    protected int readRequests;
+    protected int writtenResponses;
+
+    protected byte[] privateKey;
+    protected byte[] publicKey;
+    protected byte[] clientKey;
+    protected byte[] sessionKey;
+
+    protected volatile boolean loggedIn;
     protected volatile boolean activated;
     protected volatile boolean destroyed;
     protected volatile boolean streamingEnable;
 
     protected String token;
-	protected String clientType;
-	protected String clientVersion;
-	protected String beforeToken;
-	protected EzyConstant connectionType;
-	protected EzyConstant disconnectReason;
-	protected SocketAddress udpClientAddress;
-	protected DatagramChannel datagramChannel;
-	protected EzyDatagramChannelPool datagramChannelPool;
+    protected String clientType;
+    protected String clientVersion;
+    protected String beforeToken;
+    protected EzyConstant connectionType;
+    protected EzyConstant disconnectReason;
+    protected SocketAddress udpClientAddress;
+    protected DatagramChannel datagramChannel;
+    protected EzyDatagramChannelPool datagramChannelPool;
 
-	protected long maxWaitingTime  = 5 * 1000;
-	protected long maxIdleTime     = 3 * 60 * 1000;
-	
-	protected EzyChannel channel;
-	protected EzyDroppedPackets droppedPackets;
-	protected EzyImmediateDeliver immediateDeliver;
+    protected long maxWaitingTime  = 5 * 1000;
+    protected long maxIdleTime     = 3 * 60 * 1000;
+
+    protected EzyChannel channel;
+    protected EzyDroppedPackets droppedPackets;
+    protected EzyImmediateDeliver immediateDeliver;
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzySocketDisconnectionQueue disconnectionQueue;
 
@@ -92,94 +92,94 @@ public abstract class EzyAbstractSession
     protected EzyRequestQueue systemRequestQueue;
     protected EzyRequestQueue extensionRequestQueue;
     protected EzyRequestFrame requestFrameInSecond;
-	
-	protected transient EzySessionDelegate delegate;
-	
-	@Setter(AccessLevel.NONE)
-	protected volatile boolean disconnectionRegistered;
-	@Setter(AccessLevel.NONE)
-	protected Object disconnectionLock = new Object();
-	@Setter(AccessLevel.NONE)
-	protected Map<String, Lock> locks = new ConcurrentHashMap<>();
-	
-	public void setOwner(EzyUser owner) {
-	    this.ownerName = owner.getName();
-	    this.delegate.onSessionLoggedIn(owner);
-	}
-	
-	@Override
-	public void addReadBytes(long bytes) {
-		this.readBytes += bytes;
-	}
-	
-	@Override
-	public void addWrittenBytes(long bytes) {
-		this.writtenBytes += bytes;
-	}
-	
-	@Override
-	public void addReadRequests(int requests) {
-	    this.readRequests += requests;
-	}
-	
-	@Override
-	public boolean addReceviedRequests(int requests) {
-		if(requestFrameInSecond.isExpired())
+
+    protected transient EzySessionDelegate delegate;
+
+    @Setter(AccessLevel.NONE)
+    protected volatile boolean disconnectionRegistered;
+    @Setter(AccessLevel.NONE)
+    protected Object disconnectionLock = new Object();
+    @Setter(AccessLevel.NONE)
+    protected Map<String, Lock> locks = new ConcurrentHashMap<>();
+
+    public void setOwner(EzyUser owner) {
+        this.ownerName = owner.getName();
+        this.delegate.onSessionLoggedIn(owner);
+    }
+
+    @Override
+    public void addReadBytes(long bytes) {
+        this.readBytes += bytes;
+    }
+
+    @Override
+    public void addWrittenBytes(long bytes) {
+        this.writtenBytes += bytes;
+    }
+
+    @Override
+    public void addReadRequests(int requests) {
+        this.readRequests += requests;
+    }
+
+    @Override
+    public boolean addReceviedRequests(int requests) {
+        if(requestFrameInSecond.isExpired())
             requestFrameInSecond = requestFrameInSecond.nextFrame();
         return requestFrameInSecond.addRequests(requests);
-	}
-	
-	@Override
-	public void addWrittenResponses(int responses) {
-	    this.writtenResponses += responses;
-	}
-	
-	@Override
-	public void setActivated(boolean value) {
-		this.activated = value;
-	}
-	
-	@Override
-	public boolean isIdle() {
-	    if(loggedIn) {
-	        long offset = System.currentTimeMillis() - lastReadTime;
-	        boolean idle = maxIdleTime < offset;
-	        return idle;
-	    }
-	    return false;
-	}
-	
-	@Override
-	public Lock getLock(String name) {
-	    Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
-	    return lock;
-	}
-	
-	@Override
-	public final void send(EzyPacket packet) {
-	    if(activated) {
-    	    addWrittenResponses(1);
-    	    setLastWriteTime(System.currentTimeMillis());
+    }
+
+    @Override
+    public void addWrittenResponses(int responses) {
+        this.writtenResponses += responses;
+    }
+
+    @Override
+    public void setActivated(boolean value) {
+        this.activated = value;
+    }
+
+    @Override
+    public boolean isIdle() {
+        if(loggedIn) {
+            long offset = System.currentTimeMillis() - lastReadTime;
+            boolean idle = maxIdleTime < offset;
+            return idle;
+        }
+        return false;
+    }
+
+    @Override
+    public Lock getLock(String name) {
+        Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
+        return lock;
+    }
+
+    @Override
+    public final void send(EzyPacket packet) {
+        if(activated) {
+            addWrittenResponses(1);
+            setLastWriteTime(System.currentTimeMillis());
             setLastActivityTime(System.currentTimeMillis());
             addPacketToSessionQueue(packet);
-	    }
-	}
-	
-	@Override
-	public void sendNow(EzyPacket packet) {
+        }
+    }
+
+    @Override
+    public void sendNow(EzyPacket packet) {
         immediateDeliver.sendPacketNow(packet);
-	}
-	
+    }
+
     private void addPacketToSessionQueue(EzyPacket packet) {
-    	boolean empty = false;
+        boolean empty = false;
         boolean success = false;
         synchronized (packetQueue) {
-        	empty = packetQueue.isEmpty();
+            empty = packetQueue.isEmpty();
             success = packetQueue.add(packet);
             if(success && empty) {
-            	EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
-            	if(ticketsQueue != null)
-            		sessionTicketsQueue.add(this);
+                EzySessionTicketsQueue ticketsQueue = this.sessionTicketsQueue;
+                if(ticketsQueue != null)
+                    sessionTicketsQueue.add(this);
             }
         }
         if(!success) {
@@ -197,7 +197,7 @@ public abstract class EzyAbstractSession
                 this.disconnectReason = disconnectReason;
                 EzySocketDisconnectionQueue queue = this.disconnectionQueue;
                 if(queue != null)
-                	queue.add(newDisconnection(disconnectReason));
+                    queue.add(newDisconnection(disconnectReason));
                 this.disconnectionRegistered = true;
             }
         } 
@@ -238,72 +238,72 @@ public abstract class EzyAbstractSession
                 .append(")")
                 .toString();
     }
-	
-	@Override
-	public void destroy() {
-	    this.destroyed = true;
-	    this.activated = false;
-	    this.channel = null;
-	    this.delegate = null;
-	    this.loggedIn = false;
-	    this.readBytes = 0L;
-	    this.writtenBytes = 0L;
-	    this.connectionType = null;
-	    this.disconnectionLock = null;
-	    if(locks != null)
-	        this.locks.clear();
+
+    @Override
+    public void destroy() {
+        this.destroyed = true;
+        this.activated = false;
+        this.channel = null;
+        this.delegate = null;
+        this.loggedIn = false;
+        this.readBytes = 0L;
+        this.writtenBytes = 0L;
+        this.connectionType = null;
+        this.disconnectionLock = null;
+        if(locks != null)
+            this.locks.clear();
         this.properties.clear();
-	    this.locks = null;
-	    this.droppedPackets = null;
-	    this.immediateDeliver = null;
-	    if(packetQueue != null) {
-		    synchronized (packetQueue) {
-	            this.packetQueue.clear();
-	        }
-	    }
-	    if(systemRequestQueue != null) {
-	    	synchronized (systemRequestQueue) {
-	    		systemRequestQueue.clear();	
-			}
-	    }
-	    if(extensionRequestQueue != null) {
-	    	synchronized (extensionRequestQueue) {
-	    		extensionRequestQueue.clear();	
-			}
-	    }
-	    this.sessionTicketsQueue = null;
-	    this.disconnectionQueue = null;
-	    this.udpClientAddress = null;
-	    this.datagramChannel = null;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == null)
-			return false;
-		if(obj == this)
-			return true;
-		if(obj instanceof EzyAbstractSession)
-			return id == ((EzyAbstractSession)obj).id;
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-	    return Long.hashCode(id);
-	}
-	
-	@Override
-	public String toString() {
-	    return new StringBuilder()
-	            .append("(")
-	            .append("id: ").append(id)
-	            .append(", type: ").append(clientType)
-	            .append(", version: ").append(clientVersion)
-	            .append(", address: ").append(getClientAddress())
-	            .append(", token: ").append(token)
-	            .append(")")
-	            .toString();
-	}
-	
+        this.locks = null;
+        this.droppedPackets = null;
+        this.immediateDeliver = null;
+        if(packetQueue != null) {
+            synchronized (packetQueue) {
+                this.packetQueue.clear();
+            }
+        }
+        if(systemRequestQueue != null) {
+            synchronized (systemRequestQueue) {
+                systemRequestQueue.clear();
+            }
+        }
+        if(extensionRequestQueue != null) {
+            synchronized (extensionRequestQueue) {
+                extensionRequestQueue.clear();
+            }
+        }
+        this.sessionTicketsQueue = null;
+        this.disconnectionQueue = null;
+        this.udpClientAddress = null;
+        this.datagramChannel = null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null)
+            return false;
+        if(obj == this)
+            return true;
+        if(obj instanceof EzyAbstractSession)
+            return id == ((EzyAbstractSession)obj).id;
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("(")
+                .append("id: ").append(id)
+                .append(", type: ").append(clientType)
+                .append(", version: ").append(clientVersion)
+                .append(", address: ").append(getClientAddress())
+                .append(", token: ").append(token)
+                .append(")")
+                .toString();
+    }
+
 }

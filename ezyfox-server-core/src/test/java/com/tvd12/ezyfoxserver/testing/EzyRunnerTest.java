@@ -17,27 +17,27 @@ public class EzyRunnerTest extends BaseTest {
     @Test
     public void testWithNoArg() throws Exception {
         try {
-        	EzyRunner runner = new MyTestRunner() {
-            	protected void validateArguments(String[] args) {};
+            EzyRunner runner = new MyTestRunner() {
+                protected void validateArguments(String[] args) {};
             };
             runner.run(new String[0]);
         }
         catch (Exception e) {
-        	e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
     }
 
     @Test
-	public void test1() throws Exception {
-	    try {
-	        EzyRunner runner = new MyTestRunner();
-	        runner.run(new String[] {"test-data/settings/config.properties"});
-	        Asserts.assertNotNull(runner.getServerContext());
-	    }
-	    catch (Exception e) {
-	        e.printStackTrace();
-	        throw e;
+    public void test1() throws Exception {
+        try {
+            EzyRunner runner = new MyTestRunner();
+            runner.run(new String[] {"test-data/settings/config.properties"});
+            Asserts.assertNotNull(runner.getServerContext());
         }
-	}
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
 }

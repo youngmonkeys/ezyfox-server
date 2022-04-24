@@ -13,25 +13,25 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
 
-	@Test
-	public void test() throws Exception {
-		SSLContext sslContext = SSLContext.getDefault();
-		EzySimpleWebSocketSetting webSocketSetting = new EzySimpleWebSocketSetting();
-		EzyWebSocketSecureServerCreator creator = new EzyWebSocketSecureServerCreator(sslContext);
-		creator.setting(webSocketSetting);
-		creator.create();
-		
-		EzyWsHandler wsHandler = MethodInvoker.create()
-				.object(creator)
-				.method("newWsHandler")
-				.invoke(EzyWsHandler.class);
-		
-		WebSocketCreator webSocketCreator = MethodInvoker.create()
-				.object(creator)
-				.method("newWebSocketCreator")
-				.param(EzyWsHandler.class, wsHandler)
-				.invoke(WebSocketCreator.class);
-		webSocketCreator.createWebSocket(null, null);
-	}
-	
+    @Test
+    public void test() throws Exception {
+        SSLContext sslContext = SSLContext.getDefault();
+        EzySimpleWebSocketSetting webSocketSetting = new EzySimpleWebSocketSetting();
+        EzyWebSocketSecureServerCreator creator = new EzyWebSocketSecureServerCreator(sslContext);
+        creator.setting(webSocketSetting);
+        creator.create();
+
+        EzyWsHandler wsHandler = MethodInvoker.create()
+                .object(creator)
+                .method("newWsHandler")
+                .invoke(EzyWsHandler.class);
+
+        WebSocketCreator webSocketCreator = MethodInvoker.create()
+                .object(creator)
+                .method("newWebSocketCreator")
+                .param(EzyWsHandler.class, wsHandler)
+                .invoke(WebSocketCreator.class);
+        webSocketCreator.createWebSocket(null, null);
+    }
+
 }

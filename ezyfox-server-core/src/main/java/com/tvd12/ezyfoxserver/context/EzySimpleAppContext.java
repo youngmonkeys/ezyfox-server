@@ -27,67 +27,67 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import lombok.Getter;
 
 public class EzySimpleAppContext 
-		extends EzyAbstractZoneChildContext 
-		implements EzyAppContext {
+        extends EzyAbstractZoneChildContext
+        implements EzyAppContext {
 
-	@Getter
-	protected EzyApplication app;
-	protected EzyAppSendResponse sendResponse;
-	
-	@Override
-	protected void init0() {
-	    EzySetup setup = new EzyAppSetupImpl(app);
-	    this.sendResponse = new EzyAppSendResponseImpl(this);
-	    this.properties.put(EzyAppSendResponse.class, sendResponse);
-	    this.properties.put(EzyHandleException.class, new EzyAppHandleExceptionImpl(app));
-	    this.properties.put(EzySetup.class, setup);
-	    this.properties.put(EzyAppSetup.class, setup);
-	}
-	
-	@Override
-	public void send(
-	        EzyData data, 
-	        EzySession recipient,
-	        boolean encrypted, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipient, encrypted, transportType);
-	}
-	
-	@Override
-	public void send(
-	        EzyData data, 
-	        Collection<EzySession> recipients, 
-	        boolean encrypted, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipients, encrypted, transportType);
-	}
-	
-	public void setApp(EzyApplication app) {
+    @Getter
+    protected EzyApplication app;
+    protected EzyAppSendResponse sendResponse;
+
+    @Override
+    protected void init0() {
+        EzySetup setup = new EzyAppSetupImpl(app);
+        this.sendResponse = new EzyAppSendResponseImpl(this);
+        this.properties.put(EzyAppSendResponse.class, sendResponse);
+        this.properties.put(EzyHandleException.class, new EzyAppHandleExceptionImpl(app));
+        this.properties.put(EzySetup.class, setup);
+        this.properties.put(EzyAppSetup.class, setup);
+    }
+
+    @Override
+    public void send(
+            EzyData data,
+            EzySession recipient,
+            boolean encrypted, EzyTransportType transportType) {
+        this.sendResponse.execute(data, recipient, encrypted, transportType);
+    }
+
+    @Override
+    public void send(
+            EzyData data,
+            Collection<EzySession> recipients,
+            boolean encrypted, EzyTransportType transportType) {
+        this.sendResponse.execute(data, recipients, encrypted, transportType);
+    }
+
+    public void setApp(EzyApplication app) {
         this.app = app;
         this.component = (EzyComponent)app;
     }
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		suppliers.put(EzyAppResponse.class, () -> new EzyAppResponseImpl(this));
-	}
-	
-	@Override
-	public void destroy() {
-	    super.destroy();
-	    this.destroyApp();
-	    this.clearProperties();
-	}
 
-	protected void clearProperties() {
-	    this.app = null;
-	    this.sendResponse = null;
-	}
-	
-	protected void destroyApp() {
-	    processWithLogException(( )-> ((EzyDestroyable)app).destroy());
-	}
-	
-	@Override
+    @SuppressWarnings("rawtypes")
+    @Override
+    protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
+        suppliers.put(EzyAppResponse.class, () -> new EzyAppResponseImpl(this));
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        this.destroyApp();
+        this.clearProperties();
+    }
+
+    protected void clearProperties() {
+        this.app = null;
+        this.sendResponse = null;
+    }
+
+    protected void destroyApp() {
+        processWithLogException(( )-> ((EzyDestroyable)app).destroy());
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleAppContext>()
                 .function(t -> t.app)

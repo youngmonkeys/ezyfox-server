@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleUserRemovedEvent 
-		extends EzySimpleUserEvent 
-		implements EzyUserRemovedEvent {
+        extends EzySimpleUserEvent
+        implements EzyUserRemovedEvent {
 
     protected final EzyConstant reason;
     
-	public EzySimpleUserRemovedEvent(EzyUser user, EzyConstant reason) {
+    public EzySimpleUserRemovedEvent(EzyUser user, EzyConstant reason) {
         super(user);
         this.reason = reason;
     }

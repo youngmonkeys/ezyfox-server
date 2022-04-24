@@ -11,12 +11,12 @@ import lombok.Setter;
 @EzyPrototype
 @EzyRequestListener("noDataBinding")
 public class ClientNoDataBindingRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler {
+        extends EzyLoggable
+        implements
+            EzyHandler {
 
-	@Override
-	public void handle() {
-	}
+    @Override
+    public void handle() {
+    }
 
 }

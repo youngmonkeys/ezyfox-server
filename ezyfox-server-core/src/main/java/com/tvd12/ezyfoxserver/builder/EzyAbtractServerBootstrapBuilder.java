@@ -16,68 +16,68 @@ import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
 
 public abstract class EzyAbtractServerBootstrapBuilder 
-		implements EzyServerBootstrapBuilder {
+        implements EzyServerBootstrapBuilder {
 
-	protected EzyServer server;
-	protected EzyServerContext serverContext;
-	
-	@Override
-	public EzyAbtractServerBootstrapBuilder server(EzyServer server) {
-		this.server = server;
-		this.serverContext = newServerContext(server);
-		return this;
-	}
-	
-	@Override
-	public final EzyServerBootstrap build() {
-	    prebuild();
+    protected EzyServer server;
+    protected EzyServerContext serverContext;
+
+    @Override
+    public EzyAbtractServerBootstrapBuilder server(EzyServer server) {
+        this.server = server;
+        this.serverContext = newServerContext(server);
+        return this;
+    }
+
+    @Override
+    public final EzyServerBootstrap build() {
+        prebuild();
         return buildServerBootstrap();
-	}
-	
-	protected void prebuild() {
-	}
-	
-	protected EzyServerBootstrap buildServerBootstrap() {
-	    EzyServerBootstrap answer = newServerBootstrap();
+    }
+
+    protected void prebuild() {
+    }
+
+    protected EzyServerBootstrap buildServerBootstrap() {
+        EzyServerBootstrap answer = newServerBootstrap();
         answer.setContext(serverContext);
         answer.setLocalBootstrap(newLocalBoostrap());
         return answer;
-	}
-	
-	protected EzyServerContext newServerContext(EzyServer server) {
-	    return newServerContextBuilder()
-	            .server(server)
-	            .build();
-	}
-	
-	protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
-	    if(getWebsocketSetting().isSslActive())
-	        return newSslContextInitializer(sslConfig).init();
-	    return null;
-	}
-	
-	protected EzySslContextInitializer newSslContextInitializer(EzySslConfigSetting sslConfig) {
+    }
+
+    protected EzyServerContext newServerContext(EzyServer server) {
+        return newServerContextBuilder()
+                .server(server)
+                .build();
+    }
+
+    protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
+        if(getWebsocketSetting().isSslActive())
+            return newSslContextInitializer(sslConfig).init();
+        return null;
+    }
+
+    protected EzySslContextInitializer newSslContextInitializer(EzySslConfigSetting sslConfig) {
         return newSslContextInitializerBuilder()
                 .sslConfig(sslConfig)
                 .homeFolderPath(getConfig().getEzyfoxHome())
                 .build();
     }
-	
-	protected EzySslContextInitializer.Builder newSslContextInitializerBuilder() {
-	    return EzySslContextInitializer.builder();
-	}
-	
+
+    protected EzySslContextInitializer.Builder newSslContextInitializerBuilder() {
+        return EzySslContextInitializer.builder();
+    }
+
     protected EzyBootstrap newLocalBoostrap() {
         return EzyBootstrap.builder().context(serverContext).build();
     }
-	
-	protected EzyServerContextBuilder<?> newServerContextBuilder() {
-	    return new EzySimpleServerContextBuilder<>();
-	}
-	
-	protected abstract EzyServerBootstrap newServerBootstrap();
-	
-	protected EzyConfig getConfig() {
+
+    protected EzyServerContextBuilder<?> newServerContextBuilder() {
+        return new EzySimpleServerContextBuilder<>();
+    }
+
+    protected abstract EzyServerBootstrap newServerBootstrap();
+
+    protected EzyConfig getConfig() {
         return server.getConfig();
     }
     

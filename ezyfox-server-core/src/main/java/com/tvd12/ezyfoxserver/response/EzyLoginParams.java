@@ -13,23 +13,23 @@ public class EzyLoginParams extends EzySimpleResponseParams {
     protected int zoneId;
     protected String zoneName;
     protected long userId;
-	protected Object data;
-	protected String username;
-	
-	@Override
-	protected EzyArrayBuilder serialize0() {
-	    return newArrayBuilder()
-	            .append(zoneId)
-	            .append(zoneName)
+    protected Object data;
+    protected String username;
+
+    @Override
+    protected EzyArrayBuilder serialize0() {
+        return newArrayBuilder()
+                .append(zoneId)
+                .append(zoneName)
                 .append(userId)
                 .append(username)
                 .append(data);
-	}
-	
-	@Override
-	public void release() {
-	    super.release();
-	    this.data = null;
-	}
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        this.data = null;
+    }
 
 }

@@ -24,25 +24,25 @@ import lombok.ToString;
 @XmlRootElement(name = "plugin")
 public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPluginSetting {
 
-	@XmlElement(name = "priority")
-	protected int priority;
-	
-	@XmlElement(name = "listen-events")
-	protected EzySimpleListenEvents listenEvents = new EzySimpleListenEvents();
-	
-	private static final AtomicInteger COUNTER = new AtomicInteger(0);
-	
-	@Override
-	protected AtomicInteger getIdCounter() {
-		return COUNTER;
-	}
-	
-	@Override
-	protected String getParentFolder() {
-	    return EzyFolderNamesSetting.PLUGINS;
-	}
-	
-	@Override
+    @XmlElement(name = "priority")
+    protected int priority;
+
+    @XmlElement(name = "listen-events")
+    protected EzySimpleListenEvents listenEvents = new EzySimpleListenEvents();
+
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
+
+    @Override
+    protected AtomicInteger getIdCounter() {
+        return COUNTER;
+    }
+
+    @Override
+    protected String getParentFolder() {
+        return EzyFolderNamesSetting.PLUGINS;
+    }
+
+    @Override
     public Map<Object, Object> toMap() {
          Map<Object, Object> map = super.toMap();
          map.put("priority", priority);
@@ -50,18 +50,18 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
          return map;
     }
     
-	@Getter
-	@ToString
-	@XmlAccessorType(XmlAccessType.NONE)
-	@XmlRootElement(name = "listen-events")
-	public static class EzySimpleListenEvents implements EzyListenEvents {
-	    protected Set<EzyConstant> events = new HashSet<>();
-	    
-	    @XmlElement(name = "event")
-	    public void setEvent(String string) {
-	        events.add(EzyEventType.valueOf(string));
-	    }
-	    
-	}
-	
+    @Getter
+    @ToString
+    @XmlAccessorType(XmlAccessType.NONE)
+    @XmlRootElement(name = "listen-events")
+    public static class EzySimpleListenEvents implements EzyListenEvents {
+        protected Set<EzyConstant> events = new HashSet<>();
+
+        @XmlElement(name = "event")
+        public void setEvent(String string) {
+            events.add(EzyEventType.valueOf(string));
+        }
+
+    }
+
 }

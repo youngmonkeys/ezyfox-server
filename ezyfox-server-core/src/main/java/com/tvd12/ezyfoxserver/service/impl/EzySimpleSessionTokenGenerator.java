@@ -8,31 +8,31 @@ import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 
 public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator {
 
-	private final AtomicLong counter;
-	private final String serverNodeName;
-	
-	public EzySimpleSessionTokenGenerator() {
-	    this("ezyfox");
-	}
-	
-	public EzySimpleSessionTokenGenerator(String serverNodeName) {
-	    this.counter = new AtomicLong();
-	    this.serverNodeName = serverNodeName;
-	}
-	
-	@Override
-	public String generate() {
-	    String token = new StringBuilder()
-	            .append(serverNodeName).append("#")
-	            .append(getCount()).append("#")
-	            .append(UUID.randomUUID()).append("#")
-	            .append(System.currentTimeMillis())
-	            .toString();
-	    return EzySHA256.cryptUtfToLowercase(token);
-	}
-	
-	private long getCount() {
-		return counter.incrementAndGet();
-	}
-	
+    private final AtomicLong counter;
+    private final String serverNodeName;
+
+    public EzySimpleSessionTokenGenerator() {
+        this("ezyfox");
+    }
+
+    public EzySimpleSessionTokenGenerator(String serverNodeName) {
+        this.counter = new AtomicLong();
+        this.serverNodeName = serverNodeName;
+    }
+
+    @Override
+    public String generate() {
+        String token = new StringBuilder()
+                .append(serverNodeName).append("#")
+                .append(getCount()).append("#")
+                .append(UUID.randomUUID()).append("#")
+                .append(System.currentTimeMillis())
+                .toString();
+        return EzySHA256.cryptUtfToLowercase(token);
+    }
+
+    private long getCount() {
+        return counter.incrementAndGet();
+    }
+
 }

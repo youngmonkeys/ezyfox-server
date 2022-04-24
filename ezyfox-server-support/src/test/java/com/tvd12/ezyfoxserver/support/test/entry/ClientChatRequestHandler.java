@@ -18,18 +18,18 @@ import lombok.Setter;
 @EzyRequestListener("chat")
 @EzyObjectBinding(read = false)
 public class ClientChatRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler, 
-			EzyUserAware, 
-			EzySessionAware, 
-			EzyDataBinding {
+        extends EzyLoggable
+        implements
+            EzyHandler,
+            EzyUserAware,
+            EzySessionAware,
+            EzyDataBinding {
 
-	protected EzyUser user;
-	protected EzySession session;
-	
-	@Override
-	public void handle() {
-	}
+    protected EzyUser user;
+    protected EzySession session;
+
+    @Override
+    public void handle() {
+    }
 
 }

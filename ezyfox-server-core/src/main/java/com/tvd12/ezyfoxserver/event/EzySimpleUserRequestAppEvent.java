@@ -8,10 +8,10 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleUserRequestAppEvent 
-		extends EzySimpleUserRequestEvent 
-		implements EzyUserRequestAppEvent {
+        extends EzySimpleUserRequestEvent
+        implements EzyUserRequestAppEvent {
 
-	public EzySimpleUserRequestAppEvent(EzyUser user, EzySession session, EzyArray data) {
+    public EzySimpleUserRequestAppEvent(EzyUser user, EzySession session, EzyArray data) {
         super(user, session, data);
     }
 

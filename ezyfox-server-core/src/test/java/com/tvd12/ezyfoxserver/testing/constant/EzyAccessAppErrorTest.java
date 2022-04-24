@@ -6,9 +6,9 @@ import com.tvd12.ezyfoxserver.constant.EzyAccessAppError;
 
 public class EzyAccessAppErrorTest {
 
-	@Test
-	public void test() {
-	    System.out.println(EzyAccessAppError.MAXIMUM_USER.getName());
-	}
-	
+    @Test
+    public void test() {
+        System.out.println(EzyAccessAppError.MAXIMUM_USER.getName());
+    }
+
 }

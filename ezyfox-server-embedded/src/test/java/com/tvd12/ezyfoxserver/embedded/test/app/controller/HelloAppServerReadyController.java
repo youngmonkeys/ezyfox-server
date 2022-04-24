@@ -10,11 +10,11 @@ import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 @EzySingleton
 @EzyEventHandler(event = EzyEventNames.SERVER_READY)
 public class HelloAppServerReadyController 
-		extends EzyAbstractAppEventController<EzyServerReadyEvent> {
+        extends EzyAbstractAppEventController<EzyServerReadyEvent> {
 
-	@Override
-	public void handle(EzyAppContext ctx, EzyServerReadyEvent event) {
-		logger.info("HELLO APP - SERVER READY");
-	}
-	
+    @Override
+    public void handle(EzyAppContext ctx, EzyServerReadyEvent event) {
+        logger.info("HELLO APP - SERVER READY");
+    }
+
 }

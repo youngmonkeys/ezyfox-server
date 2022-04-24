@@ -10,6 +10,6 @@ import lombok.Setter;
 @EzyObjectBinding
 public class Hello {
 
-	protected String who;
-	
+    protected String who;
+
 }

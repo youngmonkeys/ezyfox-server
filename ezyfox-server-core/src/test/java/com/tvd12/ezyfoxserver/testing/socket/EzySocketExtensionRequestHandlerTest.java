@@ -11,32 +11,32 @@ import static org.mockito.Mockito.*;
 
 public class EzySocketExtensionRequestHandlerTest {
 
-	@Test
-	public void test() {
-		EzySocketExtensionRequestHandler handler = new EzySocketExtensionRequestHandler();
-		MethodInvoker.create()
-		    .object(handler)
-		    .method("getRequestType")
-		    .invoke();
-	}
-	
-	@Test
-	public void getRequestQueueTest() {
-		// given
-		EzySocketExtensionRequestHandler sut = new EzySocketExtensionRequestHandler();
-		
-		EzySession session = mock(EzySession.class);
-		EzyRequestQueue requestQueue = mock(EzyRequestQueue.class);
-		when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
-		
-		// when
-		EzyRequestQueue result = MethodInvoker.create()
-				.object(sut)
-				.method("getRequestQueue")
-				.param(EzySession.class, session)
-				.call();
-		
-		// then
-		Asserts.assertEquals(requestQueue, result);
-	}
+    @Test
+    public void test() {
+        EzySocketExtensionRequestHandler handler = new EzySocketExtensionRequestHandler();
+        MethodInvoker.create()
+            .object(handler)
+            .method("getRequestType")
+            .invoke();
+    }
+
+    @Test
+    public void getRequestQueueTest() {
+        // given
+        EzySocketExtensionRequestHandler sut = new EzySocketExtensionRequestHandler();
+
+        EzySession session = mock(EzySession.class);
+        EzyRequestQueue requestQueue = mock(EzyRequestQueue.class);
+        when(session.getExtensionRequestQueue()).thenReturn(requestQueue);
+
+        // when
+        EzyRequestQueue result = MethodInvoker.create()
+                .object(sut)
+                .method("getRequestQueue")
+                .param(EzySession.class, session)
+                .call();
+
+        // then
+        Asserts.assertEquals(requestQueue, result);
+    }
 }

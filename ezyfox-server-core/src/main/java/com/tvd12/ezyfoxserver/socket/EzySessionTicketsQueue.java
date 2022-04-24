@@ -6,12 +6,12 @@ public interface EzySessionTicketsQueue {
 
     int size();
     
-	void clear();
-	
-	boolean isEmpty();
-	
-	boolean add(EzySession session);
-	
-	<T extends EzySession> T take() throws InterruptedException;
-	
+    void clear();
+
+    boolean isEmpty();
+
+    boolean add(EzySession session);
+
+    <T extends EzySession> T take() throws InterruptedException;
+
 }

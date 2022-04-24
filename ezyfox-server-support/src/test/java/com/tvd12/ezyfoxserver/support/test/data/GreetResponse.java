@@ -10,6 +10,6 @@ import lombok.Data;
 @EzyObjectBinding(read = false)
 public class GreetResponse {
 
-	protected String message;
-	
+    protected String message;
+
 }

@@ -14,27 +14,27 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
     protected Supplier<EzySocketEventHandler> eventHandlerSupplier;
     protected List<EzySocketEventHandler> eventHandlers = new ArrayList<>();
 
-	@Override
-	protected EzySimpleSocketEventLoop newEventLoop() {
-	    return new EzySimpleSocketEventLoop() {
+    @Override
+    protected EzySimpleSocketEventLoop newEventLoop() {
+        return new EzySimpleSocketEventLoop() {
             
-	        @Override
+            @Override
             protected void eventLoop0() {
-	            EzySocketEventHandler eventHandler = eventHandlerSupplier.get();
-	            eventHandlers.add(eventHandler);
+                EzySocketEventHandler eventHandler = eventHandlerSupplier.get();
+                eventHandlers.add(eventHandler);
                 while(active) {
                     eventHandler.handleEvent();
                 }
             }
             
         };
-	}
-	
-	@Override
-	public void destroy() {
-		super.destroy();
-		for(EzySocketEventHandler eventHandler : eventHandlers)
-		    processWithLogException(() -> eventHandler.destroy());
-	}
-	
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        for(EzySocketEventHandler eventHandler : eventHandlers)
+            processWithLogException(() -> eventHandler.destroy());
+    }
+
 }

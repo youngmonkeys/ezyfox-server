@@ -11,15 +11,15 @@ import lombok.Setter;
 @Setter
 @EzyRequestListener("app")
 public class ClientAppRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyAppContextAware,
-			EzyHandler {
+        extends EzyLoggable
+        implements
+            EzyAppContextAware,
+            EzyHandler {
 
-	protected EzyAppContext appContext;
-	
-	@Override
-	public void handle() {
-	}
+    protected EzyAppContext appContext;
+
+    @Override
+    public void handle() {
+    }
 
 }

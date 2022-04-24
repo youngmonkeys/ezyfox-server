@@ -48,28 +48,28 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
     
     @Test
     public void takeInactiveSession() throws Exception {
-    	// given
-    	EzyBlockingSessionTicketsQueue sut = new EzyBlockingSessionTicketsQueue();
-    	
-    	MySession session = new MySession();
-    	session.setActivated(false);
-    	sut.add(session);
-    	
-    	Thread newThread = new Thread(() -> {
-    		// when
-        	EzySession takeSession;
-			try {
-				takeSession = sut.take();
-			} catch (InterruptedException e) {
-				return;
-			}
-        	
-        	// then
-        	Asserts.assertEquals(session, takeSession);
-    	});
-    	newThread.start();
-    	Thread.sleep(300L);
-    	newThread.interrupt();
+        // given
+        EzyBlockingSessionTicketsQueue sut = new EzyBlockingSessionTicketsQueue();
+
+        MySession session = new MySession();
+        session.setActivated(false);
+        sut.add(session);
+
+        Thread newThread = new Thread(() -> {
+            // when
+            EzySession takeSession;
+            try {
+                takeSession = sut.take();
+            } catch (InterruptedException e) {
+                return;
+            }
+
+            // then
+            Asserts.assertEquals(session, takeSession);
+        });
+        newThread.start();
+        Thread.sleep(300L);
+        newThread.interrupt();
     }
     
     public static class MySession extends EzyAbstractSession {

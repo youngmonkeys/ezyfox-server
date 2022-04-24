@@ -187,53 +187,53 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
     
     @Test
     public void addPacketToSessionQueueWithTicketsQueueIsNull() {
-    	// given
-    	EzyPacket packet = mock(EzyPacket.class);
-    	MyTestSession session = new MyTestSession();
-    	session.setActivated(true);
-    	
-    	EzyPacketQueue packetQueue = mock(EzyPacketQueue.class);
-    	when(packetQueue.isEmpty()).thenReturn(true);
-    	when(packetQueue.add(packet)).thenReturn(true);
-    	session.setPacketQueue(packetQueue);
-    	 
-    	// when
-    	session.send(packet);
-    	
-    	// then
-    	Asserts.assertNull(session.getSessionTicketsQueue());
+        // given
+        EzyPacket packet = mock(EzyPacket.class);
+        MyTestSession session = new MyTestSession();
+        session.setActivated(true);
+
+        EzyPacketQueue packetQueue = mock(EzyPacketQueue.class);
+        when(packetQueue.isEmpty()).thenReturn(true);
+        when(packetQueue.add(packet)).thenReturn(true);
+        session.setPacketQueue(packetQueue);
+
+        // when
+        session.send(packet);
+
+        // then
+        Asserts.assertNull(session.getSessionTicketsQueue());
     }
     
     @Test
     public void addPacketToSessionQueueWithDroppedPacketsNowIsNull() {
-    	// given
-    	EzyPacket packet = mock(EzyPacket.class);
-    	MyTestSession session = new MyTestSession();
-    	session.setActivated(true);
-    	
-    	EzyPacketQueue packetQueue = mock(EzyPacketQueue.class);
-    	when(packetQueue.isEmpty()).thenReturn(true);
-    	when(packetQueue.add(packet)).thenReturn(false);
-    	session.setPacketQueue(packetQueue);
-    	 
-    	// when
-    	session.send(packet);
-    	
-    	// then
-    	Asserts.assertNull(session.getDroppedPackets());
+        // given
+        EzyPacket packet = mock(EzyPacket.class);
+        MyTestSession session = new MyTestSession();
+        session.setActivated(true);
+
+        EzyPacketQueue packetQueue = mock(EzyPacketQueue.class);
+        when(packetQueue.isEmpty()).thenReturn(true);
+        when(packetQueue.add(packet)).thenReturn(false);
+        session.setPacketQueue(packetQueue);
+
+        // when
+        session.send(packet);
+
+        // then
+        Asserts.assertNull(session.getDroppedPackets());
     }
     
     @Test
     public void disconnectWithQueueIsNull() {
-    	// given
-    	PrivateSession session = new PrivateSession();
-    	
-    	// when
-    	session.disconnect(EzyDisconnectReason.ADMIN_BAN);
-    	
-    	// then
-    	Asserts.assertNull(session.getDisconnectionQueue());
-    	Asserts.assertTrue(session.isDisconnectionRegistered());
+        // given
+        PrivateSession session = new PrivateSession();
+
+        // when
+        session.disconnect(EzyDisconnectReason.ADMIN_BAN);
+
+        // then
+        Asserts.assertNull(session.getDisconnectionQueue());
+        Asserts.assertTrue(session.isDisconnectionRegistered());
     }
     
     private static class PrivateSession extends EzyAbstractSession {

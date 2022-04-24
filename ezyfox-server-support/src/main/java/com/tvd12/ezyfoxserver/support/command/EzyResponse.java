@@ -7,14 +7,14 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 
 public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
-	
-	T encrypted();
-	
-	T encrypted(boolean value);
 
-	T data(Object data);
-	
-	T command(String command);
+    T encrypted();
+
+    T encrypted(boolean value);
+
+    T data(Object data);
+
+    T command(String command);
     
     T user(EzyUser user, boolean exclude);
     
@@ -41,43 +41,43 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
     }
     
     default T user(EzyUser user) {
-    		return user(user, false);
+            return user(user, false);
     }
     
     default T users(EzyUser... users) {
-    		return users(users, false);
+            return users(users, false);
     }
     
     default T users(Iterable<EzyUser> users) {
-    		return users(users, false);
+            return users(users, false);
     }
     
     default T session(EzySession session) {
-    		return session(session, false);
+            return session(session, false);
     }
     
     default T sessions(EzySession... sessions) {
-    		return sessions(sessions, false);
+            return sessions(sessions, false);
     }
     
     default T sessions(Iterable<EzySession> sessions) {
-    		return sessions(sessions, false);
+            return sessions(sessions, false);
     }
     
     default T username(String username) {
-    		return username(username, false);
+            return username(username, false);
     }
     
     default T usernames(String... usernames) {
-    		return usernames(usernames, false);
+            return usernames(usernames, false);
     }
     
     default T usernames(Iterable<String> usernames) {
-    		return usernames(usernames, false);
+            return usernames(usernames, false);
     }
     
     default T udpTransport() {
-    	return transportType(EzyTransportType.UDP);
+        return transportType(EzyTransportType.UDP);
     }
-	
+
 }

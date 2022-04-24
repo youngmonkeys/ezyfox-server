@@ -10,11 +10,11 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestPluginHandler;
 @EzySingleton
 @EzyRequestListener("hello3")
 public class PluginClientHello3RequestHandler 
-		implements EzyUserRequestPluginHandler {
+        implements EzyUserRequestPluginHandler {
 
-	@Override
-	public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
-		System.out.println("hello: " + data);
-	}
+    @Override
+    public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
+        System.out.println("hello: " + data);
+    }
 
 }

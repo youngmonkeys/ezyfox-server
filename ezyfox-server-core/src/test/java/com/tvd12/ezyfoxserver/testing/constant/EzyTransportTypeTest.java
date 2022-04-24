@@ -7,10 +7,10 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyTransportTypeTest extends BaseTest {
 
-	@Test
-	public void test() {
-		assert EzyTransportType.TCP.getId() == 1;
-		System.out.println(EzyTransportType.UDP.getName());
-	}
-	
+    @Test
+    public void test() {
+        assert EzyTransportType.TCP.getId() == 1;
+        System.out.println(EzyTransportType.UDP.getName());
+    }
+    
 }

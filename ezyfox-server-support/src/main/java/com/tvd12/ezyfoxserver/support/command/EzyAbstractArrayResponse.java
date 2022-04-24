@@ -9,52 +9,52 @@ import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 
 public abstract class EzyAbstractArrayResponse 
-		extends EzyAbstractResponse<EzyArrayResponse>
-		implements EzyArrayResponse {
-	
-	protected List<Object> additionalParams = new ArrayList<>();
+        extends EzyAbstractResponse<EzyArrayResponse>
+        implements EzyArrayResponse {
 
-	public EzyAbstractArrayResponse(EzyContext context, EzyMarshaller marshaller) {
-		super(context, marshaller);
-	}
+    protected List<Object> additionalParams = new ArrayList<>();
 
-	@Override
-	public EzyArrayResponse param(Object value) {
-		additionalParams.add(value);
-		return this;
-	}
-	
-	@Override
-	public EzyArrayResponse params(Object... values) {
-		for(Object value : values)
-			additionalParams.add(value);
-		return this;
-	}
-	
-	@Override
-	public EzyArrayResponse params(Iterable<?> values) {
-		for(Object value : values)
-			additionalParams.add(value);
-		return this;
-	}
-	
-	@Override
-	protected EzyData getResponseData() {
-		EzyArray array = data != null 
-				? marshaller.marshal(data) 
-				: newArrayBuilder().build();
-		for(Object object : additionalParams) {
-			Object value = marshaller.marshal(object);
-			array.add(value);
-		}
-		return array;
-	}
-	
-	@Override
-	public void destroy() {
-		super.destroy();
-		this.additionalParams.clear();
-		this.additionalParams = null;
-	}
-	
+    public EzyAbstractArrayResponse(EzyContext context, EzyMarshaller marshaller) {
+        super(context, marshaller);
+    }
+
+    @Override
+    public EzyArrayResponse param(Object value) {
+        additionalParams.add(value);
+        return this;
+    }
+
+    @Override
+    public EzyArrayResponse params(Object... values) {
+        for(Object value : values)
+            additionalParams.add(value);
+        return this;
+    }
+
+    @Override
+    public EzyArrayResponse params(Iterable<?> values) {
+        for(Object value : values)
+            additionalParams.add(value);
+        return this;
+    }
+
+    @Override
+    protected EzyData getResponseData() {
+        EzyArray array = data != null
+                ? marshaller.marshal(data)
+                : newArrayBuilder().build();
+        for(Object object : additionalParams) {
+            Object value = marshaller.marshal(object);
+            array.add(value);
+        }
+        return array;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        this.additionalParams.clear();
+        this.additionalParams = null;
+    }
+
 }

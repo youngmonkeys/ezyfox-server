@@ -6,10 +6,10 @@ import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntry;
 
 public class EzyAbstractPluginEntryTest {
 
-	@Test
-	public void newTest() {
-		EzyAbstractPluginEntry entry = new EzyAbstractPluginEntry() {
-		};
-		entry.destroy();
-	}
+    @Test
+    public void newTest() {
+        EzyAbstractPluginEntry entry = new EzyAbstractPluginEntry() {
+        };
+        entry.destroy();
+    }
 }

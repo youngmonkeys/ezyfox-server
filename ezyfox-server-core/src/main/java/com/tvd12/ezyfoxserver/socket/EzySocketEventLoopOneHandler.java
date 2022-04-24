@@ -9,9 +9,9 @@ public abstract class EzySocketEventLoopOneHandler extends EzySocketEventLoopHan
     @Setter
     protected EzySocketEventHandler eventHandler;
 
-	@Override
-	protected EzySimpleSocketEventLoop newEventLoop() {
-	    return new EzySimpleSocketEventLoop() {
+    @Override
+    protected EzySimpleSocketEventLoop newEventLoop() {
+        return new EzySimpleSocketEventLoop() {
             
             @Override
             protected void eventLoop0() {
@@ -20,13 +20,13 @@ public abstract class EzySocketEventLoopOneHandler extends EzySocketEventLoopHan
                 }
             }
         };
-	}
-	
-	@Override
-	public void destroy() {
-		super.destroy();
-		if(eventHandler != null)
-		    processWithLogException(() -> eventHandler.destroy());
-	}
-	
+    }
+    
+    @Override
+    public void destroy() {
+        super.destroy();
+        if(eventHandler != null)
+            processWithLogException(() -> eventHandler.destroy());
+    }
+    
 }

@@ -16,16 +16,16 @@ import lombok.Setter;
 @EzyRequestListener("noUser")
 @EzyObjectBinding(read = false)
 public class ClientNoUserRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler, 
-			EzySessionAware, 
-			EzyDataBinding {
+        extends EzyLoggable
+        implements
+            EzyHandler,
+            EzySessionAware,
+            EzyDataBinding {
 
-	protected EzySession session;
-	
-	@Override
-	public void handle() {
-	}
+    protected EzySession session;
+
+    @Override
+    public void handle() {
+    }
 
 }

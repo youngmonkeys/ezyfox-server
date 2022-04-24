@@ -25,111 +25,111 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 @WebSocket
 public class EzyWsHandler extends EzyLoggable {
-	private final EzySocketDataReceiver socketDataReceiver;
-	private final EzyNioSessionManager sessionManager;
-	private final EzyHandlerGroupManager handlerGroupManager;
-	private final EzySessionManagementSetting sessionManagementSetting;
-	
-	private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
-			CLOSE_BY_SERVER.getCode()
-	);
+    private final EzySocketDataReceiver socketDataReceiver;
+    private final EzyNioSessionManager sessionManager;
+    private final EzyHandlerGroupManager handlerGroupManager;
+    private final EzySessionManagementSetting sessionManagementSetting;
 
-	public EzyWsHandler(Builder builder) {
-		this.socketDataReceiver = builder.socketDataReceiver;
-		this.sessionManager = builder.sessionManager;
-		this.handlerGroupManager = builder.handlerGroupManager;
-		this.sessionManagementSetting = builder.sessionManagementSetting;
-	}
-	
-	private boolean isIgnoreStatusCode(int statusCode) {
-		return IGNORE_STATUS_CODES.contains(statusCode);
-	}
+    private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
+            CLOSE_BY_SERVER.getCode()
+    );
 
-	@OnWebSocketClose
-	public void onClose(Session session, int statusCode, String reason) {
-		logger.debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
-		if(isIgnoreStatusCode(statusCode)) 
-			return;
-		setChannelClosed(session);
-		socketDataReceiver.wsCloseConnection(session);
-	}
-	
-	@OnWebSocketError
-	public void onError(Session session, Throwable throwable) {
-		EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
-		if(dataHandler == null) {
-			logger.debug("error on session: {}, but data handler removed", session.getRemoteAddress(), throwable);
-		}
-		if (throwable instanceof TimeoutException) {
-			logger.debug("session {}: Timeout on Read", session.getRemoteAddress());
-		}
-		else if(dataHandler != null) {
-			logger.debug("error on session: {}", session.getRemoteAddress(), throwable);
-			dataHandler.fireExceptionCaught(throwable);
-		}
-	}
+    public EzyWsHandler(Builder builder) {
+        this.socketDataReceiver = builder.socketDataReceiver;
+        this.sessionManager = builder.sessionManager;
+        this.handlerGroupManager = builder.handlerGroupManager;
+        this.sessionManagementSetting = builder.sessionManagementSetting;
+    }
 
-	@OnWebSocketConnect
-	public void onConnect(Session session) throws Exception {
-		long sessionMaxIdleTime = sessionManagementSetting.getSessionMaxIdleTime();
-		session.setIdleTimeout(sessionMaxIdleTime);
-		EzyChannel channel = new EzyWsChannel(session);
-		handlerGroupManager.newHandlerGroup(channel, EzyConnectionType.WEBSOCKET);
-	}
+    private boolean isIgnoreStatusCode(int statusCode) {
+        return IGNORE_STATUS_CODES.contains(statusCode);
+    }
 
-	@OnWebSocketMessage
-	public void onMessage(Session session, String message) throws Exception {
-		socketDataReceiver.wsReceive(session, message);
-	}
+    @OnWebSocketClose
+    public void onClose(Session session, int statusCode, String reason) {
+        logger.debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
+        if(isIgnoreStatusCode(statusCode))
+            return;
+        setChannelClosed(session);
+        socketDataReceiver.wsCloseConnection(session);
+    }
 
-	@OnWebSocketMessage
-	public void onMessage(Session session, byte[] payload, int offset, int len) throws Exception {
-		socketDataReceiver.wsReceive(session, payload, offset, len);
-	}
+    @OnWebSocketError
+    public void onError(Session session, Throwable throwable) {
+        EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
+        if(dataHandler == null) {
+            logger.debug("error on session: {}, but data handler removed", session.getRemoteAddress(), throwable);
+        }
+        if (throwable instanceof TimeoutException) {
+            logger.debug("session {}: Timeout on Read", session.getRemoteAddress());
+        }
+        else if(dataHandler != null) {
+            logger.debug("error on session: {}", session.getRemoteAddress(), throwable);
+            dataHandler.fireExceptionCaught(throwable);
+        }
+    }
 
-	private void setChannelClosed(Session connection) {
-		EzyNioSession session = sessionManager.getSession(connection);
-		if(session != null) {
-			EzyWsChannel channel = (EzyWsChannel) session.getChannel();
-			if(channel != null)
-				channel.setClosed();
-		}
-	}
+    @OnWebSocketConnect
+    public void onConnect(Session session) throws Exception {
+        long sessionMaxIdleTime = sessionManagementSetting.getSessionMaxIdleTime();
+        session.setIdleTimeout(sessionMaxIdleTime);
+        EzyChannel channel = new EzyWsChannel(session);
+        handlerGroupManager.newHandlerGroup(channel, EzyConnectionType.WEBSOCKET);
+    }
 
-	public static Builder builder() {
-		return new Builder();
-	}
+    @OnWebSocketMessage
+    public void onMessage(Session session, String message) throws Exception {
+        socketDataReceiver.wsReceive(session, message);
+    }
 
-	public static class Builder implements EzyBuilder<EzyWsHandler> {
+    @OnWebSocketMessage
+    public void onMessage(Session session, byte[] payload, int offset, int len) throws Exception {
+        socketDataReceiver.wsReceive(session, payload, offset, len);
+    }
 
-		private EzySocketDataReceiver socketDataReceiver;
-		private EzyNioSessionManager sessionManager;
-		private EzyHandlerGroupManager handlerGroupManager;
-		private EzySessionManagementSetting sessionManagementSetting;
-		
-		public Builder socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
-			this.socketDataReceiver = socketDataReceiver;
-			return this;
-		}
+    private void setChannelClosed(Session connection) {
+        EzyNioSession session = sessionManager.getSession(connection);
+        if(session != null) {
+            EzyWsChannel channel = (EzyWsChannel) session.getChannel();
+            if(channel != null)
+                channel.setClosed();
+        }
+    }
 
-		public Builder sessionManager(EzyNioSessionManager sessionManager) {
-			this.sessionManager = sessionManager;
-			return this;
-		}
+    public static Builder builder() {
+        return new Builder();
+    }
 
-		public Builder handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
-			this.handlerGroupManager = handlerGroupManager;
-			return this;
-		}
-		
-		public Builder sessionManagementSetting(EzySessionManagementSetting sessionManagementSetting) {
-			this.sessionManagementSetting = sessionManagementSetting;
-			return this;
-		}
+    public static class Builder implements EzyBuilder<EzyWsHandler> {
 
-		@Override
-		public EzyWsHandler build() {
-			return new EzyWsHandler(this);
-		}
-	}
+        private EzySocketDataReceiver socketDataReceiver;
+        private EzyNioSessionManager sessionManager;
+        private EzyHandlerGroupManager handlerGroupManager;
+        private EzySessionManagementSetting sessionManagementSetting;
+
+        public Builder socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+            this.socketDataReceiver = socketDataReceiver;
+            return this;
+        }
+
+        public Builder sessionManager(EzyNioSessionManager sessionManager) {
+            this.sessionManager = sessionManager;
+            return this;
+        }
+
+        public Builder handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
+            this.handlerGroupManager = handlerGroupManager;
+            return this;
+        }
+
+        public Builder sessionManagementSetting(EzySessionManagementSetting sessionManagementSetting) {
+            this.sessionManagementSetting = sessionManagementSetting;
+            return this;
+        }
+
+        @Override
+        public EzyWsHandler build() {
+            return new EzyWsHandler(this);
+        }
+    }
 }

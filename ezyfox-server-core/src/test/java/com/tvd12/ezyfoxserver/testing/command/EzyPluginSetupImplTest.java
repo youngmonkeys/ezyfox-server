@@ -27,22 +27,22 @@ public class EzyPluginSetupImplTest extends BaseTest {
     }
     
     @SuppressWarnings("rawtypes")
-	@Test
+    @Test
     public void addEventControllerTest() {
-    	// given
-    	EzySimplePlugin plugin = new EzySimplePlugin();
-    	
-    	EzyEventControllers eventControllers = mock(EzyEventControllers.class);
-    	plugin.setEventControllers(eventControllers);
-    	
-    	EzyPluginSetupImpl sut = new EzyPluginSetupImpl(plugin);
-    	EzyEventController controller = mock(EzyEventController.class);
-    	
-    	
-    	// when
-    	sut.addEventController(EzyEventType.SERVER_INITIALIZING, controller);
-    	
-    	// then
-    	verify(eventControllers, times(1)).addController(EzyEventType.SERVER_INITIALIZING, controller);
+        // given
+        EzySimplePlugin plugin = new EzySimplePlugin();
+        
+        EzyEventControllers eventControllers = mock(EzyEventControllers.class);
+        plugin.setEventControllers(eventControllers);
+        
+        EzyPluginSetupImpl sut = new EzyPluginSetupImpl(plugin);
+        EzyEventController controller = mock(EzyEventController.class);
+        
+        
+        // when
+        sut.addEventController(EzyEventType.SERVER_INITIALIZING, controller);
+        
+        // then
+        verify(eventControllers, times(1)).addController(EzyEventType.SERVER_INITIALIZING, controller);
     }
 }

@@ -5,6 +5,6 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 
 public interface EzyBroadcastEvent {
 
-	void fire(EzyConstant type, EzyEvent event, boolean catchException);
-	
+    void fire(EzyConstant type, EzyEvent event, boolean catchException);
+
 }

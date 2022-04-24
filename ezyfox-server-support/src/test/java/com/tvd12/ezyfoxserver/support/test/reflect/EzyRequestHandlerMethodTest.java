@@ -9,14 +9,14 @@ import com.tvd12.ezyfoxserver.support.test.controller.app.AppClientHelloRequestC
 
 public class EzyRequestHandlerMethodTest {
 
-	@Test
-	public void test() throws Exception {
-		EzyMethod method = new EzyMethod(AppClientHelloRequestController.class
-				.getDeclaredMethod("handleHello5", EzyContext.class));
-		EzyRequestHandlerMethod handlerMethod = new EzyRequestHandlerMethod("c_hello5", method);
-		assert handlerMethod.getMethod() == method;
-		System.out.println(handlerMethod);
-		assert handlerMethod.getParameterTypes().length >= 0;
-	}
-	
+    @Test
+    public void test() throws Exception {
+        EzyMethod method = new EzyMethod(AppClientHelloRequestController.class
+                .getDeclaredMethod("handleHello5", EzyContext.class));
+        EzyRequestHandlerMethod handlerMethod = new EzyRequestHandlerMethod("c_hello5", method);
+        assert handlerMethod.getMethod() == method;
+        System.out.println(handlerMethod);
+        assert handlerMethod.getParameterTypes().length >= 0;
+    }
+
 }

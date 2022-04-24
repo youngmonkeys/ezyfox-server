@@ -34,26 +34,26 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyUserDataHandlerTest {
 
-	@Test
+    @Test
     public void checkToUnmapUserTest() throws Exception {
-    	// given
+        // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "user", null);
         
         // when
         MethodInvoker.create()
-        	.object(sut)
-        	.method("checkToUnmapUser")
-        	.param(EzyConstant.class, mock(EzyConstant.class))
-        	.invoke();
+            .object(sut)
+            .method("checkToUnmapUser")
+            .param(EzyConstant.class, mock(EzyConstant.class))
+            .invoke();
         
         // then
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "user"));
     }
-	
-	@SuppressWarnings("rawtypes")
-	private MyTestDataHandler createHandler() {
-    	int zoneId = 1;
+
+    @SuppressWarnings("rawtypes")
+    private MyTestDataHandler createHandler() {
+        int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         EzyZone zone = mock(EzyZone.class);

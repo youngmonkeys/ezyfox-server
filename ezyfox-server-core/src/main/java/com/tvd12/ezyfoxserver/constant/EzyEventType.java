@@ -7,8 +7,8 @@ import lombok.Getter;
 public enum EzyEventType implements EzyConstant {
 
     SERVER_INITIALIZING(0),
-	SERVER_READY(1),
-	USER_LOGIN(21),
+    SERVER_READY(1),
+    USER_LOGIN(21),
     USER_ACCESS_APP(25),
     USER_ADDED(26),
     USER_REMOVED(27),
@@ -16,16 +16,16 @@ public enum EzyEventType implements EzyConstant {
     SESSION_REMOVED(35),
     STREAMING(36);
 
-	@Getter
-	private final int id;
-	
-	private EzyEventType(int id) {
-		this.id = id;
-	}
-	
-	@Override
-	public String getName() {
-		return toString();
-	}
-	
+    @Getter
+    private final int id;
+
+    private EzyEventType(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return toString();
+    }
+
 }

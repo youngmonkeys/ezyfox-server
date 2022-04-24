@@ -11,8 +11,8 @@ import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 @EzyEventHandler(EzyEventNames.SERVER_READY)
 public class ServerReadyEventHandler2 implements EzyServerReadyController {
 
-	@Override
-	public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {
-	}
+    @Override
+    public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {
+    }
 
 }

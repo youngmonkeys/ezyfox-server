@@ -79,8 +79,8 @@ public class EzySendResponseImpl extends EzyAbstractCommand implements EzySendRe
     }
     
     protected EzySimplePackage newPackage(
-    		EzyArray data, 
-    		boolean encrypted, EzyTransportType transportType) {
+            EzyArray data,
+            boolean encrypted, EzyTransportType transportType) {
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(encrypted);

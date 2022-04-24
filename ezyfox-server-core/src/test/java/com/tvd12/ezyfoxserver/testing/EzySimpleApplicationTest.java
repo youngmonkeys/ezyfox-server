@@ -13,7 +13,7 @@ public class EzySimpleApplicationTest extends BaseTest {
 
     @Test
     public void test() {
-    	EzySimpleApplication app = new EzySimpleApplication();
+        EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting setting = new EzySimpleAppSetting();
         app.setSetting(setting);
         assert app.equals(app);

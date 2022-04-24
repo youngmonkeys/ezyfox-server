@@ -14,37 +14,37 @@ import static org.mockito.Mockito.*;
 
 public class EzyHttpServerBootstrapTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyServerContext serverContext = mock(EzyServerContext.class);
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleServer server = new EzySimpleServer();
-		server.setSettings(settings);
-		when(serverContext.getServer()).thenReturn(server);
-		EzyEmptyHttpBootstrap httpBootstrap = new EzyEmptyHttpBootstrap();
-		httpBootstrap.setServerContext(serverContext);
-		ExEzyHttpServerBootstrap bootstrap = new ExEzyHttpServerBootstrap();
-		bootstrap.setContext(serverContext);
-		MethodInvoker.create()
-			.object(bootstrap)
-			.method("startHttpBootstrap")
-			.invoke();
-		
-		settings.getHttp().setActive(true);
-		MethodInvoker.create()
-			.object(bootstrap)
-			.method("startHttpBootstrap")
-			.invoke();
-		bootstrap.destroy();
-		bootstrap.destroy();
-	}
-	
-	public static class ExEzyHttpServerBootstrap extends EzyHttpServerBootstrap {
+    @Test
+    public void test() {
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        when(serverContext.getServer()).thenReturn(server);
+        EzyEmptyHttpBootstrap httpBootstrap = new EzyEmptyHttpBootstrap();
+        httpBootstrap.setServerContext(serverContext);
+        ExEzyHttpServerBootstrap bootstrap = new ExEzyHttpServerBootstrap();
+        bootstrap.setContext(serverContext);
+        MethodInvoker.create()
+            .object(bootstrap)
+            .method("startHttpBootstrap")
+            .invoke();
+        
+        settings.getHttp().setActive(true);
+        MethodInvoker.create()
+            .object(bootstrap)
+            .method("startHttpBootstrap")
+            .invoke();
+        bootstrap.destroy();
+        bootstrap.destroy();
+    }
+    
+    public static class ExEzyHttpServerBootstrap extends EzyHttpServerBootstrap {
 
-		@Override
-		protected void startOtherBootstraps(Runnable callback) throws Exception {
-		}
-		
-	}
-	
+        @Override
+        protected void startOtherBootstraps(Runnable callback) throws Exception {
+        }
+        
+    }
+    
 }

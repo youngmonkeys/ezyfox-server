@@ -13,32 +13,32 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzySocketSystemRequestHandlerTest {
 
-	@Test
-	public void test() {
-	    EzySocketSystemRequestHandler handler = new EzySocketSystemRequestHandler();
-		MethodInvoker.create()
-		    .object(handler)
-		    .method("getRequestType")
-		    .invoke();
-	}
-	
-	@Test
-	public void getRequestQueueTest() {
-		// given
-		EzySocketSystemRequestHandler sut = new EzySocketSystemRequestHandler();
-		
-		EzySession session = mock(EzySession.class);
-		EzyRequestQueue requestQueue = mock(EzyRequestQueue.class);
-		when(session.getSystemRequestQueue()).thenReturn(requestQueue);
-		
-		// when
-		EzyRequestQueue result = MethodInvoker.create()
-				.object(sut)
-				.method("getRequestQueue")
-				.param(EzySession.class, session)
-				.call();
-		
-		// then
-		Asserts.assertEquals(requestQueue, result);
-	}
+    @Test
+    public void test() {
+        EzySocketSystemRequestHandler handler = new EzySocketSystemRequestHandler();
+        MethodInvoker.create()
+            .object(handler)
+            .method("getRequestType")
+            .invoke();
+    }
+
+    @Test
+    public void getRequestQueueTest() {
+        // given
+        EzySocketSystemRequestHandler sut = new EzySocketSystemRequestHandler();
+
+        EzySession session = mock(EzySession.class);
+        EzyRequestQueue requestQueue = mock(EzyRequestQueue.class);
+        when(session.getSystemRequestQueue()).thenReturn(requestQueue);
+
+        // when
+        EzyRequestQueue result = MethodInvoker.create()
+                .object(sut)
+                .method("getRequestQueue")
+                .param(EzySession.class, session)
+                .call();
+
+        // then
+        Asserts.assertEquals(requestQueue, result);
+    }
 }

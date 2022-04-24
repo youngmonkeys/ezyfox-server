@@ -27,23 +27,23 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 public class EzyAccessAppController 
-		extends EzyAbstractServerController 
-		implements EzyServerController<EzyAccessAppRequest> {
+        extends EzyAbstractServerController
+        implements EzyServerController<EzyAccessAppRequest> {
 
-	@Override
-	public void handle(EzyServerContext ctx, EzyAccessAppRequest request) {
-	   try {
-	       handle0(ctx, request);
-	   }
-	   catch(EzyAccessAppException e) {
+    @Override
+    public void handle(EzyServerContext ctx, EzyAccessAppRequest request) {
+       try {
+           handle0(ctx, request);
+       }
+       catch(EzyAccessAppException e) {
            responseAccessAppError(ctx, request.getSession(), e);
            throw e;
        }
-	}
-	
-	protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
-	    EzyUser user = request.getUser();
-	    int zoneId = user.getZoneId();
+    }
+
+    protected void handle0(EzyServerContext ctx, EzyAccessAppRequest request) {
+        EzyUser user = request.getUser();
+        int zoneId = user.getZoneId();
         EzyAccessAppParams params = request.getParams();
         EzyZoneContext zoneContext = ctx.getZoneContext(zoneId);
         EzyAppContext appContext = zoneContext.getAppContext(params.getAppName());
@@ -69,7 +69,7 @@ public class EzyAccessAppController
                 EzyUserAccessedAppEvent accessedAppEvent = newAccessedAppEvent(user);
                 appContext.handleEvent(EzyEventType.USER_ACCESSED_APP, accessedAppEvent);
             }
-			
+
             EzyArray output = accessAppEvent.getOutput();
             EzyResponse accessAppResponse = newAccessAppResponse(zoneId, appSetting, output);
             ctx.send(accessAppResponse, session, false);
@@ -80,50 +80,50 @@ public class EzyAccessAppController
         }
         
     }
-	
-	protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {
-	    int current = appUserManger.getUserCount();
-	    int max = appUserManger.getMaxUsers();
-	    String appName = appUserManger.getAppName();
-	    if(current >= max)
-	        throw EzyAccessAppException.maximumUser(appName, current, max);
-	}
-	
-	protected void addUser(
-	        EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
-	    try {
-	        appUserManger.addUser(user);
-	    }
-	    catch(EzyMaxUserException e) {
-	        throw EzyAccessAppException.maximumUser(setting.getName(), e);
-	    }
-	}
-	
-	protected EzyUserAccessAppEvent newAccessAppEvent(EzyUser user) {
-	    return new EzySimpleUserAccessAppEvent(user);
-	}
-	
-	protected EzyUserAccessedAppEvent newAccessedAppEvent(EzyUser user) {
-	    return new EzySimpleUserAccessedAppEvent(user);
+
+    protected void checkAppUserMangerAvailable(EzyAppUserManager appUserManger) {
+        int current = appUserManger.getUserCount();
+        int max = appUserManger.getMaxUsers();
+        String appName = appUserManger.getAppName();
+        if(current >= max)
+            throw EzyAccessAppException.maximumUser(appName, current, max);
     }
-	
-	protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
-	    com.tvd12.ezyfoxserver.response.EzyAccessAppParams params = 
-	            new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
-	    params.setApp(app);
-	    params.setData(data);
-	    return new EzyAccessAppResponse(params);
-	}
-	
-	protected EzyResponse newAccessAppErrorResponse(EzyIAccessAppError error) {
-	    EzyErrorParams params = new EzyErrorParams();
-	    params.setError(error);
+
+    protected void addUser(
+            EzyAppUserManager appUserManger, EzyUser user, EzyAppSetting setting) {
+        try {
+            appUserManger.addUser(user);
+        }
+        catch(EzyMaxUserException e) {
+            throw EzyAccessAppException.maximumUser(setting.getName(), e);
+        }
+    }
+
+    protected EzyUserAccessAppEvent newAccessAppEvent(EzyUser user) {
+        return new EzySimpleUserAccessAppEvent(user);
+    }
+
+    protected EzyUserAccessedAppEvent newAccessedAppEvent(EzyUser user) {
+        return new EzySimpleUserAccessedAppEvent(user);
+    }
+
+    protected EzyResponse newAccessAppResponse(int zoneId, EzyAppSetting app, EzyArray data) {
+        com.tvd12.ezyfoxserver.response.EzyAccessAppParams params =
+                new com.tvd12.ezyfoxserver.response.EzyAccessAppParams();
+        params.setApp(app);
+        params.setData(data);
+        return new EzyAccessAppResponse(params);
+    }
+
+    protected EzyResponse newAccessAppErrorResponse(EzyIAccessAppError error) {
+        EzyErrorParams params = new EzyErrorParams();
+        params.setError(error);
         return new EzyAccessAppErrorResponse(params);
     }
-	
-	protected void responseAccessAppError(
-	        EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
-	    EzyResponse response = newAccessAppErrorResponse(exception.getError());
-	    ctx.send(response, session, false);
+
+    protected void responseAccessAppError(
+            EzyServerContext ctx, EzySession session, EzyAccessAppException exception) {
+        EzyResponse response = newAccessAppErrorResponse(exception.getError());
+        ctx.send(response, session, false);
     }
 }

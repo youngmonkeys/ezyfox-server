@@ -10,11 +10,11 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 @EzySingleton
 @EzyRequestListener("exception")
 public class PluginClientExceptionRequestHandler 
-		implements EzyUserRequestHandler<EzyPluginContext, Hello> {
+        implements EzyUserRequestHandler<EzyPluginContext, Hello> {
 
-	@Override
-	public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
-		throw new IllegalStateException("server maintain");
-	}
+    @Override
+    public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
+        throw new IllegalStateException("server maintain");
+    }
 
 }

@@ -21,70 +21,70 @@ import com.tvd12.ezyfoxserver.response.EzyLoginErrorResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public class EzyLoginController 
-		extends EzyAbstractServerController 
-		implements EzyServerController<EzyLoginRequest> {
+        extends EzyAbstractServerController
+        implements EzyServerController<EzyLoginRequest> {
 
-	@Override
-	public void handle(EzyServerContext ctx, EzyLoginRequest request) {
-	    try {
-	        EzySession session = request.getSession();
-	        EzyLoginParams params = request.getParams();
-	        EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneName());
-	        EzyUserLoginEvent loginEvent = newLoginEvent(session, params);
-	        try {
-	            control(ctx, zoneContext, loginEvent);
-	        }
-	        finally {
-	            loginEvent.release();
-	        }
+    @Override
+    public void handle(EzyServerContext ctx, EzyLoginRequest request) {
+        try {
+            EzySession session = request.getSession();
+            EzyLoginParams params = request.getParams();
+            EzyZoneContext zoneContext = ctx.getZoneContext(params.getZoneName());
+            EzyUserLoginEvent loginEvent = newLoginEvent(session, params);
+            try {
+                control(ctx, zoneContext, loginEvent);
+            }
+            finally {
+                loginEvent.release();
+            }
         }
         catch(EzyLoginErrorException e) {
             processException(ctx, request.getSession(), e);
             throw e;
         }
-	    catch(EzyMaxUserException e) {
-	        processException(ctx, request.getSession(), maximumUsers(e));
-	        throw e;
-	    }
-	    catch(EzyZoneNotFoundException e) {
-	        processException(ctx, request.getSession(), zoneNotFound(e));
-	        throw e;
-	    }
-	    catch(Exception e) {
-	        processException(ctx, request.getSession(), serverError(e));
-	        throw e;
-	    }
-	}
-	
-	protected void processException(
-	        EzyServerContext ctx, EzySession session, EzyLoginErrorException e) {
-	    responseLoginError(ctx, session, e.getError());
-	}
-	
-	protected void control(
-	        EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
-		firePluginEvent(zoneContext, event);
-		process(ctx, zoneContext, event);
-	}
-	
-	protected void process(
-	        EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
-	    EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
-	    processor.apply(zoneContext, event);
-	}
-	
-	protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
+        catch(EzyMaxUserException e) {
+            processException(ctx, request.getSession(), maximumUsers(e));
+            throw e;
+        }
+        catch(EzyZoneNotFoundException e) {
+            processException(ctx, request.getSession(), zoneNotFound(e));
+            throw e;
+        }
+        catch(Exception e) {
+            processException(ctx, request.getSession(), serverError(e));
+            throw e;
+        }
+    }
+
+    protected void processException(
+            EzyServerContext ctx, EzySession session, EzyLoginErrorException e) {
+        responseLoginError(ctx, session, e.getError());
+    }
+
+    protected void control(
+            EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
+        firePluginEvent(zoneContext, event);
+        process(ctx, zoneContext, event);
+    }
+
+    protected void process(
+            EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
+        EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
+        processor.apply(zoneContext, event);
+    }
+
+    protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
         ctx.broadcastPlugins(EzyEventType.USER_LOGIN, event, false);
     }
-	
-	protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {
-		return new EzySimpleUserLoginEvent(
-		        session,
-		        params.getZoneName(),
-		        params.getUsername(),
-		        params.getPassword(), params.getData());
-	}
-	
+
+    protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {
+        return new EzySimpleUserLoginEvent(
+                session,
+                params.getZoneName(),
+                params.getUsername(),
+                params.getPassword(), params.getData());
+    }
+
     protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
         EzyResponse response = newLoginErrorReponse(error);
         ctx.send(response, session, false);

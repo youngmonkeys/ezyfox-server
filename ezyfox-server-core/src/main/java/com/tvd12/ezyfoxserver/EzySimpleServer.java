@@ -31,35 +31,35 @@ public class EzySimpleServer
         extends EzyComponent 
         implements EzyServer, EzyResponseApiAware, EzyStreamingApiAware, EzySessionManagerAware, EzyDestroyable {
 
-	protected EzyConfig config;
-	protected EzySettings settings;
-	protected ClassLoader classLoader;
-	protected EzyStatistics statistics;
-	protected EzyServerControllers controllers;
+    protected EzyConfig config;
+    protected EzySettings settings;
+    protected ClassLoader classLoader;
+    protected EzyStatistics statistics;
+    protected EzyServerControllers controllers;
     protected EzyResponseApi responseApi;
-	protected EzyStreamingApi streamingApi;
-	protected EzySessionManager sessionManager;
+    protected EzyStreamingApi streamingApi;
+    protected EzySessionManager sessionManager;
     protected Map<String, ClassLoader> appClassLoaders;
-	
-	@Override
-	public String getVersion() {
-	    return "1.0.0";
-	}
-	
-	@Override
-	public void destroy() {
-	    super.destroy();
-	    ((EzyDestroyable)sessionManager).destroy();
-	}
-	
-	@Override
-	public String toString() {
-	    EzyJsonWriter writer = new EzySimpleJsonWriter();
-		String json = writer.writeAsString(this);
-		return json;
-	}
-	
-	@Override
+    
+    @Override
+    public String getVersion() {
+        return "1.0.0";
+    }
+    
+    @Override
+    public void destroy() {
+        super.destroy();
+        ((EzyDestroyable)sessionManager).destroy();
+    }
+    
+    @Override
+    public String toString() {
+        EzyJsonWriter writer = new EzySimpleJsonWriter();
+        String json = writer.writeAsString(this);
+        return json;
+    }
+    
+    @Override
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new HashMap<>();
         map.put("version", getVersion());

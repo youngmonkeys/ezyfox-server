@@ -26,5 +26,5 @@ public class EzySimpleZoneFilesSetting {
     public void forEach(Consumer<EzySimpleZoneFileSetting> consumer) {
         zoneFiles.forEach(consumer);
     }
-	
+    
 }

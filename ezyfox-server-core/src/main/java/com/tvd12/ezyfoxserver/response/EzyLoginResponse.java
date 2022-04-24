@@ -7,7 +7,7 @@ public class EzyLoginResponse
     private static final long serialVersionUID = -6999045776866818316L;
     
     public EzyLoginResponse(EzyLoginParams params) {
-	    super(EzyCommand.LOGIN, params);
-	}
-	
+        super(EzyCommand.LOGIN, params);
+    }
+
 }

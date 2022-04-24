@@ -5,8 +5,8 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDataHandler;
 
 public interface EzyNioDataHandler extends EzySocketDataHandler {
 
-	void channelInactive(EzyConstant disconnectReason);
-	
+    void channelInactive(EzyConstant disconnectReason);
+
     void exceptionCaught(Throwable throwable)  throws Exception;
-	
+
 }

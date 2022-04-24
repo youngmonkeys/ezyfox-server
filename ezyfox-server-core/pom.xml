@@ -1,48 +1,48 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.tvd12</groupId>
-		<artifactId>ezyfox-server</artifactId>
-		<version>1.2.3</version>
-	</parent>
-	<artifactId>ezyfox-server-core</artifactId>
-	<name>ezyfox-server-core</name>
-	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
-	
-	<dependencies>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-codec</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-mapping</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-tools</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tvd12</groupId>
+        <artifactId>ezyfox-server</artifactId>
+        <version>1.2.3</version>
+    </parent>
+    <artifactId>ezyfox-server-core</artifactId>
+    <name>ezyfox-server-core</name>
+    <url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>ezy-settings-1.0.0.xsd</exclude>
-					<exclude>ezy-settings.xml</exclude>
-					<exclude>ezy-zone-settings-1.0.0.xsd</exclude>
-					<exclude>ezy-zone-settings.xml</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
+    <dependencies>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-codec</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-mapping</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-tools</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>ezy-settings-1.0.0.xsd</exclude>
+                    <exclude>ezy-settings.xml</exclude>
+                    <exclude>ezy-zone-settings-1.0.0.xsd</exclude>
+                    <exclude>ezy-zone-settings.xml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 
 </project>

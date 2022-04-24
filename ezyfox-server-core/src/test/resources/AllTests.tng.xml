@@ -1,165 +1,165 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing"></package>
-			<package name="com.tvd12.ezyfoxserver.testing.ext"></package>
-		</packages>
-	</test>
-	<test name="Api">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.api"></package>
-		</packages>
-	</test>
-	<test name="Codec">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.codec"></package>
-		</packages>
-	</test>
-	<test name="Creator">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.creator"></package>
-		</packages>
-	</test>
-	<test name="Loader">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.loader"></package>
-		</packages>
-	</test>
-	<test name="Delegate">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.delegate"></package>
-		</packages>
-	</test>
-	<test name="Controller">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.controller"></package>
-		</packages>
-	</test>
-	<test name="Service">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.service"></package>
-		</packages>
-	</test>
-	<test name="Util">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.util"></package>
-		</packages>
-	</test>
-	<test name="Interceptor">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.interceptor"></package>
-		</packages>
-	</test>
-	<test name="Appcontroller">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.appcontroller"></package>
-		</packages>
-	</test>
-	<test name="CCL">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.ccl"></package>
-		</packages>
-	</test>
-	<test name="Exception">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.exception"></package>
-		</packages>
-	</test>
-	<test name="Factory">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.factory"></package>
-		</packages>
-	</test>
-	<test name="Event">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.event"></package>
-		</packages>
-	</test>
-	<test name="Helper">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.helper"></package>
-		</packages>
-	</test>
-	<test name="Config">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.config"></package>
-		</packages>
-	</test>
-	<test name="Responser">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.responser"></package>
-		</packages>
-	</test>
-	<test name="Response">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.response"></package>
-		</packages>
-	</test>
-	<test name="Handler">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.handler"></package>
-		</packages>
-	</test>
-	<test name="Constant">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.constant"></package>
-		</packages>
-	</test>
-	<test name="Request">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.request"></package>
-		</packages>
-	</test>
-	<test name="Entity">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.entity"></package>
-		</packages>
-	</test>
-	<test name="Wrapper">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.wrapper"></package>
-		</packages>
-	</test>
-	<test name="Context">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.context"></package>
-		</packages>
-	</test>
-	<test name="Setting">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.setting"></package>
-		</packages>
-	</test>
-	<test name="Builder">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.builder"></package>
-		</packages>
-	</test>
-	<test name="Command">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.command"></package>
-		</packages>
-	</test>
-	<test name="SSL">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.ssl"></package>
-		</packages>
-	</test>
-	<test name="PluginController">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.plugincontroller"></package>
-		</packages>
-	</test>
-	<test name="Socket">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.socket"></package>
-		</packages>
-	</test>
-	<test name="Statistics">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.testing.statistics"></package>
-		</packages>
-	</test>
+    <test name="All">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing"></package>
+            <package name="com.tvd12.ezyfoxserver.testing.ext"></package>
+        </packages>
+    </test>
+    <test name="Api">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.api"></package>
+        </packages>
+    </test>
+    <test name="Codec">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.codec"></package>
+        </packages>
+    </test>
+    <test name="Creator">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.creator"></package>
+        </packages>
+    </test>
+    <test name="Loader">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.loader"></package>
+        </packages>
+    </test>
+    <test name="Delegate">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.delegate"></package>
+        </packages>
+    </test>
+    <test name="Controller">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.controller"></package>
+        </packages>
+    </test>
+    <test name="Service">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.service"></package>
+        </packages>
+    </test>
+    <test name="Util">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.util"></package>
+        </packages>
+    </test>
+    <test name="Interceptor">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.interceptor"></package>
+        </packages>
+    </test>
+    <test name="Appcontroller">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.appcontroller"></package>
+        </packages>
+    </test>
+    <test name="CCL">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.ccl"></package>
+        </packages>
+    </test>
+    <test name="Exception">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.exception"></package>
+        </packages>
+    </test>
+    <test name="Factory">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.factory"></package>
+        </packages>
+    </test>
+    <test name="Event">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.event"></package>
+        </packages>
+    </test>
+    <test name="Helper">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.helper"></package>
+        </packages>
+    </test>
+    <test name="Config">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.config"></package>
+        </packages>
+    </test>
+    <test name="Responser">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.responser"></package>
+        </packages>
+    </test>
+    <test name="Response">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.response"></package>
+        </packages>
+    </test>
+    <test name="Handler">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.handler"></package>
+        </packages>
+    </test>
+    <test name="Constant">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.constant"></package>
+        </packages>
+    </test>
+    <test name="Request">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.request"></package>
+        </packages>
+    </test>
+    <test name="Entity">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.entity"></package>
+        </packages>
+    </test>
+    <test name="Wrapper">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.wrapper"></package>
+        </packages>
+    </test>
+    <test name="Context">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.context"></package>
+        </packages>
+    </test>
+    <test name="Setting">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.setting"></package>
+        </packages>
+    </test>
+    <test name="Builder">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.builder"></package>
+        </packages>
+    </test>
+    <test name="Command">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.command"></package>
+        </packages>
+    </test>
+    <test name="SSL">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.ssl"></package>
+        </packages>
+    </test>
+    <test name="PluginController">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.plugincontroller"></package>
+        </packages>
+    </test>
+    <test name="Socket">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.socket"></package>
+        </packages>
+    </test>
+    <test name="Statistics">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.testing.statistics"></package>
+        </packages>
+    </test>
 </suite>

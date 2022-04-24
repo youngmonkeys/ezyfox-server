@@ -9,5 +9,5 @@ public class EzyRequestAppResponse
     public EzyRequestAppResponse(EzyRequestAppResponseParams params) {
         super(EzyCommand.APP_REQUEST, params);
     }
-	
+
 }

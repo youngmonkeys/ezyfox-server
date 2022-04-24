@@ -25,7 +25,7 @@ public class EzySimpleEventControllersSetting implements EzyEventControllersSett
     
     @XmlElement(name = "event-controller")
     public void setItem(EzySimpleEventControllerSetting item) {
-    	eventControllers.add(item);
+        eventControllers.add(item);
     }
     
     @Override

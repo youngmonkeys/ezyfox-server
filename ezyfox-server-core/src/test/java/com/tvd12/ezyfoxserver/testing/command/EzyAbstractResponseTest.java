@@ -14,48 +14,48 @@ import static org.mockito.Mockito.*;
 
 public class EzyAbstractResponseTest {
 
-	@Test
-	public void encryptedTest() {
-		// given
-		EzyZoneChildContext context = mock(EzyZoneChildContext.class);
-		InternalResponse sut = new InternalResponse(context);
-		
-		// when
-		sut.encrypted();
-		
-		// then
-		Asserts.assertTrue(FieldUtil.getFieldValue(sut, "encrypted"));
-	}
-	
-	@Test
-	public void encryptedSetTest() {
-		// given
-		EzyZoneChildContext context = mock(EzyZoneChildContext.class);
-		InternalResponse sut = new InternalResponse(context);
-		
-		// when
-		sut.encrypted(true);
-		
-		// then
-		Asserts.assertTrue(FieldUtil.getFieldValue(sut, "encrypted"));
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private static class InternalResponse extends EzyAbstractResponse {
+    @Test
+    public void encryptedTest() {
+        // given
+        EzyZoneChildContext context = mock(EzyZoneChildContext.class);
+        InternalResponse sut = new InternalResponse(context);
 
-		@SuppressWarnings("unchecked")
-		public InternalResponse(EzyZoneChildContext context) {
-			super(context);
-		}
+        // when
+        sut.encrypted();
 
-		@Override
-		protected EzyUserManager getUserManager(EzyZoneChildContext context) {
-			return null;
-		}
+        // then
+        Asserts.assertTrue(FieldUtil.getFieldValue(sut, "encrypted"));
+    }
 
-		@Override
-		protected void sendData(EzyData data, EzyTransportType transportType) {
-		}
-		
-	}
+    @Test
+    public void encryptedSetTest() {
+        // given
+        EzyZoneChildContext context = mock(EzyZoneChildContext.class);
+        InternalResponse sut = new InternalResponse(context);
+
+        // when
+        sut.encrypted(true);
+
+        // then
+        Asserts.assertTrue(FieldUtil.getFieldValue(sut, "encrypted"));
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static class InternalResponse extends EzyAbstractResponse {
+
+        @SuppressWarnings("unchecked")
+        public InternalResponse(EzyZoneChildContext context) {
+            super(context);
+        }
+
+        @Override
+        protected EzyUserManager getUserManager(EzyZoneChildContext context) {
+            return null;
+        }
+
+        @Override
+        protected void sendData(EzyData data, EzyTransportType transportType) {
+        }
+
+    }
 }

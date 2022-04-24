@@ -11,13 +11,13 @@ import lombok.Setter;
 @EzyPrototype
 @EzyRequestListener("exception")
 public class ClientExceptionRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler {
+        extends EzyLoggable
+        implements
+            EzyHandler {
 
-	@Override
-	public void handle() {
-		throw new IllegalStateException("server maintain");
-	}
+    @Override
+    public void handle() {
+        throw new IllegalStateException("server maintain");
+    }
 
 }

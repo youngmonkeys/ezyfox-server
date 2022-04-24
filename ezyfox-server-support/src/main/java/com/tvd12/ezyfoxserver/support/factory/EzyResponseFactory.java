@@ -5,8 +5,8 @@ import com.tvd12.ezyfoxserver.support.command.EzyObjectResponse;
 
 public interface EzyResponseFactory {
 
-	EzyArrayResponse newArrayResponse();
-	
-	EzyObjectResponse newObjectResponse();
-	
+    EzyArrayResponse newArrayResponse();
+
+    EzyObjectResponse newObjectResponse();
+
 }

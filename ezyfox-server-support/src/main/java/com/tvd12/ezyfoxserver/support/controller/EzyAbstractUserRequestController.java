@@ -10,11 +10,11 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 public abstract class EzyAbstractUserRequestController 
         extends EzyLoggable
         implements EzyCommandsAware {
-	
-	protected EzyData newErrorData(EzyBadRequestException e) {
-		EzyData errorData = newArray(e.getCode(), e.getReason());
-		EzyData data = newArray(EzyResponseCommands.ERROR, errorData);
-		return data;
-	}
-	
+    
+    protected EzyData newErrorData(EzyBadRequestException e) {
+        EzyData errorData = newArray(e.getCode(), e.getReason());
+        EzyData data = newArray(EzyResponseCommands.ERROR, errorData);
+        return data;
+    }
+    
 }

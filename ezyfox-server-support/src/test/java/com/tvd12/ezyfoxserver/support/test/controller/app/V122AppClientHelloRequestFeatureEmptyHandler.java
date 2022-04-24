@@ -16,11 +16,11 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 @EzyFeature("")
 @EzyRequestListener("v122/listener/hello_feature_empty")
 public class V122AppClientHelloRequestFeatureEmptyHandler 
-		implements EzyUserRequestHandler<EzyAppContext, Hello> {
-	
-	@Override
-	public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
-		System.out.println("hello: " + data.getWho());
-	}
+        implements EzyUserRequestHandler<EzyAppContext, Hello> {
+
+    @Override
+    public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
+        System.out.println("hello: " + data.getWho());
+    }
 
 }

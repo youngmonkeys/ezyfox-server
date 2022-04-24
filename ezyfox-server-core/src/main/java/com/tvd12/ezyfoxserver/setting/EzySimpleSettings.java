@@ -33,34 +33,34 @@ public class EzySimpleSettings implements EzySettings {
     @XmlElement(name = "streaming")
     protected EzySimpleStreamingSetting streaming = new EzySimpleStreamingSetting();
     
-	@XmlElement(name = "http")
-	protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
-	
-	@XmlElement(name = "socket")
-	protected EzySimpleSocketSetting socket = new EzySimpleSocketSetting();
-	
-	@XmlElement(name = "udp")
-	protected EzySimpleUdpSetting udp = new EzySimpleUdpSetting();
-	
-	@XmlElement(name = "administrators")
-	protected EzySimpleAdminsSetting admins = new EzySimpleAdminsSetting();
-	
-	@XmlElement(name = "logger")
-	protected EzySimpleLoggerSetting logger = new EzySimpleLoggerSetting();
-	
-	@XmlElement(name = "web-socket")
-	protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
-	
-	@XmlElement(name = "thread-pool-size")
-	protected EzySimpleThreadPoolSizeSetting threadPoolSize = new EzySimpleThreadPoolSizeSetting();
-	
-	@XmlElement(name = "session-management")
-	protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
-	
-	@XmlElement(name = "event-controllers")
-	protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
-	
-	@Setter(AccessLevel.NONE)
+    @XmlElement(name = "http")
+    protected EzySimpleHttpSetting http = new EzySimpleHttpSetting();
+
+    @XmlElement(name = "socket")
+    protected EzySimpleSocketSetting socket = new EzySimpleSocketSetting();
+
+    @XmlElement(name = "udp")
+    protected EzySimpleUdpSetting udp = new EzySimpleUdpSetting();
+
+    @XmlElement(name = "administrators")
+    protected EzySimpleAdminsSetting admins = new EzySimpleAdminsSetting();
+
+    @XmlElement(name = "logger")
+    protected EzySimpleLoggerSetting logger = new EzySimpleLoggerSetting();
+
+    @XmlElement(name = "web-socket")
+    protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
+
+    @XmlElement(name = "thread-pool-size")
+    protected EzySimpleThreadPoolSizeSetting threadPoolSize = new EzySimpleThreadPoolSizeSetting();
+
+    @XmlElement(name = "session-management")
+    protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
+
+    @XmlElement(name = "event-controllers")
+    protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
+
+    @Setter(AccessLevel.NONE)
     protected EzySimpleZonesSetting zones = new EzySimpleZonesSetting();
     
     @XmlElement(name = "zones")
@@ -90,25 +90,25 @@ public class EzySimpleSettings implements EzySettings {
         this.zones.setItem(zone);
     }
     
-	@Override
-	public Set<String> getZoneNames() {
-		return zones.getZoneNames();
-	}
-	
-	@Override
-	public Set<Integer> getZoneIds() {
-		return zones.getZoneIds();
-	}
-	
-	@Override
-	public EzySimpleZoneSetting getZoneByName(String name) {
-		return zones.getZoneByName(name);
-	}
-	
-	@Override
-	public EzySimpleZoneSetting getZoneById(Integer id) {
-		return zones.getZoneById(id);
-	}
-	//=============================================//
-	
+    @Override
+    public Set<String> getZoneNames() {
+        return zones.getZoneNames();
+    }
+
+    @Override
+    public Set<Integer> getZoneIds() {
+        return zones.getZoneIds();
+    }
+
+    @Override
+    public EzySimpleZoneSetting getZoneByName(String name) {
+        return zones.getZoneByName(name);
+    }
+
+    @Override
+    public EzySimpleZoneSetting getZoneById(Integer id) {
+        return zones.getZoneById(id);
+    }
+    //=============================================//
+
 }

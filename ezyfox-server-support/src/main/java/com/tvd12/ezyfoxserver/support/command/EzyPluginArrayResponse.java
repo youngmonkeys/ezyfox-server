@@ -6,14 +6,14 @@ import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
 public class EzyPluginArrayResponse extends EzyAbstractArrayResponse {
-	
-	public EzyPluginArrayResponse(EzyPluginContext context, EzyMarshaller marshaller) {
-		super(context, marshaller);
-	}
-	
-	@Override
-	protected EzyResponse newResponse() {
-		return context.cmd(EzyPluginResponse.class);
-	}
-	
+
+    public EzyPluginArrayResponse(EzyPluginContext context, EzyMarshaller marshaller) {
+        super(context, marshaller);
+    }
+
+    @Override
+    protected EzyResponse newResponse() {
+        return context.cmd(EzyPluginResponse.class);
+    }
+
 }

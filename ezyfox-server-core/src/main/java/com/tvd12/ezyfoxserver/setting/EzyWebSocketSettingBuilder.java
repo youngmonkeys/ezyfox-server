@@ -40,8 +40,8 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     }
     
     public EzyWebSocketSettingBuilder managementEnable(boolean managementEnable) {
-    	this.managementEnable = managementEnable;
-    	return this;
+        this.managementEnable = managementEnable;
+        return this;
     }
 
     @Override

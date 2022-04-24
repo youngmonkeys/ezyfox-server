@@ -6,12 +6,12 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 
 public interface EzyContext extends EzyProperties {
 
-	<T> T get(Class<T> clazz);
-	
-	<T> T cmd(Class<T> clazz);
-	
-	void handleEvent(EzyConstant eventType, EzyEvent event);
-	
-	void handleException(Thread thread, Throwable throwable);
-	
+    <T> T get(Class<T> clazz);
+
+    <T> T cmd(Class<T> clazz);
+
+    void handleEvent(EzyConstant eventType, EzyEvent event);
+
+    void handleException(Thread thread, Throwable throwable);
+
 }

@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class EzySynchronizedUserManager extends EzyAbstractUserManager {
 
-	@Getter
+    @Getter
     protected final Object synchronizedLock = new Object();
     
     public EzySynchronizedUserManager(int maxUser) {

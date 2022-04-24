@@ -6,6 +6,6 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestInterceptor;
 
 @EzyRequestInterceptor
 public class AppRequestInteceptor 
-	implements EzyUserRequestInterceptor<EzyAppContext> {
+    implements EzyUserRequestInterceptor<EzyAppContext> {
 
 }

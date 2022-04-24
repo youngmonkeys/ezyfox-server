@@ -11,11 +11,11 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 @EzySingleton
 @EzyRequestListener("badRequestNotSend")
 public class PluginBadRequestNotSendRequestHandler 
-		implements EzyUserRequestHandler<EzyPluginContext, Hello> {
+        implements EzyUserRequestHandler<EzyPluginContext, Hello> {
 
-	@Override
-	public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
-		throw new EzyBadRequestException(1, "server maintain", false);
-	}
+    @Override
+    public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
+        throw new EzyBadRequestException(1, "server maintain", false);
+    }
 
 }

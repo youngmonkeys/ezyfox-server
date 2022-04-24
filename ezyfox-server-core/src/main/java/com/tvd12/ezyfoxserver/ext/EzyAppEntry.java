@@ -11,6 +11,6 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
  */
 public interface EzyAppEntry extends EzyEntry {
 
-	default void config(EzyAppContext ctx) {}
-	
+    default void config(EzyAppContext ctx) {}
+    
 }

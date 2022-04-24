@@ -15,49 +15,49 @@ import static org.mockito.Mockito.*;
 
 public class EzyWebSocketServerCreatorTest {
 
-	@Test
-	public void createManagementTest() {
-		// given
-		EzyWebSocketServerCreator creator = new EzyWebSocketServerCreator();
-		EzySimpleWebSocketSetting webSocketSetting = new EzySimpleWebSocketSetting();
-		webSocketSetting.setManagementEnable(true);
-		
-		creator.setting(webSocketSetting);
-		
-		// when
-		creator.create();
-		
-		// then
-		EzyWsHandler wsHandler = MethodInvoker.create()
-				.object(creator)
-				.method("newWsHandler")
-				.invoke(EzyWsHandler.class);
-		
-		WebSocketCreator webSocketCreator = MethodInvoker.create()
-				.object(creator)
-				.method("newWebSocketCreator")
-				.param(EzyWsHandler.class, wsHandler)
-				.invoke(WebSocketCreator.class);
-		webSocketCreator.createWebSocket(null, null);
-	}
-	
-	@Test
-	public void healthCheckServletTest() {
-		// given
-		HealthCheckServlet sut = new HealthCheckServlet();
-		
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		HttpServletResponse response = mock(HttpServletResponse.class);
-		
-		// when
-		MethodInvoker.create()
-			.object(sut)
-			.method("doGet")
-			.param(HttpServletRequest.class, request)
-			.param(HttpServletResponse.class, response)
-			.call();
-		
-		// then
-		verify(response, times(1)).setStatus(200);
-	}
+    @Test
+    public void createManagementTest() {
+        // given
+        EzyWebSocketServerCreator creator = new EzyWebSocketServerCreator();
+        EzySimpleWebSocketSetting webSocketSetting = new EzySimpleWebSocketSetting();
+        webSocketSetting.setManagementEnable(true);
+        
+        creator.setting(webSocketSetting);
+        
+        // when
+        creator.create();
+        
+        // then
+        EzyWsHandler wsHandler = MethodInvoker.create()
+                .object(creator)
+                .method("newWsHandler")
+                .invoke(EzyWsHandler.class);
+        
+        WebSocketCreator webSocketCreator = MethodInvoker.create()
+                .object(creator)
+                .method("newWebSocketCreator")
+                .param(EzyWsHandler.class, wsHandler)
+                .invoke(WebSocketCreator.class);
+        webSocketCreator.createWebSocket(null, null);
+    }
+    
+    @Test
+    public void healthCheckServletTest() {
+        // given
+        HealthCheckServlet sut = new HealthCheckServlet();
+        
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("doGet")
+            .param(HttpServletRequest.class, request)
+            .param(HttpServletResponse.class, response)
+            .call();
+        
+        // then
+        verify(response, times(1)).setStatus(200);
+    }
 }

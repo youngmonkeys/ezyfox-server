@@ -27,23 +27,23 @@ public abstract class EzyAbstractSocketSetting implements EzyBaseSocketSetting {
     @XmlElement(name = "ssl-active")
     protected boolean sslActive;
     
-	@XmlElement(name = "codec-creator")
-	protected String codecCreator;
-	
-	public EzyAbstractSocketSetting() {
-	    setActive(true);
-	    setSslActive(false);
-	    setAddress("0.0.0.0");
-	}
-	
-	@Override
-	public Map<Object, Object> toMap() {
-	    Map<Object, Object> map = new HashMap<>();
+    @XmlElement(name = "codec-creator")
+    protected String codecCreator;
+
+    public EzyAbstractSocketSetting() {
+        setActive(true);
+        setSslActive(false);
+        setAddress("0.0.0.0");
+    }
+
+    @Override
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new HashMap<>();
         map.put("port", port);
         map.put("address", address);
         map.put("active", active);
         map.put("codecCreator", codecCreator);
         return map;
-	}
-	
+    }
+
 }

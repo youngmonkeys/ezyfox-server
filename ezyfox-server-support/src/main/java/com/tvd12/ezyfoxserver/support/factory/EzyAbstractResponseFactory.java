@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public abstract class EzyAbstractResponseFactory implements EzyResponseFactory {
 
-	protected EzyMarshaller marshaller;
-	
+    protected EzyMarshaller marshaller;
+    
 }

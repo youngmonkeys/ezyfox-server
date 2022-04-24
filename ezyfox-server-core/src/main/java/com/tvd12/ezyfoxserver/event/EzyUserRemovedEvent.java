@@ -5,5 +5,5 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 public interface EzyUserRemovedEvent extends EzyUserEvent {
 
     EzyConstant getReason();
-	
+    
 }

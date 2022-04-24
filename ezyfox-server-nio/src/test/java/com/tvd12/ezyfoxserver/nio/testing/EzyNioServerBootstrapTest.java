@@ -45,205 +45,205 @@ import com.tvd12.test.reflect.MethodUtil;
 
 public class EzyNioServerBootstrapTest extends BaseTest {
 
-	@Test
-	public void test() throws Exception {
-		SSLContext sslContext = SSLContext.getDefault();
-		EzyResponseApi responseApi = mock(EzyResponseApi.class);
-		EzyStreamingApi streamingApi = mock(EzyStreamingApi.class);
-		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
-		EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
-		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionTicketsQueue websocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
-		EzySocketDisconnectionQueue socketDisconnectionQueue = new EzySocketDisconnectionQueue() {
-			
-			BlockingQueue<EzySocketDisconnection> queue = new LinkedBlockingQueue<>();
-			
-			@Override
-			public EzySocketDisconnection take() throws InterruptedException {
-				return queue.take();
-			}
-			
-			@Override
-			public int size() {
-				return 0;
-			}
-			
-			@Override
-			public void remove(EzySocketDisconnection disconnection) {
-			}
-			
-			@Override
-			public boolean isEmpty() {
-				return false;
-			}
-			
-			@Override
-			public void clear() {
-			}
-			
-			@Override
-			public boolean add(EzySocketDisconnection disconnection) {
-				return false;
-			}
-		};
-		
-		EzySimpleConfig config = new EzySimpleConfig();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleStreamingSetting streaming = settings.getStreaming();
-		streaming.setEnable(true);
-		settings.getUdp().setActive(true);
-		EzySimpleServer server = new EzySimpleServer();
-		EzyServerControllers serverControllers = EzyServerControllersImpl.builder().build();
-		server.setControllers(serverControllers);
-		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
-		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
-		server.setEventControllers(eventControllers);
-		server.setConfig(config);
-		server.setSettings(settings);
-		EzySimpleServerContext serverContext = new EzySimpleServerContext();
-		serverContext.setProperty(EzySocketUserRemovalQueue.class, new EzyBlockingSocketUserRemovalQueue());
-		serverContext.setServer(server);
-		serverContext.init();
-		
-		ExBootstrap localBootstrap = new ExBootstrap(new EzyBootstrap.Builder()
-				.context(serverContext));
-		
-		EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
-		bootstrap.setContext(serverContext);
-		bootstrap.setLocalBootstrap(localBootstrap);
-		bootstrap.setSslContext(sslContext);
-		bootstrap.setResponseApi(responseApi);
-		bootstrap.setStreamingApi(streamingApi);
-		bootstrap.setStreamQueue(streamQueue);
-		bootstrap.setHandlerGroupManager(handlerGroupManager);
-		bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
-		bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
-		bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
-		bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
-		bootstrap.start();
-		bootstrap.destroy();
-		bootstrap.destroy();
-	}
-	
-	@Test
-	public void startSocketServerBootstrapNotActive() {
-		// given
-		EzySimpleServer server = new EzySimpleServer();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		settings.getSocket().setActive(false);
-		server.setSettings(settings);
-		
-		EzyServerContext context = mock(EzyServerContext.class);
-		when(context.getServer()).thenReturn(server);
-		
-		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
-		sut.setContext(context);
-		
-		// when
-		MethodUtil.invokeMethod("startSocketServerBootstrap", sut);
-		
-		// then
-		Asserts.assertNull(FieldUtil.getFieldValue(sut, "socketServerBootstrap"));
-	}
-	
-	@Test
-	public void startUdpServerBootstrapNotActive() {
-		// given
-		EzySimpleServer server = new EzySimpleServer();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		settings.getUdp().setActive(false);
-		server.setSettings(settings);
-		
-		EzyServerContext context = mock(EzyServerContext.class);
-		when(context.getServer()).thenReturn(server);
-		
-		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
-		sut.setContext(context);
-		
-		// when
-		MethodUtil.invokeMethod("startUdpServerBootstrap", sut);
-		
-		// then
-		Asserts.assertNull(FieldUtil.getFieldValue(sut, "udpServerBootstrap"));
-		sut.destroy();
-	}
-	
-	@Test
-	public void startWebSocketServerBootstrapNotActive() {
-		// given
-		EzySimpleServer server = new EzySimpleServer();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		settings.getWebsocket().setActive(false);
-		server.setSettings(settings);
-		
-		EzyServerContext context = mock(EzyServerContext.class);
-		when(context.getServer()).thenReturn(server);
-		
-		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
-		sut.setContext(context);
-		
-		// when
-		MethodUtil.invokeMethod("startWebSocketServerBootstrap", sut);
-		
-		// then
-		Asserts.assertNull(FieldUtil.getFieldValue(sut, "websocketServerBootstrap"));
-	}
-	
-	@Test
-	public void startStreamHandlingLoopHandlersNotActive() {
-		// given
-		EzySimpleServer server = new EzySimpleServer();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		settings.getStreaming().setEnable(false);
-		server.setSettings(settings);
-		
-		EzyServerContext context = mock(EzyServerContext.class);
-		when(context.getServer()).thenReturn(server);
-		
-		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
-		sut.setContext(context);
-		
-		// when
-		MethodUtil.invokeMethod("startStreamHandlingLoopHandlers", sut);
-		
-		// then
-		Asserts.assertNull(FieldUtil.getFieldValue(sut, "streamHandlingLoopHandler"));
-	}
-	
-	@Test
-	public void destroySocketDataReceiver() {
-		// given
-		EzySocketDataReceiver dataReceiver = mock(EzySocketDataReceiver.class);
-		
-		EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
-		sut.setSocketDataReceiver(dataReceiver);
-		
-		// when
-		sut.destroy();
-		
-		// then
-		verify(dataReceiver, times(1)).destroy();
-	}
-	
-	public static class ExBootstrap extends EzyBootstrap {
+    @Test
+    public void test() throws Exception {
+        SSLContext sslContext = SSLContext.getDefault();
+        EzyResponseApi responseApi = mock(EzyResponseApi.class);
+        EzyStreamingApi streamingApi = mock(EzyStreamingApi.class);
+        EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionTicketsQueue websocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
+        EzySocketDisconnectionQueue socketDisconnectionQueue = new EzySocketDisconnectionQueue() {
 
-		protected ExBootstrap(Builder builder) {
-			super(builder);
-		}
-		
-		@Override
-		public void start() throws Exception {
-		}
-		
-	}
-	
-	public static class ExServerReadyController implements EzyServerReadyController {
+            BlockingQueue<EzySocketDisconnection> queue = new LinkedBlockingQueue<>();
 
-		@Override
-		public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {
-		}
-		
-	}
-	
+            @Override
+            public EzySocketDisconnection take() throws InterruptedException {
+                return queue.take();
+            }
+
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public void remove(EzySocketDisconnection disconnection) {
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+            }
+
+            @Override
+            public boolean add(EzySocketDisconnection disconnection) {
+                return false;
+            }
+        };
+
+        EzySimpleConfig config = new EzySimpleConfig();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(true);
+        settings.getUdp().setActive(true);
+        EzySimpleServer server = new EzySimpleServer();
+        EzyServerControllers serverControllers = EzyServerControllersImpl.builder().build();
+        server.setControllers(serverControllers);
+        EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
+        server.setEventControllers(eventControllers);
+        server.setConfig(config);
+        server.setSettings(settings);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setProperty(EzySocketUserRemovalQueue.class, new EzyBlockingSocketUserRemovalQueue());
+        serverContext.setServer(server);
+        serverContext.init();
+
+        ExBootstrap localBootstrap = new ExBootstrap(new EzyBootstrap.Builder()
+                .context(serverContext));
+
+        EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
+        bootstrap.setContext(serverContext);
+        bootstrap.setLocalBootstrap(localBootstrap);
+        bootstrap.setSslContext(sslContext);
+        bootstrap.setResponseApi(responseApi);
+        bootstrap.setStreamingApi(streamingApi);
+        bootstrap.setStreamQueue(streamQueue);
+        bootstrap.setHandlerGroupManager(handlerGroupManager);
+        bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
+        bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
+        bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
+        bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
+        bootstrap.start();
+        bootstrap.destroy();
+        bootstrap.destroy();
+    }
+
+    @Test
+    public void startSocketServerBootstrapNotActive() {
+        // given
+        EzySimpleServer server = new EzySimpleServer();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getSocket().setActive(false);
+        server.setSettings(settings);
+
+        EzyServerContext context = mock(EzyServerContext.class);
+        when(context.getServer()).thenReturn(server);
+
+        EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+        sut.setContext(context);
+
+        // when
+        MethodUtil.invokeMethod("startSocketServerBootstrap", sut);
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "socketServerBootstrap"));
+    }
+
+    @Test
+    public void startUdpServerBootstrapNotActive() {
+        // given
+        EzySimpleServer server = new EzySimpleServer();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getUdp().setActive(false);
+        server.setSettings(settings);
+
+        EzyServerContext context = mock(EzyServerContext.class);
+        when(context.getServer()).thenReturn(server);
+
+        EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+        sut.setContext(context);
+
+        // when
+        MethodUtil.invokeMethod("startUdpServerBootstrap", sut);
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "udpServerBootstrap"));
+        sut.destroy();
+    }
+
+    @Test
+    public void startWebSocketServerBootstrapNotActive() {
+        // given
+        EzySimpleServer server = new EzySimpleServer();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getWebsocket().setActive(false);
+        server.setSettings(settings);
+
+        EzyServerContext context = mock(EzyServerContext.class);
+        when(context.getServer()).thenReturn(server);
+
+        EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+        sut.setContext(context);
+
+        // when
+        MethodUtil.invokeMethod("startWebSocketServerBootstrap", sut);
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "websocketServerBootstrap"));
+    }
+
+    @Test
+    public void startStreamHandlingLoopHandlersNotActive() {
+        // given
+        EzySimpleServer server = new EzySimpleServer();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getStreaming().setEnable(false);
+        server.setSettings(settings);
+
+        EzyServerContext context = mock(EzyServerContext.class);
+        when(context.getServer()).thenReturn(server);
+
+        EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+        sut.setContext(context);
+
+        // when
+        MethodUtil.invokeMethod("startStreamHandlingLoopHandlers", sut);
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "streamHandlingLoopHandler"));
+    }
+
+    @Test
+    public void destroySocketDataReceiver() {
+        // given
+        EzySocketDataReceiver dataReceiver = mock(EzySocketDataReceiver.class);
+
+        EzyNioServerBootstrap sut = new EzyNioServerBootstrap();
+        sut.setSocketDataReceiver(dataReceiver);
+
+        // when
+        sut.destroy();
+
+        // then
+        verify(dataReceiver, times(1)).destroy();
+    }
+
+    public static class ExBootstrap extends EzyBootstrap {
+
+        protected ExBootstrap(Builder builder) {
+            super(builder);
+        }
+
+        @Override
+        public void start() throws Exception {
+        }
+
+    }
+
+    public static class ExServerReadyController implements EzyServerReadyController {
+
+        @Override
+        public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {
+        }
+
+    }
+
 }

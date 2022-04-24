@@ -14,26 +14,26 @@ public abstract class EzyAbstractZoneChildContext
         extends EzyAbstractContext 
         implements EzyExecutorServiceFetcher {
 
-	protected EzyZoneContext parent;
+    protected EzyZoneContext parent;
     protected ScheduledExecutorService executorService;
-	
-	public <T> T get(Class<T> clazz) {
-		T property = getProperty(clazz);
-	    if(property != null)
+    
+    public <T> T get(Class<T> clazz) {
+        T property = getProperty(clazz);
+        if(property != null)
             return property;
-		return parent.get(clazz);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+        return parent.get(clazz);
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public <T> T cmd(Class<T> clazz) {
-		Supplier supplier = commandSuppliers.get(clazz);
+        Supplier supplier = commandSuppliers.get(clazz);
         if(supplier != null)
             return (T) supplier.get();
         return parent.cmd(clazz);
     }
-	
-	public void setExecutorService(ScheduledExecutorService executorService) {
-	    this.executorService = executorService;
-	    this.properties.put(ScheduledExecutorService.class, executorService);
-	}
+    
+    public void setExecutorService(ScheduledExecutorService executorService) {
+        this.executorService = executorService;
+        this.properties.put(ScheduledExecutorService.class, executorService);
+    }
 }

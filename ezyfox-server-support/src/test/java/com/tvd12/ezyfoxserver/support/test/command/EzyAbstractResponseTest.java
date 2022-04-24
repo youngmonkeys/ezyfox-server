@@ -12,40 +12,40 @@ import com.tvd12.ezyfoxserver.support.command.EzyAbstractResponse;
 
 public class EzyAbstractResponseTest {
 
-	private EzyResponse response;
-	
-	@Test
-	public void test() {
-		// given
-		response = mock(EzyResponse.class);
-		Sut sut = new Sut();
-		
-		// when
-		sut.encrypted();
-		sut.encrypted(true);
-		
-		// then
-		verify(response, times(1)).encrypted();
-		verify(response, times(1)).encrypted(true);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public class Sut extends EzyAbstractResponse {
+    private EzyResponse response;
 
-		public Sut() {
-			super(null, null);
-		}
+    @Test
+    public void test() {
+        // given
+        response = mock(EzyResponse.class);
+        Sut sut = new Sut();
 
-		@Override
-		protected EzyData getResponseData() {
-			return null;
-		}
+        // when
+        sut.encrypted();
+        sut.encrypted(true);
 
-		@Override
-		protected EzyResponse newResponse() {
-			return EzyAbstractResponseTest.this.response;
-		}
-		
-	}
-	
+        // then
+        verify(response, times(1)).encrypted();
+        verify(response, times(1)).encrypted(true);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public class Sut extends EzyAbstractResponse {
+
+        public Sut() {
+            super(null, null);
+        }
+
+        @Override
+        protected EzyData getResponseData() {
+            return null;
+        }
+
+        @Override
+        protected EzyResponse newResponse() {
+            return EzyAbstractResponseTest.this.response;
+        }
+
+    }
+
 }

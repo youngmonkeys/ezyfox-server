@@ -35,32 +35,32 @@ public class EzySimpleZoneContext
         extends EzyAbstractComplexContext 
         implements EzyZoneContext, EzyChildContext {
 
-	@Getter
-	protected EzyZone zone;
-	
-	@Setter
     @Getter
-	protected EzyServerContext parent;
-	protected EzyBroadcastEvent broadcastEvent;
-	protected EzyBroadcastAppsEvent broadcastAppsEvent;
-	protected EzyBroadcastPluginsEvent broadcastPluginsEvent;
-	
-	protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
-	protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+    protected EzyZone zone;
 
-	@Override
-	protected void init0() {
-	    this.broadcastEvent = new EzyZoneBroadcastEventImpl(this);
-	    this.broadcastAppsEvent = new EzyBroadcastAppsEventImpl(this);
-	    this.broadcastPluginsEvent = new EzyBroadcastPluginsEventImpl(this);
-	    this.properties.put(EzyBroadcastEvent.class, broadcastEvent);
-	    this.properties.put(EzyBroadcastAppsEvent.class, broadcastAppsEvent);
-	    this.properties.put(EzyBroadcastPluginsEvent.class, broadcastPluginsEvent);
-	}
-	
-	@Override
+    @Setter
+    @Getter
+    protected EzyServerContext parent;
+    protected EzyBroadcastEvent broadcastEvent;
+    protected EzyBroadcastAppsEvent broadcastAppsEvent;
+    protected EzyBroadcastPluginsEvent broadcastPluginsEvent;
+
+    protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
+    protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+
+    @Override
+    protected void init0() {
+        this.broadcastEvent = new EzyZoneBroadcastEventImpl(this);
+        this.broadcastAppsEvent = new EzyBroadcastAppsEventImpl(this);
+        this.broadcastPluginsEvent = new EzyBroadcastPluginsEventImpl(this);
+        this.properties.put(EzyBroadcastEvent.class, broadcastEvent);
+        this.properties.put(EzyBroadcastAppsEvent.class, broadcastAppsEvent);
+        this.properties.put(EzyBroadcastPluginsEvent.class, broadcastPluginsEvent);
+    }
+
+    @Override
     public <T> T get(Class<T> clazz) {
-	    T property = getProperty(clazz);
+        T property = getProperty(clazz);
         if(property != null)
             return property;
         return parent.get(clazz);
@@ -104,92 +104,92 @@ public class EzySimpleZoneContext
     public void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchException) {
         broadcastAppsEvent.fire(type, event, filter, catchException);
     }
-	
-	@Override
-	public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
-	    super.addAppContext(app, appContext);
-	    appContextsByName.put(app.getName(), appContext);
-	}
-	
-	@Override
-	public void addPluginContext(EzyPluginSetting plugin, EzyPluginContext pluginContext) {
-	    super.addPluginContext(plugin, pluginContext);
-	    pluginContextsByName.put(plugin.getName(), pluginContext);
-	}
-	
-	@Override
+
+    @Override
+    public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
+        super.addAppContext(app, appContext);
+        appContextsByName.put(app.getName(), appContext);
+    }
+
+    @Override
+    public void addPluginContext(EzyPluginSetting plugin, EzyPluginContext pluginContext) {
+        super.addPluginContext(plugin, pluginContext);
+        pluginContextsByName.put(plugin.getName(), pluginContext);
+    }
+
+    @Override
     public EzyAppContext getAppContext(String appName) {
-	    EzyAppContext appContext = appContextsByName.get(appName);
+        EzyAppContext appContext = appContextsByName.get(appName);
         if(appContext != null)
             return appContext;
         throw new IllegalArgumentException("has not app with name = " + appName);
     }
-	
-	@Override
+
+    @Override
     public EzyPluginContext getPluginContext(String pluginName) {
-	    EzyPluginContext pluginContext = pluginContextsByName.get(pluginName);
+        EzyPluginContext pluginContext = pluginContextsByName.get(pluginName);
         if(pluginContext != null)
             return pluginContext;
         throw new IllegalArgumentException("has not plugin with name = " + pluginName);
     }
-	
-	public void setZone(EzyZone zone) {
+
+    public void setZone(EzyZone zone) {
         this.zone = zone;
         this.component = (EzyComponent)zone;
     }
-	
-	@Override
-	public void send(
-	        EzyResponse response, 
-	        EzySession recipient,
-	        boolean encrypted,
-	        EzyTransportType transportType) {
-	    parent.send(response, recipient, encrypted, transportType);
-	}
-	
-	@Override
-	public void send(
-	        EzyResponse response, 
-	        Collection<EzySession> recipients, 
-	        boolean encrypted,
-	        EzyTransportType transportType) {
-	    parent.send(response, recipients, encrypted, transportType);
-	}
-	
-	@Override
-	public void stream(
-	        byte[] bytes, 
-	        EzySession recipient, EzyTransportType transportType) {
-	    parent.stream(bytes, recipient, transportType);
-	}
-	
-	@Override
-	public void stream(
-	        byte[] bytes, 
-	        Collection<EzySession> recipients, EzyTransportType transportType) {
-	    parent.stream(bytes, recipients, transportType);
-	}
-	
-	@Override
-	protected void destroyComponents() {
-	    destroyAppContexts();
+
+    @Override
+    public void send(
+            EzyResponse response,
+            EzySession recipient,
+            boolean encrypted,
+            EzyTransportType transportType) {
+        parent.send(response, recipient, encrypted, transportType);
+    }
+
+    @Override
+    public void send(
+            EzyResponse response,
+            Collection<EzySession> recipients,
+            boolean encrypted,
+            EzyTransportType transportType) {
+        parent.send(response, recipients, encrypted, transportType);
+    }
+
+    @Override
+    public void stream(
+            byte[] bytes,
+            EzySession recipient, EzyTransportType transportType) {
+        parent.stream(bytes, recipient, transportType);
+    }
+
+    @Override
+    public void stream(
+            byte[] bytes,
+            Collection<EzySession> recipients, EzyTransportType transportType) {
+        parent.stream(bytes, recipients, transportType);
+    }
+
+    @Override
+    protected void destroyComponents() {
+        destroyAppContexts();
         destroyPluginContexts();
         destroyZone();
-	}
-	
-	@Override
-	protected void clearProperties() {
-	    super.clearProperties();
-	    this.zone = null;
-	    this.parent = null;
-	    this.broadcastEvent = null;
-	    this.broadcastAppsEvent = null;
-	    this.broadcastPluginsEvent = null;
-	    this.appContextsByName.clear();
-	    this.pluginContextsByName.clear();
-	}
-	
-	private void destroyAppContexts() {
+    }
+
+    @Override
+    protected void clearProperties() {
+        super.clearProperties();
+        this.zone = null;
+        this.parent = null;
+        this.broadcastEvent = null;
+        this.broadcastAppsEvent = null;
+        this.broadcastPluginsEvent = null;
+        this.appContextsByName.clear();
+        this.pluginContextsByName.clear();
+    }
+
+    private void destroyAppContexts() {
         for(EzyAppContext ac : appContexts)
             this.destroyAppContext(ac);
     }
@@ -210,8 +210,8 @@ public class EzySimpleZoneContext
     private void destroyPluginContext(EzyPluginContext pluginContext) {
         processWithLogException(() -> ((EzyDestroyable)pluginContext).destroy());
     }
-	
-	@Override
+
+    @Override
     public boolean equals(Object obj) {
         return new EzyEquals<EzySimpleZoneContext>()
                 .function(t -> t.zone)
@@ -227,5 +227,5 @@ public class EzySimpleZoneContext
     protected void preDestroy() {
         logger.debug("destroy ZoneContext({})", zone);
     }
-	
+
 }

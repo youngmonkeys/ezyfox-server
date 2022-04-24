@@ -11,33 +11,33 @@ import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 public class EzyWsResponseApi extends EzyAbstractResponseApi {
 
-	protected final EzyStringDataEncoder encoder;
-	
-	public EzyWsResponseApi(Object encoder) {
-		this.encoder = new EzySimpleStringDataEncoder((EzyObjectToStringEncoder)encoder);
-	}
-	
-	@Override
-	public void response(EzyPackage pack, boolean immediate) throws Exception {
-		normalResponse(pack, immediate);
-	}
-	
-	@Override
-	protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
-	    EzySimplePacket packet = super.createPacket(bytes, pack);
-	    packet.setBinary(false);
-	    return packet;
-	}
-	
-	@Override
-	protected Object encodeData(EzyArray data) throws Exception {
-		Object answer = encoder.encode(data, String.class);
-		return answer;
-	}
-	
-	@Override
-	protected EzyConstant getConnectionType() {
-		return EzyConnectionType.WEBSOCKET;
-	}
-	
+    protected final EzyStringDataEncoder encoder;
+
+    public EzyWsResponseApi(Object encoder) {
+        this.encoder = new EzySimpleStringDataEncoder((EzyObjectToStringEncoder)encoder);
+    }
+
+    @Override
+    public void response(EzyPackage pack, boolean immediate) throws Exception {
+        normalResponse(pack, immediate);
+    }
+
+    @Override
+    protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
+        EzySimplePacket packet = super.createPacket(bytes, pack);
+        packet.setBinary(false);
+        return packet;
+    }
+
+    @Override
+    protected Object encodeData(EzyArray data) throws Exception {
+        Object answer = encoder.encode(data, String.class);
+        return answer;
+    }
+
+    @Override
+    protected EzyConstant getConnectionType() {
+        return EzyConnectionType.WEBSOCKET;
+    }
+
 }

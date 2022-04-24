@@ -299,8 +299,8 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     public void testExceptionCase() {
         EzyServerContext ctx = mock(EzyServerContext.class);
         doThrow(new IllegalStateException("server maintain"))
-        	.when(ctx)
-        	.send(any(EzyResponse.class), any(EzySession.class), any(boolean.class));
+            .when(ctx)
+            .send(any(EzyResponse.class), any(EzySession.class), any(boolean.class));
         EzyStatistics userStats = new EzySimpleStatistics();
         
         EzySimpleServer server = new EzySimpleServer();

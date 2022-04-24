@@ -14,13 +14,13 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
     protected String reconnectToken;
     protected long sessionId;
     protected byte[] sessionKey;
-	
-	@Override
-	protected EzyArrayBuilder serialize0() {
-	    return newArrayBuilder()
+
+    @Override
+    protected EzyArrayBuilder serialize0() {
+        return newArrayBuilder()
             .append(serverPublicKey)
             .append(reconnectToken)
             .append(sessionId)
             .append(sessionKey);
-	}
+    }
 }

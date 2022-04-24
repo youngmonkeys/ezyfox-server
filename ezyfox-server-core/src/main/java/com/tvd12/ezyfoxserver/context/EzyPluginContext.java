@@ -5,5 +5,5 @@ import com.tvd12.ezyfoxserver.EzyPlugin;
 public interface EzyPluginContext extends EzyZoneChildContext {
 
     EzyPlugin getPlugin();
-	
+
 }

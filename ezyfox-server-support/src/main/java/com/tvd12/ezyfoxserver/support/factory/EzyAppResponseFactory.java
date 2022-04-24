@@ -22,5 +22,4 @@ public class EzyAppResponseFactory extends EzyAbstractResponseFactory {
     public EzyObjectResponse newObjectResponse() {
         return new EzyAppObjectResponse(appContext, marshaller);
     }
-
 }

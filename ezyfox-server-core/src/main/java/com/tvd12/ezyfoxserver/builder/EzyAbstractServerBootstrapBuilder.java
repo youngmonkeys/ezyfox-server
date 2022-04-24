@@ -92,5 +92,3 @@ public abstract class EzyAbstractServerBootstrapBuilder
         return getSettings().getThreadPoolSize();
     }
 }
-
-

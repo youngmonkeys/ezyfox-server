@@ -14,5 +14,4 @@ public class EzyDisconnectReasonTest extends BaseTest {
         assert value.getName().equals("IDLE");
         EzyDisconnectReason.valueOf("IDLE");
     }
-
 }

@@ -36,5 +36,4 @@ public class EzySimpleUserManagerTest {
         manager.destroy();
 
     }
-
 }

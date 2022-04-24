@@ -29,5 +29,4 @@ public class HelloController2 {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }
-    
 }

@@ -31,5 +31,4 @@ public class EzySimpleEventControllerSetting implements EzyEventControllerSettin
         map.put("controller", controller);
         return map;
     }
-
 }

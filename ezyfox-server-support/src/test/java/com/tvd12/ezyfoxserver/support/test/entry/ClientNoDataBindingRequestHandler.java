@@ -18,5 +18,4 @@ public class ClientNoDataBindingRequestHandler
     @Override
     public void handle() {
     }
-
 }

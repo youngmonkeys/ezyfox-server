@@ -39,5 +39,4 @@ public class EzyProxyResponseApiTest extends BaseTest {
         api.response(pack);
         api.response(pack, true);
     }
-
 }

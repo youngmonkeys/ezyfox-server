@@ -39,5 +39,4 @@ public class EzySocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         setting.setCodecCreator(codecCreator);
         return setting;
     }
-
 }

@@ -45,5 +45,4 @@ public class EzyStreamBytesImplTest {
         cmd.execute(new byte[]{1, 2, 3}, recipient);
         cmd.execute(new byte[]{1, 2, 3}, Lists.newArrayList(recipient));
     }
-
 }

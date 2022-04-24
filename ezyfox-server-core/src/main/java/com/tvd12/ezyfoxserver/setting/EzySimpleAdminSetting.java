@@ -35,5 +35,4 @@ public class EzySimpleAdminSetting implements EzyAdminSetting {
         map.put("accessToken", "*******");
         return map;
     }
-
 }

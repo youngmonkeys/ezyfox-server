@@ -29,5 +29,4 @@ public class EzyConfigTest extends BaseCoreTest {
         Asserts.assertEquals("", home);
         System.out.println(sut.toMap());
     }
-
 }

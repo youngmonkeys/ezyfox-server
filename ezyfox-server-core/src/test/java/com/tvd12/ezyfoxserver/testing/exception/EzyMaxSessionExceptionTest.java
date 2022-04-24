@@ -11,5 +11,4 @@ public class EzyMaxSessionExceptionTest extends BaseTest {
         EzyMaxSessionException exception = new EzyMaxSessionException(1, 2);
         System.out.print(exception.getMessage());
     }
-
 }

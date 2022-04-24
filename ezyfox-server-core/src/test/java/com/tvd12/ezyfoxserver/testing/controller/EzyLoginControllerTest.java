@@ -382,5 +382,4 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
     protected EzyConstant getCommand() {
         return EzyCommand.LOGIN;
     }
-
 }

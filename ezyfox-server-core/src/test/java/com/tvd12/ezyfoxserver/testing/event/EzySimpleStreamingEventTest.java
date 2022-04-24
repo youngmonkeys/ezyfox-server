@@ -10,5 +10,4 @@ public class EzySimpleStreamingEventTest {
         EzySimpleStreamingEvent event = new EzySimpleStreamingEvent(null, null, null);
         assert event.getBytes() == null;
     }
-
 }

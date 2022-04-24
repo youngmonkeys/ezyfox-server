@@ -46,5 +46,4 @@ public abstract class EzyRunner {
     protected EzySettingsDecorator newSettingsDecorator() {
         return null;
     }
-
 }

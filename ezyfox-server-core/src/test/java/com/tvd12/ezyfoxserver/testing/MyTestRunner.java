@@ -9,5 +9,4 @@ public class MyTestRunner extends EzyRunner {
     protected Builder<?> newStarterBuilder() {
         return MyTestStarter.builder();
     }
-
 }

@@ -59,5 +59,4 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
         }
 
     }
-
 }

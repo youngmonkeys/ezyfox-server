@@ -15,5 +15,4 @@ public class EzyProxyStreamingApiTest extends BaseTest {
         EzyBytesPackage pack = mock(EzyBytesPackage.class);
         api.response(pack);
     }
-
 }

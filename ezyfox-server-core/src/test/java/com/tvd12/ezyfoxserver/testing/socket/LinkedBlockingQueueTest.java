@@ -27,5 +27,4 @@ public class LinkedBlockingQueueTest extends BaseTest {
         assert queue.offer(new Object());
         assert !queue.offer(new Object());
     }
-
 }

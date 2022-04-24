@@ -9,5 +9,4 @@ public class SystemPropertiesTest extends BaseTest {
         System.setProperty("hello", "world");
         System.out.println(System.getProperty("hello"));
     }
-
 }

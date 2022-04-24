@@ -37,5 +37,4 @@ public class EzyPongResponse implements EzyResponse {
         array.add(getCommand().getId());
         return array;
     }
-
 }

@@ -14,5 +14,4 @@ public class EzySimpleHttpSettingTest extends BaseTest {
         setting.setPort(8081);
         System.out.println(setting.toMap());
     }
-
 }

@@ -17,5 +17,4 @@ public interface EzySessionManagementSetting extends EzyToMap {
 
         EzyMaxRequestPerSecondAction getAction();
     }
-
 }

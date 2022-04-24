@@ -21,5 +21,4 @@ public class EzySimpleZonesSettingTest extends BaseTest {
         }
         assert zonesSetting.getSize() == 0;
     }
-
 }

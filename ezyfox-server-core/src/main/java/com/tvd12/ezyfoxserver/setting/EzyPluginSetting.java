@@ -26,5 +26,4 @@ public interface EzyPluginSetting extends EzyBaseSetting {
         Set<EzyConstant> getEvents();
 
     }
-
 }

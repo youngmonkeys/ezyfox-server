@@ -6,5 +6,4 @@ public class RequestException4 extends RuntimeException {
     public RequestException4(String msg) {
         super(msg);
     }
-
 }

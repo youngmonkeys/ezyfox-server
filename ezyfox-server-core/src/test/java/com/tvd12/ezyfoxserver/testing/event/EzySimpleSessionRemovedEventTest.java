@@ -12,5 +12,4 @@ public class EzySimpleSessionRemovedEventTest {
             null, null, EzyDisconnectReason.ADMIN_BAN);
         assert event.getReason() == EzyDisconnectReason.ADMIN_BAN;
     }
-
 }

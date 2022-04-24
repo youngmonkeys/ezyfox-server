@@ -13,5 +13,4 @@ public class EzySimpleZoneFilesSettingTest extends BaseTest {
         EzySimpleZoneFilesSetting setting = new EzySimpleZoneFilesSetting();
         setting.setZoneFiles(new ArrayList<>());
     }
-
 }

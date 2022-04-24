@@ -41,5 +41,4 @@ public abstract class EzyAsmAbstractRequestHandler implements EzyAsmRequestHandl
             .session(event.getSession())
             .execute();
     }
-
 }

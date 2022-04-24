@@ -9,5 +9,4 @@ public class EzyAccessAppResponse
     public EzyAccessAppResponse(EzyAccessAppParams params) {
         super(EzyCommand.APP_ACCESS, params);
     }
-
 }

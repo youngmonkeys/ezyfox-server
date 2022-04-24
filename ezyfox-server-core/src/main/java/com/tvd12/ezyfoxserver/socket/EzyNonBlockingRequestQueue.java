@@ -52,5 +52,4 @@ public class EzyNonBlockingRequestQueue extends EzyLoggable implements EzyReques
         }
         return queue.offer(packet);
     }
-
 }

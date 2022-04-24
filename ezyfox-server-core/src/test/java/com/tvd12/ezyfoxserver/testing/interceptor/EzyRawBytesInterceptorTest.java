@@ -28,5 +28,4 @@ public class EzyRawBytesInterceptorTest {
         EzyStreamingRequest request = new EzySimpleStreamingRequest();
         interceptor.intercept(serverContext, request);
     }
-
 }

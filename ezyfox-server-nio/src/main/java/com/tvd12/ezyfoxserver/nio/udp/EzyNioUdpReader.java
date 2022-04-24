@@ -105,5 +105,4 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
             udpDataHandler.fireUdpPacketReceived(packet);
         }
     }
-
 }

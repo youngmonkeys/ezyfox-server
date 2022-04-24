@@ -6,5 +6,4 @@ public class EzySocketWritingLoopHandler extends EzySocketEventLoopMultiHandler 
     protected String getThreadName() {
         return "socket-writer";
     }
-
 }

@@ -11,5 +11,4 @@ public class EzyMaxRequestPerSecondActionTest extends BaseTest {
         assert EzyMaxRequestPerSecondAction.DROP_REQUEST.getId() == 1;
         System.out.print(EzyMaxRequestPerSecondAction.DISCONNECT_SESSION.getName());
     }
-
 }

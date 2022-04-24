@@ -60,5 +60,4 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
         boolean answer = queue.offer(packet);
         return answer;
     }
-
 }

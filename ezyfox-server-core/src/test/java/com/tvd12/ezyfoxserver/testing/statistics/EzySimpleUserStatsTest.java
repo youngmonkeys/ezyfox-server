@@ -17,5 +17,4 @@ public class EzySimpleUserStatsTest extends BaseTest {
         assert stats.getMaxUsers() == 2;
         assert stats.getCurrentUsers() == 1;
     }
-
 }

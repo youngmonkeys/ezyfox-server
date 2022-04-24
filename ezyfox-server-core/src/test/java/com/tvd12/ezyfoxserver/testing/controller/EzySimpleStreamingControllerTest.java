@@ -17,5 +17,4 @@ public class EzySimpleStreamingControllerTest extends BaseTest {
         EzySimpleStreamingRequest request = new EzySimpleStreamingRequest();
         controller.handle(zoneContext, request);
     }
-
 }

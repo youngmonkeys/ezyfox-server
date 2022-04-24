@@ -108,5 +108,4 @@ public class EzyEmbeddedServerTest {
     public void settingNullTest() {
         EzyEmbeddedServer.builder().build();
     }
-
 }

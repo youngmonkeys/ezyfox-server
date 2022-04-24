@@ -14,5 +14,4 @@ public class EzySessionAdapterTest extends BaseTest {
         };
         delegate.onSessionLoggedIn(new EzySimpleUser());
     }
-
 }

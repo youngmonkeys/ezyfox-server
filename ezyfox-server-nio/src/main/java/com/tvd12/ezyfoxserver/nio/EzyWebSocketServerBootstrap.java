@@ -96,5 +96,4 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
             return new EzyWebSocketServerBootstrap(this);
         }
     }
-
 }

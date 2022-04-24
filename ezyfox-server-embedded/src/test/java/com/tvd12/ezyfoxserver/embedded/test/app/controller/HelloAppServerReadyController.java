@@ -16,5 +16,4 @@ public class HelloAppServerReadyController
     public void handle(EzyAppContext ctx, EzyServerReadyEvent event) {
         logger.info("HELLO APP - SERVER READY");
     }
-
 }

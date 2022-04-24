@@ -77,5 +77,4 @@ public class EzySimpleAppsSetting implements EzyAppsSetting {
         map.put("apps", appMaps);
         return map;
     }
-
 }

@@ -13,5 +13,4 @@ public class EzyAbstractSessionFactoryTest extends BaseTest {
         factory.setMaxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond());
         assert factory.newProduct() != null;
     }
-
 }

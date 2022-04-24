@@ -20,5 +20,4 @@ public class EzyRequestFrameSecond extends EzyRequestFrame {
     public EzyRequestFrame nextFrame() {
         return new EzyRequestFrameSecond(maxRequests, endTime);
     }
-
 }

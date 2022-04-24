@@ -20,5 +20,4 @@ public class EzyAddExceptionHandlerImplTest extends BaseTest {
         EzyAddExceptionHandlerImpl cmd = new EzyAddExceptionHandlerImpl(fetcher);
         cmd.add(mock(EzyExceptionHandler.class));
     }
-
 }

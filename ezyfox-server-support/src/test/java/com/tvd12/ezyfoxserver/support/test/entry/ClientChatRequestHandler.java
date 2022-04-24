@@ -31,5 +31,4 @@ public class ClientChatRequestHandler
     @Override
     public void handle() {
     }
-
 }

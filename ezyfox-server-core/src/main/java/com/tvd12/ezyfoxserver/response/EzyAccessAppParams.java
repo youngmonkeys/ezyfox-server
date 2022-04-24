@@ -28,5 +28,4 @@ public class EzyAccessAppParams extends EzySimpleResponseParams {
         this.data = null;
         this.app = null;
     }
-
 }

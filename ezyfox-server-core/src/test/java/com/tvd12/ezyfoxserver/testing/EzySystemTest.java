@@ -16,5 +16,4 @@ public class EzySystemTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzySystem.class;
     }
-
 }

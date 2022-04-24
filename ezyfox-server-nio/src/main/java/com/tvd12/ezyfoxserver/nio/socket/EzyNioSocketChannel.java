@@ -57,5 +57,4 @@ public class EzyNioSocketChannel implements EzyChannel {
     public void close() {
         processWithLogException(() -> channel.close());
     }
-
 }

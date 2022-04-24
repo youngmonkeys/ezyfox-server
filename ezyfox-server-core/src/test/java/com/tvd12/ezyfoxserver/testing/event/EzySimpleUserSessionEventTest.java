@@ -10,5 +10,4 @@ public class EzySimpleUserSessionEventTest {
         EzySimpleUserSessionEvent event = new EzySimpleUserSessionEvent(null, null);
         assert event.getSession() == null;
     }
-
 }

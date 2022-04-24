@@ -125,5 +125,4 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
         }
 
     }
-
 }

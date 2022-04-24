@@ -18,5 +18,4 @@ public abstract class EzyAbstractUserRequestHandler<C extends EzyContext, D>
             return null;
         }
     }
-
 }

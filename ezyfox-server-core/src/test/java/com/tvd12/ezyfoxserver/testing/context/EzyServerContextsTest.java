@@ -32,5 +32,4 @@ public class EzyServerContextsTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzyServerContexts.class;
     }
-
 }

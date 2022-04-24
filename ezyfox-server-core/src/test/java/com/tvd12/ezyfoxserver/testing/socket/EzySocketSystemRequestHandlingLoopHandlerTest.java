@@ -14,5 +14,4 @@ public class EzySocketSystemRequestHandlingLoopHandlerTest {
             .method("getRequestType")
             .invoke();
     }
-
 }

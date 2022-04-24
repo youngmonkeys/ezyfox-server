@@ -15,5 +15,4 @@ public class EzySimpleLoggerSettingTest extends BaseTest {
         EzySimpleLoggerSetting setting = new EzySimpleLoggerSetting();
         setting.setIgnoredCommands(commandsSetting);
     }
-
 }

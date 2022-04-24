@@ -8,5 +8,4 @@ public class EzyWsWritingLoopHandler extends EzySocketWritingLoopHandler {
     protected String getThreadName() {
         return "web-socket-writer";
     }
-
 }

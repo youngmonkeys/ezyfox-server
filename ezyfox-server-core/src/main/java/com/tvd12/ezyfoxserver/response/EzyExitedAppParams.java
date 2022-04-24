@@ -27,5 +27,4 @@ public class EzyExitedAppParams extends EzySimpleResponseParams {
         this.app = null;
         this.reason = null;
     }
-
 }

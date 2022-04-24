@@ -24,5 +24,4 @@ public class EzyRequestAppResponseParams extends EzySimpleResponseParams {
     public void release() {
         this.data = null;
     }
-
 }

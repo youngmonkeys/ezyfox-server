@@ -15,5 +15,4 @@ public class EzyAppArrayResponse extends EzyAbstractArrayResponse {
     protected EzyResponse newResponse() {
         return context.cmd(EzyAppResponse.class);
     }
-
 }

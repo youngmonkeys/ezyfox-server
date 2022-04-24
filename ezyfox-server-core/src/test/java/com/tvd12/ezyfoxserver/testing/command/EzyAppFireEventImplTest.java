@@ -23,5 +23,4 @@ public class EzyAppFireEventImplTest extends BaseCoreTest {
 
         when(context.getApp()).thenReturn(application);
     }
-
 }

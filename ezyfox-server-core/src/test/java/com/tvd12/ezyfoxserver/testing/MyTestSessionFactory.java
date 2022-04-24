@@ -9,5 +9,4 @@ public class MyTestSessionFactory
     protected MyTestSession newSession() {
         return new MyTestSession();
     }
-
 }

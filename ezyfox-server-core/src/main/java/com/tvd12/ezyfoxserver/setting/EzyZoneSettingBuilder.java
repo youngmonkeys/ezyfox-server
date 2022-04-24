@@ -90,5 +90,4 @@ public class EzyZoneSettingBuilder implements EzyBuilder<EzySimpleZoneSetting> {
         p.init();
         return p;
     }
-
 }

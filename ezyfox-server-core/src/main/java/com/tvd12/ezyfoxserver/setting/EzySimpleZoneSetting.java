@@ -112,5 +112,4 @@ public class EzySimpleZoneSetting implements EzyZoneSetting, EzyInitable {
         map.put("applications", applications.toMap());
         return map;
     }
-
 }

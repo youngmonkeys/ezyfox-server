@@ -30,5 +30,4 @@ public class EzyBannerPrinter {
             .build()
             .load(file);
     }
-
 }

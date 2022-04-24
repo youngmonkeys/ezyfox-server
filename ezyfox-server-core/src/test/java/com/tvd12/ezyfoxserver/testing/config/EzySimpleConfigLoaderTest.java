@@ -19,5 +19,4 @@ public class EzySimpleConfigLoaderTest {
         // then
         Asserts.assertEquals(EzySimpleConfig.defaultConfig(), config);
     }
-
 }

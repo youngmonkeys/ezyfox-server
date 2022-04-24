@@ -35,5 +35,4 @@ public class EzyRequestFrameSecondTest extends BaseTest {
         EzyRequestFrameSecond frame = new EzyRequestFrameSecond(20, System.currentTimeMillis() - 10000);
         assert frame.isExpired();
     }
-
 }

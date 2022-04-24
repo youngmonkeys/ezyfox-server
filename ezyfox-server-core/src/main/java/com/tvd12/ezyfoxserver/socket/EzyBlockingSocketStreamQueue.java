@@ -63,5 +63,4 @@ public class EzyBlockingSocketStreamQueue
         EzySocketStream stream = queue.take();
         return stream;
     }
-
 }

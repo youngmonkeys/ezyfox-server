@@ -50,5 +50,4 @@ public class EzySimpleChildContextTest extends BaseCoreTest {
 
     public static class UnsafeCommand {
     }
-
 }

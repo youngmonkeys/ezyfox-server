@@ -19,5 +19,4 @@ public class EzyNioSocketWriterTest extends BaseTest {
                 .invoke(ByteBuffer.class);
         assert writeBuffer != null;
     }
-
 }

@@ -20,5 +20,4 @@ public class EzyAppSetupImplTest extends BaseTest {
             }
         });
     }
-
 }

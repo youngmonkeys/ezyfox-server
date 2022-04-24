@@ -93,5 +93,4 @@ public class EzyUserManagementSettingBuilder
         p.init();
         return p;
     }
-
 }

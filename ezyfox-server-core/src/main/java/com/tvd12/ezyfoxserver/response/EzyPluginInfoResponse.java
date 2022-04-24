@@ -9,5 +9,4 @@ public class EzyPluginInfoResponse
     public EzyPluginInfoResponse(EzyPluginInfoParams params) {
         super(EzyCommand.PLUGIN_INFO, params);
     }
-
 }

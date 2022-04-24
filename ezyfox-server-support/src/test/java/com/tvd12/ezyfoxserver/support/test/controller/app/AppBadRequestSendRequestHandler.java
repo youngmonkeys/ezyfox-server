@@ -17,5 +17,4 @@ public class AppBadRequestSendRequestHandler
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
         throw new EzyBadRequestException(1, "server maintain", true);
     }
-
 }

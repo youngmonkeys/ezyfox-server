@@ -20,5 +20,4 @@ public class EzySimplePacketTest {
         assert packet.getSize() == "hello".length();
         System.out.println(packet);
     }
-
 }

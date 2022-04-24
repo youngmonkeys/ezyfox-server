@@ -47,5 +47,4 @@ public abstract class EzyAbstractObjectResponse
         object.removeAll(excludeParamKeys);
         return object;
     }
-    
 }

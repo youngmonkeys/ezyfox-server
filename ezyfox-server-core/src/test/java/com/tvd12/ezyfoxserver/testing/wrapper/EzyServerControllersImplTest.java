@@ -16,5 +16,4 @@ public class EzyServerControllersImplTest extends BaseTest {
         assert controller.getStreamingController() != null;
         assert controller.getStreamingInterceptor() != null;
     }
-
 }

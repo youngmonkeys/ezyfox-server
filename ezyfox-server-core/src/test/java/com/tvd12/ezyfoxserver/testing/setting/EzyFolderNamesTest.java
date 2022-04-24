@@ -9,5 +9,4 @@ public class EzyFolderNamesTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzyFolderNamesSetting.class;
     }
-
 }

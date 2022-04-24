@@ -16,5 +16,4 @@ public class AppClientHello4RequestHandler
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
         System.out.println("hello with: " + data);
     }
-
 }

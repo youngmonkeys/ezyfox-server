@@ -11,5 +11,4 @@ public class EzyPluginsTest extends BaseTest {
         EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
         plugins.getPluginByName("zzz");
     }
-
 }

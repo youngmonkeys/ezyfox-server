@@ -28,5 +28,4 @@ public class EzySimpleParamsResponse<P extends EzyResponseParams>
         this.params.release();
         this.params = null;
     }
-
 }

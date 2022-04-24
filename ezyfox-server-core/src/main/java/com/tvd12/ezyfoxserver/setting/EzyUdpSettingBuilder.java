@@ -39,5 +39,4 @@ public class EzyUdpSettingBuilder extends EzyAbstractSocketSettingBuilder<
         p.setHandlerThreadPoolSize(handlerThreadPoolSize);
         return p;
     }
-
 }

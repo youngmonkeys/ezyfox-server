@@ -45,5 +45,4 @@ public class EzyBlockingSocketUserRemovalQueue
         EzySocketUserRemoval removal = queue.take();
         return removal;
     }
-
 }

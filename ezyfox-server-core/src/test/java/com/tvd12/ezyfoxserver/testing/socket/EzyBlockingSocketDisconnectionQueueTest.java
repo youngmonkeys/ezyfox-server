@@ -20,5 +20,4 @@ public class EzyBlockingSocketDisconnectionQueueTest {
         queue.remove(disconnection);
         assert queue.size() == 0;
     }
-
 }

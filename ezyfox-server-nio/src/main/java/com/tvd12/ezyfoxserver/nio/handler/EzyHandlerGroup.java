@@ -18,5 +18,4 @@ public interface EzyHandlerGroup extends
     default void enqueueDisconnection() {
         enqueueDisconnection(EzyDisconnectReason.UNKNOWN);
     }
-
 }

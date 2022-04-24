@@ -19,5 +19,4 @@ public class EzySimpleComponentStatistics
     protected EzyNetworkStats newNetworkStats() {
         return new EzySimpleNetworkStats();
     }
-
 }

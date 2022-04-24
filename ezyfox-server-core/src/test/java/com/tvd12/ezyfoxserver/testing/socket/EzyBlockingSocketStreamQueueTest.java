@@ -22,5 +22,4 @@ public class EzyBlockingSocketStreamQueueTest {
         queue.remove(stream);
         assert queue.size() == 1;
     }
-
 }

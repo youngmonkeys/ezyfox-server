@@ -55,5 +55,4 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         p.setManagementEnable(managementEnable);
         return p;
     }
-
 }

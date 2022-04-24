@@ -21,5 +21,4 @@ public class EzySimpleSocketStream implements EzySocketStream {
         this.bytes = null;
         this.session = null;
     }
-
 }

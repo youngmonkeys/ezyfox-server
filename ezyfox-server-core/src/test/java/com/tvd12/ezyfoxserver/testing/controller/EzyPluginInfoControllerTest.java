@@ -44,5 +44,4 @@ public class EzyPluginInfoControllerTest extends BaseTest {
         when(zoneContext.getPluginContext("test")).thenReturn(pluginContext);
         controller.handle(serverContext, request);
     }
-
 }

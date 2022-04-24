@@ -54,5 +54,4 @@ public class EzyRequestHandlerMethod extends EzyHandlerMethod {
                 .append(")")
                 .toString();
     }
-   
 }

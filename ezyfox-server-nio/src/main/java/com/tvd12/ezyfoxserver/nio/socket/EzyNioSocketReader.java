@@ -77,5 +77,4 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
     private void processReadableKey(SelectionKey key) throws Exception {
         socketDataReceiver.tcpReceive((SocketChannel) key.channel());
     }
-
 }

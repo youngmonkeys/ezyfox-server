@@ -13,5 +13,4 @@ public class EzySimpleBytesPackageTest extends BaseTest {
         pack.setTransportType(EzyTransportType.TCP);
         assert pack.getTransportType() == EzyTransportType.TCP;
     }
-
 }

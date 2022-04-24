@@ -9,5 +9,4 @@ public class EzyRequestAppErrorTest {
     public void test() {
         System.out.println(EzyRequestAppError.HAS_NOT_ACCESSED.getName());
     }
-
 }

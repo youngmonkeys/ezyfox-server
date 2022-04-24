@@ -16,5 +16,4 @@ public class PluginClientHello2RequestHandler
     public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
         System.out.println("hello: " + data.getWho());
     }
-
 }

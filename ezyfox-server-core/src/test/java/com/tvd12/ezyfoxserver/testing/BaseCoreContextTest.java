@@ -10,5 +10,4 @@ public class BaseCoreContextTest extends BaseCoreTest {
         super();
         context = newServerContext();
     }
-
 }

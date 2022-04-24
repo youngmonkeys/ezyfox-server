@@ -24,5 +24,4 @@ public class EzyExitedAppResponseTest extends BaseTest {
         assert params.getReason() == EzyUserRemoveReason.EXIT_APP;
         response.release();
     }
-
 }

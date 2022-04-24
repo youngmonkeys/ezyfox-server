@@ -358,5 +358,4 @@ public abstract class EzyAbstractHandlerGroup
             return serverContext.getServer().getSettings().getStreaming().isEnable();
         }
     }
-    
 }

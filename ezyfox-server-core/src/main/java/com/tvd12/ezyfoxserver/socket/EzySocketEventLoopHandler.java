@@ -38,5 +38,4 @@ public abstract class EzySocketEventLoopHandler
             processWithLogException(() -> eventLoop.destroy());
         }
     }
-
 }

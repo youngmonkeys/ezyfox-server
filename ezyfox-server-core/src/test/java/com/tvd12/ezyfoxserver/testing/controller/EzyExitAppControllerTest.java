@@ -31,5 +31,4 @@ public class EzyExitAppControllerTest extends BaseTest {
             .build());
         controller.handle(serverContext, request);
     }
-
 }

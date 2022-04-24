@@ -13,5 +13,4 @@ public class EzySslConfigTest extends BaseTest {
         config.setLoader("loader");
         config.setContextFactoryBuilder("builder");
     }
-
 }

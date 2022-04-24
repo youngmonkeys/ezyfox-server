@@ -10,5 +10,4 @@ public class SettingBuilderGenerator {
             .buildBySetter(true)
             .create(EzySimpleAdminSetting.class, "EzyAdminSettingBuilder"));
     }
-
 }

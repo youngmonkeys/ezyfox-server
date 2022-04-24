@@ -14,5 +14,4 @@ public class EzyCommandTest extends BaseTest {
         assert value.getName().equals("APP_ACCESS");
         EzyCommand.valueOf("APP_ACCESS");
     }
-
 }

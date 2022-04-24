@@ -20,5 +20,4 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         setting.setTcpNoDelay(true);
         assert setting.isTcpNoDelay();
     }
-
 }

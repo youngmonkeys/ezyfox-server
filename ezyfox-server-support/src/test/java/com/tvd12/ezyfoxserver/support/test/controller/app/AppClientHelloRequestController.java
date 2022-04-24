@@ -66,5 +66,4 @@ public class AppClientHelloRequestController {
     public void handleRequestException3(EzyContext context) throws Exception {
         throw new IllegalArgumentException(getClass().getSimpleName() + ":handleRequestException3");
     }
-
 }

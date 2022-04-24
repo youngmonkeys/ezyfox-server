@@ -193,5 +193,4 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
             return new EzySocketDataReceiver(this);
         }
     }
-
 }

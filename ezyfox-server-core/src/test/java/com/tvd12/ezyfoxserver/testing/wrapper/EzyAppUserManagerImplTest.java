@@ -25,5 +25,4 @@ public class EzyAppUserManagerImplTest extends BaseTest {
         manager.addUser(user);
         manager.removeUser(user, EzyUserRemoveReason.EXIT_APP);
     }
-
 }

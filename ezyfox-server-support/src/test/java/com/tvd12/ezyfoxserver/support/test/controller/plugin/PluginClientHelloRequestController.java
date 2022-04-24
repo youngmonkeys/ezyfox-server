@@ -38,5 +38,4 @@ public class PluginClientHelloRequestController {
             EzyUser user, EzySession session, EzyContext context) {
         System.out.println("PluginClientHelloRequestController::handleRequestException2, cmd = " + cmd + ", data = " + request + ", e = " + e);
     }
-
 }

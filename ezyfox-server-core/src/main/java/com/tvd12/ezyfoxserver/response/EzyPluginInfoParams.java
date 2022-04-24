@@ -23,5 +23,4 @@ public class EzyPluginInfoParams extends EzySimpleResponseParams {
     public void release() {
         this.plugin = null;
     }
-
 }

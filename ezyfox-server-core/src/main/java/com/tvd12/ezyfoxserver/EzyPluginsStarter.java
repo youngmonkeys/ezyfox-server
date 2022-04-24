@@ -92,5 +92,4 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
             return new EzyPluginsStarter(this);
         }
     }
-
 }

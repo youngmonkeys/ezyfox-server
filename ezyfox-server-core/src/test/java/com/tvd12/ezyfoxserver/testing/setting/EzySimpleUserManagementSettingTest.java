@@ -17,5 +17,4 @@ public class EzySimpleUserManagementSettingTest extends BaseTest {
         setting.setGuestNamePrefix("");
         setting.setUserNamePattern("");
     }
-
 }

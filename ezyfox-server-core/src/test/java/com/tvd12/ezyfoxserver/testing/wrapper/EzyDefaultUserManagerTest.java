@@ -13,5 +13,4 @@ public class EzyDefaultUserManagerTest {
         manager = new EzyDefaultUserManager(3);
         assert manager != null;
     }
-
 }

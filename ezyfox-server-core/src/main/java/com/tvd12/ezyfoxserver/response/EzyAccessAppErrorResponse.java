@@ -9,5 +9,4 @@ public class EzyAccessAppErrorResponse
     public EzyAccessAppErrorResponse(EzyErrorParams params) {
         super(EzyCommand.APP_ACCESS_ERROR, params);
     }
-
 }

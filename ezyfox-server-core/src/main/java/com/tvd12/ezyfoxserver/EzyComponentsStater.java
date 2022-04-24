@@ -33,5 +33,4 @@ public abstract class EzyComponentsStater extends EzyLoggable implements EzyStar
         }
 
     }
-
 }

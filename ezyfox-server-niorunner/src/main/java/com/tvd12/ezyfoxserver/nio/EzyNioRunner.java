@@ -13,5 +13,4 @@ public class EzyNioRunner extends EzyRunner {
     protected Builder<?> newStarterBuilder() {
         return EzyNioStarter.builder();
     }
-
 }

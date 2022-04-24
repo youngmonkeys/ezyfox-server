@@ -16,5 +16,4 @@ public class EzySimpleRequestAppRequestTest extends BaseCoreTest {
             .build());
         request.release();
     }
-
 }

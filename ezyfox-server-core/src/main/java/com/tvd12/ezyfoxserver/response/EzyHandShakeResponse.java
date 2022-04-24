@@ -9,5 +9,4 @@ public class EzyHandShakeResponse
     public EzyHandShakeResponse(EzyHandShakeParams params) {
         super(EzyCommand.HANDSHAKE, params);
     }
-
 }

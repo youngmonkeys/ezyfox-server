@@ -34,5 +34,4 @@ public class EzySimpleSslConfigLoader implements EzySslConfigLoader {
     protected String getPath(String first, String... more) {
         return Paths.get(first, more).toString();
     }
-
 }

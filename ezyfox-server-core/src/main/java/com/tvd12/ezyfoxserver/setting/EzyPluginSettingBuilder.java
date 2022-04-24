@@ -36,5 +36,4 @@ public class EzyPluginSettingBuilder extends EzyAbstractSettingBuilder<
         return setting;
 
     }
-
 }

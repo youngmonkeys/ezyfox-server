@@ -82,5 +82,4 @@ public class HelloController {
             EzyUser user, EzySession session, EzyContext context) {
         System.out.println("HelloController:handleException:IllegalArgumentException, cmd = " + cmd);
     }
-
 }

@@ -14,5 +14,4 @@ public class EzySimpleRequestFactoryTest {
         factory.newRequest(EzyCommand.PLUGIN_INFO);
         factory.newRequest(EzyCommand.PLUGIN_REQUEST);
     }
-
 }

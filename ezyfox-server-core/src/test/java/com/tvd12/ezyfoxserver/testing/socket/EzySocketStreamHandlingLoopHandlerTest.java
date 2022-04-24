@@ -14,5 +14,4 @@ public class EzySocketStreamHandlingLoopHandlerTest {
             .method("getThreadName")
             .invoke();
     }
-
 }

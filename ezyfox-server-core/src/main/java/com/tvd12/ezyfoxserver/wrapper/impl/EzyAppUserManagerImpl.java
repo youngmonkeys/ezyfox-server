@@ -76,5 +76,4 @@ public class EzyAppUserManagerImpl
             return new EzyAppUserManagerImpl(this);
         }
     }
-
 }

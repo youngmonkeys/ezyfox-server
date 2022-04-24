@@ -200,5 +200,4 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
         }
 
     }
-
 }

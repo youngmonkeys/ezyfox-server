@@ -41,5 +41,4 @@ public class EzySimpleBytesPackage implements EzyBytesPackage {
         this.bytes = null;
         this.recipients = null;
     }
-
 }

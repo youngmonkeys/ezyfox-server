@@ -38,5 +38,4 @@ public class EzyRunnerTest extends BaseTest {
             throw e;
         }
     }
-
 }

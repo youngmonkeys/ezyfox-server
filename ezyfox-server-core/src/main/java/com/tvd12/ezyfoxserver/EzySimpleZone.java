@@ -39,5 +39,4 @@ public class EzySimpleZone extends EzyComponent implements EzyZone, EzyDestroyab
     public String toString() {
         return setting.getName() + "(id = " + setting.getId() + ")";
     }
-
 }

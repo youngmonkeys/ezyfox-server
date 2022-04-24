@@ -179,5 +179,4 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             "must set plugin " + plugin.getName() + "'s 'thread-pool-size'"
         );
     }
-
 }

@@ -24,5 +24,4 @@ public class TestPluginEntry extends EzySimplePluginEntry {
     @Override
     protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
     }
-
 }

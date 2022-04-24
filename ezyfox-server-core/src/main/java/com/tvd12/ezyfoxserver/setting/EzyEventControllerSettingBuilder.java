@@ -26,5 +26,4 @@ public class EzyEventControllerSettingBuilder
         setting.setController(controller);
         return setting;
     }
-
 }

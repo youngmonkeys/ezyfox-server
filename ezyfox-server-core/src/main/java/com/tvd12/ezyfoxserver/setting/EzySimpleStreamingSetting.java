@@ -27,5 +27,4 @@ public class EzySimpleStreamingSetting implements EzyStreamingSetting {
         map.put("enable", enable);
         return map;
     }
-
 }

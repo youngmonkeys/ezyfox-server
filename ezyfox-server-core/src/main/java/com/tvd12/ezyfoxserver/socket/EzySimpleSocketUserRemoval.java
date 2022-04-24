@@ -20,5 +20,4 @@ public class EzySimpleSocketUserRemoval implements EzySocketUserRemoval {
         this.reason = null;
         this.zoneContext = null;
     }
-
 }

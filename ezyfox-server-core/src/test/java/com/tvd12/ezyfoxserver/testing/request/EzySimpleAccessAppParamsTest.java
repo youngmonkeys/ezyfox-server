@@ -16,5 +16,4 @@ public class EzySimpleAccessAppParamsTest {
         assert request.getParams().getData() != null;
         request.release();
     }
-
 }

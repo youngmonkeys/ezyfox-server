@@ -10,5 +10,4 @@ public class EzyResponseHandleExceptionTest extends BaseTest {
     public void test() {
         throw new EzyResponseHandleException("msg", new Exception());
     }
-
 }

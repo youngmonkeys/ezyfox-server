@@ -6,5 +6,4 @@ public final class EzyFileNames {
 
     private EzyFileNames() {
     }
-
 }

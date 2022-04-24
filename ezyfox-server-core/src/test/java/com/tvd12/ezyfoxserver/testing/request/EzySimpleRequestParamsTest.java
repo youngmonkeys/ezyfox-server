@@ -11,5 +11,4 @@ public class EzySimpleRequestParamsTest {
         EzySimpleRequestParams params = new EzySimpleRequestParams();
         params.deserialize(EzyEntityFactory.newArray());
     }
-
 }

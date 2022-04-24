@@ -274,5 +274,4 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
     protected EzyConstant getCommand() {
         return EzyCommand.HANDSHAKE;
     }
-
 }

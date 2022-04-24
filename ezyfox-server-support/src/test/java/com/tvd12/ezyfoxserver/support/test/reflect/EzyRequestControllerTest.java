@@ -16,5 +16,4 @@ public class EzyRequestControllerTest {
         assert controllerProxy.getExceptionHandlerMethods().size() >= 0;
         System.out.println(controllerProxy);
     }
-
 }

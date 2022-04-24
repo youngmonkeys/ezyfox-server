@@ -18,5 +18,4 @@ public class EzyRequestHandlerMethodTest {
         System.out.println(handlerMethod);
         assert handlerMethod.getParameterTypes().length >= 0;
     }
-
 }

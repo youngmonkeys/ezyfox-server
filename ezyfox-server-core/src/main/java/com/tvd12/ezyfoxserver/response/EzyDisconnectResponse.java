@@ -9,5 +9,4 @@ public class EzyDisconnectResponse
     public EzyDisconnectResponse(EzyDisconnectParams params) {
         super(EzyCommand.DISCONNECT, params);
     }
-
 }

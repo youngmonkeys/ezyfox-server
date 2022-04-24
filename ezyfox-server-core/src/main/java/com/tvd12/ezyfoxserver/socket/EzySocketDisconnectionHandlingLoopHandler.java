@@ -6,5 +6,4 @@ public class EzySocketDisconnectionHandlingLoopHandler extends EzySocketEventLoo
     protected final String getThreadName() {
         return "disconnection-handler";
     }
-
 }

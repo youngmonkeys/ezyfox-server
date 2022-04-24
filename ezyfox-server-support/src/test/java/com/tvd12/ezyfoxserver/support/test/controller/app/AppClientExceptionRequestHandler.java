@@ -16,5 +16,4 @@ public class AppClientExceptionRequestHandler
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
         throw new IllegalStateException("server maintain");
     }
-
 }

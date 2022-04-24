@@ -18,5 +18,4 @@ public class EzySimpleNioDataHandler
     public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
         dataReceived(cmd, msg);
     }
-    
 }

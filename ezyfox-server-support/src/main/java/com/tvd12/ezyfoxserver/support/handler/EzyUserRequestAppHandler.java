@@ -18,5 +18,4 @@ public interface EzyUserRequestAppHandler<D>
             return null;
         }
     }
-
 }

@@ -44,5 +44,4 @@ public class EzySimplePackage implements EzyPackage {
         this.data = null;
         this.recipients = null;
     }
-
 }

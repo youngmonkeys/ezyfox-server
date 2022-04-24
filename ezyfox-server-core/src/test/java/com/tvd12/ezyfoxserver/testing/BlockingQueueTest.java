@@ -17,5 +17,4 @@ public class BlockingQueueTest extends BaseTest {
         System.out.println(queue.offer("5"));
         System.out.println(queue);
     }
-
 }

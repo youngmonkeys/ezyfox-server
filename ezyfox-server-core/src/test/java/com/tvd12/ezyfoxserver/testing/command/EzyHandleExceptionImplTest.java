@@ -19,5 +19,4 @@ public class EzyHandleExceptionImplTest extends BaseTest {
         EzyHandleExceptionImpl cmd = new EzyHandleExceptionImpl(fetcher);
         cmd.handle(Thread.currentThread(), new Exception());
     }
-
 }

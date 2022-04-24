@@ -22,5 +22,4 @@ public class EzyExceptionHandlerMethod extends EzyHandlerMethod {
         Class<?>[] classes = EzyTryCatchAnnotations.getExceptionClasses(annotation);
         return classes;
     }
-    
 }

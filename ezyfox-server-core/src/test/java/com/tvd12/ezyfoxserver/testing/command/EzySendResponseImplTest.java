@@ -176,5 +176,4 @@ public class EzySendResponseImplTest {
         // then
         verify(responseApi, times(1)).response(any(EzyPackage.class), anyBoolean());
     }
-
 }

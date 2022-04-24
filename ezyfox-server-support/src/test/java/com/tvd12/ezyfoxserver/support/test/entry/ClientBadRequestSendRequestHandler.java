@@ -20,5 +20,4 @@ public class ClientBadRequestSendRequestHandler
     public void handle() {
         throw new EzyBadRequestException(1, "test", true);
     }
-
 }

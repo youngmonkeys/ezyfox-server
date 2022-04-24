@@ -95,5 +95,4 @@ public class EzyEventControllersImplTest extends BaseTest {
         }
 
     }
-
 }

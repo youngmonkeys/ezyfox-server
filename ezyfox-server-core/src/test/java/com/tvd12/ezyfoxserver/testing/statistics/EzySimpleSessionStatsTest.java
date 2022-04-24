@@ -19,5 +19,4 @@ public class EzySimpleSessionStatsTest extends BaseTest {
         assert stats.getMaxSessions() == 2;
         assert stats.getCurrentSessions() == 1;
     }
-
 }

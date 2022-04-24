@@ -66,5 +66,4 @@ public class EzyDatagramChannelPool extends EzyLoggable {
             }
         });
     }
-
 }

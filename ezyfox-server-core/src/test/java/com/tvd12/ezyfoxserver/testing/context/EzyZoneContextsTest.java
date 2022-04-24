@@ -26,5 +26,4 @@ public class EzyZoneContextsTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzyZoneContexts.class;
     }
-
 }

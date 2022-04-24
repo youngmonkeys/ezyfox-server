@@ -15,5 +15,4 @@ public class AppClientHello6RequestHandler implements EzyUserRequestHandler {
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
         System.out.println("hello with: " + data);
     }
-
 }

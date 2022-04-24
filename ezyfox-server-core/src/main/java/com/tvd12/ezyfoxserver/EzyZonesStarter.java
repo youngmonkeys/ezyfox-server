@@ -100,5 +100,4 @@ public class EzyZonesStarter extends EzyComponentsStater {
             return new EzyZonesStarter(this);
         }
     }
-
 }

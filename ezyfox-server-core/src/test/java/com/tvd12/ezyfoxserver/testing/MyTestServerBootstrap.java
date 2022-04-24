@@ -8,5 +8,4 @@ public class MyTestServerBootstrap extends EzyServerBootstrap {
     protected void startOtherBootstraps(Runnable callback) throws Exception {
         callback.run();
     }
-
 }

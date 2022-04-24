@@ -27,5 +27,4 @@ public class EzySimpleServerContextBuilderTest extends BaseTest {
             .param(EzyPluginSetting.class, new EzySimplePluginSetting())
             .invoke();
     }
-
 }

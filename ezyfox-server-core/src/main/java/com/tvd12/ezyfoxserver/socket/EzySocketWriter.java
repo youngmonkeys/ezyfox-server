@@ -70,5 +70,4 @@ public class EzySocketWriter
     protected EzySocketWriterGroup getWriterGroup(EzySession session) {
         return writerGroupFetcher.getWriterGroup(session);
     }
-
 }

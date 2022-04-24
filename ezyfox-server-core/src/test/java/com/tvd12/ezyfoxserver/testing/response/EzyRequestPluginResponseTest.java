@@ -22,5 +22,4 @@ public class EzyRequestPluginResponseTest extends BaseTest {
         assert response.serialize().size() >= 0;
         response.release();
     }
-
 }

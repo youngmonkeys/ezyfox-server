@@ -25,5 +25,4 @@ public class EzyConfigBuilderTest {
         assertEquals(config.getLoggerConfigFile(), "log.properties");
         assertEquals(config.isEnableAppClassLoader(), true);
     }
-
 }

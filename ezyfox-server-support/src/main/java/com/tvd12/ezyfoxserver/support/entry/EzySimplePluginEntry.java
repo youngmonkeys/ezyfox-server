@@ -196,5 +196,4 @@ public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     @Override
     public void destroy() {
     }
-
 }

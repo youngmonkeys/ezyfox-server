@@ -8,5 +8,4 @@ public class EzyNioUdpReadingLoopHandler extends EzySocketEventLoopOneHandler {
     protected String getThreadName() {
         return "udp-reader";
     }
-
 }

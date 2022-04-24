@@ -25,5 +25,4 @@ public class EzySimpleUdpReceivedPacketTest {
         System.out.println(packet.getChannel());
         packet.release();
     }
-
 }

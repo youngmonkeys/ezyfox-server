@@ -37,5 +37,4 @@ public class EzyUserManagerImplTest extends BaseCoreTest {
         manager.addUser(session, user);
         manager.removeUser((EzyUser) null);
     }
-
 }

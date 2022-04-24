@@ -60,5 +60,4 @@ public class EzyThreadPoolSizeSettingBuilder
         p.setSocketUserRemovalHandler(socketUserRemovalHandler);
         return p;
     }
-
 }

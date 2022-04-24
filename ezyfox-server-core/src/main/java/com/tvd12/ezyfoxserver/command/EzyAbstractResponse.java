@@ -164,5 +164,4 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
         this.context = null;
         this.userManager = null;
     }
-
 }

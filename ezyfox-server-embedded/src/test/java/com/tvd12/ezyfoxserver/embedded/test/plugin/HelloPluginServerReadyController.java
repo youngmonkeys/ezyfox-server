@@ -16,5 +16,4 @@ public class HelloPluginServerReadyController
     public void handle(EzyPluginContext ctx, EzyServerReadyEvent event) {
         logger.info("HELLO PLUGIN - SERVER READY");
     }
-
 }

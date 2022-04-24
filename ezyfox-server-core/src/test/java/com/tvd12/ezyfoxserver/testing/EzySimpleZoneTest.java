@@ -15,5 +15,4 @@ public class EzySimpleZoneTest extends BaseTest {
         assert zone.equals(zone);
         assert !zone.equals(new EzySimpleZone());
     }
-
 }

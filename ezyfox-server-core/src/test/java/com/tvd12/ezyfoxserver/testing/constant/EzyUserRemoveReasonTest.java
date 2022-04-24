@@ -9,5 +9,4 @@ public class EzyUserRemoveReasonTest {
     public void test() {
         System.out.println(EzyUserRemoveReason.EXIT_APP.getName());
     }
-
 }

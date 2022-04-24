@@ -43,5 +43,4 @@ public class EzySimpleXmlReaderTest extends BaseTest {
     public static class ClassB {
 
     }
-
 }

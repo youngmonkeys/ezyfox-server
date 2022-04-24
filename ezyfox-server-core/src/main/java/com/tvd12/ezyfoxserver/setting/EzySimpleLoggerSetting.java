@@ -47,5 +47,4 @@ public class EzySimpleLoggerSetting implements EzyLoggerSetting {
             commands.add(EzyCommand.valueOf(string));
         }
     }
-
 }

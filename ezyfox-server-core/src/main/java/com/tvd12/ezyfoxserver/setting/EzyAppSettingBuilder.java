@@ -17,5 +17,4 @@ public class EzyAppSettingBuilder extends EzyAbstractSettingBuilder<
         return setting;
 
     }
-
 }

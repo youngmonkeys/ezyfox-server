@@ -68,5 +68,4 @@ public class AppResponseFactoryTestHandler
             .usernames(Lists.newArrayList(event.getUser().getName()))
             .execute();
     }
-
 }

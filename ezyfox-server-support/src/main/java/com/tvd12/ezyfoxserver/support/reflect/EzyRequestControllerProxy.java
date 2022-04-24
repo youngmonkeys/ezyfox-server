@@ -100,5 +100,4 @@ public class EzyRequestControllerProxy {
                 .append(")")
                 .toString();
     }
-    
 }

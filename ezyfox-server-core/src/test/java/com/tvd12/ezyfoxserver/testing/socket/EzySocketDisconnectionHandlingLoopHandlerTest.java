@@ -14,5 +14,4 @@ public class EzySocketDisconnectionHandlingLoopHandlerTest {
             .method("getThreadName")
             .invoke();
     }
-
 }

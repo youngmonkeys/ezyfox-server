@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.controller;
 
 import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
-import com.tvd12.ezyfoxserver.constant.EzyIRequestAppError;
 import com.tvd12.ezyfoxserver.constant.EzyRequestAppError;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
@@ -42,26 +41,30 @@ public class EzyRequestAppController
             requestController.handle(appCtx, event);
         } else {
             EzySession session = request.getSession();
-            responseRequestAppError(ctx, session, EzyRequestAppError.HAS_NOT_ACCESSED);
+            responseRequestAppError(ctx, session);
         }
     }
 
-    protected EzyUserRequestAppEvent newRequestAppEvent(EzyRequestAppRequest request) {
+    protected EzyUserRequestAppEvent newRequestAppEvent(
+        EzyRequestAppRequest request
+    ) {
         return new EzySimpleUserRequestAppEvent(
             request.getUser(),
             request.getSession(),
             request.getParams().getData());
     }
 
-    protected EzyResponse newRequestAppErrorReponse(EzyIRequestAppError error) {
+    protected EzyResponse newRequestAppErrorResponse() {
         EzyErrorParams params = new EzyErrorParams();
-        params.setError(error);
+        params.setError(EzyRequestAppError.HAS_NOT_ACCESSED);
         return new EzyRequestAppErrorResponse(params);
     }
 
     protected void responseRequestAppError(
-        EzyServerContext ctx, EzySession session, EzyIRequestAppError error) {
-        EzyResponse response = newRequestAppErrorReponse(error);
+        EzyServerContext ctx,
+        EzySession session
+    ) {
+        EzyResponse response = newRequestAppErrorResponse();
         ctx.send(response, session, false);
     }
 }

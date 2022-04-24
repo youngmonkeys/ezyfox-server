@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
-public class EzyPluginInfoReponseTest extends BaseTest {
+public class EzyPluginInfoResponseTest extends BaseTest {
 
     @Test
     public void test() {

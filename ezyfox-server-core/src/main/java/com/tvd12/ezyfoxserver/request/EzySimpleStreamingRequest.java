@@ -19,5 +19,4 @@ public class EzySimpleStreamingRequest implements EzyStreamingRequest {
         this.session = null;
         this.bytes = null;
     }
-
 }

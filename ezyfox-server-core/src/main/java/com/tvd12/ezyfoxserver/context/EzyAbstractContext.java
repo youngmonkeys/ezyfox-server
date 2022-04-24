@@ -27,10 +27,10 @@ public abstract class EzyAbstractContext
     extends EzyEntity
     implements EzyInitable, EzyDestroyable {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected EzyComponent component;
     protected Map<Class, Supplier> commandSuppliers;
     protected EzyHandleException handleException;
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public final void init() {
@@ -91,5 +91,4 @@ public abstract class EzyAbstractContext
     protected void preDestroy() {}
 
     protected void postDestroy() {}
-
 }

@@ -15,5 +15,4 @@ public class EzySimpleExitAppParams
     public void deserialize(EzyArray t) {
         this.appId = t.get(0, int.class);
     }
-
 }

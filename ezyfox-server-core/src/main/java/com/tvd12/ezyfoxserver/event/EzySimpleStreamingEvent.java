@@ -13,5 +13,4 @@ public class EzySimpleStreamingEvent extends EzySimpleUserSessionEvent implement
         super(user, session);
         this.bytes = bytes;
     }
-
 }

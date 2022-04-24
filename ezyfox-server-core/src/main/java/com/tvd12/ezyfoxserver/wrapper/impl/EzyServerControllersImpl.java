@@ -65,11 +65,11 @@ public class EzyServerControllersImpl implements EzyServerControllers {
             answer.put(EzyCommand.PING, EzyInterceptor.ALWAYS_PASS);
             answer.put(EzyCommand.HANDSHAKE, EzyInterceptor.ALWAYS_PASS);
             answer.put(EzyCommand.LOGIN, EzyInterceptor.ALWAYS_PASS);
-            answer.put(EzyCommand.APP_ACCESS, new EzyServerUserInterceptor<>());
-            answer.put(EzyCommand.APP_REQUEST, new EzyServerUserInterceptor<>());
-            answer.put(EzyCommand.APP_EXIT, new EzyServerUserInterceptor<>());
-            answer.put(EzyCommand.PLUGIN_INFO, new EzyServerUserInterceptor<>());
-            answer.put(EzyCommand.PLUGIN_REQUEST, new EzyServerUserInterceptor<>());
+            answer.put(EzyCommand.APP_ACCESS, new EzyServerUserInterceptor());
+            answer.put(EzyCommand.APP_REQUEST, new EzyServerUserInterceptor());
+            answer.put(EzyCommand.APP_EXIT, new EzyServerUserInterceptor());
+            answer.put(EzyCommand.PLUGIN_INFO, new EzyServerUserInterceptor());
+            answer.put(EzyCommand.PLUGIN_REQUEST, new EzyServerUserInterceptor());
             return answer;
         }
 

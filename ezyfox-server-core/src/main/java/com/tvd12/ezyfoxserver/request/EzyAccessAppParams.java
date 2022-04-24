@@ -7,5 +7,4 @@ public interface EzyAccessAppParams extends EzyRequestParams {
     String getAppName();
 
     EzyData getData();
-
 }

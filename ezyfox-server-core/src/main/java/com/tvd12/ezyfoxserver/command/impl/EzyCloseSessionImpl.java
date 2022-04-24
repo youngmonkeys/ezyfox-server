@@ -28,7 +28,7 @@ public class EzyCloseSessionImpl
 
     protected void sendToClients(EzySession session, EzyConstant reason) {
         if (shouldSendToClient(reason)) {
-            sendToClients0(session, reason);
+            doSendToClients(session, reason);
         }
     }
 
@@ -41,7 +41,7 @@ public class EzyCloseSessionImpl
         session.close();
     }
 
-    protected void sendToClients0(EzySession session, EzyConstant reason) {
+    protected void doSendToClients(EzySession session, EzyConstant reason) {
         EzyResponse response = newResponse(reason);
         context.sendNow(response, session);
     }
@@ -51,5 +51,4 @@ public class EzyCloseSessionImpl
         params.setReason(reason);
         return new EzyDisconnectResponse(params);
     }
-
 }

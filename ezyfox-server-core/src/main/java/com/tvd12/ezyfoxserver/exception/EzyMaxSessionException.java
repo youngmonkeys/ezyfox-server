@@ -8,13 +8,10 @@ public class EzyMaxSessionException extends IllegalStateException {
     }
 
     private static String getMessage(int current, int max) {
-        return new StringBuilder()
-            .append("max sessions (max = ")
-            .append(max)
-            .append(", current = ")
-            .append(current)
-            .append(")")
-            .toString();
+        return "max sessions (max = " +
+            max +
+            ", current = " +
+            current +
+            ")";
     }
-
 }

@@ -89,5 +89,4 @@ public class EzyHandshakeController
         params.setSessionKey(event.getEncryptedSessionKey());
         return new EzyHandShakeResponse(params);
     }
-
 }

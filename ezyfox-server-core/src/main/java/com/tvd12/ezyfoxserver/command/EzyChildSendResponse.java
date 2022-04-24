@@ -11,19 +11,30 @@ public interface EzyChildSendResponse {
     void execute(
         EzyData data,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType);
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
     void execute(
         EzyData data,
         Collection<EzySession> recipients,
-        boolean encrypted, EzyTransportType transportType);
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
-    default void execute(EzyData data, EzySession recipient, boolean encrypted) {
+    default void execute(
+        EzyData data,
+        EzySession recipient,
+        boolean encrypted
+    ) {
         execute(data, recipient, encrypted, EzyTransportType.TCP);
     }
 
-    default void execute(EzyData data, Collection<EzySession> recipients, boolean encrypted) {
+    default void execute(
+        EzyData data,
+        Collection<EzySession> recipients,
+        boolean encrypted
+    ) {
         execute(data, recipients, encrypted, EzyTransportType.TCP);
     }
-
 }

@@ -17,5 +17,4 @@ public abstract class EzySessionDataHandler<S extends EzySession>
         this.userManager = getUserManager(user.getZoneId());
         this.zoneContext = context.getZoneContext(user.getZoneId());
     }
-
 }

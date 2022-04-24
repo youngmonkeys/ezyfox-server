@@ -205,7 +205,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         ExHandlerGroup sut = newHandlerGroup();
 
         EzySession session = FieldUtil.getFieldValue(sut, "session");
-        when(session.addReceviedRequests(1)).thenReturn(true);
+        when(session.addReceivedRequests(1)).thenReturn(true);
 
         EzyNioDataHandler handler = FieldUtil.getFieldValue(sut, "handler");
         EzySessionManager sessionManager = FieldUtil.getFieldValue(handler, "sessionManager");
@@ -235,7 +235,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         ExHandlerGroup sut = newHandlerGroup();
 
         EzySession session = FieldUtil.getFieldValue(sut, "session");
-        when(session.addReceviedRequests(1)).thenReturn(false);
+        when(session.addReceivedRequests(1)).thenReturn(false);
         when(session.isActivated()).thenReturn(true);
 
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues =

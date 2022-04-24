@@ -59,5 +59,4 @@ public class EzySimpleConfig implements EzyConfig {
         map.put("enableAppClassLoader", enableAppClassLoader);
         return map;
     }
-
 }

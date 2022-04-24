@@ -27,10 +27,10 @@ public class EzySimpleUserDelegate
 
     @Override
     public void onUserRemoved(EzyUser user, EzyConstant reason) {
-        EzyZoneContext zoneContext = serverContext.getZoneContext(user.getZoneId());
-        EzySocketUserRemoval removal = new EzySimpleSocketUserRemoval(zoneContext, user, reason);
+        EzyZoneContext zoneContext
+            = serverContext.getZoneContext(user.getZoneId());
+        EzySocketUserRemoval removal
+            = new EzySimpleSocketUserRemoval(zoneContext, user, reason);
         userRemovalQueue.add(removal);
     }
-
-
 }

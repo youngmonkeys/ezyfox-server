@@ -21,7 +21,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     protected boolean encrypted;
     protected EzyTransportType transportType;
     protected Set<EzySession> recipients = new HashSet<>();
-    protected Set<EzySession> exrecipients = new HashSet<>();
+    protected Set<EzySession> exclusiveRecipients = new HashSet<>();
 
     protected C context;
     protected EzyUserManager userManager;
@@ -61,7 +61,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     public EzyResponse user(EzyUser user, boolean exclude) {
         if (user != null) {
             if (exclude) {
-                this.exrecipients.addAll(user.getSessions());
+                this.exclusiveRecipients.addAll(user.getSessions());
             } else {
                 this.recipients.addAll(user.getSessions());
             }
@@ -110,7 +110,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     @Override
     public EzyResponse session(EzySession session, boolean exclude) {
         if (exclude) {
-            this.exrecipients.add(session);
+            this.exclusiveRecipients.add(session);
         } else {
             this.recipients.add(session);
         }
@@ -141,7 +141,7 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
 
     @Override
     public void execute() {
-        recipients.removeAll(exrecipients);
+        recipients.removeAll(exclusiveRecipients);
         EzyData data = newResponseData();
         sendData(data, transportType);
         destroy();
@@ -159,8 +159,8 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
         this.params = null;
         this.recipients.clear();
         this.recipients = null;
-        this.exrecipients.clear();
-        this.exrecipients = null;
+        this.exclusiveRecipients.clear();
+        this.exclusiveRecipients = null;
         this.context = null;
         this.userManager = null;
     }

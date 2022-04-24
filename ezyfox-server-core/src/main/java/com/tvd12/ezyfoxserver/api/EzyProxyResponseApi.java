@@ -33,5 +33,4 @@ public class EzyProxyResponseApi implements EzyResponseApi {
         socketResponseApi.response(pack, immediate);
         websocketResponseApi.response(pack, immediate);
     }
-
 }

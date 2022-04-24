@@ -478,7 +478,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         doThrow(new IllegalArgumentException("notifyAppsSessionRemoved0Case")).when(zoneContext).broadcastApps(any(EzyConstant.class), any(EzyEvent.class), any(EzyUser.class), anyBoolean());
         MethodInvoker.create()
             .object(handler)
-            .method("notifyAppsSessionRemoved0")
+            .method("doNotifyAppsSessionRemoved")
             .param(EzyEvent.class, mock(EzyEvent.class))
             .invoke();
 

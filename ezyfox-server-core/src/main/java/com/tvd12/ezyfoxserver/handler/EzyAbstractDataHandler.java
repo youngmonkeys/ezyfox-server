@@ -7,7 +7,7 @@ import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.command.EzyCloseSession;
-import com.tvd12.ezyfoxserver.constant.EzyIError;
+import com.tvd12.ezyfoxserver.constant.EzySessionError;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
@@ -50,7 +50,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyZoneUserManager userManager;
     protected EzySessionManager sessionManager;
     protected EzySettings settings;
-    protected Set<EzyConstant> unloggableCommands;
+    protected Set<EzyConstant> ignoredLogCommands;
     protected EzySessionManagementSetting sessionManagementSetting;
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
     protected volatile boolean active = true;
@@ -69,7 +69,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.settings = server.getSettings();
         this.sessionManagementSetting = settings.getSessionManagement();
         this.maxRequestPerSecond = sessionManagementSetting.getSessionMaxRequestPerSecond();
-        this.unloggableCommands = settings.getLogger().getIgnoredCommands().getCommands();
+        this.ignoredLogCommands = settings.getLogger().getIgnoredCommands().getCommands();
         ((EzyAbstractSession) this.session).setDelegate(this);
     }
 
@@ -84,9 +84,9 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         }
     }
 
-    protected void responseError(EzyIError error) {
+    protected void responseError() {
         EzyErrorParams params = new EzyErrorParams();
-        params.setError(error);
+        params.setError(EzySessionError.MAX_REQUEST_PER_SECOND);
         response(new EzyErrorResponse(params));
     }
 
@@ -98,11 +98,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
                 sessionManager.removeSession(session, MAX_REQUEST_SIZE);
             }
         });
-        addExceptionHandlers(handlers);
         return handlers;
-    }
-
-    protected void addExceptionHandlers(Map<Class<?>, EzyExceptionHandler> handlers) {
     }
 
     @Override
@@ -123,7 +119,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
         this.closeSession = null;
         this.sessionManager = null;
         this.settings = null;
-        this.unloggableCommands = null;
+        this.ignoredLogCommands = null;
         this.sessionManagementSetting = null;
         if (exceptionHandlers != null) {
             this.exceptionHandlers.clear();
@@ -133,26 +129,23 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append("(")
-            .append("\n\tactive: ").append(active)
-            .append("\n\tsession: ").append(session)
-            .append("\n\tchannel: ").append(channel)
-            .append("\n\tserver: ").append(server)
-            .append("\n\tuser: ").append(user)
-            .append("\n\tcontext: ").append(context)
-            .append("\n\tzoneContext: ").append(zoneContext)
-            .append("\n\tcontrollers: ").append(controllers)
-            .append("\n\tuserManager: ").append(userManager)
-            .append("\n\tcloseSession: ").append(closeSession)
-            .append("\n\tsessionManager: ").append(sessionManager)
-            .append("\n\tlock: ").append(lock)
-            .append("\n\tsettings: ").append(settings)
-            .append("\n\tunloggableCommands: ").append(unloggableCommands)
-            .append("\n\tsessionManagementSetting: ").append(sessionManagementSetting)
-            .append("\n\texceptionHandlers: ").append(exceptionHandlers)
-            .append("\n)")
-            .toString();
+        return "(" +
+            "\n\tactive: " + active +
+            "\n\tsession: " + session +
+            "\n\tchannel: " + channel +
+            "\n\tserver: " + server +
+            "\n\tuser: " + user +
+            "\n\tcontext: " + context +
+            "\n\tzoneContext: " + zoneContext +
+            "\n\tcontrollers: " + controllers +
+            "\n\tuserManager: " + userManager +
+            "\n\tcloseSession: " + closeSession +
+            "\n\tsessionManager: " + sessionManager +
+            "\n\tlock: " + lock +
+            "\n\tsettings: " + settings +
+            "\n\tignoredLogCommands: " + ignoredLogCommands +
+            "\n\tsessionManagementSetting: " + sessionManagementSetting +
+            "\n\texceptionHandlers: " + exceptionHandlers +
+            "\n)";
     }
-
 }

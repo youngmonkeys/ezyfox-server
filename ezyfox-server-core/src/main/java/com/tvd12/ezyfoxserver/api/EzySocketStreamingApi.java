@@ -9,5 +9,4 @@ public class EzySocketStreamingApi extends EzyAbstractStreamingApi {
     protected EzyConstant getConnectionType() {
         return EzyConnectionType.SOCKET;
     }
-
 }

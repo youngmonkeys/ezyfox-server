@@ -34,5 +34,4 @@ public abstract class EzyAbstractSessionFactory<S extends EzySession>
     }
 
     protected abstract S newSession();
-
 }

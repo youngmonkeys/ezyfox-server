@@ -58,7 +58,7 @@ public class EzyAbstractResponseApiTest {
     }
 
     @Test
-    public void encrypteMessageContentTest() {
+    public void encryptMessageContentTest() {
         // given
         byte[] messageContent = new byte[0];
         byte[] encryptionKey = new byte[0];
@@ -67,7 +67,7 @@ public class EzyAbstractResponseApiTest {
 
         // when
         Throwable e = Asserts.assertThrows(() ->
-            MethodUtil.invokeMethod("encrypteMessageContent", sut, messageContent, encryptionKey));
+            MethodUtil.invokeMethod("encryptMessageContent", sut, messageContent, encryptionKey));
 
         // then
         Asserts.assertEquals(UnsupportedOperationException.class, e.getCause().getCause().getClass());

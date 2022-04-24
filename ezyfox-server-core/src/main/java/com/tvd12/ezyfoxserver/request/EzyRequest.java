@@ -9,5 +9,4 @@ public interface EzyRequest<P extends EzyRequestParams> extends
     EzySessionFetcher,
     EzyRequestParamsFetcher<P>,
     EzyReleasable,
-    Serializable {
-}
+    Serializable {}

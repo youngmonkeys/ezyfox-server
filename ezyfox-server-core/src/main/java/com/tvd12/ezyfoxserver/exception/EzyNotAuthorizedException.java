@@ -6,5 +6,4 @@ public class EzyNotAuthorizedException extends Exception {
     public EzyNotAuthorizedException(String msg) {
         super(msg);
     }
-
 }

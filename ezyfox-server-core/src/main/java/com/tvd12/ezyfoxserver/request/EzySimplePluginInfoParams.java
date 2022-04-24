@@ -15,5 +15,4 @@ public class EzySimplePluginInfoParams
     public void deserialize(EzyArray t) {
         this.pluginName = t.get(0, String.class);
     }
-
 }

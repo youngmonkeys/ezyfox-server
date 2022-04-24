@@ -9,5 +9,4 @@ public class EzySimpleHandshakeRequest
     protected EzyHandshakeParams newParams() {
         return new EzySimpleHandShakeParams();
     }
-
 }

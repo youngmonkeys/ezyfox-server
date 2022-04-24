@@ -75,5 +75,4 @@ public interface EzyResponse extends EzyVoidCommand {
     default EzyResponse params(EzyBuilder<? extends EzyData> builder) {
         return params(builder.build());
     }
-
 }

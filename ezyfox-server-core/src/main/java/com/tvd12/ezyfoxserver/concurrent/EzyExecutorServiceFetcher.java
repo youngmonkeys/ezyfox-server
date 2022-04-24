@@ -5,5 +5,4 @@ import java.util.concurrent.ScheduledExecutorService;
 public interface EzyExecutorServiceFetcher {
 
     ScheduledExecutorService getExecutorService();
-
 }

@@ -24,5 +24,4 @@ public class EzyAppResponseImpl
     protected void sendData(EzyData data, EzyTransportType transportType) {
         context.send(data, recipients, encrypted, transportType);
     }
-
 }

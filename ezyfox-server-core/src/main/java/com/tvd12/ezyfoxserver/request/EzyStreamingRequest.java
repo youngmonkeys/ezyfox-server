@@ -11,5 +11,4 @@ public interface EzyStreamingRequest extends EzyReleasable {
     EzySession getSession();
 
     byte[] getBytes();
-
 }

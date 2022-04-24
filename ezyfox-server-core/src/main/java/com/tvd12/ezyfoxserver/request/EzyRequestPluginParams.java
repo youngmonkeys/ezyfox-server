@@ -7,5 +7,4 @@ public interface EzyRequestPluginParams extends EzyRequestParams {
     int getPluginId();
 
     EzyArray getData();
-
 }

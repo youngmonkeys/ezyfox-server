@@ -23,5 +23,4 @@ public class EzySimpleRequestPluginParams
         super.release();
         this.data = null;
     }
-
 }

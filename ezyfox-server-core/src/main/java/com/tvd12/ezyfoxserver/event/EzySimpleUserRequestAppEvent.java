@@ -13,5 +13,4 @@ public class EzySimpleUserRequestAppEvent
     public EzySimpleUserRequestAppEvent(EzyUser user, EzySession session, EzyArray data) {
         super(user, session, data);
     }
-
 }

@@ -26,28 +26,30 @@ public enum EzyCommand implements EzyConstant {
     PLUGIN_REQUEST(41, 10),
     UDP_HANDSHAKE(50, 10);
 
-    private static final Set<EzyCommand> SYSTEM_COMMANDS = systemCommands();
-    private static final Map<Integer, EzyCommand> COMMANDS_BY_ID = commandsById();
     @Getter
     private final int id;
     @Getter
     private final int priority;
 
-    private EzyCommand(int id, int priority) {
+    private static final Set<EzyCommand> SYSTEM_COMMANDS
+        = systemCommands();
+    private static final Map<Integer, EzyCommand> COMMANDS_BY_ID
+        = commandsById();
+
+    EzyCommand(int id, int priority) {
         this.id = id;
         this.priority = priority;
     }
 
     public static EzyCommand valueOf(int id) {
-        EzyCommand cmd = COMMANDS_BY_ID.get(id);
-        return cmd;
+        return COMMANDS_BY_ID.get(id);
     }
 
-    private static final Set<EzyCommand> systemCommands() {
+    private static Set<EzyCommand> systemCommands() {
         return Sets.newHashSet(HANDSHAKE, LOGIN, APP_ACCESS, APP_EXIT, PLUGIN_INFO, DISCONNECT);
     }
 
-    private static final Map<Integer, EzyCommand> commandsById() {
+    private static Map<Integer, EzyCommand> commandsById() {
         Map<Integer, EzyCommand> map = new ConcurrentHashMap<>();
         for (EzyCommand cmd : values()) {
             map.put(cmd.getId(), cmd);
@@ -63,5 +65,4 @@ public enum EzyCommand implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

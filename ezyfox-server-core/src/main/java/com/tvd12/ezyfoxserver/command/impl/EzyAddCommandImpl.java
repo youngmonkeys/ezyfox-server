@@ -16,5 +16,4 @@ public class EzyAddCommandImpl implements EzyAddCommand {
     public void add(Class commandType, Supplier commandSupplier) {
         context.addCommand(commandType, commandSupplier);
     }
-
 }

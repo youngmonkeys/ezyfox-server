@@ -16,5 +16,4 @@ public class EzyPingController
         EzySession session = request.getSession();
         ctx.send(response, session, false);
     }
-
 }

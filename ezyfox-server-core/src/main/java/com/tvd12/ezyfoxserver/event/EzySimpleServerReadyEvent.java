@@ -1,4 +1,3 @@
 package com.tvd12.ezyfoxserver.event;
 
-public class EzySimpleServerReadyEvent implements EzyServerReadyEvent {
-}
+public class EzySimpleServerReadyEvent implements EzyServerReadyEvent {}

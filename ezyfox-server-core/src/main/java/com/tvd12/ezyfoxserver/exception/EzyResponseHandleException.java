@@ -6,5 +6,4 @@ public class EzyResponseHandleException extends IllegalStateException {
     public EzyResponseHandleException(String msg, Throwable e) {
         super(msg, e);
     }
-
 }

@@ -12,11 +12,15 @@ public interface EzySendResponse {
         EzyResponse response,
         EzySession recipient,
         boolean encrypted,
-        boolean immediate, EzyTransportType transportType);
+        boolean immediate,
+        EzyTransportType transportType
+    );
 
-    void execute(EzyResponse response,
-                 Collection<EzySession> recipients,
-                 boolean encrypted,
-                 boolean immediate, EzyTransportType transportType);
-
+    void execute(
+        EzyResponse response,
+        Collection<EzySession> recipients,
+        boolean encrypted,
+        boolean immediate,
+        EzyTransportType transportType
+    );
 }

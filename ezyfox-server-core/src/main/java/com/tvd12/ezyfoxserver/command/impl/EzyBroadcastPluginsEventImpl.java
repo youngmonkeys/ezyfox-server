@@ -13,21 +13,30 @@ import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 import java.util.Collection;
 import java.util.Set;
 
-public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements EzyBroadcastPluginsEvent {
+public class EzyBroadcastPluginsEventImpl
+    extends EzyAbstractCommand
+    implements EzyBroadcastPluginsEvent {
 
     private final EzyZoneContext context;
-    private final EzyMapSet<EzyConstant, EzyPluginContext> pluginContextss;
+    private final EzyMapSet<EzyConstant, EzyPluginContext> pluginContextMaps;
 
     public EzyBroadcastPluginsEventImpl(EzyZoneContext context) {
         this.context = context;
-        this.pluginContextss = getPluginContextss();
-
+        this.pluginContextMaps = getPluginContextMaps();
     }
 
     @Override
-    public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
-        logger.debug("zone: {} broadcast to plugins event: {}", getZoneName(), type);
-        Set<EzyPluginContext> pluginContexts = pluginContextss.get(type);
+    public void fire(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
+        logger.debug(
+            "zone: {} broadcast to plugins event: {}",
+            getZoneName(),
+            type
+        );
+        Set<EzyPluginContext> pluginContexts = pluginContextMaps.get(type);
         if (pluginContexts != null) {
             for (EzyPluginContext pluginContext : pluginContexts) {
                 firePluginEvent(pluginContext, type, event, catchException);
@@ -35,7 +44,12 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
         }
     }
 
-    protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void firePluginEvent(
+        EzyPluginContext ctx,
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         if (catchException) {
             try {
                 ctx.handleEvent(type, event);
@@ -51,16 +65,20 @@ public class EzyBroadcastPluginsEventImpl extends EzyAbstractCommand implements 
         return context.getZone().getSetting().getName();
     }
 
-    private EzyMapSet<EzyConstant, EzyPluginContext> getPluginContextss() {
-        Collection<EzyPluginContext> pluginContexts = context.getPluginContexts();
-        EzyMapSet<EzyConstant, EzyPluginContext> pluginContextss = new EzyHashMapSet<>();
+    private EzyMapSet<EzyConstant, EzyPluginContext> getPluginContextMaps() {
+        Collection<EzyPluginContext> pluginContexts
+            = context.getPluginContexts();
+        EzyMapSet<EzyConstant, EzyPluginContext> pluginContextMaps
+            = new EzyHashMapSet<>();
         for (EzyPluginContext pluginContext : pluginContexts) {
-            EzyPluginSetting pluginSetting = pluginContext.getPlugin().getSetting();
-            Set<EzyConstant> listenEvents = pluginSetting.getListenEvents().getEvents();
+            EzyPluginSetting pluginSetting =
+                pluginContext.getPlugin().getSetting();
+            Set<EzyConstant> listenEvents =
+                pluginSetting.getListenEvents().getEvents();
             for (EzyConstant listenEvent : listenEvents) {
-                pluginContextss.addItem(listenEvent, pluginContext);
+                pluginContextMaps.addItem(listenEvent, pluginContext);
             }
         }
-        return pluginContextss;
+        return pluginContextMaps;
     }
 }

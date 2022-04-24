@@ -9,5 +9,4 @@ public class EzySimpleAccessAppRequest
     protected EzyAccessAppParams newParams() {
         return new EzySimpleAccessAppParams();
     }
-
 }

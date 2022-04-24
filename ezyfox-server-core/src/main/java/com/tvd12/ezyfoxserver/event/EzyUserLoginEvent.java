@@ -31,5 +31,4 @@ public interface EzyUserLoginEvent extends EzySessionEvent {
     void setStreamingEnable(boolean enable);
 
     void setUserProperty(Object key, Object value);
-
 }

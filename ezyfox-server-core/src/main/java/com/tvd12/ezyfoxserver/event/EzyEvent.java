@@ -5,7 +5,5 @@ import com.tvd12.ezyfox.util.EzyReleasable;
 public interface EzyEvent extends EzyReleasable {
 
     @Override
-    default void release() {
-
-    }
+    default void release() {}
 }

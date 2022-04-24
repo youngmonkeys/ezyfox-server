@@ -5,5 +5,4 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 public interface EzyUserEvent extends EzyEvent {
 
     EzyUser getUser();
-
 }

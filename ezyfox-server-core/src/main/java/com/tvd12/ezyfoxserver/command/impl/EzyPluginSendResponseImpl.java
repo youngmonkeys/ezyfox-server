@@ -48,7 +48,6 @@ public class EzyPluginSendResponseImpl
     }
 
     protected EzyRequestPluginResponseParams newResponseParams() {
-        EzyRequestPluginResponseParams answer = new EzyRequestPluginResponseParams();
-        return answer;
+        return new EzyRequestPluginResponseParams();
     }
 }

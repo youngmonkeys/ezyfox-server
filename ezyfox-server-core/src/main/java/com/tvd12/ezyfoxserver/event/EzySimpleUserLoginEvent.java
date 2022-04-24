@@ -66,5 +66,4 @@ public class EzySimpleUserLoginEvent
         this.userProperties.clear();
         this.userProperties = null;
     }
-
 }

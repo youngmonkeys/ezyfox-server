@@ -44,7 +44,9 @@ public class EzySimplePluginContext
     public void send(
         EzyData data,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         this.sendResponse.execute(data, recipient, encrypted, transportType);
     }
 
@@ -52,7 +54,9 @@ public class EzySimplePluginContext
     public void send(
         EzyData data,
         Collection<EzySession> recipients,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         this.sendResponse.execute(data, recipients, encrypted, transportType);
     }
 
@@ -99,5 +103,4 @@ public class EzySimplePluginContext
     protected void preDestroy() {
         logger.debug("destroy PluginContext({})", plugin);
     }
-
 }

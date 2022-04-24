@@ -11,7 +11,7 @@ public enum EzyConnectionType implements EzyConstant {
     @Getter
     private final int id;
 
-    private EzyConnectionType(int id) {
+    EzyConnectionType(int id) {
         this.id = id;
     }
 
@@ -19,5 +19,4 @@ public enum EzyConnectionType implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

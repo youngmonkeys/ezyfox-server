@@ -18,7 +18,7 @@ public enum EzyEventType implements EzyConstant {
     @Getter
     private final int id;
 
-    private EzyEventType(int id) {
+    EzyEventType(int id) {
         this.id = id;
     }
 
@@ -26,5 +26,4 @@ public enum EzyEventType implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

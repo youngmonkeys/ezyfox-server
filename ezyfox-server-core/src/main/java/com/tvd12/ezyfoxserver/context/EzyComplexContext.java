@@ -9,8 +9,10 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 import java.util.Collection;
 
-public interface EzyComplexContext
-    extends EzyContext, EzyPluginContextsFetcher, EzyAppContextsFetcher {
+public interface EzyComplexContext extends
+    EzyContext,
+    EzyPluginContextsFetcher,
+    EzyAppContextsFetcher {
 
     EzyAppContext getAppContext(int appId);
 
@@ -18,38 +20,68 @@ public interface EzyComplexContext
 
     void broadcast(
         EzyConstant eventType,
-        EzyEvent event, boolean catchException);
+        EzyEvent event,
+        boolean catchException
+    );
 
-    void send(EzyResponse response,
-              EzySession recipient,
-              boolean encrypted,
-              EzyTransportType transportType);
+    void send(
+        EzyResponse response,
+        EzySession recipient,
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
-    void send(EzyResponse response,
-              Collection<EzySession> recipients,
-              boolean encrypted,
-              EzyTransportType transportType);
+    void send(
+        EzyResponse response,
+        Collection<EzySession> recipients,
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
     void stream(
         byte[] bytes,
-        EzySession recipient, EzyTransportType transportType);
+        EzySession recipient,
+        EzyTransportType transportType
+    );
 
     void stream(
         byte[] bytes,
-        Collection<EzySession> recipients, EzyTransportType transportType);
+        Collection<EzySession> recipients,
+        EzyTransportType transportType
+    );
 
     default void send(
         EzyResponse response,
         EzyUser recipient,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         send(response, recipient.getSessions(), encrypted, transportType);
     }
 
     // ======================= tcp/send =================
     default void send(
         EzyResponse response,
-        Collection<EzySession> recipients, boolean encrypted) {
+        Collection<EzySession> recipients,
+        boolean encrypted
+    ) {
         send(response, recipients, encrypted, EzyTransportType.TCP);
+    }
+
+    default void send(
+        EzyResponse response,
+        EzySession recipient,
+        boolean encrypted
+    ) {
+        send(response, recipient, encrypted, EzyTransportType.TCP);
+    }
+
+    default void send(
+        EzyResponse response,
+        EzyUser recipient,
+        boolean encrypted
+    ) {
+        send(response, recipient, encrypted, EzyTransportType.TCP);
     }
 
     default void stream(byte[] bytes, EzySession recipient) {
@@ -59,15 +91,4 @@ public interface EzyComplexContext
     default void stream(byte[] bytes, Collection<EzySession> recipients) {
         stream(bytes, recipients, EzyTransportType.TCP);
     }
-
-    default void send(
-        EzyResponse response, EzySession recipient, boolean encrypted) {
-        send(response, recipient, encrypted, EzyTransportType.TCP);
-    }
-
-    default void send(
-        EzyResponse response, EzyUser recipient, boolean encrypted) {
-        send(response, recipient, encrypted, EzyTransportType.TCP);
-    }
-
 }

@@ -31,13 +31,11 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
 
     @Override
     protected Object encodeData(EzyArray data) throws Exception {
-        Object answer = encoder.encode(data, String.class);
-        return answer;
+        return encoder.encode(data, String.class);
     }
 
     @Override
     protected EzyConstant getConnectionType() {
         return EzyConnectionType.WEBSOCKET;
     }
-
 }

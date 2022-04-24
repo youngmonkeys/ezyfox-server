@@ -29,11 +29,8 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     implements EzyServerContextBuilder<B> {
 
     protected EzyServer server;
-    protected EzySocketUserRemovalQueue socketUserRemovalQueue;
-
-    {
-        socketUserRemovalQueue = new EzyBlockingSocketUserRemovalQueue();
-    }
+    protected EzySocketUserRemovalQueue socketUserRemovalQueue
+        = new EzyBlockingSocketUserRemovalQueue();
 
     @Override
     public B server(EzyServer server) {
@@ -163,20 +160,24 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
 
     protected ScheduledExecutorService newAppExecutorService(EzyAppSetting app) {
         String threadName = "app-" + app.getName() + "-thread";
-        int nthreads = app.getThreadPoolSize();
-        if (nthreads > 0) {
-            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        int threadPoolSize = app.getThreadPoolSize();
+        if (threadPoolSize > 0) {
+            return EzyExecutors.newScheduledThreadPool(threadPoolSize, threadName);
         }
-        return EzyExecutors.newErrorScheduledExecutor("must set app " + app.getName() + "'s 'thread-pool-size'");
+        return EzyExecutors.newErrorScheduledExecutor(
+            "must set app " + app.getName() + "'s 'thread-pool-size'"
+        );
     }
 
     protected ScheduledExecutorService newPluginExecutorService(EzyPluginSetting plugin) {
         String threadName = "plugin-" + plugin.getName() + "-thread";
-        int nthreads = plugin.getThreadPoolSize();
-        if (nthreads > 0) {
-            return EzyExecutors.newScheduledThreadPool(nthreads, threadName);
+        int threadPoolSize = plugin.getThreadPoolSize();
+        if (threadPoolSize > 0) {
+            return EzyExecutors.newScheduledThreadPool(threadPoolSize, threadName);
         }
-        return EzyExecutors.newErrorScheduledExecutor("must set plugin " + plugin.getName() + "'s 'thread-pool-size'");
+        return EzyExecutors.newErrorScheduledExecutor(
+            "must set plugin " + plugin.getName() + "'s 'thread-pool-size'"
+        );
     }
 
 }

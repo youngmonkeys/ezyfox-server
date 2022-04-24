@@ -11,5 +11,4 @@ public interface EzyAppSetup extends EzySetup {
 
     @Override
     EzyAppSetup addEventController(EzyConstant eventType, EzyEventController controller);
-
 }

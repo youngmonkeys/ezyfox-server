@@ -9,6 +9,4 @@ public class EzySimpleExitAppRequest
     protected EzyExitAppParams newParams() {
         return new EzySimpleExitAppParams();
     }
-
-
 }

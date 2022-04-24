@@ -37,10 +37,11 @@ import static com.tvd12.ezyfoxserver.context.EzyZoneContexts.getZoneSetting;
 
 public class EzyLoginProcessor extends EzyEntityBuilders {
 
-    private static final AtomicLong GUEST_COUNT = new AtomicLong();
     private final EzyUserStatistics userStats;
     private final EzyServerContext serverContext;
     private final EzySessionManager<EzySession> sessionManager;
+
+    private static final AtomicLong GUEST_COUNT = new AtomicLong();
 
     public EzyLoginProcessor(EzyServerContext serverContext) {
         this.serverContext = serverContext;
@@ -58,9 +59,9 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             userManagementSetting.getGuestNamePrefix());
         String password = event.getPassword();
         EzyZoneUserManager userManager = zone.getUserManager();
-        EzyUser user = null;
+        EzyUser user;
         EzySession session = event.getSession();
-        boolean alreadyLoggedIn = false;
+        boolean alreadyLoggedIn;
         Lock lock = userManager.getLock(username);
         lock.lock();
         try {
@@ -81,30 +82,33 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
             userManager.removeLock(username);
         }
         fireUserAddedEvent(zoneContext, user, session, event.getData(), alreadyLoggedIn);
-        EzyResponse response = newLoginReponse(zoneContext, user, event.getOutput());
+        EzyResponse response = newLoginResponse(zoneContext, user, event.getOutput());
         serverContext.send(response, session, false);
     }
 
     protected String checkUsername(
         String username,
         String userNamePattern,
-        boolean allowGuestLogin, String guestNamePrefix) {
+        boolean allowGuestLogin,
+        String guestNamePrefix
+    ) {
         if (username != null && username.matches(userNamePattern)) {
             return username;
         }
         if (allowGuestLogin) {
             long userId = GUEST_COUNT.incrementAndGet();
-            String answer = guestNamePrefix + userId;
-            return answer;
+            return guestNamePrefix + userId;
         }
         throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
 
-    protected void processUserSessions(EzyUser user,
-                                       EzySession session,
-                                       int maxSessionPerUser,
-                                       boolean allowChangeSession,
-                                       boolean streamingEnable) {
+    protected void processUserSessions(
+        EzyUser user,
+        EzySession session,
+        int maxSessionPerUser,
+        boolean allowChangeSession,
+        boolean streamingEnable
+    ) {
         if (maxSessionPerUser <= 0) {
             throw new EzyLoginErrorException(EzyLoginError.MAXIMUM_SESSION);
         }
@@ -133,15 +137,18 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
     }
 
     protected void processChangeSession(EzyUser user, EzySession session) {
-        List<EzySession> oldsessions = user.changeSession(session);
-        for (EzySession oldsession : oldsessions) {
-            sessionManager.removeSession(oldsession, EzyDisconnectReason.ANOTHER_SESSION_LOGIN);
+        List<EzySession> oldSessions = user.changeSession(session);
+        for (EzySession oldSession : oldSessions) {
+            sessionManager.removeSession(oldSession, EzyDisconnectReason.ANOTHER_SESSION_LOGIN);
         }
     }
 
-    protected void addUserToManager(EzyZoneUserManager userManager,
-                                    EzyUser user,
-                                    EzySession session, boolean alreadyLoggedIn) {
+    protected void addUserToManager(
+        EzyZoneUserManager userManager,
+        EzyUser user,
+        EzySession session,
+        boolean alreadyLoggedIn
+    ) {
         if (alreadyLoggedIn) {
             userManager.bind(session, user);
         } else {
@@ -155,15 +162,21 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         EzyZoneContext zoneContext,
         EzyUser user,
         EzySession session,
-        EzyData loginData, boolean alreadyLoggedIn) {
+        EzyData loginData,
+        boolean alreadyLoggedIn
+    ) {
         if (!alreadyLoggedIn) {
-            EzyEvent event = newUserAddedEvent(user, session, loginData);
-            fireUserAddedEvent0(zoneContext, event);
+            doFireUserAddedEvent(
+                zoneContext,
+                new EzySimpleUserAddedEvent(user, session, loginData)
+            );
         }
     }
 
-    protected void fireUserAddedEvent0(
-        EzyZoneContext zoneContext, EzyEvent event) {
+    protected void doFireUserAddedEvent(
+        EzyZoneContext zoneContext,
+        EzyEvent event
+    ) {
         try {
             zoneContext.broadcastPlugins(EzyEventType.USER_ADDED, event, true);
         } catch (Exception e) {
@@ -177,7 +190,8 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         EzyUserManagementSetting userManagementSetting,
         String newUserName,
         String password,
-        Map<Object, Object> properties) {
+        Map<Object, Object> properties
+    ) {
         EzySimpleUser user = new EzySimpleUser();
         user.setName(newUserName);
         user.setPassword(password);
@@ -188,22 +202,18 @@ public class EzyLoginProcessor extends EzyEntityBuilders {
         return user;
     }
 
-    protected EzyEvent newUserAddedEvent(EzyUser user,
-                                         EzySession session, EzyData loginData) {
-        return new EzySimpleUserAddedEvent(user, session, loginData);
-    }
-
-    protected EzyResponse newLoginReponse(
+    protected EzyResponse newLoginResponse(
         EzyZoneContext zoneContext,
-        EzyUser user, EzyData loginOuputData) {
+        EzyUser user,
+        EzyData loginOutputData
+    ) {
         EzyZoneSetting zoneSetting = getZoneSetting(zoneContext);
         EzyLoginParams params = new EzyLoginParams();
-        params.setData(loginOuputData);
+        params.setData(loginOutputData);
         params.setUserId(user.getId());
         params.setUsername(user.getName());
         params.setZoneId(zoneSetting.getId());
         params.setZoneName(zoneSetting.getName());
         return new EzyLoginResponse(params);
     }
-
 }

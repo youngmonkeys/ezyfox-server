@@ -14,5 +14,4 @@ public interface EzyBroadcastAppsEvent extends EzyBroadcastEvent {
     void fire(EzyConstant type, EzyEvent event, EzyUser user, boolean catchException);
 
     void fire(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchException);
-
 }

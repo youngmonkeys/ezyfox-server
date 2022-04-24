@@ -33,9 +33,7 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 public class EzySimpleZoneContext
     extends EzyAbstractComplexContext
     implements EzyZoneContext, EzyChildContext {
-
-    protected final Map<String, EzyAppContext> appContextsByName = new ConcurrentHashMap<>();
-    protected final Map<String, EzyPluginContext> pluginContextsByName = new ConcurrentHashMap<>();
+    
     @Getter
     protected EzyZone zone;
     @Setter
@@ -44,6 +42,10 @@ public class EzySimpleZoneContext
     protected EzyBroadcastEvent broadcastEvent;
     protected EzyBroadcastAppsEvent broadcastAppsEvent;
     protected EzyBroadcastPluginsEvent broadcastPluginsEvent;
+    protected final Map<String, EzyAppContext> appContextsByName
+        = new ConcurrentHashMap<>();
+    protected final Map<String, EzyPluginContext> pluginContextsByName
+        = new ConcurrentHashMap<>();
 
     @Override
     protected void init0() {
@@ -75,43 +77,76 @@ public class EzySimpleZoneContext
     }
 
     @Override
-    public void broadcast(EzyConstant eventType, EzyEvent event, boolean catchExeption) {
-        broadcastEvent.fire(eventType, event, catchExeption);
+    public void broadcast(
+        EzyConstant eventType,
+        EzyEvent event,
+        boolean catchException
+    ) {
+        broadcastEvent.fire(eventType, event, catchException);
     }
 
     @Override
-    public void broadcastPlugins(EzyConstant type, EzyEvent event, boolean catchException) {
+    public void broadcastPlugins(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         broadcastPluginsEvent.fire(type, event, catchException);
     }
 
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, boolean catchException) {
+    public void broadcastApps(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         broadcastAppsEvent.fire(type, event, catchException);
     }
 
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, String username, boolean catchException) {
+    public void broadcastApps(
+        EzyConstant type,
+        EzyEvent event,
+        String username,
+        boolean catchException
+    ) {
         broadcastAppsEvent.fire(type, event, username, catchException);
     }
 
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, EzyUser user, boolean catchException) {
+    public void broadcastApps(
+        EzyConstant type,
+        EzyEvent event,
+        EzyUser user,
+        boolean catchException
+    ) {
         broadcastAppsEvent.fire(type, event, user, catchException);
     }
 
     @Override
-    public void broadcastApps(EzyConstant type, EzyEvent event, Predicate<EzyAppContext> filter, boolean catchException) {
+    public void broadcastApps(
+        EzyConstant type,
+        EzyEvent event,
+        Predicate<EzyAppContext> filter,
+        boolean catchException
+    ) {
         broadcastAppsEvent.fire(type, event, filter, catchException);
     }
 
     @Override
-    public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
+    public void addAppContext(
+        EzyAppSetting app,
+        EzyAppContext appContext
+    ) {
         super.addAppContext(app, appContext);
         appContextsByName.put(app.getName(), appContext);
     }
 
     @Override
-    public void addPluginContext(EzyPluginSetting plugin, EzyPluginContext pluginContext) {
+    public void addPluginContext(
+        EzyPluginSetting plugin,
+        EzyPluginContext pluginContext
+    ) {
         super.addPluginContext(plugin, pluginContext);
         pluginContextsByName.put(plugin.getName(), pluginContext);
     }
@@ -122,16 +157,21 @@ public class EzySimpleZoneContext
         if (appContext != null) {
             return appContext;
         }
-        throw new IllegalArgumentException("has not app with name = " + appName);
+        throw new IllegalArgumentException(
+            "has not app with name = " + appName
+        );
     }
 
     @Override
     public EzyPluginContext getPluginContext(String pluginName) {
-        EzyPluginContext pluginContext = pluginContextsByName.get(pluginName);
+        EzyPluginContext pluginContext
+            = pluginContextsByName.get(pluginName);
         if (pluginContext != null) {
             return pluginContext;
         }
-        throw new IllegalArgumentException("has not plugin with name = " + pluginName);
+        throw new IllegalArgumentException(
+            "has not plugin with name = " + pluginName
+        );
     }
 
     public void setZone(EzyZone zone) {
@@ -144,7 +184,8 @@ public class EzySimpleZoneContext
         EzyResponse response,
         EzySession recipient,
         boolean encrypted,
-        EzyTransportType transportType) {
+        EzyTransportType transportType
+    ) {
         parent.send(response, recipient, encrypted, transportType);
     }
 
@@ -153,21 +194,26 @@ public class EzySimpleZoneContext
         EzyResponse response,
         Collection<EzySession> recipients,
         boolean encrypted,
-        EzyTransportType transportType) {
+        EzyTransportType transportType
+    ) {
         parent.send(response, recipients, encrypted, transportType);
     }
 
     @Override
     public void stream(
         byte[] bytes,
-        EzySession recipient, EzyTransportType transportType) {
+        EzySession recipient,
+        EzyTransportType transportType
+    ) {
         parent.stream(bytes, recipient, transportType);
     }
 
     @Override
     public void stream(
         byte[] bytes,
-        Collection<EzySession> recipients, EzyTransportType transportType) {
+        Collection<EzySession> recipients,
+        EzyTransportType transportType
+    ) {
         parent.stream(bytes, recipients, transportType);
     }
 
@@ -207,11 +253,11 @@ public class EzySimpleZoneContext
     }
 
     private void destroyAppContext(EzyAppContext appContext) {
-        processWithLogException(() -> ((EzyDestroyable) appContext).destroy());
+        processWithLogException(((EzyDestroyable) appContext)::destroy);
     }
 
     private void destroyPluginContext(EzyPluginContext pluginContext) {
-        processWithLogException(() -> ((EzyDestroyable) pluginContext).destroy());
+        processWithLogException(((EzyDestroyable) pluginContext)::destroy);
     }
 
     @Override
@@ -230,5 +276,4 @@ public class EzySimpleZoneContext
     protected void preDestroy() {
         logger.debug("destroy ZoneContext({})", zone);
     }
-
 }

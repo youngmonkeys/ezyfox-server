@@ -28,5 +28,4 @@ public class EzySimpleLoginParams
         super.release();
         this.data = null;
     }
-
 }

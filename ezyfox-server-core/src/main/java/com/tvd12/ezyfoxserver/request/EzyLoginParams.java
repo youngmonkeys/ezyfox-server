@@ -11,5 +11,4 @@ public interface EzyLoginParams extends EzyRequestParams {
     String getPassword();
 
     EzyData getData();
-
 }

@@ -25,5 +25,4 @@ public class EzySimpleHandShakeParams
         this.enableEncryption = t.get(4, boolean.class);
         this.reconnectToken = t.get(5, String.class);
     }
-
 }

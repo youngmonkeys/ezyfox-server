@@ -12,7 +12,7 @@ public enum EzySessionError implements EzyIError {
     @Getter
     private final String message;
 
-    private EzySessionError(int id, String message) {
+    EzySessionError(int id, String message) {
         this.id = id;
         this.message = message;
     }
@@ -21,5 +21,4 @@ public enum EzySessionError implements EzyIError {
     public String getName() {
         return toString();
     }
-
 }

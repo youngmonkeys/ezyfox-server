@@ -77,7 +77,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         EzyAppResponse response = new EzyAppResponseImpl(context);
 
         Field recipients = EzyAbstractResponse.class.getDeclaredField("recipients");
-        Field exrecipients = EzyAbstractResponse.class.getDeclaredField("exrecipients");
+        Field exrecipients = EzyAbstractResponse.class.getDeclaredField("exclusiveRecipients");
         recipients.setAccessible(true);
         exrecipients.setAccessible(true);
         assert ((Collection) recipients.get(response)).size() == 0;

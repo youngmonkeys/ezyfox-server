@@ -11,5 +11,4 @@ public class EzySimpleUserEvent implements EzyUserEvent {
     public EzySimpleUserEvent(EzyUser user) {
         this.user = user;
     }
-
 }

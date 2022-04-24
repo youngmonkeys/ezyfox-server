@@ -9,5 +9,4 @@ public class EzySimpleRequestPluginRequest
     protected EzyRequestPluginParams newParams() {
         return new EzySimpleRequestPluginParams();
     }
-
 }

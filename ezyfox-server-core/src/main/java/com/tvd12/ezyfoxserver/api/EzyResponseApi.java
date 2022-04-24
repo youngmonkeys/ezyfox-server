@@ -9,5 +9,4 @@ public interface EzyResponseApi {
     default void response(EzyPackage pack) throws Exception {
         response(pack, false);
     }
-
 }

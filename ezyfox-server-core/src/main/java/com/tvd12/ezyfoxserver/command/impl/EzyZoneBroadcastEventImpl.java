@@ -15,19 +15,32 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
     private final EzyZoneContext context;
 
     @Override
-    public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
+    public void fire(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         logger.debug("zone: {} fire event: {}", getZoneName(), type);
         firePluginsEvent(type, event, catchException);
         fireAppsEvent(type, event, catchException);
     }
 
-    protected void fireAppsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void fireAppsEvent(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         for (EzyAppContext appContext : context.getAppContexts()) {
             fireAppEvent(appContext, type, event, catchException);
         }
     }
 
-    protected void fireAppEvent(EzyAppContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void fireAppEvent(
+        EzyAppContext ctx,
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         if (catchException) {
             try {
                 ctx.handleEvent(type, event);
@@ -39,13 +52,22 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
         }
     }
 
-    protected void firePluginsEvent(EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void firePluginsEvent(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         for (EzyPluginContext pluginContext : context.getPluginContexts()) {
             firePluginEvent(pluginContext, type, event, catchException);
         }
     }
 
-    protected void firePluginEvent(EzyPluginContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void firePluginEvent(
+        EzyPluginContext ctx,
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         if (catchException) {
             try {
                 ctx.handleEvent(type, event);
@@ -60,5 +82,4 @@ public class EzyZoneBroadcastEventImpl extends EzyAbstractCommand implements Ezy
     protected String getZoneName() {
         return context.getZone().getSetting().getName();
     }
-
 }

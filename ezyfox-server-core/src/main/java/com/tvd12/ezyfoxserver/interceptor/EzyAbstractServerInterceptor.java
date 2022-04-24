@@ -4,6 +4,4 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 
 public abstract class EzyAbstractServerInterceptor<R>
     extends EzyLoggable
-    implements EzyServerInterceptor<R> {
-
-}
+    implements EzyServerInterceptor<R> {}

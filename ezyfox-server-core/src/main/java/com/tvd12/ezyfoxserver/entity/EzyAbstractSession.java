@@ -111,7 +111,7 @@ public abstract class EzyAbstractSession
     }
 
     @Override
-    public boolean addReceviedRequests(int requests) {
+    public boolean addReceivedRequests(int requests) {
         if (requestFrameInSecond.isExpired()) {
             requestFrameInSecond = requestFrameInSecond.nextFrame();
         }
@@ -132,16 +132,14 @@ public abstract class EzyAbstractSession
     public boolean isIdle() {
         if (loggedIn) {
             long offset = System.currentTimeMillis() - lastReadTime;
-            boolean idle = maxIdleTime < offset;
-            return idle;
+            return maxIdleTime < offset;
         }
         return false;
     }
 
     @Override
     public Lock getLock(String name) {
-        Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
-        return lock;
+        return locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
     }
 
     @Override
@@ -159,9 +157,10 @@ public abstract class EzyAbstractSession
         immediateDeliver.sendPacketNow(packet);
     }
 
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     private void addPacketToSessionQueue(EzyPacket packet) {
-        boolean empty = false;
-        boolean success = false;
+        boolean empty;
+        boolean success;
         synchronized (packetQueue) {
             empty = packetQueue.isEmpty();
             success = packetQueue.add(packet);
@@ -181,6 +180,7 @@ public abstract class EzyAbstractSession
         }
     }
 
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void disconnect(EzyConstant disconnectReason) {
         synchronized (disconnectionLock) {
@@ -188,7 +188,7 @@ public abstract class EzyAbstractSession
                 this.disconnectReason = disconnectReason;
                 EzySocketDisconnectionQueue queue = this.disconnectionQueue;
                 if (queue != null) {
-                    queue.add(newDisconnection(disconnectReason));
+                    queue.add(new EzySimpleSocketDisconnection(this, disconnectReason));
                 }
                 this.disconnectionRegistered = true;
             }
@@ -198,10 +198,6 @@ public abstract class EzyAbstractSession
     @Override
     public void close() {
         EzyProcessor.processWithLogException(() -> channel.close());
-    }
-
-    private EzySocketDisconnection newDisconnection(EzyConstant reason) {
-        return new EzySimpleSocketDisconnection(this, disconnectReason);
     }
 
     @Override
@@ -221,16 +217,15 @@ public abstract class EzyAbstractSession
 
     @Override
     public String getName() {
-        return new StringBuilder()
-            .append(name)
-            .append("(")
-            .append("owner: ").append(ownerName)
-            .append(", ")
-            .append("address: ").append(getClientAddress())
-            .append(")")
-            .toString();
+        return name +
+            "(" +
+            "owner: " + ownerName +
+            ", " +
+            "address: " + getClientAddress() +
+            ")";
     }
 
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void destroy() {
         this.destroyed = true;
@@ -291,15 +286,13 @@ public abstract class EzyAbstractSession
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append("(")
-            .append("id: ").append(id)
-            .append(", type: ").append(clientType)
-            .append(", version: ").append(clientVersion)
-            .append(", address: ").append(getClientAddress())
-            .append(", token: ").append(token)
-            .append(")")
-            .toString();
+        return "(" +
+            "id: " + id +
+            ", type: " + clientType +
+            ", version: " + clientVersion +
+            ", address: " + getClientAddress() +
+            ", token: " + token +
+            ")";
     }
 
 }

@@ -13,16 +13,19 @@ public interface EzyZoneChildContext extends EzyContext {
     void send(
         EzyData data,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType);
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
     void send(
         EzyData data,
         Collection<EzySession> recipients,
-        boolean encrypted, EzyTransportType transportType);
+        boolean encrypted,
+        EzyTransportType transportType
+    );
 
     // ======================= tcp/send =================
     default void send(EzyData data, EzySession recipient, boolean encrypted) {
         send(data, recipient, encrypted, EzyTransportType.TCP);
     }
-
 }

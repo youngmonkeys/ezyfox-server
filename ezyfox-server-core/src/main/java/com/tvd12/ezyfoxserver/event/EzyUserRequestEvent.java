@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.entity.EzyArray;
 public interface EzyUserRequestEvent extends EzyUserSessionEvent {
 
     EzyArray getData();
-
 }

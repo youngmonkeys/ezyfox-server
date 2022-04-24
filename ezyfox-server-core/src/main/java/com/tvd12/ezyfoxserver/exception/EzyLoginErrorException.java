@@ -35,5 +35,4 @@ public class EzyLoginErrorException extends IllegalStateException {
     public static EzyLoginErrorException serverError(Exception e) {
         return new EzyLoginErrorException(EzyLoginError.SERVER_ERROR, e);
     }
-
 }

@@ -7,10 +7,8 @@ public class EzySimpleRequestParams implements EzyRequestParams {
     private static final long serialVersionUID = -2484867616935892598L;
 
     @Override
-    public void deserialize(EzyArray t) {
-    }
+    public void deserialize(EzyArray t) {}
 
     @Override
-    public void release() {
-    }
+    public void release() {}
 }

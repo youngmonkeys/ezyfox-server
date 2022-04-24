@@ -11,7 +11,7 @@ public enum EzyMaxRequestPerSecondAction implements EzyConstant {
     @Getter
     private final int id;
 
-    private EzyMaxRequestPerSecondAction(int id) {
+    EzyMaxRequestPerSecondAction(int id) {
         this.id = id;
     }
 
@@ -19,5 +19,4 @@ public enum EzyMaxRequestPerSecondAction implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

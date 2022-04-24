@@ -24,7 +24,7 @@ public class EzySimpleUser
     extends EzyEntity
     implements EzyUser, EzyNameAware, EzyZoneIdAware, Serializable {
     private static final long serialVersionUID = -7846882289922504595L;
-    private transient static final AtomicLong COUNTER = new AtomicLong(0);
+
     protected long id = COUNTER.incrementAndGet();
     protected String name = "";
     protected String password = "";
@@ -37,6 +37,8 @@ public class EzySimpleUser
     protected Map<String, Lock> locks = new ConcurrentHashMap<>();
     @Setter(AccessLevel.NONE)
     protected Map<Long, EzySession> sessionMap = new ConcurrentHashMap<>();
+
+    private transient static final AtomicLong COUNTER = new AtomicLong(0);
 
     @Override
     public void addSession(EzySession session) {
@@ -63,8 +65,7 @@ public class EzySimpleUser
     @Override
     public EzySession getSession() {
         List<EzySession> sessions = getSessions();
-        EzySession session = sessions.isEmpty() ? null : sessions.get(0);
-        return session;
+        return sessions.isEmpty() ? null : sessions.get(0);
     }
 
     @Override
@@ -79,14 +80,12 @@ public class EzySimpleUser
 
     @Override
     public int getSessionCount() {
-        int size = sessionMap.size();
-        return size;
+        return sessionMap.size();
     }
 
     @Override
     public Lock getLock(String name) {
-        Lock lock = locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
-        return lock;
+        return locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
     }
 
     @Override
@@ -107,8 +106,7 @@ public class EzySimpleUser
     public boolean isIdle() {
         if (sessionMap.isEmpty()) {
             long offset = System.currentTimeMillis() - startIdleTime;
-            boolean idle = maxIdleTime < offset;
-            return idle;
+            return maxIdleTime < offset;
         }
         return false;
     }

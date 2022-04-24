@@ -8,13 +8,10 @@ public class EzyMaxUserException extends IllegalStateException {
     }
 
     private static String getMessage(int current, int max) {
-        return new StringBuilder()
-            .append("max user (max = ")
-            .append(max)
-            .append(", current = ")
-            .append(current)
-            .append(")")
-            .toString();
+        return "max user (max = " +
+            max +
+            ", current = " +
+            current +
+            ")";
     }
-
 }

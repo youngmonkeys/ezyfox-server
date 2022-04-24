@@ -5,5 +5,4 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 public interface EzySessionEvent extends EzyEvent {
 
     EzySession getSession();
-
 }

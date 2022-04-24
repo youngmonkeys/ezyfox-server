@@ -20,16 +20,20 @@ public class EzyPluginSetupImpl
     }
 
     @Override
-    public EzyPluginSetup setRequestController(EzyPluginRequestController controller) {
+    public EzyPluginSetup setRequestController(
+        EzyPluginRequestController controller
+    ) {
         plugin.setRequestController(controller);
         return this;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public EzyPluginSetup addEventController(EzyConstant eventType, EzyEventController controller) {
-        addEventController0(eventType, controller);
+    public EzyPluginSetup addEventController(
+        EzyConstant eventType,
+        EzyEventController controller
+    ) {
+        doAddEventController(eventType, controller);
         return this;
     }
-
 }

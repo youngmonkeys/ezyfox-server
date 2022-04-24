@@ -17,5 +17,4 @@ public interface EzyThreadPoolSizeSetting extends EzyToMap {
     int getSocketDisconnectionHandler();
 
     int getSocketUserRemovalHandler();
-
 }

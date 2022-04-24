@@ -15,6 +15,5 @@ public class EzyAppSettingBuilder extends EzyAbstractSettingBuilder<
         EzySimpleAppSetting setting = new EzySimpleAppSetting();
         setting.setMaxUsers(maxUsers);
         return setting;
-
     }
 }

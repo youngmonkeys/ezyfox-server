@@ -31,7 +31,8 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
     protected long sessionMaxWaitingTimeInSecond = 30;
 
     @XmlElement(name = "session-max-request-per-second")
-    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleMaxRequestPerSecond();
+    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond
+        = new EzySimpleMaxRequestPerSecond();
 
     @Override
     public void init() {
@@ -61,7 +62,8 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
         protected int value = 15;
 
         @XmlElement(name = "action")
-        protected EzyMaxRequestPerSecondAction action = EzyMaxRequestPerSecondAction.DROP_REQUEST;
+        protected EzyMaxRequestPerSecondAction action
+            = EzyMaxRequestPerSecondAction.DROP_REQUEST;
 
         @Override
         public Map<Object, Object> toMap() {

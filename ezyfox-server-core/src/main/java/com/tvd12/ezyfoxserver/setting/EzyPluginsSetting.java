@@ -18,5 +18,4 @@ public interface EzyPluginsSetting extends EzyToMap {
     EzyPluginSetting getPluginById(Integer id);
 
     EzyPluginSetting getPluginByName(String name);
-
 }

@@ -29,8 +29,7 @@ public class EzyPongResponse implements EzyResponse {
     }
 
     @Override
-    public void release() {
-    }
+    public void release() {}
 
     private EzyArray newData() {
         EzyArray array = EzyEntityFactory.newArray();

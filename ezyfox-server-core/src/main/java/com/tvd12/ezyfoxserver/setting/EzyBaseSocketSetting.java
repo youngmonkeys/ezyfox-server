@@ -13,5 +13,4 @@ public interface EzyBaseSocketSetting extends EzyToMap {
     boolean isSslActive();
 
     String getCodecCreator();
-
 }

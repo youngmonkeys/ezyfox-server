@@ -7,5 +7,4 @@ import java.util.List;
 public interface EzyEventControllersSetting extends EzyToMap {
 
     List<EzyEventControllerSetting> getEventControllers();
-
 }

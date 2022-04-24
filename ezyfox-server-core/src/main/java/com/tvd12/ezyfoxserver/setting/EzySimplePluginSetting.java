@@ -20,13 +20,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "plugin")
-public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPluginSetting {
+public class EzySimplePluginSetting
+    extends EzyAbstractSetting
+    implements EzyPluginSetting {
 
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
     @XmlElement(name = "priority")
     protected int priority;
     @XmlElement(name = "listen-events")
-    protected EzySimpleListenEvents listenEvents = new EzySimpleListenEvents();
+    protected EzySimpleListenEvents listenEvents
+        = new EzySimpleListenEvents();
+
+    private static final AtomicInteger COUNTER
+        = new AtomicInteger(0);
 
     @Override
     protected AtomicInteger getIdCounter() {
@@ -57,6 +62,5 @@ public class EzySimplePluginSetting extends EzyAbstractSetting implements EzyPlu
         public void setEvent(String string) {
             events.add(EzyEventType.valueOf(string));
         }
-
     }
 }

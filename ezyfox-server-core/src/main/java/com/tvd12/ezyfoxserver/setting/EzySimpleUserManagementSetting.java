@@ -17,7 +17,8 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "user-management")
-public class EzySimpleUserManagementSetting implements EzyUserManagementSetting, EzyInitable {
+public class EzySimpleUserManagementSetting
+    implements EzyUserManagementSetting, EzyInitable {
 
     protected long userMaxIdleTime = 0;
 

@@ -15,7 +15,9 @@ import java.util.Map;
 @ToString
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "web-socket")
-public class EzySimpleWebSocketSetting extends EzyAbstractSocketSetting implements EzyWebSocketSetting {
+public class EzySimpleWebSocketSetting
+    extends EzyAbstractSocketSetting
+    implements EzyWebSocketSetting {
 
     @XmlElement(name = "ssl-port")
     protected int sslPort;

@@ -7,5 +7,4 @@ public interface EzyEventControllerSetting extends EzyToMap {
     String getEventType();
 
     String getController();
-
 }

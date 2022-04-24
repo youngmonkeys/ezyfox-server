@@ -31,6 +31,5 @@ public class EzyAdminSettingBuilder implements EzyBuilder<EzySimpleAdminSetting>
         p.setAccessToken(accessToken);
         return p;
     }
-
 }
 

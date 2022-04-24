@@ -12,6 +12,5 @@ public interface EzyLoggerSetting extends EzyToMap {
     interface EzyIgnoredCommandsSetting {
 
         Set<EzyConstant> getCommands();
-
     }
 }

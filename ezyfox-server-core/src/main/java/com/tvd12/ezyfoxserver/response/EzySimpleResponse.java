@@ -21,12 +21,10 @@ public class EzySimpleResponse extends EzyEntityBuilders implements EzyResponse 
         EzyArrayBuilder arrayBuilder = newArrayBuilder();
         arrayBuilder.append(command.getId());
         serialize(arrayBuilder);
-        EzyArray answer = arrayBuilder.build();
-        return answer;
+        return arrayBuilder.build();
     }
 
-    protected void serialize(EzyArrayBuilder arrayBuilder) {
-    }
+    protected void serialize(EzyArrayBuilder arrayBuilder) {}
 
     @Override
     public void release() {

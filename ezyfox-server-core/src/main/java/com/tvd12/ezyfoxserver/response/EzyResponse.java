@@ -9,5 +9,4 @@ import java.io.Serializable;
 public interface EzyResponse extends EzyArraySerializable, EzyReleasable, Serializable {
 
     EzyConstant getCommand();
-
 }

@@ -15,5 +15,4 @@ public interface EzyUserManagementSetting extends EzyToMap {
     String getUserNamePattern();
 
     boolean isAllowChangeSession();
-
 }

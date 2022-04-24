@@ -65,5 +65,4 @@ public class EzyAppClassLoaderTest extends BaseTest {
 
         }
     }
-
 }

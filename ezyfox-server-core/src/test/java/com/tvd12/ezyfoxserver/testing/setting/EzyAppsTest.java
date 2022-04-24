@@ -11,5 +11,4 @@ public class EzyAppsTest extends BaseTest {
         EzySimpleAppsSetting apps = new EzySimpleAppsSetting();
         apps.getAppByName("zzz");
     }
-
 }

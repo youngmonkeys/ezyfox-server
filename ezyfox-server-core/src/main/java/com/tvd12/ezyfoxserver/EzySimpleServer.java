@@ -65,5 +65,4 @@ public class EzySimpleServer
         map.put("settings", settings.toMap());
         return map;
     }
-
 }

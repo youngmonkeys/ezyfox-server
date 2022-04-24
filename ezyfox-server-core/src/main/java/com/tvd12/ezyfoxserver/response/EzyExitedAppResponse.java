@@ -9,5 +9,4 @@ public class EzyExitedAppResponse
     public EzyExitedAppResponse(EzyExitedAppParams params) {
         super(EzyCommand.APP_EXIT, params);
     }
-
 }

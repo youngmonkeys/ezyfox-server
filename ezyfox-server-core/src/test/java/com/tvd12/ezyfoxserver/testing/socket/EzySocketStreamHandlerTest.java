@@ -81,5 +81,4 @@ public class EzySocketStreamHandlerTest {
         Thread.sleep(100);
         thread.interrupt();
     }
-
 }

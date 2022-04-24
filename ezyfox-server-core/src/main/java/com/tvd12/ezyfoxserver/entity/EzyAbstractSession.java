@@ -294,5 +294,4 @@ public abstract class EzyAbstractSession
             ", token: " + token +
             ")";
     }
-
 }

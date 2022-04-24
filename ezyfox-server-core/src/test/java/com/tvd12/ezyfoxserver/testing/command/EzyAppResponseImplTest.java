@@ -231,5 +231,4 @@ public class EzyAppResponseImplTest extends BaseTest {
         }
 
     }
-
 }

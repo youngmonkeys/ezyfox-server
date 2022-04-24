@@ -31,5 +31,4 @@ public class EzyPluginResponseImplTest extends BaseTest {
             .params(EzyEntityFactory.newArrayBuilder());
         cmd.execute();
     }
-
 }

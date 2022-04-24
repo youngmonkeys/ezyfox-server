@@ -13,5 +13,4 @@ public class EzyNetworkBytesFrameSecondTest extends BaseTest {
         assert frame.getEndTime() > frame.getStartTime();
         System.out.println(frame);
     }
-
 }

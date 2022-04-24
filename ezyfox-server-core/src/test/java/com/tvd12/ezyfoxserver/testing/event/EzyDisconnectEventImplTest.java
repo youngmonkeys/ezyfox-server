@@ -17,5 +17,4 @@ public class EzyDisconnectEventImplTest extends BaseCoreTest {
         assert event.getUser() == user;
         assert event.getReason() == EzyDisconnectReason.IDLE;
     }
-
 }

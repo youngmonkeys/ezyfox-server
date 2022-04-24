@@ -27,5 +27,4 @@ public class ClientNoUserRequestHandler
     @Override
     public void handle() {
     }
-
 }

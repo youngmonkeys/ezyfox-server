@@ -23,5 +23,4 @@ public class EzySimpleThreadPoolSizeSettingTest {
         setting.setExtensionRequestHandler(8);
         assert setting.getExtensionRequestHandler() == 8;
     }
-
 }

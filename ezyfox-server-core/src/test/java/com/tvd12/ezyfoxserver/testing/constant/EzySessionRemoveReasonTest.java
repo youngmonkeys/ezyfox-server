@@ -8,5 +8,4 @@ public class EzySessionRemoveReasonTest extends BaseTest {
     @Test
     public void test() {
     }
-
 }

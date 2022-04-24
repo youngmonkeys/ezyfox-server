@@ -32,5 +32,4 @@ public class EzyCloseSessionImplTest extends BaseTest {
         session.setChannel(channel);
         cmd.close(session, EzyDisconnectReason.UNKNOWN);
     }
-
 }

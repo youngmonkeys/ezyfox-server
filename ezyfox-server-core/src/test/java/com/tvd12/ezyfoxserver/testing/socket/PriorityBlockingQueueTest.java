@@ -73,5 +73,4 @@ public class PriorityBlockingQueueTest extends BaseTest {
         }
 
     }
-
 }

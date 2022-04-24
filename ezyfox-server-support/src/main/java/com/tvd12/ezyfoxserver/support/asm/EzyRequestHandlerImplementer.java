@@ -237,5 +237,4 @@ public class EzyRequestHandlerImplementer
         if(debug)
             logger.debug("component content: \n{}", componentContent);
     }
-
 }

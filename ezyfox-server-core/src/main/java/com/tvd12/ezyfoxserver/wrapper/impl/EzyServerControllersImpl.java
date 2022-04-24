@@ -77,5 +77,4 @@ public class EzyServerControllersImpl implements EzyServerControllers {
             return new EzyServerControllersImpl(this);
         }
     }
-
 }

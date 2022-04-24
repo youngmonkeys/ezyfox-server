@@ -62,5 +62,4 @@ public class EzyAbstractServerControllerTest extends BaseCoreTest {
             return super.getController(ctx, cmd);
         }
     }
-
 }

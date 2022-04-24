@@ -56,5 +56,4 @@ public abstract class EzyAbstractArrayResponse
         this.additionalParams.clear();
         this.additionalParams = null;
     }
-
 }

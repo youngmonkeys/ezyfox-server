@@ -11,5 +11,4 @@ public class EzySimplePluginsSettingTest extends BaseTest {
         EzySimplePluginsSetting setting = new EzySimplePluginsSetting();
         assert setting.getSize() == 0;
     }
-
 }

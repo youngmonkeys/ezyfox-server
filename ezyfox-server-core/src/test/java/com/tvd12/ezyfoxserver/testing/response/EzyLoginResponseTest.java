@@ -27,5 +27,4 @@ public class EzyLoginResponseTest extends BaseTest {
         assert response.getParams() == params;
         response.release();
     }
-
 }

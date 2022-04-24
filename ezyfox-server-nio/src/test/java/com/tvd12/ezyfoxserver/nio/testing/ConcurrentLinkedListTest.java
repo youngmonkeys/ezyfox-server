@@ -27,5 +27,4 @@ public class ConcurrentLinkedListTest {
             reads[i].start();
         }
     }
-
 }

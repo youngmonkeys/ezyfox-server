@@ -15,5 +15,4 @@ public class EzyRequestFactoryTest extends BaseCoreTest {
         factory.newRequest(EzyCommand.APP_REQUEST);
         factory.newRequest(EzyCommand.HANDSHAKE);
     }
-
 }

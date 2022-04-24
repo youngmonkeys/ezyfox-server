@@ -44,5 +44,4 @@ public abstract class EzyAbstractSocketSetting implements EzyBaseSocketSetting {
         map.put("codecCreator", codecCreator);
         return map;
     }
-
 }

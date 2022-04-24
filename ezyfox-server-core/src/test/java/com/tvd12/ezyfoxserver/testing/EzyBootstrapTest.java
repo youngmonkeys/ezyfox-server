@@ -29,5 +29,4 @@ public class EzyBootstrapTest extends BaseCoreTest {
 //                .argument(String.class)
 //                .build();
 //    }
-
 }

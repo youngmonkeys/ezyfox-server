@@ -10,5 +10,4 @@ public class EzyAccessAppExceptionTest {
     public void test() {
         new EzyAccessAppException("hello", EzyAccessAppError.MAXIMUM_USER);
     }
-
 }

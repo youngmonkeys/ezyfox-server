@@ -127,5 +127,4 @@ public interface EzyUserManager extends EzyDestroyable {
     default EzyUser removeUser(String username) {
         return removeUser(getUser(username));
     }
-
 }

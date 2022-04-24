@@ -71,5 +71,4 @@ public class PluginResponseFactoryTestHandler
             .usernames(Lists.newArrayList(event.getUser().getName()))
             .execute();
     }
-    
 }

@@ -15,5 +15,4 @@ public class EzyAppsTest extends BaseCoreTest {
         apps.setItem(app);
         apps.getAppById(-1);
     }
-
 }

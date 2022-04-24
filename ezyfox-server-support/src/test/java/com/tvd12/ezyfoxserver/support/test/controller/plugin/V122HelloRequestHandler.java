@@ -18,5 +18,4 @@ public class V122HelloRequestHandler implements EzyHandler, EzyDataBinding {
 
     @Override
     public void handle() {}
-    
 }

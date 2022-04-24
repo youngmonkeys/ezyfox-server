@@ -46,5 +46,4 @@ public class EzyBlockingSocketDisconnectionQueue
         EzySocketDisconnection disconnection = queue.take();
         return disconnection;
     }
-
 }

@@ -62,5 +62,4 @@ public class EzySimpleNetworkStatsTest extends BaseTest {
         FieldUtil.setFieldValue(stats, "frameSecond", frameSecond);
         stats.addWrittenBytes(1);
     }
-
 }

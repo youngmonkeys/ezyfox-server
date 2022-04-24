@@ -73,5 +73,4 @@ public class EzySimpleAdminsSetting implements EzyAdminsSetting {
         map.put("admins", adminMaps);
         return map;
     }
-
 }

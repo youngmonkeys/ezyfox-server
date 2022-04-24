@@ -12,5 +12,4 @@ public class EzyUserRequestExceptionTest {
         assert ex.getCommand().equals("cmd");
         assert ex.getData().equals("data");
     }
-
 }

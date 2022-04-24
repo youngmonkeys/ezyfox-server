@@ -71,5 +71,4 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
 //            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
 //            .execute();
     }
-
 }

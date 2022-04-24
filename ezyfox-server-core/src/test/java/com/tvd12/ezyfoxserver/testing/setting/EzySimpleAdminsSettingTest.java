@@ -46,5 +46,4 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
         // then
         Asserts.assertNull(sut.getAdminByName(""));
     }
-
 }

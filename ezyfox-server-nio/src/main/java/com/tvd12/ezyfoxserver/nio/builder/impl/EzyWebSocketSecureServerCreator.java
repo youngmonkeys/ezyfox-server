@@ -39,5 +39,4 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
 
         server.addConnector(wssConnector);
     }
-
 }

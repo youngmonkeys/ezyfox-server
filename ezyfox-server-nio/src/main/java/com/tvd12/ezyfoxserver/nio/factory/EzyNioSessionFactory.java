@@ -11,5 +11,4 @@ public class EzyNioSessionFactory extends EzyAbstractSessionFactory<EzyNioSessio
         EzySimpleSession session = new EzySimpleSession();
         return session;
     }
-    
 }

@@ -11,5 +11,4 @@ public class EzySimpleStreamingSettingTest extends BaseTest {
         EzySimpleStreamingSetting setting = new EzySimpleStreamingSetting();
         setting.setEnable(true);
     }
-
 }

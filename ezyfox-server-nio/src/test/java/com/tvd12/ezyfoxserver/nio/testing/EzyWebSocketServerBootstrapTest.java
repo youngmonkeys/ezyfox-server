@@ -41,5 +41,4 @@ public class EzyWebSocketServerBootstrapTest {
         // then
         Asserts.assertNotNull(creator);
     }
-
 }

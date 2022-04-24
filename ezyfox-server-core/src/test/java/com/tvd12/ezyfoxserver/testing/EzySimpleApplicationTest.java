@@ -24,5 +24,4 @@ public class EzySimpleApplicationTest extends BaseTest {
         app.destroy();
         app.destroy();
     }
-
 }

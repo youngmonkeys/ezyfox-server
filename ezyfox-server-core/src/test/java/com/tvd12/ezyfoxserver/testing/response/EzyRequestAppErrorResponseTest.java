@@ -18,5 +18,4 @@ public class EzyRequestAppErrorResponseTest extends BaseTest {
         assert response.getParams() == params;
         response.release();
     }
-
 }

@@ -6,5 +6,4 @@ public class EzySocketStreamHandlingLoopHandler extends EzySocketEventLoopOneHan
     protected final String getThreadName() {
         return "socket-stream-handler";
     }
-
 }

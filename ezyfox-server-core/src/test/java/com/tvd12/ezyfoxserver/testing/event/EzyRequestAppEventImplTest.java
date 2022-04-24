@@ -17,5 +17,4 @@ public class EzyRequestAppEventImplTest extends BaseCoreTest {
         assert event.getData() == data;
         assert event.getUser() == user;
     }
-
 }

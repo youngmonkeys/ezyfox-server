@@ -19,5 +19,4 @@ public class EzyServerShutdownImplTest extends BaseTest {
 
     public interface ExCtx extends EzyServerContext, EzyDestroyable {
     }
-
 }

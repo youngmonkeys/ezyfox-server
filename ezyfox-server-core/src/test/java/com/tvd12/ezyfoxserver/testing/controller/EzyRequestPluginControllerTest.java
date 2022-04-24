@@ -47,5 +47,4 @@ public class EzyRequestPluginControllerTest extends BaseTest {
         request.deserializeParams(array);
         controller.handle(serverContext, request);
     }
-
 }

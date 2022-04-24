@@ -19,5 +19,4 @@ public interface EzyUserRequestHandler<C extends EzyContext, D> {
             return null;
         }
     }
-
 }

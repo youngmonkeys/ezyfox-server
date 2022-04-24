@@ -15,5 +15,4 @@ public class EzySimpleSocketStreamTest extends BaseTest {
         EzySimpleSocketStream stream = new EzySimpleSocketStream(session, new byte[0]);
         System.out.println(stream.getTimestamp());
     }
-
 }

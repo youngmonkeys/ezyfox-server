@@ -127,5 +127,4 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
         this.context = null;
         this.marshaller = null;
     }
-
 }

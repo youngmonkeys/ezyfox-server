@@ -52,5 +52,4 @@ public class EzySimpleStatisticsTest {
         assert statistics.getStartTime() > 0;
         assert statistics.getWebSocketStats() != null;
     }
-
 }

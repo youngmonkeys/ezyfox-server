@@ -17,5 +17,4 @@ public class EzyUserRequestException extends IllegalStateException {
         this.command = command;
         this.data = data;
     }
-
 }

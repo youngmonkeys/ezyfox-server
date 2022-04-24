@@ -21,5 +21,4 @@ public class EzySimpleResponseParams
     @Override
     public void release() {
     }
-
 }

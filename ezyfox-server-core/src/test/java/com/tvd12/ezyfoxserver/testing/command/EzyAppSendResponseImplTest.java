@@ -38,5 +38,4 @@ public class EzyAppSendResponseImplTest extends BaseTest {
         cmd.execute(data, session, false);
         cmd.execute(data, Lists.newArrayList(session), false);
     }
-
 }

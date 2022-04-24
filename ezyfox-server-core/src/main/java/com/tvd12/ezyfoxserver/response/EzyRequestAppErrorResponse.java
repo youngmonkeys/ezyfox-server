@@ -9,5 +9,4 @@ public class EzyRequestAppErrorResponse
     public EzyRequestAppErrorResponse(EzyErrorParams params) {
         super(EzyCommand.APP_REQUEST_ERROR, params);
     }
-
 }

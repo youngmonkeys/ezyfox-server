@@ -9,5 +9,4 @@ public class EzyLoginResponse
     public EzyLoginResponse(EzyLoginParams params) {
         super(EzyCommand.LOGIN, params);
     }
-
 }

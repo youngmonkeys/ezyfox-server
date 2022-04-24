@@ -20,5 +20,4 @@ public class EzySimpleUdpReceivedPacket implements EzyUdpReceivedPacket {
         this.address = null;
         this.bytes = null;
     }
-
 }

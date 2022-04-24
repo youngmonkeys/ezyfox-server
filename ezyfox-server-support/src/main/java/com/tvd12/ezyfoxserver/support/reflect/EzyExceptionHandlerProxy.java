@@ -46,5 +46,4 @@ public class EzyExceptionHandlerProxy {
                 .append(")")
                 .toString();
     }
-
 }

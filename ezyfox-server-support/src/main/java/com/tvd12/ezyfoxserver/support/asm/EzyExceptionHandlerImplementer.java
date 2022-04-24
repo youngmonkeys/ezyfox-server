@@ -157,5 +157,4 @@ public class EzyExceptionHandlerImplementer
         if(debug)
             logger.debug("component content: \n{}", componentContent);
     }
-
 }

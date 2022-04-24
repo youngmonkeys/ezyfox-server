@@ -33,5 +33,4 @@ public class CasePerformanceTest extends BaseTest {
         private EzyUser user;
         private EzySession session;
     }
-
 }

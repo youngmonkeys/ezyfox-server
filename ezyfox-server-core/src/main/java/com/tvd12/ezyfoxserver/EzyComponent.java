@@ -25,5 +25,4 @@ public class EzyComponent implements EzyExceptionHandlersFetcher, EzyDestroyable
         }
         this.eventControllers = null;
     }
-
 }

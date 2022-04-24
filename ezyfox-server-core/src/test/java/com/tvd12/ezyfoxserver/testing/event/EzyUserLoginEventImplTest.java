@@ -42,5 +42,4 @@ public class EzyUserLoginEventImplTest extends BaseCoreTest {
         assert event.getUsername().equals("");
         assert event.getPassword().equals("");
     }
-
 }

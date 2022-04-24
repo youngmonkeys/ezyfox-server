@@ -16,5 +16,4 @@ public final class EzySystem {
         env.setProperty(EzyEnvironment.DATE_FORMAT_PATTERN, "yyyy-MM-dd'T'HH:mm:ss:SSS");
         return env;
     }
-
 }

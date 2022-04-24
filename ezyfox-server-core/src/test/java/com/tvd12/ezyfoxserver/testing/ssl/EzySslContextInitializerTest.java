@@ -19,5 +19,4 @@ public class EzySslContextInitializerTest extends BaseTest {
         SSLContext sslContext = initializer.init();
         assert sslContext != null;
     }
-
 }

@@ -19,5 +19,4 @@ public class EzyMessageControllerTest extends BaseCoreTest {
             return super.newArrayBuilder();
         }
     }
-
 }

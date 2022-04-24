@@ -101,5 +101,4 @@ public class EzyZonesStarterTest extends BaseTest {
         }
 
     }
-
 }

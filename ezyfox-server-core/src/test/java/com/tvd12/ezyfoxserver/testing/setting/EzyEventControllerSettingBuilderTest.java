@@ -32,5 +32,4 @@ public class EzyEventControllerSettingBuilderTest {
         public void handle(EzyServerContext ctx, EzyEvent event) {
         }
     }
-
 }

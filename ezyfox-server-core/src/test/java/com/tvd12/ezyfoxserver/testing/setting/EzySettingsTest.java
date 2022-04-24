@@ -28,5 +28,4 @@ public class EzySettingsTest extends BaseTest {
         settings.setUdp(new EzySimpleUdpSetting());
         settings.setThreadPoolSize(new EzySimpleThreadPoolSizeSetting());
     }
-
 }

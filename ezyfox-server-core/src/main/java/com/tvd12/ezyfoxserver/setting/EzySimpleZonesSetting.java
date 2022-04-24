@@ -68,5 +68,4 @@ public class EzySimpleZonesSetting implements EzyZonesSetting {
         map.put("zones", zoneMaps);
         return map;
     }
-
 }

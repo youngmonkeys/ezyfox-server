@@ -266,5 +266,4 @@ public class EzySimpleSessionManager<S extends EzySession>
         public abstract EzySimpleSessionManager<S> build();
 
     }
-
 }

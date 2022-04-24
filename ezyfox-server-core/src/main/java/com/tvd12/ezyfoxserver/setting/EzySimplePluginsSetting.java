@@ -77,5 +77,4 @@ public class EzySimplePluginsSetting implements EzyPluginsSetting {
         map.put("plugins", pluginMaps);
         return map;
     }
-
 }

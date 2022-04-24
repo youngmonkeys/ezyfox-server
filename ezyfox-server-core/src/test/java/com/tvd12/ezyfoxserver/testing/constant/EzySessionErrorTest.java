@@ -9,5 +9,4 @@ public class EzySessionErrorTest {
     public void test() {
         System.out.println(EzySessionError.MAX_REQUEST_PER_SECOND.getName());
     }
-
 }

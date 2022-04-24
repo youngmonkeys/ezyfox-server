@@ -29,5 +29,4 @@ public class EzySslConfigSettingBuilderTest {
         expectation.setContextFactoryBuilder(contextFactoryBuilder);
         Asserts.assertEquals(expectation, setting);
     }
-
 }

@@ -13,5 +13,4 @@ public class EzyLoginErrorTest extends BaseTest {
         assert value.getName().equals("ALREADY_LOGIN");
         EzyLoginError.valueOf("ALREADY_LOGIN");
     }
-
 }

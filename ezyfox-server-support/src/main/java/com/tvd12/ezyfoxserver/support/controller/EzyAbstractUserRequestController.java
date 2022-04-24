@@ -16,5 +16,4 @@ public abstract class EzyAbstractUserRequestController
         EzyData data = newArray(EzyResponseCommands.ERROR, errorData);
         return data;
     }
-    
 }

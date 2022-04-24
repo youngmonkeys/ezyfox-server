@@ -29,5 +29,4 @@ public class EzyServerUserInterceptorTest extends BaseCoreTest {
         request.setUser(new MyTestUser());
         interceptor.intercept(context, request);
     }
-
 }

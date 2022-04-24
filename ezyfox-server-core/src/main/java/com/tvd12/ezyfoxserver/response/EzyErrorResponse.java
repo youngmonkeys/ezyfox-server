@@ -9,5 +9,4 @@ public class EzyErrorResponse
     public EzyErrorResponse(EzyErrorParams params) {
         super(EzyCommand.ERROR, params);
     }
-
 }

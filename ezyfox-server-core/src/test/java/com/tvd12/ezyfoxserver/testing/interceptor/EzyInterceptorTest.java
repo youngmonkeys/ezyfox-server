@@ -14,5 +14,4 @@ public class EzyInterceptorTest extends BaseCoreTest {
         EzyInterceptor.ALWAYS_PASS.intercept(context, null);
 
     }
-
 }

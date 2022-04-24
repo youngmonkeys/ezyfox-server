@@ -25,5 +25,4 @@ public class EzyChildComponentTest extends BaseTest {
         component.destroy();
         component.destroy();
     }
-
 }

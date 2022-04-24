@@ -24,5 +24,4 @@ public class EzyRequestAppResponseTest extends BaseTest {
         assert response.serialize().size() > 0;
         response.release();
     }
-
 }

@@ -21,5 +21,4 @@ public class ClientAppRequestHandler
     @Override
     public void handle() {
     }
-
 }

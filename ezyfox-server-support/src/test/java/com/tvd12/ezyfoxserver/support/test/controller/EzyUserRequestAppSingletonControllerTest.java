@@ -234,5 +234,4 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
         }
 
     }
-
 }

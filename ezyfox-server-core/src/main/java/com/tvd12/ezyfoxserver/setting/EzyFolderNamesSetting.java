@@ -13,5 +13,4 @@ public final class EzyFolderNamesSetting {
 
     private EzyFolderNamesSetting() {
     }
-
 }

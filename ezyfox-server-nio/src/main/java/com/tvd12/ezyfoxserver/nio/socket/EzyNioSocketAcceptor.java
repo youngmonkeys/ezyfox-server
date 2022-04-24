@@ -116,5 +116,4 @@ public class EzyNioSocketAcceptor
         SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
         session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
     }
-
 }

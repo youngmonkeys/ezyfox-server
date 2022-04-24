@@ -25,5 +25,4 @@ public class EzySimplePluginSettingTest extends BaseTest {
         setting.setPriority(1);
         setting.setListenEvents(new EzySimpleListenEvents());
     }
-
 }

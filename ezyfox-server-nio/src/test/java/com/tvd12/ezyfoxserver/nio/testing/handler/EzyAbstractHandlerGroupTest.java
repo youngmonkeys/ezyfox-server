@@ -388,5 +388,4 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         }
 
     }
-
 }

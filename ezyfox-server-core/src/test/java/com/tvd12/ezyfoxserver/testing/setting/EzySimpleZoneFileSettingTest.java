@@ -13,5 +13,4 @@ public class EzySimpleZoneFileSettingTest extends BaseTest {
         setting.setConfigFile("file");
         setting.setActive(true);
     }
-
 }

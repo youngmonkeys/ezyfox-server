@@ -8,5 +8,4 @@ public class EzySettingsTest extends BaseCoreTest {
     @Test
     public void test() {
     }
-
 }

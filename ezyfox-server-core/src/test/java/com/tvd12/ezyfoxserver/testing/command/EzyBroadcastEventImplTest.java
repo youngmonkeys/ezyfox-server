@@ -30,5 +30,4 @@ public class EzyBroadcastEventImplTest extends BaseTest {
             assert e instanceof IllegalStateException;
         }
     }
-
 }

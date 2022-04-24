@@ -53,5 +53,4 @@ public abstract class EzySocketEventLoop
         setActive(false);
         threadPool.interrupt();
     }
-
 }

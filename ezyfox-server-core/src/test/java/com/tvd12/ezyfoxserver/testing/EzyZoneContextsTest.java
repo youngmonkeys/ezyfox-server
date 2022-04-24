@@ -16,5 +16,4 @@ public final class EzyZoneContextsTest {
         context.setZone(zone);
         return context;
     }
-
 }

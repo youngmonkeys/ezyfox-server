@@ -9,5 +9,4 @@ public class EzyAccessAppErrorTest {
     public void test() {
         System.out.println(EzyAccessAppError.MAXIMUM_USER.getName());
     }
-
 }

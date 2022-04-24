@@ -21,5 +21,4 @@ public class ClientPluginRequestHandler
     @Override
     public void handle() {
     }
-
 }

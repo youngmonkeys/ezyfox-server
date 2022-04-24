@@ -16,5 +16,4 @@ public class EzySimpleSessionManagementSettingTest extends BaseTest {
         setting.setSessionMaxWaitingTime(1);
         setting.setSessionMaxWaitingTimeInSecond(1);
     }
-
 }

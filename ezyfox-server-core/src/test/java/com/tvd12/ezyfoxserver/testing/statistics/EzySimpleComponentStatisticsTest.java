@@ -12,5 +12,4 @@ public class EzySimpleComponentStatisticsTest extends BaseTest {
         assert statistics.getSessionStats() != null;
         assert statistics.getNetworkStats() != null;
     }
-
 }

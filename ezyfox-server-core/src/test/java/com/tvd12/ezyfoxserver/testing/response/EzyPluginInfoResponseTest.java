@@ -20,5 +20,4 @@ public class EzyPluginInfoResponseTest extends BaseTest {
         response.serialize();
         response.release();
     }
-
 }

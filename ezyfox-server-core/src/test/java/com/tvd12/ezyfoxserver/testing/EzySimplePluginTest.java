@@ -24,5 +24,4 @@ public class EzySimplePluginTest extends BaseTest {
         plugin.destroy();
         plugin.destroy();
     }
-
 }

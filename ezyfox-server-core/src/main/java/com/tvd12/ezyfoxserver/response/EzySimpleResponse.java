@@ -32,5 +32,4 @@ public class EzySimpleResponse extends EzyEntityBuilders implements EzyResponse 
     public void release() {
         this.command = null;
     }
-
 }

@@ -47,5 +47,4 @@ public class EzyWsResponseApiTest {
         verify(encoder, times(0)).toMessageContent(data);
         verify(encoder, times(0)).encryptMessageContent(any(byte[].class), any(byte[].class));
     }
-
 }

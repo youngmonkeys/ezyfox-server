@@ -14,5 +14,4 @@ public class EzyPongResponseTest extends BaseTest {
         assert response.getCommand() == EzyCommand.PONG;
         response.release();
     }
-
 }

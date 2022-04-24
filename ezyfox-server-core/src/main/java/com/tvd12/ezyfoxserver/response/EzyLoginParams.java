@@ -30,5 +30,4 @@ public class EzyLoginParams extends EzySimpleResponseParams {
         super.release();
         this.data = null;
     }
-
 }

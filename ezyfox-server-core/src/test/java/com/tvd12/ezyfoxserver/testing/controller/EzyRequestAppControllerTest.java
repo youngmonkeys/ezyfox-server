@@ -68,5 +68,4 @@ public class EzyRequestAppControllerTest extends BaseCoreContextTest {
         when(serverContext.getAppContext(1)).thenReturn(appContext);
         return serverContext;
     }
-
 }

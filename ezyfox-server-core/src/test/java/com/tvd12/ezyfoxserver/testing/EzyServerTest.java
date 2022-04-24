@@ -20,5 +20,4 @@ public class EzyServerTest extends BaseCoreTest {
         assertEquals(server.getControllers() != null, true);
         assertEquals(server.getAppClassLoaders().containsKey("ezyfox-chat"), true);
     }
-
 }

@@ -25,5 +25,4 @@ public class EzyHandShakeResponseTest extends BaseTest {
         response.serialize();
         response.release();
     }
-
 }

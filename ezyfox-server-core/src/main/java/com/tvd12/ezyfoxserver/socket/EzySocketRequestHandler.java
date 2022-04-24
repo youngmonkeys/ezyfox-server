@@ -72,5 +72,4 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
     protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
         return dataHandlerGroupFetcher.getDataHandlerGroup(session);
     }
-
 }

@@ -55,5 +55,4 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
     protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
         return dataHandlerGroupFetcher.getDataHandlerGroup(session);
     }
-
 }

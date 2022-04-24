@@ -21,5 +21,4 @@ public class EzySimpleSslContextFactoryBuilder
     protected SecureRandom getSecureRandom() {
         return new SecureRandom();
     }
-
 }

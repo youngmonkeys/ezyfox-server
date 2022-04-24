@@ -11,5 +11,4 @@ public class EzyTransportTypeTest extends BaseTest {
         assert EzyTransportType.TCP.getId() == 1;
         System.out.println(EzyTransportType.UDP.getName());
     }
-
 }

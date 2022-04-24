@@ -11,5 +11,4 @@ public class EzySimplePingRequestTest {
         rq.deserializeParams(null);
         rq.release();
     }
-
 }

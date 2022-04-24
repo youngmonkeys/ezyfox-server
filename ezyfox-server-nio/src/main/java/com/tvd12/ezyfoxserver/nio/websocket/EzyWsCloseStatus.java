@@ -9,5 +9,4 @@ public class EzyWsCloseStatus extends CloseStatus {
     public EzyWsCloseStatus(int closeCode, String reasonPhrase) {
         super(closeCode, reasonPhrase);
     }
-
 }

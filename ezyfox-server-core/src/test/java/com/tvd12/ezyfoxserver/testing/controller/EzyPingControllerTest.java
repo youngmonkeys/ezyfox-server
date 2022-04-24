@@ -58,5 +58,4 @@ public class EzyPingControllerTest extends BaseTest {
             .param(EzyZoneContext.class, zoneContext)
             .invoke() == zoneUserManager;
     }
-
 }

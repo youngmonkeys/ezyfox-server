@@ -19,5 +19,4 @@ public class EzyAccessAppErrorResponseTest extends BaseTest {
         EzyAccessAppErrorResponse response = new EzyAccessAppErrorResponse(params);
         response.release();
     }
-
 }

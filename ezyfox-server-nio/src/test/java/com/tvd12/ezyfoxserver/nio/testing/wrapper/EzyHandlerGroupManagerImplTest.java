@@ -270,5 +270,4 @@ public class EzyHandlerGroupManagerImplTest extends BaseTest {
         }
 
     }
-
 }

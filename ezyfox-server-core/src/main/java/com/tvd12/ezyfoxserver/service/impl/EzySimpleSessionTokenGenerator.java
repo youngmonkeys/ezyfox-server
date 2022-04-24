@@ -34,5 +34,4 @@ public class EzySimpleSessionTokenGenerator implements EzySessionTokenGenerator 
     private long getCount() {
         return counter.incrementAndGet();
     }
-
 }

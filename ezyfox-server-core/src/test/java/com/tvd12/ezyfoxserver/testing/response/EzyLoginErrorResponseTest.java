@@ -8,5 +8,4 @@ public class EzyLoginErrorResponseTest extends BaseTest {
     @Test
     public void test() {
     }
-
 }

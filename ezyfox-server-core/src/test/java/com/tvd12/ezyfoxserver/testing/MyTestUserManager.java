@@ -18,5 +18,4 @@ public class MyTestUserManager extends EzyZoneUserManagerImpl {
             return new MyTestUserManager(this);
         }
     }
-
 }

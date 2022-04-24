@@ -19,5 +19,4 @@ public interface EzyUserRequestInterceptor<C extends EzyContext> {
             C context,
             EzyUserSessionEvent event,
             String command, Object data, Exception e) {}
-
 }

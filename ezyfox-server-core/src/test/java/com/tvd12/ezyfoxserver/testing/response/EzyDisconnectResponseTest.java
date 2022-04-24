@@ -17,5 +17,4 @@ public class EzyDisconnectResponseTest extends BaseTest {
         response.serialize();
         response.release();
     }
-
 }

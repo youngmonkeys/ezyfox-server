@@ -8,5 +8,4 @@ public class EzySimpleHandShakeRequestTest extends BaseCoreTest {
     @Test
     public void test() {
     }
-
 }

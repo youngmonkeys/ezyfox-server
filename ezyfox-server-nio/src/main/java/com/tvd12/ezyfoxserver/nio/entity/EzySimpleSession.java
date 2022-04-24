@@ -16,5 +16,4 @@ public class EzySimpleSession extends EzyAbstractSession implements EzyNioSessio
     public SelectionKey getSelectionKey() {
         return (SelectionKey) properties.get(SELECTION_KEY);
     }
-
 }

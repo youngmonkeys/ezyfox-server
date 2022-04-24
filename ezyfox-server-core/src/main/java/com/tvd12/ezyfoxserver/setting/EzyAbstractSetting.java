@@ -122,5 +122,4 @@ public abstract class EzyAbstractSetting
         map.put("configFile", configFile != null ? configFile : "");
         return map;
     }
-
 }

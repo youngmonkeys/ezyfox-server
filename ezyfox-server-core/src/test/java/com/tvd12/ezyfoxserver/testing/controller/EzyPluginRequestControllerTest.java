@@ -9,5 +9,4 @@ public class EzyPluginRequestControllerTest {
     public void test() {
         EzyPluginRequestController.DEFAULT.handle(null, null);
     }
-
 }

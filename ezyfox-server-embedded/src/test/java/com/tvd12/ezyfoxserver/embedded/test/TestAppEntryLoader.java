@@ -9,5 +9,4 @@ public class TestAppEntryLoader extends EzyAbstractAppEntryLoader {
     public EzyAppEntry load() throws Exception {
         return new TestAppEntry();
     }
-
 }

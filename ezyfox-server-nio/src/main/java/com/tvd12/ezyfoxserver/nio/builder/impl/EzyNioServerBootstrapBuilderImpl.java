@@ -141,5 +141,4 @@ public class EzyNioServerBootstrapBuilderImpl
                 .websocketSetting(getWebsocketSetting())
                 .build();
     }
-
 }

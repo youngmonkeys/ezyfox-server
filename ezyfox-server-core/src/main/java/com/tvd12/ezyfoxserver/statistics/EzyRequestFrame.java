@@ -49,5 +49,4 @@ public abstract class EzyRequestFrame implements Serializable {
             .append(EzyDates.format(endTime))
             .toString();
     }
-
 }

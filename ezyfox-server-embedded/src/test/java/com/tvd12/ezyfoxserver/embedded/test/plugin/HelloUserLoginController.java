@@ -20,5 +20,4 @@ public class HelloUserLoginController
         if(event.getUsername().contains("admin"))
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
     }
-
 }

@@ -22,5 +22,4 @@ public class EzyPluginResponseFactory extends EzyAbstractResponseFactory {
     public EzyObjectResponse newObjectResponse() {
         return new EzyPluginObjectResponse(pluginContext, marshaller);
     }
-
 }

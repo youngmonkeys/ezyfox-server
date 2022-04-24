@@ -27,5 +27,4 @@ public class EzySimpleSessionCreatorTest extends BaseTest {
         assert creator.create(mock(EzyChannel.class)) == session;
 
     }
-
 }

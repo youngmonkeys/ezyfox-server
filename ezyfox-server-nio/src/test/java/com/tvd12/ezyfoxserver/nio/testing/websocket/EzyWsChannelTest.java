@@ -39,5 +39,4 @@ public class EzyWsChannelTest extends BaseTest {
         channel.disconnect();
         channel.close();
     }
-
 }

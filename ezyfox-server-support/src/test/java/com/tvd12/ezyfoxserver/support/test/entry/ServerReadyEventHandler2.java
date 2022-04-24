@@ -14,5 +14,4 @@ public class ServerReadyEventHandler2 implements EzyServerReadyController {
     @Override
     public void handle(EzyServerContext ctx, EzyServerReadyEvent event) {
     }
-
 }

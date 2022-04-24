@@ -21,5 +21,4 @@ public class EzyUserRequestHandlerProxy implements EzyUserRequestHandler {
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
         handler.handle(context, event, data);
     }
-
 }

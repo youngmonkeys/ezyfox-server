@@ -116,5 +116,4 @@ public class EzySimpleWsHandlerGroup
             return new EzySimpleWsHandlerGroup(this);
         }
     }
-
 }

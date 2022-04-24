@@ -26,5 +26,4 @@ public class EzyAppHandleExceptionImplTest extends BaseTest {
         });
         cmd.handle(Thread.currentThread(), new IllegalArgumentException("two"));
     }
-
 }

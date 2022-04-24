@@ -10,5 +10,4 @@ public class EzySimpleUserAddedEventTest {
         EzySimpleUserAddedEvent event = new EzySimpleUserAddedEvent(null, null, null);
         assert event.getLoginData() == null;
     }
-
 }

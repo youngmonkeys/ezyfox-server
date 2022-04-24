@@ -16,5 +16,4 @@ public class PluginClientExceptionRequestHandler
     public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
         throw new IllegalStateException("server maintain");
     }
-
 }

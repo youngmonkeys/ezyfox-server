@@ -71,5 +71,4 @@ public class EzySimpleSessionManagementSetting implements EzySessionManagementSe
             return map;
         }
     }
-
 }

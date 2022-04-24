@@ -75,5 +75,4 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
         }
 
     }
-
 }

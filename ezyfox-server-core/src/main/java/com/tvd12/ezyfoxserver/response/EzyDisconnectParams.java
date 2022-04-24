@@ -17,5 +17,4 @@ public class EzyDisconnectParams extends EzySimpleResponseParams {
         return newArrayBuilder()
             .append(reason.getId());
     }
-
 }

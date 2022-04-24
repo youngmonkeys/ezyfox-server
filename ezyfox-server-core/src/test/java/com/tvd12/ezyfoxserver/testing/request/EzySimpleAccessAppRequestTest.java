@@ -8,5 +8,4 @@ public class EzySimpleAccessAppRequestTest extends BaseCoreTest {
     @Test
     public void test() {
     }
-
 }

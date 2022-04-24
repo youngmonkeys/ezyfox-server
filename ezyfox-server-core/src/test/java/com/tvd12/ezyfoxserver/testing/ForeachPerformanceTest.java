@@ -50,5 +50,4 @@ public class ForeachPerformanceTest extends BaseTest {
         System.out.println("time1 = " + time1);
         System.out.println("time2 = " + time2);
     }
-
 }

@@ -11,5 +11,4 @@ public class EzySimpleAppsSettingTest extends BaseTest {
         EzySimpleAppsSetting setting = new EzySimpleAppsSetting();
         assert setting.getSize() == 0;
     }
-
 }

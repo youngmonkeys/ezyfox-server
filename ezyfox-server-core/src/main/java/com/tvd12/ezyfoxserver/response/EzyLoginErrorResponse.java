@@ -9,5 +9,4 @@ public class EzyLoginErrorResponse
     public EzyLoginErrorResponse(EzyErrorParams params) {
         super(EzyCommand.LOGIN_ERROR, params);
     }
-
 }

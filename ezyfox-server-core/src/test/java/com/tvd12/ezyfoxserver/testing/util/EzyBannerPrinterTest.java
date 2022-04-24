@@ -24,5 +24,4 @@ public class EzyBannerPrinterTest extends BaseTest {
             }
         }.getBannerText("ezyfox-banner.txt");
     }
-
 }

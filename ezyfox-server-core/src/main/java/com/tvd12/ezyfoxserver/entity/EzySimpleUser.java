@@ -155,5 +155,4 @@ public class EzySimpleUser
     public String toString() {
         return name;
     }
-
 }

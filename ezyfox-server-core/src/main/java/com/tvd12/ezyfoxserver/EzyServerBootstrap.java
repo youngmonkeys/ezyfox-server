@@ -102,5 +102,4 @@ public abstract class EzyServerBootstrap
     protected EzyThreadPoolSizeSetting getThreadPoolSizeSetting() {
         return getServerSettings().getThreadPoolSize();
     }
-
 }

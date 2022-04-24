@@ -48,5 +48,4 @@ public class EzySimpleAppUserDelegateTest extends BaseTest {
         user.setName("test");
         delegate.onUserRemoved(user, EzyUserRemoveReason.EXIT_APP);
     }
-
 }

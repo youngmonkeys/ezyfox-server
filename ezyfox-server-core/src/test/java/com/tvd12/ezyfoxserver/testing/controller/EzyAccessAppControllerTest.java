@@ -279,5 +279,4 @@ public class EzyAccessAppControllerTest extends BaseTest {
         request.deserializeParams(params);
         return request;
     }
-
 }

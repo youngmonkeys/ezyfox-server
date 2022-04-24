@@ -133,5 +133,4 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         }
         return p;
     }
-
 }

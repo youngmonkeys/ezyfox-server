@@ -56,5 +56,4 @@ public class EzyBroadcastPluginsEventImplTest extends BaseTest {
         EzyServerReadyEvent event = new EzySimpleServerReadyEvent();
         cmd.fire(EzyEventType.SERVER_READY, event, true);
     }
-
 }

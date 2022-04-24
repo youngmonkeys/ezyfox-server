@@ -6,5 +6,4 @@ public final class EzyNioThreadPoolSizes {
     public static final int SOCKET_ACCEPTOR        = 1;
 
     private EzyNioThreadPoolSizes() {}
-
 }

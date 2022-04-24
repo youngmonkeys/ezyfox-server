@@ -13,5 +13,4 @@ public class EzySimpleEventControllersSettingTest extends BaseTest {
         EzySimpleEventControllersSetting setting = new EzySimpleEventControllersSetting();
         setting.setEventControllers(new ArrayList<>());
     }
-
 }

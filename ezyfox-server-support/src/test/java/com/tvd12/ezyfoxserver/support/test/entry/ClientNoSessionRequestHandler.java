@@ -22,5 +22,4 @@ public class ClientNoSessionRequestHandler
     @Override
     public void handle() {
     }
-
 }

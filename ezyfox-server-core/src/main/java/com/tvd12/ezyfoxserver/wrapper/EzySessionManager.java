@@ -107,5 +107,4 @@ public interface EzySessionManager<S extends EzySession> {
     default void removeSession(S session) {
         removeSession(session, EzyDisconnectReason.UNKNOWN);
     }
-
 }

@@ -27,5 +27,4 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
         this.command = null;
         this.session = null;
     }
-
 }

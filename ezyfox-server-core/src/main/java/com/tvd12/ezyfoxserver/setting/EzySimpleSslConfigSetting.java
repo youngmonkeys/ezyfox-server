@@ -35,5 +35,4 @@ public class EzySimpleSslConfigSetting implements EzySslConfigSetting {
         map.put("contextFactoryBuilder", contextFactoryBuilder);
         return map;
     }
-
 }

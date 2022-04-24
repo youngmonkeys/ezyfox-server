@@ -71,5 +71,4 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
         implementer.setResponseFactory(responseFactory);
         return implementer;
     }
-    
 }

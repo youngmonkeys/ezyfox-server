@@ -116,5 +116,4 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
         }
 
     }
-
 }

@@ -13,5 +13,4 @@ public class EzySocketExtensionRequestHandler extends EzySocketRequestHandler {
     protected String getRequestType() {
         return "extension";
     }
-
 }

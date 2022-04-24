@@ -22,5 +22,4 @@ public class UsernamePatternTest {
             System.out.println("name: " + name + ", valid = " + name.matches(pattern));
         }
     }
-
 }

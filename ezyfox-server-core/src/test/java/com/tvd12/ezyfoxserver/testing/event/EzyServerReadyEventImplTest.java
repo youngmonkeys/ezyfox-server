@@ -10,5 +10,4 @@ public class EzyServerReadyEventImplTest extends BaseCoreTest {
     public void test() {
         new EzySimpleServerReadyEvent();
     }
-
 }

@@ -8,5 +8,4 @@ public class EzyNioSocketAcceptanceLoopHandler extends EzySocketEventLoopOneHand
     protected String getThreadName() {
         return "socket-acceptor";
     }
-
 }

@@ -24,5 +24,4 @@ public class EzySimpleStatistics implements EzyStatistics, Serializable {
     protected EzyWebSocketStatistics newWebSocketStatistics() {
         return new EzySimpleWebSocketStatistics();
     }
-
 }

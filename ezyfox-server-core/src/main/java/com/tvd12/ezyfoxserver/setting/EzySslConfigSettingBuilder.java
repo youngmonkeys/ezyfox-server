@@ -31,5 +31,4 @@ public class EzySslConfigSettingBuilder implements EzyBuilder<EzySimpleSslConfig
         setting.setContextFactoryBuilder(contextFactoryBuilder);
         return setting;
     }
-
 }

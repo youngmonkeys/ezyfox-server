@@ -53,5 +53,4 @@ public class EzyEventControllersImpl implements EzyEventControllers {
     public void destroy() {
         controllers.clear();
     }
-
 }

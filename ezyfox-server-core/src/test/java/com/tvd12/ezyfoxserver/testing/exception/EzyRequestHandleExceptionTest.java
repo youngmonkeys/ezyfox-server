@@ -29,5 +29,4 @@ public class EzyRequestHandleExceptionTest extends BaseTest {
         assert exception.getData() != null;
 
     }
-
 }

@@ -30,5 +30,4 @@ public class EzySimpleSocketDisconnection implements EzySocketDisconnection {
             .append(", disconnection reason: ").append(disconnectReason)
             .toString();
     }
-
 }

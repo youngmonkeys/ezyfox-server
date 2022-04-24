@@ -76,5 +76,4 @@ public class EzySslContextInitializer {
             return new EzySslContextInitializer(this);
         }
     }
-
 }

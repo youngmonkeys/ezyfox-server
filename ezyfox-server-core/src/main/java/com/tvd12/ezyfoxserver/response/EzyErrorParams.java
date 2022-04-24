@@ -24,5 +24,4 @@ public class EzyErrorParams extends EzySimpleResponseParams {
             .append(code)
             .append(message);
     }
-
 }

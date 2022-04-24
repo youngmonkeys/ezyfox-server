@@ -8,5 +8,4 @@ public class EzyAbstractResponseTest extends BaseTest {
     @Test
     public void test() {
     }
-
 }

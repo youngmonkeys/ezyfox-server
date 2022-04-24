@@ -51,5 +51,4 @@ public class EzySimpleThreadPoolSizeSetting implements EzyThreadPoolSizeSetting 
         map.put("socketUserRemovalHandler", socketUserRemovalHandler);
         return map;
     }
-
 }

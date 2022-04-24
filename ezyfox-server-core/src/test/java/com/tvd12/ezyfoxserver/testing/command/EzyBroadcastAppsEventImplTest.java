@@ -67,5 +67,4 @@ public class EzyBroadcastAppsEventImplTest extends BaseTest {
         doThrow(new IllegalStateException()).when(appContext).handleEvent(EzyEventType.SERVER_INITIALIZING, event2);
         return appContext;
     }
-
 }

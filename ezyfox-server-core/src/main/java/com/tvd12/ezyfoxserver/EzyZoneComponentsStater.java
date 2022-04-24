@@ -32,5 +32,4 @@ public abstract class EzyZoneComponentsStater extends EzyLoggable implements Ezy
         }
 
     }
-
 }

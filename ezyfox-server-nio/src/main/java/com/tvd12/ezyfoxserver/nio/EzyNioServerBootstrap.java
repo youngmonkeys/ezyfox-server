@@ -273,5 +273,4 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
         this.socketDisconnectionHandlingLoopHandler = null;
         this.socketUserRemovalHandlingLoopHandler = null;
     }
-
 }

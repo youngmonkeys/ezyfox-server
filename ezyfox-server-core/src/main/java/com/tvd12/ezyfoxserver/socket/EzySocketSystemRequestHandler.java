@@ -13,5 +13,4 @@ public class EzySocketSystemRequestHandler extends EzySocketRequestHandler {
     protected String getRequestType() {
         return "system";
     }
-
 }

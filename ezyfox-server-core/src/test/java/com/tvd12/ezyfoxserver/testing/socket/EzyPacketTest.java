@@ -18,5 +18,4 @@ public class EzyPacketTest extends BaseTest {
         long offset = System.currentTimeMillis() - start;
         System.out.println(offset);
     }
-
 }

@@ -16,5 +16,4 @@ public class AppClientHello3RequestHandler
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
         System.out.println("hello: " + data.getWho());
     }
-
 }

@@ -38,5 +38,4 @@ public class AppGlobalExceptionHandler extends EzyLoggable {
             @EzyRequestData Object data) throws Exception {
         throw e;
     }
-
 }

@@ -83,5 +83,4 @@ public class EzySocketDisconnectionHandlerTest {
         Thread.sleep(100L);
         thread.interrupt();
     }
-
 }

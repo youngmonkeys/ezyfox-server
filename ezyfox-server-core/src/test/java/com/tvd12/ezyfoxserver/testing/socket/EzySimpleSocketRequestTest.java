@@ -22,5 +22,4 @@ public class EzySimpleSocketRequestTest extends BaseTest {
 
         assert request.isSystemRequest();
     }
-
 }

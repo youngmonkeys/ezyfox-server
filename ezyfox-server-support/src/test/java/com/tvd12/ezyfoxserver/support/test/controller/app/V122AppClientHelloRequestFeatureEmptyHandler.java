@@ -22,5 +22,4 @@ public class V122AppClientHelloRequestFeatureEmptyHandler
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
         System.out.println("hello: " + data.getWho());
     }
-
 }

@@ -56,5 +56,4 @@ public class EzySimpleUserManagementSetting implements EzyUserManagementSetting,
         map.put("userNamePattern", userNamePattern);
         return map;
     }
-
 }

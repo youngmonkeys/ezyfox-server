@@ -47,5 +47,4 @@ public class EzyBlockingSessionTicketsQueue
             logger.debug("session: {} maybe destroyed", session);
         }
     }
-
 }

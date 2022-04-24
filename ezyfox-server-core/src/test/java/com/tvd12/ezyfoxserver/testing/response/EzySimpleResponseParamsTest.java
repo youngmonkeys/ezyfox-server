@@ -12,5 +12,4 @@ public class EzySimpleResponseParamsTest extends BaseTest {
         params.serialize();
         params.release();
     }
-
 }

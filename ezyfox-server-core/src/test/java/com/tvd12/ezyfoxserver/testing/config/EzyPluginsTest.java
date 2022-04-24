@@ -11,5 +11,4 @@ public class EzyPluginsTest extends BaseCoreTest {
         EzySimplePluginsSetting plugins = new EzySimplePluginsSetting();
         plugins.getPluginById(-1);
     }
-
 }

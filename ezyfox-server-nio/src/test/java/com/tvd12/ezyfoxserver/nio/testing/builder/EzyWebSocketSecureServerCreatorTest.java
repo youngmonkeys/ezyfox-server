@@ -33,5 +33,4 @@ public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
                 .invoke(WebSocketCreator.class);
         webSocketCreator.createWebSocket(null, null);
     }
-
 }

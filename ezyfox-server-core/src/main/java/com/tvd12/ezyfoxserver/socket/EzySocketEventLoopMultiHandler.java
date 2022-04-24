@@ -37,5 +37,4 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
             processWithLogException(() -> eventHandler.destroy());
         }
     }
-
 }

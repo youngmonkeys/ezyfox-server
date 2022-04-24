@@ -18,5 +18,4 @@ public class EzyEventTypeTest extends BaseTest {
     public void test1() {
 
     }
-
 }

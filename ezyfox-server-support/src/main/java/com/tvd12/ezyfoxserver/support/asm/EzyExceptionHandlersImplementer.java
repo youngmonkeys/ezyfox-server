@@ -36,5 +36,4 @@ public class EzyExceptionHandlersImplementer extends EzyLoggable {
             EzyExceptionHandlerProxy exceptionHandler, EzyExceptionHandlerMethod method) {
         return new EzyExceptionHandlerImplementer(exceptionHandler, method);
     }
-    
 }

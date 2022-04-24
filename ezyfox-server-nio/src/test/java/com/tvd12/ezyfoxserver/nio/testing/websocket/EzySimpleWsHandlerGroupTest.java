@@ -62,340 +62,340 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzySimpleWsHandlerGroupTest extends BaseTest {
 
-	@SuppressWarnings("rawtypes")
-	@Test
-	public void test() throws Exception {
-		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-				.tokenGenerator(new EzySimpleSessionTokenGenerator())
-				.build();
-		EzyStatistics statistics = new EzySimpleStatistics();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleStreamingSetting streaming = settings.getStreaming();
-		streaming.setEnable(true);
-		EzySimpleServer server = new EzySimpleServer();
-		server.setSettings(settings);
-		server.setSessionManager(sessionManager);
-		
-		EzyServerControllers controllers = mock(EzyServerControllers.class);
-		server.setControllers(controllers);
-		
-		EzyInterceptor interceptor = mock(EzyInterceptor.class);
-		when(controllers.getInterceptor(EzyCommand.PING)).thenReturn(interceptor);
-		
-		EzyController controller = mock(EzyController.class);
-		when(controllers.getController(EzyCommand.PING)).thenReturn(controller);
-		
-		EzySimpleServerContext serverContext = new EzySimpleServerContext();
-		serverContext.setServer(server);
-		serverContext.init();
-		
-		EzyChannel channel = mock(EzyChannel.class);
-		when(channel.isConnected()).thenReturn(true);
-		when(channel.getConnection()).thenReturn(SocketChannel.open());
-		when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
-		EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
-		ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
-		ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
-		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
-		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
-		
-		EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-				.statistics(statistics)
-				.serverContext(serverContext)
-				.statsThreadPool(statsThreadPool)
-				.streamQueue(streamQueue)
-				.codecFactory(new ExCodecFactory())
-				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-				.socketSessionTicketsQueue(socketSessionTicketsQueue)
-				.webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-				.build();
-		
-		EzySimpleWsHandlerGroup group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
-				.newBuilder(channel, EzyConnectionType.WEBSOCKET)
-				.build();
-		
-		group.fireBytesReceived("hello");
-		group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
-		((EzyAbstractSession)session).setStreamingEnable(true);
-		group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
-		EzySimplePacket packet = new EzySimplePacket();
-		packet.setBinary(false);
-		packet.setData("world".getBytes());
-		packet.setTransportType(EzyTransportType.TCP);
-		ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
-		group.firePacketSend(packet, writeBuffer);
-		group.sendPacketNow(packet);
-		group.fireChannelRead(EzyCommand.PING, EzyEntityArrays.newArray(EzyCommand.PING.getId(), EzyEntityFactory.EMPTY_ARRAY));
-		
-		EzyInterceptor streamInterceptor = mock(EzyInterceptor.class);
-		when(controllers.getStreamingInterceptor()).thenReturn(streamInterceptor);
-		
-		EzyStreamingController streamController = mock(EzyStreamingController.class);
-		when(controllers.getStreamingController()).thenReturn(streamController);
-		
-		group.fireStreamBytesReceived(new byte[] {0, 1, 2});
-		
-		EzyPacket droppedPacket = mock(EzyPacket.class);
-		when(droppedPacket.getSize()).thenReturn(12);
-		group.addDroppedPacket(droppedPacket);
-		EzyPacket failedPacket = mock(EzyPacket.class);
-		when(failedPacket.getData()).thenReturn(new byte[] {1, 2, 3});
-		when(failedPacket.isBinary()).thenReturn(false);
-		when(channel.write(any(ByteBuffer.class), anyBoolean())).thenThrow(new IllegalStateException("maintain"));
-		group.firePacketSend(failedPacket, writeBuffer);
-		
-		MethodInvoker.create()
-			.object(group)
-			.method("executeHandleReceivedBytes")
-			.param("hello")
-			.invoke();
-		
-		MethodInvoker.create()
-			.object(group)
-			.method("executeHandleReceivedBytes")
-			.param("hello".getBytes())
-			.invoke();
-		
-		group.fireChannelInactive();
-		Thread.sleep(2000);
-		group.destroy();
-		group.destroy();
-		
-		EzySocketStreamQueue streamQueue1 = mock(EzySocketStreamQueue.class);
-		when(streamQueue1.add(any())).thenThrow(new IllegalStateException("queue full"));
-		group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
-				.newBuilder(channel, EzyConnectionType.WEBSOCKET)
-				.session(session)
-				.decoder(decoder)
-				.serverContext(serverContext)
-				.statsThreadPool(statsThreadPool)
-				.streamQueue(streamQueue1)
-				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-				.build();
-		group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
-	}
-	
-	@Test
-	public void newDecodeBytesCallbackCallTest() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup();
-		
-		EzyCallback<Object> decodeBytesCallback = FieldUtil.getFieldValue(sut, "decodeBytesCallback");
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void test() throws Exception {
+        EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
+                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+                .tokenGenerator(new EzySimpleSessionTokenGenerator())
+                .build();
+        EzyStatistics statistics = new EzySimpleStatistics();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(true);
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        server.setSessionManager(sessionManager);
 
-		// when
-		Throwable e = Asserts.assertThrows(() -> decodeBytesCallback.call(new Object()));
-		
-		// then
-		Asserts.assertEquals(UnsupportedOperationException.class, e.getClass());
-	}
-	
-	@Test
-	public void handleReceivedBytesLenLowerThan1() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup();
-		
-		byte[] bytes = new byte[0];
-		int offset = 0;
-		int len = 0;
+        EzyServerControllers controllers = mock(EzyServerControllers.class);
+        server.setControllers(controllers);
 
-		// when
-		// then
-		MethodInvoker.create()
-			.object(sut)
-			.method("handleReceivedBytes")
-			.param(byte[].class, bytes)
-			.param(int.class, offset)
-			.param(int.class, len)
-			.call();
-	}
-	
-	@Test
-	public void handleReceivedStreamNotEnable() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup(false);
-		
-		byte[] bytes = new byte[] {1 << 4, 2, 3};
-		int offset = 0;
-		int len = 3;
+        EzyInterceptor interceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.PING)).thenReturn(interceptor);
 
-		// when
-		MethodInvoker.create()
-			.object(sut)
-			.method("handleReceivedBytes")
-			.param(byte[].class, bytes)
-			.param(int.class, offset)
-			.param(int.class, len)
-			.call();
-		
-		// then
-		EzySession session = FieldUtil.getFieldValue(sut, "session");
-		verify(session, times(1)).isStreamingEnable();
-	}
-	
-	@Test
-	public void handleReceivedStreamEnableAndSessionStream() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup();
-		
-		EzySession session = FieldUtil.getFieldValue(sut, "session");
-		when(session.isStreamingEnable()).thenReturn(true);
-		
-		byte[] bytes = new byte[] {1 << 4, 2, 3};
-		int offset = 0;
-		int len = 3;
+        EzyController controller = mock(EzyController.class);
+        when(controllers.getController(EzyCommand.PING)).thenReturn(controller);
 
-		// when
-		MethodInvoker.create()
-			.object(sut)
-			.method("handleReceivedBytes")
-			.param(byte[].class, bytes)
-			.param(int.class, offset)
-			.param(int.class, len)
-			.call();
-		
-		// then
-		verify(session, times(1)).isStreamingEnable();
-	}
-	
-	@Test
-	public void handleReceivedSessionStreamNotEnable() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup();
-		
-		EzySession session = FieldUtil.getFieldValue(sut, "session");
-		
-		byte[] bytes = new byte[] {1 << 4, 2, 3};
-		int offset = 0;
-		int len = 3;
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
 
-		// when
-		MethodInvoker.create()
-			.object(sut)
-			.method("handleReceivedBytes")
-			.param(byte[].class, bytes)
-			.param(int.class, offset)
-			.param(int.class, len)
-			.call();
-		
-		// then
-		verify(session, times(1)).isStreamingEnable();
-	}
-	
-	@Test
-	public void handleReceivedSessionStreamEnable() throws Exception {
-		// given
-		EzyWsHandlerGroup sut = newHandlerGroup();
-		
-		EzySession session = FieldUtil.getFieldValue(sut, "session");
-		when(session.isStreamingEnable()).thenReturn(true);
-		
-		byte[] bytes = new byte[] {1 << 4, 2, 3};
-		int offset = 0;
-		int len = 3;
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.isConnected()).thenReturn(true);
+        when(channel.getConnection()).thenReturn(SocketChannel.open());
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+        EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
+        ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
+        ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
+        EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
 
-		// when
-		MethodInvoker.create()
-			.object(sut)
-			.method("handleReceivedBytes")
-			.param(byte[].class, bytes)
-			.param(int.class, offset)
-			.param(int.class, len)
-			.call();
-		
-		// then
-		verify(session, times(1)).isStreamingEnable();
-	}
-	
-	private EzySimpleWsHandlerGroup newHandlerGroup() throws IOException {
-		return newHandlerGroup(true);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private EzySimpleWsHandlerGroup newHandlerGroup(boolean streamEnable) throws IOException {
-		EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
-		EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-				.maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-				.tokenGenerator(new EzySimpleSessionTokenGenerator())
-				.build();
-		EzyStatistics statistics = new EzySimpleStatistics();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleStreamingSetting streaming = settings.getStreaming();
-		streaming.setEnable(streamEnable);
-		EzySimpleServer server = new EzySimpleServer();
-		server.setSettings(settings);
-		server.setSessionManager(sessionManager);
+        EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
+                .statistics(statistics)
+                .serverContext(serverContext)
+                .statsThreadPool(statsThreadPool)
+                .streamQueue(streamQueue)
+                .codecFactory(new ExCodecFactory())
+                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+                .socketSessionTicketsQueue(socketSessionTicketsQueue)
+                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+                .build();
 
-		EzyServerControllers controllers = mock(EzyServerControllers.class);
-		server.setControllers(controllers);
-		
-		EzySimpleConfig config = new EzySimpleConfig();
-		server.setConfig(config);
-		
-		EzySimpleServerContext serverContext = new EzySimpleServerContext();
-		serverContext.setServer(server);
-		serverContext.init();
-		
-		EzyChannel channel = mock(EzyChannel.class);
-		when(channel.isConnected()).thenReturn(true);
-		when(channel.getConnection()).thenReturn(SocketChannel.open());
-		when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
-		ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
-		EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
-		EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
-		
-		EzySimpleSession session = mock(EzySimpleSession.class);
-		when(session.getChannel()).thenReturn(channel);
-		
-		EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-				.statistics(statistics)
-				.serverContext(serverContext)
-				.statsThreadPool(statsThreadPool)
-				.streamQueue(streamQueue)
-				.codecFactory(new ExCodecFactory())
-				.sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-				.socketSessionTicketsQueue(socketSessionTicketsQueue)
-				.webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-				.build();
-		
-		EzySimpleWsHandlerGroup group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
-				.newBuilder(channel, EzyConnectionType.WEBSOCKET)
-				.session(session)
-				.build();
-		return group;
-	}
-	
-	public static class ExCodecFactory implements EzyCodecFactory {
-		@Override
-		public Object newDecoder(EzyConstant type) {
-			return new ExEzyByteToObjectDecoder();
-		}
+        EzySimpleWsHandlerGroup group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
+                .newBuilder(channel, EzyConnectionType.WEBSOCKET)
+                .build();
 
-		@Override
-		public Object newEncoder(EzyConstant type) {
-			return null;
-		}
-	}
-	
-	public static class ExEzyByteToObjectDecoder implements EzyStringToObjectDecoder {
+        group.fireBytesReceived("hello");
+        group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
+        ((EzyAbstractSession)session).setStreamingEnable(true);
+        group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
+        EzySimplePacket packet = new EzySimplePacket();
+        packet.setBinary(false);
+        packet.setData("world".getBytes());
+        packet.setTransportType(EzyTransportType.TCP);
+        ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
+        group.firePacketSend(packet, writeBuffer);
+        group.sendPacketNow(packet);
+        group.fireChannelRead(EzyCommand.PING, EzyEntityArrays.newArray(EzyCommand.PING.getId(), EzyEntityFactory.EMPTY_ARRAY));
 
-		@Override
-		public Object decode(String bytes) throws Exception {
-			return EzyEntityFactory.newArrayBuilder()
-					.append(EzyCommand.PING.getId())
-					.build();
-		}
+        EzyInterceptor streamInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamInterceptor);
 
-		@Override
-		public Object decode(byte[] bytes) throws Exception {
-			return EzyEntityFactory.newArrayBuilder()
-					.append(EzyCommand.PING.getId())
-					.build();
-		}
-		
-	}
-	
+        EzyStreamingController streamController = mock(EzyStreamingController.class);
+        when(controllers.getStreamingController()).thenReturn(streamController);
+
+        group.fireStreamBytesReceived(new byte[] {0, 1, 2});
+
+        EzyPacket droppedPacket = mock(EzyPacket.class);
+        when(droppedPacket.getSize()).thenReturn(12);
+        group.addDroppedPacket(droppedPacket);
+        EzyPacket failedPacket = mock(EzyPacket.class);
+        when(failedPacket.getData()).thenReturn(new byte[] {1, 2, 3});
+        when(failedPacket.isBinary()).thenReturn(false);
+        when(channel.write(any(ByteBuffer.class), anyBoolean())).thenThrow(new IllegalStateException("maintain"));
+        group.firePacketSend(failedPacket, writeBuffer);
+
+        MethodInvoker.create()
+            .object(group)
+            .method("executeHandleReceivedBytes")
+            .param("hello")
+            .invoke();
+
+        MethodInvoker.create()
+            .object(group)
+            .method("executeHandleReceivedBytes")
+            .param("hello".getBytes())
+            .invoke();
+
+        group.fireChannelInactive();
+        Thread.sleep(2000);
+        group.destroy();
+        group.destroy();
+
+        EzySocketStreamQueue streamQueue1 = mock(EzySocketStreamQueue.class);
+        when(streamQueue1.add(any())).thenThrow(new IllegalStateException("queue full"));
+        group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
+                .newBuilder(channel, EzyConnectionType.WEBSOCKET)
+                .session(session)
+                .decoder(decoder)
+                .serverContext(serverContext)
+                .statsThreadPool(statsThreadPool)
+                .streamQueue(streamQueue1)
+                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+                .build();
+        group.fireBytesReceived(new byte[] {127, 2, 3, 4, 5, 6}, 0, 5);
+    }
+
+    @Test
+    public void newDecodeBytesCallbackCallTest() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup();
+
+        EzyCallback<Object> decodeBytesCallback = FieldUtil.getFieldValue(sut, "decodeBytesCallback");
+
+        // when
+        Throwable e = Asserts.assertThrows(() -> decodeBytesCallback.call(new Object()));
+
+        // then
+        Asserts.assertEquals(UnsupportedOperationException.class, e.getClass());
+    }
+
+    @Test
+    public void handleReceivedBytesLenLowerThan1() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup();
+
+        byte[] bytes = new byte[0];
+        int offset = 0;
+        int len = 0;
+
+        // when
+        // then
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedBytes")
+            .param(byte[].class, bytes)
+            .param(int.class, offset)
+            .param(int.class, len)
+            .call();
+    }
+
+    @Test
+    public void handleReceivedStreamNotEnable() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup(false);
+
+        byte[] bytes = new byte[] {1 << 4, 2, 3};
+        int offset = 0;
+        int len = 3;
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedBytes")
+            .param(byte[].class, bytes)
+            .param(int.class, offset)
+            .param(int.class, len)
+            .call();
+
+        // then
+        EzySession session = FieldUtil.getFieldValue(sut, "session");
+        verify(session, times(1)).isStreamingEnable();
+    }
+
+    @Test
+    public void handleReceivedStreamEnableAndSessionStream() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup();
+
+        EzySession session = FieldUtil.getFieldValue(sut, "session");
+        when(session.isStreamingEnable()).thenReturn(true);
+
+        byte[] bytes = new byte[] {1 << 4, 2, 3};
+        int offset = 0;
+        int len = 3;
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedBytes")
+            .param(byte[].class, bytes)
+            .param(int.class, offset)
+            .param(int.class, len)
+            .call();
+
+        // then
+        verify(session, times(1)).isStreamingEnable();
+    }
+
+    @Test
+    public void handleReceivedSessionStreamNotEnable() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup();
+
+        EzySession session = FieldUtil.getFieldValue(sut, "session");
+
+        byte[] bytes = new byte[] {1 << 4, 2, 3};
+        int offset = 0;
+        int len = 3;
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedBytes")
+            .param(byte[].class, bytes)
+            .param(int.class, offset)
+            .param(int.class, len)
+            .call();
+
+        // then
+        verify(session, times(1)).isStreamingEnable();
+    }
+
+    @Test
+    public void handleReceivedSessionStreamEnable() throws Exception {
+        // given
+        EzyWsHandlerGroup sut = newHandlerGroup();
+
+        EzySession session = FieldUtil.getFieldValue(sut, "session");
+        when(session.isStreamingEnable()).thenReturn(true);
+
+        byte[] bytes = new byte[] {1 << 4, 2, 3};
+        int offset = 0;
+        int len = 3;
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedBytes")
+            .param(byte[].class, bytes)
+            .param(int.class, offset)
+            .param(int.class, len)
+            .call();
+
+        // then
+        verify(session, times(1)).isStreamingEnable();
+    }
+
+    private EzySimpleWsHandlerGroup newHandlerGroup() throws IOException {
+        return newHandlerGroup(true);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private EzySimpleWsHandlerGroup newHandlerGroup(boolean streamEnable) throws IOException {
+        EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
+        EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
+                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+                .tokenGenerator(new EzySimpleSessionTokenGenerator())
+                .build();
+        EzyStatistics statistics = new EzySimpleStatistics();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(streamEnable);
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        server.setSessionManager(sessionManager);
+
+        EzyServerControllers controllers = mock(EzyServerControllers.class);
+        server.setControllers(controllers);
+
+        EzySimpleConfig config = new EzySimpleConfig();
+        server.setConfig(config);
+
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.isConnected()).thenReturn(true);
+        when(channel.getConnection()).thenReturn(SocketChannel.open());
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+        ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
+        EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
+
+        EzySimpleSession session = mock(EzySimpleSession.class);
+        when(session.getChannel()).thenReturn(channel);
+
+        EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
+                .statistics(statistics)
+                .serverContext(serverContext)
+                .statsThreadPool(statsThreadPool)
+                .streamQueue(streamQueue)
+                .codecFactory(new ExCodecFactory())
+                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+                .socketSessionTicketsQueue(socketSessionTicketsQueue)
+                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+                .build();
+
+        EzySimpleWsHandlerGroup group = (EzySimpleWsHandlerGroup) handlerGroupBuilderFactory
+                .newBuilder(channel, EzyConnectionType.WEBSOCKET)
+                .session(session)
+                .build();
+        return group;
+    }
+
+    public static class ExCodecFactory implements EzyCodecFactory {
+        @Override
+        public Object newDecoder(EzyConstant type) {
+            return new ExEzyByteToObjectDecoder();
+        }
+
+        @Override
+        public Object newEncoder(EzyConstant type) {
+            return null;
+        }
+    }
+
+    public static class ExEzyByteToObjectDecoder implements EzyStringToObjectDecoder {
+
+        @Override
+        public Object decode(String bytes) throws Exception {
+            return EzyEntityFactory.newArrayBuilder()
+                    .append(EzyCommand.PING.getId())
+                    .build();
+        }
+
+        @Override
+        public Object decode(byte[] bytes) throws Exception {
+            return EzyEntityFactory.newArrayBuilder()
+                    .append(EzyCommand.PING.getId())
+                    .build();
+        }
+
+    }
+
 }

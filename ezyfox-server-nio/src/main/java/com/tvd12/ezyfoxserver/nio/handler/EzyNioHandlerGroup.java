@@ -5,10 +5,10 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 
 public interface EzyNioHandlerGroup extends EzyHandlerGroup {
 
-	void fireBytesReceived(byte[] bytes) throws Exception;
-	
-	void fireMessageReceived(EzyMessage message) throws Exception;
-	
-	EzyNioSession getSession();
-	
+    void fireBytesReceived(byte[] bytes) throws Exception;
+
+    void fireMessageReceived(EzyMessage message) throws Exception;
+
+    EzyNioSession getSession();
+
 }

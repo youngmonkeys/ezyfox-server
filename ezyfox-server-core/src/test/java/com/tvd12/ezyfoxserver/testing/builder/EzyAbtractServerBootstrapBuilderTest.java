@@ -54,44 +54,44 @@ public class EzyAbtractServerBootstrapBuilderTest extends BaseCoreTest {
     
     @Test
     public void commonTest() {
-    	// given
-    	EzySimpleServer server = newServer();
+        // given
+        EzySimpleServer server = newServer();
         MyTestServerBootstrapBuilder builder = 
                 (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
                 .server(server);
-    	
-    	// when
+
+        // when
         EzyUdpSetting udpSetting = 
-        		(EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", builder);
+                (EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", builder);
         EzyThreadPoolSizeSetting threadPoolSizeSetting =
-        		(EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", builder);
-    	
-    	// then
+                (EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", builder);
+
+        // then
         Asserts.assertEquals(server.getSettings().getUdp(), udpSetting);
         Asserts.assertEquals(server.getSettings().getThreadPoolSize(), threadPoolSizeSetting);
     }
     
     @Test
     public void newSslContextTest() {
-    	// given
-    	EzySimpleServer server = newServer();
-    	EzySimpleWebSocketSetting webSocketSetting = 
-    			(EzySimpleWebSocketSetting)server.getSettings().getWebsocket();
-    	webSocketSetting.setSslActive(true);
-    	
-    	MyTestServerBootstrapBuilder builder = 
-    			(MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
-    			.server(server);
-    	
-    	EzySimpleSslConfigSetting setting = new EzySimpleSslConfigSetting(); 
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleWebSocketSetting webSocketSetting =
+                (EzySimpleWebSocketSetting)server.getSettings().getWebsocket();
+        webSocketSetting.setSslActive(true);
 
-    	// when
-    	SSLContext sslContext = MethodInvoker.create()
-	        .object(builder)
-	        .method("newSslContext")
-	        .param(EzySslConfigSetting.class, setting)
-	        .invoke(SSLContext.class);
-    	
-    	Asserts.assertNotNull(sslContext);
+        MyTestServerBootstrapBuilder builder =
+                (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        EzySimpleSslConfigSetting setting = new EzySimpleSslConfigSetting();
+
+        // when
+        SSLContext sslContext = MethodInvoker.create()
+            .object(builder)
+            .method("newSslContext")
+            .param(EzySslConfigSetting.class, setting)
+            .invoke(SSLContext.class);
+
+        Asserts.assertNotNull(sslContext);
     }
 }

@@ -6,8 +6,8 @@ public class EzyAccessAppResponse
         extends EzySimpleParamsResponse<EzyAccessAppParams> {
     private static final long serialVersionUID = 1179311642566987837L;
     
-	public EzyAccessAppResponse(EzyAccessAppParams params) {
-	    super(EzyCommand.APP_ACCESS, params);
-	}
+    public EzyAccessAppResponse(EzyAccessAppParams params) {
+        super(EzyCommand.APP_ACCESS, params);
+    }
 
 }

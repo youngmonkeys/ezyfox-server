@@ -37,209 +37,209 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 
 public class EzySimplePluginEntryTest {
 
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     @Test
-	public void test() throws Exception {
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleServer server = new EzySimpleServer();
-		server.setSettings(settings);
-		EzySimpleServerContext serverContext = new EzySimpleServerContext();
-		serverContext.setServer(server);
-		serverContext.init();
-		
-		EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
-		EzySimpleZone zone = new EzySimpleZone();
-		zone.setSetting(zoneSetting);
-		EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
-		zoneContext.setZone(zone);
-		zoneContext.init();
-		zoneContext.setParent(serverContext);
-		
-		EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
-		pluginSetting.setName("test");
-		
-		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
-		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
-		EzySimplePlugin plugin = new EzySimplePlugin();
-		plugin.setSetting(pluginSetting);
-		plugin.setEventControllers(eventControllers);
-		
-		ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
-		EzySimplePluginContext pluginContext = new EzySimplePluginContext();
-		pluginContext.setPlugin(plugin);
-		pluginContext.setParent(zoneContext);
-		pluginContext.setExecutorService(pluginScheduledExecutorService);
-		pluginContext.init();
-		
-		EzySimplePluginEntry entry = new EzyPluginEntryEx();
-		entry.config(pluginContext);
-		entry.start();
-		handleClientRequest(pluginContext);
-		
-		List<EzyEventController> loginEventHandlers = pluginContext
+    public void test() throws Exception {
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+        
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleZone zone = new EzySimpleZone();
+        zone.setSetting(zoneSetting);
+        EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
+        zoneContext.setZone(zone);
+        zoneContext.init();
+        zoneContext.setParent(serverContext);
+        
+        EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
+        pluginSetting.setName("test");
+        
+        EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
+        EzySimplePlugin plugin = new EzySimplePlugin();
+        plugin.setSetting(pluginSetting);
+        plugin.setEventControllers(eventControllers);
+        
+        ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
+        EzySimplePluginContext pluginContext = new EzySimplePluginContext();
+        pluginContext.setPlugin(plugin);
+        pluginContext.setParent(zoneContext);
+        pluginContext.setExecutorService(pluginScheduledExecutorService);
+        pluginContext.init();
+        
+        EzySimplePluginEntry entry = new EzyPluginEntryEx();
+        entry.config(pluginContext);
+        entry.start();
+        handleClientRequest(pluginContext);
+        
+        List<EzyEventController> loginEventHandlers = pluginContext
             .getPlugin()
             .getEventControllers()
             .getControllers(EzyEventType.USER_LOGIN);
         Assert.assertEquals(loginEventHandlers.size(), 1);
         Assert.assertEquals(loginEventHandlers.get(0).getClass(), PluginUserLoginRequestController.class);
-		entry.destroy();
-	}
-	
-	private void handleClientRequest(EzyPluginContext context) {
-		EzySimplePlugin plugin = (EzySimplePlugin) context.getPlugin();
-		EzyPluginRequestController requestController = plugin.getRequestController();
-		
-		EzyAbstractSession session = spy(EzyAbstractSession.class);
-		EzySimpleUser user = new EzySimpleUser();
-		EzyArray data = EzyEntityFactory.newArrayBuilder()
-				.append("chat")
-				.append(EzyEntityFactory.newObjectBuilder()
-						.append("message", "greet"))
-				.build();
-		EzyUserRequestPluginEvent event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("chat")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("no command")
-				.append(EzyEntityFactory.newObjectBuilder()
-						.append("message", "greet"))
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("noUser")
-				.append(EzyEntityFactory.newObjectBuilder()
-						.append("message", "greet"))
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("noSession")
-				.append(EzyEntityFactory.newObjectBuilder()
-						.append("message", "greet"))
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("noDataBinding")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("badRequestSend")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("badRequestNoSend")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("exception")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		try {
-			requestController.handle(context, event);
-		}
-		catch (Exception e) {
-			assert e instanceof IllegalStateException;
-		}
-		
-		data = EzyEntityFactory.newArrayBuilder()
-				.append("plugin")
-				.build();
-		event = new EzySimpleUserRequestPluginEvent(user, session, data);
-		requestController.handle(context, event);
-	}
-	
-	@Test
-	public void test2() throws Exception {
-		EzySimpleSettings settings = new EzySimpleSettings();
-		EzySimpleServer server = new EzySimpleServer();
-		server.setSettings(settings);
-		EzySimpleServerContext serverContext = new EzySimpleServerContext();
-		serverContext.setServer(server);
-		serverContext.init();
-		
-		EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
-		EzySimpleZone zone = new EzySimpleZone();
-		zone.setSetting(zoneSetting);
-		EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
-		zoneContext.setZone(zone);
-		zoneContext.init();
-		zoneContext.setParent(serverContext);
-		
-		EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
-		pluginSetting.setName("test");
-		
-		EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
-		EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
-		EzySimplePlugin plugin = new EzySimplePlugin();
-		plugin.setSetting(pluginSetting);
-		plugin.setEventControllers(eventControllers);
-		
-		ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
-		EzySimplePluginContext pluginContext = new EzySimplePluginContext();
-		pluginContext.setPlugin(plugin);
-		pluginContext.setParent(zoneContext);
-		pluginContext.setExecutorService(pluginScheduledExecutorService);
-		pluginContext.init();
-		
-		EzySimplePluginEntry entry = new EzyPluginEntryEx2();
-		entry.config(pluginContext);
-		entry.start();
-		entry.destroy();
-	}
-	
-	public static class EzyPluginEntryEx extends EzySimplePluginEntry {
+        entry.destroy();
+    }
+    
+    private void handleClientRequest(EzyPluginContext context) {
+        EzySimplePlugin plugin = (EzySimplePlugin) context.getPlugin();
+        EzyPluginRequestController requestController = plugin.getRequestController();
+        
+        EzyAbstractSession session = spy(EzyAbstractSession.class);
+        EzySimpleUser user = new EzySimpleUser();
+        EzyArray data = EzyEntityFactory.newArrayBuilder()
+                .append("chat")
+                .append(EzyEntityFactory.newObjectBuilder()
+                        .append("message", "greet"))
+                .build();
+        EzyUserRequestPluginEvent event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("chat")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("no command")
+                .append(EzyEntityFactory.newObjectBuilder()
+                        .append("message", "greet"))
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("noUser")
+                .append(EzyEntityFactory.newObjectBuilder()
+                        .append("message", "greet"))
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("noSession")
+                .append(EzyEntityFactory.newObjectBuilder()
+                        .append("message", "greet"))
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("noDataBinding")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("badRequestSend")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("badRequestNoSend")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("exception")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        try {
+            requestController.handle(context, event);
+        }
+        catch (Exception e) {
+            assert e instanceof IllegalStateException;
+        }
+        
+        data = EzyEntityFactory.newArrayBuilder()
+                .append("plugin")
+                .build();
+        event = new EzySimpleUserRequestPluginEvent(user, session, data);
+        requestController.handle(context, event);
+    }
+    
+    @Test
+    public void test2() throws Exception {
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+        
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleZone zone = new EzySimpleZone();
+        zone.setSetting(zoneSetting);
+        EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
+        zoneContext.setZone(zone);
+        zoneContext.init();
+        zoneContext.setParent(serverContext);
+        
+        EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
+        pluginSetting.setName("test");
+        
+        EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
+        EzySimplePlugin plugin = new EzySimplePlugin();
+        plugin.setSetting(pluginSetting);
+        plugin.setEventControllers(eventControllers);
+        
+        ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
+        EzySimplePluginContext pluginContext = new EzySimplePluginContext();
+        pluginContext.setPlugin(plugin);
+        pluginContext.setParent(zoneContext);
+        pluginContext.setExecutorService(pluginScheduledExecutorService);
+        pluginContext.init();
+        
+        EzySimplePluginEntry entry = new EzyPluginEntryEx2();
+        entry.config(pluginContext);
+        entry.start();
+        entry.destroy();
+    }
+    
+    public static class EzyPluginEntryEx extends EzySimplePluginEntry {
 
-		@Override
-		protected String[] getScanableBeanPackages() {
-			return new String[] {
-					"com.tvd12.ezyfoxserver.support.test.entry"
-			};
-		}
-		
-		@SuppressWarnings("rawtypes")
-		@Override
-		protected Class[] getPrototypeClasses() {
-			return new Class[] {
-					ClientPluginRequestHandler.class
-			};
-		}
+        @Override
+        protected String[] getScanableBeanPackages() {
+            return new String[] {
+                    "com.tvd12.ezyfoxserver.support.test.entry"
+            };
+        }
+        
+        @SuppressWarnings("rawtypes")
+        @Override
+        protected Class[] getPrototypeClasses() {
+            return new Class[] {
+                    ClientPluginRequestHandler.class
+            };
+        }
 
-		@Override
-		protected String[] getScanableBindingPackages() {
-			return new String[] {
-					"com.tvd12.ezyfoxserver.support.test.entry"
-			};
-		}
+        @Override
+        protected String[] getScanableBindingPackages() {
+            return new String[] {
+                    "com.tvd12.ezyfoxserver.support.test.entry"
+            };
+        }
 
-		@Override
-		protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-		}
-		
-	}
-	
-	public static class EzyPluginEntryEx2 extends EzySimplePluginEntry {
+        @Override
+        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
+        }
+        
+    }
+    
+    public static class EzyPluginEntryEx2 extends EzySimplePluginEntry {
 
-		@Override
-		protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-		}
-		
-	}
-	
+        @Override
+        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
+        }
+        
+    }
+    
 }

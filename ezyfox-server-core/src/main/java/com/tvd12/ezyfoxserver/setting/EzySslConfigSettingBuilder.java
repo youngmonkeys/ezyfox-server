@@ -9,27 +9,27 @@ public class EzySslConfigSettingBuilder implements EzyBuilder<EzySimpleSslConfig
     protected String contextFactoryBuilder = "com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder";
     
     public EzySslConfigSettingBuilder file(String file) {
-    	this.file = file;
-    	return this;
+        this.file = file;
+        return this;
     }
     
     public EzySslConfigSettingBuilder loader(String loader) {
-    	this.loader = loader;
-    	return this;
+        this.loader = loader;
+        return this;
     }
     
     public EzySslConfigSettingBuilder contextFactoryBuilder(String contextFactoryBuilder) {
-    	this.contextFactoryBuilder = contextFactoryBuilder;
-    	return this;
+        this.contextFactoryBuilder = contextFactoryBuilder;
+        return this;
     }
     
     @Override
     public EzySimpleSslConfigSetting build() {
-    	EzySimpleSslConfigSetting setting = new EzySimpleSslConfigSetting();
-    	setting.setFile(file);
-    	setting.setLoader(loader);
-    	setting.setContextFactoryBuilder(contextFactoryBuilder);
-    	return setting;
+        EzySimpleSslConfigSetting setting = new EzySimpleSslConfigSetting();
+        setting.setFile(file);
+        setting.setLoader(loader);
+        setting.setContextFactoryBuilder(contextFactoryBuilder);
+        return setting;
     }
     
 }

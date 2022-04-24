@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleUserAccessAppEvent 
-		extends EzySimpleUserEvent 
-		implements EzyUserAccessAppEvent {
+        extends EzySimpleUserEvent 
+        implements EzyUserAccessAppEvent {
 
     protected final EzyArray output;
     

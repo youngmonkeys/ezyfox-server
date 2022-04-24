@@ -40,14 +40,14 @@
                         ws.onopen = function () {
                             log('connected');
                             var rq = [
-                            	11,
-                            	[
-                            		"clientKey",
-                            		"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJp80uI4ivZhcstEGxc0crz3Oe9ybHVI3DsqYOFUeh+Qv1mKr/OD8H328gc+s0Zf1i90FNs/kOeU+whq/sW3PNcCAwEAAQ==",
-                            		"reconnectToken#1",
-                            		"JAVA",
-                            		"1.0.0"
-                            	]
+                                11,
+                                [
+                                    "clientKey",
+                                    "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJp80uI4ivZhcstEGxc0crz3Oe9ybHVI3DsqYOFUeh+Qv1mKr/OD8H328gc+s0Zf1i90FNs/kOeU+whq/sW3PNcCAwEAAQ==",
+                                    "reconnectToken#1",
+                                    "JAVA",
+                                    "1.0.0"
+                                ]
                             ];
                             ws.send(JSON.stringify(rq));
                             log("has sent handshake");

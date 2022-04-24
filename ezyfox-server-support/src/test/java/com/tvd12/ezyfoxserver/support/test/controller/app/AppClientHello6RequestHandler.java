@@ -10,10 +10,10 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 @EzySingleton
 @EzyRequestListener("hello6")
 public class AppClientHello6RequestHandler implements EzyUserRequestHandler {
-	
-	@Override
-	public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
-		System.out.println("hello with: " + data);
-	}
+
+    @Override
+    public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
+        System.out.println("hello with: " + data);
+    }
 
 }

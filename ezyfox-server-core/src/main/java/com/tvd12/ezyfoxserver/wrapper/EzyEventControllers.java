@@ -8,10 +8,10 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
 public interface EzyEventControllers extends EzyDestroyable {
 
-	@SuppressWarnings("rawtypes")
-	List<EzyEventController> getControllers(EzyConstant eventType);
-	
-	@SuppressWarnings("rawtypes")
-	void addController(EzyConstant eventType, EzyEventController controller);
-	
+    @SuppressWarnings("rawtypes")
+    List<EzyEventController> getControllers(EzyConstant eventType);
+    
+    @SuppressWarnings("rawtypes")
+    void addController(EzyConstant eventType, EzyEventController controller);
+    
 }

@@ -12,34 +12,34 @@ import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
 
 public class MyTestStarter extends EzyStarter {
 
-	protected MyTestStarter(Builder builder) {
-		super(builder);
-	}
+    protected MyTestStarter(Builder builder) {
+        super(builder);
+    }
 
-	@Override
-	protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
-		return new MyTestServerBootstrapBuilder();
-	}
-	
-	@SuppressWarnings({ "rawtypes" })
+    @Override
+    protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
+        return new MyTestServerBootstrapBuilder();
+    }
+
+    @SuppressWarnings({ "rawtypes" })
     @Override
     protected EzySimpleSessionManager.Builder 
             newSessionManagerBuilder(EzySettings settings) {
         return new ExSessionManager.SBuilder();
     }
-	
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder extends EzyStarter.Builder<Builder> {
-		@Override
-		public EzyStarter build() {
-			return new MyTestStarter(this);
-		}
-	}
-	
-	public static class ExSessionManager extends EzySimpleSessionManager<ExSession> {
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends EzyStarter.Builder<Builder> {
+        @Override
+        public EzyStarter build() {
+            return new MyTestStarter(this);
+        }
+    }
+
+    public static class ExSessionManager extends EzySimpleSessionManager<ExSession> {
 
         protected ExSessionManager(SBuilder builder) {
             super(builder);
@@ -62,10 +62,10 @@ public class MyTestStarter extends EzyStarter {
                 };
             }
         }
-	    
-	}
-	
-	public static class ExSession extends EzyAbstractSession {
+
+    }
+
+    public static class ExSession extends EzyAbstractSession {
         private static final long serialVersionUID = 2019546923661465393L;
 
         @Override
@@ -85,7 +85,7 @@ public class MyTestStarter extends EzyStarter {
         @Override
         public void disconnect(EzyConstant disconnectReason) {
         }
-	    
-	}
+
+    }
 
 }

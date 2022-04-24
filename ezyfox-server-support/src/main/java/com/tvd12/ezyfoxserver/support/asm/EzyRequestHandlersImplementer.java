@@ -24,52 +24,52 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
     private EzyResponseFactory responseFactory;
     private EzyFeatureCommandManager featureCommandManager; 
     private EzyRequestCommandManager requestCommandManager;
-	
-	public Map<String, EzyUserRequestHandler> implement(Collection<Object> controllers) {
-		Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
-		for(Object controller : controllers) {
-			Map<String, EzyUserRequestHandler> map = implement(controller);
-			for(String command : map.keySet()) {
-				EzyUserRequestHandler handler = map.get(command);
-				EzyUserRequestHandler old = handlers.put(command, handler);
-				if(old != null && !allowOverrideCommand) {
-					throw new EzyDuplicateRequestHandlerException(command, old, handler);
-				}
-			}
-		}
-		return handlers;
-	}
-	
-	private Map<String, EzyUserRequestHandler> implement(Object controller) {
-		Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
-		EzyRequestControllerProxy proxy = new EzyRequestControllerProxy(controller);
-		String feature = proxy.getFeature();
-		for(EzyRequestHandlerMethod method : proxy.getRequestHandlerMethods()) {
-			EzyRequestHandlerImplementer implementer = newImplementer(proxy, method);
-			EzyAsmRequestHandler handler = implementer.implement();
-			String command = handler.getCommand();
-			handlers.put(command, handler);
-			requestCommandManager.addCommand(command);
-			if (proxy.isManagement() || method.isManagement()) {
-			    requestCommandManager.addManagementCommand(command);
-			}
-			if (proxy.isPayment() || method.isPayment()) {
-			    requestCommandManager.addPaymentCommand(command);
-			}
-			String methodFeature = feature != null ? feature : method.getFeature();
-			if (EzyStrings.isNotBlank(methodFeature)) {
-			    featureCommandManager.addFeatureCommand(methodFeature, command);
-			}
-		}
-		return handlers;
-	}
-	
-	protected EzyRequestHandlerImplementer newImplementer(
-			EzyRequestControllerProxy controller, EzyRequestHandlerMethod method) {
-	    EzyRequestHandlerImplementer implementer = 
-	            new EzyRequestHandlerImplementer(controller, method);
-	    implementer.setResponseFactory(responseFactory);
-	    return implementer;
-	}
-	
+    
+    public Map<String, EzyUserRequestHandler> implement(Collection<Object> controllers) {
+        Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
+        for(Object controller : controllers) {
+            Map<String, EzyUserRequestHandler> map = implement(controller);
+            for(String command : map.keySet()) {
+                EzyUserRequestHandler handler = map.get(command);
+                EzyUserRequestHandler old = handlers.put(command, handler);
+                if(old != null && !allowOverrideCommand) {
+                    throw new EzyDuplicateRequestHandlerException(command, old, handler);
+                }
+            }
+        }
+        return handlers;
+    }
+    
+    private Map<String, EzyUserRequestHandler> implement(Object controller) {
+        Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
+        EzyRequestControllerProxy proxy = new EzyRequestControllerProxy(controller);
+        String feature = proxy.getFeature();
+        for(EzyRequestHandlerMethod method : proxy.getRequestHandlerMethods()) {
+            EzyRequestHandlerImplementer implementer = newImplementer(proxy, method);
+            EzyAsmRequestHandler handler = implementer.implement();
+            String command = handler.getCommand();
+            handlers.put(command, handler);
+            requestCommandManager.addCommand(command);
+            if (proxy.isManagement() || method.isManagement()) {
+                requestCommandManager.addManagementCommand(command);
+            }
+            if (proxy.isPayment() || method.isPayment()) {
+                requestCommandManager.addPaymentCommand(command);
+            }
+            String methodFeature = feature != null ? feature : method.getFeature();
+            if (EzyStrings.isNotBlank(methodFeature)) {
+                featureCommandManager.addFeatureCommand(methodFeature, command);
+            }
+        }
+        return handlers;
+    }
+    
+    protected EzyRequestHandlerImplementer newImplementer(
+            EzyRequestControllerProxy controller, EzyRequestHandlerMethod method) {
+        EzyRequestHandlerImplementer implementer = 
+                new EzyRequestHandlerImplementer(controller, method);
+        implementer.setResponseFactory(responseFactory);
+        return implementer;
+    }
+    
 }

@@ -11,16 +11,16 @@ import lombok.Setter;
 @Setter
 public class EzyPluginResponseFactory extends EzyAbstractResponseFactory {
 
-	protected EzyPluginContext pluginContext;
-	
-	@Override
-	public EzyArrayResponse newArrayResponse() {
-		return new EzyPluginArrayResponse(pluginContext, marshaller);
-	}
-	
-	@Override
-	public EzyObjectResponse newObjectResponse() {
-		return new EzyPluginObjectResponse(pluginContext, marshaller);
-	}
-	
+    protected EzyPluginContext pluginContext;
+
+    @Override
+    public EzyArrayResponse newArrayResponse() {
+        return new EzyPluginArrayResponse(pluginContext, marshaller);
+    }
+
+    @Override
+    public EzyObjectResponse newObjectResponse() {
+        return new EzyPluginObjectResponse(pluginContext, marshaller);
+    }
+
 }

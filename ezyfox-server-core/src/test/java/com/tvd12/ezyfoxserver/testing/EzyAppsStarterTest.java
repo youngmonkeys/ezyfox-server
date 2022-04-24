@@ -103,8 +103,8 @@ public class EzyAppsStarterTest extends BaseTest {
     
     @Test
     public void newAppEntryLoaderArgsNotNullTest() {
-    	// given
-    	Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
+        // given
+        Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
         EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
@@ -143,8 +143,8 @@ public class EzyAppsStarterTest extends BaseTest {
     
     @Test
     public void newAppEntryLoaderClassLoaderIsNull() {
-    	// given
-    	Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
+        // given
+        Map<String, ClassLoader> loaders = new ConcurrentHashMap<>();
         EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
@@ -179,14 +179,14 @@ public class EzyAppsStarterTest extends BaseTest {
     }
     
     public static class InternalAppEntryLoader implements EzyAppEntryLoader {
-    	
-    	public InternalAppEntryLoader(String arg) {
-    		System.out.println(arg);
-    	}
 
-		@Override
-		public EzyAppEntry load() throws Exception {
-			return new EzyAppEntry() {};
-		}
+        public InternalAppEntryLoader(String arg) {
+            System.out.println(arg);
+        }
+
+        @Override
+        public EzyAppEntry load() throws Exception {
+            return new EzyAppEntry() {};
+        }
     }
 }

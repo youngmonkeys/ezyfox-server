@@ -47,8 +47,8 @@ public interface EzyComplexContext
     
     // ======================= tcp/send =================
     default void send(
-    		EzyResponse response, 
-    		Collection<EzySession> recipients, boolean encrypted) {
+            EzyResponse response, 
+            Collection<EzySession> recipients, boolean encrypted) {
         send(response, recipients, encrypted, EzyTransportType.TCP);
     }
     
@@ -61,12 +61,12 @@ public interface EzyComplexContext
     }
     
     default void send(
-    		EzyResponse response, EzySession recipient, boolean encrypted) {
+            EzyResponse response, EzySession recipient, boolean encrypted) {
         send(response, recipient, encrypted, EzyTransportType.TCP);
     }
     
     default void send(
-    		EzyResponse response, EzyUser recipient, boolean encrypted) {
+            EzyResponse response, EzyUser recipient, boolean encrypted) {
         send(response, recipient, encrypted, EzyTransportType.TCP);
     }
     

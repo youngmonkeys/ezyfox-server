@@ -74,26 +74,26 @@ public class EzySimpleUserTest extends BaseTest {
     
     @Test
     public void equalTest() {
-    	// given
-    	EzySimpleUser user1 = new EzySimpleUser();
-    	user1.setId(1L);
-    	user1.setName("user");
-    	user1.setPassword("123456");
-    	user1.setZoneId(1);
-    	user1.setMaxSessions(30);
-    	user1.setStartIdleTime(System.currentTimeMillis());
-    	user1.setMaxIdleTime(100L);
-    	user1.setDestroyed(false);
-    	EzySimpleUser user2 = new EzySimpleUser();
-    	user2.setId(1L);
-    	EzySimpleUser user3 = new EzySimpleUser();
-    	
-    	// when
-    	// then
-    	Asserts.assertFalse(user1.equals(null));
-    	Asserts.assertTrue(user1.equals(user1));
-    	Asserts.assertTrue(user1.equals(user2));
-    	Asserts.assertFalse(user1.equals(user3));
-    	Asserts.assertFalse(user1.equals(new Object()));
+        // given
+        EzySimpleUser user1 = new EzySimpleUser();
+        user1.setId(1L);
+        user1.setName("user");
+        user1.setPassword("123456");
+        user1.setZoneId(1);
+        user1.setMaxSessions(30);
+        user1.setStartIdleTime(System.currentTimeMillis());
+        user1.setMaxIdleTime(100L);
+        user1.setDestroyed(false);
+        EzySimpleUser user2 = new EzySimpleUser();
+        user2.setId(1L);
+        EzySimpleUser user3 = new EzySimpleUser();
+
+        // when
+        // then
+        Asserts.assertFalse(user1.equals(null));
+        Asserts.assertTrue(user1.equals(user1));
+        Asserts.assertTrue(user1.equals(user2));
+        Asserts.assertFalse(user1.equals(user3));
+        Asserts.assertFalse(user1.equals(new Object()));
     }
 }

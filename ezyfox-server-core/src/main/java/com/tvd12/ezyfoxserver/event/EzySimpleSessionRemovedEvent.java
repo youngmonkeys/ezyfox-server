@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class EzySimpleSessionRemovedEvent 
-		extends EzySimpleUserSessionEvent 
-		implements EzySessionRemovedEvent {
+        extends EzySimpleUserSessionEvent
+        implements EzySessionRemovedEvent {
 
     protected final EzyConstant reason;
     
@@ -18,5 +18,5 @@ public class EzySimpleSessionRemovedEvent
         super(user, session);
         this.reason = reason;
     }
-	
+
 }

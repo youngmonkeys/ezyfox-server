@@ -7,10 +7,10 @@ import com.tvd12.ezyfoxserver.request.EzyUserRequest;
 @SuppressWarnings("rawtypes")
 public class EzyServerUserInterceptor<D> extends EzyAbstractServerInterceptor<EzyUserRequest> {
 
-	@Override
-	public void intercept(EzyServerContext ctx, EzyUserRequest request) throws Exception {
-		if(request.getUser() == null)
-			throw new EzyNotAuthorizedException("user has not logged in");
-	}
-	
+    @Override
+    public void intercept(EzyServerContext ctx, EzyUserRequest request) throws Exception {
+        if(request.getUser() == null)
+            throw new EzyNotAuthorizedException("user has not logged in");
+    }
+
 }

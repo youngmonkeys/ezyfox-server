@@ -30,28 +30,28 @@ public class EzyStarterTest {
     
     @Test
     public void notPrintSettings() {
-    	// given
-    	EzyStarter starter = new ExEzyStarter.Builder()
+        // given
+        EzyStarter starter = new ExEzyStarter.Builder()
                 .build();
-    	
-    	EzyConfig config = mock(EzyConfig.class);
-    	when(config.isPrintSettings()).thenReturn(false);
-    	
-    	EzySimpleServer server = new EzySimpleServer();
-    	server.setConfig(config);
-    	
-    	EzySimpleSettings settings = new EzySimpleSettings();
-    	server.setSettings(settings);
-    	
-    	// when
-    	MethodInvoker.create()
-    		.object(starter)
-    		.method("startEzyFox")
-    		.param(EzyServer.class, server)
-    		.call();
-    	
-    	// then
-    	verify(config, times(1)).isPrintSettings();
+
+        EzyConfig config = mock(EzyConfig.class);
+        when(config.isPrintSettings()).thenReturn(false);
+
+        EzySimpleServer server = new EzySimpleServer();
+        server.setConfig(config);
+
+        EzySimpleSettings settings = new EzySimpleSettings();
+        server.setSettings(settings);
+
+        // when
+        MethodInvoker.create()
+            .object(starter)
+            .method("startEzyFox")
+            .param(EzyServer.class, server)
+            .call();
+
+        // then
+        verify(config, times(1)).isPrintSettings();
     }
     
     public static class ExEzyStarter extends EzyStarter {

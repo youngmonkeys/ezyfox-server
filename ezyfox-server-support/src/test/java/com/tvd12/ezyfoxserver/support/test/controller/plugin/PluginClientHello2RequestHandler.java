@@ -10,11 +10,11 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 @EzySingleton
 @EzyRequestListener("hello2")
 public class PluginClientHello2RequestHandler 
-		implements EzyUserRequestPluginHandler<Hello> {
+        implements EzyUserRequestPluginHandler<Hello> {
 
-	@Override
-	public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
-		System.out.println("hello: " + data.getWho());
-	}
+    @Override
+    public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
+        System.out.println("hello: " + data.getWho());
+    }
 
 }

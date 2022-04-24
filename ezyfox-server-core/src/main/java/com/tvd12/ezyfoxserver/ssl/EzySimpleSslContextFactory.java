@@ -108,7 +108,7 @@ public class EzySimpleSslContextFactory
     }
     
     protected String getDefaultAlgorithm() {
-    	return KeyManagerFactory.getDefaultAlgorithm();
+        return KeyManagerFactory.getDefaultAlgorithm();
     }
     
     protected EzyInputStreamLoader newInputStreamLoader() {

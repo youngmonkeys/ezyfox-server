@@ -34,18 +34,18 @@ import lombok.Getter;
 
 public class EzySimpleServerContext extends EzyAbstractComplexContext implements EzyServerContext {
 
-	@Getter
-	protected EzyServer server;
-	protected EzyStreamBytes streamBytes;
-	protected EzySendResponse sendResponse;
-	protected EzyBroadcastEvent broadcastEvent;
-	
-	@Getter
-	protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
-	protected final Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
+    @Getter
+    protected EzyServer server;
+    protected EzyStreamBytes streamBytes;
+    protected EzySendResponse sendResponse;
+    protected EzyBroadcastEvent broadcastEvent;
+
+    @Getter
+    protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
+    protected final Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
     protected final Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
-	
-	
+
+
     @Override
     protected void init0() {
         this.broadcastEvent = new EzyBroadcastEventImpl(this);
@@ -58,134 +58,134 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
         this.properties.put(EzyCloseSession.class, new EzyCloseSessionImpl(this));
     }
     
-	@Override
-	public <T> T get(Class<T> clazz) {
-	    T property = getProperty(clazz);
-	    if(property != null)
-            return property;
-		throw new IllegalArgumentException("has no instance of " + clazz);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-	public <T> T cmd(Class<T> clazz) {
-	    Supplier supplier = commandSuppliers.get(clazz);
-	    if(supplier != null)
+    public <T> T get(Class<T> clazz) {
+        T property = getProperty(clazz);
+        if(property != null)
+            return property;
+        throw new IllegalArgumentException("has no instance of " + clazz);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public <T> T cmd(Class<T> clazz) {
+        Supplier supplier = commandSuppliers.get(clazz);
+        if(supplier != null)
             return (T) supplier.get();
         throw new IllegalArgumentException("has no command of " + clazz);
-	}
-	
-	@Override
-	public void broadcast(
-	        EzyConstant eventType, EzyEvent event, boolean catchException) {
-	    broadcastEvent.fire(eventType, event, catchException);
-	}
-	
-	@Override
-	public void send(
-	        EzyResponse response, 
-	        EzySession recipient, 
-	        boolean encrypted, EzyTransportType transportType) {
-	    sendResponse.execute(response, recipient, encrypted, false, transportType);
-	}
-	
-	@Override
-	public void send(EzyResponse response, 
-	        Collection<EzySession> recipients, 
-	        boolean encrypted, EzyTransportType transportType) {
-	    sendResponse.execute(response, recipients, encrypted, false, transportType);
-	}
-	
-	@Override
-	public void sendNow(EzyResponse response, EzySession recipient) {
-		sendResponse.execute(response, recipient, false, true, EzyTransportType.TCP);
-	}
-	
-	@Override
-	public void stream(
-	        byte[] bytes, 
-	        EzySession recipient, EzyTransportType transportType) {
-	    streamBytes.execute(bytes, recipient, transportType);
-	}
-	
-	@Override
-	public void stream(
-	        byte[] bytes, 
-	        Collection<EzySession> recipients, EzyTransportType transportType) {
-	    streamBytes.execute(bytes, recipients, transportType);
-	}
-	
-	public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
+    }
+
+    @Override
+    public void broadcast(
+            EzyConstant eventType, EzyEvent event, boolean catchException) {
+        broadcastEvent.fire(eventType, event, catchException);
+    }
+
+    @Override
+    public void send(
+            EzyResponse response,
+            EzySession recipient,
+            boolean encrypted, EzyTransportType transportType) {
+        sendResponse.execute(response, recipient, encrypted, false, transportType);
+    }
+
+    @Override
+    public void send(EzyResponse response,
+            Collection<EzySession> recipients,
+            boolean encrypted, EzyTransportType transportType) {
+        sendResponse.execute(response, recipients, encrypted, false, transportType);
+    }
+
+    @Override
+    public void sendNow(EzyResponse response, EzySession recipient) {
+        sendResponse.execute(response, recipient, false, true, EzyTransportType.TCP);
+    }
+
+    @Override
+    public void stream(
+            byte[] bytes,
+            EzySession recipient, EzyTransportType transportType) {
+        streamBytes.execute(bytes, recipient, transportType);
+    }
+
+    @Override
+    public void stream(
+            byte[] bytes,
+            Collection<EzySession> recipients, EzyTransportType transportType) {
+        streamBytes.execute(bytes, recipients, transportType);
+    }
+
+    public void addZoneContexts(Collection<EzyZoneContext> zoneContexts) {
         for(EzyZoneContext ctx : zoneContexts)
             addZoneContext(ctx.getZone().getSetting(), ctx);
     }
-	
-	public void addZoneContext(EzyZoneSetting zone, EzyZoneContext zoneContext) {
-	    zoneContexts.add(zoneContext);
-	    zoneContextsById.put(zone.getId(), zoneContext);
-	    zoneContextsByName.put(zone.getName(), zoneContext);
-	    addAppContexts(((EzyAppContextsFetcher)zoneContext).getAppContexts());
-	    addPluginContexts(((EzyPluginContextsFetcher)zoneContext).getPluginContexts());
-	}
-	
-	@Override
-	public EzyZoneContext getZoneContext(int zoneId) {
-	    EzyZoneContext zoneContext = zoneContextsById.get(zoneId);
-	    if(zoneContext != null)
-	        return zoneContext;
-	    throw new EzyZoneNotFoundException(zoneId);
-	}
-	
-	@Override
-	public EzyZoneContext getZoneContext(String zoneName) {
-	    EzyZoneContext zoneContext = zoneContextsByName.get(zoneName);
-	    if(zoneContext != null)
-	        return zoneContext;
-	    throw new EzyZoneNotFoundException(zoneName);
-	}
-	
-	public void setServer(EzyServer server) {
+
+    public void addZoneContext(EzyZoneSetting zone, EzyZoneContext zoneContext) {
+        zoneContexts.add(zoneContext);
+        zoneContextsById.put(zone.getId(), zoneContext);
+        zoneContextsByName.put(zone.getName(), zoneContext);
+        addAppContexts(((EzyAppContextsFetcher)zoneContext).getAppContexts());
+        addPluginContexts(((EzyPluginContextsFetcher)zoneContext).getPluginContexts());
+    }
+
+    @Override
+    public EzyZoneContext getZoneContext(int zoneId) {
+        EzyZoneContext zoneContext = zoneContextsById.get(zoneId);
+        if(zoneContext != null)
+            return zoneContext;
+        throw new EzyZoneNotFoundException(zoneId);
+    }
+
+    @Override
+    public EzyZoneContext getZoneContext(String zoneName) {
+        EzyZoneContext zoneContext = zoneContextsByName.get(zoneName);
+        if(zoneContext != null)
+            return zoneContext;
+        throw new EzyZoneNotFoundException(zoneName);
+    }
+
+    public void setServer(EzyServer server) {
         this.server = server;
         this.component = (EzyComponent)server;
     }
-	
-	@Override
-	protected void destroyComponents() {
-	    destroyZoneContexts();
-	    destroyServer();
-	}
-	
-	@Override
-	protected void clearProperties() {
-	    super.clearProperties();
-	    this.server = null;
-	    this.sendResponse = null;
-	    this.broadcastEvent = null;
-	    this.zoneContexts.clear();
-	    this.zoneContextsById.clear();
-	    this.zoneContextsByName.clear();
-	}
-	
-	private void destroyServer() {
-	    processWithLogException(() -> ((EzyDestroyable)server).destroy());
-	}
-	
-	private void destroyZoneContexts() {
-	    for(EzyZoneContext zc : zoneContextsById.values())
-	        this.destroyZoneContext(zc);
+
+    @Override
+    protected void destroyComponents() {
+        destroyZoneContexts();
+        destroyServer();
     }
-	
-	private void destroyZoneContext(EzyZoneContext zoneContext) {
-	    processWithLogException(() -> ((EzyDestroyable)zoneContext).destroy());
-	}
-	
-	@Override
-	protected void preDestroy() {
-	    logger.debug("destroy ServerContext ...");
-	}
-	
-	@Override
-	protected void postDestroy() {
-	    logger.debug("ServerContext has destroyed");
-	}
+
+    @Override
+    protected void clearProperties() {
+        super.clearProperties();
+        this.server = null;
+        this.sendResponse = null;
+        this.broadcastEvent = null;
+        this.zoneContexts.clear();
+        this.zoneContextsById.clear();
+        this.zoneContextsByName.clear();
+    }
+
+    private void destroyServer() {
+        processWithLogException(() -> ((EzyDestroyable)server).destroy());
+    }
+
+    private void destroyZoneContexts() {
+        for(EzyZoneContext zc : zoneContextsById.values())
+            this.destroyZoneContext(zc);
+    }
+
+    private void destroyZoneContext(EzyZoneContext zoneContext) {
+        processWithLogException(() -> ((EzyDestroyable)zoneContext).destroy());
+    }
+
+    @Override
+    protected void preDestroy() {
+        logger.debug("destroy ServerContext ...");
+    }
+
+    @Override
+    protected void postDestroy() {
+        logger.debug("ServerContext has destroyed");
+    }
 }

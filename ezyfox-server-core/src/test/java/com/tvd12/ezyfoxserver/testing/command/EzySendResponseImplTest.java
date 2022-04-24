@@ -42,7 +42,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseOneSuccessButNotDebug() throws Exception {
-    	// given
+        // given
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(false);
         EzyResponseApi responseApi = spy(EzyAbstractResponseApi.class);
@@ -62,7 +62,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseOneSuccessButIsPong() throws Exception {
-    	// given
+        // given
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(true);
         EzyResponseApi responseApi = spy(EzyAbstractResponseApi.class);
@@ -97,7 +97,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseMultiSuccessCase() throws Exception {
-    	// when
+        // when
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(true);
         EzyResponseApi responseApi = mock(EzyResponseApi.class);
@@ -118,7 +118,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseMultiSuccessCaseButNotDebug() throws Exception {
-    	// when
+        // when
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(false);
         EzyResponseApi responseApi = mock(EzyResponseApi.class);
@@ -139,7 +139,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseMultiSuccessCaseButIsPong() throws Exception {
-    	// when
+        // when
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(true);
         EzyResponseApi responseApi = mock(EzyResponseApi.class);
@@ -160,7 +160,7 @@ public class EzySendResponseImplTest {
     
     @Test
     public void responseMultiErrorTest() throws Exception {
-    	// given
+        // given
         EzySimpleSettings settings = new EzySimpleSettings();
         settings.setDebug(true);
         EzyResponseApi responseApi = mock(EzyResponseApi.class);

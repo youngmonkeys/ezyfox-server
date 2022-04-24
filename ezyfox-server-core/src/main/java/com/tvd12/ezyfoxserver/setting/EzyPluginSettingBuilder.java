@@ -20,7 +20,7 @@ public class EzyPluginSettingBuilder extends EzyAbstractSettingBuilder<
     }
     
     public EzyPluginSettingBuilder addListenEvent(EzyConstant event) {
-    	return addListenEvent(event.toString());
+        return addListenEvent(event.toString());
     }
     
     public EzyPluginSettingBuilder listenEvents(EzySimpleListenEvents listenEvents) {

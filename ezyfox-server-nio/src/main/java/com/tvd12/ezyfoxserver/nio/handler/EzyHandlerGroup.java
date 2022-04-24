@@ -7,16 +7,16 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 
 public interface EzyHandlerGroup extends 
-			EzySocketDataHandlerGroup, 
-			EzySocketWriterGroup, 
-			EzyDestroyable {
-	
-	void enqueueDisconnection(EzyConstant reason);
+            EzySocketDataHandlerGroup,
+            EzySocketWriterGroup,
+            EzyDestroyable {
 
-	void fireExceptionCaught(Throwable throwable);
-	
-	default void enqueueDisconnection() {
-		enqueueDisconnection(EzyDisconnectReason.UNKNOWN);
-	}
-	
+    void enqueueDisconnection(EzyConstant reason);
+
+    void fireExceptionCaught(Throwable throwable);
+
+    default void enqueueDisconnection() {
+        enqueueDisconnection(EzyDisconnectReason.UNKNOWN);
+    }
+
 }

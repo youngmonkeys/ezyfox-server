@@ -8,13 +8,13 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleZoneTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzySimpleZone zone = new EzySimpleZone();
-		EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
-		zone.setSetting(setting);
-		assert zone.equals(zone);
-		assert !zone.equals(new EzySimpleZone());
-	}
-	
+    @Test
+    public void test() {
+        EzySimpleZone zone = new EzySimpleZone();
+        EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
+        zone.setSetting(setting);
+        assert zone.equals(zone);
+        assert !zone.equals(new EzySimpleZone());
+    }
+
 }

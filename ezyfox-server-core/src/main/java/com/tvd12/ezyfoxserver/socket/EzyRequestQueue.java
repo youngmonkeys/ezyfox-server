@@ -4,14 +4,14 @@ public interface EzyRequestQueue {
 
     int size();
     
-	void clear();
-	
-	EzySocketRequest take();
-	
-	boolean isFull();
-	
-	boolean isEmpty();
+    void clear();
 
-	boolean add(EzySocketRequest request);
-	
+    EzySocketRequest take();
+
+    boolean isFull();
+
+    boolean isEmpty();
+
+    boolean add(EzySocketRequest request);
+
 }

@@ -42,16 +42,16 @@ public abstract class EzyLoader extends EzyLoggable {
     
     public EzyServer load() {
         EzySettings settings = readSettings();
-    	EzySimpleServer answer = new EzySimpleServer();
-    	answer.setConfig(config);
-    	answer.setSettings(settings);
-    	answer.setClassLoader(classLoader);
-    	answer.setAppClassLoaders(newAppClassLoaders());
-    	answer.setStatistics(newStatistics());
-    	answer.setControllers(newControllers());
-    	answer.setSessionManager(newSessionManagers(settings));
-    	answer.setEventControllers(newEventControllers(settings.getEventControllers()));
-    	return answer;
+        EzySimpleServer answer = new EzySimpleServer();
+        answer.setConfig(config);
+        answer.setSettings(settings);
+        answer.setClassLoader(classLoader);
+        answer.setAppClassLoaders(newAppClassLoaders());
+        answer.setStatistics(newStatistics());
+        answer.setControllers(newControllers());
+        answer.setSessionManager(newSessionManagers(settings));
+        answer.setEventControllers(newEventControllers(settings.getEventControllers()));
+        return answer;
     }
     
     protected EzySettings readSettings() {
@@ -129,7 +129,7 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     protected String getAppsPath() {
-    	return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
+        return getPath(getHomePath(), EzyFolderNamesSetting.APPS);
     }
     
     protected String getPath(String first, String... more) {
@@ -146,8 +146,8 @@ public abstract class EzyLoader extends EzyLoggable {
     }
     
     public EzyLoader config(EzyConfig config) {
-	    this.config = config;
-	    return this;
+        this.config = config;
+        return this;
     }
     
     public EzyLoader settingsDecorator(EzySettingsDecorator settingsDecorator) {

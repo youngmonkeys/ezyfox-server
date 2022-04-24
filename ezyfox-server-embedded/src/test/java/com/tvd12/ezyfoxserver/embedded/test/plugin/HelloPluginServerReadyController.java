@@ -10,11 +10,11 @@ import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 @EzySingleton
 @EzyEventHandler(event = EzyEventNames.SERVER_READY)
 public class HelloPluginServerReadyController 
-		extends EzyAbstractPluginEventController<EzyServerReadyEvent> {
+        extends EzyAbstractPluginEventController<EzyServerReadyEvent> {
 
-	@Override
-	public void handle(EzyPluginContext ctx, EzyServerReadyEvent event) {
-		logger.info("HELLO PLUGIN - SERVER READY");
-	}
-	
+    @Override
+    public void handle(EzyPluginContext ctx, EzyServerReadyEvent event) {
+        logger.info("HELLO PLUGIN - SERVER READY");
+    }
+
 }

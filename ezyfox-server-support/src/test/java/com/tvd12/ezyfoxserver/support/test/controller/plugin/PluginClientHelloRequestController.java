@@ -14,29 +14,29 @@ import com.tvd12.ezyfoxserver.support.test.exception.RequestException4;
 @EzyRequestController("plugin")
 public class PluginClientHelloRequestController {
 
-	@EzyDoHandle("c_hello")
-	public void handleHello(
-			EzyPluginContext context,
-			@EzyRequestData Hello data,
-			EzyUser user) {
-		System.out.println("plugin: c_hello: " + data.getWho());
-	}
-	
-	@EzyDoHandle("requestException4")
-	public void handleRequestException4(
-			EzyContext context, 
-			String cmd, 
-			@EzyRequestData Hello data) throws Exception {
-		throw new RequestException4(getClass().getSimpleName() + ":handleRequestException4, cmd = " + cmd);
-	}
-	
-	@EzyTryCatch({RequestException4.class})
-	public void handleRequestException2(
-			RequestException4 e, 
-			String cmd,
-			Hello request, 
-			EzyUser user, EzySession session, EzyContext context) {
-		System.out.println("PluginClientHelloRequestController::handleRequestException2, cmd = " + cmd + ", data = " + request + ", e = " + e);
-	}
-	
+    @EzyDoHandle("c_hello")
+    public void handleHello(
+            EzyPluginContext context,
+            @EzyRequestData Hello data,
+            EzyUser user) {
+        System.out.println("plugin: c_hello: " + data.getWho());
+    }
+
+    @EzyDoHandle("requestException4")
+    public void handleRequestException4(
+            EzyContext context,
+            String cmd,
+            @EzyRequestData Hello data) throws Exception {
+        throw new RequestException4(getClass().getSimpleName() + ":handleRequestException4, cmd = " + cmd);
+    }
+
+    @EzyTryCatch({RequestException4.class})
+    public void handleRequestException2(
+            RequestException4 e,
+            String cmd,
+            Hello request,
+            EzyUser user, EzySession session, EzyContext context) {
+        System.out.println("PluginClientHelloRequestController::handleRequestException2, cmd = " + cmd + ", data = " + request + ", e = " + e);
+    }
+
 }

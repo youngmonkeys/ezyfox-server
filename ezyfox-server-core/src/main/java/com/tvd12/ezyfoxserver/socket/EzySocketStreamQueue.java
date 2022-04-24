@@ -4,16 +4,16 @@ public interface EzySocketStreamQueue {
 
     int size();
     
-	void clear();
-	
-	boolean isFull();
-	
-	boolean isEmpty();
-	
-	boolean add(EzySocketStream stream);
-	
-	void remove(EzySocketStream stream);
-	
-	EzySocketStream take() throws InterruptedException;
-	
+    void clear();
+
+    boolean isFull();
+
+    boolean isEmpty();
+
+    boolean add(EzySocketStream stream);
+
+    void remove(EzySocketStream stream);
+
+    EzySocketStream take() throws InterruptedException;
+
 }

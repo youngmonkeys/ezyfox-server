@@ -11,18 +11,18 @@ import com.tvd12.test.assertion.Asserts;
 
 public class EzyHandlerGroupBuilderFactoryImplTest {
 
-	@Test
-	public void buildWithSessionCreatorNotNull() {
-		// given
-		EzySessionCreator sessionCreator = mock(EzySessionCreator.class);
-		EzyHandlerGroupBuilderFactoryImpl.Builder builder = 
-				EzyHandlerGroupBuilderFactoryImpl.builder()
-				.sessionCreator(sessionCreator);
-		
-		// when
-		EzyHandlerGroupBuilderFactory factor = builder.build();
-		
-		// then
-		Asserts.assertNotNull(factor);
-	}
+    @Test
+    public void buildWithSessionCreatorNotNull() {
+        // given
+        EzySessionCreator sessionCreator = mock(EzySessionCreator.class);
+        EzyHandlerGroupBuilderFactoryImpl.Builder builder = 
+                EzyHandlerGroupBuilderFactoryImpl.builder()
+                .sessionCreator(sessionCreator);
+        
+        // when
+        EzyHandlerGroupBuilderFactory factor = builder.build();
+        
+        // then
+        Asserts.assertNotNull(factor);
+    }
 }

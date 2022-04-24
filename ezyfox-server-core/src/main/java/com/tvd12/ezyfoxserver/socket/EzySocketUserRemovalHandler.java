@@ -16,60 +16,60 @@ import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
 public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 
-	protected final EzySocketUserRemovalQueue userRemovalQueue;
-	
-	public EzySocketUserRemovalHandler(EzySocketUserRemovalQueue userRemovalQueue) {
-	    this.userRemovalQueue = userRemovalQueue;
-	}
-	
-	@Override
+    protected final EzySocketUserRemovalQueue userRemovalQueue;
+
+    public EzySocketUserRemovalHandler(EzySocketUserRemovalQueue userRemovalQueue) {
+        this.userRemovalQueue = userRemovalQueue;
+    }
+
+    @Override
     public void handleEvent() {
-	    processUserRemovalQueue();
-	}
-	
-	@Override
-	public void destroy() {
-	    processWithLogException(() -> userRemovalQueue.clear());
-	}
-	
-	private void processUserRemovalQueue() {
-		try {
-			EzySocketUserRemoval removal = userRemovalQueue.take();
-			processUserRemoval(removal);
-		} 
-		catch (InterruptedException e) {
-			logger.info("user-removal-handler thread interrupted: {}", Thread.currentThread());
-		}
-		catch(Throwable throwable) {
-			logger.warn("problems in user-removal-handler, thread: {}", Thread.currentThread(), throwable);
-		}
-	}
-	
-	private void processUserRemoval(EzySocketUserRemoval removal) {
-	    try {
-	        processUserRemoval0(removal);
-	    }
-	    finally {
-	        removal.release();
+        processUserRemovalQueue();
+    }
+
+    @Override
+    public void destroy() {
+        processWithLogException(() -> userRemovalQueue.clear());
+    }
+
+    private void processUserRemovalQueue() {
+        try {
+            EzySocketUserRemoval removal = userRemovalQueue.take();
+            processUserRemoval(removal);
         }
-	}
-	
-	private void processUserRemoval0(EzySocketUserRemoval removal) {
-	    EzyUser user = removal.getUser();
-	    try {
-	        EzyConstant reason = removal.getReason();
-	        EzyZoneContext zoneContext = removal.getZoneContext();
+        catch (InterruptedException e) {
+            logger.info("user-removal-handler thread interrupted: {}", Thread.currentThread());
+        }
+        catch(Throwable throwable) {
+            logger.warn("problems in user-removal-handler, thread: {}", Thread.currentThread(), throwable);
+        }
+    }
+
+    private void processUserRemoval(EzySocketUserRemoval removal) {
+        try {
+            processUserRemoval0(removal);
+        }
+        finally {
+            removal.release();
+        }
+    }
+
+    private void processUserRemoval0(EzySocketUserRemoval removal) {
+        EzyUser user = removal.getUser();
+        try {
+            EzyConstant reason = removal.getReason();
+            EzyZoneContext zoneContext = removal.getZoneContext();
             EzyUserRemovedEvent event = newUserRemovedEvent(user, reason);
             removeUserFromApps(zoneContext, event);
             notifyUserRemovedToPlugins(zoneContext, event);
-	    }
-	    finally {
+        }
+        finally {
             user.destroy();
         }
-	    logger.debug("user {} has destroyed", user);
-	}
-	
-	protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserRemovedEvent event) {
+        logger.debug("user {} has destroyed", user);
+    }
+
+    protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserRemovedEvent event) {
         try {
             context.broadcastPlugins(EzyEventType.USER_REMOVED, event, true);
         }

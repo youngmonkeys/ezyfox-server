@@ -157,21 +157,21 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
     
     @Test
     public void sendNowTest() {
-    	// given
-    	EzyResponse response = mock(EzyResponse.class);
-    	EzySession recipient = mock(EzySession.class);
-    	
-    	EzySendResponse sendResponse = mock(EzySendResponse.class);
-    	doNothing().when(sendResponse).execute(response, recipient, false, true, EzyTransportType.TCP);
-    	
-    	EzySimpleServerContext sut = new EzySimpleServerContext();
-    	FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
-    	
-    	// when
-    	sut.sendNow(response, recipient);
-    	
-    	// then
-    	verify(sendResponse, times(1)).execute(response, recipient, false, true, EzyTransportType.TCP);
+        // given
+        EzyResponse response = mock(EzyResponse.class);
+        EzySession recipient = mock(EzySession.class);
+
+        EzySendResponse sendResponse = mock(EzySendResponse.class);
+        doNothing().when(sendResponse).execute(response, recipient, false, true, EzyTransportType.TCP);
+
+        EzySimpleServerContext sut = new EzySimpleServerContext();
+        FieldUtil.setFieldValue(sut, "sendResponse", sendResponse);
+
+        // when
+        sut.sendNow(response, recipient);
+
+        // then
+        verify(sendResponse, times(1)).execute(response, recipient, false, true, EzyTransportType.TCP);
     }
     
     public static class ExCommand implements EzyCommand<Boolean> {

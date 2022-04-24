@@ -8,7 +8,7 @@ public enum EzyMaxRequestPerSecondAction implements EzyConstant {
 
     DROP_REQUEST(1),
     DISCONNECT_SESSION(2);
-	
+
     @Getter
     private final int id;
     

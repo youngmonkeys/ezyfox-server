@@ -10,15 +10,15 @@ import com.tvd12.ezyfoxserver.context.EzyAppContext;
 
 public class EzyAppObjectResponse extends EzyAbstractObjectResponse {
 
-	protected final Map<Object, Object> additionalParams = new HashMap<>();
-	
-	public EzyAppObjectResponse(EzyAppContext context, EzyMarshaller marshaller) {
-		super(context, marshaller);
-	}
-	
-	@Override
-	protected EzyResponse newResponse() {
-		return context.cmd(EzyAppResponse.class);
-	}
-	
+    protected final Map<Object, Object> additionalParams = new HashMap<>();
+
+    public EzyAppObjectResponse(EzyAppContext context, EzyMarshaller marshaller) {
+        super(context, marshaller);
+    }
+
+    @Override
+    protected EzyResponse newResponse() {
+        return context.cmd(EzyAppResponse.class);
+    }
+
 }

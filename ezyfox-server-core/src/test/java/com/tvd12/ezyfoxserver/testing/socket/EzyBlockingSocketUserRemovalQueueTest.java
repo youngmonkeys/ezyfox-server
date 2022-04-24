@@ -23,11 +23,11 @@ public class EzyBlockingSocketUserRemovalQueueTest {
         assert queue.size() == 0;
         
         try {
-        	queue.add(removal);
-        	System.out.println(queue.take());
+            queue.add(removal);
+            System.out.println(queue.take());
         }
         catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         
     }

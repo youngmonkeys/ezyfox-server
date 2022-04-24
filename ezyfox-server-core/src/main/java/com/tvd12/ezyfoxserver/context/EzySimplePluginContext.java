@@ -28,50 +28,50 @@ import lombok.Getter;
 
 
 public class EzySimplePluginContext 
-		extends EzyAbstractZoneChildContext 
-		implements EzyPluginContext {
+        extends EzyAbstractZoneChildContext
+        implements EzyPluginContext {
 
-	@Getter
-	protected EzyPlugin plugin;
-	protected EzyPluginSendResponse sendResponse;
-	
-	@Override
-	protected void init0() {
-	    EzySetup setup = new EzyPluginSetupImpl(plugin);
-	    this.sendResponse = new EzyPluginSendResponseImpl(this);
-	    this.properties.put(EzyPluginSendResponse.class, sendResponse);
-	    this.properties.put(EzyHandleException.class, new EzyPluginHandleExceptionImpl(plugin));
-	    this.properties.put(EzySetup.class, setup);
-	    this.properties.put(EzyPluginSetup.class, setup);
-	}
-	
-	@Override
-	public void send(
-	        EzyData data, 
-	        EzySession recipient, 
-	        boolean encrypted, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipient, encrypted, transportType);
-	}
-	
-	@Override
-	public void send(
-	        EzyData data, 
-	        Collection<EzySession> recipients, 
-	        boolean encrypted, EzyTransportType transportType) {
-	    this.sendResponse.execute(data, recipients, encrypted, transportType);
-	}
-	
-	public void setPlugin(EzyPlugin plugin) {
+    @Getter
+    protected EzyPlugin plugin;
+    protected EzyPluginSendResponse sendResponse;
+
+    @Override
+    protected void init0() {
+        EzySetup setup = new EzyPluginSetupImpl(plugin);
+        this.sendResponse = new EzyPluginSendResponseImpl(this);
+        this.properties.put(EzyPluginSendResponse.class, sendResponse);
+        this.properties.put(EzyHandleException.class, new EzyPluginHandleExceptionImpl(plugin));
+        this.properties.put(EzySetup.class, setup);
+        this.properties.put(EzyPluginSetup.class, setup);
+    }
+
+    @Override
+    public void send(
+            EzyData data,
+            EzySession recipient,
+            boolean encrypted, EzyTransportType transportType) {
+        this.sendResponse.execute(data, recipient, encrypted, transportType);
+    }
+
+    @Override
+    public void send(
+            EzyData data,
+            Collection<EzySession> recipients,
+            boolean encrypted, EzyTransportType transportType) {
+        this.sendResponse.execute(data, recipients, encrypted, transportType);
+    }
+
+    public void setPlugin(EzyPlugin plugin) {
         this.plugin = plugin;
         this.component = (EzyComponent)plugin;
     }
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
-		suppliers.put(EzyPluginResponse.class, () -> new EzyPluginResponseImpl(this));
-	}
-	
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    protected void addCommandSuppliers(Map<Class, Supplier> suppliers) {
+        suppliers.put(EzyPluginResponse.class, () -> new EzyPluginResponseImpl(this));
+    }
+
     @Override
     public void destroy() {
         super.destroy();

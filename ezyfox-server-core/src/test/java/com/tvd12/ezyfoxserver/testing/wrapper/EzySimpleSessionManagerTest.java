@@ -109,73 +109,73 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
         assertEquals(manager.getAllSessions(), Lists.newArrayList(session, session2));
     }
     
-	@Test
+    @Test
     public void clearNullSessionTest() {
-    	// given
-    	 MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+        // given
+         MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
                  .build();
-    	 
-    	 // when
-    	 // then
-    	 manager.clearSession(null);
+
+         // when
+         // then
+         manager.clearSession(null);
     }
-	
-	@Test
+
+    @Test
     public void checkMaxSessionsTest() {
-    	// given
-    	 MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
-    			 .maxSessions(0)
+        // given
+         MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+                 .maxSessions(0)
                  .build();
-    	 // when
-    	 Throwable e = Asserts.assertThrows(() ->
-    	 	manager.provideSession(EzyConnectionType.SOCKET)
-    	 );
-    	 
-    	 // then
-    	 Asserts.assertEquals(EzyMaxSessionException.class, e.getClass());
+         // when
+         Throwable e = Asserts.assertThrows(() ->
+             manager.provideSession(EzyConnectionType.SOCKET)
+         );
+
+         // then
+         Asserts.assertEquals(EzyMaxSessionException.class, e.getClass());
     }
-	
-	@Test
-	public void isUnloggedInSessionTrueTest() {
-		// given
-		MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+
+    @Test
+    public void isUnloggedInSessionTrueTest() {
+        // given
+        MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
                  .build();
-		EzySession session = mock(EzySession.class);
-		when(session.isLoggedIn()).thenReturn(false);
-		when(session.isActivated()).thenReturn(true);
-		when(session.getMaxWaitingTime()).thenReturn(0L);
-		when(session.getCreationTime()).thenReturn(System.currentTimeMillis() + 1);
-		
-		// when
-		Boolean result = MethodInvoker.create()
-				.object(manager)
-				.method("isUnloggedInSession")
-				.param(EzySession.class, session)
-				.invoke(Boolean.class);
-		
-		// then
-		Asserts.assertTrue(result);
-	}
-	
-	@Test
-	public void isUnloggedInSessionFalseTest() {
-		// given
-		MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+        EzySession session = mock(EzySession.class);
+        when(session.isLoggedIn()).thenReturn(false);
+        when(session.isActivated()).thenReturn(true);
+        when(session.getMaxWaitingTime()).thenReturn(0L);
+        when(session.getCreationTime()).thenReturn(System.currentTimeMillis() + 1);
+
+        // when
+        Boolean result = MethodInvoker.create()
+                .object(manager)
+                .method("isUnloggedInSession")
+                .param(EzySession.class, session)
+                .invoke(Boolean.class);
+
+        // then
+        Asserts.assertTrue(result);
+    }
+
+    @Test
+    public void isUnloggedInSessionFalseTest() {
+        // given
+        MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
                  .build();
-		EzySession session = mock(EzySession.class);
-		when(session.isLoggedIn()).thenReturn(false);
-		when(session.isActivated()).thenReturn(true);
-		when(session.getMaxWaitingTime()).thenReturn(1000L);
-		when(session.getCreationTime()).thenReturn(System.currentTimeMillis() - 100L);
-		
-		// when
-		Boolean result = MethodInvoker.create()
-				.object(manager)
-				.method("isUnloggedInSession")
-				.param(EzySession.class, session)
-				.invoke(Boolean.class);
-		
-		// then
-		Asserts.assertFalse(result);
-	}
+        EzySession session = mock(EzySession.class);
+        when(session.isLoggedIn()).thenReturn(false);
+        when(session.isActivated()).thenReturn(true);
+        when(session.getMaxWaitingTime()).thenReturn(1000L);
+        when(session.getCreationTime()).thenReturn(System.currentTimeMillis() - 100L);
+
+        // when
+        Boolean result = MethodInvoker.create()
+                .object(manager)
+                .method("isUnloggedInSession")
+                .param(EzySession.class, session)
+                .invoke(Boolean.class);
+
+        // then
+        Asserts.assertFalse(result);
+    }
 }

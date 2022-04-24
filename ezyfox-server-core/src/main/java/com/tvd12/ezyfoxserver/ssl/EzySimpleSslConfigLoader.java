@@ -27,12 +27,12 @@ public class EzySimpleSslConfigLoader implements EzySslConfigLoader {
                 .build();
     }
 
-	protected String getParentFolder(String filePath) {
-	    return Paths.get(filePath).getParent().toString();
-	}
-	
-	protected String getPath(String first, String... more) {
+    protected String getParentFolder(String filePath) {
+        return Paths.get(filePath).getParent().toString();
+    }
+
+    protected String getPath(String first, String... more) {
         return Paths.get(first, more).toString();
     }
-	
+
 }

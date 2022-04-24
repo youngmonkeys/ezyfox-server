@@ -6,6 +6,6 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 public interface EzyHandlerGroupBuilderFactory {
 
-	EzyAbstractHandlerGroup.Builder newBuilder(EzyChannel channel, EzyConnectionType type);
-	
+    EzyAbstractHandlerGroup.Builder newBuilder(EzyChannel channel, EzyConnectionType type);
+
 }

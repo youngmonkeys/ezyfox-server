@@ -12,21 +12,21 @@ import lombok.Setter;
 public class EzyExitedAppParams extends EzySimpleResponseParams {
     private static final long serialVersionUID = -2355811939162393678L;
     
-	protected EzyAppSetting app;
-	protected EzyConstant reason;
-	
-	@Override
-	protected EzyArrayBuilder serialize0() {
-	    return newArrayBuilder()
+    protected EzyAppSetting app;
+    protected EzyConstant reason;
+
+    @Override
+    protected EzyArrayBuilder serialize0() {
+        return newArrayBuilder()
                 .append(app.getId())
                 .append(reason.getId());
-	}
-	
-	@Override
-	public void release() {
-	    super.release();
-	    this.app = null;
-	    this.reason = null;
-	}
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        this.app = null;
+        this.reason = null;
+    }
 
 }

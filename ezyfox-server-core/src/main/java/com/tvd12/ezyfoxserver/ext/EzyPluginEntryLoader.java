@@ -2,6 +2,6 @@ package com.tvd12.ezyfoxserver.ext;
 
 public interface EzyPluginEntryLoader{
 
-	EzyPluginEntry load() throws Exception;
-	
+    EzyPluginEntry load() throws Exception;
+
 }

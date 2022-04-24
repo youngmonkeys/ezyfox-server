@@ -56,7 +56,7 @@ public class EzyPluginsStarterTest extends BaseTest {
     
     @Test
     public void newAppEntryLoaderArgsNotNullTest() {
-    	// given
+        // given
         EzySimpleZoneContext zoneContext = EzyZoneContextsTest.newDefaultZoneContext();
         EzySimplePlugin plugin = new EzySimplePlugin();
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
@@ -91,14 +91,14 @@ public class EzyPluginsStarterTest extends BaseTest {
     }
     
     public static class InternalPluginEntryLoader implements EzyPluginEntryLoader {
-    	
-    	public InternalPluginEntryLoader(String arg) {
-    		System.out.println(arg);
-    	}
 
-		@Override
-		public EzyPluginEntry load() throws Exception {
-			return new EzyPluginEntry() {};
-		}
+        public InternalPluginEntryLoader(String arg) {
+            System.out.println(arg);
+        }
+
+        @Override
+        public EzyPluginEntry load() throws Exception {
+            return new EzyPluginEntry() {};
+        }
     }
 }

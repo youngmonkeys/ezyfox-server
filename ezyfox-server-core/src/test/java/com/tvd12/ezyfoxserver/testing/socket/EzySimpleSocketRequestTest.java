@@ -13,15 +13,15 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleSocketRequestTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyAbstractSession session = spy(EzyAbstractSession.class);
-		EzyArray data = EzyEntityFactory.newArrayBuilder()
-				.append(EzyCommand.APP_ACCESS.getId())
-				.build();
-		EzySimpleSocketRequest request = new EzySimpleSocketRequest(session, data);
-		
-		assert request.isSystemRequest();
-	}
-	
+    @Test
+    public void test() {
+        EzyAbstractSession session = spy(EzyAbstractSession.class);
+        EzyArray data = EzyEntityFactory.newArrayBuilder()
+                .append(EzyCommand.APP_ACCESS.getId())
+                .build();
+        EzySimpleSocketRequest request = new EzySimpleSocketRequest(session, data);
+
+        assert request.isSystemRequest();
+    }
+
 }

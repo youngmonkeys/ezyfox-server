@@ -18,5 +18,5 @@ public class V122HelloRequestWithFeatureEmptyHandler implements EzyHandler, EzyD
 
     @Override
     public void handle() {}
-	
+
 }

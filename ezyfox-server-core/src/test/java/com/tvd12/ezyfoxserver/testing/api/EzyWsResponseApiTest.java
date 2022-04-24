@@ -22,34 +22,34 @@ import com.tvd12.test.util.RandomUtil;
 
 public class EzyWsResponseApiTest {
 
-	@Test
-	public void responseTest() throws Exception {
-		// given
-		EzyObjectToStringEncoder encoder = mock(EzyObjectToStringEncoder.class);
-		EzyWsResponseApi sut = new EzyWsResponseApi(encoder);
-		
-		EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
-		EzySimplePackage pack = new EzySimplePackage();
+    @Test
+    public void responseTest() throws Exception {
+        // given
+        EzyObjectToStringEncoder encoder = mock(EzyObjectToStringEncoder.class);
+        EzyWsResponseApi sut = new EzyWsResponseApi(encoder);
+
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+        EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
         pack.setEncrypted(true);
         pack.setTransportType(EzyTransportType.TCP);
         
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
-        	EzySession session = mock(EzySession.class);
-        	when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
-        	return session;
+            EzySession session = mock(EzySession.class);
+            when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+            return session;
         });
         pack.addRecipients(sessions);
-		
-		
-		// when
-		sut.response(pack);
-		
-		// then
-		verify(encoder, times(1)).encode(data, String.class);
-		verify(encoder, times(0)).toMessageContent(data);
-		verify(encoder, times(0)).encryptMessageContent(any(byte[].class), any(byte[].class));
-	}
-	
+
+
+        // when
+        sut.response(pack);
+
+        // then
+        verify(encoder, times(1)).encode(data, String.class);
+        verify(encoder, times(0)).toMessageContent(data);
+        verify(encoder, times(0)).encryptMessageContent(any(byte[].class), any(byte[].class));
+    }
+
 }

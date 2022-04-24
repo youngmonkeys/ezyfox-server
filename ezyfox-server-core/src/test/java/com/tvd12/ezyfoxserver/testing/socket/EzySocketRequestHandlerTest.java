@@ -114,7 +114,7 @@ public class EzySocketRequestHandlerTest {
     
     @Test
     public void processRequestQueue0RemainTest() {
-    	// given
+        // given
         ExEzySocketRequestHandler handler = new ExEzySocketRequestHandler();
         
         EzySocketDataHandlerGroup handlerGroup = mock(EzySocketDataHandlerGroup.class);
@@ -152,7 +152,7 @@ public class EzySocketRequestHandlerTest {
         
         @Override
         protected EzyRequestQueue getRequestQueue(EzySession session) {
-        	return session.getExtensionRequestQueue();
+            return session.getExtensionRequestQueue();
         }
         
     }

@@ -16,42 +16,42 @@ import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 
 public class EzyEventControllersImpl implements EzyEventControllers {
 
-	@SuppressWarnings("rawtypes")
-	protected final Map<EzyConstant, List<EzyEventController>> controllers 
-	        = new ConcurrentHashMap<>();
-	
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
+    protected final Map<EzyConstant, List<EzyEventController>> controllers 
+            = new ConcurrentHashMap<>();
+    
+    @SuppressWarnings("rawtypes")
     public static EzyEventControllers create(EzyEventControllersSetting setting) {
-	    EzyEventControllers controllers = new EzyEventControllersImpl();
+        EzyEventControllers controllers = new EzyEventControllersImpl();
         for(EzyEventControllerSetting item : setting.getEventControllers()) {
             EzyEventType eventType = EzyEventType.valueOf(item.getEventType());
             EzyEventController controller = EzyClasses.newInstance(item.getController());
             controllers.addController(eventType, controller);
         }
         return controllers;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void addController(EzyConstant eventType, EzyEventController controller) {
-		controllers.compute(eventType, (k, v) -> {
-		    List<EzyEventController> list = v != null 
-		        ? new ArrayList<>(v)
-	            : new ArrayList<>();
-		    list.add(controller);
-		    return list;
-		});
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List<EzyEventController> getControllers(EzyConstant eventType) {
-		return controllers.getOrDefault(eventType, Collections.emptyList());
-	}
-	
-	@Override
-	public void destroy() {
-	    controllers.clear();
-	}
-	
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void addController(EzyConstant eventType, EzyEventController controller) {
+        controllers.compute(eventType, (k, v) -> {
+            List<EzyEventController> list = v != null 
+                ? new ArrayList<>(v)
+                : new ArrayList<>();
+            list.add(controller);
+            return list;
+        });
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Override
+    public List<EzyEventController> getControllers(EzyConstant eventType) {
+        return controllers.getOrDefault(eventType, Collections.emptyList());
+    }
+    
+    @Override
+    public void destroy() {
+        controllers.clear();
+    }
+    
 }

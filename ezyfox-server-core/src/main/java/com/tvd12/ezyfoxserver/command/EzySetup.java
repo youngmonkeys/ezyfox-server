@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
 public interface EzySetup {
 
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     EzySetup addEventController(EzyConstant eventType, EzyEventController controller);
-	
+
 }

@@ -36,16 +36,16 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
     
     @Test
     public void setItemUsernameNull() {
-    	// given
-    	EzySimpleAdminSetting item = new EzySimpleAdminSetting();
-    	item.setUsername("");
-    	EzySimpleAdminsSetting sut = new EzySimpleAdminsSetting();
-    	
-    	// when
-    	sut.setItem(item);
-    	
-    	// then
-    	Asserts.assertNull(sut.getAdminByName(""));
+        // given
+        EzySimpleAdminSetting item = new EzySimpleAdminSetting();
+        item.setUsername("");
+        EzySimpleAdminsSetting sut = new EzySimpleAdminsSetting();
+
+        // when
+        sut.setItem(item);
+
+        // then
+        Asserts.assertNull(sut.getAdminByName(""));
     }
 
 }

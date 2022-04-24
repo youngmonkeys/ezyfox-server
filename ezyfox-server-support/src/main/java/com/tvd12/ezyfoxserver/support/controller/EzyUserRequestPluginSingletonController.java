@@ -6,38 +6,38 @@ import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 
 public class EzyUserRequestPluginSingletonController 
-		extends EzyUserRequestSingletonController<EzyPluginContext, EzyUserRequestPluginEvent>
-		implements EzyPluginRequestController {
+        extends EzyUserRequestSingletonController<EzyPluginContext, EzyUserRequestPluginEvent>
+        implements EzyPluginRequestController {
 
-	protected EzyUserRequestPluginSingletonController(Builder builder) {
-		super(builder);
-	}
-	
-	@Override
-	protected void responseError(
-			EzyPluginContext context, 
-			EzyUserRequestPluginEvent event, EzyData errorData) {
-		context.send(errorData, event.getSession(), false);
-	}
-	
-	public static Builder builder() {
-		return new Builder();
-	}
-	
-	public static class Builder extends EzyUserRequestSingletonController.Builder<Builder> {
+    protected EzyUserRequestPluginSingletonController(Builder builder) {
+        super(builder);
+    }
 
-		@Override
-		public EzyUserRequestPluginSingletonController build() {
-			return new EzyUserRequestPluginSingletonController(this);
-		}
-		
-		@SuppressWarnings("rawtypes")
-		@Override
-		protected EzyUserRequestPrototypeController getPrototypeController() {
-			return EzyUserRequestPluginPrototypeController.builder()
-					.beanContext(beanContext)
-					.build();
-		}
-		
-	}
+    @Override
+    protected void responseError(
+            EzyPluginContext context,
+            EzyUserRequestPluginEvent event, EzyData errorData) {
+        context.send(errorData, event.getSession(), false);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends EzyUserRequestSingletonController.Builder<Builder> {
+
+        @Override
+        public EzyUserRequestPluginSingletonController build() {
+            return new EzyUserRequestPluginSingletonController(this);
+        }
+
+        @SuppressWarnings("rawtypes")
+        @Override
+        protected EzyUserRequestPrototypeController getPrototypeController() {
+            return EzyUserRequestPluginPrototypeController.builder()
+                    .beanContext(beanContext)
+                    .build();
+        }
+
+    }
 }

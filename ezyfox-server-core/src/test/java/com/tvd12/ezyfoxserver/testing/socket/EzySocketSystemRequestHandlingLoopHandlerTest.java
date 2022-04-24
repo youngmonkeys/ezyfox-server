@@ -7,13 +7,13 @@ import org.testng.annotations.Test;
 
 public class EzySocketSystemRequestHandlingLoopHandlerTest {
 
-	@Test
-	public void test() {
-		EzySocketSystemRequestHandlingLoopHandler handler = new EzySocketSystemRequestHandlingLoopHandler();
-		MethodInvoker.create()
-		    .object(handler)
-		    .method("getRequestType")
-		    .invoke();
-	}
-	
+    @Test
+    public void test() {
+        EzySocketSystemRequestHandlingLoopHandler handler = new EzySocketSystemRequestHandlingLoopHandler();
+        MethodInvoker.create()
+            .object(handler)
+            .method("getRequestType")
+            .invoke();
+    }
+
 }

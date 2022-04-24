@@ -7,13 +7,13 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzySocketUserRemovalHandlingLoopHandlerTest {
 
-	@Test
-	public void test() {
-	    EzySocketUserRemovalHandlingLoopHandler handler = new EzySocketUserRemovalHandlingLoopHandler();
-		MethodInvoker.create()
-		    .object(handler)
-		    .method("getThreadName")
-		    .invoke();
-	}
-	
+    @Test
+    public void test() {
+        EzySocketUserRemovalHandlingLoopHandler handler = new EzySocketUserRemovalHandlingLoopHandler();
+        MethodInvoker.create()
+            .object(handler)
+            .method("getThreadName")
+            .invoke();
+    }
+    
 }

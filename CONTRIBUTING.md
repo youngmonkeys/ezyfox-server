@@ -9,7 +9,7 @@ You need for `ezyfox` to your Github
 - must include unit test and coverage 100%
 - should have 6 files or less
 - don't change old code style if it has no problem
-	
+    
 ### 3. resolve review comment if we have any
 
 Please don't use force push after push resolved comments code

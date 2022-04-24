@@ -1,15 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
-		<packages>
-			<package name="com.tvd12.ezyfoxserver.nio.testing"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.builder"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.handler"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.websocket"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.socket"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.udp"></package>
-			<package name="com.tvd12.ezyfoxserver.nio.testing.wrapper"></package>
-		</packages>
-	</test>
+    <test name="All">
+        <packages>
+            <package name="com.tvd12.ezyfoxserver.nio.testing"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.builder"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.handler"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.websocket"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.socket"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.udp"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.wrapper"></package>
+        </packages>
+    </test>
 </suite>

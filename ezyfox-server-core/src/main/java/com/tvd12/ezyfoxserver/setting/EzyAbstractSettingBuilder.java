@@ -53,7 +53,7 @@ public abstract class EzyAbstractSettingBuilder<
         p.setEntryLoaderArgs(entryLoaderArgs);
         return p;
     }
-	
+
     protected abstract T newSetting();
     
 }

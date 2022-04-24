@@ -25,16 +25,16 @@ public class EzySimpleAppSettingTest extends BaseTest {
     
     @Test
     public void configFileIsNull() {
-    	// given
-    	EzySimpleAppSetting sut = new EzySimpleAppSetting();
-    	sut.setConfigFile(null);
-    	
-    	// when
-    	String configFile = sut.getConfigFile(true);
-    	
-    	// then
-    	Asserts.assertNull(configFile);
-    	System.out.println(sut.toMap());
+        // given
+        EzySimpleAppSetting sut = new EzySimpleAppSetting();
+        sut.setConfigFile(null);
+
+        // when
+        String configFile = sut.getConfigFile(true);
+
+        // then
+        Asserts.assertNull(configFile);
+        System.out.println(sut.toMap());
     }
     
     @Test

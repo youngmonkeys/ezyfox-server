@@ -7,8 +7,8 @@ public abstract class EzyAbstractSessionDelegate
         extends EzyLoggable 
         implements EzySessionDelegate {
 
-	@Override
-	public void onSessionLoggedIn(EzyUser user) {
-	}
-	
+    @Override
+    public void onSessionLoggedIn(EzyUser user) {
+    }
+
 }

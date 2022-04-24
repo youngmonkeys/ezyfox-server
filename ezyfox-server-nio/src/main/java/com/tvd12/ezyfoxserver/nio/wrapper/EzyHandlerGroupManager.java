@@ -12,19 +12,19 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroupRemover;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroupFetcher;
 
 public interface EzyHandlerGroupManager 
-		extends EzySocketDataHandlerGroupFetcher,
-				EzySocketDataHandlerGroupRemover,
-				EzySocketWriterGroupFetcher, 
-				EzyDestroyable {
+        extends EzySocketDataHandlerGroupFetcher,
+                EzySocketDataHandlerGroupRemover,
+                EzySocketWriterGroupFetcher,
+                EzyDestroyable {
 
-	<T extends EzyHandlerGroup> T getHandlerGroup(Object connection);
-	
-	<T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type);
-	
-	void unmapHandlerGroup(SocketAddress udpAddress);
-	
-	void mapSocketChannel(SocketAddress udpAddress, EzySession session);
-	
-	Object getSocketChannel(SocketAddress udpAddress);
-	
+    <T extends EzyHandlerGroup> T getHandlerGroup(Object connection);
+
+    <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type);
+
+    void unmapHandlerGroup(SocketAddress udpAddress);
+
+    void mapSocketChannel(SocketAddress udpAddress, EzySession session);
+
+    Object getSocketChannel(SocketAddress udpAddress);
+
 }

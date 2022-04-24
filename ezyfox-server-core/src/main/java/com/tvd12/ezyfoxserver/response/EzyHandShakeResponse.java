@@ -7,7 +7,7 @@ public class EzyHandShakeResponse
     private static final long serialVersionUID = -464917427945070426L;
     
     public EzyHandShakeResponse(EzyHandShakeParams params) {
-	    super(EzyCommand.HANDSHAKE, params);
-	}
-	
+        super(EzyCommand.HANDSHAKE, params);
+    }
+
 }

@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.tvd12</groupId>
-		<artifactId>ezyfox-server</artifactId>
-		<version>1.2.3</version>
-	</parent>
-	<artifactId>ezyfox-server-nio</artifactId>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tvd12</groupId>
+        <artifactId>ezyfox-server</artifactId>
+        <version>1.2.3</version>
+    </parent>
+    <artifactId>ezyfox-server-nio</artifactId>
 
-	<name>ezyfox-server-nio</name>
-	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
+    <name>ezyfox-server-nio</name>
+    <url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 
-	<properties>
-		<jetty.version>9.4.43.v20210629</jetty.version>
-	</properties>
+    <properties>
+        <jetty.version>9.4.43.v20210629</jetty.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-server-boot</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>websocket-server</artifactId>
-			<version>${jetty.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-            		<artifactId>websocket-client</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-server-boot</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>${jetty.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty.websocket</groupId>
+                    <artifactId>websocket-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 </project>

@@ -14,29 +14,29 @@ public class EzyBootstrap
         extends EzyLoggable 
         implements EzyStartable, EzyDestroyable {
 
-	protected final EzyServerContext context;
+    protected final EzyServerContext context;
 
-	protected EzyBootstrap(Builder builder) {
-	    this.context = builder.context;
+    protected EzyBootstrap(Builder builder) {
+        this.context = builder.context;
     }
-	
-	@Override
-	public void start() throws Exception {
-	    notifyServerInitializing();
-		startAllZones();
-		startSessionManager();
-	}
-	
-	protected void notifyServerInitializing() {
-	    EzyServerInitializingEvent event = new EzySimpleServerInitializingEvent();
-	    context.handleEvent(EzyEventType.SERVER_INITIALIZING, event);
-	}
-	
+
     @Override
-	public void destroy() {
-	    // do nothing
-	}
-	
+    public void start() throws Exception {
+        notifyServerInitializing();
+        startAllZones();
+        startSessionManager();
+    }
+
+    protected void notifyServerInitializing() {
+        EzyServerInitializingEvent event = new EzySimpleServerInitializingEvent();
+        context.handleEvent(EzyEventType.SERVER_INITIALIZING, event);
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
+    }
+
     private void startAllZones() {
         EzyZonesStarter.Builder builder = newZonesStarterBuilder()
                 .serverContext(context);
@@ -47,29 +47,29 @@ public class EzyBootstrap
     protected EzyZonesStarter.Builder newZonesStarterBuilder() {
         return new EzyZonesStarter.Builder();
     }
-	
-	@SuppressWarnings("rawtypes")
+
+    @SuppressWarnings("rawtypes")
     protected void startSessionManager() throws Exception {
-		EzySessionManager sessionManager 
-		        = context.getServer().getSessionManager();
-		((EzyStartable)sessionManager).start();
-	}
-	
-	public static Builder builder() {
-	    return new Builder();
-	}
-	
-	public static class Builder implements EzyBuilder<EzyBootstrap> {
-	    protected EzyServerContext context;
-	    
-	    public Builder context(EzyServerContext context) {
-	        this.context = context;
-	        return this;
-	    }
-	    
-	    @Override
-	    public EzyBootstrap build() {
-	        return new EzyBootstrap(this);
-	    }
-	}
+        EzySessionManager sessionManager
+                = context.getServer().getSessionManager();
+        ((EzyStartable)sessionManager).start();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder implements EzyBuilder<EzyBootstrap> {
+        protected EzyServerContext context;
+
+        public Builder context(EzyServerContext context) {
+            this.context = context;
+            return this;
+        }
+
+        @Override
+        public EzyBootstrap build() {
+            return new EzyBootstrap(this);
+        }
+    }
 }

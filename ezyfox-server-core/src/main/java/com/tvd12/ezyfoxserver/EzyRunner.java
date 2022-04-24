@@ -23,8 +23,8 @@ public abstract class EzyRunner {
     }
     
     protected void validateArguments(String[] args) {
-	    if(args.length == 0)
-	        throw new IllegalStateException("must specific config.properties file");
+        if(args.length == 0)
+            throw new IllegalStateException("must specific config.properties file");
     }
     
     protected void startSystem(String[] args) throws Exception {

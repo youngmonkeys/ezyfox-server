@@ -14,13 +14,13 @@ import lombok.Setter;
 @EzyRequestListener("noSession")
 @EzyObjectBinding(read = false)
 public class ClientNoSessionRequestHandler
-		extends EzyLoggable
-		implements 
-			EzyHandler, 
-			EzyDataBinding {
+        extends EzyLoggable
+        implements
+            EzyHandler,
+            EzyDataBinding {
 
-	@Override
-	public void handle() {
-	}
+    @Override
+    public void handle() {
+    }
 
 }

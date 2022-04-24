@@ -4,11 +4,11 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public class EzySocketSystemRequestHandler extends EzySocketRequestHandler {
 
-	@Override
-	protected EzyRequestQueue getRequestQueue(EzySession session) {
-		return session.getSystemRequestQueue();
-	}
-	
+    @Override
+    protected EzyRequestQueue getRequestQueue(EzySession session) {
+        return session.getSystemRequestQueue();
+    }
+
     @Override
     protected String getRequestType() {
         return "system";

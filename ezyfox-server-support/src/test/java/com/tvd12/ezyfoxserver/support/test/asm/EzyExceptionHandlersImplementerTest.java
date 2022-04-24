@@ -12,23 +12,23 @@ import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlersImplementer;
 
 public class EzyExceptionHandlersImplementerTest {
 
-	@Test
-	public void test() {
-		EzyExceptionHandlerImplementer.setDebug(true);
-		EzyExceptionHandlersImplementer implementer = new EzyExceptionHandlersImplementer();
-		implementer.implement(Arrays.asList(new ExExceptionHandler()));
-		EzyExceptionHandlerImplementer.setDebug(false);
-		implementer.implement(Arrays.asList(new ExExceptionHandler()));
-	}
-	
-	@EzyExceptionHandler
-	public static class ExExceptionHandler {
-		
-		@EzyTryCatch(IllegalArgumentException.class)
-		public void handle(EzySession session, IllegalArgumentException ex) {
-			ex.printStackTrace();
-		}
-		
-	}
-	
+    @Test
+    public void test() {
+        EzyExceptionHandlerImplementer.setDebug(true);
+        EzyExceptionHandlersImplementer implementer = new EzyExceptionHandlersImplementer();
+        implementer.implement(Arrays.asList(new ExExceptionHandler()));
+        EzyExceptionHandlerImplementer.setDebug(false);
+        implementer.implement(Arrays.asList(new ExExceptionHandler()));
+    }
+
+    @EzyExceptionHandler
+    public static class ExExceptionHandler {
+
+        @EzyTryCatch(IllegalArgumentException.class)
+        public void handle(EzySession session, IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
 }

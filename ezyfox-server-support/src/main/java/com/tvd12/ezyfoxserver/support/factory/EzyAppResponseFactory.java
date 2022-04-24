@@ -11,16 +11,16 @@ import lombok.Setter;
 @Setter
 public class EzyAppResponseFactory extends EzyAbstractResponseFactory {
 
-	protected EzyAppContext appContext;
-	
-	@Override
-	public EzyArrayResponse newArrayResponse() {
-		return new EzyAppArrayResponse(appContext, marshaller);
-	}
-	
-	@Override
-	public EzyObjectResponse newObjectResponse() {
-		return new EzyAppObjectResponse(appContext, marshaller);
-	}
-	
+    protected EzyAppContext appContext;
+
+    @Override
+    public EzyArrayResponse newArrayResponse() {
+        return new EzyAppArrayResponse(appContext, marshaller);
+    }
+
+    @Override
+    public EzyObjectResponse newObjectResponse() {
+        return new EzyAppObjectResponse(appContext, marshaller);
+    }
+
 }

@@ -7,7 +7,7 @@ public class EzyDisconnectResponse
     private static final long serialVersionUID = -5720385557675923841L;
     
     public EzyDisconnectResponse(EzyDisconnectParams params) {
-	    super(EzyCommand.DISCONNECT, params);
-	}
-	
+        super(EzyCommand.DISCONNECT, params);
+    }
+
 }

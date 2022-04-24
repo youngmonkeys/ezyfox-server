@@ -27,68 +27,68 @@ import com.tvd12.test.assertion.Asserts;
 import lombok.Setter;
 
 public class EzySimpleAppEntryTest {
-	
-	@Test
-	public void scanPackages() {
-		// given
-		EzyAppContext appContext = mock(EzyAppContext.class);
-		ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
-		EzyZoneContext zoneContext = mock(EzyZoneContext.class);
-		EzyServerContext serverContext = mock(EzyServerContext.class);
-		EzyApplication application = mock(EzyApplication.class);
-		EzyAppUserManager appUserManager = mock(EzyAppUserManager.class);
-		EzyAppSetup appSetup = mock(EzyAppSetup.class);
-		
+    
+    @Test
+    public void scanPackages() {
+        // given
+        EzyAppContext appContext = mock(EzyAppContext.class);
+        ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
+        EzyZoneContext zoneContext = mock(EzyZoneContext.class);
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyApplication application = mock(EzyApplication.class);
+        EzyAppUserManager appUserManager = mock(EzyAppUserManager.class);
+        EzyAppSetup appSetup = mock(EzyAppSetup.class);
+        
         EzyAppSetting appSetting = mock(EzyAppSetting.class);
         when(application.getSetting()).thenReturn(appSetting);
-		
-		InternalAppEntry sut = new InternalAppEntry();
-		
-		// when
-		when(appContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
-		when(appContext.getParent()).thenReturn(zoneContext);
-		when(zoneContext.getParent()).thenReturn(serverContext);
-		when(appContext.getApp()).thenReturn(application);
-		when(application.getUserManager()).thenReturn(appUserManager);
-		when(appContext.get(EzyAppSetup.class)).thenReturn(appSetup);
-		
-		sut.config(appContext);
-		
-		// then
-		EzyBeanContext beanContext = sut.beanContext;
-		MongoConfig mongoConfig = (MongoConfig) beanContext.getBean(MongoConfig.class);
-		
-		Set<String> expectedPackages = Sets.newHashSet(
-		    EzySupportConstants.DEFAULT_PACKAGE_TO_SCAN,
-			"com.tvd12.ezyfoxserver.support.v120.test.entry"
-		);
-		
-		Asserts.assertEquals(expectedPackages, mongoConfig.packagesToScan);
-		
-		Singleton singleton = (Singleton) beanContext.getBean(Singleton.class);
-		Asserts.assertNotNull(singleton);
-	}
-	
-	@EzySingleton
-	public static class Singleton {}
-	
-	@Setter
-	@EzyConfigurationBefore
-	public static class MongoConfig implements EzyPackagesToScanAware {
-		public Set<String> packagesToScan;
-	}
-	
-	private static class InternalAppEntry extends EzySimpleAppEntry {
-		public EzyBeanContext beanContext;
-		
-		@Override
-		protected String[] getScanablePackages() {
-			return new String[]{"com.tvd12.ezyfoxserver.support.v120.test.entry"};
-		}
-		
-		@Override
-		protected void postConfig(EzyAppContext context, EzyBeanContext beanContext) {
-			this.beanContext = beanContext;
-		}
-	}
+        
+        InternalAppEntry sut = new InternalAppEntry();
+        
+        // when
+        when(appContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
+        when(appContext.getParent()).thenReturn(zoneContext);
+        when(zoneContext.getParent()).thenReturn(serverContext);
+        when(appContext.getApp()).thenReturn(application);
+        when(application.getUserManager()).thenReturn(appUserManager);
+        when(appContext.get(EzyAppSetup.class)).thenReturn(appSetup);
+        
+        sut.config(appContext);
+        
+        // then
+        EzyBeanContext beanContext = sut.beanContext;
+        MongoConfig mongoConfig = (MongoConfig) beanContext.getBean(MongoConfig.class);
+        
+        Set<String> expectedPackages = Sets.newHashSet(
+            EzySupportConstants.DEFAULT_PACKAGE_TO_SCAN,
+            "com.tvd12.ezyfoxserver.support.v120.test.entry"
+        );
+        
+        Asserts.assertEquals(expectedPackages, mongoConfig.packagesToScan);
+        
+        Singleton singleton = (Singleton) beanContext.getBean(Singleton.class);
+        Asserts.assertNotNull(singleton);
+    }
+    
+    @EzySingleton
+    public static class Singleton {}
+    
+    @Setter
+    @EzyConfigurationBefore
+    public static class MongoConfig implements EzyPackagesToScanAware {
+        public Set<String> packagesToScan;
+    }
+    
+    private static class InternalAppEntry extends EzySimpleAppEntry {
+        public EzyBeanContext beanContext;
+        
+        @Override
+        protected String[] getScanablePackages() {
+            return new String[]{"com.tvd12.ezyfoxserver.support.v120.test.entry"};
+        }
+        
+        @Override
+        protected void postConfig(EzyAppContext context, EzyBeanContext beanContext) {
+            this.beanContext = beanContext;
+        }
+    }
 }

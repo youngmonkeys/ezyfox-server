@@ -5,9 +5,9 @@ import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 
 public class TestAppEntryLoader extends EzyAbstractAppEntryLoader {
 
-	@Override
-	public EzyAppEntry load() throws Exception {
-		return new TestAppEntry();
-	}
-	
+    @Override
+    public EzyAppEntry load() throws Exception {
+        return new TestAppEntry();
+    }
+
 }

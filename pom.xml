@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.tvd12</groupId>
-		<artifactId>ezyfox</artifactId>
-		<version>1.0.4</version>
-	</parent>
-	<artifactId>ezyfox-server</artifactId>
-	<version>1.2.3</version>
-	<packaging>pom</packaging>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tvd12</groupId>
+        <artifactId>ezyfox</artifactId>
+        <version>1.0.4</version>
+    </parent>
+    <artifactId>ezyfox-server</artifactId>
+    <version>1.2.3</version>
+    <packaging>pom</packaging>
 
-	<name>ezyfox-server</name>
-	<url>https://youngmonkeys.org/project/ezyfox-sever/</url>
-	<description>
-		EzyFox Server maven project configuration 
-	</description>
+    <name>ezyfox-server</name>
+    <url>https://youngmonkeys.org/project/ezyfox-sever/</url>
+    <description>
+        EzyFox Server maven project configuration
+    </description>
 
-	<organization>
-		<name>Young Monkeys</name>
-		<url>https://youngmonkeys.org/</url>
-	</organization>
+    <organization>
+        <name>Young Monkeys</name>
+        <url>https://youngmonkeys.org/</url>
+    </organization>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</connection>
-		<developerConnection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</developerConnection>
-		<url>https://github.com/youngmonkeys/ezyfox-server</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</connection>
+        <developerConnection>scm:git:git@github.com:youngmonkeys/ezyfox-server.git</developerConnection>
+        <url>https://github.com/youngmonkeys/ezyfox-server</url>
+    </scm>
 
-	<issueManagement>
-		<system>Github</system>
-		<url>https://github.com/youngmonkeys/ezyfox-server/issues</url>
-	</issueManagement>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/youngmonkeys/ezyfox-server/issues</url>
+    </issueManagement>
 
-	<ciManagement>
-		<system>travis</system>
-		<url>https://travis-ci.org/youngmonkeys/ezyfox-server</url>
-	</ciManagement>
+    <ciManagement>
+        <system>travis</system>
+        <url>https://travis-ci.org/youngmonkeys/ezyfox-server</url>
+    </ciManagement>
 
-	<developers>
-		<developer>
-			<name>Ta Van Dung</name>
-			<email>itprono3@gmail.com</email>
-			<organization>Young Monkeys</organization>
-			<organizationUrl>https://youngmonkeys.org/</organizationUrl>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Ta Van Dung</name>
+            <email>itprono3@gmail.com</email>
+            <organization>Young Monkeys</organization>
+            <organizationUrl>https://youngmonkeys.org/</organizationUrl>
+        </developer>
+    </developers>
 
-	<properties>
-		<ezy.core.version>2.1.4</ezy.core.version>
-	</properties>
+    <properties>
+        <ezy.core.version>2.1.4</ezy.core.version>
+    </properties>
 
-	<modules>
-		<module>ezyfox-server-core</module>
-		<module>ezyfox-server-boot</module>
-		<module>ezyfox-server-nio</module>
-		<module>ezyfox-server-niorunner</module>
-		<module>ezyfox-server-support</module>
-		<module>ezyfox-server-embedded</module>
-	</modules>
+    <modules>
+        <module>ezyfox-server-core</module>
+        <module>ezyfox-server-boot</module>
+        <module>ezyfox-server-nio</module>
+        <module>ezyfox-server-niorunner</module>
+        <module>ezyfox-server-support</module>
+        <module>ezyfox-server-embedded</module>
+    </modules>
 </project>

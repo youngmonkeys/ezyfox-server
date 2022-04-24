@@ -6,14 +6,14 @@ import com.tvd12.ezyfoxserver.controller.EzyAbstractPluginEventController;
 
 public class EzyAbstractPluginEventControllerTest {
 
-	@SuppressWarnings("rawtypes")
-	@Test
-	public void newTest() {
-		new EzyAbstractPluginEventController() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void newTest() {
+        new EzyAbstractPluginEventController() {
 
-			@Override
-			public void handle(Object ctx, Object event) {
-			}
-		};
-	}
+            @Override
+            public void handle(Object ctx, Object event) {
+            }
+        };
+    }
 }

@@ -8,11 +8,11 @@ import com.tvd12.ezyfoxserver.interceptor.EzyInterceptor;
 @SuppressWarnings("rawtypes")
 public interface EzyServerControllers {
 
-	EzyController getController(EzyConstant cmd);
-	
-	EzyInterceptor getInterceptor(EzyConstant cmd);
-	
-	EzyInterceptor getStreamingInterceptor();
-	
-	EzyStreamingController getStreamingController();
+    EzyController getController(EzyConstant cmd);
+
+    EzyInterceptor getInterceptor(EzyConstant cmd);
+
+    EzyInterceptor getStreamingInterceptor();
+
+    EzyStreamingController getStreamingController();
 }

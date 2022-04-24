@@ -11,62 +11,62 @@ import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 
 public class HelloEmbeddedServer2 {
 
-	public static void main(String[] args) throws Exception {
-		EzySimpleSettings settings = new EzyEmbeddedSettingsBuilderPrototype()
-				.scan("com.tvd12.ezyfoxserver.embedded.test")
-				.build();
-		
-		EzyEmbeddedServer server = EzyEmbeddedServer.builder()
-				.settings(settings)
-				.build();
-		server.start();
-	}
-	
-	public static class HelloAppEntry extends EzySimpleAppEntry {
+    public static void main(String[] args) throws Exception {
+        EzySimpleSettings settings = new EzyEmbeddedSettingsBuilderPrototype()
+                .scan("com.tvd12.ezyfoxserver.embedded.test")
+                .build();
 
-		@Override
-		protected String[] getScanableBeanPackages() {
-			return new String[] {
-					"com.tvd12.ezyfoxserver.embedded.test" // replace by your package
-			};
-		}
+        EzyEmbeddedServer server = EzyEmbeddedServer.builder()
+                .settings(settings)
+                .build();
+        server.start();
+    }
 
-		@Override
-		protected String[] getScanableBindingPackages() {
-			return new String[] {
-					"com.tvd12.ezyfoxserver.embedded.test" // replace by your package
-			};
-		}
-		
-	}
-	
-	public static class HelloAppEntryLoader extends EzyAbstractAppEntryLoader {
+    public static class HelloAppEntry extends EzySimpleAppEntry {
 
-		@Override
-		public EzyAppEntry load() throws Exception {
-			return new HelloAppEntry();
-		}
-		
-	}
-	
-	public static class HelloPluginEntry extends EzySimplePluginEntry {
+        @Override
+        protected String[] getScanableBeanPackages() {
+            return new String[] {
+                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            };
+        }
 
-		@Override
-		protected String[] getScanableBeanPackages() {
-			return new String[] {
-					"com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
-			};
-		}
+        @Override
+        protected String[] getScanableBindingPackages() {
+            return new String[] {
+                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            };
+        }
 
-	}
+    }
 
-	public class HelloPluginEntryLoader extends EzyAbstractPluginEntryLoader {
+    public static class HelloAppEntryLoader extends EzyAbstractAppEntryLoader {
 
-		@Override
-		public EzyPluginEntry load() throws Exception {
-			return new HelloPluginEntry();
-		}
-		
-	}
-	
+        @Override
+        public EzyAppEntry load() throws Exception {
+            return new HelloAppEntry();
+        }
+
+    }
+
+    public static class HelloPluginEntry extends EzySimplePluginEntry {
+
+        @Override
+        protected String[] getScanableBeanPackages() {
+            return new String[] {
+                    "com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
+            };
+        }
+
+    }
+
+    public class HelloPluginEntryLoader extends EzyAbstractPluginEntryLoader {
+
+        @Override
+        public EzyPluginEntry load() throws Exception {
+            return new HelloPluginEntry();
+        }
+
+    }
+
 }

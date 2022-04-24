@@ -6,10 +6,10 @@ import com.tvd12.ezyfoxserver.nio.entity.EzySimpleSession;
 
 public class EzyNioSessionFactory extends EzyAbstractSessionFactory<EzyNioSession> {
 
-	@Override
-	protected EzyNioSession newSession() {
-		EzySimpleSession session = new EzySimpleSession();
-		return session;
-	}
-	
+    @Override
+    protected EzyNioSession newSession() {
+        EzySimpleSession session = new EzySimpleSession();
+        return session;
+    }
+    
 }

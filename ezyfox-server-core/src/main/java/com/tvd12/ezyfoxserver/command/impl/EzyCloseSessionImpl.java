@@ -11,43 +11,43 @@ import com.tvd12.ezyfoxserver.response.EzyDisconnectResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public class EzyCloseSessionImpl 
-		extends EzyMessageController 
-		implements EzyCloseSession {
+        extends EzyMessageController
+        implements EzyCloseSession {
 
-	private final EzyServerContext context;
-	
-	public EzyCloseSessionImpl(EzyServerContext ctx) {
-		this.context = ctx;
-	}
-	
-	@Override
-	public void close(EzySession session, EzyConstant reason) {
-	    sendToClients(session, reason);
+    private final EzyServerContext context;
+
+    public EzyCloseSessionImpl(EzyServerContext ctx) {
+        this.context = ctx;
+    }
+
+    @Override
+    public void close(EzySession session, EzyConstant reason) {
+        sendToClients(session, reason);
         disconnectSession(session, reason);
-	}
-	
-	protected void sendToClients(EzySession session, EzyConstant reason) {
-		if(shouldSendToClient(reason))
-		    sendToClients0(session, reason);
-	}
-	
-	protected boolean shouldSendToClient(EzyConstant reason) {
-	    return reason != EzyDisconnectReason.UNKNOWN;
-	}
-	
-	protected void disconnectSession(EzySession session, EzyConstant reason) {
+    }
+
+    protected void sendToClients(EzySession session, EzyConstant reason) {
+        if(shouldSendToClient(reason))
+            sendToClients0(session, reason);
+    }
+
+    protected boolean shouldSendToClient(EzyConstant reason) {
+        return reason != EzyDisconnectReason.UNKNOWN;
+    }
+
+    protected void disconnectSession(EzySession session, EzyConstant reason) {
         logger.info("close session: {}, reason: {}", session.getClientAddress(), reason);
         session.close();
     }
-	
-	protected void sendToClients0(EzySession session, EzyConstant reason) {
-	    EzyResponse response = newResponse(reason);
-	    context.sendNow(response, session);
-	}
-	
-	protected EzyResponse newResponse(EzyConstant reason) {
-	    EzyDisconnectParams params = new EzyDisconnectParams();
-	    params.setReason(reason);
+
+    protected void sendToClients0(EzySession session, EzyConstant reason) {
+        EzyResponse response = newResponse(reason);
+        context.sendNow(response, session);
+    }
+
+    protected EzyResponse newResponse(EzyConstant reason) {
+        EzyDisconnectParams params = new EzyDisconnectParams();
+        params.setReason(reason);
         return new EzyDisconnectResponse(params);
     }
 

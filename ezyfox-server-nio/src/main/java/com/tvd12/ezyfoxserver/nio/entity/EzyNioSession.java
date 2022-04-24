@@ -6,8 +6,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public interface EzyNioSession extends EzySession {
 
-	String SELECTION_KEY	= "SessionSelectionKey";
-	
-	SelectionKey getSelectionKey();
-	
+    String SELECTION_KEY    = "SessionSelectionKey";
+    
+    SelectionKey getSelectionKey();
+    
 }

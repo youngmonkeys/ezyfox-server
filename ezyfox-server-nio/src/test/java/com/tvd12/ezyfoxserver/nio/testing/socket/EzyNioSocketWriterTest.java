@@ -10,14 +10,14 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyNioSocketWriterTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyNioSocketWriter writer = new EzyNioSocketWriter();
-		ByteBuffer writeBuffer = MethodInvoker.create()
-				.object(writer)
-				.method("getWriteBuffer")
-				.invoke(ByteBuffer.class);
-		assert writeBuffer != null;
-	}
-	
+    @Test
+    public void test() {
+        EzyNioSocketWriter writer = new EzyNioSocketWriter();
+        ByteBuffer writeBuffer = MethodInvoker.create()
+                .object(writer)
+                .method("getWriteBuffer")
+                .invoke(ByteBuffer.class);
+        assert writeBuffer != null;
+    }
+
 }

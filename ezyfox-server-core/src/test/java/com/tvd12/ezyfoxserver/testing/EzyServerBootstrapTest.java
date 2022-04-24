@@ -71,19 +71,19 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
     
     @Test
     public void commonTest() throws Exception {
-    	// given
-    	EzySimpleConfig config = new EzySimpleConfig();
-    	config.setPrintBanner(false);
-    	
-    	EzySimpleSettings settings = new EzySimpleSettings();
-    	EzySimpleServer server = new EzySimpleServer();
-    	server.setSettings(settings);
-    	server.setConfig(config);
-    	
-    	EzyServerContext serverContext = mock(EzyServerContext.class);
-    	when(serverContext.getServer()).thenReturn(server);
-    	
-    	EzyServerBootstrap sut = new EzyServerBootstrap() {
+        // given
+        EzySimpleConfig config = new EzySimpleConfig();
+        config.setPrintBanner(false);
+        
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        server.setConfig(config);
+        
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        when(serverContext.getServer()).thenReturn(server);
+        
+        EzyServerBootstrap sut = new EzyServerBootstrap() {
             @Override
             protected void startOtherBootstraps(Runnable callback) throws Exception {
                 callback.run();
@@ -94,9 +94,9 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
         // when
         ReflectMethodUtil.invokeMethod("printBanner", sut);
         EzyUdpSetting udpSetting = 
-        		(EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", sut);
+                (EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", sut);
         EzyThreadPoolSizeSetting threadPoolSizeSetting = 
-        		(EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", sut);
+                (EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", sut);
         
         // then
         Asserts.assertEquals(server.getSettings().getUdp(), udpSetting);

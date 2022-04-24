@@ -36,14 +36,14 @@ public abstract class EzyAbstractResponse<C extends EzyZoneChildContext>
     
     @Override
     public EzyResponse encrypted() {
-    	this.encrypted = true;
-    	return this;
+        this.encrypted = true;
+        return this;
     }
     
     @Override
     public EzyResponse encrypted(boolean value) {
-    	this.encrypted = value;
-    	return this;
+        this.encrypted = value;
+        return this;
     }
     
     @Override

@@ -11,32 +11,32 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzySimpleConfig config = new EzySimpleConfig();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		settings.getSocket().setCodecCreator(ExCodecCreator.class.getName());
-		settings.getWebsocket().setCodecCreator(ExCodecCreator.class.getName());
-		EzySimpleServer server = new EzySimpleServer();
-		server.setConfig(config);
-		server.setSettings(settings);
-		EzyNioServerBootstrapBuilderImpl builder = new EzyNioServerBootstrapBuilderImpl();
-		builder.server(server);
-		builder.build();
-	}
-	
-	public static class ExCodecCreator implements EzyCodecCreator {
+    @Test
+    public void test() {
+        EzySimpleConfig config = new EzySimpleConfig();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getSocket().setCodecCreator(ExCodecCreator.class.getName());
+        settings.getWebsocket().setCodecCreator(ExCodecCreator.class.getName());
+        EzySimpleServer server = new EzySimpleServer();
+        server.setConfig(config);
+        server.setSettings(settings);
+        EzyNioServerBootstrapBuilderImpl builder = new EzyNioServerBootstrapBuilderImpl();
+        builder.server(server);
+        builder.build();
+    }
 
-		@Override
-		public Object newEncoder() {
-			return null;
-		}
+    public static class ExCodecCreator implements EzyCodecCreator {
 
-		@Override
-		public Object newDecoder(int maxRequestSize) {
-			return null;
-		}
-		
-	}
-	
+        @Override
+        public Object newEncoder() {
+            return null;
+        }
+
+        @Override
+        public Object newDecoder(int maxRequestSize) {
+            return null;
+        }
+
+    }
+
 }

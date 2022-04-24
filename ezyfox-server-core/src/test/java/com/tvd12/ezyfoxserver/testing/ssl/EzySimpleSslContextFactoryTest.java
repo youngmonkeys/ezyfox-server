@@ -35,22 +35,22 @@ public class EzySimpleSslContextFactoryTest extends BaseCoreTest {
     
     @Test
     public void getAlgorithmTest() {
-    	// given
-    	EzySimpleSslContextFactory sut = new EzySimpleSslContextFactory() {
-    		protected String getDefaultAlgorithm() {
-    			return null;
-    		};
-    	};
-    	EzySslConfig sslConfig = mock(EzySslConfig.class);
-    	
-    	// when
-    	String algorithm = MethodInvoker.create()
-    			.object(sut)
-    			.method("getAlgorithm")
-    			.param(EzySslConfig.class, sslConfig)
-    			.call();
-    	
-    	// then
-    	Asserts.assertEquals("SunX509", algorithm);
+        // given
+        EzySimpleSslContextFactory sut = new EzySimpleSslContextFactory() {
+            protected String getDefaultAlgorithm() {
+                return null;
+            };
+        };
+        EzySslConfig sslConfig = mock(EzySslConfig.class);
+        
+        // when
+        String algorithm = MethodInvoker.create()
+                .object(sut)
+                .method("getAlgorithm")
+                .param(EzySslConfig.class, sslConfig)
+                .call();
+        
+        // then
+        Asserts.assertEquals("SunX509", algorithm);
     }
 }

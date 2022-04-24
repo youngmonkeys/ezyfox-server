@@ -8,14 +8,14 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 public interface EzyServerContext extends EzyComplexContext {
 
-	void sendNow(EzyResponse response, EzySession recipient);
-	
-	EzyServer getServer();
-	
-	EzyZoneContext getZoneContext(int zoneId);
-	
-	EzyZoneContext getZoneContext(String zoneName);
-	
-	List<EzyZoneContext> getZoneContexts();
-	
+    void sendNow(EzyResponse response, EzySession recipient);
+    
+    EzyServer getServer();
+    
+    EzyZoneContext getZoneContext(int zoneId);
+    
+    EzyZoneContext getZoneContext(String zoneName);
+    
+    List<EzyZoneContext> getZoneContexts();
+    
 }

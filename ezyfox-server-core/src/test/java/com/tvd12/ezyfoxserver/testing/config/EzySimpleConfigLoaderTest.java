@@ -9,16 +9,16 @@ import com.tvd12.test.assertion.Asserts;
 
 public class EzySimpleConfigLoaderTest {
 
-	@Test
-	public void loadFilePathNullTest() {
-		// given
-		EzySimpleConfigLoader sut = new EzySimpleConfigLoader();
-		
-		// when
-		EzyConfig config = sut.load(null);
-		
-		// then
-		Asserts.assertEquals(EzySimpleConfig.defaultConfig(), config);
-	}
-	
+    @Test
+    public void loadFilePathNullTest() {
+        // given
+        EzySimpleConfigLoader sut = new EzySimpleConfigLoader();
+
+        // when
+        EzyConfig config = sut.load(null);
+
+        // then
+        Asserts.assertEquals(EzySimpleConfig.defaultConfig(), config);
+    }
+
 }

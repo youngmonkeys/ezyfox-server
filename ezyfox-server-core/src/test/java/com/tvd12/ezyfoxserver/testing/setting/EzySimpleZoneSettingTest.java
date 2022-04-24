@@ -47,14 +47,14 @@ public class EzySimpleZoneSettingTest {
     
     @Test
     public void configFileIsNull() {
-    	// given
-    	EzySimpleZoneSetting sut = new EzySimpleZoneSetting();
-    	
-    	// when
-    	String configFile = sut.getConfigFile();
-    	
-    	// then
-    	Asserts.assertNull(configFile);
-    	System.out.println(sut.toMap());
+        // given
+        EzySimpleZoneSetting sut = new EzySimpleZoneSetting();
+
+        // when
+        String configFile = sut.getConfigFile();
+
+        // then
+        Asserts.assertNull(configFile);
+        System.out.println(sut.toMap());
     }
 }

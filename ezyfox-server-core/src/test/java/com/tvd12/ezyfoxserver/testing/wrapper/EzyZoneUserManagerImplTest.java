@@ -79,77 +79,77 @@ public class EzyZoneUserManagerImplTest {
     
     @Test
     public void unmapSessionUserWithUserIsNull() {
-    	// given
-    	EzyZoneUserManagerImpl sut = newZoneUserManager();
-    	EzySession session = mock(EzySession.class);
-    	
-    	// when
-    	sut.unmapSessionUser(session, mock(EzyConstant.class));
-    	
-    	// then
-    	Asserts.assertNull(sut.getUser(session));
+        // given
+        EzyZoneUserManagerImpl sut = newZoneUserManager();
+        EzySession session = mock(EzySession.class);
+
+        // when
+        sut.unmapSessionUser(session, mock(EzyConstant.class));
+
+        // then
+        Asserts.assertNull(sut.getUser(session));
     }
     
     @Test
     public void unmapSessionUserWithSessionCountGreaterThan1() {
-    	// given
-    	EzyZoneUserManagerImpl sut = newZoneUserManager();
-    	EzySession session = mock(EzySession.class);
+        // given
+        EzyZoneUserManagerImpl sut = newZoneUserManager();
+        EzySession session = mock(EzySession.class);
 
-    	EzyUser user = mock(EzyUser.class);
-    	when(user.getSessionCount()).thenReturn(1);
-    	
-    	Map<EzySession, EzyUser> usersBySession = FieldUtil.getFieldValue(sut, "usersBySession");
-    	usersBySession.put(session, user);
-    	
-    	// when
-    	sut.unmapSessionUser(session, mock(EzyConstant.class));
-    	
-    	// then
-    	Asserts.assertNull(sut.getUser(session));
+        EzyUser user = mock(EzyUser.class);
+        when(user.getSessionCount()).thenReturn(1);
+
+        Map<EzySession, EzyUser> usersBySession = FieldUtil.getFieldValue(sut, "usersBySession");
+        usersBySession.put(session, user);
+
+        // when
+        sut.unmapSessionUser(session, mock(EzyConstant.class));
+
+        // then
+        Asserts.assertNull(sut.getUser(session));
     }
     
     @Test
     public void unmapSessionUserWithmaxIdleTimeGreaterThan0() {
-    	// given
-    	EzyZoneUserManagerImpl sut = newZoneUserManager();
-    	EzySession session = mock(EzySession.class);
+        // given
+        EzyZoneUserManagerImpl sut = newZoneUserManager();
+        EzySession session = mock(EzySession.class);
 
-    	EzyUser user = mock(EzyUser.class);
-    	when(user.getMaxIdleTime()).thenReturn(1000L);
-    	
-    	Map<EzySession, EzyUser> usersBySession = FieldUtil.getFieldValue(sut, "usersBySession");
-    	usersBySession.put(session, user);
-    	
-    	// when
-    	sut.unmapSessionUser(session, mock(EzyConstant.class));
-    	
-    	// then
-    	Asserts.assertNull(sut.getUser(session));
+        EzyUser user = mock(EzyUser.class);
+        when(user.getMaxIdleTime()).thenReturn(1000L);
+
+        Map<EzySession, EzyUser> usersBySession = FieldUtil.getFieldValue(sut, "usersBySession");
+        usersBySession.put(session, user);
+
+        // when
+        sut.unmapSessionUser(session, mock(EzyConstant.class));
+
+        // then
+        Asserts.assertNull(sut.getUser(session));
     }
     
     @Test
     public void startIdleValidationServiceWithIdleValidationService() {
-    	// given
-    	EzyZoneUserManagerImpl sut = newZoneUserManager();
+        // given
+        EzyZoneUserManagerImpl sut = newZoneUserManager();
 
-    	// when
-    	MethodUtil.invokeMethod("startIdleValidationService", sut);
-    	
-    	// then
-    	Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
+        // when
+        MethodUtil.invokeMethod("startIdleValidationService", sut);
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
     }
     
     @Test
     public void destroyWithIdleValidationService() {
-    	// given
-    	EzyZoneUserManagerImpl sut = newZoneUserManager();
+        // given
+        EzyZoneUserManagerImpl sut = newZoneUserManager();
 
-    	// when
-    	sut.destroy();
-    	
-    	// then
-    	Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
+        // when
+        sut.destroy();
+
+        // then
+        Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
     }
     
     private EzySimpleUser newAndAddIdleUser(String username, EzyZoneUserManagerImpl manager) {
@@ -165,7 +165,7 @@ public class EzyZoneUserManagerImplTest {
     }
     
     private EzyZoneUserManagerImpl newZoneUserManager() {
-    	EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
         when(serverContext.getZoneContext(1)).thenReturn(zoneContext);
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();

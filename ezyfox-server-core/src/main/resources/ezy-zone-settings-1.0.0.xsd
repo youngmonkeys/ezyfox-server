@@ -1,155 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema targetNamespace="http://www.tvd12.com/schema/ezyfox/settings" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://www.tvd12.com/schema/ezyfox/settings" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    xmlns="http://www.tvd12.com/schema/ezyfox/settings" elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-	<xs:element name="settings">
-		<xs:complexType>
-			<xs:all>
-				<xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="applications" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="user-management" minOccurs="0" maxOccurs="1" />
-			</xs:all>
-		</xs:complexType>
-	</xs:element>
+    <xs:element name="settings">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="max-users" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="streaming" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="event-controllers" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="applications" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="plugins" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="user-management" minOccurs="0" maxOccurs="1" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
 
-	<xs:element name="streaming" type="streaming-type" />
-	<xs:element name="event-controllers" type="event-controllers-type" />
-	<xs:element name="event-controller" type="event-controller-type" />
-	<xs:element name="max-users" type="xs:integer" />
-	<xs:element name="applications" type="applications-type" />
-	<xs:element name="application" type="application-type" />
-	<xs:element name="plugins" type="plugins-type" />
-	<xs:element name="plugin" type="plugin-type" />
-	<xs:element name="user-management" type="user-management-type" />
-	
-	<xs:complexType name="streaming-type">
-		<xs:all>
-			<xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
-	
-	<xs:complexType name="event-controllers-type">
-		<xs:all>
-			<xs:element ref="event-controller" />
-		</xs:all>
-	</xs:complexType>
-	
-	<xs:complexType name="event-controller-type">
-		<xs:all>
-			<xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1" />
-			<xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1" />
-		</xs:all>
-	</xs:complexType>
+    <xs:element name="streaming" type="streaming-type" />
+    <xs:element name="event-controllers" type="event-controllers-type" />
+    <xs:element name="event-controller" type="event-controller-type" />
+    <xs:element name="max-users" type="xs:integer" />
+    <xs:element name="applications" type="applications-type" />
+    <xs:element name="application" type="application-type" />
+    <xs:element name="plugins" type="plugins-type" />
+    <xs:element name="plugin" type="plugin-type" />
+    <xs:element name="user-management" type="user-management-type" />
 
-	<xs:simpleType name="listen-event-type">
-		<xs:list>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="SERVER_INITIALIZING" />
-					<xs:enumeration value="SERVER_READY" />
-					<xs:enumeration value="STREAMING" />
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:list>
-	</xs:simpleType>
+    <xs:complexType name="streaming-type">
+        <xs:all>
+            <xs:element name="enable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:complexType name="plugins-type">
-		<xs:all>
-			<xs:element ref="plugin" minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
+    <xs:complexType name="event-controllers-type">
+        <xs:all>
+            <xs:element ref="event-controller" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:complexType name="plugin-type">
-		<xs:all>
-			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
-			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="listen-events" type="plugin-listen-events" minOccurs="0" maxOccurs="1" />
-		</xs:all>
-	</xs:complexType>
+    <xs:complexType name="event-controller-type">
+        <xs:all>
+            <xs:element name="event-type" type="listen-event-type" maxOccurs="1" minOccurs="1" />
+            <xs:element name="controller" type="class-type" maxOccurs="1" minOccurs="1" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:complexType name="plugin-listen-events">
-		<xs:sequence>
-			<xs:element name="event" type="plugin-listen-event-type" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
+    <xs:simpleType name="listen-event-type">
+        <xs:list>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="SERVER_INITIALIZING" />
+                    <xs:enumeration value="SERVER_READY" />
+                    <xs:enumeration value="STREAMING" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:list>
+    </xs:simpleType>
 
-	<xs:simpleType name="plugin-listen-event-type">
-		<xs:list>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="USER_LOGIN" />
-					<xs:enumeration value="USER_ADDED" />
-					<xs:enumeration value="USER_REMOVED" />
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:list>
-	</xs:simpleType>
+    <xs:complexType name="plugins-type">
+        <xs:all>
+            <xs:element ref="plugin" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:complexType name="applications-type">
-		<xs:all>
-			<xs:element ref="application" minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
+    <xs:complexType name="plugin-type">
+        <xs:all>
+            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+            <xs:element name="priority" type="xs:integer" default="0" minOccurs="0" maxOccurs="1" />
+            <xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+            <xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="listen-events" type="plugin-listen-events" minOccurs="0" maxOccurs="1" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:complexType name="application-type">
-		<xs:all>
-			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
-			<xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
-		</xs:all>
-	</xs:complexType>
-	
-	<xs:complexType name="administrators-type">
-		<xs:sequence>
-			<xs:element name="administrator" type="administrator-type" minOccurs="1" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
-	
-	<xs:complexType name="administrator-type">
-		<xs:all>
-			<xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-			<xs:element name="api-access-token" type="not-empty-type" minOccurs="1" maxOccurs="1" />
-		</xs:all>
-	</xs:complexType>
+    <xs:complexType name="plugin-listen-events">
+        <xs:sequence>
+            <xs:element name="event" type="plugin-listen-event-type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
 
-	<xs:complexType name="user-management-type">
-		<xs:all>
-			<xs:element name="allow-guest-login" type="xs:boolean" minOccurs="0" maxOccurs="1" />
-			<xs:element name="guest-name-prefix" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="user-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1" />
-			<xs:element name="user-name-pattern" type="xs:string" minOccurs="0" maxOccurs="1" />
-			<xs:element name="allow-change-session" type="xs:boolean" minOccurs="0" maxOccurs="1" />
-			<xs:element name="max-session-per-user" type="xs:int" minOccurs="0" maxOccurs="1" />
-		</xs:all>
-	</xs:complexType>
+    <xs:simpleType name="plugin-listen-event-type">
+        <xs:list>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="USER_LOGIN" />
+                    <xs:enumeration value="USER_ADDED" />
+                    <xs:enumeration value="USER_REMOVED" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:list>
+    </xs:simpleType>
 
-	<xs:simpleType name="class-type">
-		<xs:restriction base="not-empty-type" />
-	</xs:simpleType>
+    <xs:complexType name="applications-type">
+        <xs:all>
+            <xs:element ref="application" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
 
-	<xs:simpleType name="file-type">
-		<xs:restriction base="not-empty-type" />
-	</xs:simpleType>
+    <xs:complexType name="application-type">
+        <xs:all>
+            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="folder" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="active-profiles" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="entry-loader" type="class-type" minOccurs="1" maxOccurs="1" />
+            <xs:element name="max-users" type="xs:integer" minOccurs="0" maxOccurs="1" />
+            <xs:element name="thread-pool-size" type="xs:integer" minOccurs="0" maxOccurs="1" />
+            <xs:element name="config-file" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
 
-	<xs:simpleType name="not-empty-type">
-		<xs:restriction base="xs:string">
-			<xs:minLength value="1" />
-		</xs:restriction>
-	</xs:simpleType>
+    <xs:complexType name="administrators-type">
+        <xs:sequence>
+            <xs:element name="administrator" type="administrator-type" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="administrator-type">
+        <xs:all>
+            <xs:element name="username" type="not-empty-type" minOccurs="1" maxOccurs="1" />
+            <xs:element name="password" type="not-empty-type" minOccurs="1" maxOccurs="1" />
+            <xs:element name="api-access-token" type="not-empty-type" minOccurs="1" maxOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="user-management-type">
+        <xs:all>
+            <xs:element name="allow-guest-login" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="guest-name-prefix" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="user-max-idle-time" type="xs:long" minOccurs="0" maxOccurs="1" />
+            <xs:element name="user-name-pattern" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="allow-change-session" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="max-session-per-user" type="xs:int" minOccurs="0" maxOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="class-type">
+        <xs:restriction base="not-empty-type" />
+    </xs:simpleType>
+
+    <xs:simpleType name="file-type">
+        <xs:restriction base="not-empty-type" />
+    </xs:simpleType>
+
+    <xs:simpleType name="not-empty-type">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
 
 </xs:schema>

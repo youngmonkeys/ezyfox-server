@@ -9,11 +9,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class EzyAbstractSetup extends EzyAbstractCommand {
 
-	private final EzyServerChild serverChild;
-	
-	@SuppressWarnings("rawtypes")
-	public void addEventController0(EzyConstant eventType, EzyEventController controller) {
-	    serverChild.addEventController(eventType, controller);
-	}
-	
+    private final EzyServerChild serverChild;
+    
+    @SuppressWarnings("rawtypes")
+    public void addEventController0(EzyConstant eventType, EzyEventController controller) {
+        serverChild.addEventController(eventType, controller);
+    }
+    
 }

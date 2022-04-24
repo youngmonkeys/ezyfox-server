@@ -7,20 +7,20 @@ import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerProxy;
 
 public class EzyExceptionHandlerProxyTest {
 
-	@Test
-	public void test() {
-		EzyExceptionHandlerProxy proxy = new EzyExceptionHandlerProxy(
-				new ExceptionHandlerEx());
-		System.out.println(proxy.toString());
-	}
-	
-	public static class ExceptionHandlerEx {
-		
-		@EzyTryCatch(Exception.class)
-		public void handle(Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
+    @Test
+    public void test() {
+        EzyExceptionHandlerProxy proxy = new EzyExceptionHandlerProxy(
+                new ExceptionHandlerEx());
+        System.out.println(proxy.toString());
+    }
+
+    public static class ExceptionHandlerEx {
+
+        @EzyTryCatch(Exception.class)
+        public void handle(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

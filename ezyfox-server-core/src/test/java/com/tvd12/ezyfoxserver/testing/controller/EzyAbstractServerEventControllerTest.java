@@ -7,13 +7,13 @@ import com.tvd12.ezyfoxserver.controller.EzyAbstractServerEventController;
 
 public class EzyAbstractServerEventControllerTest {
 
-	@Test
-	public void newTest() {
-		new EzyAbstractServerEventController<Object>() {
-			@Override
-			public void handle(EzyServerContext ctx, Object event) {
-			}
-			
-		};
-	}
+    @Test
+    public void newTest() {
+        new EzyAbstractServerEventController<Object>() {
+            @Override
+            public void handle(EzyServerContext ctx, Object event) {
+            }
+
+        };
+    }
 }

@@ -30,43 +30,43 @@ public class EzyLoaderTest extends BaseCoreTest {
 
     @Test
     public void newAppClassLoaderNotEnableClassLoader() {
-    	// given
-    	InternalLoader sut = new InternalLoader();
-    	FieldUtil.setFieldValue(sut, "classLoader", Thread.currentThread().getContextClassLoader());
-    	
-    	EzyConfig config = mock(EzyConfig.class);
-    	when(config.isEnableAppClassLoader()).thenReturn(false);
-    	FieldUtil.setFieldValue(sut, "config", config);
-    	
-    	// when
-    	ClassLoader classLoader = MethodUtil.invokeMethod("newAppClassLoader", sut, new File(""));
-    	
-    	// then
-    	Asserts.assertEquals(Thread.currentThread().getContextClassLoader(), classLoader);
+        // given
+        InternalLoader sut = new InternalLoader();
+        FieldUtil.setFieldValue(sut, "classLoader", Thread.currentThread().getContextClassLoader());
+
+        EzyConfig config = mock(EzyConfig.class);
+        when(config.isEnableAppClassLoader()).thenReturn(false);
+        FieldUtil.setFieldValue(sut, "config", config);
+
+        // when
+        ClassLoader classLoader = MethodUtil.invokeMethod("newAppClassLoader", sut, new File(""));
+
+        // then
+        Asserts.assertEquals(Thread.currentThread().getContextClassLoader(), classLoader);
     }
     
     @Test
     public void getEntryFoldersEmptyTest() {
-    	// given
-    	InternalLoader sut = new InternalLoader();
-    	
-    	EzyConfig config = mock(EzyConfig.class);
-    	when(config.isEnableAppClassLoader()).thenReturn(false);
-    	FieldUtil.setFieldValue(sut, "config", config);
-    	
-    	// when
-    	File[] folders = MethodUtil.invokeMethod("getEntryFolders", sut);
-    	
-    	// then
-    	Asserts.assertEquals(new File[0], folders);
+        // given
+        InternalLoader sut = new InternalLoader();
+
+        EzyConfig config = mock(EzyConfig.class);
+        when(config.isEnableAppClassLoader()).thenReturn(false);
+        FieldUtil.setFieldValue(sut, "config", config);
+
+        // when
+        File[] folders = MethodUtil.invokeMethod("getEntryFolders", sut);
+
+        // then
+        Asserts.assertEquals(new File[0], folders);
     }
     
     private static class InternalLoader extends EzyLoader {
 
-		@SuppressWarnings("rawtypes")
-		@Override
-		protected Builder createSessionManagerBuilder(EzySettings settings) {
-			return null;
-		}
+        @SuppressWarnings("rawtypes")
+        @Override
+        protected Builder createSessionManagerBuilder(EzySettings settings) {
+            return null;
+        }
     }
 }

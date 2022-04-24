@@ -4,14 +4,14 @@ public interface EzySocketUserRemovalQueue {
 
     int size();
     
-	void clear();
-	
-	boolean isEmpty();
-	
-	boolean add(EzySocketUserRemoval removal);
-	
-	void remove(EzySocketUserRemoval removal);
-	
-	EzySocketUserRemoval take() throws InterruptedException;
-	
+    void clear();
+    
+    boolean isEmpty();
+    
+    boolean add(EzySocketUserRemoval removal);
+    
+    void remove(EzySocketUserRemoval removal);
+    
+    EzySocketUserRemoval take() throws InterruptedException;
+    
 }

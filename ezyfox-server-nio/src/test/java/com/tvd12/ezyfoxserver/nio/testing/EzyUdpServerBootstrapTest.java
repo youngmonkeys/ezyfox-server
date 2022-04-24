@@ -12,22 +12,22 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 
 public class EzyUdpServerBootstrapTest {
 
-	@Test
-	public void test() throws Exception {
-		EzySimpleServerContext context = new EzySimpleServerContext();
-		EzySimpleServer server = new EzySimpleServer();
-		EzySimpleSettings settings = new EzySimpleSettings();
-		server.setSettings(settings);
-		context.setServer(server);
-		EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
-		EzyUdpServerBootstrap bootstrap = EzyUdpServerBootstrap.builder()
-				.serverContext(context)
-				.handlerGroupManager(handlerGroupManager)
-				.build();
-		bootstrap.start();
-		Thread.sleep(250);
-		bootstrap.destroy();
-				
-	}
-	
+    @Test
+    public void test() throws Exception {
+        EzySimpleServerContext context = new EzySimpleServerContext();
+        EzySimpleServer server = new EzySimpleServer();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        server.setSettings(settings);
+        context.setServer(server);
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzyUdpServerBootstrap bootstrap = EzyUdpServerBootstrap.builder()
+                .serverContext(context)
+                .handlerGroupManager(handlerGroupManager)
+                .build();
+        bootstrap.start();
+        Thread.sleep(250);
+        bootstrap.destroy();
+                
+    }
+    
 }

@@ -14,44 +14,44 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import lombok.Getter;
 
 public abstract class EzyHandlerMethod {
-	
-	@Getter
-	protected final EzyMethod method;
-	
-	public EzyHandlerMethod(EzyMethod method) {
-		this.method = method;
-	}
 
-	public String getName() {
-		return method.getName();
-	}
-	
-	public Parameter[] getParameters() {
-		return method.getMethod().getParameters();
-	}
-	
-	public Class<?>[] getParameterTypes() {
-		return method.getParameterTypes();
-	}
+    @Getter
+    protected final EzyMethod method;
 
-	public Class<?> getRequestDataType() {
-		Class<?> dataType = null;
-		for(Parameter parameter : getParameters()) {
-			Class<?> type = parameter.getType();
-			if(type != EzyContext.class &&
-					type != EzyAppContext.class &&
-					type != EzyPluginContext.class &&
-					type != EzyUserSessionEvent.class &&
-					type != EzyUser.class &&
-					type != EzySession.class &&
-					!Throwable.class.isAssignableFrom(type)) {
-				if(dataType == null || type != String.class)
-					dataType = type;
-				if(parameter.isAnnotationPresent(EzyRequestData.class))
-					break;
-			}
-		}
-		return dataType;
-	}
-	
+    public EzyHandlerMethod(EzyMethod method) {
+        this.method = method;
+    }
+
+    public String getName() {
+        return method.getName();
+    }
+
+    public Parameter[] getParameters() {
+        return method.getMethod().getParameters();
+    }
+
+    public Class<?>[] getParameterTypes() {
+        return method.getParameterTypes();
+    }
+
+    public Class<?> getRequestDataType() {
+        Class<?> dataType = null;
+        for(Parameter parameter : getParameters()) {
+            Class<?> type = parameter.getType();
+            if(type != EzyContext.class &&
+                    type != EzyAppContext.class &&
+                    type != EzyPluginContext.class &&
+                    type != EzyUserSessionEvent.class &&
+                    type != EzyUser.class &&
+                    type != EzySession.class &&
+                    !Throwable.class.isAssignableFrom(type)) {
+                if(dataType == null || type != String.class)
+                    dataType = type;
+                if(parameter.isAnnotationPresent(EzyRequestData.class))
+                    break;
+            }
+        }
+        return dataType;
+    }
+
 }

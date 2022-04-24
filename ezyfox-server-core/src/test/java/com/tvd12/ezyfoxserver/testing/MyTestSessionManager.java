@@ -34,9 +34,9 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
         @Override
         protected EzyObjectFactory<MyTestSession> newObjectFactory() {
             return new EzyAbstractSessionFactory<MyTestSession>() {
-            	{
-            		maxRequestPerSecond = new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond();
-            	}
+                {
+                    maxRequestPerSecond = new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond();
+                }
                 @Override
                 protected MyTestSession newSession() {
                     return new MyTestSession();

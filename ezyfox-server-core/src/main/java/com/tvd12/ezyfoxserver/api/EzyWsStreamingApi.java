@@ -9,5 +9,4 @@ public class EzyWsStreamingApi extends EzyAbstractStreamingApi {
     protected EzyConstant getConnectionType() {
         return EzyConnectionType.WEBSOCKET;
     }
-
 }

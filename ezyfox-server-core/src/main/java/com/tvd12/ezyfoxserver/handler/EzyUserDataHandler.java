@@ -45,5 +45,4 @@ public abstract class EzyUserDataHandler<S extends EzySession>
         request.setBytes(bytes);
         return request;
     }
-
 }

@@ -17,5 +17,4 @@ public class EzySimpleSessionRemovedEvent
         super(user, session);
         this.reason = reason;
     }
-
 }

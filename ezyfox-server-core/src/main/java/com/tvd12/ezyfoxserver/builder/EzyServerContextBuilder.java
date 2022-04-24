@@ -8,5 +8,4 @@ public interface EzyServerContextBuilder<B extends EzyServerContextBuilder<B>>
     extends EzyBuilder<EzyServerContext> {
 
     B server(EzyServer server);
-
 }

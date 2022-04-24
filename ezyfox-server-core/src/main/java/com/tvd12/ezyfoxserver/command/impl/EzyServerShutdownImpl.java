@@ -19,5 +19,4 @@ public class EzyServerShutdownImpl
     public void execute() {
         ((EzyDestroyable) context).destroy();
     }
-
 }

@@ -17,5 +17,4 @@ public interface EzyServerContext extends EzyComplexContext {
     EzyZoneContext getZoneContext(String zoneName);
 
     List<EzyZoneContext> getZoneContexts();
-
 }

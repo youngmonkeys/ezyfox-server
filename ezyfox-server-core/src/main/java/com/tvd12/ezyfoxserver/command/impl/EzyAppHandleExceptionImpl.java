@@ -30,5 +30,4 @@ public class EzyAppHandleExceptionImpl
             logger.debug("handle app: {} error", appName, throwable);
         }
     }
-
 }

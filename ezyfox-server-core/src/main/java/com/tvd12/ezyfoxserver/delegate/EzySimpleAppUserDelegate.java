@@ -58,5 +58,4 @@ public class EzySimpleAppUserDelegate
     public void destroy() {
         this.appContext = null;
     }
-
 }

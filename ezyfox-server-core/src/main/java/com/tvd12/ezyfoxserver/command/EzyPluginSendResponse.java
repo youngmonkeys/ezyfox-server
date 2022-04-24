@@ -1,4 +1,3 @@
 package com.tvd12.ezyfoxserver.command;
 
-public interface EzyPluginSendResponse extends EzyChildSendResponse {
-}
+public interface EzyPluginSendResponse extends EzyChildSendResponse {}

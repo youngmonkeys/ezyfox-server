@@ -9,34 +9,48 @@ import com.tvd12.ezyfoxserver.event.EzyEvent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class EzyBroadcastEventImpl extends EzyAbstractCommand implements EzyBroadcastEvent {
+public class EzyBroadcastEventImpl
+    extends EzyAbstractCommand
+    implements EzyBroadcastEvent {
 
     private final EzyServerContext context;
 
     @Override
-    public void fire(EzyConstant type, EzyEvent event, boolean catchException) {
+    public void fire(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         logger.debug("broadcast server event: {}", type);
         fireZonesEvent(type, event, catchException);
     }
 
-    protected void fireZonesEvent(EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void fireZonesEvent(
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         for (EzyZoneContext zoneContext : context.getZoneContexts()) {
             fireZoneEvent(zoneContext, type, event, catchException);
         }
     }
 
-    protected void fireZoneEvent(EzyZoneContext ctx, EzyConstant type, EzyEvent event, boolean catchException) {
+    protected void fireZoneEvent(
+        EzyZoneContext ctx,
+        EzyConstant type,
+        EzyEvent event,
+        boolean catchException
+    ) {
         if (catchException) {
             try {
                 ctx.handleEvent(type, event);
-                ctx.broadcast(type, event, catchException);
+                ctx.broadcast(type, event, true);
             } catch (Exception e) {
                 ctx.handleException(Thread.currentThread(), e);
             }
         } else {
             ctx.handleEvent(type, event);
-            ctx.broadcast(type, event, catchException);
+            ctx.broadcast(type, event, false);
         }
     }
-
 }

@@ -4,6 +4,4 @@ import com.tvd12.ezyfox.util.EzyEntityBuilders;
 
 public abstract class EzyAbstractZoneEventController<E>
     extends EzyEntityBuilders
-    implements EzyZoneEventController<E> {
-
-}
+    implements EzyZoneEventController<E> {}

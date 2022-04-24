@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.interceptor;
 
-import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.exception.EzyNotAuthorizedException;
 import com.tvd12.ezyfoxserver.interceptor.EzyServerUserInterceptor;
@@ -15,8 +14,8 @@ public class EzyServerUserInterceptorTest extends BaseCoreTest {
     @Test(expectedExceptions = {EzyNotAuthorizedException.class})
     public void test() throws Exception {
         EzyServerContext context = newServerContext();
-        EzyServerUserInterceptor<EzyArray> interceptor =
-            new EzyServerUserInterceptor<>();
+        EzyServerUserInterceptor interceptor =
+            new EzyServerUserInterceptor();
         EzyRequestAppRequest request = new EzySimpleRequestAppRequest();
         interceptor.intercept(context, request);
     }
@@ -24,8 +23,8 @@ public class EzyServerUserInterceptorTest extends BaseCoreTest {
     @Test
     public void test1() throws Exception {
         EzyServerContext context = newServerContext();
-        EzyServerUserInterceptor<EzyArray> interceptor =
-            new EzyServerUserInterceptor<>();
+        EzyServerUserInterceptor interceptor =
+            new EzyServerUserInterceptor();
         EzySimpleRequestAppRequest request = new EzySimpleRequestAppRequest();
         request.setUser(new MyTestUser());
         interceptor.intercept(context, request);

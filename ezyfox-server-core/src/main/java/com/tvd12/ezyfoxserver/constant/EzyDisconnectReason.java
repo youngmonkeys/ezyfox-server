@@ -23,16 +23,15 @@ public enum EzyDisconnectReason implements EzyConstant {
     @Getter
     private final int id;
 
-    private EzyDisconnectReason(int id) {
+    EzyDisconnectReason(int id) {
         this.id = id;
     }
 
     public static EzyDisconnectReason valueOf(int id) {
-        EzyDisconnectReason reason = REASONS_BY_ID.get(id);
-        return reason;
+        return REASONS_BY_ID.get(id);
     }
 
-    private static final Map<Integer, EzyDisconnectReason> reasonsById() {
+    private static Map<Integer, EzyDisconnectReason> reasonsById() {
         Map<Integer, EzyDisconnectReason> map = new ConcurrentHashMap<>();
         for (EzyDisconnectReason reason : values()) {
             map.put(reason.getId(), reason);
@@ -44,5 +43,4 @@ public enum EzyDisconnectReason implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

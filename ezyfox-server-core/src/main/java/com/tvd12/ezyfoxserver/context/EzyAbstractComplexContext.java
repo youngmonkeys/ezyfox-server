@@ -13,10 +13,14 @@ public abstract class EzyAbstractComplexContext
     extends EzyAbstractContext
     implements EzyComplexContext {
 
-    protected final Set<EzyAppContext> appContexts = new HashSet<>();
-    protected final Map<Integer, EzyAppContext> appContextsById = new ConcurrentHashMap<>();
-    protected final Set<EzyPluginContext> pluginContexts = new HashSet<>();
-    protected final Map<Integer, EzyPluginContext> pluginContextsById = new ConcurrentHashMap<>();
+    protected final Set<EzyAppContext> appContexts
+        = new HashSet<>();
+    protected final Map<Integer, EzyAppContext> appContextsById
+        = new ConcurrentHashMap<>();
+    protected final Set<EzyPluginContext> pluginContexts
+        = new HashSet<>();
+    protected final Map<Integer, EzyPluginContext> pluginContextsById
+        = new ConcurrentHashMap<>();
 
     public void addAppContext(EzyAppSetting app, EzyAppContext appContext) {
         appContexts.add(appContext);
@@ -84,5 +88,4 @@ public abstract class EzyAbstractComplexContext
     }
 
     protected void destroyComponents() {}
-
 }

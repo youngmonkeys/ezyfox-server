@@ -14,36 +14,29 @@ public final class EzyServerContexts {
 
     public static EzySettings getSettings(EzyServerContext context) {
         EzyServer server = context.getServer();
-        EzySettings settings = server.getSettings();
-        return settings;
+        return server.getSettings();
     }
 
     public static boolean containsUser(EzyAppContext context, EzyUser user) {
-        boolean contains = EzyAppContexts.containsUser(context, user);
-        return contains;
+        return EzyAppContexts.containsUser(context, user);
     }
 
     public static boolean containsUser(EzyAppContext context, String username) {
-        boolean contains = EzyAppContexts.containsUser(context, username);
-        return contains;
+        return EzyAppContexts.containsUser(context, username);
     }
 
     public static EzyUserManager getUserManager(EzyAppContext context) {
-        EzyUserManager userManager = EzyAppContexts.getUserManager(context);
-        return userManager;
+        return EzyAppContexts.getUserManager(context);
     }
 
     public static EzyStatistics getStatistics(EzyServerContext context) {
         EzyServer server = context.getServer();
-        EzyStatistics statistics = server.getStatistics();
-        return statistics;
+        return server.getStatistics();
     }
 
     @SuppressWarnings("unchecked")
     public static EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
         EzyServer server = ctx.getServer();
-        EzySessionManager<EzySession> sessionManager = server.getSessionManager();
-        return sessionManager;
+        return (EzySessionManager<EzySession>) server.getSessionManager();
     }
-
 }

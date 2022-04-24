@@ -59,5 +59,4 @@ public class EzyConfigBuilder implements EzyBuilder<EzyConfig> {
         p.setEnableAppClassLoader(enableAppClassLoader);
         return p;
     }
-
 }

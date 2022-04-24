@@ -3,10 +3,6 @@ package com.tvd12.ezyfoxserver.testing;
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyObjectBuilder;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
-import com.tvd12.ezyfox.json.EzyJsonMapper;
-import com.tvd12.ezyfox.mapping.jackson.EzySimpleJsonMapper;
-import com.tvd12.ezyfox.mapping.jaxb.EzySimpleXmlMapper;
-import com.tvd12.ezyfox.mapping.jaxb.EzyXmlReader;
 import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
 import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.EzyLoader;
@@ -26,9 +22,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
-import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager.Builder;
-import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 import com.tvd12.test.base.BaseTest;
 
 import java.security.KeyPair;
@@ -58,15 +52,18 @@ public class BaseCoreTest extends BaseTest {
 
     protected EzySimpleServer newServer() {
         try {
-            EzySimpleServer answer = (EzySimpleServer) loadEzyFox(readConfig("test-data/settings/config.properties"));
-            return answer;
+            return (EzySimpleServer) loadEzyFox(
+                readConfig()
+            );
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected EzyConfig readConfig(String configFile) throws Exception {
-        return getConfigLoader().load(configFile);
+    protected EzyConfig readConfig() {
+        return getConfigLoader().load(
+            "test-data/settings/config.properties"
+        );
     }
 
     protected EzyConfigLoader getConfigLoader() {
@@ -81,26 +78,10 @@ public class BaseCoreTest extends BaseTest {
             protected Builder createSessionManagerBuilder(EzySettings settings) {
                 return MyTestSessionManager.builder();
             }
-
         }
             .config(config)
             .classLoader(getClassLoader())
             .load();
-    }
-
-    protected EzyXmlReader getXmlReader() {
-        return EzySimpleXmlMapper.builder()
-            .classLoader(getClassLoader())
-            .contextPath("com.tvd12.ezyfoxserver.mapping")
-            .build();
-    }
-
-    protected EzyJsonMapper getJsonMapper() {
-        return EzySimpleJsonMapper.builder().build();
-    }
-
-    public EzyServerControllers newControllers() {
-        return EzyServerControllersImpl.builder().build();
     }
 
     protected ClassLoader getClassLoader() {
@@ -126,14 +107,6 @@ public class BaseCoreTest extends BaseTest {
             .generate();
     }
 
-    protected EzySession newSessionHasKey(String token) {
-        KeyPair keyPair = newRSAKeys();
-        EzySession session = newSession();
-        session.setToken(token);
-        session.setPublicKey(keyPair.getPublic().getEncoded());
-        return session;
-    }
-
     protected EzySimpleUser newUser() {
         return new EzySimpleUser();
     }
@@ -149,8 +122,6 @@ public class BaseCoreTest extends BaseTest {
     public static class SessionDelegate implements EzySessionDelegate {
 
         @Override
-        public void onSessionLoggedIn(EzyUser user) {
-        }
-
+        public void onSessionLoggedIn(EzyUser user) {}
     }
 }

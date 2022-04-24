@@ -6,7 +6,8 @@ import com.tvd12.ezyfoxserver.event.EzySimpleStreamingEvent;
 import com.tvd12.ezyfoxserver.event.EzyStreamingEvent;
 import com.tvd12.ezyfoxserver.request.EzyStreamingRequest;
 
-public class EzySimpleStreamingController implements EzyStreamingController {
+public class EzySimpleStreamingController
+    implements EzyStreamingController {
 
     @Override
     public void handle(EzyZoneContext ctx, EzyStreamingRequest request) {
@@ -16,5 +17,4 @@ public class EzySimpleStreamingController implements EzyStreamingController {
             request.getBytes());
         ctx.handleEvent(EzyEventType.STREAMING, event);
     }
-
 }

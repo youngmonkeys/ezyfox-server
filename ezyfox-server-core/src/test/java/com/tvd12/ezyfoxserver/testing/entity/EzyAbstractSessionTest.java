@@ -149,12 +149,12 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
             e.printStackTrace();
         }
         privateSession.setRequestFrameInSecond(new EzyRequestFrameSecond(2));
-        Asserts.assertFalse(privateSession.addReceviedRequests(1));
-        Asserts.assertTrue(privateSession.addReceviedRequests(3));
+        Asserts.assertFalse(privateSession.addReceivedRequests(1));
+        Asserts.assertTrue(privateSession.addReceivedRequests(3));
 
         privateSession.setRequestFrameInSecond(new EzyRequestFrameSecond(5, System.currentTimeMillis() - 2 * 1000));
-        Asserts.assertFalse(privateSession.addReceviedRequests(1));
-        Asserts.assertFalse(privateSession.addReceviedRequests(3));
+        Asserts.assertFalse(privateSession.addReceivedRequests(1));
+        Asserts.assertFalse(privateSession.addReceivedRequests(3));
         Asserts.assertFalse(privateSession.getRequestFrameInSecond().isExpired());
 
         byte[] clientKey = RandomUtil.randomShortByteArray();

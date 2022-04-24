@@ -11,7 +11,7 @@ public enum EzyTransportType implements EzyConstant {
     @Getter
     private final int id;
 
-    private EzyTransportType(int id) {
+    EzyTransportType(int id) {
         this.id = id;
     }
 
@@ -19,5 +19,4 @@ public enum EzyTransportType implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

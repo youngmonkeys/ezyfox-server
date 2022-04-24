@@ -54,6 +54,5 @@ public class EzySimpleSessionCreator implements EzySessionCreator {
         public EzySessionCreator build() {
             return new EzySimpleSessionCreator(this);
         }
-
     }
 }

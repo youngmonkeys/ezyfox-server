@@ -4,6 +4,4 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 
 public abstract class EzyAbstractPluginEventController<E>
     extends EzyLoggable
-    implements EzyPluginEventController<E> {
-
-}
+    implements EzyPluginEventController<E> {}

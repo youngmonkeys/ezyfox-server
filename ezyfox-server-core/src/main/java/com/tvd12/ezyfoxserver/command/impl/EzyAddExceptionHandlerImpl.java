@@ -21,5 +21,4 @@ public class EzyAddExceptionHandlerImpl
         EzyExceptionHandlers handlers = fetcher.getExceptionHandlers();
         handlers.addExceptionHandler(handler);
     }
-
 }

@@ -19,5 +19,4 @@ public class EzyExitAppController
         EzyAppUserManager userManager = app.getUserManager();
         userManager.removeUser(request.getUser(), EzyUserRemoveReason.EXIT_APP);
     }
-
 }

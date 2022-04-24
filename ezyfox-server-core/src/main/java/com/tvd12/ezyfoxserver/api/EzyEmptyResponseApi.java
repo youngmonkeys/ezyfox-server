@@ -6,15 +6,12 @@ public final class EzyEmptyResponseApi implements EzyResponseApi {
 
     private static final EzyEmptyResponseApi INSTANCE = new EzyEmptyResponseApi();
 
-    private EzyEmptyResponseApi() {
-    }
+    private EzyEmptyResponseApi() {}
 
     public static EzyEmptyResponseApi getInstance() {
         return INSTANCE;
     }
 
     @Override
-    public void response(EzyPackage pack, boolean immediate) throws Exception {
-    }
-
+    public void response(EzyPackage pack, boolean immediate) throws Exception {}
 }

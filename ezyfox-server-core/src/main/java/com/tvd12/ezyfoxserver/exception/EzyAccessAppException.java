@@ -11,12 +11,12 @@ public class EzyAccessAppException extends IllegalStateException {
     private final EzyIAccessAppError error;
 
     public EzyAccessAppException(String message, EzyIAccessAppError error) {
-        super(error.getMessage());
+        super(error.getMessage() + ": " + message);
         this.error = error;
     }
 
     public EzyAccessAppException(String message, EzyIAccessAppError error, Exception e) {
-        super(error.getMessage(), e);
+        super(error.getMessage() + ": " + message, e);
         this.error = error;
     }
 
@@ -28,5 +28,4 @@ public class EzyAccessAppException extends IllegalStateException {
     public static EzyAccessAppException maximumUser(String appName, int current, int max) {
         return maximumUser(appName, new EzyMaxUserException(current, max));
     }
-
 }

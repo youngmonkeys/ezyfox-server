@@ -31,5 +31,4 @@ public abstract class EzyAbstractStreamingApi implements EzyStreamingApi {
     }
 
     protected abstract EzyConstant getConnectionType();
-
 }

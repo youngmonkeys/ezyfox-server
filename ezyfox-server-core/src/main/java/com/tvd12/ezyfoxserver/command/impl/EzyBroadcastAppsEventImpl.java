@@ -63,5 +63,4 @@ public class EzyBroadcastAppsEventImpl extends EzyAbstractCommand implements Ezy
     protected String getZoneName() {
         return context.getZone().getSetting().getName();
     }
-
 }

@@ -10,7 +10,7 @@ public enum EzyUserRemoveReason implements EzyConstant {
 
     private final int id;
 
-    private EzyUserRemoveReason(int id) {
+    EzyUserRemoveReason(int id) {
         this.id = id;
     }
 
@@ -18,5 +18,4 @@ public enum EzyUserRemoveReason implements EzyConstant {
     public String getName() {
         return toString();
     }
-
 }

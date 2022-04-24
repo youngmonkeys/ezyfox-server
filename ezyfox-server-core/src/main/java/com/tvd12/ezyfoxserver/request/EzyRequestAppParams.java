@@ -7,5 +7,4 @@ public interface EzyRequestAppParams extends EzyRequestParams {
     int getAppId();
 
     EzyArray getData();
-
 }

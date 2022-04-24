@@ -9,5 +9,4 @@ public class EzySimplePingRequest
     protected EzyRequestParams newParams() {
         return EzySimpleRequestParams.EMPTY;
     }
-
 }

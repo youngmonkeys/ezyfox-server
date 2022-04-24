@@ -93,5 +93,4 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
             return new EzySimpleCodecFactory(this);
         }
     }
-
 }

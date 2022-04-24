@@ -230,7 +230,7 @@ public class EzyLoginControllerTest extends EzyBaseControllerTest {
             .when(zoneContext)
             .broadcastPlugins(any(EzyConstant.class), any(EzyEvent.class), anyBoolean());
         MethodInvoker.create()
-            .method("fireUserAddedEvent0")
+            .method("doFireUserAddedEvent")
             .object(processor)
             .param(EzyZoneContext.class, zoneContext)
             .param(EzyEvent.class, mock(EzyEvent.class))

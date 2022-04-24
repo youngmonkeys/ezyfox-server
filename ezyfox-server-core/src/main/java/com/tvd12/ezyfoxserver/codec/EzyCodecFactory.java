@@ -7,5 +7,4 @@ public interface EzyCodecFactory {
     Object newEncoder(EzyConstant type);
 
     Object newDecoder(EzyConstant type);
-
 }

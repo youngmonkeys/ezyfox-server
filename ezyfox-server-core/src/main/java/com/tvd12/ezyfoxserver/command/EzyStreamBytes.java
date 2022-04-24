@@ -9,11 +9,15 @@ public interface EzyStreamBytes {
 
     void execute(
         byte[] bytes,
-        EzySession recipient, EzyTransportType transportType);
+        EzySession recipient,
+        EzyTransportType transportType
+    );
 
     void execute(
         byte[] bytes,
-        Collection<EzySession> recipients, EzyTransportType transportType);
+        Collection<EzySession> recipients,
+        EzyTransportType transportType
+    );
 
     default void execute(byte[] bytes, EzySession recipient) {
         execute(bytes, recipient, EzyTransportType.TCP);
@@ -22,5 +26,4 @@ public interface EzyStreamBytes {
     default void execute(byte[] bytes, Collection<EzySession> recipients) {
         execute(bytes, recipients, EzyTransportType.TCP);
     }
-
 }

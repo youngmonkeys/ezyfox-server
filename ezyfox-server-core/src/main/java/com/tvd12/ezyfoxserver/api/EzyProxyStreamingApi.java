@@ -17,5 +17,4 @@ public class EzyProxyStreamingApi implements EzyStreamingApi {
         socketResponseApi.response(pack);
         websocketResponseApi.response(pack);
     }
-
 }

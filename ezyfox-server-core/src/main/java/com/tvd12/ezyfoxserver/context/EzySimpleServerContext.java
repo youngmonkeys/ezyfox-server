@@ -26,14 +26,17 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 public class EzySimpleServerContext extends EzyAbstractComplexContext implements EzyServerContext {
 
     @Getter
-    protected final List<EzyZoneContext> zoneContexts = new ArrayList<>();
-    protected final Map<Integer, EzyZoneContext> zoneContextsById = new ConcurrentHashMap<>();
-    protected final Map<String, EzyZoneContext> zoneContextsByName = new ConcurrentHashMap<>();
-    @Getter
     protected EzyServer server;
     protected EzyStreamBytes streamBytes;
     protected EzySendResponse sendResponse;
     protected EzyBroadcastEvent broadcastEvent;
+    @Getter
+    protected final List<EzyZoneContext> zoneContexts
+        = new ArrayList<>();
+    protected final Map<Integer, EzyZoneContext> zoneContextsById
+        = new ConcurrentHashMap<>();
+    protected final Map<String, EzyZoneContext> zoneContextsByName
+        = new ConcurrentHashMap<>();
 
     @Override
     protected void init0() {
@@ -68,7 +71,10 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
 
     @Override
     public void broadcast(
-        EzyConstant eventType, EzyEvent event, boolean catchException) {
+        EzyConstant eventType,
+        EzyEvent event,
+        boolean catchException
+    ) {
         broadcastEvent.fire(eventType, event, catchException);
     }
 
@@ -76,33 +82,63 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     public void send(
         EzyResponse response,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType) {
-        sendResponse.execute(response, recipient, encrypted, false, transportType);
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
+        sendResponse.execute(
+            response,
+            recipient,
+            encrypted,
+            false,
+            transportType
+        );
     }
 
     @Override
-    public void send(EzyResponse response,
-                     Collection<EzySession> recipients,
-                     boolean encrypted, EzyTransportType transportType) {
-        sendResponse.execute(response, recipients, encrypted, false, transportType);
+    public void send(
+        EzyResponse response,
+        Collection<EzySession> recipients,
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
+        sendResponse.execute(
+            response,
+            recipients,
+            encrypted,
+            false,
+            transportType
+        );
     }
 
     @Override
-    public void sendNow(EzyResponse response, EzySession recipient) {
-        sendResponse.execute(response, recipient, false, true, EzyTransportType.TCP);
+    public void sendNow(
+        EzyResponse response,
+        EzySession recipient
+    ) {
+        sendResponse.execute(
+            response,
+            recipient,
+            false,
+            true,
+            EzyTransportType.TCP
+        );
     }
 
     @Override
     public void stream(
         byte[] bytes,
-        EzySession recipient, EzyTransportType transportType) {
+        EzySession recipient,
+        EzyTransportType transportType
+    ) {
         streamBytes.execute(bytes, recipient, transportType);
     }
 
     @Override
     public void stream(
         byte[] bytes,
-        Collection<EzySession> recipients, EzyTransportType transportType) {
+        Collection<EzySession> recipients,
+        EzyTransportType transportType
+    ) {
         streamBytes.execute(bytes, recipients, transportType);
     }
 
@@ -112,12 +148,15 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
         }
     }
 
-    public void addZoneContext(EzyZoneSetting zone, EzyZoneContext zoneContext) {
+    public void addZoneContext(
+        EzyZoneSetting zone,
+        EzyZoneContext zoneContext
+    ) {
         zoneContexts.add(zoneContext);
         zoneContextsById.put(zone.getId(), zoneContext);
         zoneContextsByName.put(zone.getName(), zoneContext);
-        addAppContexts(((EzyAppContextsFetcher) zoneContext).getAppContexts());
-        addPluginContexts(((EzyPluginContextsFetcher) zoneContext).getPluginContexts());
+        addAppContexts(zoneContext.getAppContexts());
+        addPluginContexts(zoneContext.getPluginContexts());
     }
 
     @Override
@@ -171,7 +210,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     }
 
     private void destroyZoneContext(EzyZoneContext zoneContext) {
-        processWithLogException(() -> ((EzyDestroyable) zoneContext).destroy());
+        processWithLogException(((EzyDestroyable) zoneContext)::destroy);
     }
 
     @Override

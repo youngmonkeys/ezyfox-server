@@ -16,5 +16,4 @@ public class EzySimpleUserRequestEvent
         super(user, session);
         this.data = data;
     }
-
 }

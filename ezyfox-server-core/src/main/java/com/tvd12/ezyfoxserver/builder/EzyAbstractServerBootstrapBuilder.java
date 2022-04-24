@@ -10,14 +10,14 @@ import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
 
 import javax.net.ssl.SSLContext;
 
-public abstract class EzyAbtractServerBootstrapBuilder
+public abstract class EzyAbstractServerBootstrapBuilder
     implements EzyServerBootstrapBuilder {
 
     protected EzyServer server;
     protected EzyServerContext serverContext;
 
     @Override
-    public EzyAbtractServerBootstrapBuilder server(EzyServer server) {
+    public EzyAbstractServerBootstrapBuilder server(EzyServer server) {
         this.server = server;
         this.serverContext = newServerContext(server);
         return this;
@@ -25,12 +25,11 @@ public abstract class EzyAbtractServerBootstrapBuilder
 
     @Override
     public final EzyServerBootstrap build() {
-        prebuild();
+        preBuild();
         return buildServerBootstrap();
     }
 
-    protected void prebuild() {
-    }
+    protected void preBuild() {}
 
     protected EzyServerBootstrap buildServerBootstrap() {
         EzyServerBootstrap answer = newServerBootstrap();
@@ -79,10 +78,6 @@ public abstract class EzyAbtractServerBootstrapBuilder
 
     protected EzySettings getSettings() {
         return server.getSettings();
-    }
-
-    protected EzyUdpSetting getUdpSetting() {
-        return getSettings().getUdp();
     }
 
     protected EzySocketSetting getSocketSetting() {

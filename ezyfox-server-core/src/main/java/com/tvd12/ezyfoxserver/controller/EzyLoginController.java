@@ -50,27 +50,42 @@ public class EzyLoginController
     }
 
     protected void processException(
-        EzyServerContext ctx, EzySession session, EzyLoginErrorException e) {
+        EzyServerContext ctx,
+        EzySession session,
+        EzyLoginErrorException e
+    ) {
         responseLoginError(ctx, session, e.getError());
     }
 
     protected void control(
-        EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
+        EzyServerContext ctx,
+        EzyZoneContext zoneContext,
+        EzyUserLoginEvent event
+    ) {
         firePluginEvent(zoneContext, event);
         process(ctx, zoneContext, event);
     }
 
     protected void process(
-        EzyServerContext ctx, EzyZoneContext zoneContext, EzyUserLoginEvent event) {
+        EzyServerContext ctx,
+        EzyZoneContext zoneContext,
+        EzyUserLoginEvent event
+    ) {
         EzyLoginProcessor processor = new EzyLoginProcessor(ctx);
         processor.apply(zoneContext, event);
     }
 
-    protected void firePluginEvent(EzyZoneContext ctx, EzyUserLoginEvent event) {
+    protected void firePluginEvent(
+        EzyZoneContext ctx,
+        EzyUserLoginEvent event
+    ) {
         ctx.broadcastPlugins(EzyEventType.USER_LOGIN, event, false);
     }
 
-    protected EzyUserLoginEvent newLoginEvent(EzySession session, EzyLoginParams params) {
+    protected EzyUserLoginEvent newLoginEvent(
+        EzySession session,
+        EzyLoginParams params
+    ) {
         return new EzySimpleUserLoginEvent(
             session,
             params.getZoneName(),
@@ -78,15 +93,18 @@ public class EzyLoginController
             params.getPassword(), params.getData());
     }
 
-    protected void responseLoginError(EzyServerContext ctx, EzySession session, EzyILoginError error) {
-        EzyResponse response = newLoginErrorReponse(error);
+    protected void responseLoginError(
+        EzyServerContext ctx,
+        EzySession session,
+        EzyILoginError error
+    ) {
+        EzyResponse response = newLoginErrorResponse(error);
         ctx.send(response, session, false);
     }
 
-    protected EzyResponse newLoginErrorReponse(EzyILoginError error) {
+    protected EzyResponse newLoginErrorResponse(EzyILoginError error) {
         EzyErrorParams params = new EzyErrorParams();
         params.setError(error);
         return new EzyLoginErrorResponse(params);
     }
-
 }

@@ -15,5 +15,4 @@ public class EzySimpleUserRequestPluginEvent
         EzySession session, EzyArray data) {
         super(user, session, data);
     }
-
 }

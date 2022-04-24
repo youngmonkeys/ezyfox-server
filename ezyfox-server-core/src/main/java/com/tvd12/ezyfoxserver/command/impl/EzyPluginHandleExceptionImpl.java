@@ -30,5 +30,4 @@ public class EzyPluginHandleExceptionImpl
             logger.debug("handle plugin: {} error", pluginName, throwable);
         }
     }
-
 }

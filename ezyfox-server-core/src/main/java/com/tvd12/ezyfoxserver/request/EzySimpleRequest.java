@@ -35,5 +35,4 @@ public abstract class EzySimpleRequest<P extends EzyRequestParams> implements
         this.session = null;
         this.params = null;
     }
-
 }

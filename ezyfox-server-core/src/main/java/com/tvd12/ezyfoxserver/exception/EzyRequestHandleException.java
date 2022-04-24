@@ -31,14 +31,11 @@ public class EzyRequestHandleException extends IllegalStateException {
     protected static String newHandleRequestErrorMessage(
         EzySession session,
         EzyConstant cmd, Object data) {
-        return new StringBuilder()
-            .append("error when handle request from: ")
-            .append(session.getName())
-            .append(", command: ")
-            .append(cmd)
-            .append(", data: ")
-            .append(data)
-            .toString();
+        return "error when handle request from: " +
+            session.getName() +
+            ", command: " +
+            cmd +
+            ", data: " +
+            data;
     }
-
 }

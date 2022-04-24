@@ -5,7 +5,6 @@ import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
-import com.tvd12.ezyfoxserver.constant.EzySessionError;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyController;
 import com.tvd12.ezyfoxserver.controller.EzyStreamingController;
@@ -28,36 +27,32 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         super(ctx, session);
     }
 
-    public void dataReceived(EzyCommand cmd, EzyArray msg) throws Exception {
-        if (!validateState()) {
+    public void dataReceived(EzyCommand cmd, EzyArray msg) {
+        if (!active) {
             return;
         }
-        if (!validateSession()) {
+        if (isInactivatedSession()) {
             return;
         }
         handleReceivedData(cmd, msg);
     }
 
-    public void streamingReceived(byte[] bytes) throws Exception {
-        if (!validateState()) {
+    public void streamingReceived(byte[] bytes) {
+        if (!active) {
             return;
         }
-        if (!validateSession()) {
+        if (isInactivatedSession()) {
             return;
         }
         handleReceivedStreaming(bytes);
     }
 
-    protected boolean validateState() {
-        return active;
-    }
-
-    protected boolean validateSession() {
-        return session != null && session.isActivated();
+    protected boolean isInactivatedSession() {
+        return session == null || !session.isActivated();
     }
 
     public void processMaxRequestPerSecond() {
-        responseError(EzySessionError.MAX_REQUEST_PER_SECOND);
+        responseError();
         if (maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
             this.active = false;
             if (sessionManager != null) {
@@ -66,13 +61,13 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
 
-    protected void handleReceivedStreaming(byte[] bytes) throws Exception {
+    protected void handleReceivedStreaming(byte[] bytes) {
         updateSessionBeforeHandleRequest();
-        handleReceivedStreaming0(bytes);
+        doHandleReceivedStreaming(bytes);
     }
 
     @SuppressWarnings("rawtypes")
-    protected void handleReceivedStreaming0(byte[] bytes) throws Exception {
+    protected void doHandleReceivedStreaming(byte[] bytes) {
         EzyStreamingRequest request = newStreamingRequest(bytes);
         try {
             EzyInterceptor interceptor = controllers.getStreamingInterceptor();
@@ -86,7 +81,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
 
-    protected void handleReceivedData(EzyConstant cmd, EzyArray msg) throws Exception {
+    protected void handleReceivedData(EzyConstant cmd, EzyArray msg) {
         EzyArray data = msg.get(1, EzyArray.class);
         debugLogReceivedData(cmd, data);
         updateSessionBeforeHandleRequest();
@@ -101,7 +96,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     protected void debugLogReceivedData(EzyConstant cmd, EzyArray data) {
         boolean debug = settings.isDebug();
-        if (debug && !unloggableCommands.contains(cmd)) {
+        if (debug && !ignoredLogCommands.contains(cmd)) {
             logger.debug("received from: {}, command: {}, data: {}", session.getName(), cmd, data);
         }
     }
@@ -120,9 +115,20 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
                 context.handleException(Thread.currentThread(), throwable);
             } else {
                 if (active) {
-                    logger.warn("fatal error, please add an issue to ezyfox-server github with log: {}\nand stacktrace: ", toString(), e);
+                    logger.warn(
+                        "fatal error, please add an issue to ezyfox-server github " +
+                            "with log: {}\nand stacktrace: ",
+                        this,
+                        e
+                    );
                 } else {
-                    logger.warn("can't handle command: {} and data: {}, this session maybe destroyed (session: {}), error message: {}", cmd, data, session, e.getMessage());
+                    logger.warn("can't handle command: {} and data: {}, this session " +
+                        "maybe destroyed (session: {}), error message: {}",
+                        cmd,
+                        data,
+                        session,
+                        e.getMessage()
+                    );
                 }
             }
 
@@ -131,7 +137,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
 
-    public void exceptionCaught(Throwable cause) throws Exception {
+    public void exceptionCaught(Throwable cause) {
         logger.debug("exception caught at session: {}", session, cause);
         EzyExceptionHandler exceptionHandler = exceptionHandlers.get(cause.getClass());
         if (exceptionHandler != null) {
@@ -149,10 +155,10 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         } finally {
             lock.unlock();
         }
-        channelInactive0(reason);
+        doChannelInactive(reason);
     }
 
-    protected void channelInactive0(EzyConstant reason) {
+    protected void doChannelInactive(EzyConstant reason) {
         removeSession();
         notifySessionRemoved(reason);
         closeSession(reason);
@@ -176,11 +182,11 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     protected void notifyAppsSessionRemoved(EzyEvent event) {
         if (user != null) {
-            notifyAppsSessionRemoved0(event);
+            doNotifyAppsSessionRemoved(event);
         }
     }
 
-    protected void notifyAppsSessionRemoved0(EzyEvent event) {
+    protected void doNotifyAppsSessionRemoved(EzyEvent event) {
         try {
             zoneContext.broadcastApps(EzyEventType.SESSION_REMOVED, event, user, true);
         } catch (Exception e) {
@@ -207,5 +213,4 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
     protected EzyEvent newSessionRemovedEvent(EzyConstant reason) {
         return new EzySimpleSessionRemovedEvent(user, session, reason);
     }
-
 }

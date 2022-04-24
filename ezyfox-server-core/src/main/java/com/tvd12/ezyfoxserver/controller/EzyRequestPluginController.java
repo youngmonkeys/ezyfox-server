@@ -30,15 +30,15 @@ public class EzyRequestPluginController
     protected EzyPluginContext getPluginContext(
         EzyZoneContext zoneCtx, EzyRequestPluginParams requestParams) {
         int pluginId = requestParams.getPluginId();
-        EzyPluginContext pluginContext = zoneCtx.getPluginContext(pluginId);
-        return pluginContext;
+        return zoneCtx.getPluginContext(pluginId);
     }
 
-    protected EzyUserRequestPluginEvent newRequestPluginEvent(EzyRequestPluginRequest request) {
+    protected EzyUserRequestPluginEvent newRequestPluginEvent(
+        EzyRequestPluginRequest request
+    ) {
         return new EzySimpleUserRequestPluginEvent(
             request.getUser(),
             request.getSession(),
             request.getParams().getData());
     }
-
 }

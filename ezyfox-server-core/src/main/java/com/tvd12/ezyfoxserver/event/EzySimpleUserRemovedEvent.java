@@ -15,5 +15,4 @@ public class EzySimpleUserRemovedEvent
         super(user);
         this.reason = reason;
     }
-
 }

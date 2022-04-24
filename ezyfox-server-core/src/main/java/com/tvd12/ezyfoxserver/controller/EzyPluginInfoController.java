@@ -35,5 +35,4 @@ public class EzyPluginInfoController
         params.setPlugin(pluginSetting);
         return new EzyPluginInfoResponse(params);
     }
-
 }

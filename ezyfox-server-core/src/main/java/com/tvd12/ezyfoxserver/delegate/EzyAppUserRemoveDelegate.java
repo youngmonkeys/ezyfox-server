@@ -6,5 +6,4 @@ import com.tvd12.ezyfoxserver.entity.EzyUser;
 public interface EzyAppUserRemoveDelegate {
 
     void onUserRemoved(EzyUser user, EzyConstant reason);
-
 }

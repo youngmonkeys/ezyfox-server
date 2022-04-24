@@ -12,8 +12,7 @@ public class EzySimpleConfigLoader implements EzyConfigLoader {
             return EzySimpleConfig.defaultConfig();
         }
         EzyPropertiesFileReader reader = newPropertiesReader();
-        EzySimpleConfig config = reader.read(filePath, EzySimpleConfig.class);
-        return config;
+        return reader.read(filePath, EzySimpleConfig.class);
     }
 
     protected EzyPropertiesFileReader newPropertiesReader() {

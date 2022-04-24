@@ -9,22 +9,24 @@ public final class EzyZoneContexts {
 
     private EzyZoneContexts() {}
 
-    public static EzyZoneSetting getZoneSetting(EzyZoneContext context) {
+    public static EzyZoneSetting getZoneSetting(
+        EzyZoneContext context
+    ) {
         EzyZone zone = context.getZone();
-        EzyZoneSetting setting = zone.getSetting();
-        return setting;
+        return zone.getSetting();
     }
 
-    public static EzyZoneUserManager getUserManager(EzyZoneContext context) {
+    public static EzyZoneUserManager getUserManager(
+        EzyZoneContext context
+    ) {
         EzyZone zone = context.getZone();
-        EzyZoneUserManager userManager = zone.getUserManager();
-        return userManager;
+        return zone.getUserManager();
     }
 
-    public static EzyUserManagementSetting getUserManagementSetting(EzyZoneContext context) {
+    public static EzyUserManagementSetting getUserManagementSetting(
+        EzyZoneContext context
+    ) {
         EzyZoneSetting zoneSetting = getZoneSetting(context);
-        EzyUserManagementSetting userManagement = zoneSetting.getUserManagement();
-        return userManagement;
+        return zoneSetting.getUserManagement();
     }
-
 }

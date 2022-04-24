@@ -43,7 +43,9 @@ public class EzySimpleAppContext
     public void send(
         EzyData data,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         this.sendResponse.execute(data, recipient, encrypted, transportType);
     }
 
@@ -51,7 +53,9 @@ public class EzySimpleAppContext
     public void send(
         EzyData data,
         Collection<EzySession> recipients,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         this.sendResponse.execute(data, recipients, encrypted, transportType);
     }
 
@@ -98,5 +102,4 @@ public class EzySimpleAppContext
     protected void preDestroy() {
         logger.debug("destroy AppContext({})", app);
     }
-
 }

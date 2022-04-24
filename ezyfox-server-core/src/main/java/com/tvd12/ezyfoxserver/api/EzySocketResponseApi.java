@@ -26,7 +26,7 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
     }
 
     @Override
-    protected byte[] encrypteMessageContent(
+    protected byte[] encryptMessageContent(
         byte[] messageContent, byte[] encryptionKey) throws Exception {
         return encoder.encryptMessageContent(messageContent, encryptionKey);
     }
@@ -35,5 +35,4 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
     protected EzyConstant getConnectionType() {
         return EzyConnectionType.SOCKET;
     }
-
 }

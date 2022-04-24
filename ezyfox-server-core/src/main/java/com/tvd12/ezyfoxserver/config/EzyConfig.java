@@ -15,5 +15,4 @@ public interface EzyConfig extends EzyToMap {
     String getLoggerConfigFile();
 
     boolean isEnableAppClassLoader();
-
 }

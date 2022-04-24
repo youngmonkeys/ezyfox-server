@@ -11,5 +11,4 @@ public class EzySimpleSessionEvent implements EzySessionEvent {
     public EzySimpleSessionEvent(EzySession session) {
         this.session = session;
     }
-
 }

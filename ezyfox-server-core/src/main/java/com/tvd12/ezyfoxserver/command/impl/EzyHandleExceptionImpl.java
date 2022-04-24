@@ -26,5 +26,4 @@ public class EzyHandleExceptionImpl
             logger.warn("handle exception", throwable);
         }
     }
-
 }

@@ -23,5 +23,4 @@ public class EzySimpleRequestAppParams
         super.release();
         this.data = null;
     }
-
 }

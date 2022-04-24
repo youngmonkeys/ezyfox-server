@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 public interface EzyIError extends EzyConstant {
 
     String getMessage();
-
 }

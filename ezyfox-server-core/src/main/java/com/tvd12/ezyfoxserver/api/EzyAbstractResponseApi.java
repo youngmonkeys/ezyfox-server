@@ -19,7 +19,10 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         }
     }
 
-    protected final void normalResponse(EzyPackage pack, boolean immediate) throws Exception {
+    protected final void normalResponse(
+        EzyPackage pack,
+        boolean immediate
+    ) throws Exception {
         EzyConstant connectionType = getConnectionType();
         Collection<EzySession> recipients = pack.getRecipients(connectionType);
         if (recipients.isEmpty()) {
@@ -46,12 +49,12 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         byte[] messageContent = dataToMessageContent(pack.getData());
         if (immediate) {
             for (EzySession session : recipients) {
-                byte[] bytes = encrypteMessageContent(messageContent, session.getSessionKey());
+                byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
                 session.sendNow(createPacket(bytes, pack));
             }
         } else {
             for (EzySession session : recipients) {
-                byte[] bytes = encrypteMessageContent(messageContent, session.getSessionKey());
+                byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
                 session.send(createPacket(bytes, pack));
             }
         }
@@ -72,7 +75,7 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         throw new UnsupportedOperationException("unsupported");
     }
 
-    protected byte[] encrypteMessageContent(
+    protected byte[] encryptMessageContent(
         byte[] messageContent, byte[] encryptionKey) throws Exception {
         throw new UnsupportedOperationException("unsupported");
     }

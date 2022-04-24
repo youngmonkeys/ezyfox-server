@@ -7,5 +7,4 @@ import com.tvd12.ezyfoxserver.request.EzySimpleRequest;
 public interface EzyRequestFactory {
 
     EzySimpleRequest newRequest(EzyConstant cmd);
-
 }

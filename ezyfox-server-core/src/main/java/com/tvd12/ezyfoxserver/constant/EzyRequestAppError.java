@@ -12,7 +12,7 @@ public enum EzyRequestAppError implements EzyIRequestAppError {
     @Getter
     private final String message;
 
-    private EzyRequestAppError(int id, String message) {
+    EzyRequestAppError(int id, String message) {
         this.id = id;
         this.message = message;
     }
@@ -21,5 +21,4 @@ public enum EzyRequestAppError implements EzyIRequestAppError {
     public String getName() {
         return toString();
     }
-
 }

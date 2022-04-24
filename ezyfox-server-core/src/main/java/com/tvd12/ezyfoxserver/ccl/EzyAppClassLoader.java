@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezyfoxserver.ccl;
 
 import com.tvd12.ezyfox.util.EzyDirectories;
@@ -11,10 +8,6 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-/**
- * @author tavandung12
- *
- */
 public class EzyAppClassLoader extends URLClassLoader {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());

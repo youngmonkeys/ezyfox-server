@@ -5,7 +5,7 @@ import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzyStarter;
-import com.tvd12.ezyfoxserver.builder.EzyAbtractServerBootstrapBuilder;
+import com.tvd12.ezyfoxserver.builder.EzyAbstractServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.builder.EzyServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
@@ -61,7 +61,7 @@ public class EzyStarterTest {
 
         @Override
         protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
-            EzyAbtractServerBootstrapBuilder builder = new EzyAbtractServerBootstrapBuilder() {
+            EzyAbstractServerBootstrapBuilder builder = new EzyAbstractServerBootstrapBuilder() {
 
                 @Override
                 protected EzyServerBootstrap newServerBootstrap() {

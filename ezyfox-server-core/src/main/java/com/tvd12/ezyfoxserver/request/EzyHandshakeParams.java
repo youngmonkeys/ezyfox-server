@@ -13,5 +13,4 @@ public interface EzyHandshakeParams extends EzyRequestParams {
     String getReconnectToken();
 
     boolean isEnableEncryption();
-
 }

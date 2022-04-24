@@ -21,7 +21,9 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
     @Override
     public void execute(
         byte[] bytes,
-        EzySession recipient, EzyTransportType transportType) {
+        EzySession recipient,
+        EzyTransportType transportType
+    ) {
         EzyStreamingApi streamingApi = server.getStreamingApi();
         EzySimpleBytesPackage pack = newPackage(bytes, transportType);
         pack.addRecipient(recipient);
@@ -37,7 +39,9 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
     @Override
     public void execute(
         byte[] bytes,
-        Collection<EzySession> recipients, EzyTransportType transportType) {
+        Collection<EzySession> recipients,
+        EzyTransportType transportType
+    ) {
         EzyStreamingApi streamingApi = server.getStreamingApi();
         EzySimpleBytesPackage pack = newPackage(bytes, transportType);
         pack.addRecipients(recipients);
@@ -50,20 +54,24 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
         }
     }
 
-    protected EzySimpleBytesPackage newPackage(byte[] bytes, EzyTransportType transportType) {
+    protected EzySimpleBytesPackage newPackage(
+        byte[] bytes,
+        EzyTransportType transportType
+    ) {
         EzySimpleBytesPackage pack = new EzySimpleBytesPackage();
         pack.setBytes(bytes);
         pack.setTransportType(transportType);
         return pack;
     }
 
-    protected String getRecipientsNames(Collection<EzySession> recipients) {
+    protected String getRecipientsNames(
+        Collection<EzySession> recipients
+    ) {
         StringBuilder builder = new StringBuilder()
             .append("[ ");
-        for (EzySession recv : recipients) {
-            builder.append(recv.getName()).append(" ");
+        for (EzySession receiver : recipients) {
+            builder.append(receiver.getName()).append(" ");
         }
         return builder.append("]").toString();
     }
-
 }

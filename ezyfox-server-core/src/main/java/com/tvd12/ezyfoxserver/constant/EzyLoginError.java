@@ -21,7 +21,7 @@ public enum EzyLoginError implements EzyILoginError {
     @Getter
     private final String message;
 
-    private EzyLoginError(int id, String message) {
+    EzyLoginError(int id, String message) {
         this.id = id;
         this.message = message;
     }
@@ -30,5 +30,4 @@ public enum EzyLoginError implements EzyILoginError {
     public String getName() {
         return toString();
     }
-
 }

@@ -7,5 +7,4 @@ public interface EzyDeliver {
     void send(EzyPacket packet);
 
     void sendNow(EzyPacket packet);
-
 }

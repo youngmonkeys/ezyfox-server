@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import javax.net.ssl.SSLContext;
 
-public class EzyAbtractServerBootstrapBuilderTest extends BaseCoreTest {
+public class EzyAbstractServerBootstrapBuilderTest extends BaseCoreTest {
 
     @Test
     public void test() {
@@ -19,7 +19,8 @@ public class EzyAbtractServerBootstrapBuilderTest extends BaseCoreTest {
         MyTestServerBootstrapBuilder builder =
             (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
                 .server(server);
-        assert !builder.equals(null);
+        //noinspection ConstantConditions
+        Asserts.assertFalse(builder.equals(null));
 
         EzySslConfigSetting sslConfigSetting = server.getSettings()
             .getWebsocket()
@@ -56,13 +57,10 @@ public class EzyAbtractServerBootstrapBuilderTest extends BaseCoreTest {
                 .server(server);
 
         // when
-        EzyUdpSetting udpSetting =
-            (EzyUdpSetting) ReflectMethodUtil.invokeMethod("getUdpSetting", builder);
         EzyThreadPoolSizeSetting threadPoolSizeSetting =
             (EzyThreadPoolSizeSetting) ReflectMethodUtil.invokeMethod("getThreadPoolSizeSetting", builder);
 
         // then
-        Asserts.assertEquals(server.getSettings().getUdp(), udpSetting);
         Asserts.assertEquals(server.getSettings().getThreadPoolSize(), threadPoolSizeSetting);
     }
 

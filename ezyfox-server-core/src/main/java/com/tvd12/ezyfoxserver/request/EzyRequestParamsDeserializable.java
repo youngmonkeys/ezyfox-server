@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.entity.EzyArray;
 public interface EzyRequestParamsDeserializable {
 
     void deserializeParams(EzyArray array);
-
 }

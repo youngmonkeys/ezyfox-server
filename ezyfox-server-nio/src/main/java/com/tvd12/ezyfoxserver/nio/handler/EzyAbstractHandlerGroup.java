@@ -157,7 +157,7 @@ public abstract class EzyAbstractHandlerGroup
     }
     
     protected final void handleReceivedData(Object data, int dataSize) {
-        boolean hasMaxRequestPerSecond = session.addReceviedRequests(1);
+        boolean hasMaxRequestPerSecond = session.addReceivedRequests(1);
         if(hasMaxRequestPerSecond) {
             handler.processMaxRequestPerSecond();
             networkStats.addDroppedInPackets(1);

@@ -9,5 +9,4 @@ public class EzySimpleLoginRequest
     protected EzyLoginParams newParams() {
         return new EzySimpleLoginParams();
     }
-
 }

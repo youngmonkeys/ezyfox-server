@@ -8,7 +8,5 @@ public abstract class EzyAbstractSessionDelegate
     implements EzySessionDelegate {
 
     @Override
-    public void onSessionLoggedIn(EzyUser user) {
-    }
-
+    public void onSessionLoggedIn(EzyUser user) {}
 }

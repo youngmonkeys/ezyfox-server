@@ -35,14 +35,12 @@ public class EzyServerControllersImpl implements EzyServerControllers {
 
     @Override
     public EzyController getController(EzyConstant cmd) {
-        EzyController controller = controllers.get(cmd);
-        return controller;
+        return controllers.get(cmd);
     }
 
     @Override
     public EzyInterceptor getInterceptor(EzyConstant cmd) {
-        EzyInterceptor interceptor = interceptors.get(cmd);
-        return interceptor;
+        return interceptors.get(cmd);
     }
 
     public static class Builder {

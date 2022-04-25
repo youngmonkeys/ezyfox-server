@@ -25,9 +25,7 @@ public class EzySimpleSocketDisconnection implements EzySocketDisconnection {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append("session: ").append(session)
-            .append(", disconnection reason: ").append(disconnectReason)
-            .toString();
+        return "session: " + session +
+            ", disconnection reason: " + disconnectReason;
     }
 }

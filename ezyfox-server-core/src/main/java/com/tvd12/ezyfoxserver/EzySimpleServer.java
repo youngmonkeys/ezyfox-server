@@ -53,8 +53,7 @@ public class EzySimpleServer
     @Override
     public String toString() {
         EzyJsonWriter writer = new EzySimpleJsonWriter();
-        String json = writer.writeAsString(this);
-        return json;
+        return writer.writeAsString(this);
     }
 
     @Override

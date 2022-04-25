@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
@@ -56,7 +53,7 @@ public abstract class EzyStarter implements EzyStartable {
     protected void startEzyFox(EzyServer server) throws Exception {
         EzyConfig config = server.getConfig();
         if (config.isPrintSettings()) {
-            getLogger().info("settings: \n{}", server.toString());
+            getLogger().info("settings: \n{}", server);
         }
         EzyServerBootstrap serverBoostrap = newServerBoostrap(server);
         serverBoostrap.start();

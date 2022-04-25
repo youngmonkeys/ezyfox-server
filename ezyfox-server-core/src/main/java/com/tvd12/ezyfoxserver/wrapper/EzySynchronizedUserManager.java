@@ -25,7 +25,7 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
 
     @Override
     public EzyUser addUser(EzyUser user) {
-        EzyUser answer = null;
+        EzyUser answer;
         synchronized (synchronizedLock) {
             answer = addUser0(user);
         }

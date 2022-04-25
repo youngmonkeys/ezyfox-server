@@ -14,63 +14,63 @@ import java.util.Map;
 public interface EzyServer extends EzyEventComponent, EzyToMap {
 
     /**
-     * Get server version
+     * Get server version.
      *
      * @return the server version
      */
     String getVersion();
 
     /**
-     * Get server config
+     * Get server config.
      *
      * @return the server config
      */
     EzyConfig getConfig();
 
     /**
-     * Get server settings
+     * Get server settings.
      *
      * @return the server setting
      */
     EzySettings getSettings();
 
     /**
-     * Get server class loader
+     * Get server class loader.
      *
      * @return the server class loader
      */
     ClassLoader getClassLoader();
 
     /**
-     * Get server statistics
+     * Get server statistics.
      *
      * @return the server statistics
      */
     EzyStatistics getStatistics();
 
     /**
-     * Get server controllers
+     * Get server controllers.
      *
      * @return the server controllers
      */
     EzyServerControllers getControllers();
 
     /**
-     * Get server response api
+     * Get server response api.
      *
      * @return the server response api
      */
     EzyResponseApi getResponseApi();
 
     /**
-     * Get server streaming api
+     * Get server streaming api.
      *
      * @return the server streaming api
      */
     EzyStreamingApi getStreamingApi();
 
     /**
-     * Get server session manager
+     * Get server session manager.
      *
      * @return the session manager
      */
@@ -78,10 +78,9 @@ public interface EzyServer extends EzyEventComponent, EzyToMap {
     EzySessionManager getSessionManager();
 
     /**
-     * Get server's applications class loader
+     * Get server's applications class loader.
      *
      * @return the applications class loader
      */
     Map<String, ClassLoader> getAppClassLoaders();
-
 }

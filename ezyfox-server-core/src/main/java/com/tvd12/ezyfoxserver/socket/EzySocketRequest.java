@@ -14,5 +14,4 @@ public interface EzySocketRequest extends EzyReleasable {
     EzySession getSession();
 
     boolean isSystemRequest();
-
 }

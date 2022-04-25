@@ -5,5 +5,4 @@ import javax.net.ssl.SSLContext;
 public interface EzySslContextFactory {
 
     SSLContext newSslContext(EzySslConfig config) throws Exception;
-
 }

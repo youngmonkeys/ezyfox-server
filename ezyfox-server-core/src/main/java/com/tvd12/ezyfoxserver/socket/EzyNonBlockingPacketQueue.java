@@ -29,17 +29,14 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
         queue.clear();
     }
 
-
     @Override
     public EzyPacket take() {
-        EzyPacket packet = queue.poll();
-        return packet;
+        return queue.poll();
     }
 
     @Override
     public EzyPacket peek() {
-        EzyPacket packet = queue.peek();
-        return packet;
+        return queue.peek();
     }
 
     @Override
@@ -57,7 +54,6 @@ public class EzyNonBlockingPacketQueue extends EzyLoggable implements EzyPacketQ
         if (isFull()) {
             return false;
         }
-        boolean answer = queue.offer(packet);
-        return answer;
+        return queue.offer(packet);
     }
 }

@@ -7,8 +7,8 @@ import lombok.Getter;
 public class EzySimpleSocketStream implements EzySocketStream {
 
     private byte[] bytes;
-    private long timestamp;
     private EzySession session;
+    private final long timestamp;
 
     public EzySimpleSocketStream(EzySession session, byte[] bytes) {
         this.bytes = bytes;

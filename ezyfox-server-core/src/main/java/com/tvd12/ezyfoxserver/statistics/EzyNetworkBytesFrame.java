@@ -40,12 +40,10 @@ public abstract class EzyNetworkBytesFrame implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(getClass().getSimpleName())
-            .append(": ")
-            .append(EzyDates.format(startTime))
-            .append(" -> ")
-            .append(EzyDates.format(endTime))
-            .toString();
+        return getClass().getSimpleName() +
+            ": " +
+            EzyDates.format(startTime) +
+            " -> " +
+            EzyDates.format(endTime);
     }
 }

@@ -116,7 +116,6 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     }
 
     //=============== packets =================
-
     @Override
     public void addReadPackets(long packets) {
         this.readPackets += packets;
@@ -141,6 +140,4 @@ public class EzySimpleNetworkStats implements EzyNetworkStats, Serializable {
     public void addWriteErrorPackets(long packets) {
         this.writeErrorPackets += packets;
     }
-
-
 }

@@ -30,6 +30,5 @@ public abstract class EzyZoneComponentsStater extends EzyLoggable implements Ezy
             this.zoneContext = zoneContext;
             return (B) this;
         }
-
     }
 }

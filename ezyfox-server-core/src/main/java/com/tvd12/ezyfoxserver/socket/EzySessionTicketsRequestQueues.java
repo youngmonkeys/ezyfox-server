@@ -6,13 +6,10 @@ import lombok.Getter;
 @Getter
 public class EzySessionTicketsRequestQueues {
 
-    private final EzySessionTicketsQueue systemQueue;
-    private final EzySessionTicketsQueue extensionQueue;
-
-    {
-        systemQueue = new EzyBlockingSessionTicketsQueue();
-        extensionQueue = new EzyBlockingSessionTicketsQueue();
-    }
+    private final EzySessionTicketsQueue systemQueue =
+        new EzyBlockingSessionTicketsQueue();
+    private final EzySessionTicketsQueue extensionQueue =
+        new EzyBlockingSessionTicketsQueue();
 
     public boolean addRequest(EzySocketRequest request) {
         EzyRequestQueue queue;
@@ -26,6 +23,7 @@ public class EzySessionTicketsRequestQueues {
             queue = session.getExtensionRequestQueue();
         }
         boolean success;
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (queue) {
             boolean empty = queue.isEmpty();
             success = queue.add(request);

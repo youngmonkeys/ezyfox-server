@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -19,16 +16,10 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyServerControllersImpl;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author tavandung12
- *
- */
-@SuppressWarnings("rawtypes")
 public abstract class EzyLoader extends EzyLoggable {
 
     protected EzyConfig config;
@@ -65,9 +56,12 @@ public abstract class EzyLoader extends EzyLoggable {
         return new EzySimpleStatistics();
     }
 
-    protected abstract EzySimpleSessionManager.Builder
-    createSessionManagerBuilder(EzySettings settings);
+    @SuppressWarnings("rawtypes")
+    protected abstract EzySimpleSessionManager.Builder createSessionManagerBuilder(
+        EzySettings settings
+    );
 
+    @SuppressWarnings("rawtypes")
     protected EzySessionManager newSessionManagers(EzySettings settings) {
         EzySimpleSessionManager.Builder builder
             = createSessionManagerBuilder(settings);
@@ -106,19 +100,13 @@ public abstract class EzyLoader extends EzyLoggable {
 
     protected File[] getEntryFolders() {
         File entries = getEntriesFolder();
-        File[] answer = entries.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory();
-            }
-        });
+        File[] answer = entries.listFiles(File::isDirectory);
         return answer != null ? answer : new File[0];
     }
 
     protected File getEntriesFolder() {
         String entriesPath = getEntriesPath();
-        File entries = new File(entriesPath);
-        return entries;
+        return new File(entriesPath);
     }
 
     protected String getEntriesPath() {

@@ -5,5 +5,4 @@ import java.net.SocketAddress;
 public interface EzyUdpClientAddressAware {
 
     void setUdpClientAddress(SocketAddress address);
-
 }

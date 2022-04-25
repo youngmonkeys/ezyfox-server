@@ -13,5 +13,4 @@ public interface EzySessionTicketsQueue {
     boolean add(EzySession session);
 
     <T extends EzySession> T take() throws InterruptedException;
-
 }

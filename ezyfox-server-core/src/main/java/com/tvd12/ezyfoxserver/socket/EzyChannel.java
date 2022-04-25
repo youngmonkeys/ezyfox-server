@@ -21,5 +21,4 @@ public interface EzyChannel {
     SocketAddress getServerAddress();
 
     SocketAddress getClientAddress();
-
 }

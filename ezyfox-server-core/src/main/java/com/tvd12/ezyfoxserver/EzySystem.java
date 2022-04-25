@@ -4,8 +4,7 @@ public final class EzySystem {
 
     private static final EzyEnvironment ENV = newEnviroment();
 
-    private EzySystem() {
-    }
+    private EzySystem() {}
 
     public static EzyEnvironment getEnv() {
         return ENV;

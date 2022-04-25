@@ -13,5 +13,4 @@ public interface EzyRequestQueue {
     boolean isEmpty();
 
     boolean add(EzySocketRequest request);
-
 }

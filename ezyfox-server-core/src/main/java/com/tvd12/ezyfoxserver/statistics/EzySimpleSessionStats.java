@@ -24,6 +24,4 @@ public class EzySimpleSessionStats implements EzySessionStats, Serializable {
             this.maxSessions = sessions;
         }
     }
-
-
 }

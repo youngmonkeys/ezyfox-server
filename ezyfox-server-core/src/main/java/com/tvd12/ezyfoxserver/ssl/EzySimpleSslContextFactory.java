@@ -72,7 +72,7 @@ public class EzySimpleSslContextFactory
 
     protected char[] getPassword(String file) throws Exception {
         InputStream stream = newInputStreamLoader().load(file);
-        char[] answer = null;
+        char[] answer;
         try {
             answer = newInputStreamReader().readChars(stream, "UTF-8");
         } finally {
@@ -85,6 +85,7 @@ public class EzySimpleSslContextFactory
         return newInputStreamLoader().load(file);
     }
 
+    @SuppressWarnings("unused")
     protected KeyStore newKeyStore(EzySslConfig config) throws KeyStoreException {
         return KeyStore.getInstance(getKeyStoreType());
     }

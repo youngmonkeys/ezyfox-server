@@ -15,5 +15,4 @@ public interface EzyPacketQueue {
     boolean isEmpty();
 
     boolean add(EzyPacket packet);
-
 }

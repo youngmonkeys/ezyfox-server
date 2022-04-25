@@ -20,6 +20,5 @@ public class EzySimpleUserManager extends EzyAbstractUserManager {
         public EzyUserManager build() {
             return new EzySimpleUserManager(this);
         }
-
     }
 }

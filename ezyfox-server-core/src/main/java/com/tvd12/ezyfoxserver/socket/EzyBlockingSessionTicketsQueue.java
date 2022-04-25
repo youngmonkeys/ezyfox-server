@@ -32,8 +32,7 @@ public class EzyBlockingSessionTicketsQueue
 
     @Override
     public boolean add(EzySession session) {
-        boolean result = queue.offer(session);
-        return result;
+        return queue.offer(session);
     }
 
     @SuppressWarnings("unchecked")

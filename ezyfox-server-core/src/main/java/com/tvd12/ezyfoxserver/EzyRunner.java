@@ -1,16 +1,9 @@
-/**
- *
- */
 package com.tvd12.ezyfoxserver;
 
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.EzySettingsDecorator;
 import lombok.Getter;
 
-/**
- * @author tavandung12
- *
- */
 public abstract class EzyRunner {
 
     @Getter

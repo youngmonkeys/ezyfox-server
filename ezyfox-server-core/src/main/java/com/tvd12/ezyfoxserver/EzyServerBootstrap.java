@@ -31,7 +31,7 @@ public abstract class EzyServerBootstrap
         setupServer();
         startLocalBootstrap();
         startHttpBootstrap();
-        startOtherBootstraps(() -> this.notifyServerReady());
+        startOtherBootstraps(this::notifyServerReady);
     }
 
     protected void setupServer() {

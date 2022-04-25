@@ -55,12 +55,12 @@ public class EzyBlockingSocketStreamQueue
 
     @Override
     public void remove(EzySocketStream stream) {
+        //noinspection ResultOfMethodCallIgnored
         queue.remove(stream);
     }
 
     @Override
     public EzySocketStream take() throws InterruptedException {
-        EzySocketStream stream = queue.take();
-        return stream;
+        return queue.take();
     }
 }

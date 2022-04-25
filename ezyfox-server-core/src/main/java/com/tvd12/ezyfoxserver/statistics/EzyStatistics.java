@@ -9,5 +9,4 @@ public interface EzyStatistics {
     EzySocketStatistics getSocketStats();
 
     EzyWebSocketStatistics getWebSocketStats();
-
 }

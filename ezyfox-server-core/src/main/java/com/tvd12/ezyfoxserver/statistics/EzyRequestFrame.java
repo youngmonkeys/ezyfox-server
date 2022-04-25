@@ -26,6 +26,7 @@ public abstract class EzyRequestFrame implements Serializable {
     protected abstract long getExistsTime();
 
     public boolean addRequests(long requests) {
+        //noinspection NonAtomicOperationOnVolatileField
         return (this.requests += requests) > maxRequests;
     }
 
@@ -41,12 +42,10 @@ public abstract class EzyRequestFrame implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(getClass().getSimpleName())
-            .append(": ")
-            .append(EzyDates.format(startTime))
-            .append(" -> ")
-            .append(EzyDates.format(endTime))
-            .toString();
+        return getClass().getSimpleName() +
+            ": " +
+            EzyDates.format(startTime) +
+            " -> " +
+            EzyDates.format(endTime);
     }
 }

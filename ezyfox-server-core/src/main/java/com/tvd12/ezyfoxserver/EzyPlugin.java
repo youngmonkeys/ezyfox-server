@@ -8,5 +8,4 @@ public interface EzyPlugin extends EzyServerChild {
     EzyPluginSetting getSetting();
 
     EzyPluginRequestController getRequestController();
-
 }

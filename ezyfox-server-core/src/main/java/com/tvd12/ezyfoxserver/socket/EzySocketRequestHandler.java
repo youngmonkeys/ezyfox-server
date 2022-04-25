@@ -28,6 +28,8 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
         try {
             EzySession session = sessionTicketsQueue.take();
             EzyRequestQueue requestQueue = getRequestQueue(session);
+
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (requestQueue) {
                 request = requestQueue.take();
                 if (requestQueue.size() > 0) {

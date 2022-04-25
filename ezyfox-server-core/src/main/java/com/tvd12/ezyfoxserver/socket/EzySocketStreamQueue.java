@@ -15,5 +15,4 @@ public interface EzySocketStreamQueue {
     void remove(EzySocketStream stream);
 
     EzySocketStream take() throws InterruptedException;
-
 }

@@ -13,5 +13,4 @@ public interface EzyEventControllers extends EzyDestroyable {
 
     @SuppressWarnings("rawtypes")
     void addController(EzyConstant eventType, EzyEventController controller);
-
 }

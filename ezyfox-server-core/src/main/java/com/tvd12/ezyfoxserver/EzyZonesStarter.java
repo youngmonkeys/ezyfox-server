@@ -29,7 +29,6 @@ public class EzyZonesStarter extends EzyComponentsStater {
         for (String zoneName : zoneNames) {
             this.startZone(zoneName);
         }
-
     }
 
     protected void startZone(String zoneName) {
@@ -74,11 +73,11 @@ public class EzyZonesStarter extends EzyComponentsStater {
 
     protected void startComponents(
         EzyZoneComponentsStater.Builder<?, ?> builder, EzyZoneContext zoneContext) {
-        EzyZoneComponentsStater starter = newComponenstStater(builder, zoneContext);
+        EzyZoneComponentsStater starter = newComponentsStater(builder, zoneContext);
         starter.start();
     }
 
-    protected EzyZoneComponentsStater newComponenstStater(
+    protected EzyZoneComponentsStater newComponentsStater(
         EzyZoneComponentsStater.Builder<?, ?> builder, EzyZoneContext zoneContext) {
         return builder
             .zoneContext(zoneContext)

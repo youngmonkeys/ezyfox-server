@@ -1,4 +1,3 @@
 package com.tvd12.ezyfoxserver.statistics;
 
-public interface EzyWebSocketStatistics extends EzyComponentStatistics {
-}
+public interface EzyWebSocketStatistics extends EzyComponentStatistics {}

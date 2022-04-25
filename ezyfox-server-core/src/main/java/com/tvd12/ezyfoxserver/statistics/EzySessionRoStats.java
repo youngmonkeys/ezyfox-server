@@ -7,5 +7,4 @@ public interface EzySessionRoStats {
     int getTotalSessions();
 
     int getCurrentSessions();
-
 }

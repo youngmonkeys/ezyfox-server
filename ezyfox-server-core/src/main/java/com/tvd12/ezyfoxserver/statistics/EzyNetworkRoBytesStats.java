@@ -21,5 +21,4 @@ public interface EzyNetworkRoBytesStats {
     long getWrittenBytesPerMinute();
 
     long getWrittenBytesPerSecond();
-
 }

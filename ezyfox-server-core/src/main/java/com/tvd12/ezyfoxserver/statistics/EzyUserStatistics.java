@@ -5,5 +5,4 @@ public interface EzyUserStatistics extends EzyUserRoStatistics {
     void addUsers(int users);
 
     void setCurrentUsers(int users);
-
 }

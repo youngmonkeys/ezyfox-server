@@ -12,5 +12,4 @@ public interface EzySocketUserRemoval extends EzyReleasable {
     EzyConstant getReason();
 
     EzyZoneContext getZoneContext();
-
 }

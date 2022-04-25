@@ -11,7 +11,7 @@ public interface EzyUserManager extends EzyDestroyable {
     EzyUser addUser(EzyUser user);
 
     /**
-     * Get user by id
+     * Get user by id.
      *
      * @param userId the user id
      * @return the user
@@ -19,43 +19,43 @@ public interface EzyUserManager extends EzyDestroyable {
     EzyUser getUser(long userId);
 
     /**
-     * Get user by id
+     * Get user by id.
      *
-     * @param username the user name
+     * @param username the username
      * @return the user
      */
     EzyUser getUser(String username);
 
     /**
-     * Get users as list
+     * Get users as list.
      *
      * @return The users as list
      */
     List<EzyUser> getUserList();
 
     /**
-     * Get count of users
+     * Get count of users.
      *
      * @return count of users
      */
     int getUserCount();
 
     /**
-     * Get max users count
+     * Get max users count.
      *
      * @return the max users count
      */
     int getMaxUsers();
 
     /**
-     * available to add user or not
+     * available to add user or not.
      *
      * @return available to add user or not
      */
     boolean available();
 
     /**
-     * Check whether contains user or not
+     * Check whether contains user or not.
      *
      * @param userId the user id
      * @return true or false
@@ -63,15 +63,15 @@ public interface EzyUserManager extends EzyDestroyable {
     boolean containsUser(long userId);
 
     /**
-     * Check whether contains user or not
+     * Check whether contains user or not.
      *
-     * @param username the user name
+     * @param username the username
      * @return true or false
      */
     boolean containsUser(String username);
 
     /**
-     * Remove user
+     * Remove user.
      *
      * @param user the user
      * @return the current user
@@ -79,7 +79,7 @@ public interface EzyUserManager extends EzyDestroyable {
     EzyUser removeUser(EzyUser user);
 
     /**
-     * Get lock mapped to username
+     * Get lock mapped to username.
      *
      * @param username the username
      * @return the lock
@@ -87,19 +87,19 @@ public interface EzyUserManager extends EzyDestroyable {
     Lock getLock(String username);
 
     /**
-     * Remove lock mapped to username
+     * Remove lock mapped to username.
      *
      * @param username the username
      */
     void removeLock(String username);
 
     /**
-     * clear all user
+     * clear all user.
      */
     void clear();
 
     /**
-     * Check whether contains user or not
+     * Check whether contains user or not.
      *
      * @param user the user
      * @return true or false
@@ -109,7 +109,7 @@ public interface EzyUserManager extends EzyDestroyable {
     }
 
     /**
-     * Remove user by id
+     * Remove user by id.
      *
      * @param userId the user id
      * @return the current user
@@ -119,9 +119,9 @@ public interface EzyUserManager extends EzyDestroyable {
     }
 
     /**
-     * Remove user byte name
+     * Remove user byte name.
      *
-     * @param username the user name
+     * @param username the username
      * @return the current user
      */
     default EzyUser removeUser(String username) {

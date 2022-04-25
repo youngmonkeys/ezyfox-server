@@ -7,5 +7,4 @@ public interface EzyUserRoStatistics {
     int getTotalUsers();
 
     int getCurrentUsers();
-
 }

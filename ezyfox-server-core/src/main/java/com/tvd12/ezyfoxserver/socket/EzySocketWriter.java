@@ -41,6 +41,7 @@ public class EzySocketWriter
             return;
         }
         EzyPacketQueue queue = session.getPacketQueue();
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (queue) {
             boolean emptyQueue = processSessionQueue(group, queue);
             if (!emptyQueue) {

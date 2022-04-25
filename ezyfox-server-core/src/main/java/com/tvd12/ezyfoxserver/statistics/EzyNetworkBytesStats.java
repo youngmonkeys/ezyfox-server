@@ -11,5 +11,4 @@ public interface EzyNetworkBytesStats extends EzyNetworkRoBytesStats {
     void addDroppedOutBytes(long bytes);
 
     void addWriteErrorBytes(long bytes);
-
 }

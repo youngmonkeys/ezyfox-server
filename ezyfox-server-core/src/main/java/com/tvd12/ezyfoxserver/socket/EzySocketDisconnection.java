@@ -9,5 +9,4 @@ public interface EzySocketDisconnection extends EzyReleasable {
     EzySession getSession();
 
     EzyConstant getDisconnectReason();
-
 }

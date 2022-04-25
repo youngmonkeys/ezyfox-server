@@ -16,5 +16,4 @@ public class EzySimpleSslConfig implements EzySslConfig {
 
     @Property("ssl.certificate_password")
     protected String certificatePasswordFile = "ssl/ssl-certificate-password.txt";
-
 }

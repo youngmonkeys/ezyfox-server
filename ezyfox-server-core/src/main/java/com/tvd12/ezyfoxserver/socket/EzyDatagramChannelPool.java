@@ -14,15 +14,15 @@ public class EzyDatagramChannelPool extends EzyLoggable {
     protected final EzyRoundRobin<DatagramChannel> channels;
 
     public EzyDatagramChannelPool(int poolSize) {
-        this.channels = new EzyRoundRobin<>(() -> newChannel(), poolSize);
+        this.channels = new EzyRoundRobin<>(this::newChannel, poolSize);
     }
 
     protected DatagramChannel newChannel() {
         try {
-            DatagramChannel chan = openChannel();
-            chan.configureBlocking(false);
-            chan.socket().setReuseAddress(true);
-            return chan;
+            DatagramChannel channel = openChannel();
+            channel.configureBlocking(false);
+            channel.socket().setReuseAddress(true);
+            return channel;
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -53,8 +53,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
     }
 
     public DatagramChannel getChannel() {
-        DatagramChannel channel = channels.get();
-        return channel;
+        return channels.get();
     }
 
     public void close() {

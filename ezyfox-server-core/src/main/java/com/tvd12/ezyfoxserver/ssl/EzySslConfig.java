@@ -7,5 +7,4 @@ public interface EzySslConfig {
     String getKeyStorePasswordFile();
 
     String getCertificatePasswordFile();
-
 }

@@ -10,14 +10,14 @@ import java.util.List;
 public interface EzySessionManager<S extends EzySession> {
 
     /**
-     * Recognize that the session has logged in
+     * Recognize that the session has logged in.
      *
      * @param session the session
      */
     void addLoggedInSession(S session);
 
     /**
-     * Check contains session mapped to id or not
+     * Check contains session mapped to id or not.
      *
      * @param id the session id
      * @return true or false
@@ -25,7 +25,7 @@ public interface EzySessionManager<S extends EzySession> {
     boolean containsSession(long id);
 
     /**
-     * Get session by id
+     * Get session by id.
      *
      * @param id the id
      * @return the session mapped to the id
@@ -33,7 +33,7 @@ public interface EzySessionManager<S extends EzySession> {
     EzySession getSession(long id);
 
     /**
-     * Add session to disconnect queue
+     * Add session to disconnect queue.
      *
      * @param session the session
      * @param reason  the reason
@@ -41,34 +41,36 @@ public interface EzySessionManager<S extends EzySession> {
     void removeSession(S session, EzyConstant reason);
 
     /**
-     * clear session
+     * clear session.
      *
      * @param session the session
      */
     void clearSession(S session);
 
     /**
-     * Get all sessions
+     * Get all sessions.
      *
      * @return all sessions
      */
     List<S> getAllSessions();
 
     /**
-     * Get all alive sessions
+     * Get all alive sessions.
      *
      * @return all alive sessions
      */
     List<S> getAliveSessions();
 
     /**
-     * Get logged in sessions
+     * Get logged-in sessions.
      *
-     * @return all logged in sessions
+     * @return all logged-in sessions
      */
     List<S> getLoggedInSessions();
 
     /**
+     * Get all session count.
+     *
      * @return all sessions count
      */
     int getAllSessionCount();
@@ -79,12 +81,14 @@ public interface EzySessionManager<S extends EzySession> {
     int getAliveSessionCount();
 
     /**
-     * @return logged in session count
+     * Get logged-in session count.
+     *
+     * @return logged-in session count
      */
     int getLoggedInSessionCount();
 
     /**
-     * Provide session from pool and map the session to channel
+     * Provide session from pool and map the session to channel.
      *
      * @param channel the channel
      * @return the session mapped channel
@@ -92,7 +96,7 @@ public interface EzySessionManager<S extends EzySession> {
     S provideSession(EzyChannel channel);
 
     /**
-     * Get session by connection
+     * Get session by connection.
      *
      * @param connection the connection
      * @return the session mapped to the connection
@@ -100,7 +104,7 @@ public interface EzySessionManager<S extends EzySession> {
     S getSession(Object connection);
 
     /**
-     * Add session to disconnect queue
+     * Add session to disconnect queue.
      *
      * @param session the session
      */

@@ -8,5 +8,4 @@ public interface EzyZone extends EzyEventComponent {
     EzyZoneSetting getSetting();
 
     EzyZoneUserManager getUserManager();
-
 }

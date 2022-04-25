@@ -12,5 +12,4 @@ public interface EzyUdpReceivedPacket extends EzyReleasable {
     InetSocketAddress getAddress();
 
     byte[] getBytes();
-
 }

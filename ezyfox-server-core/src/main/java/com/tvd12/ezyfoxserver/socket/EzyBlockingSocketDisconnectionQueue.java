@@ -9,12 +9,8 @@ public class EzyBlockingSocketDisconnectionQueue
     extends EzyLoggable
     implements EzySocketDisconnectionQueue {
 
-    private final BlockingQueue<EzySocketDisconnection> queue;
-
-    public EzyBlockingSocketDisconnectionQueue() {
-        this.queue = new LinkedBlockingQueue<EzySocketDisconnection>();
-    }
-
+    private final BlockingQueue<EzySocketDisconnection> queue =
+        new LinkedBlockingQueue<>();
 
     @Override
     public int size() {
@@ -38,12 +34,12 @@ public class EzyBlockingSocketDisconnectionQueue
 
     @Override
     public void remove(EzySocketDisconnection disconnection) {
+        //noinspection ResultOfMethodCallIgnored
         queue.remove(disconnection);
     }
 
     @Override
     public EzySocketDisconnection take() throws InterruptedException {
-        EzySocketDisconnection disconnection = queue.take();
-        return disconnection;
+        return queue.take();
     }
 }

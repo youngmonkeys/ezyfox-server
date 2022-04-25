@@ -13,5 +13,4 @@ public interface EzySocketDisconnectionQueue {
     void remove(EzySocketDisconnection disconnection);
 
     EzySocketDisconnection take() throws InterruptedException;
-
 }

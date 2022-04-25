@@ -26,7 +26,6 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
                     eventHandler.handleEvent();
                 }
             }
-
         };
     }
 
@@ -34,7 +33,7 @@ public abstract class EzySocketEventLoopMultiHandler extends EzySocketEventLoopH
     public void destroy() {
         super.destroy();
         for (EzySocketEventHandler eventHandler : eventHandlers) {
-            processWithLogException(() -> eventHandler.destroy());
+            processWithLogException(eventHandler::destroy);
         }
     }
 }

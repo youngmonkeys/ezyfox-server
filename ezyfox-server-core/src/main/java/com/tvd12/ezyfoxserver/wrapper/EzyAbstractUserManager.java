@@ -44,38 +44,32 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     protected EzyUser addUser0(EzyUser user) {
         checkMaxUsers();
         usersByName.putIfAbsent(user.getName(), user);
-        EzyUser answer = usersById.putIfAbsent(user.getId(), user);
-        return answer;
+        return usersById.putIfAbsent(user.getId(), user);
     }
 
     @Override
     public EzyUser getUser(long userId) {
-        EzyUser user = usersById.get(userId);
-        return user;
+        return usersById.get(userId);
     }
 
     @Override
     public EzyUser getUser(String username) {
-        EzyUser user = usersByName.get(username);
-        return user;
+        return usersByName.get(username);
     }
 
     @Override
     public List<EzyUser> getUserList() {
-        List<EzyUser> users = new ArrayList<>(usersById.values());
-        return users;
+        return new ArrayList<>(usersById.values());
     }
 
     @Override
     public boolean containsUser(long userId) {
-        boolean contains = usersById.containsKey(userId);
-        return contains;
+        return usersById.containsKey(userId);
     }
 
     @Override
     public boolean containsUser(String username) {
-        boolean contains = usersByName.containsKey(username);
-        return contains;
+        return usersByName.containsKey(username);
     }
 
     @Override
@@ -95,8 +89,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
 
     @Override
     public int getUserCount() {
-        int count = usersById.size();
-        return count;
+        return usersById.size();
     }
 
     @Override
@@ -106,14 +99,12 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
 
     @Override
     public boolean available() {
-        boolean available = usersById.size() < maxUsers;
-        return available;
+        return usersById.size() < maxUsers;
     }
 
     @Override
     public Lock getLock(String username) {
-        Lock lock = locks.computeIfAbsent(username, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
-        return lock;
+        return locks.computeIfAbsent(username, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
     }
 
     @Override

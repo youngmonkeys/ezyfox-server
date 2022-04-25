@@ -11,5 +11,4 @@ public interface EzySocketDataHandler extends EzyDestroyable {
     void streamingReceived(byte[] bytes) throws Exception;
 
     void processMaxRequestPerSecond();
-
 }

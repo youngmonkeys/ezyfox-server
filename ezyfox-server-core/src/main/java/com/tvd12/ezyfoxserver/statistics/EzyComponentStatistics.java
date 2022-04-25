@@ -5,5 +5,4 @@ public interface EzyComponentStatistics {
     EzySessionRoStats getSessionStats();
 
     EzyNetworkRoStats getNetworkStats();
-
 }

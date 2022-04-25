@@ -10,8 +10,8 @@ public class EzySimpleSocketRequest implements EzySocketRequest {
 
     private EzyArray data;
     private EzyCommand command;
-    private boolean systemRequest;
     private EzySession session;
+    private final boolean systemRequest;
 
     public EzySimpleSocketRequest(EzySession session, EzyArray data) {
         this.data = data;

@@ -34,7 +34,7 @@ public abstract class EzySocketEventLoop
     }
 
     private Runnable newServiceTask() {
-        return () -> eventLoop();
+        return this::eventLoop;
     }
 
     protected abstract void eventLoop();
@@ -46,10 +46,10 @@ public abstract class EzySocketEventLoop
 
     @Override
     public void destroy() {
-        processWithLogException(() -> this.destroy0());
+        processWithLogException(this::doDestroy);
     }
 
-    protected void destroy0() throws Exception {
+    protected void doDestroy() {
         setActive(false);
         threadPool.interrupt();
     }

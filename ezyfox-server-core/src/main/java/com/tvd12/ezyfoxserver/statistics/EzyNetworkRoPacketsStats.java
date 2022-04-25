@@ -11,5 +11,4 @@ public interface EzyNetworkRoPacketsStats {
     long getDroppedOutPackets();
 
     long getWriteErrorPackets();
-
 }

@@ -29,7 +29,6 @@ public class EzyNonBlockingRequestQueue extends EzyLoggable implements EzyReques
         queue.clear();
     }
 
-
     @Override
     public EzySocketRequest take() {
         return queue.poll();

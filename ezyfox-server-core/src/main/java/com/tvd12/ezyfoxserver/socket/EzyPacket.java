@@ -18,5 +18,4 @@ public interface EzyPacket extends EzyReleasable {
     EzyConstant getTransportType();
 
     int getSize();
-
 }

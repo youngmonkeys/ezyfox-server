@@ -10,5 +10,4 @@ public interface EzySocketStream extends EzyReleasable {
     long getTimestamp();
 
     EzySession getSession();
-
 }

@@ -39,13 +39,11 @@ public class EzySimplePacket implements EzyPacket {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append("(")
-            .append("transportType: ")
-            .append(transportType)
-            .append(", data: ")
-            .append(data)
-            .append(")")
-            .toString();
+        return "(" +
+            "transportType: " +
+            transportType +
+            ", data: " +
+            data +
+            ")";
     }
 }

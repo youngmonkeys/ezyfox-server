@@ -8,5 +8,4 @@ public interface EzyAppUserManager extends EzyUserManager {
     void removeUser(EzyUser user, EzyConstant reason);
 
     String getAppName();
-
 }

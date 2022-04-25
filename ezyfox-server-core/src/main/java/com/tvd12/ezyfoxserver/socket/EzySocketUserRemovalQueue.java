@@ -13,5 +13,4 @@ public interface EzySocketUserRemovalQueue {
     void remove(EzySocketUserRemoval removal);
 
     EzySocketUserRemoval take() throws InterruptedException;
-
 }

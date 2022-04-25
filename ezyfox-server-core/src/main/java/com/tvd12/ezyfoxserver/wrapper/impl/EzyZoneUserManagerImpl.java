@@ -51,7 +51,7 @@ public class EzyZoneUserManagerImpl
             return null;
         }
         ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(idleValidationThreadPoolSize, "user-manager");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> answer.shutdown()));
+        Runtime.getRuntime().addShutdownHook(new Thread(answer::shutdown));
         return answer;
     }
 
@@ -110,8 +110,7 @@ public class EzyZoneUserManagerImpl
     protected boolean shouldRemoveUserNow(EzyUser user) {
         int sessionCount = user.getSessionCount();
         long maxIdleTime = user.getMaxIdleTime();
-        boolean should = sessionCount <= 0 && maxIdleTime <= 0;
-        return should;
+        return sessionCount <= 0 && maxIdleTime <= 0;
     }
 
     /*
@@ -146,7 +145,7 @@ public class EzyZoneUserManagerImpl
     protected void startIdleValidationService() {
         if (idleValidationService != null) {
             idleValidationService.scheduleAtFixedRate(
-                () -> validateIdleUsers(),
+                this::validateIdleUsers,
                 idleValidationDelay,
                 idleValidationInterval, TimeUnit.MILLISECONDS);
         }
@@ -165,8 +164,7 @@ public class EzyZoneUserManagerImpl
     }
 
     protected boolean isIdleUser(EzyUser user) {
-        boolean idle = user.isIdle();
-        return idle;
+        return user.isIdle();
     }
 
     protected void delegateUserRemove(EzyUser user, EzyConstant reason) {
@@ -178,7 +176,7 @@ public class EzyZoneUserManagerImpl
         super.destroy();
         this.usersBySession.clear();
         if (idleValidationService != null) {
-            processWithLogException(() -> idleValidationService.shutdown());
+            processWithLogException(idleValidationService::shutdown);
         }
     }
 
@@ -201,8 +199,8 @@ public class EzyZoneUserManagerImpl
             return this;
         }
 
-        public Builder maxIdleTime(long maxIdletime) {
-            this.maxIdleTime = maxIdletime;
+        public Builder maxIdleTime(long maxIdleTime) {
+            this.maxIdleTime = maxIdleTime;
             return this;
         }
 

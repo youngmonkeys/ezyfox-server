@@ -24,6 +24,4 @@ public class EzySimpleUserStats implements EzyUserStatistics, Serializable {
             this.maxUsers = users;
         }
     }
-
-
 }

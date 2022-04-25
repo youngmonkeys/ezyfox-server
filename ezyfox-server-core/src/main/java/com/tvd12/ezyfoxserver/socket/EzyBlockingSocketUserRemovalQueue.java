@@ -37,12 +37,12 @@ public class EzyBlockingSocketUserRemovalQueue
 
     @Override
     public void remove(EzySocketUserRemoval removal) {
+        //noinspection ResultOfMethodCallIgnored
         queue.remove(removal);
     }
 
     @Override
     public EzySocketUserRemoval take() throws InterruptedException {
-        EzySocketUserRemoval removal = queue.take();
-        return removal;
+        return queue.take();
     }
 }

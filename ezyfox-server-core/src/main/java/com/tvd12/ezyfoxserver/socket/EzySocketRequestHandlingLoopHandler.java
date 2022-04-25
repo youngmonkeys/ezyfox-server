@@ -8,5 +8,4 @@ public abstract class EzySocketRequestHandlingLoopHandler extends EzySocketEvent
     }
 
     protected abstract String getRequestType();
-
 }

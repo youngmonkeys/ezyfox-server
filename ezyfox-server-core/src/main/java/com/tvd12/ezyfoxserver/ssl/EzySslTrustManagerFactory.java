@@ -7,10 +7,7 @@ import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactorySpi;
 import javax.net.ssl.X509TrustManager;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 public class EzySslTrustManagerFactory extends TrustManagerFactorySpi {
@@ -26,14 +23,12 @@ public class EzySslTrustManagerFactory extends TrustManagerFactorySpi {
         }
 
         @Override
-        public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] chain, String authType) {
             logger.debug("ssl: check client trusted, chain = {}, authType = {}", chain, authType);
         }
 
         @Override
-        public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
+        public void checkServerTrusted(X509Certificate[] chain, String authType) {
             logger.debug("ssl: check server trusted, chain = {}, authType = {}", chain, authType);
         }
     };
@@ -46,14 +41,14 @@ public class EzySslTrustManagerFactory extends TrustManagerFactorySpi {
     }
 
     @Override
-    protected void engineInit(KeyStore keystore)
-        throws KeyStoreException {
+    protected void engineInit(KeyStore keystore) {
         logger.debug("ssl: engine init, keystore = {}", keystore);
     }
 
     @Override
-    protected void engineInit(ManagerFactoryParameters managerFactoryParameters)
-        throws InvalidAlgorithmParameterException {
+    protected void engineInit(
+        ManagerFactoryParameters managerFactoryParameters
+    ) {
         logger.debug("ssl: engine init, parameters = {}", managerFactoryParameters);
     }
 }

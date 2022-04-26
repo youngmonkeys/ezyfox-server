@@ -27,6 +27,5 @@ public class TestAppEntry extends EzySimpleAppEntry {
     }
 
     @Override
-    protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
-    }
+    protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {}
 }

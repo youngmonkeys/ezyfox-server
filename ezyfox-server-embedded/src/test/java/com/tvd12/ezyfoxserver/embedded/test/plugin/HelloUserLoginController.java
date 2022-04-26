@@ -11,13 +11,14 @@ import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 
 @EzySingleton
 @EzyEventHandler(EzyEventNames.USER_LOGIN)
-public class HelloUserLoginController 
-        extends EzyAbstractPluginEventController<EzyUserLoginEvent> {
+public class HelloUserLoginController
+    extends EzyAbstractPluginEventController<EzyUserLoginEvent> {
 
     @Override
     public void handle(EzyPluginContext ctx, EzyUserLoginEvent event) {
         logger.info("HELLO - user {} login in", event.getUsername());
-        if(event.getUsername().contains("admin"))
+        if (event.getUsername().contains("admin")) {
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);
+        }
     }
 }

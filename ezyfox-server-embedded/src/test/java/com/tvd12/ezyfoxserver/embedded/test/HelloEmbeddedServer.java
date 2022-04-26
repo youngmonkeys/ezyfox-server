@@ -9,12 +9,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
-import com.tvd12.ezyfoxserver.setting.EzyAppSettingBuilder;
-import com.tvd12.ezyfoxserver.setting.EzyPluginSettingBuilder;
-import com.tvd12.ezyfoxserver.setting.EzySettingsBuilder;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzyWebSocketSettingBuilder;
-import com.tvd12.ezyfoxserver.setting.EzyZoneSettingBuilder;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
@@ -24,31 +19,31 @@ public class HelloEmbeddedServer {
 
     public static void main(String[] args) throws Exception {
         EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()
-                .name("hello")
-                .addListenEvent(EzyEventType.USER_LOGIN)
-                .entryLoader(HelloPluginEntryLoader.class);
+            .name("hello")
+            .addListenEvent(EzyEventType.USER_LOGIN)
+            .entryLoader(HelloPluginEntryLoader.class);
 
         EzyAppSettingBuilder appSettingBuilder = new EzyAppSettingBuilder()
-                .name("hello")
-                .entryLoader(HelloAppEntryLoader.class);
+            .name("hello")
+            .entryLoader(HelloAppEntryLoader.class);
 
         EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
-                .name("hello")
-                .application(appSettingBuilder.build())
-                .plugin(pluginSettingBuilder.build());
+            .name("hello")
+            .application(appSettingBuilder.build())
+            .plugin(pluginSettingBuilder.build());
 
         EzyWebSocketSettingBuilder webSocketSettingBuilder = new EzyWebSocketSettingBuilder()
-                .active(true)
-                .managementEnable(true);
+            .active(true)
+            .managementEnable(true);
 
         EzySimpleSettings settings = new EzySettingsBuilder()
-                .zone(zoneSettingBuilder.build())
-                .websocket(webSocketSettingBuilder.build())
-                .build();
+            .zone(zoneSettingBuilder.build())
+            .websocket(webSocketSettingBuilder.build())
+            .build();
 
         EzyEmbeddedServer server = EzyEmbeddedServer.builder()
-                .settings(settings)
-                .build();
+            .settings(settings)
+            .build();
         server.start();
     }
 
@@ -56,23 +51,23 @@ public class HelloEmbeddedServer {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
             };
         }
 
         @Override
         protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
             return EzyUserRequestAppSingletonController.builder()
-                    .beanContext(beanContext)
-                    .build();
+                .beanContext(beanContext)
+                .build();
         }
 
     }
@@ -90,16 +85,16 @@ public class HelloEmbeddedServer {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
             };
         }
 
         @Override
         protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
             return EzyUserRequestPluginSingletonController.builder()
-                    .beanContext(beanContext)
-                    .build();
+                .beanContext(beanContext)
+                .build();
         }
 
     }

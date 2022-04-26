@@ -9,8 +9,8 @@ import com.tvd12.ezyfoxserver.event.EzyServerReadyEvent;
 
 @EzySingleton
 @EzyEventHandler(event = EzyEventNames.SERVER_READY)
-public class HelloPluginServerReadyController 
-        extends EzyAbstractPluginEventController<EzyServerReadyEvent> {
+public class HelloPluginServerReadyController
+    extends EzyAbstractPluginEventController<EzyServerReadyEvent> {
 
     @Override
     public void handle(EzyPluginContext ctx, EzyServerReadyEvent event) {

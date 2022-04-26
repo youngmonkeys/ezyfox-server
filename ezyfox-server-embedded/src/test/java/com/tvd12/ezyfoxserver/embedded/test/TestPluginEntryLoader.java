@@ -6,7 +6,7 @@ import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 public class TestPluginEntryLoader extends EzyAbstractPluginEntryLoader {
 
     @Override
-    public EzyPluginEntry load() throws Exception {
+    public EzyPluginEntry load() {
         return new TestPluginEntry();
     }
 }

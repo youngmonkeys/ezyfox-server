@@ -13,12 +13,12 @@ public class HelloEmbeddedServer2 {
 
     public static void main(String[] args) throws Exception {
         EzySimpleSettings settings = new EzyEmbeddedSettingsBuilderPrototype()
-                .scan("com.tvd12.ezyfoxserver.embedded.test")
-                .build();
+            .scan("com.tvd12.ezyfoxserver.embedded.test")
+            .build();
 
         EzyEmbeddedServer server = EzyEmbeddedServer.builder()
-                .settings(settings)
-                .build();
+            .settings(settings)
+            .build();
         server.start();
     }
 
@@ -26,15 +26,15 @@ public class HelloEmbeddedServer2 {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
             };
         }
 
@@ -53,8 +53,8 @@ public class HelloEmbeddedServer2 {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
+            return new String[]{
+                "com.tvd12.ezyfoxserver.embedded.test.plugin" // replace by your package
             };
         }
 

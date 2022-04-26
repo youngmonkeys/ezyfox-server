@@ -16,18 +16,18 @@ public class EzyEmbeddedRunner extends EzyRunner {
         this.settings = builder.settings;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     protected void validateArguments(String[] args) {}
 
     @Override
     protected EzyStarter.Builder<?> newStarterBuilder() {
         return EzyEmbeddedStarter.builder()
-                .config(config)
-                .settings(settings);
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            .config(config)
+            .settings(settings);
     }
 
     public static class Builder implements EzyBuilder<EzyEmbeddedRunner> {
@@ -49,6 +49,5 @@ public class EzyEmbeddedRunner extends EzyRunner {
         public EzyEmbeddedRunner build() {
             return new EzyEmbeddedRunner(this);
         }
-
     }
 }

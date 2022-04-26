@@ -18,10 +18,15 @@ public class EzyEmbeddedStarter extends EzyNioStarter {
         this.settings = builder.settings;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     protected EzyConfig readConfig(String configFile) throws Exception {
-        if(config != null)
+        if (config != null) {
             return config;
+        }
         return super.readConfig(configFile);
     }
 
@@ -30,20 +35,16 @@ public class EzyEmbeddedStarter extends EzyNioStarter {
         return new EzyEmbeddedLoader() {
             @SuppressWarnings("rawtypes")
             @Override
-            protected EzySimpleSessionManager.Builder 
-                    createSessionManagerBuilder(EzySettings settings) {
+            protected EzySimpleSessionManager.Builder
+            createSessionManagerBuilder(EzySettings settings) {
                 return newSessionManagerBuilder(settings);
             }
-            
+
             @Override
             protected EzySettings readSettings() {
                 return settings;
             }
         };
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder extends EzyNioStarter.Builder {
@@ -65,6 +66,5 @@ public class EzyEmbeddedStarter extends EzyNioStarter {
         public EzyStarter build() {
             return new EzyEmbeddedStarter(this);
         }
-
     }
 }

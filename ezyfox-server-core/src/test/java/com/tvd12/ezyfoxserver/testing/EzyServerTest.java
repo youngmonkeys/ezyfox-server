@@ -3,11 +3,11 @@ package com.tvd12.ezyfoxserver.testing;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 public class EzyServerTest extends BaseCoreTest {
 
-    private EzySimpleServer server;
+    private final EzySimpleServer server;
 
     public EzyServerTest() {
         super();
@@ -17,7 +17,7 @@ public class EzyServerTest extends BaseCoreTest {
     @Test
     public void test() {
         assertEquals(server.getClassLoader(), EzySimpleServer.class.getClassLoader());
-        assertEquals(server.getControllers() != null, true);
-        assertEquals(server.getAppClassLoaders().containsKey("ezyfox-chat"), true);
+        assertNotNull(server.getControllers());
+        assertTrue(server.getAppClassLoaders().containsKey("ezyfox-chat"));
     }
 }

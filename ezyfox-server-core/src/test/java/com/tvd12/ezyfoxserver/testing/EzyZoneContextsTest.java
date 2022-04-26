@@ -6,8 +6,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 
 public final class EzyZoneContextsTest {
 
-    private EzyZoneContextsTest() {
-    }
+    private EzyZoneContextsTest() {}
 
     public static EzySimpleZoneContext newDefaultZoneContext() {
         EzySimpleZoneContext context = new EzySimpleZoneContext();

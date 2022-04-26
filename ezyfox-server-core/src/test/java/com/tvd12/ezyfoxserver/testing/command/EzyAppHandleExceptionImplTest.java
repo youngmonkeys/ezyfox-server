@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
-import com.tvd12.ezyfox.util.EzyExceptionHandler;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.command.impl.EzyAppHandleExceptionImpl;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
@@ -17,12 +16,8 @@ public class EzyAppHandleExceptionImplTest extends BaseTest {
         app.setSetting(setting);
         EzyAppHandleExceptionImpl cmd = new EzyAppHandleExceptionImpl(app);
         cmd.handle(Thread.currentThread(), new IllegalArgumentException("one"));
-        app.getExceptionHandlers().addExceptionHandler(new EzyExceptionHandler() {
-
-            @Override
-            public void handleException(Thread thread, Throwable throwable) {
-                throw new IllegalStateException();
-            }
+        app.getExceptionHandlers().addExceptionHandler((thread, throwable) -> {
+            throw new IllegalStateException();
         });
         cmd.handle(Thread.currentThread(), new IllegalArgumentException("two"));
     }

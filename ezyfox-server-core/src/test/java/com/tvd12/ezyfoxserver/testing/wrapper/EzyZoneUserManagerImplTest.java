@@ -30,7 +30,6 @@ public class EzyZoneUserManagerImplTest {
         when(serverContext.getZoneContext(1)).thenReturn(zoneContext);
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
         EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext, queue);
-        userDelegate = new EzySimpleUserDelegate(serverContext, queue);
 
         EzyZoneUserManagerImpl manager = (EzyZoneUserManagerImpl) EzyZoneUserManagerImpl.builder()
             .idleValidationDelay(10)
@@ -61,10 +60,10 @@ public class EzyZoneUserManagerImplTest {
         manager.addUser(session2, user2);
         assert manager.getUserCount() == 1;
 
-        newAndAddIdleUser("user3", manager);
+        newAndAddIdleUser(manager);
         assert manager.getUserCount() == 2;
 
-        newAndAddIdleUser("user4", manager);
+        newAndAddIdleUser(manager);
         assert manager.getUserCount() == 3;
 
         manager.start();
@@ -109,7 +108,7 @@ public class EzyZoneUserManagerImplTest {
     }
 
     @Test
-    public void unmapSessionUserWithmaxIdleTimeGreaterThanZero() {
+    public void unmapSessionUserWithMaxIdleTimeGreaterThanZero() {
         // given
         EzyZoneUserManagerImpl sut = newZoneUserManager();
         EzySession session = mock(EzySession.class);
@@ -151,7 +150,7 @@ public class EzyZoneUserManagerImplTest {
         Asserts.assertNull(FieldUtil.getFieldValue(sut, "idleValidationService"));
     }
 
-    private EzySimpleUser newAndAddIdleUser(String username, EzyZoneUserManagerImpl manager) {
+    private void newAndAddIdleUser(EzyZoneUserManagerImpl manager) {
         EzyAbstractSession session = mock(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         user.setZoneId(1);
@@ -160,7 +159,6 @@ public class EzyZoneUserManagerImplTest {
         manager.addUser(session, user);
         user.removeSession(session);
         user.setMaxIdleTime(0);
-        return user;
     }
 
     private EzyZoneUserManagerImpl newZoneUserManager() {
@@ -169,7 +167,6 @@ public class EzyZoneUserManagerImplTest {
         when(serverContext.getZoneContext(1)).thenReturn(zoneContext);
         TestBlockingSocketUserRemovalQueue queue = new TestBlockingSocketUserRemovalQueue();
         EzySimpleUserDelegate userDelegate = new EzySimpleUserDelegate(serverContext, queue);
-        userDelegate = new EzySimpleUserDelegate(serverContext, queue);
 
         return (EzyZoneUserManagerImpl) EzyZoneUserManagerImpl.builder()
             .idleValidationDelay(10)

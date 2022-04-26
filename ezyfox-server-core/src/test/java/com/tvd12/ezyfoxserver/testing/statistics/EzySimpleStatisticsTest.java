@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.statistics;
 
+import com.tvd12.ezyfox.util.EzyThreads;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
@@ -22,29 +23,25 @@ public class EzySimpleStatisticsTest {
         Thread[] threads = new Thread[max];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(() -> {
-                networkStats.addReadBytes(1 * 50);
+                networkStats.addReadBytes(50);
                 networkStats.addReadPackets(1);
                 networkStats.addWrittenBytes(2 * 50);
                 networkStats.addWrittenPackets(2);
                 count.incrementAndGet();
             });
         }
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
+        for (Thread thread : threads) {
+            thread.start();
         }
 
         while (count.get() < max) {
-            Thread.sleep(5L);
+            EzyThreads.sleep(5L);
         }
         Thread.sleep(100);
         System.out.println("getReadBytes: " + networkStats.getReadBytes());
         System.out.println("getReadPackets: " + networkStats.getReadPackets());
         System.out.println("getWrittenBytes: " + networkStats.getWrittenBytes());
         System.out.println("getWrittenPackets: " + networkStats.getWrittenPackets());
-//        assert networkStats.getReadBytes() == max * 50;
-//        assert networkStats.getReadPackets() == max;
-//        assert networkStats.getWrittenBytes() == max * 2 * 50;
-//        assert networkStats.getWrittenPackets() == max * 2;
         System.out.println(networkStats.getReadBytes());
         System.out.println(networkStats.getReadPackets());
         System.out.println(networkStats.getWrittenBytes());

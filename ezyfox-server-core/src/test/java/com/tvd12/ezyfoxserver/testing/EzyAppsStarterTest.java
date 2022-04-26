@@ -29,17 +29,13 @@ public class EzyAppsStarterTest extends BaseTest {
             public EzyAppsStarter build() {
                 return new EzyAppsStarter(this) {
 
-                    public EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
+                    public EzyAppEntryLoader newAppEntryLoader(String appName) {
                         throw new RuntimeException();
                     }
-
-                    ;
 
                     public java.util.Set<String> getAppNames() {
                         return Sets.newHashSet("test");
                     }
-
-                    ;
                 };
             }
         }

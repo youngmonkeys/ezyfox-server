@@ -27,6 +27,5 @@ public class EzyRequestHandleExceptionTest extends BaseTest {
         assert exception.getSession() == session;
         assert exception.getCommand() == EzyCommand.LOGIN;
         assert exception.getData() != null;
-
     }
 }

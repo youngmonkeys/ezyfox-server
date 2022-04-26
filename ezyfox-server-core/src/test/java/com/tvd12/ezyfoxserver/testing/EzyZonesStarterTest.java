@@ -86,8 +86,7 @@ public class EzyZonesStarterTest extends BaseTest {
 
         @Override
         public EzyAppEntry load() throws Exception {
-            EzyAppEntry enry = mock(EzyAppEntry.class);
-            return enry;
+            return mock(EzyAppEntry.class);
         }
 
     }
@@ -96,9 +95,7 @@ public class EzyZonesStarterTest extends BaseTest {
 
         @Override
         public EzyPluginEntry load() throws Exception {
-            EzyPluginEntry entry = mock(EzyPluginEntry.class);
-            return entry;
+            return mock(EzyPluginEntry.class);
         }
-
     }
 }

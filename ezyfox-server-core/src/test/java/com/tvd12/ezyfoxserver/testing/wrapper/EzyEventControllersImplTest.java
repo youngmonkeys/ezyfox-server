@@ -83,16 +83,12 @@ public class EzyEventControllersImplTest extends BaseTest {
     public static class EventController1 implements EzyEventController {
 
         @Override
-        public void handle(Object ctx, Object event) {
-        }
-
+        public void handle(Object ctx, Object event) {}
     }
 
     public static class EventController2 implements EzyEventController {
 
         @Override
-        public void handle(Object ctx, Object event) {
-        }
-
+        public void handle(Object ctx, Object event) {}
     }
 }

@@ -11,8 +11,7 @@ public class EzyAbstractZoneEventControllerTest {
         new EzyAbstractZoneEventController<Object>() {
 
             @Override
-            public void handle(EzyZoneContext ctx, Object event) {
-            }
+            public void handle(EzyZoneContext ctx, Object event) {}
         };
     }
 }

@@ -16,7 +16,6 @@ public class EzyAbstractConfigTest extends BaseCoreTest {
         config.setThreadPoolSize(100);
     }
 
-
     public static class Config extends EzyAbstractSetting {
         @Override
         protected AtomicInteger getIdCounter() {

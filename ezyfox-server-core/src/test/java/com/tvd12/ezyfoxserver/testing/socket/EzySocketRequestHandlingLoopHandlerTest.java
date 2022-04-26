@@ -19,6 +19,5 @@ public class EzySocketRequestHandlingLoopHandlerTest {
         protected String getRequestType() {
             return "test";
         }
-
     }
 }

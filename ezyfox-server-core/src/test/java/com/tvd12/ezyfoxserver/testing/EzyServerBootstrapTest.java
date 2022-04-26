@@ -38,7 +38,7 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
         EzyServerBootstrap bootstrap = new EzyServerBootstrap() {
 
             @Override
-            protected void startOtherBootstraps(Runnable callback) throws Exception {
+            protected void startOtherBootstraps(Runnable callback) {
                 callback.run();
             }
 
@@ -67,7 +67,7 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
     }
 
     @Test
-    public void commonTest() throws Exception {
+    public void commonTest() {
         // given
         EzySimpleConfig config = new EzySimpleConfig();
         config.setPrintBanner(false);
@@ -82,7 +82,7 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
 
         EzyServerBootstrap sut = new EzyServerBootstrap() {
             @Override
-            protected void startOtherBootstraps(Runnable callback) throws Exception {
+            protected void startOtherBootstraps(Runnable callback) {
                 callback.run();
             }
         };
@@ -112,8 +112,6 @@ public class EzyServerBootstrapTest extends BaseCoreTest {
             public EzySimpleSessionManager<EzySession> build() {
                 return new ExEzySimpleSessionManager(this);
             }
-
         }
-
     }
 }

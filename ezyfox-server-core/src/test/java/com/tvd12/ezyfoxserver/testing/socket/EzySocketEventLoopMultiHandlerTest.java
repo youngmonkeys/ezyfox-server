@@ -33,6 +33,5 @@ public class EzySocketEventLoopMultiHandlerTest {
         protected String getThreadName() {
             return "test";
         }
-
     }
 }

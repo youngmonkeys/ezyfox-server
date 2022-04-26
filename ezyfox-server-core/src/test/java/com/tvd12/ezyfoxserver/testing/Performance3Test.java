@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Performance3Test extends BaseTest {
 
     @SuppressWarnings("unused")
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.out.println("\n========= begin =========\n");
         long start = System.currentTimeMillis();
         ConcurrentHashMap<Object, Object> strs = new ConcurrentHashMap<>();

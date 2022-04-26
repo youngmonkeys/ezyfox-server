@@ -7,8 +7,7 @@ public class EzyAbstractPluginEntryTest {
 
     @Test
     public void newTest() {
-        EzyAbstractPluginEntry entry = new EzyAbstractPluginEntry() {
-        };
+        EzyAbstractPluginEntry entry = new EzyAbstractPluginEntry() {};
         entry.destroy();
     }
 }

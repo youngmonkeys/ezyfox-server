@@ -5,6 +5,5 @@ import org.testng.annotations.Test;
 public class EzyResponseSerializerTest {
 
     @Test
-    public void test() {
-    }
+    public void test() {}
 }

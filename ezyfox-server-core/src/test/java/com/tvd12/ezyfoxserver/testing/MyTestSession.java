@@ -22,21 +22,13 @@ public class MyTestSession extends EzyAbstractSession {
     }
 
     @Override
-    public void close() {
-    }
+    public void close() {}
 
     @Override
-    public void disconnect(EzyConstant disconnectReason) {
-    }
+    public void disconnect(EzyConstant disconnectReason) {}
 
     @Override
     public EzySessionDelegate getDelegate() {
-        return new EzySessionDelegate() {
-
-            @Override
-            public void onSessionLoggedIn(EzyUser user) {
-
-            }
-        };
+        return user -> {};
     }
 }

@@ -74,6 +74,5 @@ public class EzySimpleAppSettingTest extends BaseTest {
         public EzyAppEntry load() throws Exception {
             return null;
         }
-
     }
 }

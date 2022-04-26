@@ -10,7 +10,7 @@ public class EzyAbstractPluginEntryLoaderTest {
     public void newTest() {
         new EzyAbstractPluginEntryLoader() {
             @Override
-            public EzyPluginEntry load() throws Exception {
+            public EzyPluginEntry load() {
                 return null;
             }
         };

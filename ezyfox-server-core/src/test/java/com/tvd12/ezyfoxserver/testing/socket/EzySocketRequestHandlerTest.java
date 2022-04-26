@@ -43,8 +43,7 @@ public class EzySocketRequestHandlerTest {
         ExEzySocketRequestHandler handler = new ExEzySocketRequestHandler();
 
         EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);
-        EzySocketDataHandlerGroup handlerGroup = null;
-        when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(handlerGroup);
+        when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(null);
 
         EzySession session = spy(EzyAbstractSession.class);
         when(session.isActivated()).thenReturn(Boolean.TRUE);
@@ -86,7 +85,7 @@ public class EzySocketRequestHandlerTest {
     }
 
     @Test
-    public void processRequestQueue0InterrupTest() throws Exception {
+    public void processRequestQueue0InterruptTest() throws Exception {
         ExEzySocketRequestHandler handler = new ExEzySocketRequestHandler();
 
         EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);
@@ -96,7 +95,7 @@ public class EzySocketRequestHandlerTest {
         handler.setSessionTicketsQueue(sessionTicketsRequestQueues.getExtensionQueue());
         handler.setDataHandlerGroupFetcher(dataHandlerGroupFetcher);
 
-        Thread thread = new Thread(() -> handler.handleEvent());
+        Thread thread = new Thread(handler::handleEvent);
         thread.start();
         Thread.sleep(100L);
         thread.interrupt();

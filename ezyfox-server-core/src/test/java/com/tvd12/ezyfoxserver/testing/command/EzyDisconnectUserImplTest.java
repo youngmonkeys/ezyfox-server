@@ -1,27 +1,41 @@
 package com.tvd12.ezyfoxserver.testing.command;
 
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
+import com.tvd12.ezyfoxserver.socket.EzySimpleSocketDisconnection;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestUser;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
 public class EzyDisconnectUserImplTest extends BaseCoreTest {
 
     @Test
     public void test() {
+        // given
+        String token = RandomUtil.randomShortAlphabetString();
         EzySession session = newSession();
-        session.setToken("abc");
+        session.setToken(token);
+
+        String username = RandomUtil.randomShortAlphabetString();
         EzySimpleUser user = newUser();
-        user.setName("abc");
+        user.setName(username);
         user.addSession(session);
-//        EzyServerContext context = newServerContext();
-//        new EzyDisconnectUserImpl(context)
-//            .user(user)
-//            .fireClientEvent(true)
-//            .fireServerEvent(true)
-//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-//            .execute();
+
+        // when
+        EzySimpleSocketDisconnection disconnection = new EzySimpleSocketDisconnection(
+            session,
+            EzyDisconnectReason.ADMIN_BAN
+        );
+
+        // when
+        Asserts.assertEquals(user.getName(), username);
+        Asserts.assertEquals(user.getSession(), session);
+        Asserts.assertEquals(session.getToken(), token);
+        Asserts.assertEquals(disconnection.getSession(), session);
+        Asserts.assertEquals(disconnection.getDisconnectReason(), EzyDisconnectReason.ADMIN_BAN);
     }
 
     @Test
@@ -31,13 +45,6 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         session.setToken("abc");
         user.setName("abc");
         user.addSession(session);
-//        EzyServerContext context = newServerContext();
-//        new EzyDisconnectUserImpl(context)
-//            .user(user)
-//            .fireClientEvent(false)
-//            .fireServerEvent(true)
-//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-//            .execute();
     }
 
     @Test
@@ -47,13 +54,6 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         EzySession session = newSession();
         session.setToken("abc");
         user.addSession(session);
-//        EzyServerContext context = newServerContext();
-//        new EzyDisconnectUserImpl(context)
-//            .user(user)
-//            .fireClientEvent(false)
-//            .fireServerEvent(false)
-//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-//            .execute();
     }
 
     @Test
@@ -63,12 +63,5 @@ public class EzyDisconnectUserImplTest extends BaseCoreTest {
         EzySession session = newSession();
         session.setToken("abc");
         user.addSession(session);
-//        EzyServerContext context = newServerContext();
-//        new EzyDisconnectUserImpl(context)
-//            .user(user)
-//            .fireClientEvent(false)
-//            .fireServerEvent(true)
-//            .reason(EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
-//            .execute();
     }
 }

@@ -14,12 +14,13 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,15 +43,13 @@ public class EzySimpleAppContextTest extends BaseTest {
         appContext.setParent(zoneContext);
         appContext.setApp(app);
         appContext.init();
-        assert appContext.get(Void.class) == null;
+        Asserts.assertNull(appContext.get(Void.class));
+        //noinspection EqualsWithItself
         assert appContext.equals(appContext);
         EzySimpleAppContext appContext2 = new EzySimpleAppContext();
         assert !appContext.equals(appContext2);
         assert appContext.cmd(EzyAppResponse.class) != null;
-
-        assert appContext.cmd(Void.class) == null;
-        ;
-
+        Asserts.assertNull(appContext.cmd(Void.class));
         EzySimpleUser user = new EzySimpleUser();
         user.setName("test");
         EzyAbstractSession session = spy(EzyAbstractSession.class);
@@ -72,7 +71,7 @@ public class EzySimpleAppContextTest extends BaseTest {
         // given
         EzyData data = mock(EzyData.class);
         EzySession recipient = mock(EzySession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
         boolean encrypted = RandomUtil.randomBoolean();
 
         EzyAppSendResponse sendResponse = mock(EzyAppSendResponse.class);

@@ -48,14 +48,12 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
 
         @Override
         public EzyByteToObjectDecoder newDecoder(int maxRequestSize) {
-            EzyByteToObjectDecoder decoder = mock(EzyByteToObjectDecoder.class);
-            return decoder;
+            return mock(EzyByteToObjectDecoder.class);
         }
 
         @Override
         public EzyObjectToByteEncoder newEncoder() {
-            EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
-            return encoder;
+            return mock(EzyObjectToByteEncoder.class);
         }
 
     }
@@ -64,14 +62,12 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
 
         @Override
         public Object newEncoder() {
-            EzyObjectToStringEncoder encoder = mock(EzyObjectToStringEncoder.class);
-            return encoder;
+            return mock(EzyObjectToStringEncoder.class);
         }
 
         @Override
         public Object newDecoder(int maxRequestSize) {
-            EzyStringToObjectDecoder decoder = mock(EzyStringToObjectDecoder.class);
-            return decoder;
+            return mock(EzyStringToObjectDecoder.class);
         }
 
     }

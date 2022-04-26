@@ -13,7 +13,7 @@ public class EzyMessageControllerTest extends BaseCoreTest {
         controller.newArrayBuilder();
     }
 
-    public class MyEzyMessageController extends EzyMessageController {
+    public static class MyEzyMessageController extends EzyMessageController {
         @Override
         public EzyArrayBuilder newArrayBuilder() {
             return super.newArrayBuilder();

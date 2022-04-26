@@ -17,6 +17,5 @@ public class EzyServerShutdownImplTest extends BaseTest {
         cmd.execute();
     }
 
-    public interface ExCtx extends EzyServerContext, EzyDestroyable {
-    }
+    public interface ExCtx extends EzyServerContext, EzyDestroyable {}
 }

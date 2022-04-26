@@ -6,7 +6,6 @@ import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.delegate.EzyAbstractSessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyMaxSessionException;
-import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestSession;
@@ -92,13 +91,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
     public void test1() {
         MyTestSessionManager manager =
             (MyTestSessionManager) new MyTestSessionManager.Builder()
-                .tokenGenerator(new EzySessionTokenGenerator() {
-
-                    @Override
-                    public String generate() {
-                        return UUID.randomUUID().toString();
-                    }
-                })
+                .tokenGenerator(() -> UUID.randomUUID().toString())
                 .build();
         MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET);
         session.setLoggedIn(true);
@@ -111,7 +104,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
     @Test
     public void clearNullSessionTest() {
         // given
-        MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+        MyTestSessionManager manager = new MyTestSessionManager.Builder()
             .build();
 
         // when
@@ -137,7 +130,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
     @Test
     public void isUnloggedInSessionTrueTest() {
         // given
-        MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+        MyTestSessionManager manager = new MyTestSessionManager.Builder()
             .build();
         EzySession session = mock(EzySession.class);
         when(session.isLoggedIn()).thenReturn(false);
@@ -159,7 +152,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
     @Test
     public void isUnloggedInSessionFalseTest() {
         // given
-        MyTestSessionManager manager = (MyTestSessionManager) new MyTestSessionManager.Builder()
+        MyTestSessionManager manager = new MyTestSessionManager.Builder()
             .build();
         EzySession session = mock(EzySession.class);
         when(session.isLoggedIn()).thenReturn(false);

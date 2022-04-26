@@ -21,7 +21,10 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.Mockito.mock;
@@ -47,20 +50,20 @@ public class EzyAppResponseImplTest extends BaseTest {
         user2.addSession(session3);
         user2.addSession(session4);
 
-//        List<Object> list = new ArrayList<>();
-
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+        List<Object> list = new ArrayList<>();
 
         long time = Performance.create()
             .loop(1000000)
             .test(() -> {
                 response.users(new EzyUser[]{user1, user2}, false);
-//                list.add(user1);
-//                list.add(user2);
-//                list.add(Arrays.asList(new EzyUser[] {user1, user2}));
-//                list.addAll(user1.getSessions());
-//                list.addAll(user2.getSessions());
-//                response.user(user1);
-//                response.user(user2);
+                list.add(user1);
+                list.add(user2);
+                list.add(Arrays.asList(user1, user2));
+                list.addAll(user1.getSessions());
+                list.addAll(user2.getSessions());
+                response.user(user1);
+                response.user(user2);
             })
             .getTime();
         System.out.println("time = " + time);
@@ -77,36 +80,36 @@ public class EzyAppResponseImplTest extends BaseTest {
         EzyAppResponse response = new EzyAppResponseImpl(context);
 
         Field recipients = EzyAbstractResponse.class.getDeclaredField("recipients");
-        Field exrecipients = EzyAbstractResponse.class.getDeclaredField("exclusiveRecipients");
+        Field exclusiveRecipients = EzyAbstractResponse.class.getDeclaredField("exclusiveRecipients");
         recipients.setAccessible(true);
-        exrecipients.setAccessible(true);
+        exclusiveRecipients.setAccessible(true);
         assert ((Collection) recipients.get(response)).size() == 0;
-        assert ((Collection) exrecipients.get(response)).size() == 0;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 0;
 
         EzyUser user1 = newUser("user1");
         response.user(user1);
         assert ((Collection) recipients.get(response)).size() == 2;
-        assert ((Collection) exrecipients.get(response)).size() == 0;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 0;
 
         EzyUser user2 = newUser("user2");
         response.user(user2);
         response.user(user2, true);
         assert ((Collection) recipients.get(response)).size() == 4;
-        assert ((Collection) exrecipients.get(response)).size() == 2;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 2;
 
         EzyUser user3 = newUser("user3");
         EzyUser user4 = newUser("user4");
         response.users(user3, user4);
         response.users(new EzyUser[]{user3, null}, true);
         assert ((Collection) recipients.get(response)).size() == 8;
-        assert ((Collection) exrecipients.get(response)).size() == 4;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 4;
 
         EzyUser user5 = newUser("user5");
         EzyUser user6 = newUser("user6");
         response.users(Lists.newArrayList(user5, user6));
         response.users(Lists.newArrayList(user5, null), true);
         assert ((Collection) recipients.get(response)).size() == 12;
-        assert ((Collection) exrecipients.get(response)).size() == 6;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 6;
 
         EzyUser user7 = newUser("user7");
         EzyUser user8 = newUser("user8");
@@ -115,7 +118,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         response.username("user7");
         response.username("user7", true);
         assert ((Collection) recipients.get(response)).size() == 14;
-        assert ((Collection) exrecipients.get(response)).size() == 8;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 8;
 
         EzyUser user9 = newUser("user9");
         EzyUser user10 = newUser("user10");
@@ -126,7 +129,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         response.usernames("user9", "user10");
         response.usernames(new String[]{"user11"}, true);
         assert ((Collection) recipients.get(response)).size() == 18;
-        assert ((Collection) exrecipients.get(response)).size() == 10;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 10;
 
         EzyUser user12 = newUser("user12");
         EzyUser user13 = newUser("user13");
@@ -137,26 +140,26 @@ public class EzyAppResponseImplTest extends BaseTest {
         response.usernames(Lists.newArrayList("user12", "user13"));
         response.usernames(Lists.newArrayList("user14"), true);
         assert ((Collection) recipients.get(response)).size() == 22;
-        assert ((Collection) exrecipients.get(response)).size() == 12;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 12;
 
         EzySession session1 = new ExSession();
         response.session(session1);
         assert ((Collection) recipients.get(response)).size() == 23;
-        assert ((Collection) exrecipients.get(response)).size() == 12;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 12;
 
         EzySession session2 = new ExSession();
         EzySession session3 = new ExSession();
         response.sessions(session2, session3);
         response.sessions(new EzySession[]{session3}, true);
         assert ((Collection) recipients.get(response)).size() == 25;
-        assert ((Collection) exrecipients.get(response)).size() == 13;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 13;
 
         EzySession session4 = new ExSession();
         EzySession session5 = new ExSession();
         response.sessions(Lists.newArrayList(session4, session5));
         response.sessions(Lists.newArrayList(session4, session5), true);
         assert ((Collection) recipients.get(response)).size() == 27;
-        assert ((Collection) exrecipients.get(response)).size() == 15;
+        assert ((Collection) exclusiveRecipients.get(response)).size() == 15;
     }
 
     @Test
@@ -189,8 +192,7 @@ public class EzyAppResponseImplTest extends BaseTest {
         EzyAppUserManager userManager = EzyAppUserManagerImpl.builder().build();
         when(context.getApp()).thenReturn(application);
         when(application.getUserManager()).thenReturn(userManager);
-        EzyAppResponse response = new EzyAppResponseImpl(context);
-        return response;
+        return new EzyAppResponseImpl(context);
     }
 
     public static class ExUser extends EzySimpleUser {
@@ -199,7 +201,6 @@ public class EzyAppResponseImplTest extends BaseTest {
         public ExUser(String name) {
             setName(name);
         }
-
     }
 
     public static class ExSession extends EzyAbstractSession {
@@ -223,12 +224,9 @@ public class EzyAppResponseImplTest extends BaseTest {
         }
 
         @Override
-        public void close() {
-        }
+        public void close() {}
 
         @Override
-        public void disconnect(EzyConstant disconnectReason) {
-        }
-
+        public void disconnect(EzyConstant disconnectReason) {}
     }
 }

@@ -21,6 +21,7 @@ public class EzySimplePluginSettingTest extends BaseTest {
         assert setting.getFolder().equals("name");
         System.out.println(setting.getLocation());
         System.out.println(setting.getConfigFile());
+        //noinspection EqualsWithItself
         assert setting.equals(setting);
         setting.setPriority(1);
         setting.setListenEvents(new EzySimpleListenEvents());

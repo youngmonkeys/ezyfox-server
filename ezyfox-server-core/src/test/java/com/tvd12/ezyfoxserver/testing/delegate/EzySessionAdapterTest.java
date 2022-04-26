@@ -10,8 +10,7 @@ public class EzySessionAdapterTest extends BaseTest {
 
     @Test
     public void test() {
-        EzySessionDelegate delegate = new EzyAbstractSessionDelegate() {
-        };
+        EzySessionDelegate delegate = new EzyAbstractSessionDelegate() {};
         delegate.onSessionLoggedIn(new EzySimpleUser());
     }
 }

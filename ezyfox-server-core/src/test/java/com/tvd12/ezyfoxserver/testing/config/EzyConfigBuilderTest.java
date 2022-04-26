@@ -5,6 +5,7 @@ import com.tvd12.ezyfoxserver.config.EzyConfigBuilder;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class EzyConfigBuilderTest {
 
@@ -19,10 +20,10 @@ public class EzyConfigBuilderTest {
             .enableAppClassLoader(true)
             .build();
         assertEquals(config.getEzyfoxHome(), ".");
-        assertEquals(config.isPrintSettings(), true);
-        assertEquals(config.isPrintBanner(), true);
+        assertTrue(config.isPrintSettings());
+        assertTrue(config.isPrintBanner());
         assertEquals(config.getBannerFile(), "banner.txt");
         assertEquals(config.getLoggerConfigFile(), "log.properties");
-        assertEquals(config.isEnableAppClassLoader(), true);
+        assertTrue(config.isEnableAppClassLoader());
     }
 }

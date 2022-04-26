@@ -40,7 +40,5 @@ public class EzySimpleXmlReaderTest extends BaseTest {
         System.out.println(new EzySimpleJsonWriter().writeAsString(settings));
     }
 
-    public static class ClassB {
-
-    }
+    public static class ClassB {}
 }

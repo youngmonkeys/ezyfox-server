@@ -12,6 +12,5 @@ public class EzyInterceptorTest extends BaseCoreTest {
     public void test() throws Exception {
         EzyServerContext context = newServerContext();
         EzyInterceptor.ALWAYS_PASS.intercept(context, null);
-
     }
 }

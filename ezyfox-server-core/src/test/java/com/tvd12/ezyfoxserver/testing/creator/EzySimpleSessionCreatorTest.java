@@ -25,6 +25,5 @@ public class EzySimpleSessionCreatorTest extends BaseTest {
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         when(sessionManager.provideSession(any())).thenReturn(session);
         assert creator.create(mock(EzyChannel.class)) == session;
-
     }
 }

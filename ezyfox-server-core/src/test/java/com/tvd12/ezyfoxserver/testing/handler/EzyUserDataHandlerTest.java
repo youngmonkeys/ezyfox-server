@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 public class EzyUserDataHandlerTest {
 
     @Test
-    public void checkToUnmapUserTest() throws Exception {
+    public void checkToUnmapUserTest() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "user", null);

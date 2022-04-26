@@ -14,6 +14,7 @@ import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class EzySettingsBuilderTest {
 
@@ -100,23 +101,23 @@ public class EzySettingsBuilderTest {
             .zone(zoneSetting)
             .addEventController(EzyEventType.SERVER_INITIALIZING, HelloServerInitializingReadyController.class)
             .build();
-        assertEquals(settings.isDebug(), true);
+        assertTrue(settings.isDebug());
         assertEquals(settings.getNodeName(), "test");
         assertEquals(settings.getMaxSessions(), 100);
         assertEquals(settings.getStreaming(), streamingSetting);
         assertEquals(settings.getHttp(), httpSetting);
 
         socketSetting = settings.getSocket();
-        assertEquals(socketSetting.isActive(), true);
+        assertTrue(socketSetting.isActive());
         assertEquals(socketSetting.getAddress(), "1.1.1.1");
         assertEquals(socketSetting.getCodecCreator(), TestCodecCreator.class.getName());
         assertEquals(socketSetting.getMaxRequestSize(), 1024);
         assertEquals(socketSetting.getPort(), 12345);
-        assertEquals(socketSetting.isTcpNoDelay(), true);
+        assertTrue(socketSetting.isTcpNoDelay());
         assertEquals(socketSetting.getWriterThreadPoolSize(), 3);
 
         udpSetting = settings.getUdp();
-        assertEquals(udpSetting.isActive(), true);
+        assertTrue(udpSetting.isActive());
         assertEquals(udpSetting.getAddress(), "2.2.2.2");
         assertEquals(udpSetting.getCodecCreator(), TestCodecCreator.class.getName());
         assertEquals(udpSetting.getMaxRequestSize(), 2048);
@@ -125,12 +126,12 @@ public class EzySettingsBuilderTest {
         assertEquals(udpSetting.getHandlerThreadPoolSize(), 3);
 
         webSocketSetting = settings.getWebsocket();
-        assertEquals(webSocketSetting.isActive(), true);
+        assertTrue(webSocketSetting.isActive());
         assertEquals(webSocketSetting.getAddress(), "1.1.1.1");
         assertEquals(webSocketSetting.getCodecCreator(), TestCodecCreator.class.getName());
         assertEquals(webSocketSetting.getMaxFrameSize(), 1024);
         assertEquals(webSocketSetting.getPort(), 12345);
-        assertEquals(webSocketSetting.isSslActive(), true);
+        assertTrue(webSocketSetting.isSslActive());
         assertEquals(webSocketSetting.getSslConfig(), sslConfigSetting);
         assertEquals(webSocketSetting.getSslPort(), 23456);
         assertEquals(webSocketSetting.getWriterThreadPoolSize(), 3);

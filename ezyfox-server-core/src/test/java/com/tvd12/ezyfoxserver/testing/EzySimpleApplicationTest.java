@@ -15,6 +15,7 @@ public class EzySimpleApplicationTest extends BaseTest {
         EzySimpleApplication app = new EzySimpleApplication();
         EzySimpleAppSetting setting = new EzySimpleAppSetting();
         app.setSetting(setting);
+        //noinspection EqualsWithItself
         assert app.equals(app);
         assert !app.equals(new EzySimpleApplication());
 

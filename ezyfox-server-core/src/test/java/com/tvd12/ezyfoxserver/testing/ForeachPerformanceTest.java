@@ -14,9 +14,7 @@ public class ForeachPerformanceTest extends BaseTest {
     public void test() {
         List<String> list = Lists.newArrayList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
         long time1 = Performance.create()
-            .test(() -> {
-                list.forEach(s -> {String s1 = s + 1;});
-            })
+            .test(() -> list.forEach(s -> {String s1 = s + 1;}))
             .getTime();
 
         long time2 = Performance.create()
@@ -31,18 +29,18 @@ public class ForeachPerformanceTest extends BaseTest {
         System.out.println("time2 = " + time2);
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Test
     public void test2() {
         List<String> list1 = Lists.newArrayList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
         List<String> list2 = Lists.newArrayList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
         long time1 = Performance.create()
-            .test(() -> {
-                list1.addAll(list2);
-            })
+            .test(() -> list1.addAll(list2))
             .getTime();
 
         long time2 = Performance.create()
             .test(() -> {
+                //noinspection UseBulkOperation
                 list2.forEach(s -> list1.add(s));
             })
             .getTime();

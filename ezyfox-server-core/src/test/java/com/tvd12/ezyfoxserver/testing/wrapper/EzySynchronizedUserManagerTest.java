@@ -33,6 +33,5 @@ public class EzySynchronizedUserManagerTest {
         userManager.removeLock(user1.getName());
         userManager.clear();
         userManager.destroy();
-
     }
 }

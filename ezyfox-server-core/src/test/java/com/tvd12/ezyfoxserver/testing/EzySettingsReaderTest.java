@@ -12,7 +12,6 @@ public class EzySettingsReaderTest {
 
     @Test
     public void test() throws Exception {
-//        JAXBContext jaxbContext = JAXBContext.newInstance(EzyFoxSettings.class);
         JAXBContext jaxbContext = JAXBContext.newInstance("com.tvd12.ezyfoxserver", getClass().getClassLoader());
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         EzySimpleSettings settings = jaxbUnmarshaller
@@ -24,6 +23,4 @@ public class EzySettingsReaderTest {
         return getClass().getClassLoader()
             .getResourceAsStream("ezy-settings.xml");
     }
-
-
 }

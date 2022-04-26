@@ -14,9 +14,7 @@ public class EzySocketEventLoopOneHandlerTest {
         handler.setEventHandler(new EzySocketEventHandler() {
 
             @Override
-            public void destroy() {
-
-            }
+            public void destroy() {}
 
             @Override
             public void handleEvent() {
@@ -34,6 +32,5 @@ public class EzySocketEventLoopOneHandlerTest {
         protected String getThreadName() {
             return "test";
         }
-
     }
 }

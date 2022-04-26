@@ -22,6 +22,7 @@ public class ByteBufferTest extends BaseTest {
 
         start = System.currentTimeMillis();
         for (int i = 0; i < 1000000; ++i) {
+            //noinspection ResultOfMethodCallIgnored
             ByteBuffer.wrap(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9});
         }
         offset = System.currentTimeMillis() - start;

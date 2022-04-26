@@ -33,8 +33,7 @@ public class EzySocketStreamHandlerTest {
         EzySocketStreamHandler handler = new EzySocketStreamHandler();
 
         EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);
-        EzySocketDataHandlerGroup dataHandlerGroup = null;
-        when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(dataHandlerGroup);
+        when(dataHandlerGroupFetcher.getDataHandlerGroup(any(EzySession.class))).thenReturn(null);
 
         EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
         EzySession session = spy(EzyAbstractSession.class);
@@ -76,7 +75,7 @@ public class EzySocketStreamHandlerTest {
         handler.setStreamQueue(streamQueue);
         handler.setDataHandlerGroupFetcher(dataHandlerGroupFetcher);
 
-        Thread thread = new Thread(() -> handler.handleEvent());
+        Thread thread = new Thread(handler::handleEvent);
         thread.start();
         Thread.sleep(100);
         thread.interrupt();

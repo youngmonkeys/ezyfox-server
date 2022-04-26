@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting.EzySimpleListenEven
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class EzyZoneSettingBuilderTest {
 
@@ -90,8 +91,8 @@ public class EzyZoneSettingBuilderTest {
         assertEquals(pluginSetting.getListenEvents().getEvents().size(), 1);
 
         userManagementSetting = setting.getUserManagement();
-        assertEquals(userManagementSetting.isAllowChangeSession(), true);
-        assertEquals(userManagementSetting.isAllowGuestLogin(), true);
+        assertTrue(userManagementSetting.isAllowChangeSession());
+        assertTrue(userManagementSetting.isAllowGuestLogin());
         assertEquals(userManagementSetting.getGuestNamePrefix(), "Guest#");
         assertEquals(userManagementSetting.getMaxSessionPerUser(), 3);
         assertEquals(userManagementSetting.getUserMaxIdleTimeInSecond(), 100);
@@ -101,14 +102,13 @@ public class EzyZoneSettingBuilderTest {
     public static class TestAppEntryLoader implements EzyAppEntryLoader {
 
         public TestAppEntryLoader(String config) {
-
+            System.out.println(config);
         }
 
         @Override
         public EzyAppEntry load() throws Exception {
             return null;
         }
-
     }
 
     public static class TestPluginEntryLoader implements EzyPluginEntryLoader {
@@ -127,6 +127,5 @@ public class EzyZoneSettingBuilderTest {
         public void handle(EzyZoneContext ctx, EzyServerReadyEvent event) {
             // add logic here
         }
-
     }
 }

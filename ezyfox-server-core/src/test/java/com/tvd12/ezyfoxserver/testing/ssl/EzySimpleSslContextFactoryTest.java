@@ -36,7 +36,6 @@ public class EzySimpleSslContextFactoryTest extends BaseCoreTest {
                 return null;
             }
 
-            ;
         };
         EzySslConfig sslConfig = mock(EzySslConfig.class);
 

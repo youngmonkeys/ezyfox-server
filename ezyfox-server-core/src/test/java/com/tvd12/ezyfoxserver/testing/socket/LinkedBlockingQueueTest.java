@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -22,9 +23,9 @@ public class LinkedBlockingQueueTest extends BaseTest {
     @Test
     public void test1() {
         LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>(3);
-        assert queue.offer(new Object());
-        assert queue.offer(new Object());
-        assert queue.offer(new Object());
-        assert !queue.offer(new Object());
+        Asserts.assertTrue(queue.offer(new Object()));
+        Asserts.assertTrue(queue.offer(new Object()));
+        Asserts.assertTrue(queue.offer(new Object()));
+        Asserts.assertFalse(queue.offer(new Object()));
     }
 }

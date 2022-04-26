@@ -19,6 +19,7 @@ import com.tvd12.ezyfoxserver.event.EzyUserAccessAppEvent;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
 import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -40,10 +41,10 @@ public class EzySimpleZoneContextTest extends BaseTest {
         context.setParent(parent);
         context.init();
         assert context.get(EzyBroadcastEvent.class) != null;
-        assert context.get(Void.class) == null;
-        context.addCommand(ExCommand.class, () -> new ExCommand());
+        Asserts.assertNull(context.get(Void.class));
+        context.addCommand(ExCommand.class, ExCommand::new);
         assert context.cmd(ExCommand.class) != null;
-        assert context.cmd(Void.class) == null;
+        Asserts.assertNull(context.cmd(Void.class));
         context.broadcast(EzyEventType.SERVER_INITIALIZING, new EzySimpleServerInitializingEvent(), true);
         context.broadcastApps(EzyEventType.SERVER_READY, new EzySimpleServerReadyEvent(), true);
         EzySimpleUser user = new EzySimpleUser();
@@ -52,6 +53,7 @@ public class EzySimpleZoneContextTest extends BaseTest {
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, "dungtv", true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, user, true);
         context.broadcastApps(EzyEventType.USER_ACCESS_APP, accessAppEvent, EzyPredicates.ALWAYS_TRUE, true);
+        //noinspection EqualsWithItself
         assert context.equals(context);
         EzyZoneContext zoneContext2 = mock(EzyZoneContext.class);
         EzySimpleZone zone2 = new EzySimpleZone();
@@ -89,6 +91,5 @@ public class EzySimpleZoneContextTest extends BaseTest {
         public Boolean execute() {
             return Boolean.TRUE;
         }
-
     }
 }

@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.socket;
 
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +23,12 @@ public class PriorityBlockingQueueTest extends BaseTest {
         MyRequest loginRequest2 = new MyRequest(System.currentTimeMillis(), EzyCommand.LOGIN);
         MyRequest loginRequest3 = new MyRequest(System.currentTimeMillis() + 100, EzyCommand.LOGIN);
 
-        assert queue.offer(handshakeRequest2);
-        assert queue.offer(handshakeRequest3);
-        assert queue.offer(handshakeRequest1);
-        assert queue.offer(loginRequest2);
-        assert queue.offer(loginRequest3);
-        assert queue.offer(loginRequest1);
+        Asserts.assertTrue(queue.offer(handshakeRequest2));
+        Asserts.assertTrue(queue.offer(handshakeRequest3));
+        Asserts.assertTrue(queue.offer(handshakeRequest1));
+        Asserts.assertTrue(queue.offer(loginRequest2));
+        Asserts.assertTrue(queue.offer(loginRequest3));
+        Asserts.assertTrue(queue.offer(loginRequest1));
 
         assert queue.take() == handshakeRequest1;
         assert queue.take() == handshakeRequest2;
@@ -63,14 +64,7 @@ public class PriorityBlockingQueueTest extends BaseTest {
             if (one.getCommand().getPriority() < second.getCommand().getPriority()) {
                 return -1;
             }
-            if (one.getTimestamp() > second.getTimestamp()) {
-                return 1;
-            }
-            if (one.getTimestamp() < second.getTimestamp()) {
-                return -1;
-            }
-            return 0;
+            return Long.compare(one.getTimestamp(), second.getTimestamp());
         }
-
     }
 }

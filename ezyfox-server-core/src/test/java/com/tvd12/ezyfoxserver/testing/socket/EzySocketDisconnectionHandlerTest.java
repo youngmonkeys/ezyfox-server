@@ -36,8 +36,7 @@ public class EzySocketDisconnectionHandlerTest {
         EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
 
         EzySocketDataHandlerGroupRemover dataHandlerGroupRemover = mock(EzySocketDataHandlerGroupRemover.class);
-        EzySocketDataHandlerGroup handlerGroup = null;
-        when(dataHandlerGroupRemover.removeHandlerGroup(any(EzySession.class))).thenReturn(handlerGroup);
+        when(dataHandlerGroupRemover.removeHandlerGroup(any(EzySession.class))).thenReturn(null);
 
         EzySession session = spy(EzyAbstractSession.class);
         EzySocketDisconnection disconnection = new EzySimpleSocketDisconnection(session);
@@ -67,7 +66,7 @@ public class EzySocketDisconnectionHandlerTest {
     }
 
     @Test
-    public void processDisconnectionQueueInterrupTest() throws Exception {
+    public void processDisconnectionQueueInterruptTest() throws Exception {
         EzySocketDisconnectionHandler handler = new EzySocketDisconnectionHandler();
 
         EzySocketDisconnectionQueue disconnectionQueue = new EzyBlockingSocketDisconnectionQueue();
@@ -78,7 +77,7 @@ public class EzySocketDisconnectionHandlerTest {
 
         handler.setDisconnectionQueue(disconnectionQueue);
         handler.setDataHandlerGroupRemover(dataHandlerGroupRemover);
-        Thread thread = new Thread(() -> handler.handleEvent());
+        Thread thread = new Thread(handler::handleEvent);
         thread.start();
         Thread.sleep(100L);
         thread.interrupt();

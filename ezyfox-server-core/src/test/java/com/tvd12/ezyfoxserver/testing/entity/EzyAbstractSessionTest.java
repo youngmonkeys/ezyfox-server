@@ -21,7 +21,7 @@ import static org.testng.Assert.assertEquals;
 
 public class EzyAbstractSessionTest extends BaseCoreTest {
 
-    @SuppressWarnings("unlikely-arg-type")
+    @SuppressWarnings({"unlikely-arg-type", "EqualsWithItself", "ConstantConditions", "EqualsBetweenInconvertibleTypes"})
     @Test
     public void test() {
         MyTestSession session = new MyTestSession();

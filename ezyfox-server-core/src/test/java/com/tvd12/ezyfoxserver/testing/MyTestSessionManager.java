@@ -43,6 +43,5 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
                 }
             };
         }
-
     }
 }

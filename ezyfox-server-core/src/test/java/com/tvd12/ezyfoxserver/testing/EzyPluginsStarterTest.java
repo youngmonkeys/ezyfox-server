@@ -31,14 +31,10 @@ public class EzyPluginsStarterTest extends BaseTest {
                         return Sets.newHashSet("test");
                     }
 
-                    ;
-
                     public EzyPluginEntryLoader newPluginEntryLoader(String pluginName)
                         throws Exception {
                         throw new Exception();
                     }
-
-                    ;
                 };
             }
         }

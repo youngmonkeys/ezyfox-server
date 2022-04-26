@@ -12,7 +12,6 @@ public class EzyAbstractServerEventControllerTest {
             @Override
             public void handle(EzyServerContext ctx, Object event) {
             }
-
         };
     }
 }

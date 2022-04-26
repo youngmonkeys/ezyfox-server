@@ -54,7 +54,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
     }
 
     @Test
-    public void handleSocketSSLTest() throws Exception {
+    public void handleSocketSSLTest() {
         // given
         EzyHandshakeController sut = new EzyHandshakeController();
         EzyServerContext serverContext = mock(EzyServerContext.class);

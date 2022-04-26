@@ -7,6 +7,7 @@ import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class EzySimpleAdminsSettingTest extends BaseTest {
@@ -30,7 +31,7 @@ public class EzySimpleAdminsSettingTest extends BaseTest {
         adminSetting.setAccessToken("token1");
         adminSetting.setUsername("user1");
         adminSetting.setPassword("password1");
-        setting.setAdmins(Arrays.asList(adminSetting1));
+        setting.setAdmins(Collections.singletonList(adminSetting1));
     }
 
     @Test

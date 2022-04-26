@@ -14,7 +14,7 @@ import com.tvd12.ezyfoxserver.response.EzySimpleResponse;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -104,7 +104,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
 
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
@@ -125,7 +125,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
 
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
@@ -146,7 +146,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.PONG);
         EzySession recipient = spy(EzyAbstractSession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
 
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);
@@ -168,7 +168,7 @@ public class EzySendResponseImplTest {
         EzySendResponseImpl cmd = new EzySendResponseImpl(server);
         EzyResponse response = new EzySimpleResponse(EzyCommand.APP_REQUEST);
         EzySession recipient = spy(EzyAbstractSession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
 
         // when
         cmd.execute(response, recipients, false, false, EzyTransportType.TCP);

@@ -94,6 +94,5 @@ public class EzyDatagramChannelPoolTest {
         protected void implCloseSelectableChannel() throws IOException {
             throw new IOException("close test");
         }
-
     }
 }

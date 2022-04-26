@@ -81,9 +81,8 @@ public class EzyAbstractResponseApiTest {
         }
 
         @Override
-        protected Object encodeData(EzyArray data) throws Exception {
+        protected Object encodeData(EzyArray data) {
             return null;
         }
-
     }
 }

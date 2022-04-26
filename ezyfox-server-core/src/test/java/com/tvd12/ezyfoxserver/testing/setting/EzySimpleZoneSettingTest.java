@@ -10,11 +10,11 @@ public class EzySimpleZoneSettingTest {
     public void test() {
         EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
         setting.setConfigFile("config.properties");
-        EzySimpleAppsSetting appsSetting = (EzySimpleAppsSetting) setting.getApplications();
+        EzySimpleAppsSetting appsSetting = setting.getApplications();
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("app");
         appsSetting.setItem(appSetting);
-        EzySimplePluginsSetting pluginsSetting = (EzySimplePluginsSetting) setting.getPlugins();
+        EzySimplePluginsSetting pluginsSetting = setting.getPlugins();
         EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
         pluginSetting.setName("plugin");
         pluginsSetting.setItem(pluginSetting);
@@ -22,6 +22,7 @@ public class EzySimpleZoneSettingTest {
         assert setting.getAppByName("app") == appSetting;
         assert setting.getPluginNames().size() == 1;
         assert setting.getPluginByName("plugin") == pluginSetting;
+        //noinspection EqualsWithItself
         assert setting.equals(setting);
         assert !setting.equals(new EzySimpleZoneSetting());
         assert setting.hashCode() == setting.hashCode();

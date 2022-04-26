@@ -48,7 +48,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
 
     @SuppressWarnings("rawtypes")
     @Test
-    public void normalCase() throws Exception {
+    public void normalCase() {
         int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -63,12 +63,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -155,12 +155,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -241,13 +241,13 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        doThrow(new IllegalArgumentException("server maintain")).when(streamingInteceptor).intercept(any(), any());
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        doThrow(new IllegalArgumentException("server maintain")).when(streamingInterceptor).intercept(any(), any());
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -301,12 +301,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -346,7 +346,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
             .append(loginData)
             .build();
 
-        doThrow(new IllegalStateException("server maintain")).when(loginInteceptor).intercept(any(), any());
+        doThrow(new IllegalStateException("server maintain")).when(loginInterceptor).intercept(any(), any());
         FieldUtil.setFieldValue(handler, "context", null);
 
         handler.dataReceived(EzyCommand.LOGIN, requestData);
@@ -370,12 +370,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -411,7 +411,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
             .append(EzyEntityFactory.newObject())
             .build();
 
-        doThrow(new IllegalStateException("server maintain")).when(loginInteceptor).intercept(any(), any());
+        doThrow(new IllegalStateException("server maintain")).when(loginInterceptor).intercept(any(), any());
         FieldUtil.setFieldValue(handler, "context", null);
         FieldUtil.setFieldValue(handler, "active", false);
 
@@ -425,7 +425,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
 
     @SuppressWarnings({"rawtypes"})
     @Test
-    public void notifyAppsSessionRemoved0Case() throws Exception {
+    public void notifyAppsSessionRemoved0Case() {
         int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -440,12 +440,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -486,7 +486,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
 
     @SuppressWarnings({"rawtypes"})
     @Test
-    public void notifyPluginsSessionRemovedCase() throws Exception {
+    public void notifyPluginsSessionRemovedCase() {
         int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -501,12 +501,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -547,7 +547,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
 
     @SuppressWarnings({"rawtypes"})
     @Test
-    public void closeSessionExceptionCase() throws Exception {
+    public void closeSessionExceptionCase() {
         int zoneId = 1;
         EzyServerContext serverContext = mock(EzyServerContext.class);
         EzyZoneContext zoneContext = mock(EzyZoneContext.class);
@@ -562,12 +562,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);
@@ -643,12 +643,11 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
 
         // then
         verify(sessionManager, times(1)).removeSession(session, EzyDisconnectReason.MAX_REQUEST_PER_SECOND);
-        ;
     }
 
 
     @Test
-    public void dataReceivedValidateStateFalse() throws Exception {
+    public void dataReceivedValidateStateFalse() {
         // given
         MyTestDataHandler sut = createHandler();
         sut.destroy();
@@ -663,7 +662,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void dataReceivedValidateSessionIsNull() throws Exception {
+    public void dataReceivedValidateSessionIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "session", null);
@@ -678,7 +677,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void dataReceivedValidateSessionInActive() throws Exception {
+    public void dataReceivedValidateSessionInActive() {
         // given
         MyTestDataHandler sut = createHandler();
         EzySession session = FieldUtil.getFieldValue(sut, "session");
@@ -694,7 +693,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void streamingReceivedValidateStateFalse() throws Exception {
+    public void streamingReceivedValidateStateFalse() {
         // given
         MyTestDataHandler sut = createHandler();
         sut.destroy();
@@ -707,7 +706,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void streamingReceivedValidateSessionIsNull() throws Exception {
+    public void streamingReceivedValidateSessionIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "session", null);
@@ -720,7 +719,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void processMaxRequestPerSecondActionDiffDisconnection() throws Exception {
+    public void processMaxRequestPerSecondActionDiffDisconnection() {
         // given
         MyTestDataHandler sut = createHandler();
         EzySessionManagementSetting.EzyMaxRequestPerSecond maxRequestPerSecond =
@@ -735,7 +734,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void processMaxRequestPerSecondWithSessionManagerIsNull() throws Exception {
+    public void processMaxRequestPerSecondWithSessionManagerIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "sessionManager", null);
@@ -748,7 +747,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void debugLogReceivedDataIsNotDebug() throws Exception {
+    public void debugLogReceivedDataIsNotDebug() {
         // given
         MyTestDataHandler sut = createHandler();
         EzySettings settings = FieldUtil.getFieldValue(sut, "settings");
@@ -767,7 +766,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void debugLogReceivedDataUnloggableCommandsIsPing() throws Exception {
+    public void debugLogReceivedDataIgnoredLogCommandsIsPing() {
         // given
         MyTestDataHandler sut = createHandler();
         EzySettings settings = FieldUtil.getFieldValue(sut, "settings");
@@ -786,7 +785,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void exceptionCaughtHandlerNull() throws Exception {
+    public void exceptionCaughtHandlerNull() {
         // given
         MyTestDataHandler sut = createHandler();
         Throwable e = new Exception("just test");
@@ -797,7 +796,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void removeSessionWithSessionManagerIsNull() throws Exception {
+    public void removeSessionWithSessionManagerIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "sessionManager", null);
@@ -810,7 +809,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void notifySessionRemovedZoneContextIsNull() throws Exception {
+    public void notifySessionRemovedZoneContextIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "zoneContext", null);
@@ -827,7 +826,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void notifyAppsSessionRemovedUserNull() throws Exception {
+    public void notifyAppsSessionRemovedUserNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "user", null);
@@ -844,7 +843,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void responseContextIsNull() throws Exception {
+    public void responseContextIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         FieldUtil.setFieldValue(sut, "context", null);
@@ -861,7 +860,7 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
     }
 
     @Test
-    public void exceptionCaughtSessionManagerIsNull() throws Exception {
+    public void exceptionCaughtSessionManagerIsNull() {
         // given
         MyTestDataHandler sut = createHandler();
         Throwable e = new EzyMaxRequestSizeException("just test");
@@ -890,12 +889,12 @@ public class EzySimpleDataHandlerTest extends BaseCoreTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);

@@ -14,7 +14,7 @@ public class TestBlockingSocketUserRemovalQueue
     private final BlockingQueue<EzySocketUserRemoval> queue;
 
     public TestBlockingSocketUserRemovalQueue() {
-        this.queue = new LinkedBlockingQueue<EzySocketUserRemoval>();
+        this.queue = new LinkedBlockingQueue<>();
     }
 
     @Override
@@ -39,13 +39,13 @@ public class TestBlockingSocketUserRemovalQueue
 
     @Override
     public void remove(EzySocketUserRemoval removal) {
+        //noinspection ResultOfMethodCallIgnored
         queue.remove(removal);
     }
 
     @Override
     public EzySocketUserRemoval take() throws InterruptedException {
-        EzySocketUserRemoval removal = queue.take();
-        return removal;
+        return queue.take();
     }
 
 }

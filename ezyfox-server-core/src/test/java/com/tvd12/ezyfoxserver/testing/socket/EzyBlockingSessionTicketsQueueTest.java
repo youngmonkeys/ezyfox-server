@@ -79,6 +79,5 @@ public class EzyBlockingSessionTicketsQueueTest extends BaseTest {
             super();
             this.id = ID_GENTOR.incrementAndGet();
         }
-
     }
 }

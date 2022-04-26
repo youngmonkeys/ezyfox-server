@@ -44,6 +44,5 @@ public class EzyAbstractSettingTest extends BaseTest {
         protected AtomicInteger getIdCounter() {
             return GENTER;
         }
-
     }
 }

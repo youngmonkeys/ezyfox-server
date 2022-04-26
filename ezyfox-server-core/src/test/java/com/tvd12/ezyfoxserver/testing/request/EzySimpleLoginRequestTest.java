@@ -6,6 +6,5 @@ import org.testng.annotations.Test;
 public class EzySimpleLoginRequestTest extends BaseCoreTest {
 
     @Test
-    public void test() {
-    }
+    public void test() {}
 }

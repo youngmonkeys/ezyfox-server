@@ -54,15 +54,9 @@ public class MyTestStarter extends EzyStarter {
 
             @Override
             protected EzyObjectFactory<ExSession> newObjectFactory() {
-                return new EzyObjectFactory<MyTestStarter.ExSession>() {
-                    @Override
-                    public ExSession newProduct() {
-                        return new ExSession();
-                    }
-                };
+                return ExSession::new;
             }
         }
-
     }
 
     public static class ExSession extends EzyAbstractSession {
@@ -79,12 +73,9 @@ public class MyTestStarter extends EzyStarter {
         }
 
         @Override
-        public void close() {
-        }
+        public void close() {}
 
         @Override
-        public void disconnect(EzyConstant disconnectReason) {
-        }
-
+        public void disconnect(EzyConstant disconnectReason) {}
     }
 }

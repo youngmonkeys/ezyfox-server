@@ -76,12 +76,10 @@ public class EzySocketWriterTest extends BaseTest {
         socketWriter.setSessionTicketsQueue(sessionTicketsQueue);
         socketWriter.setWriterGroupFetcher(writerGroupFetcher);
 
-        EzyPacketQueue packetQueue = null;
-
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         session.setActivated(true);
         session.setSessionTicketsQueue(sessionTicketsQueue);
-        session.setPacketQueue(packetQueue);
+        session.setPacketQueue(null);
         sessionTicketsQueue.add(session);
 
         socketWriter.handleEvent();
@@ -92,8 +90,7 @@ public class EzySocketWriterTest extends BaseTest {
         EzySessionTicketsQueue sessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
 
         EzySocketWriterGroupFetcher writerGroupFetcher = mock(EzySocketWriterGroupFetcher.class);
-        EzySocketWriterGroup writerGroup = null;
-        when(writerGroupFetcher.getWriterGroup(any(EzySession.class))).thenReturn(writerGroup);
+        when(writerGroupFetcher.getWriterGroup(any(EzySession.class))).thenReturn(null);
 
         EzySocketWriter socketWriter = new EzySocketWriter();
         socketWriter.setSessionTicketsQueue(sessionTicketsQueue);
@@ -143,9 +140,7 @@ public class EzySocketWriterTest extends BaseTest {
         socketWriter.setSessionTicketsQueue(sessionTicketsQueue);
         socketWriter.setWriterGroupFetcher(writerGroupFetcher);
 
-        Thread thread = new Thread(() -> {
-            socketWriter.handleEvent();
-        });
+        Thread thread = new Thread(socketWriter::handleEvent);
         thread.start();
         Thread.sleep(100);
         thread.interrupt();

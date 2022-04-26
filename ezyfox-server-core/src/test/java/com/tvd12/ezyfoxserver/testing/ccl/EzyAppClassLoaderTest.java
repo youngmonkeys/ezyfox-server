@@ -22,6 +22,7 @@ public class EzyAppClassLoaderTest extends BaseTest {
         try {
             loader.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -60,9 +61,10 @@ public class EzyAppClassLoaderTest extends BaseTest {
             try {
                 loader.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

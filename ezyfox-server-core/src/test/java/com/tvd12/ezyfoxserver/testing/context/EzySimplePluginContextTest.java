@@ -19,7 +19,7 @@ import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -40,6 +40,7 @@ public class EzySimplePluginContextTest extends BaseTest {
         pluginContext.setParent(zoneContext);
         pluginContext.setPlugin(plugin);
         pluginContext.init();
+        //noinspection EqualsWithItself
         assert pluginContext.equals(pluginContext);
         EzySimplePluginContext pluginContext2 = new EzySimplePluginContext();
         assert !pluginContext.equals(pluginContext2);
@@ -60,7 +61,7 @@ public class EzySimplePluginContextTest extends BaseTest {
         // given
         EzyData data = mock(EzyData.class);
         EzySession recipient = mock(EzySession.class);
-        List<EzySession> recipients = Arrays.asList(recipient);
+        List<EzySession> recipients = Collections.singletonList(recipient);
         boolean encrypted = RandomUtil.randomBoolean();
 
         EzyPluginSendResponse sendResponse = mock(EzyPluginSendResponse.class);

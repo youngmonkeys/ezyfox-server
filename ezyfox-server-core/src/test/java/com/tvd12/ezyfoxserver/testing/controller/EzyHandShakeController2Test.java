@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import java.security.KeyPair;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class EzyHandShakeController2Test extends EzyBaseControllerTest {
 
@@ -24,7 +25,7 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
         EzySession first = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("first.token:    " + first);
         System.err.println("alive sessions: " + getSessionManager(ctx).getAliveSessions());
-        assertEquals(getSessionManager(ctx).containsSession(first.getId()), true);
+        assertTrue(getSessionManager(ctx).containsSession(first.getId()));
         EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
         System.err.println("session: " + session);
         EzyArray data = newHandShakeData(first.getToken());
@@ -47,14 +48,6 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
             .append(true)
             .append(reconnectToken)
             .build();
-    }
-
-    protected EzySession newSession(String reconnectToken) {
-        KeyPair keyPair = newRSAKeys();
-        EzySession session = super.newSession();
-        session.setToken(reconnectToken);
-        session.setPublicKey(keyPair.getPublic().getEncoded());
-        return session;
     }
 
     @Override

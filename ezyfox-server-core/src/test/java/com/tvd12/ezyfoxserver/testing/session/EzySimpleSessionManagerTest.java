@@ -14,7 +14,6 @@ public class EzySimpleSessionManagerTest {
     public static void main(String[] args) throws Exception {
         MySessionManager manager = MySessionManager.builder()
             .build();
-//        manager.start();
         Thread.sleep(30 * 1000);
         List<MySession> sessions = new ArrayList<>();
         System.out.println("add sessions");
@@ -32,7 +31,6 @@ public class EzySimpleSessionManagerTest {
 
     public static class MySession extends EzyAbstractSession {
         private static final long serialVersionUID = 6212756561210534733L;
-
     }
 
     public static class MySessionFactory extends EzyAbstractSessionFactory<MySession> {
@@ -41,7 +39,6 @@ public class EzySimpleSessionManagerTest {
         protected MySession newSession() {
             return new MySession();
         }
-
     }
 
     public static class MySessionManager extends EzySimpleSessionManager<MySession> {
@@ -69,8 +66,6 @@ public class EzySimpleSessionManagerTest {
             protected EzyObjectFactory<MySession> newObjectFactory() {
                 return new MySessionFactory();
             }
-
         }
-
     }
 }

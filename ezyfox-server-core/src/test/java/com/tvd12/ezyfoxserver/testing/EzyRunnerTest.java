@@ -14,12 +14,10 @@ public class EzyRunnerTest extends BaseTest {
     }
 
     @Test
-    public void testWithNoArg() throws Exception {
+    public void testWithNoArg() {
         try {
             EzyRunner runner = new MyTestRunner() {
                 protected void validateArguments(String[] args) {}
-
-                ;
             };
             runner.run(new String[0]);
         } catch (Exception e) {

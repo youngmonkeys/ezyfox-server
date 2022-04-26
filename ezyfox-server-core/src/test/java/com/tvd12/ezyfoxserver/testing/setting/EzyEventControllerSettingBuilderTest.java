@@ -24,12 +24,10 @@ public class EzyEventControllerSettingBuilderTest {
         // then
         Asserts.assertEquals(A.class.getName(), eventController.getController());
         Asserts.assertEquals(EzyEventType.SERVER_READY.toString(), eventController.getEventType());
-        ;
     }
 
     private static class A implements EzyEventController<EzyServerContext, EzyEvent> {
         @Override
-        public void handle(EzyServerContext ctx, EzyEvent event) {
-        }
+        public void handle(EzyServerContext ctx, EzyEvent event) {}
     }
 }

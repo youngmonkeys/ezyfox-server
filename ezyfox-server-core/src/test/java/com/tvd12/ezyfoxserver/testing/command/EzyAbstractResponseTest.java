@@ -53,8 +53,6 @@ public class EzyAbstractResponseTest {
         }
 
         @Override
-        protected void sendData(EzyData data, EzyTransportType transportType) {
-        }
-
+        protected void sendData(EzyData data, EzyTransportType transportType) {}
     }
 }

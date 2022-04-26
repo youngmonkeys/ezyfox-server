@@ -6,6 +6,5 @@ import org.testng.annotations.Test;
 public class EzyErrorResponseTest extends BaseTest {
 
     @Test
-    public void test() {
-    }
+    public void test() {}
 }

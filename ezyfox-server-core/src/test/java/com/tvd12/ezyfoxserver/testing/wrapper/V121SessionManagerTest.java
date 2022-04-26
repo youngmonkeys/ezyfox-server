@@ -74,8 +74,8 @@ public class V121SessionManagerTest {
         // when
         sut.start();
 
-        for (int i = 0; i < threads.length; ++i) {
-            threads[i].start();
+        for (Thread thread : threads) {
+            thread.start();
         }
         Thread.sleep(1000);
         disconnectionThread.interrupt();

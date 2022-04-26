@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 public class EzySimpleServerContextTest extends BaseCoreTest {
 
-    private EzySimpleServerContext context;
+    private final EzySimpleServerContext context;
 
     public EzySimpleServerContextTest() {
         super();
@@ -41,7 +41,7 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
 
     @Test
     public void test() {
-        EzySimpleServerContext ctx = ((EzySimpleServerContext) context);
+        EzySimpleServerContext ctx = context;
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         EzySimpleApplication app = new EzySimpleApplication();
         EzyZoneContext zoneContext = ctx.getZoneContexts().get(0);
@@ -80,7 +80,7 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         assert pluginContext.getProperty("test.2") != null;
 
         assert context.get(EzyBroadcastEvent.class) != null;
-        context.addCommand(ExCommand.class, () -> new ExCommand());
+        context.addCommand(ExCommand.class, ExCommand::new);
         assert context.cmd(ExCommand.class) != null;
         try {
             context.cmd(Void.class);
@@ -174,6 +174,5 @@ public class EzySimpleServerContextTest extends BaseCoreTest {
         public Boolean execute() {
             return Boolean.TRUE;
         }
-
     }
 }

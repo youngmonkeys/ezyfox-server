@@ -27,6 +27,5 @@ public class EzyBlockingSocketUserRemovalQueueTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

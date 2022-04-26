@@ -15,7 +15,7 @@ public class EzyAddCommandImplTest extends BaseTest {
         EzyAbstractContext ctx = spy(EzyAbstractContext.class);
         ctx.init();
         EzyAddCommandImpl cmd = new EzyAddCommandImpl(ctx);
-        cmd.add(Cmd.class, () -> new Cmd());
+        cmd.add(Cmd.class, Cmd::new);
     }
 
     public static class Cmd implements EzyCommand<Boolean> {
@@ -24,6 +24,5 @@ public class EzyAddCommandImplTest extends BaseTest {
         public Boolean execute() {
             return Boolean.TRUE;
         }
-
     }
 }

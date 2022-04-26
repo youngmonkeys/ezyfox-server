@@ -61,28 +61,21 @@ public class EzyStarterTest {
 
         @Override
         protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
-            EzyAbstractServerBootstrapBuilder builder = new EzyAbstractServerBootstrapBuilder() {
+            return new EzyAbstractServerBootstrapBuilder() {
 
                 @Override
                 protected EzyServerBootstrap newServerBootstrap() {
-                    EzyServerBootstrap bootstrap = new EzyServerBootstrap() {
+                    return new EzyServerBootstrap() {
 
                         @Override
-                        protected void startOtherBootstraps(Runnable callback) throws Exception {
-                        }
+                        protected void startOtherBootstraps(Runnable callback) {}
 
                         @Override
-                        protected void startLocalBootstrap() throws Exception {
-                        }
-
+                        protected void startLocalBootstrap() {}
                     };
-                    return bootstrap;
                 }
-
             };
-            return builder;
         }
-
 
         @Override
         protected EzySimpleSessionManager.Builder newSessionManagerBuilder(
@@ -96,7 +89,6 @@ public class EzyStarterTest {
             public EzyStarter build() {
                 return new ExEzyStarter(this);
             }
-
         }
     }
 
@@ -115,12 +107,9 @@ public class EzyStarterTest {
 
             @Override
             protected EzyObjectFactory newObjectFactory() {
-                EzyObjectFactory factory = mock(EzyObjectFactory.class);
-                return factory;
+                return mock(EzyObjectFactory.class);
             }
-
         }
-
     }
 }
 

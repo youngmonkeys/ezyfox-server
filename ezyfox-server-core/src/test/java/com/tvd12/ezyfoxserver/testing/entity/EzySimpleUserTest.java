@@ -89,7 +89,9 @@ public class EzySimpleUserTest extends BaseTest {
 
         // when
         // then
+        //noinspection ConstantConditions
         Asserts.assertFalse(user1.equals(null));
+        //noinspection EqualsWithItself
         Asserts.assertTrue(user1.equals(user1));
         Asserts.assertTrue(user1.equals(user2));
         Asserts.assertFalse(user1.equals(user3));

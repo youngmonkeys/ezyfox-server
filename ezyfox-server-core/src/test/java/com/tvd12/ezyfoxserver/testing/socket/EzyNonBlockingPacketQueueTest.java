@@ -61,6 +61,5 @@ public class EzyNonBlockingPacketQueueTest extends BaseTest {
         Asserts.assertFalse(result);
     }
 
-    public static class Packet extends EzySimplePacket {
-    }
+    public static class Packet extends EzySimplePacket {}
 }

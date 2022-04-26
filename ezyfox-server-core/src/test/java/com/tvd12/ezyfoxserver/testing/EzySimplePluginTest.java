@@ -15,6 +15,7 @@ public class EzySimplePluginTest extends BaseTest {
         EzySimplePlugin plugin = new EzySimplePlugin();
         EzySimplePluginSetting setting = new EzySimplePluginSetting();
         plugin.setSetting(setting);
+        //noinspection EqualsWithItself
         assert plugin.equals(plugin);
         assert !plugin.equals(new EzySimplePlugin());
 

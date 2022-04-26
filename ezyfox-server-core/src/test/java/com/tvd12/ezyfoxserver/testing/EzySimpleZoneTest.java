@@ -12,6 +12,7 @@ public class EzySimpleZoneTest extends BaseTest {
         EzySimpleZone zone = new EzySimpleZone();
         EzySimpleZoneSetting setting = new EzySimpleZoneSetting();
         zone.setSetting(setting);
+        //noinspection EqualsWithItself
         assert zone.equals(zone);
         assert !zone.equals(new EzySimpleZone());
     }

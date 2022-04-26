@@ -1,24 +1,28 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
 import com.tvd12.ezyfox.callback.EzyCallback;
-import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
-import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfox.codec.EzyMessageHeaderReader;
 import com.tvd12.ezyfox.codec.EzySimpleStringDataDecoder;
 import com.tvd12.ezyfox.codec.EzyStringDataDecoder;
+import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
+import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySimpleSocketStream;
 import com.tvd12.ezyfoxserver.socket.EzySocketStream;
 
 public class EzySimpleWsHandlerGroup
-        extends EzyAbstractHandlerGroup<EzyStringDataDecoder>
-        implements EzyWsHandlerGroup {
+    extends EzyAbstractHandlerGroup<EzyStringDataDecoder>
+    implements EzyWsHandlerGroup {
 
     private final EzyCallback<Object> decodeBytesCallback;
 
     public EzySimpleWsHandlerGroup(Builder builder) {
         super(builder);
         this.decodeBytesCallback = newDecodeBytesCallback();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     protected EzyCallback<Object> newDecodeBytesCallback() {
@@ -37,17 +41,17 @@ public class EzySimpleWsHandlerGroup
 
     @Override
     protected EzyStringDataDecoder newDecoder(Object decoder) {
-        return new EzySimpleStringDataDecoder((EzyStringToObjectDecoder)decoder);
+        return new EzySimpleStringDataDecoder((EzyStringToObjectDecoder) decoder);
     }
 
     @Override
-    public void fireBytesReceived(String bytes) throws Exception {
+    public void fireBytesReceived(String bytes) {
         handleReceivedBytes(bytes);
         executeAddReadBytes(bytes.length());
     }
 
     @Override
-    public void fireBytesReceived(byte[] bytes, int offset, int len) throws Exception {
+    public void fireBytesReceived(byte[] bytes, int offset, int len) {
         handleReceivedBytes(bytes, offset, len);
         executeAddReadBytes(len - offset);
     }
@@ -65,8 +69,7 @@ public class EzySimpleWsHandlerGroup
     private void handleReceivedBytes(String bytes) {
         try {
             decoder.decode(bytes, decodeBytesCallback);
-        }
-        catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             fireExceptionCaught(throwable);
         }
     }
@@ -74,40 +77,35 @@ public class EzySimpleWsHandlerGroup
     private void handleReceivedBytes(byte[] bytes) {
         try {
             decoder.decode(bytes, decodeBytesCallback);
-        }
-        catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             fireExceptionCaught(throwable);
         }
     }
 
     private void handleReceivedBytes(byte[] bytes, int offset, int len) {
         try {
-            if(len <= 1) return;
+            if (len <= 1) {
+                return;
+            }
             byte headerByte = bytes[offset];
             boolean isRawBytes = EzyMessageHeaderReader.readRawBytes(headerByte);
-            if(isRawBytes) {
+            if (isRawBytes) {
                 boolean sessionStreamingEnable = session.isStreamingEnable();
-                if(!streamingEnable || !sessionStreamingEnable) {
+                if (!streamingEnable || !sessionStreamingEnable) {
                     return;
                 }
                 byte[] rawBytes = EzyBytes.copy(bytes, offset, len);
                 EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
                 streamQueue.add(stream);
-            }
-            else {
+            } else {
                 int newLen = len - 1;
                 int newOffset = offset + 1;
                 byte[] messageBytes = EzyBytes.copy(bytes, newOffset, newLen);
                 handleReceivedBytes(messageBytes);
             }
-        }
-        catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             fireExceptionCaught(throwable);
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder extends EzyAbstractHandlerGroup.Builder {

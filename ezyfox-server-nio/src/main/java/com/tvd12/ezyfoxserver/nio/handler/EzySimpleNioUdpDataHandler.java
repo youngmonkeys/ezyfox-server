@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.handler;
 
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SocketChannel;
-import java.util.concurrent.ExecutorService;
-
-import org.eclipse.jetty.websocket.api.Session;
-
 import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfox.codec.EzyMessageHeader;
 import com.tvd12.ezyfox.codec.EzyMessageReaders;
@@ -27,27 +19,29 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelAware;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
-import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPoolAware;
-import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
-import com.tvd12.ezyfoxserver.socket.EzyUdpClientAddressAware;
-import com.tvd12.ezyfoxserver.socket.EzyUdpReceivedPacket;
+import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManagerAware;
-
 import lombok.Setter;
+import org.eclipse.jetty.websocket.api.Session;
+
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.ExecutorService;
 
 @SuppressWarnings("rawtypes")
 public class EzySimpleNioUdpDataHandler
-        extends EzyLoggable
-        implements
-            EzyNioUdpDataHandler,
-            EzySessionManagerAware,
-            EzyHandlerGroupManagerAware,
-            EzyDatagramChannelPoolAware,
-            EzyDestroyable {
+    extends EzyLoggable
+    implements
+    EzyNioUdpDataHandler,
+    EzySessionManagerAware,
+    EzyHandlerGroupManagerAware,
+    EzyDatagramChannelPoolAware,
+    EzyDestroyable {
 
+    protected final ExecutorService executorService;
     @Setter
     protected EzyResponseApi responseApi;
     @Setter
@@ -59,70 +53,76 @@ public class EzySimpleNioUdpDataHandler
     @Setter
     protected EzySocketDataReceiver socketDataReceiver;
 
-    protected final ExecutorService executorService;
-
     public EzySimpleNioUdpDataHandler(int threadPoolSize) {
-        this.executorService =
-                EzyExecutors.newFixedThreadPool(threadPoolSize, "udp-data-handler");
+        this.executorService = EzyExecutors.newFixedThreadPool(
+            threadPoolSize,
+            "udp-data-handler"
+        );
     }
 
     @Override
-    public void fireUdpPacketReceived(EzyUdpReceivedPacket packet) throws Exception {
-        this.executorService.execute(() -> handleReceivedUdpPacket(packet));
+    public void fireUdpPacketReceived(EzyUdpReceivedPacket packet) {
+        this.executorService.execute(() ->
+            handleReceivedUdpPacket(packet)
+        );
     }
 
     protected void handleReceivedUdpPacket(EzyUdpReceivedPacket packet) {
         try {
             EzyMessage message = EzyMessageReaders.bytesToMessage(packet.getBytes());
-            if(message == null)
+            if (message == null) {
                 return;
+            }
             InetSocketAddress udpAddress = packet.getAddress();
             Object socketChannel = handlerGroupManager.getSocketChannel(udpAddress);
-            if(socketChannel != null) {
+            if (socketChannel != null) {
                 SocketAddress tcpAddress = (socketChannel instanceof SocketChannel)
-                    ? ((SocketChannel)socketChannel).getRemoteAddress()
-                    : ((Session)socketChannel).getRemoteAddress();
-                if(isOneClient(tcpAddress, udpAddress))
+                    ? ((SocketChannel) socketChannel).getRemoteAddress()
+                    : ((Session) socketChannel).getRemoteAddress();
+                if (isOneClient(tcpAddress, udpAddress)) {
                     socketDataReceiver.udpReceive(socketChannel, message);
-            }
-            else {
+                }
+            } else {
                 EzyMessageHeader header = message.getHeader();
-                if(header.isUdpHandshake())
+                if (header.isUdpHandshake()) {
                     handleUdpHandshake(packet.getChannel(), udpAddress, message);
+                }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.warn("handle received udp package: {} error: {}({})", packet, e.getClass().getName(), e.getMessage());
         }
     }
 
     protected void handleUdpHandshake(
-            DatagramChannel channel,
-            InetSocketAddress address, EzyMessage message) throws Exception {
+        DatagramChannel channel,
+        InetSocketAddress address, EzyMessage message) throws Exception {
         byte[] content = message.getContent();
-        if(content.length < 11)
+        if (content.length < 11) {
             return;
+        }
         byte[] sessionIdBytes = EzyBytes.copy(content, 0, 8);
         long sessionId = EzyLongs.bin2long(sessionIdBytes);
         byte[] tokenSizeBytes = EzyBytes.copy(content, 8, 2);
         int tokenSize = EzyInts.bin2int(tokenSizeBytes);
-        if(tokenSize > 512)
+        if (tokenSize > 512) {
             return;
+        }
         byte[] tokenBytes = EzyBytes.copy(content, 10, tokenSize);
         EzySession session = sessionManager.getSession(sessionId);
-        if(session == null)
+        if (session == null) {
             return;
+        }
         int responseCode = 498;
         String token = new String(tokenBytes);
         String sessionToken = session.getToken();
-        if(sessionToken.equals(token)) {
+        if (sessionToken.equals(token)) {
             responseCode = 200;
             SocketAddress oldUdpAddress = session.getUdpClientAddress();
             handlerGroupManager.unmapHandlerGroup(oldUdpAddress);
             handlerGroupManager.mapSocketChannel(address, session);
-            ((EzyDatagramChannelAware)session).setDatagramChannel(channel);
-            ((EzyUdpClientAddressAware)session).setUdpClientAddress(address);
-            ((EzyDatagramChannelPoolAware)session).setDatagramChannelPool(datagramChannelPool);
+            ((EzyDatagramChannelAware) session).setDatagramChannel(channel);
+            ((EzyUdpClientAddressAware) session).setUdpClientAddress(address);
+            ((EzyDatagramChannelPoolAware) session).setDatagramChannelPool(datagramChannelPool);
         }
         response(session, responseCode);
     }
@@ -144,8 +144,7 @@ public class EzySimpleNioUdpDataHandler
     protected boolean isOneClient(SocketAddress tcpAddress, SocketAddress udpAddress) {
         String tcpHost = EzySocketAddresses.getHost(tcpAddress);
         String udpHost = EzySocketAddresses.getHost(udpAddress);
-        boolean answer = tcpHost.equals(udpHost);
-        return answer;
+        return tcpHost.equals(udpHost);
     }
 
     @Override

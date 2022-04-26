@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.wrapper;
 
-import java.net.SocketAddress;
-
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -11,11 +9,13 @@ import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroupFetcher;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroupRemover;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroupFetcher;
 
-public interface EzyHandlerGroupManager 
-        extends EzySocketDataHandlerGroupFetcher,
-                EzySocketDataHandlerGroupRemover,
-                EzySocketWriterGroupFetcher,
-                EzyDestroyable {
+import java.net.SocketAddress;
+
+public interface EzyHandlerGroupManager
+    extends EzySocketDataHandlerGroupFetcher,
+    EzySocketDataHandlerGroupRemover,
+    EzySocketWriterGroupFetcher,
+    EzyDestroyable {
 
     <T extends EzyHandlerGroup> T getHandlerGroup(Object connection);
 
@@ -26,5 +26,4 @@ public interface EzyHandlerGroupManager
     void mapSocketChannel(SocketAddress udpAddress, EzySession session);
 
     Object getSocketChannel(SocketAddress udpAddress);
-
 }

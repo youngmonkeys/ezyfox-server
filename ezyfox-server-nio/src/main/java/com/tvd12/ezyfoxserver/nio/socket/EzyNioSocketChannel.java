@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-import static com.tvd12.ezyfox.util.EzyReturner.returnWithException;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import lombok.Getter;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-
-import lombok.Getter;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+import static com.tvd12.ezyfox.util.EzyReturner.returnWithException;
 
 @Getter
 public class EzyNioSocketChannel implements EzyChannel {
@@ -21,14 +20,13 @@ public class EzyNioSocketChannel implements EzyChannel {
 
     public EzyNioSocketChannel(SocketChannel channel) {
         this.channel = channel;
-        this.serverAddress = returnWithException(() -> channel.getLocalAddress());
-        this.clientAddress = returnWithException(() -> channel.getRemoteAddress());
+        this.serverAddress = returnWithException(channel::getLocalAddress);
+        this.clientAddress = returnWithException(channel::getRemoteAddress);
     }
 
     @Override
     public int write(Object data, boolean binary) throws Exception {
-        int writtenBytes = channel.write((ByteBuffer)data);
-        return writtenBytes;
+        return channel.write((ByteBuffer) data);
     }
 
     @SuppressWarnings("unchecked")
@@ -44,17 +42,16 @@ public class EzyNioSocketChannel implements EzyChannel {
 
     @Override
     public boolean isConnected() {
-        boolean connected = channel.isConnected();
-        return connected;
+        return channel.isConnected();
     }
 
     @Override
     public void disconnect() {
-        processWithLogException(() -> channel.finishConnect());
+        processWithLogException(channel::finishConnect);
     }
 
     @Override
     public void close() {
-        processWithLogException(() -> channel.close());
+        processWithLogException(channel::close);
     }
 }

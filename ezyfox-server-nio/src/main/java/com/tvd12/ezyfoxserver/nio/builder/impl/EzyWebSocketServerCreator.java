@@ -1,12 +1,11 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
+import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
+import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -16,17 +15,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
-import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
-import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
-import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class EzyWebSocketServerCreator {
 
@@ -71,8 +65,9 @@ public class EzyWebSocketServerCreator {
         Server server = new Server(threadPool);
         ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
         contextHandlers.addHandler(wsContextHandler);
-        if(setting.isManagementEnable())
+        if (setting.isManagementEnable()) {
             contextHandlers.addHandler(managementHandler());
+        }
         server.setHandler(contextHandlers);
         HttpConfiguration httpConfig = new HttpConfiguration();
         httpConfig.setSecureScheme("https");
@@ -93,26 +88,21 @@ public class EzyWebSocketServerCreator {
     }
 
     protected void configServer(
-            Server server, HttpConfiguration httpConfig, ServerConnector wsConnector) {
+        Server server, HttpConfiguration httpConfig, ServerConnector wsConnector) {
 
     }
 
     private EzyWsHandler newWsHandler() {
         return EzyWsHandler.builder()
-                .sessionManager(sessionManager)
-                .handlerGroupManager(handlerGroupManager)
-                .sessionManagementSetting(sessionManagementSetting)
-                .socketDataReceiver(socketDataReceiver)
-                .build();
+            .sessionManager(sessionManager)
+            .handlerGroupManager(handlerGroupManager)
+            .sessionManagementSetting(sessionManagementSetting)
+            .socketDataReceiver(socketDataReceiver)
+            .build();
     }
 
     private WebSocketCreator newWebSocketCreator(EzyWsHandler handler) {
-        return new WebSocketCreator() {
-            @Override
-            public Object createWebSocket(ServletUpgradeRequest request, ServletUpgradeResponse response) {
-                return handler;
-            }
-        };
+        return (request, response) -> handler;
     }
 
     private WebSocketHandler newWebSocketHandler(EzyWsHandler handler) {
@@ -133,7 +123,7 @@ public class EzyWebSocketServerCreator {
         private static final long serialVersionUID = -5456527539188272097L;
 
         @Override
-        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
             resp.setStatus(200);
         }
     }

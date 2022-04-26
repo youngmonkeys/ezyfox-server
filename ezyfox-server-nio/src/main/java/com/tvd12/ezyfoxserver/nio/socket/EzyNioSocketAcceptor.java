@@ -1,5 +1,14 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
+import lombok.Setter;
+
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -8,20 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
-import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
-import static com.tvd12.ezyfox.util.EzyProcessor.*;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
-import lombok.Setter;
-
-public class EzyNioSocketAcceptor 
-        extends EzySocketAbstractEventHandler
-        implements EzyHandlerGroupManagerAware, EzyNioAcceptableConnectionsHandler {
+public class EzyNioSocketAcceptor
+    extends EzySocketAbstractEventHandler
+    implements EzyHandlerGroupManagerAware, EzyNioAcceptableConnectionsHandler {
 
     @Setter
     protected boolean tcpNoDelay;
@@ -43,14 +43,13 @@ public class EzyNioSocketAcceptor
     public void handleEvent() {
         try {
             processReadyKeys();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.info("I/O error at socket-acceptor", e);
         }
     }
 
     public void handleAcceptableConnections() {
-        if(acceptableConnections.isEmpty()) {
+        if (acceptableConnections.isEmpty()) {
             return;
         }
         //noinspection SynchronizeOnNonFinalField
@@ -64,7 +63,7 @@ public class EzyNioSocketAcceptor
 
         Set<SelectionKey> readyKeys = ownSelector.selectedKeys();
         Iterator<SelectionKey> iterator = readyKeys.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             SelectionKey key = iterator.next();
             iterator.remove();
             processReadyKey(key);
@@ -73,7 +72,7 @@ public class EzyNioSocketAcceptor
     }
 
     private void processReadyKey(SelectionKey key) throws Exception {
-        if(key.isAcceptable()) {
+        if (key.isAcceptable()) {
             ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
             SocketChannel clientChannel = serverChannel.accept();
             addConnection(clientChannel);
@@ -89,7 +88,7 @@ public class EzyNioSocketAcceptor
 
     private void doHandleAcceptableConnections() {
         Iterator<SocketChannel> iterator = acceptableConnections.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             SocketChannel clientChannel = iterator.next();
             iterator.remove();
             acceptConnection(clientChannel);
@@ -99,8 +98,7 @@ public class EzyNioSocketAcceptor
     private void acceptConnection(SocketChannel clientChannel) {
         try {
             doAcceptConnection(clientChannel);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("can't accept connection: {}", clientChannel, e);
         }
     }
@@ -112,7 +110,7 @@ public class EzyNioSocketAcceptor
         EzyChannel channel = new EzyNioSocketChannel(clientChannel);
 
         EzyNioHandlerGroup handlerGroup = handlerGroupManager
-                .newHandlerGroup(channel, EzyConnectionType.SOCKET);
+            .newHandlerGroup(channel, EzyConnectionType.SOCKET);
         EzyNioSession session = handlerGroup.getSession();
 
         SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);

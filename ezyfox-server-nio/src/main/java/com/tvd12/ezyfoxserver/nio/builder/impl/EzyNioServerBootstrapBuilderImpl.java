@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
-import java.util.concurrent.ExecutorService;
-
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.api.EzyProxyResponseApi;
@@ -17,17 +15,13 @@ import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
+import com.tvd12.ezyfoxserver.socket.*;
+
+import java.util.concurrent.ExecutorService;
 
 public class EzyNioServerBootstrapBuilderImpl
-        extends EzyHttpServerBootstrapBuilder
-        implements EzyNioServerBootstrapBuilder {
+    extends EzyHttpServerBootstrapBuilder
+    implements EzyNioServerBootstrapBuilder {
 
     @Override
     protected EzyServerBootstrap newServerBootstrap() {
@@ -41,15 +35,15 @@ public class EzyNioServerBootstrapBuilderImpl
         EzySocketDisconnectionQueue socketDisconnectionQueue = newSocketDisconnectionQueue();
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues = newSessionTicketsRequestQueues();
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = newHandlerGroupBuilderFactory(
-                statsThreadPool,
-                codecFactory,
-                streamQueue,
-                socketDisconnectionQueue,
-                socketSessionTicketsQueue,
-                websocketSessionTicketsQueue,
-                sessionTicketsRequestQueues);
+            statsThreadPool,
+            codecFactory,
+            streamQueue,
+            socketDisconnectionQueue,
+            socketSessionTicketsQueue,
+            websocketSessionTicketsQueue,
+            sessionTicketsRequestQueues);
         EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager(
-                handlerGroupBuilderFactory);
+            handlerGroupBuilderFactory);
         EzySocketDataReceiver socketDataReceiver = newSocketDataReceiver(handlerGroupManager);
         EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
         bootstrap.setResponseApi(responseApi);
@@ -66,33 +60,33 @@ public class EzyNioServerBootstrapBuilderImpl
     }
 
     private EzyHandlerGroupManager newHandlerGroupManager(
-            EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory) {
+        EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory) {
 
         return EzyHandlerGroupManagerImpl.builder()
-                .handlerGroupBuilderFactory(handlerGroupBuilderFactory)
-                .build();
+            .handlerGroupBuilderFactory(handlerGroupBuilderFactory)
+            .build();
     }
 
     private EzyHandlerGroupBuilderFactory newHandlerGroupBuilderFactory(
-            ExecutorService statsThreadPool,
-            EzyCodecFactory codecFactory,
-            EzySocketStreamQueue streamQueue,
-            EzySocketDisconnectionQueue disconnectionQueue,
-            EzySessionTicketsQueue socketSessionTicketsQueue,
-            EzySessionTicketsQueue websocketSessionTicketsQueue,
-            EzySessionTicketsRequestQueues sessionTicketsRequestQueues) {
+        ExecutorService statsThreadPool,
+        EzyCodecFactory codecFactory,
+        EzySocketStreamQueue streamQueue,
+        EzySocketDisconnectionQueue disconnectionQueue,
+        EzySessionTicketsQueue socketSessionTicketsQueue,
+        EzySessionTicketsQueue websocketSessionTicketsQueue,
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues) {
 
         return EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(server.getStatistics())
-                .serverContext(serverContext)
-                .streamQueue(streamQueue)
-                .codecFactory(codecFactory)
-                .statsThreadPool(statsThreadPool)
-                .disconnectionQueue(disconnectionQueue)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(websocketSessionTicketsQueue)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .statistics(server.getStatistics())
+            .serverContext(serverContext)
+            .streamQueue(streamQueue)
+            .codecFactory(codecFactory)
+            .statsThreadPool(statsThreadPool)
+            .disconnectionQueue(disconnectionQueue)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(websocketSessionTicketsQueue)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
     }
 
     protected EzyStreamingApi newStreamingApi() {
@@ -110,9 +104,9 @@ public class EzyNioServerBootstrapBuilderImpl
 
     private EzySocketDataReceiver newSocketDataReceiver(EzyHandlerGroupManager handlerGroupManager) {
         return EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .threadPoolSize(getThreadPoolSizeSetting().getSocketDataReceiver())
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .threadPoolSize(getThreadPoolSizeSetting().getSocketDataReceiver())
+            .build();
     }
 
     private EzySocketStreamQueue newStreamQueue() {
@@ -137,8 +131,8 @@ public class EzyNioServerBootstrapBuilderImpl
 
     private EzyCodecFactory newCodecFactory() {
         return EzySimpleCodecFactory.builder()
-                .socketSetting(getSocketSetting())
-                .websocketSetting(getWebsocketSetting())
-                .build();
+            .socketSetting(getSocketSetting())
+            .websocketSetting(getWebsocketSetting())
+            .build();
     }
 }

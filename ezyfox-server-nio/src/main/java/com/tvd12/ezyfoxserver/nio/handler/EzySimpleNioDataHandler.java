@@ -7,15 +7,15 @@ import com.tvd12.ezyfoxserver.handler.EzySimpleDataHandler;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 
 public class EzySimpleNioDataHandler
-        extends EzySimpleDataHandler<EzyNioSession>
-        implements EzyNioDataHandler {
+    extends EzySimpleDataHandler<EzyNioSession>
+    implements EzyNioDataHandler {
 
     public EzySimpleNioDataHandler(EzyServerContext ctx, EzyNioSession session) {
         super(ctx, session);
     }
 
     @Override
-    public void channelRead(EzyCommand cmd, EzyArray msg)  throws Exception {
+    public void channelRead(EzyCommand cmd, EzyArray msg) {
         dataReceived(cmd, msg);
     }
 }

@@ -1,6 +1,12 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
+import com.tvd12.ezyfoxserver.nio.socket.*;
+import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
+import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
+import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -9,18 +15,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 
-import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioAcceptableConnectionsHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptanceLoopHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReadingLoopHandler;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketWriter;
-import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
-import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
-import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
-import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
-import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
@@ -34,6 +29,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzySocketEventLoopHandler newReadingLoopHandler(
-            EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
+        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketReadingLoopHandler();
         loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
         EzyNioSocketReader eventHandler = new EzyNioSocketReader();
@@ -105,7 +104,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzySocketEventLoopHandler newSocketAcceptanceLoopHandler(
-            EzyNioSocketAcceptor socketAcceptor) {
+        EzyNioSocketAcceptor socketAcceptor) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
         loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
         socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
@@ -153,17 +152,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return getServerSettings().getSocket();
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder
-            extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
+        extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
 
         @Override
         public EzySocketServerBootstrap build() {
             return new EzySocketServerBootstrap(this);
         }
-
     }
 }

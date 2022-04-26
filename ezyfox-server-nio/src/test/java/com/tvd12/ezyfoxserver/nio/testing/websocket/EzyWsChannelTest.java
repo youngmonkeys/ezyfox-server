@@ -1,19 +1,16 @@
 package com.tvd12.ezyfoxserver.nio.testing.websocket;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.net.InetSocketAddress;
-
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsChannel;
+import com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus;
+import com.tvd12.test.base.BaseTest;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.nio.websocket.EzyWsChannel;
-import com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus;
-import com.tvd12.test.base.BaseTest;
+import java.net.InetSocketAddress;
+
+import static org.mockito.Mockito.*;
 
 public class EzyWsChannelTest extends BaseTest {
 

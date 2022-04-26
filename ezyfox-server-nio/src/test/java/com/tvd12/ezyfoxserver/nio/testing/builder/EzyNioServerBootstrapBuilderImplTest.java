@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.nio.testing.builder;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.codec.EzyCodecCreator;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyNioServerBootstrapBuilderImpl;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
 
@@ -36,6 +35,5 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         public Object newDecoder(int maxRequestSize) {
             return null;
         }
-
     }
 }

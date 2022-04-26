@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
@@ -15,20 +12,15 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.websocket.EzySimpleWsHandlerGroup;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
-import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
-import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
-import com.tvd12.ezyfoxserver.statistics.EzySocketStatistics;
-import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.ezyfoxserver.statistics.EzyWebSocketStatistics;
+import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.statistics.*;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilderFactory {
 
-private final ExecutorService statsThreadPool;
+    private final ExecutorService statsThreadPool;
 
     private final EzyStatistics statistics;
     private final AtomicInteger socketSessionCount;
@@ -55,6 +47,10 @@ private final ExecutorService statsThreadPool;
         this.socketSessionTicketsQueue = builder.socketSessionTicketsQueue;
         this.webSocketSessionTicketsQueue = builder.webSocketSessionTicketsQueue;
         this.sessionTicketsRequestQueues = builder.sessionTicketsRequestQueues;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -116,10 +112,6 @@ private final ExecutorService statsThreadPool;
 
     private EzyWebSocketStatistics getWebSocketStatistics() {
         return statistics.getWebSocketStats();
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyHandlerGroupBuilderFactory> {
@@ -186,8 +178,9 @@ private final ExecutorService statsThreadPool;
 
         @Override
         public EzyHandlerGroupBuilderFactory build() {
-            if(sessionCreator == null)
+            if (sessionCreator == null) {
                 this.sessionCreator = newSessionCreator(serverContext);
+            }
             return new EzyHandlerGroupBuilderFactoryImpl(this);
         }
 
@@ -195,9 +188,9 @@ private final ExecutorService statsThreadPool;
             EzyServer server = serverContext.getServer();
             EzySettings settings = server.getSettings();
             return EzySimpleSessionCreator.builder()
-                    .sessionManager(server.getSessionManager())
-                    .sessionSetting(settings.getSessionManagement())
-                    .build();
+                .sessionManager(server.getSessionManager())
+                .sessionSetting(settings.getSessionManagement())
+                .build();
         }
     }
 }

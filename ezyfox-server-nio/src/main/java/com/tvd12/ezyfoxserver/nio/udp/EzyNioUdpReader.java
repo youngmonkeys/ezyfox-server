@@ -1,24 +1,19 @@
 package com.tvd12.ezyfoxserver.nio.udp;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
-import java.nio.channels.ClosedSelectorException;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.util.Iterator;
-import java.util.Set;
-
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
 import com.tvd12.ezyfoxserver.socket.EzySimpleUdpReceivedPacket;
 import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 import com.tvd12.ezyfoxserver.socket.EzyUdpReceivedPacket;
-
 import lombok.Setter;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.util.Iterator;
+import java.util.Set;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
 
@@ -41,8 +36,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
     public void handleEvent() {
         try {
             processReadyKeys();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.info("I/O error at udp socket-reader: {}({})", e.getClass().getName(), e.getMessage());
         }
     }
@@ -51,38 +45,34 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
         ownSelector.select();
         Set<SelectionKey> selectedKeys = this.ownSelector.selectedKeys();
         Iterator<SelectionKey> iterator = selectedKeys.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             SelectionKey key = iterator.next();
             iterator.remove();
-            if(key.isValid()) {
+            if (key.isValid()) {
                 processReadyKey(key);
             }
         }
     }
 
-    private void processReadyKey(SelectionKey key) throws Exception {
-        if(key.isReadable()) {
+    private void processReadyKey(SelectionKey key) {
+        if (key.isReadable()) {
             processReadableKey(key);
         }
     }
 
-    private void processReadableKey(SelectionKey key) throws Exception {
+    private void processReadableKey(SelectionKey key) {
         DatagramChannel channel = (DatagramChannel) key.channel();
         try {
             processReadBytes(channel);
-        }
-        catch (ClosedSelectorException e) {
+        } catch (ClosedSelectorException e) {
             logger.debug("selector has already closed: {}", e.getMessage());
 
-        }
-        catch (CancelledKeyException e) {
+        } catch (CancelledKeyException e) {
             logger.debug("key has already cancelled: {}", e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             logger.warn("io exception: {}", e.getMessage());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("fatal error at udp socket-reader", e);
         }
     }
@@ -90,7 +80,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
     private void processReadBytes(DatagramChannel channel) throws Exception {
         buffer.clear();
         InetSocketAddress address = (InetSocketAddress) channel.receive(buffer);
-        if(address == null) {
+        if (address == null) {
             logger.info("has no data in udp channel: {}", channel);
             return;
         }
@@ -101,7 +91,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
             byte[] binary = new byte[buffer.limit()];
             buffer.get(binary);
             EzyUdpReceivedPacket packet =
-                    new EzySimpleUdpReceivedPacket(channel, address, binary);
+                new EzySimpleUdpReceivedPacket(channel, address, binary);
             udpDataHandler.fireUdpPacketReceived(packet);
         }
     }

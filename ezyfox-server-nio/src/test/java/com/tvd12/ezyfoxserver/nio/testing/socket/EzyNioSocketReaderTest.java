@@ -1,29 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
-import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
-import com.tvd12.ezyfox.codec.EzyMessage;
-import com.tvd12.ezyfox.codec.EzyMessageHeader;
-import com.tvd12.ezyfox.codec.EzySimpleMessage;
-import com.tvd12.ezyfox.codec.EzySimpleMessageHeader;
+import com.tvd12.ezyfox.codec.*;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -46,17 +23,24 @@ import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
-import com.tvd12.ezyfoxserver.socket.EzySocketDisconnectionQueue;
-import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
+import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.test.base.BaseTest;
+import org.mockito.stubbing.Answer;
+import org.testng.annotations.Test;
+
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class EzyNioSocketReaderTest extends BaseTest {
 
@@ -64,9 +48,9 @@ public class EzyNioSocketReaderTest extends BaseTest {
     public void test() throws Exception {
         EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager();
         EzySocketDataReceiver socketDataReceiver = EzySocketDataReceiver.builder()
-                .threadPoolSize(1)
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .threadPoolSize(1)
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
         Selector ownSelector = spy(ExSelector.class);
         when(ownSelector.selectNow()).thenReturn(1);
@@ -76,9 +60,9 @@ public class EzyNioSocketReaderTest extends BaseTest {
         SelectionKey selectionKey4 = spy(ExSelectionKey.class);
         SelectionKey selectionKey5 = spy(ExSelectionKey.class);
         when(ownSelector.selectedKeys()).thenReturn(Sets.newHashSet(
-                selectionKey1,
-                selectionKey2,
-                selectionKey3, selectionKey4, selectionKey5));
+            selectionKey1,
+            selectionKey2,
+            selectionKey3, selectionKey4, selectionKey5));
         when(selectionKey1.isValid()).thenReturn(true);
         when(selectionKey1.readyOps()).thenReturn(SelectionKey.OP_READ);
         when(selectionKey2.isValid()).thenReturn(true);
@@ -96,13 +80,10 @@ public class EzyNioSocketReaderTest extends BaseTest {
 
         when(selectionKey1.channel()).thenReturn(socketChannel1);
         when(socketChannel1.isConnected()).thenReturn(true);
-        when(socketChannel1.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-            @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
-                ByteBuffer buffer = invocation.getArgumentAt(0, ByteBuffer.class);
-                buffer.put("hello".getBytes());
-                return "hello".length();
-            }
+        when(socketChannel1.read(any(ByteBuffer.class))).then((Answer<Integer>) invocation -> {
+            ByteBuffer buffer = invocation.getArgumentAt(0, ByteBuffer.class);
+            buffer.put("hello".getBytes());
+            return "hello".length();
         });
 
         SocketChannel socketChannel4 = mock(SocketChannel.class);
@@ -117,12 +98,7 @@ public class EzyNioSocketReaderTest extends BaseTest {
 
         when(selectionKey5.channel()).thenReturn(socketChannel5);
         when(socketChannel5.isConnected()).thenReturn(true);
-        when(socketChannel5.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-            @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
-                return -1;
-            }
-        });
+        when(socketChannel5.read(any(ByteBuffer.class))).then((Answer<Integer>) invocation -> -1);
 
         EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
         socketAcceptor.setReadSelector(ownSelector);
@@ -140,9 +116,9 @@ public class EzyNioSocketReaderTest extends BaseTest {
     public void testExceptionCase() throws Exception {
         EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager();
         EzySocketDataReceiver socketDataReceiver = EzySocketDataReceiver.builder()
-                .threadPoolSize(1)
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .threadPoolSize(1)
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
         Selector ownSelector = spy(ExSelector.class);
         when(ownSelector.selectNow()).thenReturn(1);
@@ -158,11 +134,8 @@ public class EzyNioSocketReaderTest extends BaseTest {
 
         when(selectionKey1.channel()).thenReturn(socketChannel1);
         when(socketChannel1.isConnected()).thenReturn(true);
-        when(socketChannel1.read(any(ByteBuffer.class))).then(new Answer<Integer>() {
-            @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
-                throw new IllegalStateException("server maintain");
-            }
+        when(socketChannel1.read(any(ByteBuffer.class))).then((Answer<Integer>) invocation -> {
+            throw new IllegalStateException("server maintain");
         });
 
         EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
@@ -178,10 +151,10 @@ public class EzyNioSocketReaderTest extends BaseTest {
     }
 
     private EzyHandlerGroupManager newHandlerGroupManager() {
-        EzyNioSessionManager sessionManager = (EzyNioSessionManager)EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+        EzyNioSessionManager sessionManager = (EzyNioSessionManager) EzyNioSessionManagerImpl.builder()
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
         EzyCodecFactory codecFactory = mock(EzyCodecFactory.class);
         when(codecFactory.newDecoder(any())).thenReturn(decoder);
@@ -204,21 +177,20 @@ public class EzyNioSocketReaderTest extends BaseTest {
         EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzyStatistics statistics = new EzySimpleStatistics();
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(statistics)
-                .statsThreadPool(statsThreadPool)
-                .streamQueue(streamQueue)
-                .disconnectionQueue(disconnectionQueue)
-                .codecFactory(codecFactory)
-                .serverContext(serverContext)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .statistics(statistics)
+            .statsThreadPool(statsThreadPool)
+            .streamQueue(streamQueue)
+            .disconnectionQueue(disconnectionQueue)
+            .codecFactory(codecFactory)
+            .serverContext(serverContext)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
 
-        EzyHandlerGroupManager handlerGroupManager = EzyHandlerGroupManagerImpl.builder()
-                .handlerGroupBuilderFactory(handlerGroupBuilderFactory)
-                .build();
-        return handlerGroupManager;
+        return EzyHandlerGroupManagerImpl.builder()
+            .handlerGroupBuilderFactory(handlerGroupBuilderFactory)
+            .build();
     }
 
     public static abstract class ExSocketChannel extends SocketChannel {
@@ -243,14 +215,14 @@ public class EzyNioSocketReaderTest extends BaseTest {
         public void reset() {}
 
         @Override
-        public Object decode(EzyMessage message) throws Exception {
+        public Object decode(EzyMessage message) {
             return EzyEntityFactory.newArrayBuilder()
-                    .append(EzyCommand.PING.getId())
-                    .build();
+                .append(EzyCommand.PING.getId())
+                .build();
         }
 
         @Override
-        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
+        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) {
             EzyMessageHeader header = new EzySimpleMessageHeader(false, false, false, false, false, false);
             byte[] content = new byte[bytes.remaining()];
             bytes.get(content);

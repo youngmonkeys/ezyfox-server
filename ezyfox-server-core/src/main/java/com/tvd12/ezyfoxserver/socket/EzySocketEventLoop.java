@@ -40,8 +40,11 @@ public abstract class EzySocketEventLoop
     protected abstract void eventLoop();
 
     protected void initThreadPool() {
-        Runnable task = newServiceTask();
-        threadPool = new EzyThreadList(threadPoolSize(), task, threadName());
+        threadPool = new EzyThreadList(
+            threadPoolSize(),
+            newServiceTask(),
+            threadName()
+        );
     }
 
     @Override

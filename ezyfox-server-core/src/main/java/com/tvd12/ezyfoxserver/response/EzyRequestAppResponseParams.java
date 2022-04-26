@@ -14,7 +14,7 @@ public class EzyRequestAppResponseParams extends EzySimpleResponseParams {
     protected EzyData data;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(appId)
             .append(data);

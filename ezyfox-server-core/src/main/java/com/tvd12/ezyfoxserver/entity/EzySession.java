@@ -15,7 +15,13 @@ import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.locks.Lock;
 
-public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDestroyable, Serializable {
+@SuppressWarnings("MethodCount")
+public interface EzySession extends
+    EzyDeliver,
+    EzyHasName,
+    EzyProperties,
+    EzyDestroyable,
+    Serializable {
 
     /**
      * Get session id.
@@ -341,14 +347,14 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
     void setActivated(boolean activated);
 
     /**
-     * The session is idle or not
+     * The session is idle or not.
      *
      * @return session is idle or not
      */
     boolean isIdle();
 
     /**
-     * The session is destroyed or not
+     * The session is destroyed or not.
      *
      * @return destroyed or not
      */
@@ -408,6 +414,13 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @param reason the reason
      */
     void disconnect(EzyConstant reason);
+
+    /**
+     * Disconnect with UNKNOWN reason.
+     */
+    default void disconnect() {
+        disconnect(EzyDisconnectReason.UNKNOWN);
+    }
 
     /**
      * Get the channel mapped to this session.
@@ -472,11 +485,4 @@ public interface EzySession extends EzyDeliver, EzyHasName, EzyProperties, EzyDe
      * @return the datagram channel pool
      */
     EzyDatagramChannelPool getDatagramChannelPool();
-
-    /**
-     * disconnect.
-     */
-    default void disconnect() {
-        disconnect(EzyDisconnectReason.UNKNOWN);
-    }
 }

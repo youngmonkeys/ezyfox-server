@@ -30,7 +30,7 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
     public void handleEvent() {
         try {
             handleAcceptableConnections();
-            processReadyKeys0();
+            doProcessReadyKeys();
             Thread.sleep(3L);
         }
         catch(Exception e) {
@@ -42,7 +42,7 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
         acceptableConnectionsHandler.handleAcceptableConnections();
     }
 
-    private void processReadyKeys0() throws Exception {
+    private void doProcessReadyKeys() throws Exception {
         int readyKeyCount = ownSelector.selectNow();
         if(readyKeyCount > 0) {
             processReadyKeys();

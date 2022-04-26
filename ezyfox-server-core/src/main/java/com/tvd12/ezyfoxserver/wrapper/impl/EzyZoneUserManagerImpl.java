@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.wrapper.EzyZoneUserManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,8 @@ public class EzyZoneUserManagerImpl
     protected final long idleValidationInterval;
     protected final int idleValidationThreadPoolSize;
     protected final ScheduledExecutorService idleValidationService;
-    protected final ConcurrentHashMap<EzySession, EzyUser> usersBySession = new ConcurrentHashMap<>();
+    protected final Map<EzySession, EzyUser> usersBySession
+        = new ConcurrentHashMap<>();
 
     protected EzyZoneUserManagerImpl(Builder builder) {
         super(builder);
@@ -50,22 +52,28 @@ public class EzyZoneUserManagerImpl
         if (maxIdleTime <= 0) {
             return null;
         }
-        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(idleValidationThreadPoolSize, "user-manager");
+        ScheduledExecutorService answer = EzyExecutors.newScheduledThreadPool(
+            idleValidationThreadPoolSize,
+            "user-manager"
+        );
         Runtime.getRuntime().addShutdownHook(new Thread(answer::shutdown));
         return answer;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyUserManager#addUser(com.tvd12.ezyfoxserver.mapping.entity.EzyUser)
-     */
     @Override
     public void addUser(EzySession session, EzyUser user) {
         checkMaxUsers();
         usersById.put(user.getId(), user);
         usersByName.put(user.getName(), user);
         usersBySession.put(session, user);
-        logger.info("zone: {} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", zoneName, user, locks.size(), usersById.size(), usersByName.size());
+        logger.info(
+            "zone: {} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}",
+            zoneName,
+            user,
+            locks.size(),
+            usersById.size(),
+            usersByName.size()
+        );
     }
 
     @Override
@@ -73,34 +81,31 @@ public class EzyZoneUserManagerImpl
         usersBySession.put(session, user);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyUserManager#getUser(com.tvd12.ezyfoxserver.mapping.entity.EzySession)
-     */
     @Override
     public EzyUser getUser(EzySession session) {
         return usersBySession.get(session);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyUserManager#containsUser(com.tvd12.ezyfoxserver.mapping.entity.EzySession)
-     */
     @Override
     public boolean containsUser(EzySession session) {
         return usersBySession.containsKey(session);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyServerUserManager#unmapSessionUser(com.tvd12.ezyfoxserver.mapping.entity.EzySession)
-     */
     @Override
     public void unmapSessionUser(EzySession session, EzyConstant reason) {
         EzyUser user = usersBySession.remove(session);
         if (user != null) {
             user.removeSession(session);
-            logger.debug("zone: {} remove session {} from user {} by reason {}, user remain: {} sessions, usersBySession.size: {}", zoneName, session.getClientAddress(), user, reason, user.getSessionCount(), usersBySession.size());
+            logger.debug(
+                "zone: {} remove session {} from user {} by reason {}, " +
+                    "user remain: {} sessions, usersBySession.size: {}",
+                zoneName,
+                session.getClientAddress(),
+                user,
+                reason,
+                user.getSessionCount(),
+                usersBySession.size()
+            );
             if (shouldRemoveUserNow(user)) {
                 removeUser(user, reason);
             }
@@ -113,25 +118,26 @@ public class EzyZoneUserManagerImpl
         return sessionCount <= 0 && maxIdleTime <= 0;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.tvd12.ezyfoxserver.mapping.wrapper.EzyServerUserManager#removeUser(com.tvd12.ezyfoxserver.mapping.entity.EzyUser, com.tvd12.ezyfoxserver.mapping.constant.EzyUserRemoveReason)
-     */
     @Override
     public void removeUser(EzyUser user, EzyConstant reason) {
         String username = user.getName();
         Lock lock = locks.computeIfAbsent(username, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
         lock.lock();
         try {
-            removeUser0(user, reason);
+            doRemoveUser(user, reason);
         } finally {
             lock.unlock();
             locks.remove(username);
         }
     }
 
-    private void removeUser0(EzyUser user, EzyConstant reason) {
-        logger.debug("zone: {} remove user: {} by reason: {}", zoneName, user, reason);
+    private void doRemoveUser(EzyUser user, EzyConstant reason) {
+        logger.debug(
+            "zone: {} remove user: {} by reason: {}",
+            zoneName,
+            user,
+            reason
+        );
         removeUser(user);
         delegateUserRemove(user, reason);
     }
@@ -228,6 +234,5 @@ public class EzyZoneUserManagerImpl
         public EzyZoneUserManager build() {
             return new EzyZoneUserManagerImpl(this);
         }
-
     }
 }

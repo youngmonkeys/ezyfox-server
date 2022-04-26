@@ -11,10 +11,10 @@ public class EzySimpleResponseParams
 
     @Override
     public final EzyArray serialize() {
-        return serialize0().build();
+        return doSerialize().build();
     }
 
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder();
     }
 

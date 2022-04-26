@@ -47,7 +47,7 @@ public class EzySocketStreamHandlerTest {
     }
 
     @Test
-    public void processStreamQueue0ExceptionCaseTest() {
+    public void doProcessStreamQueueExceptionCaseTest() {
         EzySocketStreamHandler handler = new EzySocketStreamHandler();
 
         EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);
@@ -64,7 +64,7 @@ public class EzySocketStreamHandlerTest {
     }
 
     @Test
-    public void processStreamQueue0ExceptionInterruptTest() throws Exception {
+    public void doProcessStreamQueueExceptionInterruptTest() throws Exception {
         EzySocketStreamHandler handler = new EzySocketStreamHandler();
 
         EzySocketDataHandlerGroupFetcher dataHandlerGroupFetcher = mock(EzySocketDataHandlerGroupFetcher.class);

@@ -48,7 +48,7 @@ public class EzySimpleZoneContext
         = new ConcurrentHashMap<>();
 
     @Override
-    protected void init0() {
+    protected void doInit() {
         this.broadcastEvent = new EzyZoneBroadcastEventImpl(this);
         this.broadcastAppsEvent = new EzyBroadcastAppsEventImpl(this);
         this.broadcastPluginsEvent = new EzyBroadcastPluginsEventImpl(this);

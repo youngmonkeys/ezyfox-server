@@ -21,7 +21,7 @@ public abstract class EzyZoneComponentsStater extends EzyLoggable implements Ezy
     public abstract void start();
 
     @SuppressWarnings("unchecked")
-    public static abstract class Builder
+    public abstract static class Builder
         <T extends EzyZoneComponentsStater, B extends Builder<T, B>>
         implements EzyBuilder<T> {
         protected EzyZoneContext zoneContext;

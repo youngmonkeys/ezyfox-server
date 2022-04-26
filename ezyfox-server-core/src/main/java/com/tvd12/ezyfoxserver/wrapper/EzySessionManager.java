@@ -33,12 +33,29 @@ public interface EzySessionManager<S extends EzySession> {
     EzySession getSession(long id);
 
     /**
+     * Get session by connection.
+     *
+     * @param connection the connection
+     * @return the session mapped to the connection
+     */
+    S getSession(Object connection);
+
+    /**
      * Add session to disconnect queue.
      *
      * @param session the session
      * @param reason  the reason
      */
     void removeSession(S session, EzyConstant reason);
+
+    /**
+     * Add session to disconnect queue.
+     *
+     * @param session the session
+     */
+    default void removeSession(S session) {
+        removeSession(session, EzyDisconnectReason.UNKNOWN);
+    }
 
     /**
      * clear session.
@@ -76,6 +93,8 @@ public interface EzySessionManager<S extends EzySession> {
     int getAllSessionCount();
 
     /**
+     * Get all alive session count.
+     *
      * @return alive sessions count
      */
     int getAliveSessionCount();
@@ -94,21 +113,4 @@ public interface EzySessionManager<S extends EzySession> {
      * @return the session mapped channel
      */
     S provideSession(EzyChannel channel);
-
-    /**
-     * Get session by connection.
-     *
-     * @param connection the connection
-     * @return the session mapped to the connection
-     */
-    S getSession(Object connection);
-
-    /**
-     * Add session to disconnect queue.
-     *
-     * @param session the session
-     */
-    default void removeSession(S session) {
-        removeSession(session, EzyDisconnectReason.UNKNOWN);
-    }
 }

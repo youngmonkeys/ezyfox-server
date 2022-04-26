@@ -31,7 +31,7 @@ public class EzySimplePluginContext
     protected EzyPluginSendResponse sendResponse;
 
     @Override
-    protected void init0() {
+    protected void doInit() {
         EzySetup setup = new EzyPluginSetupImpl(plugin);
         this.sendResponse = new EzyPluginSendResponseImpl(this);
         this.properties.put(EzyPluginSendResponse.class, sendResponse);

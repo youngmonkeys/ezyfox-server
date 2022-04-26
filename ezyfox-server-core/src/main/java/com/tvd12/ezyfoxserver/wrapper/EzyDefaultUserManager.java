@@ -35,7 +35,8 @@ public class EzyDefaultUserManager extends EzyAbstractUserManager {
         return new HashMap<>();
     }
 
-    public static class Builder<B extends Builder<B>> extends EzyAbstractUserManager.Builder<B> {
+    public static class Builder<B extends Builder<B>>
+        extends EzyAbstractUserManager.Builder<B> {
 
         @Override
         public EzyUserManager build() {

@@ -16,7 +16,7 @@ public class EzyLoginParams extends EzySimpleResponseParams {
     protected String username;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(zoneId)
             .append(zoneName)

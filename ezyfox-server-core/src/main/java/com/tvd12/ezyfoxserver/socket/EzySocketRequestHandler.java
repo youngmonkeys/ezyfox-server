@@ -15,15 +15,6 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
 
     @Override
     public void handleEvent() {
-        processRequestQueue0();
-    }
-
-    @Override
-    public void destroy() {
-        processWithLogException(() -> sessionTicketsQueue.clear());
-    }
-
-    private void processRequestQueue0() {
         EzySocketRequest request = null;
         try {
             EzySession session = sessionTicketsQueue.take();
@@ -36,11 +27,18 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
                     sessionTicketsQueue.add(session);
                 }
             }
-            processRequestQueue(request);
+            processRequest(request);
         } catch (InterruptedException e) {
-            logger.info("{}-request-handler thread interrupted: {}", getRequestType(), Thread.currentThread());
+            logger.info(
+                "{}-request-handler thread interrupted",
+                getRequestType()
+            );
         } catch (Throwable throwable) {
-            logger.warn("problems in {}-request-handler, thread: {}", getRequestType(), Thread.currentThread(), throwable);
+            logger.warn(
+                "problems in {}-request-handler",
+                getRequestType(),
+                throwable
+            );
         } finally {
             if (request != null) {
                 request.release();
@@ -48,30 +46,42 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
         }
     }
 
-    protected abstract EzyRequestQueue getRequestQueue(EzySession session);
+    @Override
+    public void destroy() {
+        processWithLogException(sessionTicketsQueue::clear);
+    }
+
+    protected abstract EzyRequestQueue getRequestQueue(
+        EzySession session
+    );
 
     protected abstract String getRequestType();
 
-    private void processRequestQueue(EzySocketRequest request) throws Exception {
+    private void processRequest(
+        EzySocketRequest request
+    ) throws Exception {
         try {
-            processRequestQueue0(request);
+            EzyArray data = request.getData();
+            EzySession session = request.getSession();
+            EzySocketDataHandlerGroup handlerGroup =
+                getDataHandlerGroup(session);
+            if (handlerGroup != null) {
+                handlerGroup.fireChannelRead(request.getCommand(), data);
+            } else {
+                logger.warn(
+                    "has no handler group with session: {}, drop request: {}",
+                    session,
+                    request
+                );
+            }
         } finally {
             request.release();
         }
     }
 
-    private void processRequestQueue0(EzySocketRequest request) throws Exception {
-        EzyArray data = request.getData();
-        EzySession session = request.getSession();
-        EzySocketDataHandlerGroup handlerGroup = getDataHandlerGroup(session);
-        if (handlerGroup != null) {
-            handlerGroup.fireChannelRead(request.getCommand(), data);
-        } else {
-            logger.warn("has no handler group with session: {}, drop request: {}", session, request);
-        }
-    }
-
-    protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
+    protected EzySocketDataHandlerGroup getDataHandlerGroup(
+        EzySession session
+    ) {
         return dataHandlerGroupFetcher.getDataHandlerGroup(session);
     }
 }

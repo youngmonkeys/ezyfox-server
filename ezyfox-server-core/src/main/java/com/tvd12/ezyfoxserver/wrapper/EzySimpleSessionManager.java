@@ -19,12 +19,17 @@ public class EzySimpleSessionManager<S extends EzySession>
     extends EzyObjectProvider<S>
     implements EzySessionManager<S> {
 
-    protected static final AtomicInteger COUNTER = new AtomicInteger(0);
     protected final int maxSessions;
     protected final EzySessionTokenGenerator tokenGenerator;
-    protected final ConcurrentHashMap<Long, S> loggedInSession = new ConcurrentHashMap<>();
-    protected final ConcurrentHashMap<Long, S> sessionsById = new ConcurrentHashMap<>();
-    protected final ConcurrentHashMap<Object, S> sessionsByConnection = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<Long, S> loggedInSession
+        = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<Long, S> sessionsById
+        = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<Object, S> sessionsByConnection
+        = new ConcurrentHashMap<>();
+
+    protected static final AtomicInteger COUNTER
+        = new AtomicInteger(0);
 
     protected EzySimpleSessionManager(Builder<S> builder) {
         super(builder);
@@ -90,7 +95,11 @@ public class EzySimpleSessionManager<S extends EzySession>
         S ss = provideSession(channel.getConnectionType());
         ss.setChannel(channel);
         sessionsByConnection.put(channel.getConnection(), ss);
-        logger.info("provide session: {}, sessions size = {}", ss.getName(), providedObjects.size());
+        logger.info(
+            "provide session: {}, sessions size = {}",
+            ss.getName(),
+            providedObjects.size()
+        );
         return ss;
     }
 
@@ -247,6 +256,5 @@ public class EzySimpleSessionManager<S extends EzySession>
         }
 
         public abstract EzySimpleSessionManager<S> build();
-
     }
 }

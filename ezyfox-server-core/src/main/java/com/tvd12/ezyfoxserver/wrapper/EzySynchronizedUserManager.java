@@ -27,9 +27,16 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
     public EzyUser addUser(EzyUser user) {
         EzyUser answer;
         synchronized (synchronizedLock) {
-            answer = addUser0(user);
+            answer = doAddUser(user);
         }
-        logger.info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        logger.info(
+            "{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}",
+            getMessagePrefix(),
+            user,
+            locks.size(),
+            usersById.size(),
+            usersByName.size()
+        );
         return answer;
     }
 
@@ -71,9 +78,16 @@ public class EzySynchronizedUserManager extends EzyAbstractUserManager {
     @Override
     public EzyUser removeUser(EzyUser user) {
         synchronized (synchronizedLock) {
-            removeUser0(user);
+            doRemoveUser(user);
         }
-        logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        logger.info(
+            "{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}",
+            getMessagePrefix(),
+            user,
+            locks.size(),
+            usersById.size(),
+            usersByName.size()
+        );
         return user;
     }
 

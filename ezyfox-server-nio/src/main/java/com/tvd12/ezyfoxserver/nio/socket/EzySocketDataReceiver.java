@@ -50,10 +50,10 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
         int index = Math.abs(channel.hashCode() % threadPoolSize);
         ByteBuffer buffer = tcpByteBuffers[index];
         ExecutorService executorService = executorServices[index];
-        executorService.execute(() -> tcpReceive0(channel, buffer));
+        executorService.execute(() -> doTcpReceive(channel, buffer));
     }
 
-    private void tcpReceive0(SocketChannel channel, ByteBuffer buffer) {
+    private void doTcpReceive(SocketChannel channel, ByteBuffer buffer) {
         try {
             tcpReadBytes(channel, buffer);
         }
@@ -102,10 +102,10 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
 
     public void udpReceive(Object socketChannel, EzyMessage message) {
         ExecutorService executorService = selectedExecutorService(socketChannel);
-        executorService.execute(() -> udpReceive0(socketChannel, message));
+        executorService.execute(() -> doUdpReceive(socketChannel, message));
     }
 
-    private void udpReceive0(Object socketChannel, EzyMessage message) {
+    private void doUdpReceive(Object socketChannel, EzyMessage message) {
         try {
             EzyNioHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(socketChannel);
             if(handlerGroup != null)
@@ -119,10 +119,10 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
 
     public void wsReceive(Session session, String message) {
         ExecutorService executorService = selectedExecutorService(session);
-        executorService.execute(() -> wsReceive0(session, message));
+        executorService.execute(() -> doWsReceive(session, message));
     }
 
-    private void wsReceive0(Session session, String message) {
+    private void doWsReceive(Session session, String message) {
         try {
             EzyWsHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(session);
             if(handlerGroup != null)
@@ -135,10 +135,10 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
 
     public void wsReceive(Session session, byte[] payload, int offset, int len) {
         ExecutorService executorService = selectedExecutorService(session);
-        executorService.execute(() -> wsReceive0(session, payload, offset, len));
+        executorService.execute(() -> doWsReceive(session, payload, offset, len));
     }
 
-    private void wsReceive0(Session session, byte[] payload, int offset, int len) {
+    private void doWsReceive(Session session, byte[] payload, int offset, int len) {
         try {
             EzyWsHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(session);
             if(handlerGroup != null)

@@ -16,29 +16,19 @@ public interface EzyResponse extends EzyVoidCommand {
 
     EzyResponse params(EzyData params);
 
+    default EzyResponse params(EzyBuilder<? extends EzyData> builder) {
+        return params(builder.build());
+    }
+
     EzyResponse user(EzyUser user, boolean exclude);
-
-    EzyResponse users(EzyUser[] users, boolean exclude);
-
-    EzyResponse users(Iterable<EzyUser> users, boolean exclude);
-
-    EzyResponse username(String username, boolean exclude);
-
-    EzyResponse usernames(String[] usernames, boolean exclude);
-
-    EzyResponse usernames(Iterable<String> usernames, boolean exclude);
-
-    EzyResponse session(EzySession session, boolean exclude);
-
-    EzyResponse sessions(EzySession[] sessions, boolean exclude);
-
-    EzyResponse sessions(Iterable<EzySession> sessions, boolean exclude);
-
-    EzyResponse transportType(EzyTransportType transportType);
 
     default EzyResponse user(EzyUser user) {
         return user(user, false);
     }
+
+    EzyResponse users(EzyUser[] users, boolean exclude);
+
+    EzyResponse users(Iterable<EzyUser> users, boolean exclude);
 
     default EzyResponse users(EzyUser... users) {
         return users(users, false);
@@ -52,6 +42,12 @@ public interface EzyResponse extends EzyVoidCommand {
         return username(username, false);
     }
 
+    EzyResponse username(String username, boolean exclude);
+
+    EzyResponse usernames(String[] usernames, boolean exclude);
+
+    EzyResponse usernames(Iterable<String> usernames, boolean exclude);
+
     default EzyResponse usernames(String... usernames) {
         return usernames(usernames, false);
     }
@@ -60,9 +56,15 @@ public interface EzyResponse extends EzyVoidCommand {
         return usernames(usernames, false);
     }
 
+    EzyResponse session(EzySession session, boolean exclude);
+
     default EzyResponse session(EzySession session) {
         return session(session, false);
     }
+
+    EzyResponse sessions(EzySession[] sessions, boolean exclude);
+
+    EzyResponse sessions(Iterable<EzySession> sessions, boolean exclude);
 
     default EzyResponse sessions(EzySession... sessions) {
         return sessions(sessions, false);
@@ -72,7 +74,5 @@ public interface EzyResponse extends EzyVoidCommand {
         return sessions(sessions, false);
     }
 
-    default EzyResponse params(EzyBuilder<? extends EzyData> builder) {
-        return params(builder.build());
-    }
+    EzyResponse transportType(EzyTransportType transportType);
 }

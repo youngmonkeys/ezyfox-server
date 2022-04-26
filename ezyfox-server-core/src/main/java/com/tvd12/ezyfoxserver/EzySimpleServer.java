@@ -19,15 +19,17 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Hello world!
- */
 @Setter
 @Getter
 @SuppressWarnings("rawtypes")
 public class EzySimpleServer
     extends EzyComponent
-    implements EzyServer, EzyResponseApiAware, EzyStreamingApiAware, EzySessionManagerAware, EzyDestroyable {
+    implements
+    EzyServer,
+    EzyResponseApiAware,
+    EzyStreamingApiAware,
+    EzySessionManagerAware,
+    EzyDestroyable {
 
     protected EzyConfig config;
     protected EzySettings settings;

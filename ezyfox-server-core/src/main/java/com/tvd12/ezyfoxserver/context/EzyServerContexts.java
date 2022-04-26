@@ -35,7 +35,9 @@ public final class EzyServerContexts {
     }
 
     @SuppressWarnings("unchecked")
-    public static EzySessionManager<EzySession> getSessionManager(EzyServerContext ctx) {
+    public static EzySessionManager<EzySession> getSessionManager(
+        EzyServerContext ctx
+    ) {
         EzyServer server = ctx.getServer();
         return (EzySessionManager<EzySession>) server.getSessionManager();
     }

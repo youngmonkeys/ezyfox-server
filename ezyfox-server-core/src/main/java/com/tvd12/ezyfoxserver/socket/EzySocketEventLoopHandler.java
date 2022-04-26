@@ -17,11 +17,11 @@ public abstract class EzySocketEventLoopHandler
 
     @Override
     public void start() throws Exception {
-        this.eventLoop = newEventLoop0();
+        this.eventLoop = createEventLoop();
         this.eventLoop.start();
     }
 
-    private EzySimpleSocketEventLoop newEventLoop0() {
+    private EzySimpleSocketEventLoop createEventLoop() {
         EzySimpleSocketEventLoop eventLoop = newEventLoop();
         eventLoop.setThreadName(getThreadName());
         eventLoop.setThreadPoolSize(threadPoolSize);

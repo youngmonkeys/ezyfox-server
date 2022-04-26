@@ -29,8 +29,15 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
 
     @Override
     public EzyUser addUser(EzyUser user) {
-        EzyUser answer = addUser0(user);
-        logger.info("{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        EzyUser answer = doAddUser(user);
+        logger.info(
+            "{} add user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}",
+            getMessagePrefix(),
+            user,
+            locks.size(),
+            usersById.size(),
+            usersByName.size()
+        );
         return answer;
     }
 
@@ -41,7 +48,7 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
         }
     }
 
-    protected EzyUser addUser0(EzyUser user) {
+    protected EzyUser doAddUser(EzyUser user) {
         checkMaxUsers();
         usersByName.putIfAbsent(user.getName(), user);
         return usersById.putIfAbsent(user.getId(), user);
@@ -74,12 +81,19 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
 
     @Override
     public EzyUser removeUser(EzyUser user) {
-        removeUser0(user);
-        logger.info("{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}", getMessagePrefix(), user, locks.size(), usersById.size(), usersByName.size());
+        doRemoveUser(user);
+        logger.info(
+            "{} remove user: {}, locks.size = {}, usersById.size = {}, usersByName.size = {}",
+            getMessagePrefix(),
+            user,
+            locks.size(),
+            usersById.size(),
+            usersByName.size()
+        );
         return user;
     }
 
-    protected void removeUser0(EzyUser user) {
+    protected void doRemoveUser(EzyUser user) {
         if (user != null) {
             locks.remove(user.getName());
             usersById.remove(user.getId());
@@ -141,7 +155,8 @@ public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyU
     }
 
     @SuppressWarnings("unchecked")
-    public abstract static class Builder<B extends Builder<B>> implements EzyBuilder<EzyUserManager> {
+    public abstract static class Builder<B extends Builder<B>>
+        implements EzyBuilder<EzyUserManager> {
 
         protected int maxUsers = 999999;
 

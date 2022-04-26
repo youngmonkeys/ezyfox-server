@@ -25,7 +25,6 @@ public class EzySocketEventLoopMultiHandlerTest {
         Thread.sleep(200);
         handler.destroy();
         handler.destroy();
-
     }
 
     public static class ExEzySocketEventLoopMultiHandler extends EzySocketEventLoopMultiHandler {

@@ -28,28 +28,28 @@ public class EzySocketDisconnectionHandler extends EzySocketAbstractEventHandler
             EzySocketDisconnection disconnection = disconnectionQueue.take();
             processDisconnection(disconnection);
         } catch (InterruptedException e) {
-            logger.info("disconnection-handler thread interrupted: {}", Thread.currentThread());
+            logger.info("disconnection-handler thread interrupted");
         } catch (Throwable throwable) {
-            logger.warn("problems in disconnection-handler, thread: {}", Thread.currentThread(), throwable);
+            logger.warn("problems in disconnection-handler, thread", throwable);
         }
     }
 
     private void processDisconnection(EzySocketDisconnection disconnection) {
         try {
-            processDisconnection0(disconnection);
+            EzySession session = disconnection.getSession();
+            EzyConstant disconnectReason = disconnection.getDisconnectReason();
+            EzySocketDataHandlerGroup handlerGroup = removeDataHandlerGroup(session);
+            if (handlerGroup != null) {
+                handlerGroup.fireChannelInactive(disconnectReason);
+            } else {
+                logger.warn(
+                    "has no handler group with session: {}, ignore disconnection: {}",
+                    session,
+                    disconnection
+                );
+            }
         } finally {
             disconnection.release();
-        }
-    }
-
-    private void processDisconnection0(EzySocketDisconnection disconnection) {
-        EzySession session = disconnection.getSession();
-        EzyConstant disconnectReason = disconnection.getDisconnectReason();
-        EzySocketDataHandlerGroup handlerGroup = removeDataHandlerGroup(session);
-        if (handlerGroup != null) {
-            handlerGroup.fireChannelInactive(disconnectReason);
-        } else {
-            logger.warn("has no handler group with session: {}, ignore disconnection: {}", session, disconnection);
         }
     }
 

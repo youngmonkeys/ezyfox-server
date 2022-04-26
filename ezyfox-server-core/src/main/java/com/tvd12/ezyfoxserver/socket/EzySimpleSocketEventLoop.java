@@ -21,11 +21,11 @@ public abstract class EzySimpleSocketEventLoop extends EzySocketEventLoop {
 
     protected final void eventLoop() {
         logger.debug("{} event loop has started", currentThreadName());
-        eventLoop0();
+        doEventLoop();
         logger.debug("{} event loop has stopped", currentThreadName());
     }
 
-    protected abstract void eventLoop0();
+    protected abstract void doEventLoop();
 
     private String currentThreadName() {
         return Thread.currentThread().getName();

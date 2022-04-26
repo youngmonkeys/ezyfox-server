@@ -6,9 +6,9 @@ import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 
-@SuppressWarnings("rawtypes")
 public class EzySimpleSessionCreator implements EzySessionCreator {
 
+    @SuppressWarnings("rawtypes")
     protected final EzySessionManager sessionManager;
     protected final EzySessionManagementSetting sessionSetting;
 
@@ -37,9 +37,11 @@ public class EzySimpleSessionCreator implements EzySessionCreator {
 
     public static class Builder implements EzyBuilder<EzySessionCreator> {
 
+        @SuppressWarnings("rawtypes")
         private EzySessionManager sessionManager;
         private EzySessionManagementSetting sessionSetting;
 
+        @SuppressWarnings("rawtypes")
         public Builder sessionManager(EzySessionManager sessionManager) {
             this.sessionManager = sessionManager;
             return this;

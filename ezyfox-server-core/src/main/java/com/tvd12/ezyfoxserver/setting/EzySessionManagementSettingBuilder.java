@@ -9,19 +9,26 @@ public class EzySessionManagementSettingBuilder
 
     protected long sessionMaxIdleTimeInSecond = 30;
     protected long sessionMaxWaitingTimeInSecond = 30;
-    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond = new EzySimpleMaxRequestPerSecond();
+    protected EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond
+        = new EzySimpleMaxRequestPerSecond();
 
-    public EzySessionManagementSettingBuilder sessionMaxIdleTimeInSecond(long sessionMaxIdleTimeInSecond) {
+    public EzySessionManagementSettingBuilder sessionMaxIdleTimeInSecond(
+        long sessionMaxIdleTimeInSecond
+    ) {
         this.sessionMaxIdleTimeInSecond = sessionMaxIdleTimeInSecond;
         return this;
     }
 
-    public EzySessionManagementSettingBuilder sessionMaxWaitingTimeInSecond(long sessionMaxWaitingTimeInSecond) {
+    public EzySessionManagementSettingBuilder sessionMaxWaitingTimeInSecond(
+        long sessionMaxWaitingTimeInSecond
+    ) {
         this.sessionMaxWaitingTimeInSecond = sessionMaxWaitingTimeInSecond;
         return this;
     }
 
-    public EzySessionManagementSettingBuilder sessionMaxRequestPerSecond(EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond) {
+    public EzySessionManagementSettingBuilder sessionMaxRequestPerSecond(
+        EzySimpleMaxRequestPerSecond sessionMaxRequestPerSecond
+    ) {
         this.sessionMaxRequestPerSecond = sessionMaxRequestPerSecond;
         return this;
     }
@@ -40,14 +47,17 @@ public class EzySessionManagementSettingBuilder
         implements EzyBuilder<EzySimpleMaxRequestPerSecond> {
 
         protected int value = 15;
-        protected EzyMaxRequestPerSecondAction action = EzyMaxRequestPerSecondAction.DROP_REQUEST;
+        protected EzyMaxRequestPerSecondAction action
+            = EzyMaxRequestPerSecondAction.DROP_REQUEST;
 
         public EzyMaxRequestPerSecondBuilder value(int value) {
             this.value = value;
             return this;
         }
 
-        public EzyMaxRequestPerSecondBuilder action(EzyMaxRequestPerSecondAction action) {
+        public EzyMaxRequestPerSecondBuilder action(
+            EzyMaxRequestPerSecondAction action
+        ) {
             this.action = action;
             return this;
         }

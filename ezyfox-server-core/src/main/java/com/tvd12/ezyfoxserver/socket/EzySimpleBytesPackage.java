@@ -18,7 +18,8 @@ public class EzySimpleBytesPackage implements EzyBytesPackage {
     @Getter
     @Setter
     protected EzyConstant transportType = EzyTransportType.TCP;
-    protected EzyHashMapList<EzyConstant, EzySession> recipients = new EzyHashMapList<>();
+    protected EzyHashMapList<EzyConstant, EzySession> recipients
+        = new EzyHashMapList<>();
 
     public void addRecipients(Collection<EzySession> recipients) {
         for (EzySession recipient : recipients) {

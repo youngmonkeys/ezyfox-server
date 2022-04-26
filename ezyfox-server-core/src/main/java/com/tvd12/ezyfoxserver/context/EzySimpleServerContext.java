@@ -39,7 +39,7 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
         = new ConcurrentHashMap<>();
 
     @Override
-    protected void init0() {
+    protected void doInit() {
         this.broadcastEvent = new EzyBroadcastEventImpl(this);
         this.streamBytes = new EzyStreamBytesImpl(server);
         this.sendResponse = new EzySendResponseImpl(server);

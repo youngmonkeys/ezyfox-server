@@ -38,7 +38,7 @@ public class EzySimpleUser
     @Setter(AccessLevel.NONE)
     protected Map<Long, EzySession> sessionMap = new ConcurrentHashMap<>();
 
-    private transient static final AtomicLong COUNTER = new AtomicLong(0);
+    private static final transient AtomicLong COUNTER = new AtomicLong(0);
 
     @Override
     public void addSession(EzySession session) {

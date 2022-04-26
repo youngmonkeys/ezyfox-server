@@ -27,7 +27,10 @@ public class EzyAppSetupImpl
 
     @SuppressWarnings("rawtypes")
     @Override
-    public EzyAppSetup addEventController(EzyConstant eventType, EzyEventController controller) {
+    public EzyAppSetup addEventController(
+        EzyConstant eventType,
+        EzyEventController controller
+    ) {
         doAddEventController(eventType, controller);
         return this;
     }

@@ -48,7 +48,7 @@ public abstract class EzySocketRequestHandler extends EzySocketAbstractEventHand
 
     @Override
     public void destroy() {
-        processWithLogException(() -> sessionTicketsQueue.clear());
+        processWithLogException(sessionTicketsQueue::clear);
     }
 
     protected abstract EzyRequestQueue getRequestQueue(

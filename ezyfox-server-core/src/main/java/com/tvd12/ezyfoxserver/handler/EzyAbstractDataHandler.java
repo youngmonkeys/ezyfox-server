@@ -33,7 +33,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_SIZE;
 
-@SuppressWarnings("rawtypes")
 public abstract class EzyAbstractDataHandler<S extends EzySession>
     extends EzyLoggable
     implements EzySessionDelegate, EzyDestroyable {
@@ -48,6 +47,7 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyCloseSession closeSession;
     protected EzyServerControllers controllers;
     protected EzyZoneUserManager userManager;
+    @SuppressWarnings("rawtypes")
     protected EzySessionManager sessionManager;
     protected EzySettings settings;
     protected Set<EzyConstant> ignoredLogCommands;
@@ -55,7 +55,8 @@ public abstract class EzyAbstractDataHandler<S extends EzySession>
     protected EzyMaxRequestPerSecond maxRequestPerSecond;
     protected volatile boolean active = true;
     protected volatile boolean destroyed = false;
-    protected Map<Class<?>, EzyExceptionHandler> exceptionHandlers = newExceptionHandlers();
+    protected Map<Class<?>, EzyExceptionHandler> exceptionHandlers
+        = newExceptionHandlers();
 
     public EzyAbstractDataHandler(EzyServerContext ctx, S session) {
         this.context = ctx;

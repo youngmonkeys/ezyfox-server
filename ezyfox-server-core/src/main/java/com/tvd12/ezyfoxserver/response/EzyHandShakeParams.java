@@ -15,7 +15,7 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
     protected byte[] sessionKey;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(serverPublicKey)
             .append(reconnectToken)

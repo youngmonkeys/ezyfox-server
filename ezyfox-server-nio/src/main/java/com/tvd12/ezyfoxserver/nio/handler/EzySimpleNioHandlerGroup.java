@@ -84,7 +84,7 @@ public class EzySimpleNioHandlerGroup
     }
 
     @Override
-    protected void sendPacketNow0(EzyPacket packet) {
+    protected void doSendPacketNow(EzyPacket packet) {
         ByteBuffer writeBuffer = ByteBuffer.allocate(packet.getSize());
         executeSendingPacket(packet, writeBuffer);
     }

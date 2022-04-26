@@ -19,7 +19,7 @@ public class EzyErrorParams extends EzySimpleResponseParams {
     }
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(code)
             .append(message);

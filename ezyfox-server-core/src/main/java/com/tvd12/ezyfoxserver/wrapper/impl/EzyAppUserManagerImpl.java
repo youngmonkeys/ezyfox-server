@@ -31,7 +31,10 @@ public class EzyAppUserManagerImpl
     @Override
     public void removeUser(EzyUser user, EzyConstant reason) {
         String username = user.getName();
-        Lock lock = locks.computeIfAbsent(username, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
+        Lock lock = locks.computeIfAbsent(
+            username,
+            EzyFunctions.NEW_REENTRANT_LOCK_FUNC
+        );
         lock.lock();
         try {
             boolean contains = containsUser(user);
@@ -56,7 +59,8 @@ public class EzyAppUserManagerImpl
         ((EzyDestroyable) userDelegate).destroy();
     }
 
-    public static class Builder extends EzyAbstractUserManager.Builder<Builder> {
+    public static class Builder
+        extends EzyAbstractUserManager.Builder<Builder> {
 
         protected String appName;
         protected EzyAppUserDelegate userDelegate;

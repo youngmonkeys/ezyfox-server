@@ -44,7 +44,10 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
         }
     }
 
-    protected EzyPluginEntry startPlugin(String pluginName, EzyPluginEntryLoader loader)
+    protected EzyPluginEntry startPlugin(
+        String pluginName,
+        EzyPluginEntryLoader loader
+    )
         throws Exception {
         EzyPluginEntry entry = loader.load();
         entry.config(getPluginContext(pluginName));
@@ -60,18 +63,22 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
         return zoneSetting.getPluginByName(name);
     }
 
-    protected Class<EzyPluginEntryLoader>
-    getPluginEntryLoaderClass(String pluginName) throws Exception {
+    protected Class<EzyPluginEntryLoader> getPluginEntryLoaderClass(
+        String pluginName
+    ) throws Exception {
         return getPluginEntryLoaderClass(getPluginByName(pluginName));
     }
 
     @SuppressWarnings("unchecked")
-    protected Class<EzyPluginEntryLoader>
-    getPluginEntryLoaderClass(EzyPluginSetting plugin) throws Exception {
+    protected Class<EzyPluginEntryLoader> getPluginEntryLoaderClass(
+        EzyPluginSetting plugin
+    ) throws Exception {
         return (Class<EzyPluginEntryLoader>) Class.forName(plugin.getEntryLoader());
     }
 
-    protected EzyPluginEntryLoader newPluginEntryLoader(String pluginName) throws Exception {
+    protected EzyPluginEntryLoader newPluginEntryLoader(
+        String pluginName
+    ) throws Exception {
         Class<EzyPluginEntryLoader> pluginLoaderClass =
             getPluginEntryLoaderClass(pluginName);
         EzyPluginSetting pluginSetting = getPluginByName(pluginName);

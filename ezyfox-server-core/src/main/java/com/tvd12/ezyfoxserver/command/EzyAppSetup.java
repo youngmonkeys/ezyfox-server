@@ -4,11 +4,14 @@ import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 
-@SuppressWarnings("rawtypes")
 public interface EzyAppSetup extends EzySetup {
 
     EzyAppSetup setRequestController(EzyAppRequestController controller);
 
+    @SuppressWarnings("rawtypes")
     @Override
-    EzyAppSetup addEventController(EzyConstant eventType, EzyEventController controller);
+    EzyAppSetup addEventController(
+        EzyConstant eventType,
+        EzyEventController controller
+    );
 }

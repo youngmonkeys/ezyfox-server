@@ -55,7 +55,7 @@ public abstract class EzyServerBootstrap
 
     protected final void notifyServerReady() {
         printBanner();
-        notifyServerReady0();
+        doNotifyServerReady();
     }
 
     protected final void printBanner() {
@@ -65,7 +65,7 @@ public abstract class EzyServerBootstrap
         }
     }
 
-    protected void notifyServerReady0() {
+    protected void doNotifyServerReady() {
         EzyEvent event = new EzySimpleServerReadyEvent();
         context.handleEvent(EzyEventType.SERVER_READY, event);
         context.broadcast(EzyEventType.SERVER_READY, event, true);

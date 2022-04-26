@@ -19,10 +19,12 @@ public class EzyAppClassLoader extends URLClassLoader {
         super(getURLsByPath(directory), parent);
     }
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     private static URL[] getURLsByPath(File directory) {
         return getURLsByPath(new EzyDirectories().directory(directory));
     }
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     private static URL[] getURLsByPath(EzyDirectories directories) {
         try {
             return directories.getURLs();

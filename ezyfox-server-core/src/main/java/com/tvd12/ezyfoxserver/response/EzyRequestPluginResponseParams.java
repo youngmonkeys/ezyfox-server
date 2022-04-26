@@ -14,7 +14,7 @@ public class EzyRequestPluginResponseParams extends EzySimpleResponseParams {
     protected EzyData data;
 
     @Override
-    public EzyArrayBuilder serialize0() {
+    public EzyArrayBuilder doSerialize() {
         EzyArrayBuilder builder = newArrayBuilder()
             .append(pluginId)
             .append(data);

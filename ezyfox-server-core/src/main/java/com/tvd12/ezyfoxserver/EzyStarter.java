@@ -14,11 +14,6 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author tavandung12
- *
- */
-@SuppressWarnings("rawtypes")
 public abstract class EzyStarter implements EzyStartable {
 
     private final String configFile;
@@ -79,16 +74,20 @@ public abstract class EzyStarter implements EzyStartable {
 
     protected EzyLoader newLoader() {
         return new EzyLoader() {
+            @SuppressWarnings("rawtypes")
             @Override
-            protected EzySimpleSessionManager.Builder
-            createSessionManagerBuilder(EzySettings settings) {
+            protected EzySimpleSessionManager.Builder createSessionManagerBuilder(
+                EzySettings settings
+            ) {
                 return newSessionManagerBuilder(settings);
             }
         };
     }
 
-    protected abstract EzySimpleSessionManager.Builder
-    newSessionManagerBuilder(EzySettings settings);
+    @SuppressWarnings("rawtypes")
+    protected abstract EzySimpleSessionManager.Builder newSessionManagerBuilder(
+        EzySettings settings
+    );
 
     protected EzyConfigLoader getConfigLoader() {
         return new EzySimpleConfigLoader();
@@ -107,7 +106,8 @@ public abstract class EzyStarter implements EzyStartable {
     }
 
     @SuppressWarnings("unchecked")
-    public abstract static class Builder<B extends Builder<B>> implements EzyBuilder<EzyStarter> {
+    public abstract static class Builder<B extends Builder<B>>
+        implements EzyBuilder<EzyStarter> {
 
         protected String configFile;
         protected EzySettingsDecorator settingsDecorator;

@@ -20,20 +20,25 @@ public class EzyEventControllersImpl implements EzyEventControllers {
     protected final Map<EzyConstant, List<EzyEventController>> controllers
         = new ConcurrentHashMap<>();
 
-    @SuppressWarnings("rawtypes")
-    public static EzyEventControllers create(EzyEventControllersSetting setting) {
+    public static EzyEventControllers create(
+        EzyEventControllersSetting setting
+    ) {
         EzyEventControllers controllers = new EzyEventControllersImpl();
         for (EzyEventControllerSetting item : setting.getEventControllers()) {
-            EzyEventType eventType = EzyEventType.valueOf(item.getEventType());
-            EzyEventController controller = EzyClasses.newInstance(item.getController());
-            controllers.addController(eventType, controller);
+            controllers.addController(
+                EzyEventType.valueOf(item.getEventType()),
+                EzyClasses.newInstance(item.getController())
+            );
         }
         return controllers;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void addController(EzyConstant eventType, EzyEventController controller) {
+    public void addController(
+        EzyConstant eventType,
+        EzyEventController controller
+    ) {
         controllers.compute(eventType, (k, v) -> {
             List<EzyEventController> list = v != null
                 ? new ArrayList<>(v)
@@ -45,8 +50,13 @@ public class EzyEventControllersImpl implements EzyEventControllers {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public List<EzyEventController> getControllers(EzyConstant eventType) {
-        return controllers.getOrDefault(eventType, Collections.emptyList());
+    public List<EzyEventController> getControllers(
+        EzyConstant eventType
+    ) {
+        return controllers.getOrDefault(
+            eventType,
+            Collections.emptyList()
+        );
     }
 
     @Override

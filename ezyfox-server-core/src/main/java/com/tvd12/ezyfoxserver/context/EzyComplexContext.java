@@ -9,6 +9,7 @@ import com.tvd12.ezyfoxserver.response.EzyResponse;
 
 import java.util.Collection;
 
+@SuppressWarnings("OverloadMethodsDeclarationOrder")
 public interface EzyComplexContext extends
     EzyContext,
     EzyPluginContextsFetcher,

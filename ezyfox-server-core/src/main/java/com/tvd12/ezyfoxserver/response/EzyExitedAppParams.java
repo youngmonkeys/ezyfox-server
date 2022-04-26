@@ -15,7 +15,7 @@ public class EzyExitedAppParams extends EzySimpleResponseParams {
     protected EzyConstant reason;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(app.getId())
             .append(reason.getId());

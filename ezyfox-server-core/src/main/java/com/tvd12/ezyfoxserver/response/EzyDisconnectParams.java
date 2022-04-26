@@ -13,7 +13,7 @@ public class EzyDisconnectParams extends EzySimpleResponseParams {
     protected EzyConstant reason;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(reason.getId());
     }

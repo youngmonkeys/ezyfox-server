@@ -15,7 +15,7 @@ public class EzyAccessAppParams extends EzySimpleResponseParams {
     protected EzyAppSetting app;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(app.getId())
             .append(app.getName())

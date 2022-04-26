@@ -67,20 +67,24 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
         return zoneSetting.getAppByName(name);
     }
 
-    protected Class<EzyAppEntryLoader>
-    getAppEntryLoaderClass(String appName) throws Exception {
+    protected Class<EzyAppEntryLoader> getAppEntryLoaderClass(
+        String appName
+    ) throws Exception {
         return getAppEntryLoaderClass(getAppByName(appName));
     }
 
     @SuppressWarnings("unchecked")
-    protected Class<EzyAppEntryLoader>
-    getAppEntryLoaderClass(EzyAppSetting app) throws Exception {
+    protected Class<EzyAppEntryLoader> getAppEntryLoaderClass(
+        EzyAppSetting app
+    ) throws Exception {
         ClassLoader classLoader = getAppClassLoader(app.getName(), app.getFolder());
         return (Class<EzyAppEntryLoader>)
             Class.forName(app.getEntryLoader(), true, classLoader);
     }
 
-    protected EzyAppEntryLoader newAppEntryLoader(String appName) throws Exception {
+    protected EzyAppEntryLoader newAppEntryLoader(
+        String appName
+    ) throws Exception {
         Class<EzyAppEntryLoader> entryLoaderClass = getAppEntryLoaderClass(appName);
         EzyAppSetting appSetting = getAppByName(appName);
         if (appSetting.getEntryLoaderArgs() == null) {
@@ -90,7 +94,10 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
             .newInstance(appSetting.getEntryLoaderArgs());
     }
 
-    protected ClassLoader getAppClassLoader(String appName, String appFolder) {
+    protected ClassLoader getAppClassLoader(
+        String appName,
+        String appFolder
+    ) {
         ClassLoader appClassLoader = appClassLoaders.get(appFolder);
         if (appClassLoader != null) {
             return appClassLoader;

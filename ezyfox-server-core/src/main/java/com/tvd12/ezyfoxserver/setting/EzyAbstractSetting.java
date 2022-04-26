@@ -81,16 +81,16 @@ public abstract class EzyAbstractSetting
     }
 
     @Override
-    public String getConfigFileInput() {
-        return getConfigFile(true);
-    }
-
-    @Override
     public String getConfigFile(boolean noParent) {
         if (noParent) {
             return configFile;
         }
         return Paths.get(getLocation(), configFile).toString();
+    }
+
+    @Override
+    public String getConfigFileInput() {
+        return getConfigFile(true);
     }
 
     protected abstract String getParentFolder();

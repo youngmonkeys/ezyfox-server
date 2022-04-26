@@ -13,7 +13,7 @@ public class EzyPluginInfoParams extends EzySimpleResponseParams {
     protected EzyPluginSetting plugin;
 
     @Override
-    protected EzyArrayBuilder serialize0() {
+    protected EzyArrayBuilder doSerialize() {
         return newArrayBuilder()
             .append(plugin.getId())
             .append(plugin.getName());

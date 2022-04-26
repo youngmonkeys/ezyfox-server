@@ -39,10 +39,10 @@ public abstract class EzyAbstractContext
         this.properties.put(EzyHandleException.class, handleException);
         this.properties.put(EzyAddCommand.class, new EzyAddCommandImpl(this));
         this.properties.put(EzyAddExceptionHandler.class, new EzyAddExceptionHandlerImpl(component));
-        this.init0();
+        this.doInit();
     }
 
-    protected void init0() {}
+    protected void doInit() {}
 
     @SuppressWarnings("unchecked")
     public void handleEvent(EzyConstant eventType, EzyEvent event) {

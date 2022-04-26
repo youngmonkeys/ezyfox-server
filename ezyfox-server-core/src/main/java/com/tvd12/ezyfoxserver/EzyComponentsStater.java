@@ -20,17 +20,16 @@ public abstract class EzyComponentsStater extends EzyLoggable implements EzyStar
     @Override
     public abstract void start();
 
-    @SuppressWarnings("unchecked")
-    public static abstract class Builder
+    public abstract static class Builder
         <T extends EzyComponentsStater, B extends Builder<T, B>>
         implements EzyBuilder<T> {
 
         protected EzyServerContext serverContext;
 
+        @SuppressWarnings("unchecked")
         public B serverContext(EzyServerContext serverContext) {
             this.serverContext = serverContext;
             return (B) this;
         }
-
     }
 }

@@ -19,7 +19,6 @@ import static com.tvd12.ezyfoxserver.constant.EzyDisconnectReason.MAX_REQUEST_PE
 import static com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction.DISCONNECT_SESSION;
 import static com.tvd12.ezyfoxserver.exception.EzyRequestHandleException.requestHandleException;
 
-@SuppressWarnings("unchecked")
 public abstract class EzySimpleDataHandler<S extends EzySession>
     extends EzyUserDataHandler<S> {
 
@@ -51,6 +50,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         return session == null || !session.isActivated();
     }
 
+    @SuppressWarnings("unchecked")
     public void processMaxRequestPerSecond() {
         responseError();
         if (maxRequestPerSecond.getAction() == DISCONNECT_SESSION) {
@@ -66,7 +66,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         doHandleReceivedStreaming(bytes);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected void doHandleReceivedStreaming(byte[] bytes) {
         EzyStreamingRequest request = newStreamingRequest(bytes);
         try {
@@ -101,7 +101,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         }
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
         EzyRequest request = newRequest(cmd, data);
         try {
@@ -166,6 +166,7 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
         destroy();
     }
 
+    @SuppressWarnings("unchecked")
     protected void removeSession() {
         if (sessionManager != null) {
             sessionManager.clearSession(session);

@@ -149,7 +149,7 @@ public class EzySocketDataReceiverTest {
     }
 
     @Test
-    public void wsReceive0ButException() throws Exception {
+    public void doWsReceiveButException() throws Exception {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
@@ -166,7 +166,7 @@ public class EzySocketDataReceiverTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("wsReceive0")
+            .method("doWsReceive")
             .param(Session.class, session)
             .param(String.class, message)
             .call();
@@ -177,7 +177,7 @@ public class EzySocketDataReceiverTest {
     }
 
     @Test
-    public void wsReceive02ButException() throws Exception {
+    public void doWsReceive2ButException() throws Exception {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
@@ -194,7 +194,7 @@ public class EzySocketDataReceiverTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("wsReceive0")
+            .method("doWsReceive")
             .param(Session.class, session)
             .param(byte[].class, payload)
             .param(int.class, 0)

@@ -18,6 +18,7 @@ public class EzyHandshakeController
     extends EzyAbstractServerController
     implements EzyServerController<EzyHandShakeRequest> {
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     @Override
     public void handle(EzyServerContext ctx, EzyHandShakeRequest request) {
         EzySession session = request.getSession();
@@ -30,6 +31,7 @@ public class EzyHandshakeController
         event.release();
     }
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     protected void handleSocketSSL(EzyServerContext ctx, EzyHandshakeEvent event) {
         EzySession session = event.getSession();
         if (session.getConnectionType() == EzyConnectionType.WEBSOCKET) {

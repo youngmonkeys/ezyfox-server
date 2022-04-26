@@ -19,7 +19,10 @@ public abstract class EzyChildComponent
     protected EzyEntry entry;
 
     @SuppressWarnings("rawtypes")
-    public void addEventController(EzyConstant eventType, EzyEventController ctrl) {
+    public void addEventController(
+        EzyConstant eventType,
+        EzyEventController ctrl
+    ) {
         eventControllers.addController(eventType, ctrl);
     }
 

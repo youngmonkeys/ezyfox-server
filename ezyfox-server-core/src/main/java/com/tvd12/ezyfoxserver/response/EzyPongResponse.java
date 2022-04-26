@@ -7,8 +7,9 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 
 public class EzyPongResponse implements EzyResponse {
     private static final long serialVersionUID = -8041496097838048962L;
-    private final static EzyPongResponse INSTANCE = new EzyPongResponse();
+
     private final EzyArray data;
+    private static final EzyPongResponse INSTANCE = new EzyPongResponse();
 
     private EzyPongResponse() {
         this.data = newData();

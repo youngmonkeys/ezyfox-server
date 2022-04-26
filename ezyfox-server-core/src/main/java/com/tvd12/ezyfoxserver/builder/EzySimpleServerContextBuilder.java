@@ -43,7 +43,10 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         EzySimpleServerContext context = newServerContext();
         context.setServer(server);
         context.addZoneContexts(newZoneContexts(context));
-        context.setProperty(EzySocketUserRemovalQueue.class, socketUserRemovalQueue);
+        context.setProperty(
+            EzySocketUserRemovalQueue.class,
+            socketUserRemovalQueue
+        );
         context.init();
         return context;
     }
@@ -52,7 +55,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return new EzySimpleServerContext();
     }
 
-    protected Collection<EzyZoneContext> newZoneContexts(EzyServerContext parent) {
+    protected Collection<EzyZoneContext> newZoneContexts(
+        EzyServerContext parent
+    ) {
         Collection<EzyZoneContext> contexts = new ArrayList<>();
         EzySettings settings = EzyServerContexts.getSettings(parent);
         for (Integer zoneId : settings.getZoneIds()) {
@@ -60,8 +65,13 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             EzySimpleZone zone = new EzySimpleZone();
             zone.setSetting(zoneSetting);
             EzyUserDelegate userDelegate = newUserDelegate(parent);
-            EzyZoneUserManager userManager = newZoneUserManager(zoneSetting, userDelegate);
-            EzyEventControllers eventControllers = newEventControllers(zoneSetting.getEventControllers());
+            EzyZoneUserManager userManager = newZoneUserManager(
+                zoneSetting,
+                userDelegate
+            );
+            EzyEventControllers eventControllers = newEventControllers(
+                zoneSetting.getEventControllers()
+            );
             zone.setUserManager(userManager);
             zone.setEventControllers(eventControllers);
             EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
@@ -81,7 +91,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
     }
 
     protected EzyZoneUserManager newZoneUserManager(
-        EzyZoneSetting zoneSetting, EzyUserDelegate userDelegate) {
+        EzyZoneSetting zoneSetting,
+        EzyUserDelegate userDelegate
+    ) {
         EzyUserManagementSetting setting = zoneSetting.getUserManagement();
         return EzyZoneUserManagerImpl.builder()
             .userDelegate(userDelegate)
@@ -95,11 +107,15 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return new EzyEventControllersImpl();
     }
 
-    protected EzyEventControllers newEventControllers(EzyEventControllersSetting setting) {
+    protected EzyEventControllers newEventControllers(
+        EzyEventControllersSetting setting
+    ) {
         return EzyEventControllersImpl.create(setting);
     }
 
-    protected Collection<EzyAppContext> newAppContexts(EzyZoneContext parent) {
+    protected Collection<EzyAppContext> newAppContexts(
+        EzyZoneContext parent
+    ) {
         EzyZone zone = parent.getZone();
         EzyZoneSetting zoneSetting = zone.getSetting();
         Collection<EzyAppContext> contexts = new ArrayList<>();
@@ -109,7 +125,10 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return contexts;
     }
 
-    protected EzyAppContext newAppContext(EzyZoneContext parent, EzyAppSetting setting) {
+    protected EzyAppContext newAppContext(
+        EzyZoneContext parent,
+        EzyAppSetting setting
+    ) {
         EzySimpleAppUserDelegate userDelegate = new EzySimpleAppUserDelegate();
         EzyAppUserManager appUserManager = newAppUserManager(setting, userDelegate);
         EzyEventControllers eventControllers = newEventControllers();
@@ -127,8 +146,10 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return appContext;
     }
 
-    protected EzyAppUserManager
-    newAppUserManager(EzyAppSetting setting, EzyAppUserDelegate userDelegate) {
+    protected EzyAppUserManager newAppUserManager(
+        EzyAppSetting setting,
+        EzyAppUserDelegate userDelegate
+    ) {
         return EzyAppUserManagerImpl.builder()
             .appName(setting.getName())
             .maxUsers(setting.getMaxUsers())
@@ -136,17 +157,27 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
             .build();
     }
 
-    protected Collection<EzyPluginContext> newPluginContexts(EzySimpleZoneContext parent) {
+    protected Collection<EzyPluginContext> newPluginContexts(
+        EzySimpleZoneContext parent
+    ) {
         EzyZone zone = parent.getZone();
         EzyZoneSetting zoneSetting = zone.getSetting();
         Collection<EzyPluginContext> contexts = new ArrayList<>();
         for (Integer appId : zoneSetting.getPluginIds()) {
-            contexts.add(newPluginContext(parent, zoneSetting.getPluginById(appId)));
+            contexts.add(
+                newPluginContext(
+                    parent,
+                    zoneSetting.getPluginById(appId)
+                )
+            );
         }
         return contexts;
     }
 
-    protected EzyPluginContext newPluginContext(EzySimpleZoneContext parent, EzyPluginSetting setting) {
+    protected EzyPluginContext newPluginContext(
+        EzySimpleZoneContext parent,
+        EzyPluginSetting setting
+    ) {
         EzySimplePlugin plugin = new EzySimplePlugin();
         plugin.setSetting(setting);
         plugin.setEventControllers(newEventControllers());
@@ -158,7 +189,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         return pluginContext;
     }
 
-    protected ScheduledExecutorService newAppExecutorService(EzyAppSetting app) {
+    protected ScheduledExecutorService newAppExecutorService(
+        EzyAppSetting app
+    ) {
         String threadName = "app-" + app.getName() + "-thread";
         int threadPoolSize = app.getThreadPoolSize();
         if (threadPoolSize > 0) {
@@ -169,7 +202,9 @@ public class EzySimpleServerContextBuilder<B extends EzySimpleServerContextBuild
         );
     }
 
-    protected ScheduledExecutorService newPluginExecutorService(EzyPluginSetting plugin) {
+    protected ScheduledExecutorService newPluginExecutorService(
+        EzyPluginSetting plugin
+    ) {
         String threadName = "plugin-" + plugin.getName() + "-thread";
         int threadPoolSize = plugin.getThreadPoolSize();
         if (threadPoolSize > 0) {

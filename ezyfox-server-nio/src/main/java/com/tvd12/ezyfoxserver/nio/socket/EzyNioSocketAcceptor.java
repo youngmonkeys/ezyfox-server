@@ -53,8 +53,9 @@ public class EzyNioSocketAcceptor
         if(acceptableConnections.isEmpty()) {
             return;
         }
+        //noinspection SynchronizeOnNonFinalField
         synchronized (acceptableConnections) {
-            handleAcceptableConnections0();
+            doHandleAcceptableConnections();
         }
     }
 
@@ -80,12 +81,13 @@ public class EzyNioSocketAcceptor
     }
 
     private void addConnection(SocketChannel clientChannel) {
+        //noinspection SynchronizeOnNonFinalField
         synchronized (acceptableConnections) {
             acceptableConnections.add(clientChannel);
         }
     }
 
-    private void handleAcceptableConnections0() {
+    private void doHandleAcceptableConnections() {
         Iterator<SocketChannel> iterator = acceptableConnections.iterator();
         while(iterator.hasNext()) {
             SocketChannel clientChannel = iterator.next();
@@ -96,14 +98,14 @@ public class EzyNioSocketAcceptor
 
     private void acceptConnection(SocketChannel clientChannel) {
         try {
-            acceptConnection0(clientChannel);
+            doAcceptConnection(clientChannel);
         }
         catch(Exception e) {
-            logger.error("can't acception connection: {}", clientChannel, e);
+            logger.error("can't accept connection: {}", clientChannel, e);
         }
     }
 
-    private void acceptConnection0(SocketChannel clientChannel) throws Exception {
+    private void doAcceptConnection(SocketChannel clientChannel) throws Exception {
         clientChannel.configureBlocking(false);
         clientChannel.socket().setTcpNoDelay(tcpNoDelay);
 

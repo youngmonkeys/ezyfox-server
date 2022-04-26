@@ -139,14 +139,14 @@ public abstract class EzyAbstractHandlerGroup
     @Override
     public final void sendPacketNow(EzyPacket packet) {
         try {
-            sendPacketNow0(packet);
+            doSendPacketNow(packet);
         }
         finally {
             packet.release();
         }
     }
     
-    protected void sendPacketNow0(EzyPacket packet) {
+    protected void doSendPacketNow(EzyPacket packet) {
         executeSendingPacket(packet, null);
     }
     

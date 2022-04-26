@@ -14,45 +14,44 @@ public class EzySocketStreamHandler extends EzySocketAbstractEventHandler {
 
     @Override
     public void handleEvent() {
-        processStreamQueue0();
+        try {
+            EzySocketStream stream = streamQueue.take();
+            processStream(stream);
+        } catch (InterruptedException e) {
+            logger.warn("socket-stream-handler thread interrupted");
+        } catch (Throwable throwable) {
+            logger.warn("problems in socket-stream-handler", throwable);
+        }
     }
 
     @Override
     public void destroy() {
-        processWithLogException(() -> streamQueue.clear());
+        processWithLogException(streamQueue::clear);
     }
 
-    private void processStreamQueue0() {
+    private void processStream(EzySocketStream stream) throws Exception {
         try {
-            EzySocketStream stream = streamQueue.take();
-            processStreamQueue(stream);
-        } catch (InterruptedException e) {
-            logger.warn("socket-stream-handler thread interrupted: {}", Thread.currentThread());
-        } catch (Throwable throwable) {
-            logger.warn("problems in socket-stream-handler, thread: {}", Thread.currentThread(), throwable);
-        }
-    }
-
-    private void processStreamQueue(EzySocketStream stream) throws Exception {
-        try {
-            processStreamQueue0(stream);
+            byte[] bytes = stream.getBytes();
+            EzySession session = stream.getSession();
+            EzySocketDataHandlerGroup handlerGroup =
+                getDataHandlerGroup(session);
+            if (handlerGroup != null) {
+                handlerGroup.fireStreamBytesReceived(bytes);
+            } else {
+                logger.warn(
+                    "has no handler group with session: {}, drop: {} bytes",
+                    session,
+                    bytes.length
+                );
+            }
         } finally {
             stream.release();
         }
     }
 
-    private void processStreamQueue0(EzySocketStream stream) throws Exception {
-        byte[] bytes = stream.getBytes();
-        EzySession session = stream.getSession();
-        EzySocketDataHandlerGroup handlerGroup = getDataHandlerGroup(session);
-        if (handlerGroup != null) {
-            handlerGroup.fireStreamBytesReceived(bytes);
-        } else {
-            logger.warn("has no handler group with session: {}, drop: {} bytes", session, bytes.length);
-        }
-    }
-
-    protected EzySocketDataHandlerGroup getDataHandlerGroup(EzySession session) {
+    protected EzySocketDataHandlerGroup getDataHandlerGroup(
+        EzySession session
+    ) {
         return dataHandlerGroupFetcher.getDataHandlerGroup(session);
     }
 }

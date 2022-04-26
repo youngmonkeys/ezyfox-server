@@ -16,7 +16,7 @@ public class EzySocketWriter
 
     @Override
     public void handleEvent() {
-        processSessionTicketsQueue0();
+        doProcessSessionTicketsQueue();
     }
 
     @Override
@@ -24,14 +24,14 @@ public class EzySocketWriter
         processWithLogException(() -> sessionTicketsQueue.clear());
     }
 
-    private void processSessionTicketsQueue0() {
+    private void doProcessSessionTicketsQueue() {
         try {
             EzySession session = sessionTicketsQueue.take();
             processSessionQueue(session);
         } catch (InterruptedException e) {
-            logger.info("socket-writer thread interrupted: {}", Thread.currentThread());
+            logger.info("socket-writer thread interrupted");
         } catch (Throwable throwable) {
-            logger.warn("problems in socket-writer, thread: {}", Thread.currentThread(), throwable);
+            logger.warn("problems in socket-writer, thread", throwable);
         }
     }
 

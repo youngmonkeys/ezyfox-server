@@ -10,15 +10,15 @@ import com.tvd12.ezyfoxserver.event.EzySimpleUserRemovedEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRemovedEvent;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 
-import java.util.Collection;
-
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 
     protected final EzySocketUserRemovalQueue userRemovalQueue;
 
-    public EzySocketUserRemovalHandler(EzySocketUserRemovalQueue userRemovalQueue) {
+    public EzySocketUserRemovalHandler(
+        EzySocketUserRemovalQueue userRemovalQueue
+    ) {
         this.userRemovalQueue = userRemovalQueue;
     }
 
@@ -45,27 +45,26 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
 
     private void processUserRemoval(EzySocketUserRemoval removal) {
         try {
-            processUserRemoval0(removal);
+            EzyUser user = removal.getUser();
+            try {
+                EzyConstant reason = removal.getReason();
+                EzyZoneContext zoneContext = removal.getZoneContext();
+                EzyUserRemovedEvent event = newUserRemovedEvent(user, reason);
+                removeUserFromApps(zoneContext, event);
+                notifyUserRemovedToPlugins(zoneContext, event);
+            } finally {
+                user.destroy();
+            }
+            logger.debug("user {} has destroyed", user);
         } finally {
             removal.release();
         }
     }
 
-    private void processUserRemoval0(EzySocketUserRemoval removal) {
-        EzyUser user = removal.getUser();
-        try {
-            EzyConstant reason = removal.getReason();
-            EzyZoneContext zoneContext = removal.getZoneContext();
-            EzyUserRemovedEvent event = newUserRemovedEvent(user, reason);
-            removeUserFromApps(zoneContext, event);
-            notifyUserRemovedToPlugins(zoneContext, event);
-        } finally {
-            user.destroy();
-        }
-        logger.debug("user {} has destroyed", user);
-    }
-
-    protected void notifyUserRemovedToPlugins(EzyZoneContext context, EzyUserRemovedEvent event) {
+    protected void notifyUserRemovedToPlugins(
+        EzyZoneContext context,
+        EzyUserRemovedEvent event
+    ) {
         try {
             context.broadcastPlugins(EzyEventType.USER_REMOVED, event, true);
         } catch (Exception e) {
@@ -74,14 +73,19 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
         }
     }
 
-    protected void removeUserFromApps(EzyZoneContext zoneContext, EzyUserRemovedEvent event) {
-        Collection<EzyAppContext> appContexts = zoneContext.getAppContexts();
-        for (EzyAppContext appContext : appContexts) {
+    protected void removeUserFromApps(
+        EzyZoneContext zoneContext,
+        EzyUserRemovedEvent event
+    ) {
+        for (EzyAppContext appContext : zoneContext.getAppContexts()) {
             removeUserFromApp(appContext, event);
         }
     }
 
-    protected void removeUserFromApp(EzyAppContext appContext, EzyUserRemovedEvent event) {
+    protected void removeUserFromApp(
+        EzyAppContext appContext,
+        EzyUserRemovedEvent event
+    ) {
         EzyUser user = event.getUser();
         EzyApplication app = appContext.getApp();
         EzyAppUserManager userManager = app.getUserManager();
@@ -92,11 +96,19 @@ public class EzySocketUserRemovalHandler extends EzySocketAbstractEventHandler {
             }
         } catch (Exception e) {
             String appName = app.getSetting().getName();
-            logger.error("remove user: {} from app: {} error", event.getUser(), appName, e);
+            logger.error(
+                "remove user: {} from app: {} error",
+                event.getUser(),
+                appName,
+                e
+            );
         }
     }
 
-    protected EzyUserRemovedEvent newUserRemovedEvent(EzyUser user, EzyConstant reason) {
+    protected EzyUserRemovedEvent newUserRemovedEvent(
+        EzyUser user,
+        EzyConstant reason
+    ) {
         return new EzySimpleUserRemovedEvent(user, reason);
     }
 }

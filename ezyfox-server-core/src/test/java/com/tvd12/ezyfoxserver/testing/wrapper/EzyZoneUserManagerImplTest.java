@@ -109,7 +109,7 @@ public class EzyZoneUserManagerImplTest {
     }
 
     @Test
-    public void unmapSessionUserWithmaxIdleTimeGreaterThan0() {
+    public void unmapSessionUserWithmaxIdleTimeGreaterThanZero() {
         // given
         EzyZoneUserManagerImpl sut = newZoneUserManager();
         EzySession session = mock(EzySession.class);

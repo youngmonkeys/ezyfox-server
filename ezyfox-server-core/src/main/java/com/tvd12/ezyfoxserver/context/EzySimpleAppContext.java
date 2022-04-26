@@ -30,7 +30,7 @@ public class EzySimpleAppContext
     protected EzyAppSendResponse sendResponse;
 
     @Override
-    protected void init0() {
+    protected void doInit() {
         EzySetup setup = new EzyAppSetupImpl(app);
         this.sendResponse = new EzyAppSendResponseImpl(this);
         this.properties.put(EzyAppSendResponse.class, sendResponse);

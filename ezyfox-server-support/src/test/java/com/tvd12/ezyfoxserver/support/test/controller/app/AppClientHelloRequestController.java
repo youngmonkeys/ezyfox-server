@@ -56,9 +56,9 @@ public class AppClientHelloRequestController {
 
     @EzyDoHandle("requestException2")
     public void handleRequestException2(
-            EzyContext context,
-            String cmd,
-            @EzyRequestData Hello data) throws Exception {
+        EzyContext context,
+        String cmd,
+        @EzyRequestData Hello data) throws Exception {
         throw new Exception(getClass().getSimpleName() + ":handleRequestException2, cmd = " + cmd);
     }
 

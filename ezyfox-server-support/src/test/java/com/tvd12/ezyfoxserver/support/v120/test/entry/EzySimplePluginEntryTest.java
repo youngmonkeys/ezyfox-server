@@ -1,15 +1,5 @@
 package com.tvd12.ezyfoxserver.support.v120.test.entry;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyPackagesToScanAware;
 import com.tvd12.ezyfox.bean.annotation.EzyConfigurationBefore;
@@ -25,8 +15,13 @@ import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
 import com.tvd12.ezyfoxserver.support.constant.EzySupportConstants;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.test.assertion.Asserts;
-
 import lombok.Setter;
+import org.testng.annotations.Test;
+
+import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.*;
 
 public class EzySimplePluginEntryTest {
 
@@ -81,7 +76,7 @@ public class EzySimplePluginEntryTest {
 
         EzyPlugin plugin = mock(EzyPlugin.class);
         when(pluginContext.getPlugin()).thenReturn(plugin);
-        
+
         EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
         when(plugin.getSetting()).thenReturn(pluginSetting);
 
@@ -110,7 +105,7 @@ public class EzySimplePluginEntryTest {
 
         EzyPlugin plugin = mock(EzyPlugin.class);
         when(pluginContext.getPlugin()).thenReturn(plugin);
-        
+
         EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
         when(plugin.getSetting()).thenReturn(pluginSetting);
 

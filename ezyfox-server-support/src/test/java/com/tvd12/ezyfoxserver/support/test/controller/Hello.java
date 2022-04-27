@@ -1,7 +1,6 @@
 package com.tvd12.ezyfoxserver.support.test.controller;
 
 import com.tvd12.ezyfox.binding.annotation.EzyObjectBinding;
-
 import lombok.Getter;
 import lombok.Setter;
 

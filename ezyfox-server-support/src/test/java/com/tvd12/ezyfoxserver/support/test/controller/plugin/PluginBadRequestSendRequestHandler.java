@@ -10,8 +10,8 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
 @EzyRequestListener("badRequestSend")
-public class PluginBadRequestSendRequestHandler 
-        implements EzyUserRequestHandler<EzyPluginContext, Hello> {
+public class PluginBadRequestSendRequestHandler
+    implements EzyUserRequestHandler<EzyPluginContext, Hello> {
 
     @Override
     public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {

@@ -8,7 +8,6 @@ import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
-
 import lombok.Setter;
 
 @Setter
@@ -16,11 +15,11 @@ import lombok.Setter;
 @EzyRequestListener("noUser")
 @EzyObjectBinding(read = false)
 public class ClientNoUserRequestHandler
-        extends EzyLoggable
-        implements
-            EzyHandler,
-            EzySessionAware,
-            EzyDataBinding {
+    extends EzyLoggable
+    implements
+    EzyHandler,
+    EzySessionAware,
+    EzyDataBinding {
 
     protected EzySession session;
 

@@ -1,8 +1,7 @@
 package com.tvd12.ezyfoxserver.support.test.exception;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.support.exception.EzyUserRequestException;
+import org.testng.annotations.Test;
 
 public class EzyUserRequestExceptionTest {
 

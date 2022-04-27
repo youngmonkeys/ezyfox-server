@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.entry;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
@@ -22,17 +16,18 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
-import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.entry.EzyDefaultAppEntry;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.spy;
 
 public class EzyDefaultAppEntryTest {
 
@@ -44,7 +39,7 @@ public class EzyDefaultAppEntryTest {
         EzySimpleServerContext serverContext = new EzySimpleServerContext();
         serverContext.setServer(server);
         serverContext.init();
-        
+
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
@@ -52,14 +47,14 @@ public class EzyDefaultAppEntryTest {
         zoneContext.setZone(zone);
         zoneContext.init();
         zoneContext.setParent(serverContext);
-        
+
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("test");
         appSetting.setActiveProfiles("hello,world");
         appSetting.setPackageName("x.z.y");
-        
+
         EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-                .build();
+            .build();
 
         EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
         EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
@@ -67,101 +62,100 @@ public class EzyDefaultAppEntryTest {
         application.setSetting(appSetting);
         application.setUserManager(appUserManager);
         application.setEventControllers(eventControllers);
-        
+
         ScheduledExecutorService appScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(application);
         appContext.setParent(zoneContext);
         appContext.setExecutorService(appScheduledExecutorService);
         appContext.init();
-        
+
         EzySimpleAppEntry entry = new EzyAppEntryEx();
         entry.config(appContext);
         entry.start();
         handleClientRequest(appContext);
         entry.destroy();
     }
-    
+
     private void handleClientRequest(EzyAppContext context) {
         EzySimpleApplication app = (EzySimpleApplication) context.getApp();
         EzyAppRequestController requestController = app.getRequestController();
-        
+
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("chat")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .build();
+            .append("chat")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("no command")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("no command")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noUser")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noUser")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noSession")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noSession")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noDataBinding")
-                .build();
+            .append("noDataBinding")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestSend")
-                .build();
+            .append("badRequestSend")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestNoSend")
-                .build();
+            .append("badRequestNoSend")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("exception")
-                .build();
+            .append("exception")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         try {
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
-        
+
         data = EzyEntityFactory.newArrayBuilder()
-                .append("app")
-                .build();
+            .append("app")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
     }
-    
+
     @Test
     public void test2() throws Exception {
         EzySimpleSettings settings = new EzySimpleSettings();
@@ -170,7 +164,7 @@ public class EzyDefaultAppEntryTest {
         EzySimpleServerContext serverContext = new EzySimpleServerContext();
         serverContext.setServer(server);
         serverContext.init();
-        
+
         EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
@@ -178,12 +172,12 @@ public class EzyDefaultAppEntryTest {
         zoneContext.setZone(zone);
         zoneContext.init();
         zoneContext.setParent(serverContext);
-        
+
         EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
         appSetting.setName("test");
-        
+
         EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-                .build();
+            .build();
 
         EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
         EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
@@ -191,50 +185,50 @@ public class EzyDefaultAppEntryTest {
         application.setSetting(appSetting);
         application.setUserManager(appUserManager);
         application.setEventControllers(eventControllers);
-        
+
         ScheduledExecutorService appScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
         EzySimpleAppContext appContext = new EzySimpleAppContext();
         appContext.setApp(application);
         appContext.setParent(zoneContext);
         appContext.setExecutorService(appScheduledExecutorService);
         appContext.init();
-        
+
         EzySimpleAppEntry entry = new EzyAppEntryEx2();
         entry.config(appContext);
         entry.start();
         entry.destroy();
     }
-    
+
     public static class EzyAppEntryEx extends EzyDefaultAppEntry {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
-        
+
         @SuppressWarnings("rawtypes")
         @Override
         protected Class[] getPrototypeClasses() {
-            return new Class[] {
-                    ClientAppRequestHandler.class
+            return new Class[]{
+                ClientAppRequestHandler.class
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
 
         @Override
         protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
         }
-        
+
     }
-    
+
     public static class EzyAppEntryEx2 extends EzyDefaultAppEntry {
 
         @Override
@@ -250,6 +244,6 @@ public class EzyDefaultAppEntryTest {
         @Override
         protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
         }
-        
+
     }
 }

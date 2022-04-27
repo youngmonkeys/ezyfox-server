@@ -12,10 +12,9 @@ public interface EzyUserRequestHandler<C extends EzyContext, D> {
     default Class<D> getDataType() {
         try {
             return EzyGenerics.getGenericInterfacesArguments(
-                    getClass(),
-                    EzyUserRequestHandler.class, 2)[1];
-        }
-        catch (Exception e) {
+                getClass(),
+                EzyUserRequestHandler.class, 2)[1];
+        } catch (Exception e) {
             return null;
         }
     }

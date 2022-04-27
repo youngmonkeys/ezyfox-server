@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.support.reflect;
 
-import java.lang.reflect.Parameter;
-
 import com.tvd12.ezyfox.core.annotation.EzyRequestData;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
@@ -10,8 +8,9 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
-
 import lombok.Getter;
+
+import java.lang.reflect.Parameter;
 
 public abstract class EzyHandlerMethod {
 
@@ -36,19 +35,21 @@ public abstract class EzyHandlerMethod {
 
     public Class<?> getRequestDataType() {
         Class<?> dataType = null;
-        for(Parameter parameter : getParameters()) {
+        for (Parameter parameter : getParameters()) {
             Class<?> type = parameter.getType();
-            if(type != EzyContext.class &&
-                    type != EzyAppContext.class &&
-                    type != EzyPluginContext.class &&
-                    type != EzyUserSessionEvent.class &&
-                    type != EzyUser.class &&
-                    type != EzySession.class &&
-                    !Throwable.class.isAssignableFrom(type)) {
-                if(dataType == null || type != String.class)
+            if (type != EzyContext.class &&
+                type != EzyAppContext.class &&
+                type != EzyPluginContext.class &&
+                type != EzyUserSessionEvent.class &&
+                type != EzyUser.class &&
+                type != EzySession.class &&
+                !Throwable.class.isAssignableFrom(type)) {
+                if (dataType == null || type != String.class) {
                     dataType = type;
-                if(parameter.isAnnotationPresent(EzyRequestData.class))
+                }
+                if (parameter.isAnnotationPresent(EzyRequestData.class)) {
                     break;
+                }
             }
         }
         return dataType;

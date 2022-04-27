@@ -1,16 +1,15 @@
 package com.tvd12.ezyfoxserver.support.test.reflect;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerProxy;
+import org.testng.annotations.Test;
 
 public class EzyExceptionHandlerProxyTest {
 
     @Test
     public void test() {
         EzyExceptionHandlerProxy proxy = new EzyExceptionHandlerProxy(
-                new ExceptionHandlerEx());
+            new ExceptionHandlerEx());
         System.out.println(proxy.toString());
     }
 

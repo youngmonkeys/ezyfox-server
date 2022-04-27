@@ -9,8 +9,8 @@ import com.tvd12.ezyfoxserver.support.handler.EzyAbstractUserRequestHandler;
 @SuppressWarnings("rawtypes")
 @EzySingleton
 @EzyRequestListener("hello5")
-public class AppClientHello5RequestHandler 
-        extends EzyAbstractUserRequestHandler {
+public class AppClientHello5RequestHandler
+    extends EzyAbstractUserRequestHandler {
 
     @Override
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {

@@ -1,8 +1,5 @@
 package com.tvd12.ezyfoxserver.support.asm;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
@@ -15,26 +12,27 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.handler.EzyUncaughtExceptionHandler;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerMethod;
 import com.tvd12.ezyfoxserver.support.reflect.EzyExceptionHandlerProxy;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
-@SuppressWarnings("rawtypes")
-public class EzyExceptionHandlerImplementer 
-        extends EzyAbstractHandlerImplementer<EzyExceptionHandlerMethod> {
+import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("rawtypes")
+public class EzyExceptionHandlerImplementer
+    extends EzyAbstractHandlerImplementer<EzyExceptionHandlerMethod> {
+
+    protected final static String PARAMETER_PREFIX = "param";
+    protected final static AtomicInteger COUNT = new AtomicInteger(0);
     @Setter
     private static boolean debug;
     protected final EzyExceptionHandlerProxy exceptionHandler;
 
-    protected final static String PARAMETER_PREFIX = "param";
-    protected final static AtomicInteger COUNT = new AtomicInteger(0);
-
     public EzyExceptionHandlerImplementer(
-            EzyExceptionHandlerProxy exceptionHandler, EzyExceptionHandlerMethod handlerMethod) {
+        EzyExceptionHandlerProxy exceptionHandler, EzyExceptionHandlerMethod handlerMethod) {
         super(handlerMethod);
         this.exceptionHandler = exceptionHandler;
     }
@@ -42,8 +40,7 @@ public class EzyExceptionHandlerImplementer
     public EzyUncaughtExceptionHandler implement() {
         try {
             return doimplement();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
@@ -77,44 +74,44 @@ public class EzyExceptionHandlerImplementer
 
     protected String makeExceptionHandlerFieldContent() {
         return new EzyInstruction()
-                .append("private ")
-                    .append(exceptionHandler.getClazz().getName())
-                        .append(" exceptionHandler")
-                .toString();
+            .append("private ")
+            .append(exceptionHandler.getClazz().getName())
+            .append(" exceptionHandler")
+            .toString();
     }
 
     protected String makeSetExceptionHandlerMethodContent() {
         return new EzyFunction(getSetExceptionHandlerMethod())
-                .body()
-                    .append(new EzyInstruction("\t", "\n")
-                            .append("this.exceptionHandler")
-                            .equal()
-                            .brackets(exceptionHandler.getClazz().getClazz())
-                            .append("arg0"))
-                    .function()
-                .toString();
+            .body()
+            .append(new EzyInstruction("\t", "\n")
+                .append("this.exceptionHandler")
+                .equal()
+                .brackets(exceptionHandler.getClazz().getClazz())
+                .append("arg0"))
+            .function()
+            .toString();
     }
 
     protected String makeHandleExceptionMethodContent() {
         EzyMethod method = getHandleExceptionMethod();
         EzyFunction function = new EzyFunction(method)
-                .throwsException();
+            .throwsException();
         EzyBody body = function.body();
         Class<?>[] exceptionClasses = handlerMethod.getExceptionClasses();
         EzyClassTree exceptionTree = new EzyClassTree(exceptionClasses);
-        for(Class<?> exceptionClass : exceptionTree.toList()) {
+        for (Class<?> exceptionClass : exceptionTree.toList()) {
             EzyInstruction instructionIf = new EzyInstruction("\t", "\n", false)
-                    .append("if(arg4 instanceof ")
-                        .append(exceptionClass.getName())
-                    .append(") {");
+                .append("if(arg4 instanceof ")
+                .append(exceptionClass.getName())
+                .append(") {");
             body.append(instructionIf);
             EzyInstruction instructionHandle = new EzyInstruction("\t\t", "\n");
             instructionHandle
-                    .append("this.exceptionHandler.").append(handlerMethod.getName())
-                    .bracketopen();
+                .append("this.exceptionHandler.").append(handlerMethod.getName())
+                .bracketopen();
             appendHandleExceptionMethodArguments(instructionHandle, exceptionClass);
             instructionHandle
-                    .bracketclose();
+                .bracketclose();
             body.append(instructionHandle);
             body.append(new EzyInstruction("\t", "\n", false).append("}"));
         }
@@ -125,22 +122,22 @@ public class EzyExceptionHandlerImplementer
     }
 
     protected void appendHandleExceptionMethodArguments(
-            EzyInstruction instruction, Class<?> exceptionClass) {
+        EzyInstruction instruction, Class<?> exceptionClass) {
         super.appendHandleExceptionMethodArguments(
-                handlerMethod, instruction, exceptionClass, "arg2", "arg3", "arg4");
+            handlerMethod, instruction, exceptionClass, "arg2", "arg3", "arg4");
     }
 
     protected EzyMethod getSetExceptionHandlerMethod() {
         Method method = EzyMethods.getMethod(
-                EzyAsmAbstractUncaughtExceptionHandler.class, "setExceptionHandler", Object.class);
+            EzyAsmAbstractUncaughtExceptionHandler.class, "setExceptionHandler", Object.class);
         return new EzyMethod(method);
     }
 
     protected EzyMethod getHandleExceptionMethod() {
         Method method = EzyMethods.getMethod(
-                EzyAsmAbstractUncaughtExceptionHandler.class,
-                "handleException",
-                EzyContext.class, EzyUserSessionEvent.class, String.class, Object.class, Exception.class);
+            EzyAsmAbstractUncaughtExceptionHandler.class,
+            "handleException",
+            EzyContext.class, EzyUserSessionEvent.class, String.class, Object.class, Exception.class);
         return new EzyMethod(method);
     }
 
@@ -150,11 +147,12 @@ public class EzyExceptionHandlerImplementer
 
     protected String getImplClassName() {
         return exceptionHandler.getClassSimpleName()
-                + "$" + handlerMethod.getName() + "$ExceptionHandler$AutoImpl$" + COUNT.incrementAndGet();
+            + "$" + handlerMethod.getName() + "$ExceptionHandler$AutoImpl$" + COUNT.incrementAndGet();
     }
 
     protected void printComponentContent(String componentContent) {
-        if(debug)
+        if (debug) {
             logger.debug("component content: \n{}", componentContent);
+        }
     }
 }

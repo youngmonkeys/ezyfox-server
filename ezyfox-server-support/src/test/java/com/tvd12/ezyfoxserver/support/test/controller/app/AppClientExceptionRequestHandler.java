@@ -9,8 +9,8 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
 @EzyRequestListener("exception")
-public class AppClientExceptionRequestHandler 
-        implements EzyUserRequestHandler<EzyAppContext, Hello> {
+public class AppClientExceptionRequestHandler
+    implements EzyUserRequestHandler<EzyAppContext, Hello> {
 
     @Override
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {

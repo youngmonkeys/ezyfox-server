@@ -1,16 +1,16 @@
 package com.tvd12.ezyfoxserver.support.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 
-public abstract class EzyAbstractArrayResponse 
-        extends EzyAbstractResponse<EzyArrayResponse>
-        implements EzyArrayResponse {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class EzyAbstractArrayResponse
+    extends EzyAbstractResponse<EzyArrayResponse>
+    implements EzyArrayResponse {
 
     protected List<Object> additionalParams = new ArrayList<>();
 
@@ -26,24 +26,26 @@ public abstract class EzyAbstractArrayResponse
 
     @Override
     public EzyArrayResponse params(Object... values) {
-        for(Object value : values)
+        for (Object value : values) {
             additionalParams.add(value);
+        }
         return this;
     }
 
     @Override
     public EzyArrayResponse params(Iterable<?> values) {
-        for(Object value : values)
+        for (Object value : values) {
             additionalParams.add(value);
+        }
         return this;
     }
 
     @Override
     protected EzyData getResponseData() {
         EzyArray array = data != null
-                ? marshaller.marshal(data)
-                : newArrayBuilder().build();
-        for(Object object : additionalParams) {
+            ? marshaller.marshal(data)
+            : newArrayBuilder().build();
+        for (Object object : additionalParams) {
             Object value = marshaller.marshal(object);
             array.add(value);
         }

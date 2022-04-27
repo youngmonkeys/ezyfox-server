@@ -11,18 +11,17 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
-
 import lombok.Setter;
 
 @Setter
 @EzySingleton
 @EzyRequestListener("responseFactoryTest")
 public class PluginResponseFactoryTestHandler
-        implements EzyUserRequestHandler<EzyPluginContext, Hello> {
+    implements EzyUserRequestHandler<EzyPluginContext, Hello> {
 
     @EzyAutoBind("pluginResponseFactory")
     protected EzyResponseFactory responseFactory;
-    
+
     @Override
     public void handle(EzyPluginContext context, EzyUserSessionEvent event, Hello data) {
         responseFactory.newArrayResponse()
@@ -41,12 +40,12 @@ public class PluginResponseFactoryTestHandler
             .usernames(event.getUser().getName())
             .usernames(Lists.newArrayList(event.getUser().getName()))
             .execute();
-        
+
         responseFactory.newArrayResponse()
             .command("hello")
             .usernames(Lists.newArrayList(event.getUser().getName()))
             .execute();
-        
+
         responseFactory.newObjectResponse()
             .command("hello")
             .data(EzyEntityFactory.newObjectBuilder())
@@ -65,7 +64,7 @@ public class PluginResponseFactoryTestHandler
             .transportType(EzyTransportType.TCP)
             .udpTransport()
             .execute();
-        
+
         responseFactory.newObjectResponse()
             .command("hello")
             .usernames(Lists.newArrayList(event.getUser().getName()))

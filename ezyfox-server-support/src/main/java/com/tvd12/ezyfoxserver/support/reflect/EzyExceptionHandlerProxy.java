@@ -1,13 +1,12 @@
 package com.tvd12.ezyfoxserver.support.reflect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tvd12.ezyfox.core.annotation.EzyTryCatch;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyMethod;
-
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class EzyExceptionHandlerProxy {
@@ -25,7 +24,7 @@ public class EzyExceptionHandlerProxy {
     public List<EzyExceptionHandlerMethod> fetchExceptionHandlerMethods() {
         List<EzyExceptionHandlerMethod> list = new ArrayList<>();
         List<EzyMethod> methods = clazz.getPublicMethods(m -> m.isAnnotated(EzyTryCatch.class));
-        for(EzyMethod method : methods) {
+        for (EzyMethod method : methods) {
             EzyExceptionHandlerMethod m = new EzyExceptionHandlerMethod(method);
             list.add(m);
         }
@@ -39,11 +38,11 @@ public class EzyExceptionHandlerProxy {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append(clazz.getName())
-                .append("(\n")
-                    .append("\tinstance: ").append(instance).append(",\n")
-                    .append("\texceptionHandlerMethods: ").append(exceptionHandlerMethods).append("\n")
-                .append(")")
-                .toString();
+            .append(clazz.getName())
+            .append("(\n")
+            .append("\tinstance: ").append(instance).append(",\n")
+            .append("\texceptionHandlerMethods: ").append(exceptionHandlerMethods).append("\n")
+            .append(")")
+            .toString();
     }
 }

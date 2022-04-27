@@ -10,7 +10,6 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.entity.EzySessionAware;
 import com.tvd12.ezyfoxserver.entity.EzyUser;
 import com.tvd12.ezyfoxserver.entity.EzyUserAware;
-
 import lombok.Setter;
 
 @Setter
@@ -18,12 +17,12 @@ import lombok.Setter;
 @EzyRequestListener("chat")
 @EzyObjectBinding(read = false)
 public class ClientChatRequestHandler
-        extends EzyLoggable
-        implements
-            EzyHandler,
-            EzyUserAware,
-            EzySessionAware,
-            EzyDataBinding {
+    extends EzyLoggable
+    implements
+    EzyHandler,
+    EzyUserAware,
+    EzySessionAware,
+    EzyDataBinding {
 
     protected EzyUser user;
     protected EzySession session;

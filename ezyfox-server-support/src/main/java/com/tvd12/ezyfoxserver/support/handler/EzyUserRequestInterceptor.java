@@ -6,17 +6,17 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 public interface EzyUserRequestInterceptor<C extends EzyContext> {
 
     default void preHandle(
-            C context,
-            EzyUserSessionEvent event,
-            String command, Object data) {}
+        C context,
+        EzyUserSessionEvent event,
+        String command, Object data) {}
 
     default void postHandle(
-            C context,
-            EzyUserSessionEvent event,
-            String command, Object data) {}
+        C context,
+        EzyUserSessionEvent event,
+        String command, Object data) {}
 
     default void postHandle(
-            C context,
-            EzyUserSessionEvent event,
-            String command, Object data, Exception e) {}
+        C context,
+        EzyUserSessionEvent event,
+        String command, Object data, Exception e) {}
 }

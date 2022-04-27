@@ -15,7 +15,8 @@ public class EzyUserRequestException extends IllegalStateException {
         Exception e) {
         super(
             "handle request: " + command + " with data: " +
-                data + " error", e
+                data + " error",
+            e
         );
         this.command = command;
         this.data = data;

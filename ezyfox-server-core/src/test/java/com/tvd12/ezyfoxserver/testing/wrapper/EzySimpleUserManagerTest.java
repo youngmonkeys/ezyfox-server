@@ -10,7 +10,7 @@ public class EzySimpleUserManagerTest {
 
     @Test
     public void fromBuilderTest() {
-        int maxUsers = RandomUtil.randomInt();
+        int maxUsers = RandomUtil.randomSmallInt() + 2;
         EzySimpleUserManager manager = (EzySimpleUserManager) EzySimpleUserManager.builder()
             .maxUsers(maxUsers)
             .build();

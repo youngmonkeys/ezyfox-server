@@ -225,6 +225,5 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
                 .beanContext(beanContext)
                 .build();
         }
-
     }
 }

@@ -35,13 +35,12 @@ public class EzyRequestControllerProxy {
     }
 
     protected String getCommandGroup() {
-        String uri = EzyRequestControllerAnnotations.getGroup(clazz.getClazz());
-        return uri;
+        return EzyRequestControllerAnnotations.getGroup(clazz.getClazz());
     }
 
     protected List<EzyRequestHandlerMethod> fetchRequestHandlerMethods() {
         List<EzyRequestHandlerMethod> list = new ArrayList<>();
-        List<EzyMethod> methods = clazz.getPublicMethods(m -> isRequestHandlerMethod(m));
+        List<EzyMethod> methods = clazz.getPublicMethods(this::isRequestHandlerMethod);
         for (EzyMethod method : methods) {
             EzyRequestHandlerMethod m = new EzyRequestHandlerMethod(commandGroup, method);
             list.add(m);
@@ -92,12 +91,10 @@ public class EzyRequestControllerProxy {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(clazz.getName())
-            .append("(\n")
-            .append("\tinstance: ").append(instance).append(",\n")
-            .append("\trequestHandlerMethods: ").append(requestHandlerMethods).append(",\n")
-            .append(")")
-            .toString();
+        return clazz.getName() +
+            "(\n" +
+            "\tinstance: " + instance + ",\n" +
+            "\trequestHandlerMethods: " + requestHandlerMethods + ",\n" +
+            ")";
     }
 }

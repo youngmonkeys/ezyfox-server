@@ -13,12 +13,10 @@ public class EzyExceptionHandlerMethod extends EzyHandlerMethod {
     public EzyExceptionHandlerMethod(EzyMethod method) {
         super(method);
         this.exceptionClasses = fetchExceptionClasses();
-
     }
 
     protected Class<?>[] fetchExceptionClasses() {
         EzyTryCatch annotation = method.getAnnotation(EzyTryCatch.class);
-        Class<?>[] classes = EzyTryCatchAnnotations.getExceptionClasses(annotation);
-        return classes;
+        return EzyTryCatchAnnotations.getExceptionClasses(annotation);
     }
 }

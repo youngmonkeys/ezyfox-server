@@ -15,8 +15,8 @@ import java.lang.reflect.Parameter;
 public class EzyAbstractHandlerImplementer<H extends EzyHandlerMethod>
     extends EzyLoggable {
 
-    protected final static String PARAMETER_PREFIX = "param";
     protected final H handlerMethod;
+    protected static final String PARAMETER_PREFIX = "param";
 
     public EzyAbstractHandlerImplementer(H handlerMethod) {
         this.handlerMethod = handlerMethod;
@@ -59,7 +59,9 @@ public class EzyAbstractHandlerImplementer<H extends EzyHandlerMethod>
         EzyExceptionHandlerMethod method,
         EzyInstruction instruction,
         Class<?> exceptionClass,
-        String commandArg, String dataArg, String exceptionArg) {
+        String commandArg, String dataArg,
+        String exceptionArg
+    ) {
         int paramCount = 0;
         Parameter[] parameters = method.getParameters();
         Class<?> requestDataType = method.getRequestDataType();

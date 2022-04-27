@@ -10,5 +10,4 @@ import lombok.Setter;
 public class Hello {
 
     protected String who;
-
 }

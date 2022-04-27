@@ -23,7 +23,9 @@ public class EzyExceptionHandlerProxy {
 
     public List<EzyExceptionHandlerMethod> fetchExceptionHandlerMethods() {
         List<EzyExceptionHandlerMethod> list = new ArrayList<>();
-        List<EzyMethod> methods = clazz.getPublicMethods(m -> m.isAnnotated(EzyTryCatch.class));
+        List<EzyMethod> methods = clazz.getPublicMethods(
+            m -> m.isAnnotated(EzyTryCatch.class)
+        );
         for (EzyMethod method : methods) {
             EzyExceptionHandlerMethod m = new EzyExceptionHandlerMethod(method);
             list.add(m);
@@ -37,12 +39,10 @@ public class EzyExceptionHandlerProxy {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(clazz.getName())
-            .append("(\n")
-            .append("\tinstance: ").append(instance).append(",\n")
-            .append("\texceptionHandlerMethods: ").append(exceptionHandlerMethods).append("\n")
-            .append(")")
-            .toString();
+        return clazz.getName() +
+            "(\n" +
+            "\tinstance: " + instance + ",\n" +
+            "\texceptionHandlerMethods: " + exceptionHandlerMethods + "\n" +
+            ")";
     }
 }

@@ -12,17 +12,19 @@ public class EzyAbstractResponseTest {
     private EzyResponse response;
 
     @Test
-    public void test() {
+    public void encryptedTrue() {
         // given
         response = mock(EzyResponse.class);
         Sut sut = new Sut();
 
         // when
-        sut.encrypted();
-        sut.encrypted(true);
+        sut.encrypted()
+            .encrypted(false)
+            .encrypted(true);
 
         // then
         verify(response, times(1)).encrypted();
+        verify(response, times(1)).encrypted(false);
         verify(response, times(1)).encrypted(true);
     }
 
@@ -42,6 +44,5 @@ public class EzyAbstractResponseTest {
         protected EzyResponse newResponse() {
             return EzyAbstractResponseTest.this.response;
         }
-
     }
 }

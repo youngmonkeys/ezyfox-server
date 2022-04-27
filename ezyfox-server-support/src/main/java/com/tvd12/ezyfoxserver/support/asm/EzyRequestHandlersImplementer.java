@@ -24,7 +24,9 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
     private EzyFeatureCommandManager featureCommandManager;
     private EzyRequestCommandManager requestCommandManager;
 
-    public Map<String, EzyUserRequestHandler> implement(Collection<Object> controllers) {
+    public Map<String, EzyUserRequestHandler> implement(
+        Collection<Object> controllers
+    ) {
         Map<String, EzyUserRequestHandler> handlers = new HashMap<>();
         for (Object controller : controllers) {
             Map<String, EzyUserRequestHandler> map = implement(controller);

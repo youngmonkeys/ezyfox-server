@@ -223,16 +223,12 @@ public class EzySimplePluginEntryTest {
         }
 
         @Override
-        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-        }
-
+        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {}
     }
 
     public static class EzyPluginEntryEx2 extends EzySimplePluginEntry {
 
         @Override
-        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-        }
-
+        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {}
     }
 }

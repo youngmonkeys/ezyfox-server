@@ -40,7 +40,7 @@ public class EzySimplePluginEntryTest {
         EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
         when(plugin.getSetting()).thenReturn(pluginSetting);
 
-        InteralPluginEngtry sut = new InteralPluginEngtry();
+        InternalPluginEntry sut = new InternalPluginEntry();
 
         // when
         when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
@@ -80,7 +80,7 @@ public class EzySimplePluginEntryTest {
         EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
         when(plugin.getSetting()).thenReturn(pluginSetting);
 
-        NotAllowRequestEngtry sut = new NotAllowRequestEngtry();
+        NotAllowRequestEntry sut = new NotAllowRequestEntry();
 
         // when
         when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
@@ -109,7 +109,7 @@ public class EzySimplePluginEntryTest {
         EzyPluginSetting pluginSetting = mock(EzyPluginSetting.class);
         when(plugin.getSetting()).thenReturn(pluginSetting);
 
-        DisAllowRequestEngtry sut = new DisAllowRequestEngtry();
+        DisAllowRequestEntry sut = new DisAllowRequestEntry();
 
         // when
         when(pluginContext.get(ScheduledExecutorService.class)).thenReturn(executorService);
@@ -133,7 +133,7 @@ public class EzySimplePluginEntryTest {
         public Set<String> packagesToScan;
     }
 
-    private static class InteralPluginEngtry extends EzySimplePluginEntry {
+    private static class InternalPluginEntry extends EzySimplePluginEntry {
         public EzyBeanContext beanContext;
 
         @Override
@@ -147,7 +147,7 @@ public class EzySimplePluginEntryTest {
         }
     }
 
-    private static class NotAllowRequestEngtry extends EzySimplePluginEntry {
+    private static class NotAllowRequestEntry extends EzySimplePluginEntry {
         @Override
         protected boolean allowRequest() {
             return false;
@@ -155,6 +155,5 @@ public class EzySimplePluginEntryTest {
     }
 
     @EzyDisallowRequest
-    private static class DisAllowRequestEngtry extends EzySimplePluginEntry {
-    }
+    private static class DisAllowRequestEntry extends EzySimplePluginEntry {}
 }

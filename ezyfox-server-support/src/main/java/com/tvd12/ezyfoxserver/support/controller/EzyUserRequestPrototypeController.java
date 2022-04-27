@@ -47,7 +47,11 @@ public abstract class EzyUserRequestPrototypeController<
         String cmd = data.get(0, String.class);
         EzyPrototypeSupplier supplier = handlers.get(cmd);
         if (supplier == null) {
-            logger.warn("has no handler with command: {} from session: {}", cmd, event.getSession().getName());
+            logger.warn(
+                "has no handler with command: {} from session: {}",
+                cmd,
+                event.getSession().getName()
+            );
             return;
         }
         EzyHandler handler = (EzyHandler) supplier.supply(beanContext);
@@ -72,7 +76,13 @@ public abstract class EzyUserRequestPrototypeController<
                 EzyData errorData = newErrorData(e);
                 responseError(context, event, errorData);
             }
-            logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
+            logger.debug(
+                "request cmd: {} by session: {} with data: {} error",
+                cmd,
+                event.getSession().getName(),
+                data,
+                e
+            );
             postHandle(context, event, cmd, handler, e);
         } catch (Exception e) {
             postHandle(context, event, cmd, handler, e);
@@ -80,13 +90,33 @@ public abstract class EzyUserRequestPrototypeController<
         }
     }
 
-    protected abstract void preHandle(C context, E event, String cmd, EzyHandler handler);
+    protected abstract void preHandle(
+        C context,
+        E event,
+        String cmd,
+        EzyHandler handler
+    );
 
-    protected void postHandle(C context, E event, String cmd, EzyHandler handler) {}
+    protected void postHandle(
+        C context,
+        E event,
+        String cmd,
+        EzyHandler handler
+    ) {}
 
-    protected void postHandle(C context, E event, String cmd, EzyHandler handler, Exception e) {}
+    protected void postHandle(
+        C context,
+        E event,
+        String cmd,
+        EzyHandler handler,
+        Exception e
+    ) {}
 
-    protected abstract void responseError(C context, E event, EzyData errorData);
+    protected abstract void responseError(
+        C context,
+        E event,
+        EzyData errorData
+    );
 
     @Override
     public Set<String> getCommands() {
@@ -106,7 +136,8 @@ public abstract class EzyUserRequestPrototypeController<
         public B beanContext(EzyBeanContext beanContext) {
             this.beanContext = beanContext;
             this.prototypeFactory = beanContext.getPrototypeFactory();
-            this.unmarshaller = beanContext.getSingleton("unmarshaller", EzyUnmarshaller.class);
+            this.unmarshaller = beanContext
+                .getSingleton("unmarshaller", EzyUnmarshaller.class);
             return (B) this;
         }
 
@@ -122,16 +153,23 @@ public abstract class EzyUserRequestPrototypeController<
             Map<String, EzyPrototypeSupplier> handlers = new HashMap<>();
             for (EzyPrototypeSupplier supplier : suppliers) {
                 Class<?> handleType = supplier.getObjectType();
-                EzyRequestListener annotation = handleType.getAnnotation(EzyRequestListener.class);
+                EzyRequestListener annotation =
+                    handleType.getAnnotation(EzyRequestListener.class);
                 String command = EzyRequestListenerAnnotations.getCommand(annotation);
                 handlers.put(command, supplier);
-                logger.debug("add command {} and request handler supplier {}", command, supplier);
+                logger.debug(
+                    "add command {} and request handler supplier {}",
+                    command,
+                    supplier
+                );
             }
             extractRequestCommands(handlers);
             return handlers;
         }
 
-        private void extractRequestCommands(Map<String, EzyPrototypeSupplier> handlers) {
+        private void extractRequestCommands(
+            Map<String, EzyPrototypeSupplier> handlers
+        ) {
             EzyFeatureCommandManager featureCommandManager =
                 beanContext.getSingleton(EzyFeatureCommandManager.class);
             EzyRequestCommandManager requestCommandManager =

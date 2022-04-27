@@ -171,7 +171,7 @@ public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     }
 
     private Set<String> internalGetScanableBeanPackages() {
-        Set<String> scanablePackages = new HashSet<String>();
+        Set<String> scanablePackages = new HashSet<>();
         scanablePackages.add(DEFAULT_PACKAGE_TO_SCAN);
         scanablePackages.addAll(Arrays.asList(getScanablePackages()));
         scanablePackages.addAll(Arrays.asList(getScanableBeanPackages()));
@@ -179,7 +179,7 @@ public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
     }
 
     private Set<String> internalGetScanableBindingPackages() {
-        Set<String> scanablePackages = new HashSet<String>();
+        Set<String> scanablePackages = new HashSet<>();
         scanablePackages.add(DEFAULT_PACKAGE_TO_SCAN);
         scanablePackages.addAll(Arrays.asList(getScanablePackages()));
         scanablePackages.addAll(Arrays.asList(getScanableBindingPackages()));

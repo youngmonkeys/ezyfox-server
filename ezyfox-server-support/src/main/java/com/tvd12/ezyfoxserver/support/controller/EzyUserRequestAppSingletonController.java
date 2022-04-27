@@ -20,7 +20,9 @@ public class EzyUserRequestAppSingletonController
     @Override
     protected void responseError(
         EzyAppContext context,
-        EzyUserRequestAppEvent event, EzyData errorData) {
+        EzyUserRequestAppEvent event,
+        EzyData errorData
+    ) {
         context.send(errorData, event.getSession(), false);
     }
 
@@ -38,6 +40,5 @@ public class EzyUserRequestAppSingletonController
                 .beanContext(beanContext)
                 .build();
         }
-
     }
 }

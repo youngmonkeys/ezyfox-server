@@ -85,7 +85,13 @@ public abstract class EzyUserRequestSingletonController<
                     EzyData errorData = newErrorData(ex);
                     responseError(context, event, errorData);
                 }
-                logger.debug("request cmd: {} by session: {} with data: {} error", cmd, event.getSession().getName(), data, e);
+                logger.debug(
+                    "request cmd: {} by session: {} with data: {} error",
+                    cmd,
+                    event.getSession().getName(),
+                    data,
+                    e
+                );
             } else {
                 EzyUncaughtExceptionHandler exceptionHandler = getExceptionHandler(e.getClass());
                 if (exceptionHandler == null) {
@@ -208,16 +214,16 @@ public abstract class EzyUserRequestSingletonController<
                 logger.debug("add interceptor {}", interceptor);
                 answer.add(interceptor);
             }
-            answer.sort((a, b) ->
-                EzyRequestInterceptorAnnotations.getPriority(a.getClass())
-                    - EzyRequestInterceptorAnnotations.getPriority(b.getClass())
+            answer.sort(Comparator.comparingInt(a ->
+                EzyRequestInterceptorAnnotations.getPriority(a.getClass()))
             );
             return interceptors;
         }
 
         private Map<Class<?>, EzyUncaughtExceptionHandler> getExceptionHandlers() {
             Map<Class<?>, EzyUncaughtExceptionHandler> handlers = new HashMap<>();
-            Map<Class<?>, EzyUncaughtExceptionHandler> implementedHandlers = implementExceptionHandlers();
+            Map<Class<?>, EzyUncaughtExceptionHandler> implementedHandlers =
+                implementExceptionHandlers();
             for (Class<?> exceptionClass : implementedHandlers.keySet()) {
                 EzyUncaughtExceptionHandler handler = implementedHandlers.get(exceptionClass);
                 logger.debug("add exception {} and handler {}", exceptionClass.getName(), handler);

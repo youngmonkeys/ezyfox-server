@@ -13,5 +13,4 @@ public interface EzyAsmRequestHandler extends EzyUserRequestHandler {
     String getCommand();
 
     void setCommand(String command);
-
 }

@@ -27,29 +27,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EzyRequestHandlerImplementer
     extends EzyAbstractHandlerImplementer<EzyRequestHandlerMethod> {
 
-    protected final static AtomicInteger COUNT = new AtomicInteger(0);
     @Setter
     private static boolean debug;
-    protected final EzyRequestControllerProxy controller;
     @Setter
     protected EzyResponseFactory responseFactory;
+    protected final EzyRequestControllerProxy controller;
+
+    protected static final AtomicInteger COUNT = new AtomicInteger(0);
 
     public EzyRequestHandlerImplementer(
-        EzyRequestControllerProxy controller, EzyRequestHandlerMethod handlerMethod) {
+        EzyRequestControllerProxy controller,
+        EzyRequestHandlerMethod handlerMethod
+    ) {
         super(handlerMethod);
         this.controller = controller;
     }
 
     public EzyAsmRequestHandler implement() {
         try {
-            return doimplement();
+            return doImplement();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
     @SuppressWarnings("rawtypes")
-    protected EzyAsmRequestHandler doimplement() throws Exception {
+    protected EzyAsmRequestHandler doImplement() throws Exception {
         ClassPool pool = ClassPool.getDefault();
         String implClassName = getImplClassName();
         CtClass implClass = pool.makeClass(implClassName);
@@ -172,7 +175,9 @@ public class EzyRequestHandlerImplementer
 
     protected void appendHandleExceptionMethodArguments(
         EzyExceptionHandlerMethod method,
-        EzyInstruction instruction, Class<?> exceptionClass) {
+        EzyInstruction instruction,
+        Class<?> exceptionClass
+    ) {
         super.appendHandleExceptionMethodArguments(
             method, instruction, exceptionClass, "this.command", "arg2", "arg3");
     }

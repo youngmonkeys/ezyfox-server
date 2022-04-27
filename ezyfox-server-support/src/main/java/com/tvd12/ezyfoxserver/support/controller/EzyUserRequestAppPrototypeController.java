@@ -22,7 +22,10 @@ public class EzyUserRequestAppPrototypeController
     @Override
     protected void preHandle(
         EzyAppContext context,
-        EzyUserRequestAppEvent event, String cmd, EzyHandler handler) {
+        EzyUserRequestAppEvent event,
+        String cmd,
+        EzyHandler handler
+    ) {
         if (handler instanceof EzyAppContextAware) {
             ((EzyAppContextAware) handler).setAppContext(context);
         }
@@ -31,11 +34,14 @@ public class EzyUserRequestAppPrototypeController
     @Override
     protected void responseError(
         EzyAppContext context,
-        EzyUserRequestAppEvent event, EzyData errorData) {
+        EzyUserRequestAppEvent event,
+        EzyData errorData
+    ) {
         context.send(errorData, event.getSession(), false);
     }
 
-    public static class Builder extends EzyUserRequestPrototypeController.Builder<Builder> {
+    public static class Builder
+        extends EzyUserRequestPrototypeController.Builder<Builder> {
 
         @Override
         public EzyUserRequestAppPrototypeController build() {

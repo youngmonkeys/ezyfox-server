@@ -13,7 +13,10 @@ public class EzyUserRequestException extends IllegalStateException {
         String command,
         Object data,
         Exception e) {
-        super("handle request: " + command + " with data: " + data + " error", e);
+        super(
+            "handle request: " + command + " with data: " +
+                data + " error", e
+        );
         this.command = command;
         this.data = data;
     }

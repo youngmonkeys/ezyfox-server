@@ -15,6 +15,7 @@ public class EzyRequestHandlerMethodTest {
         EzyRequestHandlerMethod handlerMethod = new EzyRequestHandlerMethod("c_hello5", method);
         assert handlerMethod.getMethod() == method;
         System.out.println(handlerMethod);
+        //noinspection ConstantConditions
         assert handlerMethod.getParameterTypes().length >= 0;
     }
 }

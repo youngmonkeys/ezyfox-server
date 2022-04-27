@@ -10,6 +10,6 @@ public interface EzyUncaughtExceptionHandler<C extends EzyContext, D> {
         EzyUserSessionEvent event,
         String command,
         D data,
-        Exception exception) throws Exception;
-
+        Exception exception
+    ) throws Exception;
 }

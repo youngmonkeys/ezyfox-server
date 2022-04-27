@@ -37,13 +37,13 @@ public abstract class EzyHandlerMethod {
         Class<?> dataType = null;
         for (Parameter parameter : getParameters()) {
             Class<?> type = parameter.getType();
-            if (type != EzyContext.class &&
-                type != EzyAppContext.class &&
-                type != EzyPluginContext.class &&
-                type != EzyUserSessionEvent.class &&
-                type != EzyUser.class &&
-                type != EzySession.class &&
-                !Throwable.class.isAssignableFrom(type)) {
+            if (type != EzyContext.class
+                && type != EzyAppContext.class
+                && type != EzyPluginContext.class
+                && type != EzyUserSessionEvent.class
+                && type != EzyUser.class
+                && type != EzySession.class
+                && !Throwable.class.isAssignableFrom(type)) {
                 if (dataType == null || type != String.class) {
                     dataType = type;
                 }

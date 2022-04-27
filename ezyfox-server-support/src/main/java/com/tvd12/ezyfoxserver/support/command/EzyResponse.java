@@ -14,35 +14,21 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
 
     T data(Object data);
 
-    T command(String command);
-
-    T user(EzyUser user, boolean exclude);
-
-    T users(EzyUser[] users, boolean exclude);
-
-    T users(Iterable<EzyUser> users, boolean exclude);
-
-    T session(EzySession session, boolean exclude);
-
-    T sessions(EzySession[] sessions, boolean exclude);
-
-    T sessions(Iterable<EzySession> sessions, boolean exclude);
-
-    T username(String username, boolean exclude);
-
-    T usernames(String[] usernames, boolean exclude);
-
-    T usernames(Iterable<String> usernames, boolean exclude);
-
-    T transportType(EzyTransportType transportType);
-
     default T data(EzyBuilder<?> builder) {
         return data(builder.build());
     }
 
+    T command(String command);
+
+    T user(EzyUser user, boolean exclude);
+
     default T user(EzyUser user) {
         return user(user, false);
     }
+
+    T users(EzyUser[] users, boolean exclude);
+
+    T users(Iterable<EzyUser> users, boolean exclude);
 
     default T users(EzyUser... users) {
         return users(users, false);
@@ -52,9 +38,15 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
         return users(users, false);
     }
 
+    T session(EzySession session, boolean exclude);
+
     default T session(EzySession session) {
         return session(session, false);
     }
+
+    T sessions(EzySession[] sessions, boolean exclude);
+
+    T sessions(Iterable<EzySession> sessions, boolean exclude);
 
     default T sessions(EzySession... sessions) {
         return sessions(sessions, false);
@@ -64,9 +56,15 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
         return sessions(sessions, false);
     }
 
+    T username(String username, boolean exclude);
+
     default T username(String username) {
         return username(username, false);
     }
+
+    T usernames(String[] usernames, boolean exclude);
+
+    T usernames(Iterable<String> usernames, boolean exclude);
 
     default T usernames(String... usernames) {
         return usernames(usernames, false);
@@ -75,6 +73,8 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
     default T usernames(Iterable<String> usernames) {
         return usernames(usernames, false);
     }
+
+    T transportType(EzyTransportType transportType);
 
     default T udpTransport() {
         return transportType(EzyTransportType.UDP);

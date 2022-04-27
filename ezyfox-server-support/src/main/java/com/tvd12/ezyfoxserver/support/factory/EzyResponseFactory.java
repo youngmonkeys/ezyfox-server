@@ -8,5 +8,4 @@ public interface EzyResponseFactory {
     EzyArrayResponse newArrayResponse();
 
     EzyObjectResponse newObjectResponse();
-
 }

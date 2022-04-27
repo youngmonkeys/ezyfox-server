@@ -12,8 +12,9 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 public class EzyExceptionHandlersImplementer extends EzyLoggable {
 
-    public Map<Class<?>, EzyUncaughtExceptionHandler>
-    implement(Collection<Object> exceptionHandlers) {
+    public Map<Class<?>, EzyUncaughtExceptionHandler> implement(
+        Collection<Object> exceptionHandlers
+    ) {
         Map<Class<?>, EzyUncaughtExceptionHandler> handlers = new HashMap<>();
         for (Object controller : exceptionHandlers) {
             handlers.putAll(implement(controller));
@@ -21,7 +22,9 @@ public class EzyExceptionHandlersImplementer extends EzyLoggable {
         return handlers;
     }
 
-    public Map<Class<?>, EzyUncaughtExceptionHandler> implement(Object exceptionHandler) {
+    public Map<Class<?>, EzyUncaughtExceptionHandler> implement(
+        Object exceptionHandler
+    ) {
         Map<Class<?>, EzyUncaughtExceptionHandler> handlers = new HashMap<>();
         EzyExceptionHandlerProxy proxy = new EzyExceptionHandlerProxy(exceptionHandler);
         for (EzyExceptionHandlerMethod method : proxy.getExceptionHandlerMethods()) {
@@ -35,7 +38,9 @@ public class EzyExceptionHandlersImplementer extends EzyLoggable {
     }
 
     protected EzyExceptionHandlerImplementer newImplementer(
-        EzyExceptionHandlerProxy exceptionHandler, EzyExceptionHandlerMethod method) {
+        EzyExceptionHandlerProxy exceptionHandler,
+        EzyExceptionHandlerMethod method
+    ) {
         return new EzyExceptionHandlerImplementer(exceptionHandler, method);
     }
 }

@@ -13,7 +13,6 @@ public abstract class EzyAbstractUserRequestController
 
     protected EzyData newErrorData(EzyBadRequestException e) {
         EzyData errorData = newArray(e.getCode(), e.getReason());
-        EzyData data = newArray(EzyResponseCommands.ERROR, errorData);
-        return data;
+        return newArray(EzyResponseCommands.ERROR, errorData);
     }
 }

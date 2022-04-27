@@ -7,7 +7,7 @@ import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlersImplementer;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class EzyExceptionHandlersImplementerTest {
 
@@ -15,18 +15,20 @@ public class EzyExceptionHandlersImplementerTest {
     public void test() {
         EzyExceptionHandlerImplementer.setDebug(true);
         EzyExceptionHandlersImplementer implementer = new EzyExceptionHandlersImplementer();
-        implementer.implement(Arrays.asList(new ExExceptionHandler()));
+        implementer.implement(Collections.singletonList(new ExExceptionHandler()));
         EzyExceptionHandlerImplementer.setDebug(false);
-        implementer.implement(Arrays.asList(new ExExceptionHandler()));
+        implementer.implement(Collections.singletonList(new ExExceptionHandler()));
     }
 
     @EzyExceptionHandler
     public static class ExExceptionHandler {
 
         @EzyTryCatch(IllegalArgumentException.class)
-        public void handle(EzySession session, IllegalArgumentException ex) {
+        public void handle(
+            @SuppressWarnings("unused") EzySession session,
+            IllegalArgumentException ex
+        ) {
             ex.printStackTrace();
         }
-
     }
 }

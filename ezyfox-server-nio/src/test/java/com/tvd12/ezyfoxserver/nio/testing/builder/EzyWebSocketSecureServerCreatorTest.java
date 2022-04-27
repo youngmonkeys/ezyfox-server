@@ -1,15 +1,14 @@
 package com.tvd12.ezyfoxserver.nio.testing.builder;
 
-import javax.net.ssl.SSLContext;
-
-import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
 import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
+import org.testng.annotations.Test;
+
+import javax.net.ssl.SSLContext;
 
 public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
 
@@ -22,15 +21,15 @@ public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
         creator.create();
 
         EzyWsHandler wsHandler = MethodInvoker.create()
-                .object(creator)
-                .method("newWsHandler")
-                .invoke(EzyWsHandler.class);
+            .object(creator)
+            .method("newWsHandler")
+            .invoke(EzyWsHandler.class);
 
         WebSocketCreator webSocketCreator = MethodInvoker.create()
-                .object(creator)
-                .method("newWebSocketCreator")
-                .param(EzyWsHandler.class, wsHandler)
-                .invoke(WebSocketCreator.class);
+            .object(creator)
+            .method("newWebSocketCreator")
+            .param(EzyWsHandler.class, wsHandler)
+            .invoke(WebSocketCreator.class);
         webSocketCreator.createWebSocket(null, null);
     }
 }

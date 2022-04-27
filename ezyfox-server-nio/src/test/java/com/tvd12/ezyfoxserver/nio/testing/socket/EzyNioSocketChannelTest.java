@@ -1,14 +1,14 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketChannel;
+import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketChannel;
-import com.tvd12.test.base.BaseTest;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 public class EzyNioSocketChannelTest extends BaseTest {
 

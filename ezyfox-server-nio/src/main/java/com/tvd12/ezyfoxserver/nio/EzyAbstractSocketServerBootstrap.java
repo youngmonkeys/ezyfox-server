@@ -1,7 +1,5 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
@@ -14,6 +12,8 @@ import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
+
 public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
     protected EzyServerContext serverContext;
@@ -22,7 +22,7 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
     protected EzySessionTicketsQueue sessionTicketsQueue;
     protected EzySocketEventLoopHandler writingLoopHandler;
 
-    public EzyAbstractSocketServerBootstrap(Builder<?,?> builder) {
+    public EzyAbstractSocketServerBootstrap(Builder<?, ?> builder) {
         this.serverContext = builder.serverContext;
         this.socketDataReceiver = builder.socketDataReceiver;
         this.handlerGroupManager = builder.handlerGroupManager;
@@ -40,7 +40,7 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 
     protected final EzyNioSessionManager getSessionManager() {
         return (EzyNioSessionManager)
-                serverContext.getServer().getSessionManager();
+            serverContext.getServer().getSessionManager();
     }
 
     protected final EzySessionManagementSetting getSessionManagementSetting() {
@@ -48,13 +48,13 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
     }
 
     @SuppressWarnings("unchecked")
-    public static abstract class Builder<B, T extends EzyAbstractSocketServerBootstrap>
-            implements EzyBuilder<T> {
+    public abstract static class Builder<B, T extends EzyAbstractSocketServerBootstrap>
+        implements EzyBuilder<T> {
 
         protected EzyServerContext serverContext;
-        private EzySocketDataReceiver socketDataReceiver;
         protected EzyHandlerGroupManager handlerGroupManager;
         protected EzySessionTicketsQueue sessionTicketsQueue;
+        protected EzySocketDataReceiver socketDataReceiver;
 
         public B serverContext(EzyServerContext context) {
             this.serverContext = context;
@@ -63,7 +63,7 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 
         public B socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
             this.socketDataReceiver = socketDataReceiver;
-            return (B)this;
+            return (B) this;
         }
 
         public B handlerGroupManager(EzyHandlerGroupManager manager) {

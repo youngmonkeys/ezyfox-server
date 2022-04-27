@@ -8,23 +8,23 @@ public class ConcurrentLinkedListTest {
         ConcurrentLinkedQueue<Integer> queue = new ConcurrentLinkedQueue<>();
         Thread write = new Thread(() -> {
             int i = 0;
-            while(true) {
-                queue.add(i ++);
+            while (true) {
+                queue.add(i++);
             }
         });
         write.start();
 
         Thread[] reads = new Thread[200];
-        for(int i = 0 ; i < reads.length ; ++i) {
+        for (int i = 0; i < reads.length; ++i) {
             final int index = i;
             reads[index] = new Thread(() -> {
-                while(true) {
+                while (true) {
                     System.out.println("thread-" + index + "\t\t" + queue.poll());
                 }
             });
         }
-        for(int i = 0 ; i < reads.length ; ++i) {
-            reads[i].start();
+        for (Thread read : reads) {
+            read.start();
         }
     }
 }

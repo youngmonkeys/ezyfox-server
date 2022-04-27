@@ -1,18 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SocketChannel;
-
-import org.eclipse.jetty.websocket.api.Session;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.codec.EzyMessage;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
@@ -20,6 +7,14 @@ import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.util.RandomUtil;
+import org.eclipse.jetty.websocket.api.Session;
+import org.testng.annotations.Test;
+
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SocketChannel;
+
+import static org.mockito.Mockito.*;
 
 public class EzySocketDataReceiverTest {
 
@@ -28,10 +23,10 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[] {1, 2, 3});
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[]{1, 2, 3});
 
         SocketChannel channel = mock(SocketChannel.class);
         when(channel.read(buffer)).thenThrow(new ClosedChannelException());
@@ -53,10 +48,10 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[] {1, 2, 3});
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[]{1, 2, 3});
 
         SocketChannel channel = mock(SocketChannel.class);
         when(channel.read(buffer)).thenThrow(new ClosedChannelException());
@@ -78,9 +73,9 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .threadPoolSize(1)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .threadPoolSize(1)
+            .build();
 
         SocketChannel channel = mock(SocketChannel.class);
 
@@ -104,9 +99,9 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .threadPoolSize(1)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .threadPoolSize(1)
+            .build();
 
         SocketChannel channel = mock(SocketChannel.class);
 
@@ -126,9 +121,9 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .threadPoolSize(1)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .threadPoolSize(1)
+            .build();
 
         SocketChannel channel = mock(SocketChannel.class);
 
@@ -153,8 +148,8 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
         Session session = mock(Session.class);
         String message = RandomUtil.randomShortAlphabetString();
@@ -181,11 +176,11 @@ public class EzySocketDataReceiverTest {
         // given
         EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
         EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
-                .handlerGroupManager(handlerGroupManager)
-                .build();
+            .handlerGroupManager(handlerGroupManager)
+            .build();
 
         Session session = mock(Session.class);
-        byte[] payload = new byte[] {1, 2, 3};
+        byte[] payload = new byte[]{1, 2, 3};
 
         EzyWsHandlerGroup handlerGroup = mock(EzyWsHandlerGroup.class);
         doThrow(new RuntimeException()).when(handlerGroup).fireBytesReceived(payload, 0, payload.length);

@@ -1,29 +1,28 @@
 package com.tvd12.ezyfoxserver.nio.websocket;
 
-import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
-
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import lombok.Getter;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 
-import lombok.Getter;
+import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SERVER;
 
 @Getter
 public class EzyWsChannel implements EzyChannel {
 
     private final Session session;
-    private volatile boolean opened;
     private final SocketAddress serverAddress;
     private final SocketAddress clientAddress;
-    private final static Logger LOGGER = LoggerFactory.getLogger(EzyWsChannel.class);
+    private volatile boolean opened;
+    private static final Logger LOGGER
+        = LoggerFactory.getLogger(EzyWsChannel.class);
 
     public EzyWsChannel(Session session) {
         this.opened = true;
@@ -35,11 +34,11 @@ public class EzyWsChannel implements EzyChannel {
     @Override
     public int write(Object data, boolean binary) throws Exception {
         try {
-            if(binary)
-                return writeBinary((byte[])data);
-            return writeString((String)data);
-        }
-        catch(WebSocketException e) {
+            if (binary) {
+                return writeBinary((byte[]) data);
+            }
+            return writeString((String) data);
+        } catch (WebSocketException e) {
             LOGGER.debug("write data: {}, to: {} error", data, clientAddress, e);
             return 0;
         }
@@ -83,8 +82,7 @@ public class EzyWsChannel implements EzyChannel {
     public void disconnect() {
         try {
             session.disconnect();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warn("disconnect session: {} error", session, e);
         }
     }
@@ -93,8 +91,7 @@ public class EzyWsChannel implements EzyChannel {
     public void close() {
         try {
             session.close(CLOSE_BY_SERVER);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warn("close session: {} error", session, e);
         }
     }

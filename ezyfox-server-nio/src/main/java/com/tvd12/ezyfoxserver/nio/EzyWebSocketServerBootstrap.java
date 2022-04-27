@@ -1,26 +1,29 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
-
-import javax.net.ssl.SSLContext;
-
-import org.eclipse.jetty.server.Server;
-
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
+import org.eclipse.jetty.server.Server;
+
+import javax.net.ssl.SSLContext;
+
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private Server server;
-    private SSLContext sslContext;
+    private final SSLContext sslContext;
 
     public EzyWebSocketServerBootstrap(Builder builder) {
         super(builder);
         this.sslContext = builder.sslContext;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -39,12 +42,12 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 
     private Server newSocketServer() {
         return newSocketServerCreator()
-                .setting(getWsSetting())
-                .sessionManager(getSessionManager())
-                .handlerGroupManager(handlerGroupManager)
-                .sessionManagementSetting(getSessionManagementSetting())
-                .socketDataReceiver(socketDataReceiver)
-                .create();
+            .setting(getWsSetting())
+            .sessionManager(getSessionManager())
+            .handlerGroupManager(handlerGroupManager)
+            .sessionManagementSetting(getSessionManagementSetting())
+            .socketDataReceiver(socketDataReceiver)
+            .create();
     }
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
@@ -60,8 +63,9 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
     }
 
     private EzyWebSocketServerCreator newSocketServerCreator() {
-        if(isSslActive())
+        if (isSslActive()) {
             return new EzyWebSocketSecureServerCreator(sslContext);
+        }
         return new EzyWebSocketServerCreator();
     }
 
@@ -77,12 +81,8 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
         return getServerSettings().getWebsocket();
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder
-            extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzyWebSocketServerBootstrap> {
+        extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzyWebSocketServerBootstrap> {
 
         private SSLContext sslContext;
 

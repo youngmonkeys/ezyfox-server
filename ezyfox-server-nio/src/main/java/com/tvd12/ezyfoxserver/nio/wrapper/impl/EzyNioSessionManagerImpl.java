@@ -5,11 +5,12 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyNioSessionFactory;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySimpleSessionManager;
+
 import static com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting.EzyMaxRequestPerSecond;
 
-public class EzyNioSessionManagerImpl 
-        extends EzySimpleSessionManager<EzyNioSession>
-        implements EzyNioSessionManager {
+public class EzyNioSessionManagerImpl
+    extends EzySimpleSessionManager<EzyNioSession>
+    implements EzyNioSessionManager {
 
     protected EzyNioSessionManagerImpl(Builder builder) {
         super(builder);
@@ -40,6 +41,4 @@ public class EzyNioSessionManagerImpl
             return factory;
         }
     }
-
-
 }

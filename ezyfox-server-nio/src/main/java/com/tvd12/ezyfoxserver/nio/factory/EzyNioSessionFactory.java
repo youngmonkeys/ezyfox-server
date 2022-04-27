@@ -8,7 +8,6 @@ public class EzyNioSessionFactory extends EzyAbstractSessionFactory<EzyNioSessio
 
     @Override
     protected EzyNioSession newSession() {
-        EzySimpleSession session = new EzySimpleSession();
-        return session;
+        return new EzySimpleSession();
     }
 }

@@ -13,20 +13,20 @@ public class EzyNioStarter extends EzyStarter {
         super(builder);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     protected EzyServerBootstrapBuilder newServerBootstrapBuilder() {
         return new EzyNioServerBootstrapBuilderImpl();
     }
 
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({"rawtypes"})
     @Override
     protected EzySimpleSessionManager.Builder newSessionManagerBuilder(EzySettings settings) {
         return EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(settings.getSessionManagement().getSessionMaxRequestPerSecond());
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            .maxRequestPerSecond(settings.getSessionManagement().getSessionMaxRequestPerSecond());
     }
 
     public static class Builder extends EzyStarter.Builder<Builder> {

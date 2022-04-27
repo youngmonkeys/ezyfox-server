@@ -7,6 +7,5 @@ public interface EzyNioDataHandler extends EzySocketDataHandler {
 
     void channelInactive(EzyConstant disconnectReason);
 
-    void exceptionCaught(Throwable throwable)  throws Exception;
-
+    void exceptionCaught(Throwable throwable) throws Exception;
 }

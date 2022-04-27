@@ -10,5 +10,4 @@ public interface EzyNioHandlerGroup extends EzyHandlerGroup {
     void fireMessageReceived(EzyMessage message) throws Exception;
 
     EzyNioSession getSession();
-
 }

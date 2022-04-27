@@ -1,32 +1,22 @@
 package com.tvd12.ezyfoxserver.nio.testing.udp;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
-import java.nio.channels.ClosedSelectorException;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.spi.SelectorProvider;
-import java.util.Set;
-
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioUdpDataHandler;
 import com.tvd12.ezyfoxserver.nio.udp.EzyNioUdpReader;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.reflect.MethodUtil;
+import org.mockito.stubbing.Answer;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.Set;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class EzyNioUdpReaderTest {
 
@@ -44,13 +34,10 @@ public class EzyNioUdpReaderTest {
         when(selectionKey.readyOps()).thenReturn(SelectionKey.OP_READ);
         MyDatagramChannel channel = mock(MyDatagramChannel.class);
         when(selectionKey.channel()).thenReturn(channel);
-        when(channel.receive(any(ByteBuffer.class))).thenAnswer(new Answer<InetSocketAddress>() {
-            @Override
-            public InetSocketAddress answer(InvocationOnMock invocation) throws Throwable {
-                ByteBuffer buffer = invocation.getArgumentAt(0, ByteBuffer.class);
-                buffer.put((byte)0);
-                return new InetSocketAddress(12346);
-            }
+        when(channel.receive(any(ByteBuffer.class))).thenAnswer((Answer<InetSocketAddress>) invocation -> {
+            ByteBuffer buffer = invocation.getArgumentAt(0, ByteBuffer.class);
+            buffer.put((byte) 0);
+            return new InetSocketAddress(12346);
         });
         reader.handleEvent();
     }
@@ -145,7 +132,7 @@ public class EzyNioUdpReaderTest {
     }
 
     @Test
-    public void processReadyKeysKeyInvalid() throws IOException {
+    public void processReadyKeysKeyInvalid() {
         // given
         Selector ownSelector = mock(Selector.class);
         EzyNioUdpReader sut = new EzyNioUdpReader(1024);
@@ -164,7 +151,7 @@ public class EzyNioUdpReaderTest {
     }
 
     @Test
-    public void processReadyKeyNotReadable() throws IOException {
+    public void processReadyKeyNotReadable() {
         // given
         EzyNioUdpReader sut = new EzyNioUdpReader(1024);
 

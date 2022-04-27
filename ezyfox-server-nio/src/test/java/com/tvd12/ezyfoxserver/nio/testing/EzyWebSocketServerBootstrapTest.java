@@ -1,9 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.testing;
 
-import javax.net.ssl.SSLContext;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.EzyWebSocketServerBootstrap;
@@ -11,8 +7,12 @@ import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodUtil;
+import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.*;
+import javax.net.ssl.SSLContext;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyWebSocketServerBootstrapTest {
 
@@ -31,9 +31,9 @@ public class EzyWebSocketServerBootstrapTest {
         server.setSettings(settings);
 
         EzyWebSocketServerBootstrap sut = EzyWebSocketServerBootstrap.builder()
-                .sslContext(sslContext)
-                .serverContext(serverContext)
-                .build();
+            .sslContext(sslContext)
+            .serverContext(serverContext)
+            .build();
 
         // when
         EzyWebSocketServerCreator creator = MethodUtil.invokeMethod("newSocketServerCreator", sut);

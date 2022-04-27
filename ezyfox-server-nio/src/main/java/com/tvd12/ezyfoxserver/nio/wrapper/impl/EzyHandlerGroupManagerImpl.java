@@ -1,9 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.wrapper.impl;
 
-import java.net.SocketAddress;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -15,9 +11,13 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketDataHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriterGroup;
 
+import java.net.SocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class EzyHandlerGroupManagerImpl
-        extends EzyLoggable
-        implements EzyHandlerGroupManager {
+    extends EzyLoggable
+    implements EzyHandlerGroupManager {
 
     private final Map<Object, Object> socketChannelByUdpAddress;
     private final Map<Object, EzyHandlerGroup> groupsByConnection;
@@ -29,11 +29,19 @@ public class EzyHandlerGroupManagerImpl
         this.socketChannelByUdpAddress = new ConcurrentHashMap<>();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type) {
-        EzyHandlerGroup group = handlerGroupBuilderFactory.newBuilder(channel, type)
-                .build();
+    public <T extends EzyHandlerGroup> T newHandlerGroup(
+        EzyChannel channel,
+        EzyConnectionType type
+    ) {
+        EzyHandlerGroup group = handlerGroupBuilderFactory
+            .newBuilder(channel, type)
+            .build();
         groupsByConnection.put(channel.getConnection(), group);
         return (T) group;
     }
@@ -44,27 +52,57 @@ public class EzyHandlerGroupManagerImpl
         return (T) groupsByConnection.get(connection);
     }
 
+    private EzyHandlerGroup getHandlerGroup(EzySession session) {
+        if (session == null) {
+            return null;
+        }
+        EzyChannel channel = session.getChannel();
+        if (channel == null) {
+            return null;
+        }
+        Object connection = channel.getConnection();
+        if (connection == null) {
+            return null;
+        }
+        return groupsByConnection.get(connection);
+    }
+
     @Override
     public void unmapHandlerGroup(SocketAddress udpAddress) {
-        if(udpAddress != null) {
+        if (udpAddress != null) {
             socketChannelByUdpAddress.remove(udpAddress);
-            logger.debug("unmap socket channel from: {}, socketChannelByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
+            logger.debug(
+                "unmap socket channel from: {}, socketChannelByUdpAddress.size: {}",
+                udpAddress,
+                socketChannelByUdpAddress.size()
+            );
         }
     }
 
     @Override
-    public void mapSocketChannel(SocketAddress udpAddress, EzySession session) {
-        if(session == null)
+    public void mapSocketChannel(
+        SocketAddress udpAddress,
+        EzySession session
+    ) {
+        if (session == null) {
             return;
+        }
         EzyChannel channel = session.getChannel();
-        if(channel == null)
+        if (channel == null) {
             return;
+        }
         Object connection = channel.getConnection();
-        if(connection == null)
+        if (connection == null) {
             return;
-        if(groupsByConnection.containsKey(connection))
+        }
+        if (groupsByConnection.containsKey(connection)) {
             socketChannelByUdpAddress.put(udpAddress, connection);
-        logger.debug("map socket channel to: {}, socketChannelByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
+        }
+        logger.debug(
+            "map socket channel to: {}, socketChannelByUdpAddress.size: {}",
+            udpAddress,
+            socketChannelByUdpAddress.size()
+        );
     }
 
     @Override
@@ -74,32 +112,30 @@ public class EzyHandlerGroupManagerImpl
 
     @Override
     public EzySocketDataHandlerGroup removeHandlerGroup(EzySession session) {
-        if(session == null)
+        if (session == null) {
             return null;
+        }
         EzyChannel channel = session.getChannel();
-        if(channel == null)
+        if (channel == null) {
             return null;
+        }
         Object connection = channel.getConnection();
-        if(connection == null)
+        if (connection == null) {
             return null;
+        }
         EzyHandlerGroup group = groupsByConnection.remove(connection);
         SocketAddress udpClientAddress = session.getUdpClientAddress();
-        if(udpClientAddress != null)
+        if (udpClientAddress != null) {
             socketChannelByUdpAddress.remove(udpClientAddress);
-        logger.debug("remove handler group: {} with session: {}, groupsByConnection.size: {}, socketChannelByUdpAddress.size: {}", group, session, groupsByConnection.size(), socketChannelByUdpAddress.size());
-        return group;
-    }
-
-    private EzyHandlerGroup getHandlerGroup(EzySession session) {
-        if(session == null)
-            return null;
-        EzyChannel channel = session.getChannel();
-        if(channel == null)
-            return null;
-        Object connection = channel.getConnection();
-        if(connection == null)
-            return null;
-        EzyHandlerGroup group = groupsByConnection.get(connection);
+        }
+        logger.debug(
+            "remove handler group: {} with session: {}, " +
+                "groupsByConnection.size: {}, socketChannelByUdpAddress.size: {}",
+            group,
+            session,
+            groupsByConnection.size(),
+            socketChannelByUdpAddress.size()
+        );
         return group;
     }
 
@@ -116,10 +152,6 @@ public class EzyHandlerGroupManagerImpl
     @Override
     public void destroy() {
         groupsByConnection.clear();
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyHandlerGroupManager> {

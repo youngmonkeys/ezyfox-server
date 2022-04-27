@@ -1,27 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.testing.handler;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-
-import org.testng.annotations.Test;
-
-import com.tvd12.ezyfox.codec.EzyByteToObjectDecoder;
-import com.tvd12.ezyfox.codec.EzyMessage;
-import com.tvd12.ezyfox.codec.EzyMessageHeader;
-import com.tvd12.ezyfox.codec.EzySimpleMessage;
-import com.tvd12.ezyfox.codec.EzySimpleMessageDataDecoder;
-import com.tvd12.ezyfox.codec.EzySimpleMessageHeader;
+import com.tvd12.ezyfox.codec.*;
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
@@ -44,20 +23,28 @@ import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzyBlockingSocketStreamQueue;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.socket.EzyPacket;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
-import com.tvd12.ezyfoxserver.socket.EzySessionTicketsRequestQueues;
-import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
-import com.tvd12.ezyfoxserver.socket.EzySocketStreamQueue;
+import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.*;
 
 public class EzySimpleNioHandlerGroupTest extends BaseTest {
 
@@ -67,9 +54,9 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         EzyStatistics statistics = new EzySimpleStatistics();
         EzySimpleSettings settings = new EzySimpleSettings();
         EzySimpleStreamingSetting streaming = settings.getStreaming();
@@ -90,18 +77,18 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
 
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(statistics)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .codecFactory(new ExCodecFactory())
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-                .build();
+            .statistics(statistics)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .codecFactory(new ExCodecFactory())
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+            .build();
 
         EzySimpleNioHandlerGroup group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .build();
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .build();
 
         group.fireBytesReceived("hello".getBytes());
         EzySimplePacket packet = new EzySimplePacket();
@@ -112,12 +99,12 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         group.firePacketSend(packet, writeBuffer);
         group.sendPacketNow(packet);
         group.fireChannelRead(EzyCommand.PING, EzyEntityArrays.newArray(EzyCommand.PING.getId(), EzyEntityFactory.EMPTY_ARRAY));
-        group.fireStreamBytesReceived(new byte[] {0, 1, 2});
+        group.fireStreamBytesReceived(new byte[]{0, 1, 2});
         EzyPacket droppedPacket = mock(EzyPacket.class);
         when(droppedPacket.getSize()).thenReturn(12);
         group.addDroppedPacket(droppedPacket);
         EzyPacket failedPacket = mock(EzyPacket.class);
-        when(failedPacket.getData()).thenReturn(new byte[] {1, 2, 3});
+        when(failedPacket.getData()).thenReturn(new byte[]{1, 2, 3});
         when(failedPacket.isBinary()).thenReturn(true);
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenThrow(new IllegalStateException("maintain"));
         group.firePacketSend(failedPacket, writeBuffer);
@@ -128,43 +115,43 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 
         EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
         group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .streamQueue(streamQueue)
-                .decoder(new ExStreamEzyByteToObjectDecoder())
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
-        ((EzyAbstractSession)session).setStreamingEnable(false);
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .streamQueue(streamQueue)
+            .decoder(new ExStreamEzyByteToObjectDecoder())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
+        ((EzyAbstractSession) session).setStreamingEnable(false);
         group.fireBytesReceived("hello".getBytes());
         Thread.sleep(500);
-        ((EzyAbstractSession)session).setStreamingEnable(true);
+        ((EzyAbstractSession) session).setStreamingEnable(true);
         group.fireBytesReceived("hello".getBytes());
         Thread.sleep(1000);
 
         streamQueue = mock(EzySocketStreamQueue.class);
         when(streamQueue.add(any())).thenThrow(new IllegalStateException("maintain"));
         group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .streamQueue(streamQueue)
-                .decoder(new ExStreamEzyByteToObjectDecoder())
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .streamQueue(streamQueue)
+            .decoder(new ExStreamEzyByteToObjectDecoder())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
         group.fireBytesReceived("hello".getBytes());
         Thread.sleep(1000);
 
         group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .decoder(new ErrorEzyByteToObjectDecoder())
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .decoder(new ErrorEzyByteToObjectDecoder())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
         group.fireBytesReceived("hello".getBytes());
         group.fireMessageReceived(mock(EzyMessage.class));
         Thread.sleep(300);
@@ -176,9 +163,9 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         EzyStatistics statistics = new EzySimpleStatistics();
         EzySimpleSettings settings = new EzySimpleSettings();
         EzySimpleStreamingSetting streaming = settings.getStreaming();
@@ -202,23 +189,23 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(statistics)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .codecFactory(new ExCodecFactory())
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-                .build();
+            .statistics(statistics)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .codecFactory(new ExCodecFactory())
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+            .build();
 
         EzySimpleNioHandlerGroup group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .decoder(decoder)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .decoder(decoder)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
         EzySimplePacket packet = new EzySimplePacket();
         packet.setBinary(true);
         packet.setData("world".getBytes());
@@ -234,9 +221,9 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         EzyStatistics statistics = new EzySimpleStatistics();
         EzySimpleSettings settings = new EzySimpleSettings();
         EzySimpleStreamingSetting streaming = settings.getStreaming();
@@ -262,23 +249,23 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
 
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(statistics)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .codecFactory(new ExCodecFactory())
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-                .build();
+            .statistics(statistics)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .codecFactory(new ExCodecFactory())
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+            .build();
 
         EzySimpleNioHandlerGroup group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .decoder(decoder)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .decoder(decoder)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
         EzySimplePacket packet = new EzySimplePacket();
         packet.setBinary(true);
         packet.setData("world".getBytes());
@@ -289,7 +276,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
     }
 
     @Test
-    public void handleReceivedMesssageHeaderIsNotRawBytes() throws Exception {
+    public void handleReceivedMessageHeaderIsNotRawBytes() throws Exception {
         // given
         EzySimpleNioHandlerGroup sut = newHandlerGroup();
 
@@ -300,7 +287,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMesssage")
+            .method("handleReceivedMessage")
             .param(EzyMessage.class, message)
             .call();
 
@@ -314,7 +301,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
     }
 
     @Test
-    public void handleReceivedMesssageStreamingNotEnable() throws Exception {
+    public void handleReceivedMessageStreamingNotEnable() throws Exception {
         // given
         EzySimpleNioHandlerGroup sut = newHandlerGroup(false);
 
@@ -326,7 +313,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMesssage")
+            .method("handleReceivedMessage")
             .param(EzyMessage.class, message)
             .call();
 
@@ -335,7 +322,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
     }
 
     @Test
-    public void handleReceivedMesssageSessionStreamingNotEnable() throws Exception {
+    public void handleReceivedMessageSessionStreamingNotEnable() throws Exception {
         // given
         EzySimpleNioHandlerGroup sut = newHandlerGroup();
 
@@ -350,7 +337,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMesssage")
+            .method("handleReceivedMessage")
             .param(EzyMessage.class, message)
             .call();
 
@@ -371,7 +358,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
 
 
         EzyPacket packet = mock(EzyPacket.class);
-        when(packet.getData()).thenReturn(new byte[] {1, 2, 3, 5});
+        when(packet.getData()).thenReturn(new byte[]{1, 2, 3, 5});
         when(packet.isBinary()).thenReturn(true);
 
         ByteBuffer writeBuffer = ByteBuffer.allocate(5);
@@ -398,9 +385,9 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzySessionTicketsQueue socketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionTicketsQueue webSocketSessionTicketsQueue = new EzyBlockingSessionTicketsQueue();
         EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
-                .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
-                .tokenGenerator(new EzySimpleSessionTokenGenerator())
-                .build();
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
         EzyStatistics statistics = new EzySimpleStatistics();
         EzySimpleSettings settings = new EzySimpleSettings();
         EzySimpleStreamingSetting streaming = settings.getStreaming();
@@ -431,24 +418,23 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         when(codecFactory.newDecoder(any())).thenReturn(decoder);
 
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = EzyHandlerGroupBuilderFactoryImpl.builder()
-                .statistics(statistics)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .codecFactory(codecFactory)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .socketSessionTicketsQueue(socketSessionTicketsQueue)
-                .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
-                .build();
+            .statistics(statistics)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .codecFactory(codecFactory)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .socketSessionTicketsQueue(socketSessionTicketsQueue)
+            .webSocketSessionTicketsQueue(webSocketSessionTicketsQueue)
+            .build();
 
-        EzySimpleNioHandlerGroup group = (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
-                .newBuilder(channel, EzyConnectionType.SOCKET)
-                .session(session)
-                .decoder(decoder)
-                .serverContext(serverContext)
-                .statsThreadPool(statsThreadPool)
-                .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-                .build();
-        return group;
+        return (EzySimpleNioHandlerGroup) handlerGroupBuilderFactory
+            .newBuilder(channel, EzyConnectionType.SOCKET)
+            .session(session)
+            .decoder(decoder)
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
     }
 
     public static class ExEzyByteToObjectDecoder implements EzyByteToObjectDecoder {
@@ -457,21 +443,71 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         public void reset() {}
 
         @Override
-        public Object decode(EzyMessage message) throws Exception {
+        public Object decode(EzyMessage message) {
             return EzyEntityFactory.newArrayBuilder()
-                    .append(EzyCommand.PING.getId())
-                    .build();
+                .append(EzyCommand.PING.getId())
+                .build();
         }
 
         @Override
-        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
+        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) {
             EzyMessageHeader header = new EzySimpleMessageHeader(false, false, false, false, false, false);
             byte[] content = new byte[bytes.remaining()];
             bytes.get(content);
             EzyMessage message = new EzySimpleMessage(header, content, content.length);
             queue.add(message);
         }
+    }
 
+    @Test
+    public void builderTest() {
+        // given
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+
+        @SuppressWarnings("rawtypes")
+        EzySessionManager sessionManager = EzyNioSessionManagerImpl.builder()
+            .maxRequestPerSecond(new EzySimpleSessionManagementSetting.EzySimpleMaxRequestPerSecond())
+            .tokenGenerator(new EzySimpleSessionTokenGenerator())
+            .build();
+        server.setSessionManager(sessionManager);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzySessionTicketsQueue sessionTicketsQueue =
+            mock(EzySessionTicketsQueue.class);
+        EzySocketDisconnectionQueue disconnectionQueue =
+            mock(EzySocketDisconnectionQueue.class);
+
+        Object connection = new Object();
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.getConnection()).thenReturn(connection);
+        EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
+
+        EzySessionStats sessionStats = mock(EzySessionStats.class);
+        doNothing().when(sessionStats).setCurrentSessions(anyInt());
+
+        // when
+        EzySimpleNioHandlerGroup sut = (EzySimpleNioHandlerGroup) EzySimpleNioHandlerGroup.builder()
+            .session(session)
+            .serverContext(serverContext)
+            .sessionCount(new AtomicInteger())
+            .sessionStats(sessionStats)
+            .sessionTicketsQueue(sessionTicketsQueue)
+            .disconnectionQueue(disconnectionQueue)
+            .build();
+
+        // then
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(sut, "disconnectionQueue"),
+            disconnectionQueue
+        );
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(sut, "sessionTicketsQueue"),
+            sessionTicketsQueue
+        );
     }
 
     public static class ExStreamEzyByteToObjectDecoder implements EzyByteToObjectDecoder {
@@ -480,14 +516,14 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         public void reset() {}
 
         @Override
-        public Object decode(EzyMessage message) throws Exception {
+        public Object decode(EzyMessage message) {
             return EzyEntityFactory.newArrayBuilder()
-                    .append(EzyCommand.PING.getId())
-                    .build();
+                .append(EzyCommand.PING.getId())
+                .build();
         }
 
         @Override
-        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
+        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) {
             EzyMessageHeader header = new EzySimpleMessageHeader(true, true, true, true, true, false);
             byte[] content = new byte[bytes.remaining()];
             bytes.get(content);
@@ -515,14 +551,13 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         public void reset() {}
 
         @Override
-        public Object decode(EzyMessage message) throws Exception {
+        public Object decode(EzyMessage message) {
             throw new IllegalStateException("maintain");
         }
 
         @Override
-        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) throws Exception {
+        public void decode(ByteBuffer bytes, Queue<EzyMessage> queue) {
             throw new IllegalStateException("maintain");
         }
-
     }
 }

@@ -13,29 +13,29 @@ public class AppGlobalExceptionHandler extends EzyLoggable {
 
     @EzyTryCatch(RequestException.class)
     public void handleRequestException(RequestException e,
-            EzyUserSessionEvent event,
-            boolean boolValue,
-            int intValue,
-            Void voidData,
-            String cmd,
-            Hello data,
-            String stringValue) {
+                                       EzyUserSessionEvent event,
+                                       boolean boolValue,
+                                       int intValue,
+                                       Void voidData,
+                                       String cmd,
+                                       Hello data,
+                                       String stringValue) {
         logger.error("try cath RequestException, data: {}", data, e);
     }
 
     @EzyTryCatch(IllegalArgumentException.class)
     public void handleIllegalArgumentException(
-            IllegalArgumentException e,
-            String cmd,
-            @EzyRequestData Object data) {
+        IllegalArgumentException e,
+        String cmd,
+        @EzyRequestData Object data) {
         logger.error("try cath IllegalArgumentException, cmd = {}, data = {}", cmd, data, e);
     }
 
     @EzyTryCatch(Exception.class)
     public void handleException(
-            Exception e,
-            String cmd,
-            @EzyRequestData Object data) throws Exception {
+        Exception e,
+        String cmd,
+        @EzyRequestData Object data) throws Exception {
         throw e;
     }
 }

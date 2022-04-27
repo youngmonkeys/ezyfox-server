@@ -1,14 +1,13 @@
 package com.tvd12.ezyfoxserver.support.test.manager;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.testng.annotations.Test;
-import org.testng.collections.Sets;
-
 import com.tvd12.ezyfox.util.EzyMapBuilder;
 import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
+import org.testng.collections.Sets;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class EzyFeatureCommandManagerTest {
 
@@ -19,7 +18,7 @@ public class EzyFeatureCommandManagerTest {
         sut.addFeatureCommand("hello", "/a");
         sut.addFeatureCommand("hello", "/b");
         sut.addFeatureCommand("world", "/c");
-        
+
         // when
         Asserts.assertEquals(
             sut.getFeatures(),

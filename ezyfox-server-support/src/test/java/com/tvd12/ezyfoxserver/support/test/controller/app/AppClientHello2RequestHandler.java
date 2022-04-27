@@ -9,9 +9,9 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
 @EzyRequestListener("hello2")
-public class AppClientHello2RequestHandler 
-        extends EzyAbstractUserRequestHandler<EzyAppContext, Hello> {
-    
+public class AppClientHello2RequestHandler
+    extends EzyAbstractUserRequestHandler<EzyAppContext, Hello> {
+
     @Override
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {
         System.out.println("hello: " + data.getWho());

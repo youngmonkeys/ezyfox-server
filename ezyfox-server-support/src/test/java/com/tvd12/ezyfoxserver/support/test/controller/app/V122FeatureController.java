@@ -16,7 +16,7 @@ public class V122FeatureController {
     @EzyFeature("hello.world")
     @EzyDoHandle("hello")
     public void hello() {}
-    
+
     @EzyFeature("")
     @EzyDoHandle("hello2")
     public void hello2() {}

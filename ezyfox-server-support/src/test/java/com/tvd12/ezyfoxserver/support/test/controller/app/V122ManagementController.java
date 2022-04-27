@@ -15,7 +15,7 @@ public class V122ManagementController {
     @EzyFeature("hello.world")
     @EzyDoHandle("hello")
     public void hello() {}
-    
+
     @EzyManagement
     @EzyPayment
     @EzyFeature("")

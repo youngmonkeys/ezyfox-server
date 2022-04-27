@@ -1,11 +1,11 @@
 package com.tvd12.ezyfoxserver.support.manager;
 
+import com.tvd12.ezyfox.util.EzyDestroyable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.tvd12.ezyfox.util.EzyDestroyable;
 
 public class EzyRequestCommandManager implements EzyDestroyable {
 
@@ -18,11 +18,11 @@ public class EzyRequestCommandManager implements EzyDestroyable {
         this.managementCommands = ConcurrentHashMap.newKeySet();
         this.paymentCommands = ConcurrentHashMap.newKeySet();
     }
-    
+
     public void addCommand(String command) {
         this.commands.add(command);
     }
-    
+
     public boolean containsCommand(String command) {
         return this.commands.contains(command);
     }
@@ -34,7 +34,7 @@ public class EzyRequestCommandManager implements EzyDestroyable {
     public boolean isManagementCommand(String command) {
         return managementCommands.contains(command);
     }
-    
+
     public void addPaymentCommand(String command) {
         this.paymentCommands.add(command);
     }
@@ -42,15 +42,15 @@ public class EzyRequestCommandManager implements EzyDestroyable {
     public boolean isPaymentCommand(String command) {
         return paymentCommands.contains(command);
     }
-    
+
     public List<String> getCommands() {
         return new ArrayList<>(commands);
     }
-    
+
     public List<String> getManagementCommands() {
         return new ArrayList<>(managementCommands);
     }
-    
+
     public List<String> getPaymentCommands() {
         return new ArrayList<>(paymentCommands);
     }

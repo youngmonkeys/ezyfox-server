@@ -9,9 +9,9 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestAppHandler;
 @SuppressWarnings("rawtypes")
 @EzySingleton
 @EzyRequestListener("hello4")
-public class AppClientHello4RequestHandler 
-        implements EzyUserRequestAppHandler {
-    
+public class AppClientHello4RequestHandler
+    implements EzyUserRequestAppHandler {
+
     @Override
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
         System.out.println("hello with: " + data);

@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.controller;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
@@ -22,11 +16,7 @@ import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
-import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestPluginSingletonController;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
@@ -37,6 +27,11 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyZoneUserManagerImpl;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.spy;
 
 public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 
@@ -53,8 +48,8 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
         EzySimpleZone zone = new EzySimpleZone();
         zone.setSetting(zoneSetting);
         EzyZoneUserManager zoneUserManager = EzyZoneUserManagerImpl.builder()
-                .zoneName("test")
-                .build();
+            .zoneName("test")
+            .build();
         zone.setUserManager(zoneUserManager);
         EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
         zoneContext.setZone(zone);
@@ -100,71 +95,70 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("hello")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("hello")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         EzyUserRequestPluginEvent event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("responseFactoryTest")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("responseFactoryTest")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("no command")
-                .build();
+            .append("no command")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("hello2")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("hello2")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("plugin/c_hello")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("plugin/c_hello")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestSend")
-                .build();
+            .append("badRequestSend")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestNotSend")
-                .build();
+            .append("badRequestNotSend")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("plugin/requestException4")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("plugin/requestException4")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         try {
             data = EzyEntityFactory.newArrayBuilder()
-                    .append("exception")
-                    .build();
+                .append("exception")
+                .build();
             event = new EzySimpleUserRequestPluginEvent(user, session, data);
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
     }
@@ -173,30 +167,30 @@ public class EzyUserRequestPluginSingletonControllerTest extends BaseTest {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.controller.plugin"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.controller.plugin"
             };
         }
 
         @SuppressWarnings("rawtypes")
         @Override
         protected Class[] getPrototypeClasses() {
-            return new Class[] {
+            return new Class[]{
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.controller"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.controller"
             };
         }
 
         @Override
         protected EzyPluginRequestController newUserRequestController(EzyBeanContext beanContext) {
             return EzyUserRequestPluginSingletonController.builder()
-                    .beanContext(beanContext)
-                    .build();
+                .beanContext(beanContext)
+                .build();
         }
 
     }

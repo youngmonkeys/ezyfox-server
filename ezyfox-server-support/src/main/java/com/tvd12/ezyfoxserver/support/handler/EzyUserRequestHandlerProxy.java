@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.support.handler;
 
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
-
 import lombok.Getter;
 
 @Getter

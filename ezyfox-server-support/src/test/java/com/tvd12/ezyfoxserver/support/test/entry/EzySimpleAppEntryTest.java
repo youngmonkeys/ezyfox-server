@@ -1,13 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.entry;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
@@ -26,20 +18,23 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
-import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.spy;
 
 public class EzySimpleAppEntryTest {
 
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({"rawtypes"})
     @Test
     public void test() throws Exception {
         EzySimpleSettings settings = new EzySimpleSettings();
@@ -61,7 +56,7 @@ public class EzySimpleAppEntryTest {
         appSetting.setName("test");
 
         EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-                .build();
+            .build();
 
         EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
         EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
@@ -89,7 +84,7 @@ public class EzySimpleAppEntryTest {
         Assert.assertEquals(serverReadyHandlers.size(), 2);
         Assert.assertEquals(serverReadyHandlers.get(0).getClass(), ServerReadyEventHandler2.class);
         Assert.assertEquals(serverReadyHandlers.get(1).getClass(), ServerReadyEventHandler.class);
-        
+
         List<EzyEventController> loginEventHandlers = appContext
             .getApp()
             .getEventControllers()
@@ -107,75 +102,74 @@ public class EzySimpleAppEntryTest {
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("chat")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .build();
+            .append("chat")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("no command")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("no command")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noUser")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noUser")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noSession")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noSession")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noDataBinding")
-                .build();
+            .append("noDataBinding")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestSend")
-                .build();
+            .append("badRequestSend")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestNoSend")
-                .build();
+            .append("badRequestNoSend")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("exception")
-                .build();
+            .append("exception")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         try {
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("app")
-                .build();
+            .append("app")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
     }
@@ -201,7 +195,7 @@ public class EzySimpleAppEntryTest {
         appSetting.setName("test");
 
         EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-                .build();
+            .build();
 
         EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
         EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
@@ -227,23 +221,23 @@ public class EzySimpleAppEntryTest {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
 
         @SuppressWarnings("rawtypes")
         @Override
         protected Class[] getPrototypeClasses() {
-            return new Class[] {
-                    ClientAppRequestHandler.class
+            return new Class[]{
+                ClientAppRequestHandler.class
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
 

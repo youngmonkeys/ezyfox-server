@@ -5,7 +5,6 @@ import com.tvd12.ezyfoxserver.support.command.EzyAppArrayResponse;
 import com.tvd12.ezyfoxserver.support.command.EzyAppObjectResponse;
 import com.tvd12.ezyfoxserver.support.command.EzyArrayResponse;
 import com.tvd12.ezyfoxserver.support.command.EzyObjectResponse;
-
 import lombok.Setter;
 
 @Setter

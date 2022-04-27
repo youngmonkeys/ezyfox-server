@@ -9,8 +9,8 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestPluginHandler;
 @SuppressWarnings("rawtypes")
 @EzySingleton
 @EzyRequestListener("hello3")
-public class PluginClientHello3RequestHandler 
-        implements EzyUserRequestPluginHandler {
+public class PluginClientHello3RequestHandler
+    implements EzyUserRequestPluginHandler {
 
     @Override
     public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {

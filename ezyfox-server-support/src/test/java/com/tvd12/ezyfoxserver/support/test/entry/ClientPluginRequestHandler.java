@@ -5,16 +5,15 @@ import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzyPluginContextAware;
-
 import lombok.Setter;
 
 @Setter
 @EzyRequestListener("plugin")
 public class ClientPluginRequestHandler
-        extends EzyLoggable
-        implements
-            EzyPluginContextAware,
-            EzyHandler {
+    extends EzyLoggable
+    implements
+    EzyPluginContextAware,
+    EzyHandler {
 
     protected EzyPluginContext pluginContext;
 

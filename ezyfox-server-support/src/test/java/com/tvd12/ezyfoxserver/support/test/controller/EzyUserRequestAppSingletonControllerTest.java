@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.controller;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
@@ -22,11 +16,7 @@ import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
-import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleAppSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.asm.EzyExceptionHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.asm.EzyRequestHandlerImplementer;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
@@ -39,6 +29,11 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyAppUserManagerImpl;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.spy;
 
 public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 
@@ -65,7 +60,7 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
         appSetting.setName("test");
 
         EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
-                .build();
+            .build();
 
         EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
         EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
@@ -105,100 +100,98 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("hello")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("hello")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         EzyUserRequestAppEvent event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("responseFactoryTest")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("responseFactoryTest")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("no command")
-                .build();
+            .append("no command")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("hello2")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("hello2")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("hello6")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
-
-        event = new EzySimpleUserRequestAppEvent(user, session, data);
-        requestController.handle(context, event);
-
-        data = EzyEntityFactory.newArrayBuilder()
-                .append("c_hello")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("hello6")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
 
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestSend")
-                .build();
+            .append("c_hello")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
+
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestNotSend")
-                .build();
+            .append("badRequestSend")
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("requestException")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("badRequestNotSend")
+            .build();
+        event = new EzySimpleUserRequestAppEvent(user, session, data);
+        requestController.handle(context, event);
+
+        data = EzyEntityFactory.newArrayBuilder()
+            .append("requestException")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         try {
             data = EzyEntityFactory.newArrayBuilder()
-                    .append("requestException2")
-                    .build();
+                .append("requestException2")
+                .build();
             event = new EzySimpleUserRequestAppEvent(user, session, data);
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e.getCause().getClass() == Exception.class;
         }
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("requestException3")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("who", "Mr.Young Monkey!"))
-                .build();
+            .append("requestException3")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("who", "Mr.Young Monkey!"))
+            .build();
         event = new EzySimpleUserRequestAppEvent(user, session, data);
         requestController.handle(context, event);
 
         try {
             data = EzyEntityFactory.newArrayBuilder()
-                    .append("exception")
-                    .build();
+                .append("exception")
+                .build();
             event = new EzySimpleUserRequestAppEvent(user, session, data);
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
     }
@@ -207,30 +200,30 @@ public class EzyUserRequestAppSingletonControllerTest extends BaseTest {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.controller.app"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.controller.app"
             };
         }
 
         @SuppressWarnings("rawtypes")
         @Override
         protected Class[] getPrototypeClasses() {
-            return new Class[] {
+            return new Class[]{
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.controller"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.controller"
             };
         }
 
         @Override
         protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
             return EzyUserRequestAppSingletonController.builder()
-                    .beanContext(beanContext)
-                    .build();
+                .beanContext(beanContext)
+                .build();
         }
 
     }

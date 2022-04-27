@@ -5,23 +5,23 @@ import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 
-public class EzyUserRequestAppSingletonController 
-        extends EzyUserRequestSingletonController<EzyAppContext, EzyUserRequestAppEvent>
-        implements EzyAppRequestController {
+public class EzyUserRequestAppSingletonController
+    extends EzyUserRequestSingletonController<EzyAppContext, EzyUserRequestAppEvent>
+    implements EzyAppRequestController {
 
     protected EzyUserRequestAppSingletonController(Builder builder) {
         super(builder);
     }
 
-    @Override
-    protected void responseError(
-            EzyAppContext context,
-            EzyUserRequestAppEvent event, EzyData errorData) {
-        context.send(errorData, event.getSession(), false);
-    }
-
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    protected void responseError(
+        EzyAppContext context,
+        EzyUserRequestAppEvent event, EzyData errorData) {
+        context.send(errorData, event.getSession(), false);
     }
 
     public static class Builder extends EzyUserRequestSingletonController.Builder<Builder> {
@@ -35,8 +35,8 @@ public class EzyUserRequestAppSingletonController
         @Override
         protected EzyUserRequestPrototypeController getPrototypeController() {
             return EzyUserRequestAppPrototypeController.builder()
-                    .beanContext(beanContext)
-                    .build();
+                .beanContext(beanContext)
+                .build();
         }
 
     }

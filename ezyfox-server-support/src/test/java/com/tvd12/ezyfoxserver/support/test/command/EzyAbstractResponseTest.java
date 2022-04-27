@@ -1,14 +1,11 @@
 package com.tvd12.ezyfoxserver.support.test.command;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.entity.EzyData;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.support.command.EzyAbstractResponse;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.*;
 
 public class EzyAbstractResponseTest {
 

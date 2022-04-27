@@ -5,5 +5,5 @@ import java.util.Set;
 public interface EzyCommandsAware {
 
     Set<String> getCommands();
-    
+
 }

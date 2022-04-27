@@ -10,8 +10,8 @@ import com.tvd12.ezyfoxserver.support.test.controller.Hello;
 
 @EzySingleton
 @EzyRequestListener("badRequestNotSend")
-public class AppBadRequestNotSendRequestHandler 
-        implements EzyUserRequestHandler<EzyAppContext, Hello> {
+public class AppBadRequestNotSendRequestHandler
+    implements EzyUserRequestHandler<EzyAppContext, Hello> {
 
     @Override
     public void handle(EzyAppContext context, EzyUserSessionEvent event, Hello data) {

@@ -1,11 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.entry;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
 import com.tvd12.ezyfox.entity.EzyArray;
@@ -22,15 +16,16 @@ import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
-import com.tvd12.ezyfoxserver.setting.EzyEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimplePluginSetting;
-import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
-import com.tvd12.ezyfoxserver.setting.EzySimpleZoneSetting;
+import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.support.entry.EzyDefaultPluginEntry;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.mockito.Mockito.spy;
 
 public class EzyDefaultPluginEntryTest {
 
@@ -83,75 +78,74 @@ public class EzyDefaultPluginEntryTest {
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         EzySimpleUser user = new EzySimpleUser();
         EzyArray data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("chat")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         EzyUserRequestPluginEvent event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("chat")
-                .build();
+            .append("chat")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("no command")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("no command")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noUser")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noUser")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noSession")
-                .append(EzyEntityFactory.newObjectBuilder()
-                        .append("message", "greet"))
-                .build();
+            .append("noSession")
+            .append(EzyEntityFactory.newObjectBuilder()
+                .append("message", "greet"))
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("noDataBinding")
-                .build();
+            .append("noDataBinding")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestSend")
-                .build();
+            .append("badRequestSend")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("badRequestNoSend")
-                .build();
+            .append("badRequestNoSend")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("exception")
-                .build();
+            .append("exception")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         try {
             requestController.handle(context, event);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
 
         data = EzyEntityFactory.newArrayBuilder()
-                .append("plugin")
-                .build();
+            .append("plugin")
+            .build();
         event = new EzySimpleUserRequestPluginEvent(user, session, data);
         requestController.handle(context, event);
     }
@@ -199,23 +193,23 @@ public class EzyDefaultPluginEntryTest {
 
         @Override
         protected String[] getScanableBeanPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
 
         @SuppressWarnings("rawtypes")
         @Override
         protected Class[] getPrototypeClasses() {
-            return new Class[] {
-                    ClientPluginRequestHandler.class
+            return new Class[]{
+                ClientPluginRequestHandler.class
             };
         }
 
         @Override
         protected String[] getScanableBindingPackages() {
-            return new String[] {
-                    "com.tvd12.ezyfoxserver.support.test.entry"
+            return new String[]{
+                "com.tvd12.ezyfoxserver.support.test.entry"
             };
         }
 

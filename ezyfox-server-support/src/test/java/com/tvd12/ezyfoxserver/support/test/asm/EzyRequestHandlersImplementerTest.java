@@ -1,18 +1,5 @@
 package com.tvd12.ezyfoxserver.support.test.asm;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -35,11 +22,19 @@ import com.tvd12.ezyfoxserver.support.test.controller.HelloController2;
 import com.tvd12.ezyfoxserver.support.test.data.GreetRequest;
 import com.tvd12.ezyfoxserver.support.test.data.GreetResponse;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class EzyRequestHandlersImplementerTest {
 
     @Test
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void test() {
         // given
         EzyAppContext context = mock(EzyAppContext.class);
@@ -61,14 +56,14 @@ public class EzyRequestHandlersImplementerTest {
 
         EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
         EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
-        
+
         implementer.setFeatureCommandManager(featureCommandManager);
         implementer.setRequestCommandManager(requestCommandManager);
 
         Map<String, EzyUserRequestHandler> handlers = implementer.implement(
             Collections.singletonList(new HelloController())
         );
-        for(EzyUserRequestHandler handler : handlers.values()) {
+        for (EzyUserRequestHandler handler : handlers.values()) {
             handler.handle(context, event, new GreetRequest("Dzung"));
         }
         EzyRequestHandlerImplementer.setDebug(false);
@@ -91,14 +86,14 @@ public class EzyRequestHandlersImplementerTest {
         EzyRequestControllerProxy proxy
             = new EzyRequestControllerProxy(new HelloController());
         EzyRequestHandlerImplementer implementer =
-                new EzyRequestHandlerImplementer(
-                        proxy,
-                        proxy.getRequestHandlerMethods().get(0)) {
-            @Override
-            protected EzyAsmRequestHandler doimplement() throws Exception {
-                throw new RuntimeException("test");
-            }
-        };
+            new EzyRequestHandlerImplementer(
+                proxy,
+                proxy.getRequestHandlerMethods().get(0)) {
+                @Override
+                protected EzyAsmRequestHandler doimplement() throws Exception {
+                    throw new RuntimeException("test");
+                }
+            };
         implementer.implement();
     }
 

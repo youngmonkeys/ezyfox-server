@@ -6,7 +6,6 @@ import com.tvd12.ezyfox.binding.annotation.EzyObjectBinding;
 import com.tvd12.ezyfox.core.annotation.EzyRequestListener;
 import com.tvd12.ezyfox.function.EzyHandler;
 import com.tvd12.ezyfox.util.EzyLoggable;
-
 import lombok.Setter;
 
 @Setter
@@ -14,10 +13,10 @@ import lombok.Setter;
 @EzyRequestListener("noSession")
 @EzyObjectBinding(read = false)
 public class ClientNoSessionRequestHandler
-        extends EzyLoggable
-        implements
-            EzyHandler,
-            EzyDataBinding {
+    extends EzyLoggable
+    implements
+    EzyHandler,
+    EzyDataBinding {
 
     @Override
     public void handle() {

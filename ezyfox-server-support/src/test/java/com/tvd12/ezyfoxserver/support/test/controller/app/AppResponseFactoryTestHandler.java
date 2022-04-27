@@ -10,14 +10,13 @@ import com.tvd12.ezyfoxserver.event.EzyUserSessionEvent;
 import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.test.controller.Hello;
-
 import lombok.Setter;
 
 @Setter
 @EzySingleton
 @EzyRequestListener("responseFactoryTest")
 public class AppResponseFactoryTestHandler
-        implements EzyUserRequestHandler<EzyAppContext, Hello> {
+    implements EzyUserRequestHandler<EzyAppContext, Hello> {
 
     @EzyAutoBind("appResponseFactory")
     protected EzyResponseFactory responseFactory;

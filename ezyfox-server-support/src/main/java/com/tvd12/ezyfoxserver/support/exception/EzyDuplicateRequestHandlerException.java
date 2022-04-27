@@ -7,8 +7,8 @@ public class EzyDuplicateRequestHandlerException extends IllegalStateException {
 
     @SuppressWarnings("rawtypes")
     public EzyDuplicateRequestHandlerException(
-            String command,
-            EzyUserRequestHandler old, EzyUserRequestHandler now) {
+        String command,
+        EzyUserRequestHandler old, EzyUserRequestHandler now) {
         super("duplicate handler for: " + command + " <> " + old + " => " + now);
     }
 }

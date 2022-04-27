@@ -1,15 +1,14 @@
 package com.tvd12.ezyfoxserver.support.test.manager;
 
-import java.util.Arrays;
-
+import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
+import com.tvd12.test.assertion.Asserts;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
-import com.tvd12.test.assertion.Asserts;
+import java.util.Arrays;
 
 public class EzyRequestCommandManagerTest {
-    
+
     @Test
     public void test() {
         // given
@@ -17,7 +16,7 @@ public class EzyRequestCommandManagerTest {
         sut.addCommand("a");
         sut.addPaymentCommand("d");
         sut.addManagementCommand("e");
-        
+
         // when
         // then
         Asserts.assertTrue(sut.containsCommand("a"));

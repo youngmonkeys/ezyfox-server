@@ -7,7 +7,10 @@ import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 
 public class EzyPluginArrayResponse extends EzyAbstractArrayResponse {
 
-    public EzyPluginArrayResponse(EzyPluginContext context, EzyMarshaller marshaller) {
+    public EzyPluginArrayResponse(
+        EzyPluginContext context,
+        EzyMarshaller marshaller
+    ) {
         super(context, marshaller);
     }
 

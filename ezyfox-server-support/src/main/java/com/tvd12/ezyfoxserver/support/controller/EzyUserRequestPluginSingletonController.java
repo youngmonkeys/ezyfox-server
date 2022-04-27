@@ -20,7 +20,9 @@ public class EzyUserRequestPluginSingletonController
     @Override
     protected void responseError(
         EzyPluginContext context,
-        EzyUserRequestPluginEvent event, EzyData errorData) {
+        EzyUserRequestPluginEvent event,
+        EzyData errorData
+    ) {
         context.send(errorData, event.getSession(), false);
     }
 
@@ -38,6 +40,5 @@ public class EzyUserRequestPluginSingletonController
                 .beanContext(beanContext)
                 .build();
         }
-
     }
 }

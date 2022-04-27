@@ -47,11 +47,9 @@ public class EzyRequestHandlerMethod extends EzyHandlerMethod {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(method.getName())
-            .append("(")
-            .append("command: ").append(command)
-            .append(")")
-            .toString();
+        return method.getName() +
+            "(" +
+            "command: " + command +
+            ")";
     }
 }

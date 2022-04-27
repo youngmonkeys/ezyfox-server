@@ -25,7 +25,10 @@ public class HelloController2 {
     @EzyDoHandle("Hello")
     public void greet(
         @EzyRequestData GreetRequest request,
-        EzyUser user, EzySession session, Integer nothing) {
+        EzyUser user,
+        EzySession session,
+        Integer nothing
+    ) {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }

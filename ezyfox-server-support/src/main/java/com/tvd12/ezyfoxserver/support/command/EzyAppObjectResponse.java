@@ -5,14 +5,12 @@ import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class EzyAppObjectResponse extends EzyAbstractObjectResponse {
 
-    protected final Map<Object, Object> additionalParams = new HashMap<>();
-
-    public EzyAppObjectResponse(EzyAppContext context, EzyMarshaller marshaller) {
+    public EzyAppObjectResponse(
+        EzyAppContext context,
+        EzyMarshaller marshaller
+    ) {
         super(context, marshaller);
     }
 

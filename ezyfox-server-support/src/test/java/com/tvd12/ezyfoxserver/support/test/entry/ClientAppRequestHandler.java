@@ -18,6 +18,5 @@ public class ClientAppRequestHandler
     protected EzyAppContext appContext;
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

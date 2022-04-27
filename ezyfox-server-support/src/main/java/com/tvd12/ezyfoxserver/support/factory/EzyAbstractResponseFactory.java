@@ -4,8 +4,8 @@ import com.tvd12.ezyfox.binding.EzyMarshaller;
 import lombok.Setter;
 
 @Setter
-public abstract class EzyAbstractResponseFactory implements EzyResponseFactory {
+public abstract class EzyAbstractResponseFactory
+    implements EzyResponseFactory {
 
     protected EzyMarshaller marshaller;
-
 }

@@ -17,7 +17,11 @@ public class EzyUserRequestHandlerProxy implements EzyUserRequestHandler {
     }
 
     @Override
-    public void handle(EzyContext context, EzyUserSessionEvent event, Object data) {
+    public void handle(
+        EzyContext context,
+        EzyUserSessionEvent event,
+        Object data
+    ) {
         handler.handle(context, event, data);
     }
 }

@@ -15,11 +15,9 @@ public abstract class EzyAbstractResponse<T extends EzyResponse<T>>
     implements EzyResponse<T>, EzyDestroyable {
 
     protected Object data;
-
-    protected com.tvd12.ezyfoxserver.command.EzyResponse response;
-
     protected EzyContext context;
     protected EzyMarshaller marshaller;
+    protected com.tvd12.ezyfoxserver.command.EzyResponse response;
 
     public EzyAbstractResponse(EzyContext context, EzyMarshaller marshaller) {
         this.context = context;

@@ -14,21 +14,30 @@ public abstract class EzyAbstractObjectResponse
     extends EzyAbstractResponse<EzyObjectResponse>
     implements EzyObjectResponse {
 
-    protected final Set<Object> excludeParamKeys = new HashSet<>();
-    protected final Map<Object, Object> additionalParams = new HashMap<>();
+    protected Set<Object> excludeParamKeys;
+    protected Map<Object, Object> additionalParams;
 
-    public EzyAbstractObjectResponse(EzyContext context, EzyMarshaller marshaller) {
+    public EzyAbstractObjectResponse(
+        EzyContext context,
+        EzyMarshaller marshaller
+    ) {
         super(context, marshaller);
     }
 
     @Override
     public EzyObjectResponse param(Object key, Object value) {
+        if (additionalParams == null) {
+            additionalParams = new HashMap<>();
+        }
         additionalParams.put(key, value);
         return this;
     }
 
     @Override
     public EzyObjectResponse exclude(Object key) {
+        if (excludeParamKeys == null) {
+            excludeParamKeys = new HashSet<>();
+        }
         excludeParamKeys.add(key);
         return this;
     }
@@ -38,13 +47,29 @@ public abstract class EzyAbstractObjectResponse
         EzyObject object = data != null
             ? marshaller.marshal(data)
             : newObjectBuilder().build();
-        for (Object key : additionalParams.keySet()) {
-            Object value = additionalParams.get(key);
-            Object skey = marshaller.marshal(key);
-            Object svalue = marshaller.marshal(value);
-            object.put(skey, svalue);
+        if (additionalParams != null) {
+            for (Map.Entry<Object, Object> e : additionalParams.entrySet()) {
+                Object skey = marshaller.marshal(e.getKey());
+                Object svalue = marshaller.marshal(e.getValue());
+                object.put(skey, svalue);
+            }
         }
-        object.removeAll(excludeParamKeys);
+        if (excludeParamKeys != null) {
+            object.removeAll(excludeParamKeys);
+        }
         return object;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (excludeParamKeys != null) {
+            this.excludeParamKeys.clear();
+            this.excludeParamKeys = null;
+        }
+        if (additionalParams != null) {
+            this.additionalParams.clear();
+            this.additionalParams = null;
+        }
     }
 }

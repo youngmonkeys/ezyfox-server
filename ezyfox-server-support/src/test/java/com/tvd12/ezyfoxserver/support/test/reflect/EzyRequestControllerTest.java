@@ -12,6 +12,7 @@ public class EzyRequestControllerTest {
         EzyRequestControllerProxy controllerProxy =
             new EzyRequestControllerProxy(instance);
         assert controllerProxy.getInstance() == instance;
+        //noinspection ConstantConditions
         assert controllerProxy.getExceptionHandlerMethods().size() >= 0;
         System.out.println(controllerProxy);
     }

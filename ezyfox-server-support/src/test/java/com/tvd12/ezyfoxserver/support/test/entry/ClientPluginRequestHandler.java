@@ -18,6 +18,5 @@ public class ClientPluginRequestHandler
     protected EzyPluginContext pluginContext;
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

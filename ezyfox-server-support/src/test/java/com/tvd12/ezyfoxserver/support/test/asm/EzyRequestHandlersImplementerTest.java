@@ -90,7 +90,7 @@ public class EzyRequestHandlersImplementerTest {
                 proxy,
                 proxy.getRequestHandlerMethods().get(0)) {
                 @Override
-                protected EzyAsmRequestHandler doimplement() throws Exception {
+                protected EzyAsmRequestHandler doImplement() {
                     throw new RuntimeException("test");
                 }
             };

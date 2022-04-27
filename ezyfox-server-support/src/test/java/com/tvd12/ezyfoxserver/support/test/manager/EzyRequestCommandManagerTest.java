@@ -5,7 +5,7 @@ import com.tvd12.test.assertion.Asserts;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class EzyRequestCommandManagerTest {
 
@@ -20,11 +20,11 @@ public class EzyRequestCommandManagerTest {
         // when
         // then
         Asserts.assertTrue(sut.containsCommand("a"));
-        Asserts.assertEquals(sut.getCommands(), Arrays.asList("a"), false);
+        Asserts.assertEquals(sut.getCommands(), Collections.singletonList("a"), false);
         Assert.assertTrue(sut.isPaymentCommand("d"));
-        Asserts.assertEquals(sut.getPaymentCommands(), Arrays.asList("d"), false);
+        Asserts.assertEquals(sut.getPaymentCommands(), Collections.singletonList("d"), false);
         Assert.assertTrue(sut.isManagementCommand("e"));
-        Asserts.assertEquals(sut.getManagementCommands(), Arrays.asList("e"), false);
+        Asserts.assertEquals(sut.getManagementCommands(), Collections.singletonList("e"), false);
         sut.destroy();
     }
 }

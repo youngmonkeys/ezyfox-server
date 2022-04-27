@@ -22,21 +22,21 @@ public class EzyExceptionHandlerImplementerTest {
         new EzyExceptionHandlerImplementer(handlerProxy, method) {
             @SuppressWarnings("rawtypes")
             @Override
-            protected EzyUncaughtExceptionHandler doimplement() throws Exception {
+            protected EzyUncaughtExceptionHandler doImplement() {
                 throw new IllegalStateException("test");
             }
         }
             .implement();
-
     }
 
     public static class ExceptionHandlerFail {
 
         @EzyTryCatch(Exception.class)
-        public void handle(Exception e,
-                           @EzyRequestData int value) {
+        public void handle(
+            Exception e,
+            @SuppressWarnings("unused") @EzyRequestData int value
+        ) {
             e.printStackTrace();
         }
-
     }
 }

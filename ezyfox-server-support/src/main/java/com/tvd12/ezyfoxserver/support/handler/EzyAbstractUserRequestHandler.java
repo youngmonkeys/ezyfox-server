@@ -12,7 +12,9 @@ public abstract class EzyAbstractUserRequestHandler<C extends EzyContext, D>
     @Override
     public Class<D> getDataType() {
         try {
-            return EzyGenerics.getTwoGenericClassArguments(getClass().getGenericSuperclass())[1];
+            return EzyGenerics.getTwoGenericClassArguments(
+                getClass().getGenericSuperclass()
+            )[1];
         } catch (Exception e) {
             return null;
         }

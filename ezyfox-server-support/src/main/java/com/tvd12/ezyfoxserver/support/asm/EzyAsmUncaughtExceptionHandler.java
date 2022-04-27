@@ -7,5 +7,4 @@ public interface EzyAsmUncaughtExceptionHandler<C extends EzyContext, D>
     extends EzyUncaughtExceptionHandler<C, D> {
 
     void setExceptionHandler(Object exceptionHandler);
-
 }

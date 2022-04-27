@@ -18,7 +18,8 @@ public class PluginClientHelloRequestController {
     public void handleHello(
         EzyPluginContext context,
         @EzyRequestData Hello data,
-        EzyUser user) {
+        EzyUser user
+    ) {
         System.out.println("plugin: c_hello: " + data.getWho());
     }
 
@@ -26,7 +27,8 @@ public class PluginClientHelloRequestController {
     public void handleRequestException4(
         EzyContext context,
         String cmd,
-        @EzyRequestData Hello data) throws Exception {
+        @EzyRequestData Hello data
+    ) throws Exception {
         throw new RequestException4(getClass().getSimpleName() + ":handleRequestException4, cmd = " + cmd);
     }
 
@@ -35,7 +37,10 @@ public class PluginClientHelloRequestController {
         RequestException4 e,
         String cmd,
         Hello request,
-        EzyUser user, EzySession session, EzyContext context) {
+        EzyUser user,
+        EzySession session,
+        EzyContext context
+    ) {
         System.out.println("PluginClientHelloRequestController::handleRequestException2, cmd = " + cmd + ", data = " + request + ", e = " + e);
     }
 }

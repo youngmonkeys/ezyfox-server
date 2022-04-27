@@ -10,7 +10,7 @@ public class EzyExceptionHandlerProxyTest {
     public void test() {
         EzyExceptionHandlerProxy proxy = new EzyExceptionHandlerProxy(
             new ExceptionHandlerEx());
-        System.out.println(proxy.toString());
+        System.out.println(proxy);
     }
 
     public static class ExceptionHandlerEx {
@@ -19,6 +19,5 @@ public class EzyExceptionHandlerProxyTest {
         public void handle(Exception e) {
             e.printStackTrace();
         }
-
     }
 }

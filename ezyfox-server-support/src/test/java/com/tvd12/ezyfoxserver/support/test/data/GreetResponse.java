@@ -8,7 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 @EzyObjectBinding(read = false)
 public class GreetResponse {
-
     protected String message;
-
 }

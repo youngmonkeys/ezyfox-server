@@ -15,6 +15,5 @@ public class ClientNoDataBindingRequestHandler
     EzyHandler {
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

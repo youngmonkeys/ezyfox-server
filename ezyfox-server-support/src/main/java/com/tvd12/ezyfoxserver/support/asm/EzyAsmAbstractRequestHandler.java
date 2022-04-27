@@ -17,7 +17,10 @@ public abstract class EzyAsmAbstractRequestHandler implements EzyAsmRequestHandl
 
     @Override
     public void handle(
-        EzyContext context, EzyUserSessionEvent event, Object data) {
+        EzyContext context,
+        EzyUserSessionEvent event,
+        Object data
+    ) {
         try {
             handleRequest(context, event, data);
         } catch (Exception e) {
@@ -26,13 +29,22 @@ public abstract class EzyAsmAbstractRequestHandler implements EzyAsmRequestHandl
     }
 
     public abstract void handleRequest(
-        EzyContext context, EzyUserSessionEvent event, Object data);
+        EzyContext context,
+        EzyUserSessionEvent event,
+        Object data
+    );
 
     public abstract void handleException(
         EzyContext context,
-        EzyUserSessionEvent event, Object data, Exception exception);
+        EzyUserSessionEvent event,
+        Object data,
+        Exception exception
+    );
 
-    protected void responseToSession(EzyUserSessionEvent event, Object data) {
+    protected void responseToSession(
+        EzyUserSessionEvent event,
+        Object data
+    ) {
         responseFactory.newObjectResponse()
             .command(command)
             .data(data)

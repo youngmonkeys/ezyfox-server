@@ -27,7 +27,10 @@ public class HelloController {
     @EzyDoHandle("Hello2")
     public void greet(
         @EzyRequestData GreetRequest request,
-        EzyUser user, EzySession session, Integer nothing) {
+        EzyUser user,
+        EzySession session,
+        Integer nothing
+    ) {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }
@@ -35,7 +38,10 @@ public class HelloController {
     @EzyDoHandle("Hello3")
     public void greet(
         @EzyRequestData GreetRequest request,
-        EzyUser user, EzySession session, int nothing) {
+        EzyUser user,
+        EzySession session,
+        int nothing
+    ) {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }
@@ -43,7 +49,10 @@ public class HelloController {
     @EzyDoHandle("Hello4")
     public void greet(
         @EzyRequestData GreetRequest request,
-        EzyUser user, EzySession session, boolean nothing) {
+        EzyUser user,
+        EzySession session,
+        boolean nothing
+    ) {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }
@@ -51,7 +60,10 @@ public class HelloController {
     @EzyDoHandle("Hello5")
     public void greet(
         @EzyRequestData GreetRequest request,
-        EzyUser user, EzySession session, char nothing) {
+        EzyUser user,
+        EzySession session,
+        char nothing
+    ) {
         GreetResponse response = new GreetResponse("Hello " + request.getWho() + "!");
         System.out.println("HelloController::Big/Hello response: " + response);
     }
@@ -70,7 +82,10 @@ public class HelloController {
     public void handleException2(
         RuntimeException e,
         GreetRequest request,
-        EzyUser user, EzySession session, EzyContext context) {
+        EzyUser user,
+        EzySession session,
+        EzyContext context
+    ) {
         e.printStackTrace();
     }
 
@@ -79,7 +94,10 @@ public class HelloController {
         IllegalArgumentException e,
         String cmd,
         GreetRequest request,
-        EzyUser user, EzySession session, EzyContext context) {
+        EzyUser user,
+        EzySession session,
+        EzyContext context
+    ) {
         System.out.println("HelloController:handleException:IllegalArgumentException, cmd = " + cmd);
     }
 }

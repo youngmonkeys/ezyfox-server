@@ -19,6 +19,5 @@ public class ClientNoSessionRequestHandler
     EzyDataBinding {
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

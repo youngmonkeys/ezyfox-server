@@ -24,6 +24,5 @@ public class ClientNoUserRequestHandler
     protected EzySession session;
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

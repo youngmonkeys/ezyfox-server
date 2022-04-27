@@ -28,6 +28,5 @@ public class ClientChatRequestHandler
     protected EzySession session;
 
     @Override
-    public void handle() {
-    }
+    public void handle() {}
 }

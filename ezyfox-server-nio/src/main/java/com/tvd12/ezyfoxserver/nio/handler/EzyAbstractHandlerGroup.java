@@ -183,7 +183,13 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
             int packetSize = packet.getSize();
             networkStats.addWriteErrorPackets(1);
             networkStats.addWriteErrorBytes(packetSize);
-            logger.warn("can't send {} bytes to session: {}, error: {}({})", packetSize, session, e.getClass().getName(), e.getMessage());
+            logger.warn(
+                "can't send {} bytes to session: {}, error: {}({})",
+                packetSize,
+                session,
+                e.getClass().getName(),
+                e.getMessage()
+            );
         }
     }
 
@@ -266,7 +272,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
         processWithLogException(handler::destroy);
     }
 
-    public static abstract class Builder implements EzyBuilder<EzyHandlerGroup> {
+    public abstract static class Builder implements EzyBuilder<EzyHandlerGroup> {
 
         protected AtomicInteger sessionCount;
         protected EzySessionStats sessionStats;

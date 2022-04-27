@@ -35,8 +35,12 @@ public class EzyHandlerGroupManagerImpl
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type) {
-        EzyHandlerGroup group = handlerGroupBuilderFactory.newBuilder(channel, type)
+    public <T extends EzyHandlerGroup> T newHandlerGroup(
+        EzyChannel channel,
+        EzyConnectionType type
+    ) {
+        EzyHandlerGroup group = handlerGroupBuilderFactory
+            .newBuilder(channel, type)
             .build();
         groupsByConnection.put(channel.getConnection(), group);
         return (T) group;
@@ -48,16 +52,38 @@ public class EzyHandlerGroupManagerImpl
         return (T) groupsByConnection.get(connection);
     }
 
+    private EzyHandlerGroup getHandlerGroup(EzySession session) {
+        if (session == null) {
+            return null;
+        }
+        EzyChannel channel = session.getChannel();
+        if (channel == null) {
+            return null;
+        }
+        Object connection = channel.getConnection();
+        if (connection == null) {
+            return null;
+        }
+        return groupsByConnection.get(connection);
+    }
+
     @Override
     public void unmapHandlerGroup(SocketAddress udpAddress) {
         if (udpAddress != null) {
             socketChannelByUdpAddress.remove(udpAddress);
-            logger.debug("unmap socket channel from: {}, socketChannelByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
+            logger.debug(
+                "unmap socket channel from: {}, socketChannelByUdpAddress.size: {}",
+                udpAddress,
+                socketChannelByUdpAddress.size()
+            );
         }
     }
 
     @Override
-    public void mapSocketChannel(SocketAddress udpAddress, EzySession session) {
+    public void mapSocketChannel(
+        SocketAddress udpAddress,
+        EzySession session
+    ) {
         if (session == null) {
             return;
         }
@@ -72,7 +98,11 @@ public class EzyHandlerGroupManagerImpl
         if (groupsByConnection.containsKey(connection)) {
             socketChannelByUdpAddress.put(udpAddress, connection);
         }
-        logger.debug("map socket channel to: {}, socketChannelByUdpAddress.size: {}", udpAddress, socketChannelByUdpAddress.size());
+        logger.debug(
+            "map socket channel to: {}, socketChannelByUdpAddress.size: {}",
+            udpAddress,
+            socketChannelByUdpAddress.size()
+        );
     }
 
     @Override
@@ -98,23 +128,15 @@ public class EzyHandlerGroupManagerImpl
         if (udpClientAddress != null) {
             socketChannelByUdpAddress.remove(udpClientAddress);
         }
-        logger.debug("remove handler group: {} with session: {}, groupsByConnection.size: {}, socketChannelByUdpAddress.size: {}", group, session, groupsByConnection.size(), socketChannelByUdpAddress.size());
+        logger.debug(
+            "remove handler group: {} with session: {}, " +
+                "groupsByConnection.size: {}, socketChannelByUdpAddress.size: {}",
+            group,
+            session,
+            groupsByConnection.size(),
+            socketChannelByUdpAddress.size()
+        );
         return group;
-    }
-
-    private EzyHandlerGroup getHandlerGroup(EzySession session) {
-        if (session == null) {
-            return null;
-        }
-        EzyChannel channel = session.getChannel();
-        if (channel == null) {
-            return null;
-        }
-        Object connection = channel.getConnection();
-        if (connection == null) {
-            return null;
-        }
-        return groupsByConnection.get(connection);
     }
 
     @Override

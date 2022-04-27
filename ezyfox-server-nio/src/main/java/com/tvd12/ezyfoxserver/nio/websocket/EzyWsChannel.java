@@ -17,11 +17,12 @@ import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SER
 @Getter
 public class EzyWsChannel implements EzyChannel {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(EzyWsChannel.class);
     private final Session session;
     private final SocketAddress serverAddress;
     private final SocketAddress clientAddress;
     private volatile boolean opened;
+    private static final Logger LOGGER
+        = LoggerFactory.getLogger(EzyWsChannel.class);
 
     public EzyWsChannel(Session session) {
         this.opened = true;

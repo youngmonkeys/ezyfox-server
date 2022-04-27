@@ -11,9 +11,9 @@ public interface EzyHandlerGroup extends
     EzySocketWriterGroup,
     EzyDestroyable {
 
-    void enqueueDisconnection(EzyConstant reason);
-
     void fireExceptionCaught(Throwable throwable);
+
+    void enqueueDisconnection(EzyConstant reason);
 
     default void enqueueDisconnection() {
         enqueueDisconnection(EzyDisconnectReason.UNKNOWN);

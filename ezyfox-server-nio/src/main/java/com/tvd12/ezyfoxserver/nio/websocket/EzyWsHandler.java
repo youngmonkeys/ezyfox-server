@@ -20,13 +20,15 @@ import static com.tvd12.ezyfoxserver.nio.websocket.EzyWsCloseStatus.CLOSE_BY_SER
 
 @WebSocket
 public class EzyWsHandler extends EzyLoggable {
-    private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
-        CLOSE_BY_SERVER.getCode()
-    );
+
     private final EzySocketDataReceiver socketDataReceiver;
     private final EzyNioSessionManager sessionManager;
     private final EzyHandlerGroupManager handlerGroupManager;
     private final EzySessionManagementSetting sessionManagementSetting;
+
+    private static final Set<Integer> IGNORE_STATUS_CODES = Sets.newHashSet(
+        CLOSE_BY_SERVER.getCode()
+    );
 
     public EzyWsHandler(Builder builder) {
         this.socketDataReceiver = builder.socketDataReceiver;
@@ -45,7 +47,12 @@ public class EzyWsHandler extends EzyLoggable {
 
     @OnWebSocketClose
     public void onClose(Session session, int statusCode, String reason) {
-        logger.debug("close session: {}, statusCode = {}, reason = {}", session.getRemoteAddress(), statusCode, reason);
+        logger.debug(
+            "close session: {}, statusCode = {}, reason = {}",
+            session.getRemoteAddress(),
+            statusCode,
+            reason
+        );
         if (isIgnoreStatusCode(statusCode)) {
             return;
         }
@@ -57,7 +64,11 @@ public class EzyWsHandler extends EzyLoggable {
     public void onError(Session session, Throwable throwable) {
         EzyWsHandlerGroup dataHandler = handlerGroupManager.getHandlerGroup(session);
         if (dataHandler == null) {
-            logger.debug("error on session: {}, but data handler removed", session.getRemoteAddress(), throwable);
+            logger.debug(
+                "error on session: {}, but data handler removed",
+                session.getRemoteAddress(),
+                throwable
+            );
         }
         if (throwable instanceof TimeoutException) {
             logger.debug("session {}: Timeout on Read", session.getRemoteAddress());

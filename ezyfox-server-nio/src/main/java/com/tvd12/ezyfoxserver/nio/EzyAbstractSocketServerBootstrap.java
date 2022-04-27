@@ -48,13 +48,13 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
     }
 
     @SuppressWarnings("unchecked")
-    public static abstract class Builder<B, T extends EzyAbstractSocketServerBootstrap>
+    public abstract static class Builder<B, T extends EzyAbstractSocketServerBootstrap>
         implements EzyBuilder<T> {
 
         protected EzyServerContext serverContext;
         protected EzyHandlerGroupManager handlerGroupManager;
         protected EzySessionTicketsQueue sessionTicketsQueue;
-        private EzySocketDataReceiver socketDataReceiver;
+        protected EzySocketDataReceiver socketDataReceiver;
 
         public B serverContext(EzyServerContext context) {
             this.serverContext = context;

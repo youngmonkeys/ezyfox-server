@@ -17,7 +17,9 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 
-public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable {
+public class EzySocketDataReceiver
+    extends EzyLoggable
+    implements EzyDestroyable {
 
     protected final int threadPoolSize;
     protected final ByteBuffer[] tcpByteBuffers;
@@ -62,11 +64,19 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
         try {
             tcpReadBytes(channel, buffer);
         } catch (Exception e) {
-            logger.info("I/O error at tcp-data-reader (channel: {}): {}({})", channel, e.getClass().getName(), e.getMessage());
+            logger.info(
+                "I/O error at tcp-data-reader (channel: {}): {}({})",
+                channel,
+                e.getClass().getName(),
+                e.getMessage()
+            );
         }
     }
 
-    private void tcpReadBytes(SocketChannel channel, ByteBuffer buffer) throws Exception {
+    private void tcpReadBytes(
+        SocketChannel channel,
+        ByteBuffer buffer
+    ) throws Exception {
         int readBytes = -1;
         Exception exception = null;
         try {
@@ -87,36 +97,48 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
         }
     }
 
-    private void processReadBytes(SocketChannel channel, ByteBuffer buffer) throws Exception {
+    private void processReadBytes(
+        SocketChannel channel,
+        ByteBuffer buffer
+    ) throws Exception {
         buffer.flip();
         byte[] binary = new byte[buffer.limit()];
         buffer.get(binary);
-        EzyNioHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(channel);
+        EzyNioHandlerGroup handlerGroup =
+            handlerGroupManager.getHandlerGroup(channel);
         if (handlerGroup != null) {
             handlerGroup.fireBytesReceived(binary);
         }
     }
 
     private void tcpCloseConnection(SocketChannel channel) {
-        EzyHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(channel);
+        EzyHandlerGroup handlerGroup =
+            handlerGroupManager.getHandlerGroup(channel);
         if (handlerGroup != null) {
             handlerGroup.enqueueDisconnection();
         }
     }
 
     public void udpReceive(Object socketChannel, EzyMessage message) {
-        ExecutorService executorService = selectedExecutorService(socketChannel);
+        ExecutorService executorService =
+            selectedExecutorService(socketChannel);
         executorService.execute(() -> doUdpReceive(socketChannel, message));
     }
 
     private void doUdpReceive(Object socketChannel, EzyMessage message) {
         try {
-            EzyNioHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(socketChannel);
+            EzyNioHandlerGroup handlerGroup =
+                handlerGroupManager.getHandlerGroup(socketChannel);
             if (handlerGroup != null) {
                 handlerGroup.fireMessageReceived(message);
             }
         } catch (Exception e) {
-            logger.info("I/O error at udp-message-received (channel: {}): {}({})", socketChannel, e.getClass().getName(), e.getMessage());
+            logger.info(
+                "I/O error at udp-message-received (channel: {}): {}({})",
+                socketChannel,
+                e.getClass().getName(),
+                e.getMessage()
+            );
         }
 
     }
@@ -126,6 +148,11 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
         executorService.execute(() -> doWsReceive(session, message));
     }
 
+    public void wsReceive(Session session, byte[] payload, int offset, int len) {
+        ExecutorService executorService = selectedExecutorService(session);
+        executorService.execute(() -> doWsReceive(session, payload, offset, len));
+    }
+
     private void doWsReceive(Session session, String message) {
         try {
             EzyWsHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(session);
@@ -133,13 +160,13 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
                 handlerGroup.fireBytesReceived(message);
             }
         } catch (Exception e) {
-            logger.info("I/O error at ws-message-received (session: {}): {}({})", session, e.getClass().getName(), e.getMessage());
+            logger.info(
+                "I/O error at ws-message-received (session: {}): {}({})",
+                session,
+                e.getClass().getName(),
+                e.getMessage()
+            );
         }
-    }
-
-    public void wsReceive(Session session, byte[] payload, int offset, int len) {
-        ExecutorService executorService = selectedExecutorService(session);
-        executorService.execute(() -> doWsReceive(session, payload, offset, len));
     }
 
     private void doWsReceive(Session session, byte[] payload, int offset, int len) {
@@ -149,12 +176,18 @@ public class EzySocketDataReceiver extends EzyLoggable implements EzyDestroyable
                 handlerGroup.fireBytesReceived(payload, offset, len);
             }
         } catch (Exception e) {
-            logger.info("I/O error at ws-message-received (session: {}): {}({})", session, e.getClass().getName(), e.getMessage());
+            logger.info(
+                "I/O error at ws-message-received (session: {}): {}({})",
+                session,
+                e.getClass().getName(),
+                e.getMessage()
+            );
         }
     }
 
     public void wsCloseConnection(Session session) {
-        EzyWsHandlerGroup handlerGroup = handlerGroupManager.getHandlerGroup(session);
+        EzyWsHandlerGroup handlerGroup =
+            handlerGroupManager.getHandlerGroup(session);
         if (handlerGroup != null) {
             handlerGroup.enqueueDisconnection();
         }

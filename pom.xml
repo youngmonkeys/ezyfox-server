@@ -76,7 +76,7 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
-                    <violationSeverity>error</violationSeverity>
+                    <violationSeverity>warning</violationSeverity>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>
                 <executions>

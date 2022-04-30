@@ -35,8 +35,9 @@ public class EzyEmbeddedStarter extends EzyNioStarter {
         return new EzyEmbeddedLoader() {
             @SuppressWarnings("rawtypes")
             @Override
-            protected EzySimpleSessionManager.Builder
-            createSessionManagerBuilder(EzySettings settings) {
+            protected EzySimpleSessionManager.Builder createSessionManagerBuilder(
+                EzySettings settings
+            ) {
                 return newSessionManagerBuilder(settings);
             }
 

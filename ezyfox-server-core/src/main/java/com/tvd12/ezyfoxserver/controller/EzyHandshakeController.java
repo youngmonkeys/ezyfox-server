@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.controller;
 import com.tvd12.ezyfox.sercurity.EzyAesCrypt;
 import com.tvd12.ezyfox.sercurity.EzyAsyCrypt;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
+import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -24,6 +25,7 @@ public class EzyHandshakeController
         EzySession session = request.getSession();
         EzyHandshakeParams params = request.getParams();
         EzyHandshakeEvent event = newHandshakeEvent(session, params);
+        ctx.broadcast(EzyEventType.CLIENT_HANDSHAKE, event, false);
         handleSocketSSL(ctx, event);
         updateSession(session, event);
         EzyResponse response = newHandShakeResponse(session, event);
@@ -45,20 +47,26 @@ public class EzyHandshakeController
             return;
         }
         byte[] clientKey = event.getClientKey();
-        byte[] sessionKey = EzyAesCrypt.randomKey();
-        byte[] encryptedSessionKey = sessionKey;
-        try {
-            if (clientKey.length > 0) {
-                encryptedSessionKey = EzyAsyCrypt.builder()
-                    .publicKey(clientKey)
-                    .build()
-                    .encrypt(sessionKey);
-            }
-        } catch (Exception e) {
-            logger.debug("cannot encrypt session key for session: {}", session, e);
+        byte[] sessionKey = event.getSessionKey();
+        if (sessionKey == null) {
+            sessionKey = EzyAesCrypt.randomKey();
+            event.setSessionKey(sessionKey);
         }
-        event.setSessionKey(sessionKey);
-        event.setEncryptedSessionKey(encryptedSessionKey);
+        byte[] encryptedSessionKey = event.getEncryptedSessionKey();
+        if (encryptedSessionKey == null) {
+            encryptedSessionKey = sessionKey;
+            try {
+                if (clientKey.length > 0) {
+                    encryptedSessionKey = EzyAsyCrypt.builder()
+                        .publicKey(clientKey)
+                        .build()
+                        .encrypt(sessionKey);
+                }
+            } catch (Exception e) {
+                logger.debug("cannot encrypt session key for session: {}", session, e);
+            }
+            event.setEncryptedSessionKey(encryptedSessionKey);
+        }
     }
 
     protected void updateSession(EzySession session, EzyHandshakeEvent event) {
@@ -71,7 +79,9 @@ public class EzyHandshakeController
     }
 
     protected EzyHandshakeEvent newHandshakeEvent(
-        EzySession session, EzyHandshakeParams params) {
+        EzySession session,
+        EzyHandshakeParams params
+    ) {
         return new EzySimpleHandshakeEvent(
             session,
             params.getClientId(),
@@ -83,7 +93,9 @@ public class EzyHandshakeController
     }
 
     protected EzyResponse newHandShakeResponse(
-        EzySession session, EzyHandshakeEvent event) {
+        EzySession session,
+        EzyHandshakeEvent event
+    ) {
         EzyHandShakeParams params = new EzyHandShakeParams();
         params.setServerPublicKey(session.getPublicKey());
         params.setReconnectToken(session.getToken());

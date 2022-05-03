@@ -13,8 +13,9 @@ public class EzySimpleHandShakeParams
     protected byte[] clientKey;
     protected String clientType;
     protected String clientVersion;
-    protected String reconnectToken;
     protected boolean enableEncryption;
+    protected String reconnectToken;
+    protected Object data;
 
     @Override
     public void deserialize(EzyArray t) {
@@ -24,5 +25,6 @@ public class EzySimpleHandShakeParams
         this.clientVersion = t.get(3, String.class);
         this.enableEncryption = t.get(4, boolean.class);
         this.reconnectToken = t.get(5, String.class);
+        this.data = t.getWithDefault(6, null);
     }
 }

@@ -7,6 +7,7 @@ public enum EzyEventType implements EzyConstant {
 
     SERVER_INITIALIZING(0),
     SERVER_READY(1),
+    CLIENT_HANDSHAKE(10),
     USER_LOGIN(21),
     USER_ACCESS_APP(25),
     USER_ADDED(26),

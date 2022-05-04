@@ -13,7 +13,7 @@
     <url>https://youngmonkeys.org/project/ezyfox-sever/</url>
 
     <properties>
-        <jetty.version>9.4.43.v20210629</jetty.version>
+        <jetty.version>9.4.46.v20220331</jetty.version>
     </properties>
 
     <dependencies>

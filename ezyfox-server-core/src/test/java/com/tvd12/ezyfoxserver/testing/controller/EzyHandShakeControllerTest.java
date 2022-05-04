@@ -259,10 +259,9 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
             event.setSessionKey(sessionKey);
             event.setEncryptedSessionKey(encryptedSessionKey);
             return null;
-        }).when(serverContext).broadcast(
+        }).when(serverContext).handleEvent(
             any(EzyEventType.class),
-            any(EzyHandshakeEvent.class),
-            any(boolean.class)
+            any(EzyHandshakeEvent.class)
         );
         EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
 
@@ -300,10 +299,9 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         sut.handle(serverContext, request);
 
         // then
-        verify(serverContext, times(1)).broadcast(
+        verify(serverContext, times(1)).handleEvent(
             any(EzyEventType.class),
-            any(EzyHandshakeEvent.class),
-            any(boolean.class)
+            any(EzyHandshakeEvent.class)
         );
         verify(serverContext, times(1)).send(
             any(com.tvd12.ezyfoxserver.response.EzyResponse.class),

@@ -68,16 +68,18 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected void doHandleReceivedStreaming(byte[] bytes) {
-        EzyStreamingRequest request = newStreamingRequest(bytes);
         try {
-            EzyInterceptor interceptor = controllers.getStreamingInterceptor();
-            interceptor.intercept(context, request);
-            EzyStreamingController controller = controllers.getStreamingController();
-            controller.handle(zoneContext, request);
+            EzyStreamingRequest request = newStreamingRequest(bytes);
+            try {
+                EzyInterceptor interceptor = controllers.getStreamingInterceptor();
+                interceptor.intercept(context, request);
+                EzyStreamingController controller = controllers.getStreamingController();
+                controller.handle(zoneContext, request);
+            } finally {
+                request.release();
+            }
         } catch (Throwable e) {
             context.handleException(Thread.currentThread(), e);
-        } finally {
-            request.release();
         }
     }
 
@@ -103,12 +105,16 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected void handleRequest(EzyConstant cmd, EzyArray data) {
-        EzyRequest request = newRequest(cmd, data);
         try {
-            EzyInterceptor interceptor = controllers.getInterceptor(cmd);
-            interceptor.intercept(context, request);
-            EzyController controller = controllers.getController(cmd);
-            controller.handle(context, request);
+            EzyRequest request = newRequest(cmd, data);
+            try {
+                EzyInterceptor interceptor = controllers.getInterceptor(cmd);
+                interceptor.intercept(context, request);
+                EzyController controller = controllers.getController(cmd);
+                controller.handle(context, request);
+            } finally {
+                request.release();
+            }
         } catch (Exception e) {
             if (context != null) {
                 Throwable throwable = requestHandleException(session, cmd, data, e);
@@ -131,9 +137,6 @@ public abstract class EzySimpleDataHandler<S extends EzySession>
                     );
                 }
             }
-
-        } finally {
-            request.release();
         }
     }
 

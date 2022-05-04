@@ -6,6 +6,8 @@ import com.tvd12.ezyfoxserver.EzyApplication;
 import com.tvd12.ezyfoxserver.command.EzyAbstractCommand;
 import com.tvd12.ezyfoxserver.command.EzyHandleException;
 
+import static com.tvd12.ezyfox.io.EzyStrings.exceptionToSimpleString;
+
 public class EzyAppHandleExceptionImpl
     extends EzyAbstractCommand
     implements EzyHandleException {
@@ -22,12 +24,19 @@ public class EzyAppHandleExceptionImpl
     public void handle(Thread thread, Throwable throwable) {
         String appName = app.getSetting().getName();
         EzyExceptionHandlers handlers = fetcher.getExceptionHandlers();
-        try {
-            handlers.handleException(thread, throwable);
-        } catch (Exception e) {
-            logger.warn("handle exception on app: {} error", appName, e);
-        } finally {
-            logger.debug("handle app: {} error", appName, throwable);
+        if (handlers.isEmpty()) {
+            logger.info("app: {} has no handler for exception:", appName, throwable);
+        } else {
+            try {
+                handlers.handleException(thread, throwable);
+            } catch (Exception e) {
+                logger.warn(
+                    "handle exception: {} on app: {} error",
+                    exceptionToSimpleString(throwable),
+                    appName,
+                    e
+                );
+            }
         }
     }
 }

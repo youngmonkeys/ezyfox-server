@@ -11,17 +11,20 @@ import lombok.Setter;
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 @Getter
-public class EzyComponent implements EzyExceptionHandlersFetcher, EzyDestroyable {
+public class EzyComponent implements
+    EzyExceptionHandlersFetcher,
+    EzyDestroyable {
+
+    @Setter
+    protected EzyEventControllers eventControllers;
 
     protected final EzyExceptionHandlers exceptionHandlers
         = new EzyListExceptionHandlers();
-    @Setter
-    protected EzyEventControllers eventControllers;
 
     @Override
     public void destroy() {
         if (eventControllers != null) {
-            processWithLogException(() -> eventControllers.destroy());
+            processWithLogException(eventControllers::destroy);
         }
         this.eventControllers = null;
     }

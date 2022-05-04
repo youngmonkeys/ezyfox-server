@@ -25,7 +25,7 @@ public class EzyHandshakeController
         EzySession session = request.getSession();
         EzyHandshakeParams params = request.getParams();
         EzyHandshakeEvent event = newHandshakeEvent(session, params);
-        ctx.broadcast(EzyEventType.CLIENT_HANDSHAKE, event, false);
+        ctx.handleEvent(EzyEventType.CLIENT_HANDSHAKE, event);
         handleSocketSSL(ctx, event);
         updateSession(session, event);
         EzyResponse response = newHandShakeResponse(session, event);

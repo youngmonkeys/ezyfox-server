@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -51,21 +50,12 @@ public class EzySimpleServerContext extends EzyAbstractComplexContext implements
     }
 
     @Override
-    public <T> T get(Class<T> clazz) {
-        T property = getProperty(clazz);
-        if (property != null) {
-            return property;
-        }
+    protected <T> T parentGet(Class<T> clazz) {
         throw new IllegalArgumentException("has no instance of " + clazz);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T> T cmd(Class<T> clazz) {
-        Supplier supplier = commandSuppliers.get(clazz);
-        if (supplier != null) {
-            return (T) supplier.get();
-        }
+    protected <T> T parentCmd(Class<T> clazz) {
         throw new IllegalArgumentException("has no command of " + clazz);
     }
 

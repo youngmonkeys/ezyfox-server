@@ -44,6 +44,31 @@ public abstract class EzyAbstractContext
 
     protected void doInit() {}
 
+    public <T> T get(Class<T> clazz) {
+        T property = getProperty(clazz);
+        if (property != null) {
+            return property;
+        }
+        return parentGet(clazz);
+    }
+
+    protected abstract <T> T parentGet(Class<T> clazz);
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public <T> T cmd(Class<T> clazz) {
+        Supplier supplier = commandSuppliers.get(clazz);
+        if (supplier != null) {
+            return (T) supplier.get();
+        }
+        T property = getProperty(clazz);
+        if (property != null) {
+            return property;
+        }
+        return parentCmd(clazz);
+    }
+
+    protected abstract <T> T parentCmd(Class<T> clazz);
+
     @SuppressWarnings("unchecked")
     public void handleEvent(EzyConstant eventType, EzyEvent event) {
         List<EzyEventController> controllers = component

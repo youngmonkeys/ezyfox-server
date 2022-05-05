@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.Supplier;
 
 @Setter
 @Getter
@@ -16,20 +15,13 @@ public abstract class EzyAbstractZoneChildContext
     protected EzyZoneContext parent;
     protected ScheduledExecutorService executorService;
 
-    public <T> T get(Class<T> clazz) {
-        T property = getProperty(clazz);
-        if (property != null) {
-            return property;
-        }
+    @Override
+    protected <T> T parentGet(Class<T> clazz) {
         return parent.get(clazz);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public <T> T cmd(Class<T> clazz) {
-        Supplier supplier = commandSuppliers.get(clazz);
-        if (supplier != null) {
-            return (T) supplier.get();
-        }
+    @Override
+    protected <T> T parentCmd(Class<T> clazz) {
         return parent.cmd(clazz);
     }
 

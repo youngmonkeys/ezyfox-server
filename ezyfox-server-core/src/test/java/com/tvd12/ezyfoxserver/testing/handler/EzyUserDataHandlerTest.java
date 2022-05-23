@@ -64,12 +64,12 @@ public class EzyUserDataHandlerTest {
         EzyServer server = mock(EzyServer.class);
         when(serverContext.getServer()).thenReturn(server);
         EzyServerControllers controllers = mock(EzyServerControllers.class);
-        EzyInterceptor streamingInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getStreamingInterceptor()).thenReturn(streamingInteceptor);
+        EzyInterceptor streamingInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getStreamingInterceptor()).thenReturn(streamingInterceptor);
         EzyStreamingController streamingController = mock(EzyStreamingController.class);
         when(controllers.getStreamingController()).thenReturn(streamingController);
-        EzyInterceptor loginInteceptor = mock(EzyInterceptor.class);
-        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInteceptor);
+        EzyInterceptor loginInterceptor = mock(EzyInterceptor.class);
+        when(controllers.getInterceptor(EzyCommand.LOGIN)).thenReturn(loginInterceptor);
         EzyController loginController = mock(EzyController.class);
         when(controllers.getController(EzyCommand.LOGIN)).thenReturn(loginController);
         when(server.getControllers()).thenReturn(controllers);

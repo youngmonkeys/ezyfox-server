@@ -12,16 +12,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 
-public abstract class EzyAbstractUserManager extends EzyLoggable implements EzyUserManager {
+public abstract class EzyAbstractUserManager
+    extends EzyLoggable
+    implements EzyUserManager {
 
     protected final int maxUsers;
     protected final Map<String, Lock> locks = newLocksMap();
     protected final Map<Long, EzyUser> usersById = newUsersByIdMap();
     protected final Map<String, EzyUser> usersByName = newUsersByName();
-
-    public EzyAbstractUserManager(int maxUser) {
-        this.maxUsers = maxUser;
-    }
 
     protected EzyAbstractUserManager(Builder<?> builder) {
         this.maxUsers = builder.maxUsers;

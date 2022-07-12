@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.support.test.command;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.command.EzyResponse;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzyContext;
 import com.tvd12.ezyfoxserver.support.command.EzyAbstractObjectResponse;
 import com.tvd12.ezyfoxserver.support.command.EzyObjectResponse;
@@ -11,7 +12,7 @@ import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class EzyAbstractObjectResponseTest {
 
@@ -39,6 +40,29 @@ public class EzyAbstractObjectResponseTest {
         );
     }
 
+    @Test
+    public void udpOrTcpTransportTest() {
+        // given
+        EzyContext context = mock(EzyContext.class);
+        EzyMarshaller marshaller = mock(EzyMarshaller.class);
+
+        // when
+        EzyObjectResponse sut = new InternalObjectResponse(
+            context,
+            marshaller
+        )
+            .udpOrTcpTransport();
+
+        // then
+        EzyResponse response = FieldUtil.getFieldValue(
+            sut,
+            "response"
+        );
+        verify(response, times(1)).transportType(
+            EzyTransportType.UDP_OR_TCP
+        );
+    }
+
     private static class InternalObjectResponse
         extends EzyAbstractObjectResponse {
 
@@ -51,7 +75,10 @@ public class EzyAbstractObjectResponseTest {
 
         @Override
         protected EzyResponse newResponse() {
-            return null;
+            if (response == null) {
+                response = mock(EzyResponse.class);
+            }
+            return response;
         }
     }
 }

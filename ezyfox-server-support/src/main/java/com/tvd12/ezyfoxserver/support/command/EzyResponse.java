@@ -79,4 +79,8 @@ public interface EzyResponse<T extends EzyResponse<T>> extends EzyVoidCommand {
     default T udpTransport() {
         return transportType(EzyTransportType.UDP);
     }
+
+    default T udpOrTcpTransport() {
+        return transportType(EzyTransportType.UDP_OR_TCP);
+    }
 }

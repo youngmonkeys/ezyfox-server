@@ -171,18 +171,15 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
         try {
             EzyChannel channel = session.getChannel();
             if (canWriteBytes(channel)) {
-                int writeBytes;
                 EzyConstant transportType = packet.getTransportType();
                 if (transportType == EzyTransportType.UDP_OR_TCP) {
                     transportType = session.getDatagramChannelPool() != null
                         ? EzyTransportType.UDP
                         : EzyTransportType.TCP;
                 }
-                if (transportType == EzyTransportType.TCP) {
-                    writeBytes = writePacketToSocket(packet, writeBuffer);
-                } else {
-                    writeBytes = writeUdpPacketToSocket(packet, writeBuffer);
-                }
+                int writeBytes = transportType == EzyTransportType.TCP
+                    ? writePacketToSocket(packet, writeBuffer)
+                    : writeUdpPacketToSocket(packet, writeBuffer);
                 executeAddWrittenBytes(writeBytes);
             }
         } catch (Exception e) {

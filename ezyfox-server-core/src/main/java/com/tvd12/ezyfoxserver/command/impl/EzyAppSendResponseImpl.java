@@ -25,7 +25,9 @@ public class EzyAppSendResponseImpl
     public void execute(
         EzyData data,
         EzySession recipient,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         EzyResponse response = newResponse(data);
         serverContext.send(response, recipient, encrypted, transportType);
     }
@@ -34,7 +36,9 @@ public class EzyAppSendResponseImpl
     public void execute(
         EzyData data,
         Collection<EzySession> recipients,
-        boolean encrypted, EzyTransportType transportType) {
+        boolean encrypted,
+        EzyTransportType transportType
+    ) {
         EzyResponse response = newResponse(data);
         serverContext.send(response, recipients, encrypted, transportType);
     }

@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum EzyTransportType implements EzyConstant {
 
     TCP(1),
-    UDP(2);
+    UDP(2),
+    UDP_OR_TCP(3);
 
     @Getter
     private final int id;

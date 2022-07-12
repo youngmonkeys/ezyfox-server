@@ -7,10 +7,8 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
-import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
-import com.tvd12.ezyfoxserver.constant.EzyMaxRequestPerSecondAction;
+import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
+import com.tvd12.ezyfoxserver.constant.*;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -351,6 +349,146 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
             .statsThreadPool(statsThreadPool)
             .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
             .build();
+    }
+
+    @Test
+    public void executeSendingPacketWithTransportTypeWithUdpOrTcpActualUdp() throws Exception {
+        // given
+        EzyStatistics statistics = new EzySimpleStatistics();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(true);
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleConfig config = new EzySimpleConfig();
+        server.setConfig(config);
+
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.isConnected()).thenReturn(true);
+        when(channel.getConnection()).thenReturn(SocketChannel.open());
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
+
+        EzySimpleSession session = mock(EzySimpleSession.class);
+        when(session.getChannel()).thenReturn(channel);
+
+        EzyDatagramChannelPool datagramChannelPool =
+            mock(EzyDatagramChannelPool.class);
+        when(session.getDatagramChannelPool()).thenReturn(datagramChannelPool);
+
+        InetSocketAddress udpAddress = new InetSocketAddress("127.0.0.1", 12348);
+        when(session.getUdpClientAddress()).thenReturn(udpAddress);
+
+        ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
+        ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
+
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues =
+            mock(EzySessionTicketsRequestQueues.class);
+        when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
+        ExHandlerGroup group = (ExHandlerGroup) new ExHandlerGroup.Builder()
+            .session(session)
+            .decoder(decoder)
+            .sessionCount(new AtomicInteger())
+            .networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
+            .sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
+
+        EzyPacket packet = mock(EzyPacket.class);
+        when(
+            packet.getTransportType()
+        ).thenReturn(EzyTransportType.UDP_OR_TCP);
+        when(packet.getData()).thenReturn(new byte[]{1, 2, 3});
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+
+        // when
+        MethodInvoker.create()
+            .object(group)
+            .method("executeSendingPacket")
+            .param(EzyPacket.class, packet)
+            .param(Object.class, buffer)
+            .invoke();
+
+        Asserts.assertNotNull(group.getSession());
+
+        // then
+        verify(session, times(3)).getChannel();
+        verify(session, times(2)).getDatagramChannelPool();
+        verify(session, times(1)).getUdpClientAddress();
+    }
+
+    @Test
+    public void executeSendingPacketWithTransportTypeWithUdpOrTcpActualTcp() throws Exception {
+        // given
+        EzyStatistics statistics = new EzySimpleStatistics();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(true);
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleConfig config = new EzySimpleConfig();
+        server.setConfig(config);
+
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.isConnected()).thenReturn(true);
+        when(channel.getConnection()).thenReturn(SocketChannel.open());
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
+
+        EzySimpleSession session = mock(EzySimpleSession.class);
+        when(session.getChannel()).thenReturn(channel);
+
+        InetSocketAddress udpAddress = new InetSocketAddress("127.0.0.1", 12348);
+        when(session.getUdpClientAddress()).thenReturn(udpAddress);
+
+        ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
+        ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
+
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues =
+            mock(EzySessionTicketsRequestQueues.class);
+        when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
+        ExHandlerGroup group = (ExHandlerGroup) new ExHandlerGroup.Builder()
+            .session(session)
+            .decoder(decoder)
+            .sessionCount(new AtomicInteger())
+            .networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
+            .sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
+
+        EzyPacket packet = mock(EzyPacket.class);
+        when(
+            packet.getTransportType()
+        ).thenReturn(EzyTransportType.UDP_OR_TCP);
+        when(packet.getData()).thenReturn(new byte[]{1, 2, 3});
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+
+        // when
+        MethodInvoker.create()
+            .object(group)
+            .method("executeSendingPacket")
+            .param(EzyPacket.class, packet)
+            .param(Object.class, buffer)
+            .invoke();
+
+        Asserts.assertNotNull(group.getSession());
+
+        // then
+        verify(session, times(3)).getChannel();
+        verify(session, times(1)).getDatagramChannelPool();
+        verify(session, times(0)).getUdpClientAddress();
     }
 
     @SuppressWarnings("rawtypes")

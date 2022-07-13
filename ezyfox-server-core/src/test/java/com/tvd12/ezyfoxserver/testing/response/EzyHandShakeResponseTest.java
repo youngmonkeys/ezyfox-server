@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.testing.response;
 
-import com.tvd12.ezyfox.sercurity.EzyAesCrypt;
+import com.tvd12.ezyfox.security.EzyAesCrypt;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 import com.tvd12.test.base.BaseTest;

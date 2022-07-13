@@ -1,7 +1,7 @@
 package com.tvd12.ezyfoxserver.controller;
 
-import com.tvd12.ezyfox.sercurity.EzyAesCrypt;
-import com.tvd12.ezyfox.sercurity.EzyAsyCrypt;
+import com.tvd12.ezyfox.security.EzyAesCrypt;
+import com.tvd12.ezyfox.security.EzyAsyCrypt;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;

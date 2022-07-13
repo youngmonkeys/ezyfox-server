@@ -2,8 +2,8 @@ package com.tvd12.ezyfoxserver.testing.controller;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
-import com.tvd12.ezyfox.sercurity.EzyBase64;
-import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
+import com.tvd12.ezyfox.security.EzyBase64;
+import com.tvd12.ezyfox.security.EzyKeysGenerator;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;

@@ -1,6 +1,6 @@
 package com.tvd12.ezyfoxserver.service.impl;
 
-import com.tvd12.ezyfox.sercurity.EzySHA256;
+import com.tvd12.ezyfox.security.EzySHA256;
 import com.tvd12.ezyfoxserver.service.EzySessionTokenGenerator;
 
 import java.util.UUID;

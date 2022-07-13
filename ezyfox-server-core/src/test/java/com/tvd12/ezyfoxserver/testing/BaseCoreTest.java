@@ -3,7 +3,7 @@ package com.tvd12.ezyfoxserver.testing;
 import com.tvd12.ezyfox.builder.EzyArrayBuilder;
 import com.tvd12.ezyfox.builder.EzyObjectBuilder;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
-import com.tvd12.ezyfox.sercurity.EzyKeysGenerator;
+import com.tvd12.ezyfox.security.EzyKeysGenerator;
 import com.tvd12.ezyfox.util.EzyInitable;
 import com.tvd12.ezyfoxserver.EzyLoader;
 import com.tvd12.ezyfoxserver.EzyServer;

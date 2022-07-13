@@ -57,7 +57,7 @@
     </developers>
 
     <properties>
-        <ezy.core.version>2.1.5</ezy.core.version>
+        <ezy.core.version>2.1.6</ezy.core.version>
     </properties>
 
     <build>

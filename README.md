@@ -11,6 +11,7 @@
 * [Latest Version](#latest-version)
 * [Code Example](#code-example)
 * [Client SDKs](#client-sdks)
+* [Products](#products)
 * [Demos](#demos)
 * [Tutorials](#tutorials)
 * [Tests](#tests)
@@ -126,6 +127,10 @@ You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 9.  [Swift](https://github.com/youngmonkeys/ezyfox-server-swift-client)
 10. [React Native](https://github.com/youngmonkeys/ezyfox-react-native-client)
 
+# Products
+
+1. [Defi Warrior](https://defiwarrior.io/)
+
 # Demos
 
 1. [Free Chat](https://youngmonkeys.org/asset/freechat/)
@@ -138,7 +143,7 @@ You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
 # Tutorials:
 
 1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G): A simple realtime chat application
-1. [EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
+2[EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
 
 # Tests
 

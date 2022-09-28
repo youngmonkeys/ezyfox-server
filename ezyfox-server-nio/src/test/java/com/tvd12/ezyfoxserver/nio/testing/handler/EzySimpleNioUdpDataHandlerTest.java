@@ -343,7 +343,6 @@ public class EzySimpleNioUdpDataHandlerTest {
 
         // then
         verify(handlerGroupManager, times(1)).getSocketChannel(udpAddress);
-        verify(socketChannel, times(1)).getRemoteAddress();
         verify(socketDataReceiver, times(1)).udpReceive(any(SocketChannel.class), any(EzyMessage.class));
         sut.destroy();
     }
@@ -380,7 +379,6 @@ public class EzySimpleNioUdpDataHandlerTest {
 
         // then
         verify(handlerGroupManager, times(1)).getSocketChannel(udpAddress);
-        verify(session, times(1)).getRemoteAddress();
         verify(socketDataReceiver, times(1)).udpReceive(any(SocketChannel.class), any(EzyMessage.class));
         sut.destroy();
     }
@@ -405,6 +403,9 @@ public class EzySimpleNioUdpDataHandlerTest {
         when(handlerGroupManager.getSocketChannel(udpAddress)).thenReturn(socketChannel);
         sut.setHandlerGroupManager(handlerGroupManager);
 
+        EzySocketDataReceiver socketDataReceiver = mock(EzySocketDataReceiver.class);
+        sut.setSocketDataReceiver(socketDataReceiver);
+
         // when
         MethodInvoker.create()
             .object(sut)
@@ -414,7 +415,7 @@ public class EzySimpleNioUdpDataHandlerTest {
 
         // then
         verify(handlerGroupManager, times(1)).getSocketChannel(udpAddress);
-        verify(socketChannel, times(1)).getRemoteAddress();
+        verify(socketDataReceiver, times(1)).udpReceive(any(SocketChannel.class), any(EzyMessage.class));
         sut.destroy();
     }
 

@@ -9,7 +9,6 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.io.EzyBytes;
 import com.tvd12.ezyfox.io.EzyInts;
 import com.tvd12.ezyfox.io.EzyLongs;
-import com.tvd12.ezyfox.net.EzySocketAddresses;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.api.EzyResponseApi;
@@ -23,12 +22,10 @@ import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManagerAware;
 import lombok.Setter;
-import org.eclipse.jetty.websocket.api.Session;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
-import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 
 @SuppressWarnings("rawtypes")
@@ -76,12 +73,7 @@ public class EzySimpleNioUdpDataHandler
             InetSocketAddress udpAddress = packet.getAddress();
             Object socketChannel = handlerGroupManager.getSocketChannel(udpAddress);
             if (socketChannel != null) {
-                SocketAddress tcpAddress = (socketChannel instanceof SocketChannel)
-                    ? ((SocketChannel) socketChannel).getRemoteAddress()
-                    : ((Session) socketChannel).getRemoteAddress();
-                if (isOneClient(tcpAddress, udpAddress)) {
-                    socketDataReceiver.udpReceive(socketChannel, message);
-                }
+                socketDataReceiver.udpReceive(socketChannel, message);
             } else {
                 EzyMessageHeader header = message.getHeader();
                 if (header.isUdpHandshake()) {
@@ -146,12 +138,6 @@ public class EzySimpleNioUdpDataHandler
         response.setData(responseCommand);
         responseApi.response(response);
         logger.debug("response udp handshake to: {}, code: {}", recipient, responseCode);
-    }
-
-    protected boolean isOneClient(SocketAddress tcpAddress, SocketAddress udpAddress) {
-        String tcpHost = EzySocketAddresses.getHost(tcpAddress);
-        String udpHost = EzySocketAddresses.getHost(udpAddress);
-        return tcpHost.equals(udpHost);
     }
 
     @Override

@@ -86,12 +86,13 @@ public class EzySimpleAppEntry extends EzyAbstractAppEntry {
     }
 
     protected EzyBeanContext createBeanContext(EzyAppContext context) {
-        EzyBindingContext bindingContext = createBindingContext();
+        EzyAppSetting appSetting = context.getApp().getSetting();
+        String settingPackageName = appSetting.getPackageName();
+        EzyBindingContext bindingContext = createBindingContext(settingPackageName);
         EzyMarshaller marshaller = bindingContext.newMarshaller();
         EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
         EzyResponseFactory appResponseFactory = createAppResponseFactory(context, marshaller);
         ScheduledExecutorService executorService = context.get(ScheduledExecutorService.class);
-        EzyAppSetting appSetting = context.getApp().getSetting();
         EzyBeanContextBuilder beanContextBuilder = EzyBeanContext.builder()
             .addSingleton("appContext", context)
             .addSingleton("marshaller", marshaller)
@@ -110,8 +111,8 @@ public class EzySimpleAppEntry extends EzyAbstractAppEntry {
         beanContextBuilder.addPrototypeClasses(prototypeClasses);
 
         Set<String> scanablePackages = internalGetScanableBeanPackages();
-        if (appSetting.getPackageName() != null) {
-            scanablePackages.add(appSetting.getPackageName());
+        if (settingPackageName != null) {
+            scanablePackages.add(settingPackageName);
         }
         EzyReflection reflection = new EzyReflectionProxy(scanablePackages);
         beanContextBuilder.addSingletonClasses(
@@ -129,9 +130,13 @@ public class EzySimpleAppEntry extends EzyAbstractAppEntry {
         return beanContextBuilder.build();
     }
 
-    protected EzyBindingContext createBindingContext() {
+    protected EzyBindingContext createBindingContext(String settingPackageName) {
+        Set<String> scanablePackages = internalGetScanableBindingPackages();
+        if (settingPackageName != null) {
+            scanablePackages.add(settingPackageName);
+        }
         return EzyBindingContext.builder()
-            .scan(internalGetScanableBindingPackages())
+            .scan(scanablePackages)
             .build();
     }
 

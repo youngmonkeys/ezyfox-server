@@ -67,7 +67,7 @@ public class EzySimpleNioHandlerGroup
                 int dataSize = message.getByteCount();
                 handleReceivedData(data, dataSize);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             fireExceptionCaught(e);
         } finally {
             executeAddReadBytes(message.getByteCount());

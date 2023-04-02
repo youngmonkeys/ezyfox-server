@@ -63,7 +63,7 @@ public class EzySocketDataReceiver
     private void doTcpReceive(SocketChannel channel, ByteBuffer buffer) {
         try {
             tcpReadBytes(channel, buffer);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info(
                 "I/O error at tcp-data-reader (channel: {}): {}({})",
                 channel,
@@ -76,15 +76,15 @@ public class EzySocketDataReceiver
     private void tcpReadBytes(
         SocketChannel channel,
         ByteBuffer buffer
-    ) throws Exception {
+    ) throws Throwable {
         int readBytes = -1;
-        Exception exception = null;
+        Throwable exception = null;
         try {
             buffer.clear();
             readBytes = channel.read(buffer);
         } catch (ClosedChannelException e) {
             // do nothing
-        } catch (Exception e) {
+        } catch (Throwable e) {
             exception = e;
         }
         if (readBytes == -1) {

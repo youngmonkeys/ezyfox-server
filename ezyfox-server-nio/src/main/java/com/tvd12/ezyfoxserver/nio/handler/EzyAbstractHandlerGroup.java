@@ -254,15 +254,23 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
     }
 
     private void addReadBytes(int count) {
-        session.addReadBytes(count);
-        networkStats.addReadBytes(count);
-        networkStats.addReadPackets(1);
+        try {
+            session.addReadBytes(count);
+            networkStats.addReadBytes(count);
+            networkStats.addReadPackets(1);
+        } catch (Throwable e) {
+            logger.info("add ready bytes error", e);
+        }
     }
 
     private void addWrittenBytes(int count) {
-        session.addWrittenBytes(count);
-        networkStats.addWrittenBytes(count);
-        networkStats.addWrittenPackets(1);
+        try {
+            session.addWrittenBytes(count);
+            networkStats.addWrittenBytes(count);
+            networkStats.addWrittenPackets(1);
+        } catch (Throwable e) {
+            logger.info("add written bytes error", e);
+        }
     }
 
     public EzyNioSession getSession() {

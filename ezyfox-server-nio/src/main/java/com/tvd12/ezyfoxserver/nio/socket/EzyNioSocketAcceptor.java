@@ -43,7 +43,7 @@ public class EzyNioSocketAcceptor
     public void handleEvent() {
         try {
             processReadyKeys();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info("I/O error at socket-acceptor", e);
         }
     }

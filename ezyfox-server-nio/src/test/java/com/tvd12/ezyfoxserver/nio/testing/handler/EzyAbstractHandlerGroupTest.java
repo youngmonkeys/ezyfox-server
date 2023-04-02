@@ -491,6 +491,72 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         verify(session, times(0)).getUdpClientAddress();
     }
 
+    @Test
+    public void addReadAndWrittenBytesFailedTest() throws Exception {
+        // given
+        EzyStatistics statistics = new EzySimpleStatistics();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleStreamingSetting streaming = settings.getStreaming();
+        streaming.setEnable(true);
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleConfig config = new EzySimpleConfig();
+        server.setConfig(config);
+
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.isConnected()).thenReturn(true);
+        when(channel.getConnection()).thenReturn(SocketChannel.open());
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
+
+        EzySimpleSession session = mock(EzySimpleSession.class);
+        when(session.getChannel()).thenReturn(channel);
+        doThrow(new RuntimeException("test")).when(session).addReadBytes(any(long.class));
+        doThrow(new RuntimeException("test")).when(session).addWrittenBytes(any(long.class));
+
+        InetSocketAddress udpAddress = new InetSocketAddress("127.0.0.1", 12348);
+        when(session.getUdpClientAddress()).thenReturn(udpAddress);
+
+        ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
+        ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
+
+        EzySessionTicketsRequestQueues sessionTicketsRequestQueues =
+            mock(EzySessionTicketsRequestQueues.class);
+        when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
+        ExHandlerGroup group = (ExHandlerGroup) new ExHandlerGroup.Builder()
+            .session(session)
+            .decoder(decoder)
+            .sessionCount(new AtomicInteger())
+            .networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
+            .sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
+            .serverContext(serverContext)
+            .statsThreadPool(statsThreadPool)
+            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
+            .build();
+
+        // when
+        MethodInvoker.create()
+            .object(group)
+            .method("addReadBytes")
+            .param(int.class, 1)
+            .invoke();
+        MethodInvoker.create()
+            .object(group)
+            .method("addWrittenBytes")
+            .param(int.class, 1)
+            .invoke();
+
+        Asserts.assertNotNull(group.getSession());
+
+        // then
+        verify(session, atLeast(1)).addReadBytes(1);
+        verify(session, atLeast(1)).addWrittenBytes(1);
+    }
+
     @SuppressWarnings("rawtypes")
     public static class ExHandlerGroup
         extends EzyAbstractHandlerGroup

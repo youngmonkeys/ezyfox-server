@@ -1,8 +1,6 @@
 
 # ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
 
-[![Build Status](https://travis-ci.org/youngmonkeys/ezyfox-server.svg?branch=master)](https://travis-ci.org/youngmonkeys/ezyfox-server)
-
 * [Features](#features)
 * [Benchmark](#benchmark)
 * [Introduction](#introduction)

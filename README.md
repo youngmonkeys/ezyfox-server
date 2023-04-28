@@ -17,26 +17,26 @@
 
 # Features
 
-* **Core container & dependency injection**: bean manipulation, auto binding, auto implementation, etc.
-* **Multiple Communication Protocols**: supports TCP, UDP, WebSocket, HTTP.
-* **Traffic Encryption**: traffic between clients and servers can be encrypted using SSL.
-* **Multiple Client SDKs**: Android, IOS, Unity, React, C++, Flutter, ...
+* **Core Container & Dependency Injection**: Includes bean manipulation, auto-binding, auto-implementation, and more.
+* **Multiple Communication Protocols**: Supports TCP, UDP, WebSocket, and HTTP.
+* **Traffic Encryption**: Allows for traffic between clients and servers to be encrypted using SSL.
+* **Multiple Client SDKs**: Includes Android, iOS, Unity, React, C++, Flutter, and more.
 
 # Benchmark
 
-Ezyfox Server's benchmark with 1000 CCU broadcast messages in 1 hour on one VPS ram 512MB, CPU 1 core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how did we test.
+Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent users in one hour on a VPS with 512MB of RAM and 1 CPU core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how we conducted the test.
 
 <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
 
 # Introduction
 
-To rapidly develop online games, developers often have to use a game server engine like SmartFoxServer or Photon, but unfortunately, they come with really high price, especially when more and more users are engaging in our products. Therefore, we develop EzyFox ecosystem aiming to make everything free and open for everyone who are keen on building multi-players games and applications.
+To develop online games rapidly, developers often need to use a game server engine like SmartFoxServer or Photon. Unfortunately, these engines come with a high price tag, especially as more and more users engage with our products. That's why we developed the EzyFox ecosystem, which aims to be free and open for anyone interested in building multiplayer games and applications.
 
-EzyFox ecosystem supports a wide range of most important components to develop an enterprise product including TCP, UDP, WebSocket protocols with SSL encryption, HTTP RESTful API, Remote procedure call RPC protocol, Database interaction, Memory caching, Message Queue. 
+The EzyFox ecosystem supports a wide range of essential components for enterprise product development, including TCP, UDP, WebSocket protocols with SSL encryption, HTTP RESTful API, Remote Procedure Call (RPC) protocol, Database Interaction, Memory Caching, and Message Queue.
 
-With EzyFox ecosystem, we can stay away from the headache of choosing which technologies to use to manage and scale up an application, so we can just focus on implementing business logics.
+With the EzyFox ecosystem, we can avoid the headache of choosing which technologies to use to manage and scale up an application, allowing us to focus solely on implementing business logic.
 
-# Get Started
+# Getting Started
 
 [https://youngmonkeys.org/get-started/](https://youngmonkeys.org/get-started/)
 
@@ -110,7 +110,7 @@ EzyEmbeddedServer server = EzyEmbeddedServer.builder()
 server.start();
 ```
 
-You can find full example [here](https://youngmonkeys.org/use-embedded-server/)
+You can find the full example [here](https://youngmonkeys.org/use-embedded-server/)
 
 # Client SDKs
 
@@ -152,13 +152,13 @@ mvn test
 
 # Contact us
 
-- Touch us on [Facebook](https://www.facebook.com/youngmonkeys.org)
+- Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)
 - Ask us on [stackask.com](https://stackask.com)
-- Email to me [Dzung](mailto:itprono3@gmail.com)
+- Email us at [Dzung](mailto:itprono3@gmail.com)
 
-# Help us by donation
+# Help us by making a donation.
 
-Currently, our operating budget is fully from on our own salaries, and all product developments are still based on voluntary contributions from a few organization members. Apparently, the low budget would cause many considerable difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we really appreciate your support if you can provide a donation to take us further steps. Thanks in advance for your meaningful contributions!
+Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
 
 [https://youngmonkeys.org/donate/](https://youngmonkeys.org/donate/)
 

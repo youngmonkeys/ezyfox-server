@@ -36,7 +36,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
     public void handleEvent() {
         try {
             processReadyKeys();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info("I/O error at udp socket-reader: {}({})", e.getClass().getName(), e.getMessage());
         }
     }
@@ -72,7 +72,7 @@ public class EzyNioUdpReader extends EzySocketAbstractEventHandler {
         } catch (IOException e) {
             logger.warn("io exception: {}", e.getMessage());
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("fatal error at udp socket-reader", e);
         }
     }

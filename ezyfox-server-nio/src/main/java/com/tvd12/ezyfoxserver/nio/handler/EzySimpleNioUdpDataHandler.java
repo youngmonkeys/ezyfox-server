@@ -80,7 +80,7 @@ public class EzySimpleNioUdpDataHandler
                     handleUdpHandshake(packet.getChannel(), udpAddress, message);
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.warn(
                 "handle received udp package: {} error: {}({})",
                 packet,

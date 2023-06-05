@@ -30,7 +30,12 @@ public class EzyStreamBytesImpl extends EzyAbstractCommand implements EzyStreamB
         try {
             streamingApi.response(pack);
         } catch (Exception e) {
-            logger.warn("send {} bytes {}, to client: {} error", bytes.length, recipient.getName(), e);
+            logger.warn(
+                "send {} bytes {}, to client error",
+                bytes.length,
+                recipient.getName(),
+                e
+            );
         } finally {
             pack.release();
         }

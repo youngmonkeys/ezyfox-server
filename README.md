@@ -15,6 +15,10 @@
 * [Tests](#tests)
 * [Contact us](#contact-us)
 
+# Required
+
+* Java version: 1.8
+
 # Features
 
 * **Core Container & Dependency Injection**: Includes bean manipulation, auto-binding, auto-implementation, and more.

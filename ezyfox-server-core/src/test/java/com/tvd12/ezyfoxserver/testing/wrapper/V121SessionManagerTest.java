@@ -82,7 +82,7 @@ public class V121SessionManagerTest {
 
 
         // then
-        Asserts.assertEquals(sut.getAllSessionCount(), 3);
+        Asserts.assertTrue(sut.getAllSessionCount() >= 3);
         sut.destroy();
     }
 

@@ -42,7 +42,7 @@ public class EzySimpleNioHandlerGroup
     private void handleReceivedBytes(byte[] bytes) {
         try {
             decoder.decode(bytes, decodeBytesCallback);
-        } catch (Exception throwable) {
+        } catch (Throwable throwable) {
             fireExceptionCaught(throwable);
         }
     }

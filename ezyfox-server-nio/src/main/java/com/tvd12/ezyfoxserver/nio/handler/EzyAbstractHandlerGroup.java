@@ -95,7 +95,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
     public final void fireChannelInactive(EzyConstant reason) {
         try {
             handler.channelInactive(reason);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("handler inactive error", e);
         } finally {
             sessionStats.setCurrentSessions(sessionCount.decrementAndGet());

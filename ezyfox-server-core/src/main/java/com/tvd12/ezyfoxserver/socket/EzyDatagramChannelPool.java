@@ -23,7 +23,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
             channel.configureBlocking(false);
             channel.socket().setReuseAddress(true);
             return channel;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new IllegalStateException(e);
         }
     }
@@ -36,7 +36,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.bind(address);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 throw new IllegalStateException(e);
             }
         });
@@ -46,7 +46,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.register(selector, SelectionKey.OP_READ);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 throw new IllegalStateException(e);
             }
         });
@@ -60,7 +60,7 @@ public class EzyDatagramChannelPool extends EzyLoggable {
         channels.forEach(channel -> {
             try {
                 channel.close();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logger.warn("close datagram channel: {} error", channel, e);
             }
         });

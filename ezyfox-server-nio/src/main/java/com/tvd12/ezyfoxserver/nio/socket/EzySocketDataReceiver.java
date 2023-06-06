@@ -132,7 +132,7 @@ public class EzySocketDataReceiver
             if (handlerGroup != null) {
                 handlerGroup.fireMessageReceived(message);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info(
                 "I/O error at udp-message-received (channel: {}): {}({})",
                 socketChannel,
@@ -159,7 +159,7 @@ public class EzySocketDataReceiver
             if (handlerGroup != null) {
                 handlerGroup.fireBytesReceived(message);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info(
                 "I/O error at ws-message-received (session: {}): {}({})",
                 session,
@@ -175,7 +175,7 @@ public class EzySocketDataReceiver
             if (handlerGroup != null) {
                 handlerGroup.fireBytesReceived(payload, offset, len);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info(
                 "I/O error at ws-message-received (session: {}): {}({})",
                 session,

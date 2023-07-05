@@ -10,6 +10,7 @@ public abstract class EzyAbstractSettingBuilder<
 
     protected String name;
     protected String entryLoader;
+    protected String packageName;
     protected int threadPoolSize;
     protected String configFile;
     protected Object[] entryLoaderArgs;
@@ -26,6 +27,11 @@ public abstract class EzyAbstractSettingBuilder<
 
     public B entryLoader(Class<?> entryLoader) {
         return entryLoader(entryLoader.getName());
+    }
+
+    public B packageName(String packageName) {
+        this.packageName = packageName;
+        return (B) this;
     }
 
     public B threadPoolSize(int threadPoolSize) {
@@ -48,6 +54,7 @@ public abstract class EzyAbstractSettingBuilder<
         T p = newSetting();
         p.setName(name);
         p.setEntryLoader(entryLoader);
+        p.setPackageName(packageName);
         p.setThreadPoolSize(threadPoolSize);
         p.setConfigFile(configFile);
         p.setEntryLoaderArgs(entryLoaderArgs);

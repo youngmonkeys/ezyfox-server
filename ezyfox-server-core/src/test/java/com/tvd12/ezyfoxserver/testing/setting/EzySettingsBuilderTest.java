@@ -184,12 +184,16 @@ public class EzySettingsBuilderTest {
                 .userMaxIdleTimeInSecond(userMaxIdleTimeInSecond);
 
         String appName = RandomUtil.randomShortAlphabetString();
+        String appPackageName = RandomUtil.randomShortAlphabetString();
         EzyAppSettingBuilder appSettingBuilder = new EzyAppSettingBuilder()
-            .name(appName);
+            .name(appName)
+            .packageName(appPackageName);
 
         String pluginName = RandomUtil.randomShortAlphabetString();
+        String pluginPackageName = RandomUtil.randomShortAlphabetString();
         EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()
-            .name(pluginName);
+            .name(pluginName)
+            .packageName(pluginPackageName);
 
         String zoneName = RandomUtil.randomShortAlphabetString();
         EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
@@ -225,8 +229,16 @@ public class EzySettingsBuilderTest {
             settings.getZoneByName(zoneName).getId()
         );
         Asserts.assertEquals(
+            settings.getZoneByName(zoneName).getAppByName(appName).getPackageName(),
+            appPackageName
+        );
+        Asserts.assertEquals(
             settings.getZoneByName(zoneName).getPluginByName(pluginName).getZoneId(),
             settings.getZoneByName(zoneName).getId()
+        );
+        Asserts.assertEquals(
+            settings.getZoneByName(zoneName).getPluginByName(pluginName).getPackageName(),
+            pluginPackageName
         );
     }
 

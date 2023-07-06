@@ -51,7 +51,10 @@ public class EzySimpleSslContextFactory
     }
 
     protected void initKeyManagerFactory(
-        KeyManagerFactory factory, KeyStore keyStore, char[] password)
+        KeyManagerFactory factory,
+        KeyStore keyStore,
+        char[] password
+    )
         throws Exception {
         factory.init(keyStore, password);
     }

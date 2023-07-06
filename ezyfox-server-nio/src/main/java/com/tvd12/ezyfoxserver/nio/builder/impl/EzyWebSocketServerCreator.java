@@ -88,9 +88,10 @@ public class EzyWebSocketServerCreator {
     }
 
     protected void configServer(
-        Server server, HttpConfiguration httpConfig, ServerConnector wsConnector) {
-
-    }
+        Server server,
+        HttpConfiguration httpConfig,
+        ServerConnector wsConnector
+    ) {}
 
     private EzyWsHandler newWsHandler() {
         return EzyWsHandler.builder()

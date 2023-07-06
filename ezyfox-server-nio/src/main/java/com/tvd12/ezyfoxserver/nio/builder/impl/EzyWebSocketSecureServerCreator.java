@@ -16,7 +16,10 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
 
     @Override
     protected void configServer(
-        Server server, HttpConfiguration httpConfig, ServerConnector wsConnector) {
+        Server server,
+        HttpConfiguration httpConfig,
+        ServerConnector wsConnector
+    ) {
 
         HttpConfiguration httpsConfig = new HttpConfiguration(httpConfig);
         httpsConfig.addCustomizer(new SecureRequestCustomizer());
@@ -24,10 +27,14 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
         SslContextFactory sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setSslContext(sslContext);
 
-        ServerConnector wssConnector = new ServerConnector(server,
-            new SslConnectionFactory(sslContextFactory,
-                HttpVersion.HTTP_1_1.asString()),
-            new HttpConnectionFactory(httpsConfig));
+        ServerConnector wssConnector = new ServerConnector(
+            server,
+            new SslConnectionFactory(
+                sslContextFactory,
+                HttpVersion.HTTP_1_1.asString()
+            ),
+            new HttpConnectionFactory(httpsConfig)
+        );
 
         wssConnector.setHost(setting.getAddress());
         wssConnector.setPort(setting.getSslPort());

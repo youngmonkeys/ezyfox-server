@@ -130,6 +130,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
     private EzySocketServerBootstrap newSocketServerBootstrap() {
         return EzySocketServerBootstrap.builder()
             .serverContext(context)
+            .sslContext(sslContext)
             .socketDataReceiver(socketDataReceiver)
             .handlerGroupManager(handlerGroupManager)
             .sessionTicketsQueue(socketSessionTicketsQueue)

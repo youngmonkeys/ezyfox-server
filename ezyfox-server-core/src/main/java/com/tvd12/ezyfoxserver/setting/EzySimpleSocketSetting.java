@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import com.tvd12.ezyfoxserver.constant.SslType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,9 @@ public class EzySimpleSocketSetting
     extends EzyAbstractSocketSetting
     implements EzySocketSetting {
 
+    @XmlElement(name = "ssl-type")
+    protected SslType sslType;
+
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
 
@@ -31,6 +35,7 @@ public class EzySimpleSocketSetting
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
+        setSslType(SslType.L7);
         setMaxRequestSize(4096);
         setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");

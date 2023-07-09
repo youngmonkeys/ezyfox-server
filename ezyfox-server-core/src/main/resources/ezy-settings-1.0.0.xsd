@@ -63,6 +63,7 @@
             <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-type" type="ssl-type-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
@@ -75,7 +76,6 @@
             <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="address" type="not-empty-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
-            <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="channel-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="handler-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
@@ -96,6 +96,17 @@
             <xs:element name="management-enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
+
+    <xs:simpleType name="ssl-type-type">
+        <xs:list>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="L4"/>
+                    <xs:enumeration value="L7"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:list>
+    </xs:simpleType>
 
     <xs:complexType name="ssl-config-type">
         <xs:all>

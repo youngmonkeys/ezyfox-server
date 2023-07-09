@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio;
 
+import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.socket.*;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
@@ -8,6 +9,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
+import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -23,12 +25,13 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private Selector acceptSelector;
     private ServerSocket serverSocket;
     private ServerSocketChannel serverSocketChannel;
-
+    private final SSLContext sslContext;
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
+        this.sslContext = builder.sslContext;
     }
 
     public static Builder builder() {
@@ -63,10 +66,22 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private void getBindAndConfigServerSocket() throws Exception {
-        this.serverSocket = serverSocketChannel.socket();
+        this.serverSocket = createServerSocket();
         this.serverSocket.setReuseAddress(true);
         this.serverSocket.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
         this.serverSocketChannel.register(acceptSelector, SelectionKey.OP_ACCEPT);
+    }
+
+    private ServerSocket createServerSocket() throws Exception {
+        EzySocketSetting socketSetting = getSocketSetting();
+        boolean sslActive = socketSetting.isSslActive();
+        SslType sslType = socketSetting.getSslType();
+        if (sslActive && sslType == SslType.L4) {
+            return sslContext
+                .getServerSocketFactory()
+                .createServerSocket(getSocketPort());
+        }
+        return serverSocketChannel.socket();
     }
 
     private void startSocketHandlers() throws Exception {
@@ -154,6 +169,13 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     public static class Builder
         extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
+
+        private SSLContext sslContext;
+
+        public Builder sslContext(SSLContext sslContext) {
+            this.sslContext = sslContext;
+            return this;
+        }
 
         @Override
         public EzySocketServerBootstrap build() {

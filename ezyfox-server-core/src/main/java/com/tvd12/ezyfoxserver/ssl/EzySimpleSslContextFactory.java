@@ -77,7 +77,10 @@ public class EzySimpleSslContextFactory
         InputStream stream = newInputStreamLoader().load(file);
         char[] answer;
         try {
-            answer = newInputStreamReader().readChars(stream, "UTF-8");
+            answer = newInputStreamReader()
+                .readString(stream, "UTF-8")
+                .trim()
+                .toCharArray();
         } finally {
             stream.close();
         }

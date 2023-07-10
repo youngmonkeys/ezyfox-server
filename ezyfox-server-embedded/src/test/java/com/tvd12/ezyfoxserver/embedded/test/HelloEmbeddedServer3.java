@@ -99,7 +99,6 @@ public class HelloEmbeddedServer3 {
             .active(true) // active or not
             .address("0.0.0.0") // set loopback IP
             .channelPoolSize(16) // set number of udp channel for socket writing, default 16
-            .codecCreator(MsgPackCodecCreator.class) // encoder/decoder creator, default MsgPackCodecCreator
             .handlerThreadPoolSize(5) // set number of handler's thread, default 5
             .maxRequestSize(1024) // set max request's size
             .port(2611) // set listen port

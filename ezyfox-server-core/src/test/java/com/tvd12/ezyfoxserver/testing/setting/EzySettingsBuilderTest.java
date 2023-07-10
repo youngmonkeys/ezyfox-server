@@ -35,7 +35,6 @@ public class EzySettingsBuilderTest {
             .active(true)
             .address("2.2.2.2")
             .channelPoolSize(3)
-            .codecCreator(TestCodecCreator.class)
             .handlerThreadPoolSize(3)
             .maxRequestSize(2048)
             .port(23456)
@@ -119,7 +118,6 @@ public class EzySettingsBuilderTest {
         udpSetting = settings.getUdp();
         assertTrue(udpSetting.isActive());
         assertEquals(udpSetting.getAddress(), "2.2.2.2");
-        assertEquals(udpSetting.getCodecCreator(), TestCodecCreator.class.getName());
         assertEquals(udpSetting.getMaxRequestSize(), 2048);
         assertEquals(udpSetting.getPort(), 23456);
         assertEquals(udpSetting.getChannelPoolSize(), 3);

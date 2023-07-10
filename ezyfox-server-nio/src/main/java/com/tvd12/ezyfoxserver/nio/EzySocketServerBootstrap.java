@@ -10,6 +10,8 @@ import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
 import javax.net.ssl.SSLContext;
+
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -67,21 +69,29 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private void getBindAndConfigServerSocket() throws Exception {
         this.serverSocket = createServerSocket();
-        this.serverSocket.setReuseAddress(true);
-        this.serverSocket.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
         this.serverSocketChannel.register(acceptSelector, SelectionKey.OP_ACCEPT);
     }
 
     private ServerSocket createServerSocket() throws Exception {
+        ServerSocket server;
         EzySocketSetting socketSetting = getSocketSetting();
         boolean sslActive = socketSetting.isSslActive();
         SslType sslType = socketSetting.getSslType();
         if (sslActive && sslType == SslType.L4) {
-            return sslContext
+            server = sslContext
                 .getServerSocketFactory()
-                .createServerSocket(getSocketPort());
+                .createServerSocket(
+                    getSocketPort(),
+                    0,
+                    InetAddress.getByName(getSocketAddress())
+                );
+            server.setReuseAddress(true);
+        } else {
+            server = serverSocketChannel.socket();
+            server.setReuseAddress(true);
+            server.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
         }
-        return serverSocketChannel.socket();
+        return server;
     }
 
     private void startSocketHandlers() throws Exception {

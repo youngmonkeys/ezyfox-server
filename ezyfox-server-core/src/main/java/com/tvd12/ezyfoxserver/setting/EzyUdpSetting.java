@@ -1,6 +1,14 @@
 package com.tvd12.ezyfoxserver.setting;
 
-public interface EzyUdpSetting extends EzyBaseSocketSetting {
+import com.tvd12.ezyfox.util.EzyToMap;
+
+public interface EzyUdpSetting extends EzyToMap {
+
+    int getPort();
+
+    String getAddress();
+
+    boolean isActive();
 
     int getMaxRequestSize();
 

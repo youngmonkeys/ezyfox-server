@@ -7,14 +7,10 @@ import com.tvd12.ezyfox.stream.EzySimpleInputStreamReader;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import lombok.Setter;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
+import javax.net.ssl.*;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.SecureRandom;
 
 @Setter
 public class EzySimpleSslContextFactory
@@ -24,8 +20,6 @@ public class EzySimpleSslContextFactory
     protected static final String SUNX509 = "SunX509";
     protected static final String PROTOCOL = "TLS";
     protected static final String JKS_KEYSTORE = "JKS";
-    protected SecureRandom secureRandom;
-    protected TrustManager[] trustManagers;
 
     @Override
     public SSLContext newSslContext(EzySslConfig config) throws Exception {
@@ -43,10 +37,15 @@ public class EzySimpleSslContextFactory
         KeyManagerFactory keyManagerFactory = newKeyManagerFactory(config);
         initKeyManagerFactory(keyManagerFactory, keyStore, certificatePassword);
 
+        // Set up trust manager factory to use our key store
+        TrustManagerFactory trustManagerFactory = newTrustManagerFactory(config);
+        initTrustManagerFactory(trustManagerFactory, keyStore);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+
         // Initialize the SSLContext to work with our key managers.
         SSLContext context = SSLContext.getInstance(getProtocol());
         KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
-        context.init(keyManagers, null, null);
+        context.init(keyManagers, trustManagers, null);
         return context;
     }
 
@@ -54,18 +53,34 @@ public class EzySimpleSslContextFactory
         KeyManagerFactory factory,
         KeyStore keyStore,
         char[] password
-    )
-        throws Exception {
+    ) throws Exception {
         factory.init(keyStore, password);
     }
 
-    protected KeyManagerFactory newKeyManagerFactory(EzySslConfig config)
-        throws Exception {
+    protected KeyManagerFactory newKeyManagerFactory(
+        EzySslConfig config
+    ) throws Exception {
         return KeyManagerFactory.getInstance(getAlgorithm(config));
     }
 
-    protected void loadKeyStore(KeyStore keyStore, InputStream stream, char[] password)
-        throws Exception {
+    protected void initTrustManagerFactory(
+        TrustManagerFactory factory,
+        KeyStore keyStore
+    ) throws Exception {
+        factory.init(keyStore);
+    }
+
+    protected TrustManagerFactory newTrustManagerFactory(
+        EzySslConfig config
+    ) throws Exception {
+        return TrustManagerFactory.getInstance(getAlgorithm(config));
+    }
+
+    protected void loadKeyStore(
+        KeyStore keyStore,
+        InputStream stream,
+        char[] password
+    ) throws Exception {
         try {
             keyStore.load(stream, password);
         } finally {
@@ -91,7 +106,6 @@ public class EzySimpleSslContextFactory
         return newInputStreamLoader().load(file);
     }
 
-    @SuppressWarnings("unused")
     protected KeyStore newKeyStore(EzySslConfig config) throws KeyStoreException {
         return KeyStore.getInstance(getKeyStoreType());
     }

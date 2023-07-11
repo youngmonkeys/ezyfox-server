@@ -119,23 +119,23 @@ public class EzySocketDataReceiver
         }
     }
 
-    public void udpReceive(Object socketChannel, EzyMessage message) {
+    public void udpReceive(Object channel, EzyMessage message) {
         ExecutorService executorService =
-            selectedExecutorService(socketChannel);
-        executorService.execute(() -> doUdpReceive(socketChannel, message));
+            selectedExecutorService(channel);
+        executorService.execute(() -> doUdpReceive(channel, message));
     }
 
-    private void doUdpReceive(Object socketChannel, EzyMessage message) {
+    private void doUdpReceive(Object channel, EzyMessage message) {
         try {
             EzyNioHandlerGroup handlerGroup =
-                handlerGroupManager.getHandlerGroup(socketChannel);
+                handlerGroupManager.getHandlerGroup(channel);
             if (handlerGroup != null) {
                 handlerGroup.fireMessageReceived(message);
             }
         } catch (Throwable e) {
             logger.info(
                 "I/O error at udp-message-received (channel: {}): {}({})",
-                socketChannel,
+                channel,
                 e.getClass().getName(),
                 e.getMessage()
             );

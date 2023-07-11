@@ -169,8 +169,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
 
     protected final void executeSendingPacket(EzyPacket packet, Object writeBuffer) {
         try {
-            EzyChannel channel = session.getChannel();
-            if (canWriteBytes(channel)) {
+            if (session.isActivated() && channel.isConnected()) {
                 EzyConstant transportType = packet.getTransportType();
                 if (transportType == EzyTransportType.UDP_OR_TCP) {
                     transportType = session.getDatagramChannelPool() != null
@@ -186,7 +185,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
             int packetSize = packet.getSize();
             networkStats.addWriteErrorPackets(1);
             networkStats.addWriteErrorBytes(packetSize);
-            logger.warn(
+            logger.info(
                 "can't send {} bytes to session: {}, error: {}({})",
                 packetSize,
                 session,
@@ -236,13 +235,6 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
 
     protected ByteBuffer getWriteBuffer(ByteBuffer fixed, int bytesToWrite) {
         return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
-    }
-
-    private boolean canWriteBytes(EzyChannel channel) {
-        if (channel == null) {
-            return false;
-        }
-        return channel.isConnected();
     }
 
     protected final void executeAddReadBytes(int bytes) {

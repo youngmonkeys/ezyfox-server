@@ -10,8 +10,6 @@ import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
 import javax.net.ssl.SSLContext;
-
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -68,40 +66,28 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private void getBindAndConfigServerSocket() throws Exception {
-        this.serverSocket = createServerSocket();
+        this.serverSocket = serverSocketChannel.socket();
+        this.serverSocket.setReuseAddress(true);
+        this.serverSocket.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
         this.serverSocketChannel.register(acceptSelector, SelectionKey.OP_ACCEPT);
     }
 
-    private ServerSocket createServerSocket() throws Exception {
-        ServerSocket server;
-        EzySocketSetting socketSetting = getSocketSetting();
-        boolean sslActive = socketSetting.isSslActive();
-        SslType sslType = socketSetting.getSslType();
-        if (sslActive && sslType == SslType.L4) {
-            server = sslContext
-                .getServerSocketFactory()
-                .createServerSocket(
-                    getSocketPort(),
-                    0,
-                    InetAddress.getByName(getSocketAddress())
-                );
-            server.setReuseAddress(true);
-        } else {
-            server = serverSocketChannel.socket();
-            server.setReuseAddress(true);
-            server.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
-        }
-        return server;
-    }
-
     private void startSocketHandlers() throws Exception {
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor socketAcceptor = newSocketAcceptor();
         writingLoopHandler = newWritingLoopHandler();
         readingLoopHandler = newReadingLoopHandler(socketAcceptor);
         socketAcceptanceLoopHandler = newSocketAcceptanceLoopHandler(socketAcceptor);
         socketAcceptanceLoopHandler.start();
         readingLoopHandler.start();
         writingLoopHandler.start();
+    }
+
+    private EzyNioSocketAcceptor newSocketAcceptor() {
+        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
+        if (isEnableL4Ssl()) {
+            acceptor.setSslContext(sslContext);
+        }
+        return acceptor;
     }
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
@@ -117,7 +103,8 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzySocketEventLoopHandler newReadingLoopHandler(
-        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
+        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler
+    ) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketReadingLoopHandler();
         loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
         EzyNioSocketReader eventHandler = new EzyNioSocketReader();
@@ -147,6 +134,11 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private ServerSocketChannel newServerSocketChannel() throws Exception {
         return ServerSocketChannel.open();
+    }
+
+    private boolean isEnableL4Ssl() {
+        EzySocketSetting setting = getSocketSetting();
+        return setting.isSslActive() && setting.getSslType() == SslType.L4;
     }
 
     private int getSocketReaderPoolSize() {

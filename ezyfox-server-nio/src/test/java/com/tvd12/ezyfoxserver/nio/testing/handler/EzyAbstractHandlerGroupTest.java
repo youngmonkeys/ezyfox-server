@@ -263,7 +263,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 
         // then
         EzySession session = FieldUtil.getFieldValue(sut, "session");
-        verify(session, times(3)).getChannel();
+        verify(session, times(2)).getChannel();
     }
 
     @Test

@@ -54,7 +54,10 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     }
 
     @Override
-    public EzyAbstractHandlerGroup.Builder newBuilder(EzyChannel channel, EzyConnectionType type) {
+    public EzyAbstractHandlerGroup.Builder newBuilder(
+        EzyChannel channel,
+        EzyConnectionType type
+    ) {
         EzyAbstractHandlerGroup.Builder builder = (type == EzyConnectionType.SOCKET)
             ? newBuilderBySocketType()
             : newBuilderByWebSocketType();
@@ -69,12 +72,11 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     }
 
     private EzyAbstractHandlerGroup.Builder newBuilderBySocketType() {
-        EzyAbstractHandlerGroup.Builder builder = EzySimpleNioHandlerGroup.builder();
-        builder.sessionCount(socketSessionCount);
-        builder.sessionStats(getSocketSessionStats());
-        builder.networkStats(getSocketNetworkStats());
-        builder.sessionTicketsQueue(socketSessionTicketsQueue);
-        return builder;
+        return EzySimpleNioHandlerGroup.builder()
+            .sessionCount(socketSessionCount)
+            .sessionStats(getSocketSessionStats())
+            .networkStats(getSocketNetworkStats())
+            .sessionTicketsQueue(socketSessionTicketsQueue);
     }
 
     private EzyAbstractHandlerGroup.Builder newBuilderByWebSocketType() {

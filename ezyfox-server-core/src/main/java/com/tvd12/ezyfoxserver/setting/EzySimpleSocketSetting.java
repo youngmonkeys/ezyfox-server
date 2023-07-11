@@ -45,6 +45,7 @@ public class EzySimpleSocketSetting
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
         map.put("sslActive", sslActive);
+        map.put("sslType", sslType);
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);

@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.ssl;
 
+import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
 import com.tvd12.ezyfox.stream.EzyInputStreamLoader;
 import com.tvd12.ezyfox.stream.EzyInputStreamReader;
@@ -93,7 +94,7 @@ public class EzySimpleSslContextFactory
         char[] answer;
         try {
             answer = newInputStreamReader()
-                .readString(stream, "UTF-8")
+                .readString(stream, EzyStrings.UTF_8)
                 .trim()
                 .toCharArray();
         } finally {
@@ -106,7 +107,9 @@ public class EzySimpleSslContextFactory
         return newInputStreamLoader().load(file);
     }
 
-    protected KeyStore newKeyStore(EzySslConfig config) throws KeyStoreException {
+    protected KeyStore newKeyStore(
+        @SuppressWarnings("unused") EzySslConfig config
+    ) throws KeyStoreException {
         return KeyStore.getInstance(getKeyStoreType());
     }
 

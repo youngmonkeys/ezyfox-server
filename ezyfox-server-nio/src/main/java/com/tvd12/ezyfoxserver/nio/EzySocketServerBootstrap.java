@@ -26,9 +26,9 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private Selector acceptSelector;
     private ServerSocket serverSocket;
     private ServerSocketChannel serverSocketChannel;
-    private final SSLContext sslContext;
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
+    private final SSLContext sslContext;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);

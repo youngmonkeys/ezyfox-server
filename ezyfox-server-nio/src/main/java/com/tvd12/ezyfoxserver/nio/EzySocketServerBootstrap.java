@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 
 import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
@@ -85,7 +86,9 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private EzyNioSocketAcceptor newSocketAcceptor() {
         EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
         if (isEnableL4Ssl()) {
-            acceptor.setSslContext(sslContext);
+            acceptor.setSslHandshakeHandler(
+                new EzySslHandshakeHandler(sslContext)
+            );
         }
         return acceptor;
     }

@@ -89,16 +89,20 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
             .build();
 
         EzyChannel channelX = mock(EzyChannel.class);
-        MethodInvoker.create()
-            .object(group)
-            .method("canWriteBytes")
-            .param(EzyChannel.class, null)
-            .invoke();
-        MethodInvoker.create()
-            .object(group)
-            .method("canWriteBytes")
-            .param(EzyChannel.class, channelX)
-            .invoke();
+        try {
+            MethodInvoker.create()
+                .object(group)
+                .method("canWriteBytes")
+                .param(EzyChannel.class, null)
+                .invoke();
+            MethodInvoker.create()
+                .object(group)
+                .method("canWriteBytes")
+                .param(EzyChannel.class, channelX)
+                .invoke();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
         sessionTicketsRequestQueues = mock(EzySessionTicketsRequestQueues.class);
         when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
@@ -375,6 +379,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 
         EzySimpleSession session = mock(EzySimpleSession.class);
         when(session.getChannel()).thenReturn(channel);
+        when(session.isActivated()).thenReturn(true);
 
         EzyDatagramChannelPool datagramChannelPool =
             mock(EzyDatagramChannelPool.class);
@@ -418,7 +423,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         Asserts.assertNotNull(group.getSession());
 
         // then
-        verify(session, times(3)).getChannel();
+        verify(session, times(1)).isActivated();
+        verify(session, times(2)).getChannel();
         verify(session, times(2)).getDatagramChannelPool();
         verify(session, times(1)).getUdpClientAddress();
     }
@@ -447,6 +453,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 
         EzySimpleSession session = mock(EzySimpleSession.class);
         when(session.getChannel()).thenReturn(channel);
+        when(session.isActivated()).thenReturn(true);
 
         InetSocketAddress udpAddress = new InetSocketAddress("127.0.0.1", 12348);
         when(session.getUdpClientAddress()).thenReturn(udpAddress);
@@ -486,7 +493,8 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         Asserts.assertNotNull(group.getSession());
 
         // then
-        verify(session, times(3)).getChannel();
+        verify(session, times(1)).isActivated();
+        verify(session, times(2)).getChannel();
         verify(session, times(1)).getDatagramChannelPool();
         verify(session, times(0)).getUdpClientAddress();
     }

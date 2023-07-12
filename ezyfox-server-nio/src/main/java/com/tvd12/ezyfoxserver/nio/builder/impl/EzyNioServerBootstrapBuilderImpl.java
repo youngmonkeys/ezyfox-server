@@ -12,9 +12,11 @@ import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
+import com.tvd12.ezyfoxserver.nio.socket.EzySecureSocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
+import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.*;
 
 import java.util.concurrent.ExecutorService;
@@ -103,7 +105,12 @@ public class EzyNioServerBootstrapBuilderImpl
     }
 
     private EzySocketDataReceiver newSocketDataReceiver(EzyHandlerGroupManager handlerGroupManager) {
-        return EzySocketDataReceiver.builder()
+        EzySocketSetting setting = getSocketSetting();
+        return (
+            setting.isEnableL4Ssl()
+                ? EzySecureSocketDataReceiver.builder()
+                : EzySocketDataReceiver.builder()
+        )
             .handlerGroupManager(handlerGroupManager)
             .threadPoolSize(getThreadPoolSizeSetting().getSocketDataReceiver())
             .build();

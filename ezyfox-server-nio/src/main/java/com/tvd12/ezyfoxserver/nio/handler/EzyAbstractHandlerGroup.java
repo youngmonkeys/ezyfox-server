@@ -16,6 +16,7 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
+import lombok.Getter;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -32,6 +33,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
     EzyDroppedPackets,
     EzyDestroyable {
 
+    @Getter
     protected final EzyChannel channel;
 
     protected final D decoder;

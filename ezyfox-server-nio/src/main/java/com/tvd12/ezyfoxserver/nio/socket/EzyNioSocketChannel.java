@@ -14,9 +14,9 @@ import static com.tvd12.ezyfox.util.EzyReturner.returnWithException;
 @Getter
 public class EzyNioSocketChannel implements EzyChannel {
 
-    private final SocketChannel channel;
-    private final SocketAddress serverAddress;
-    private final SocketAddress clientAddress;
+    protected final SocketChannel channel;
+    protected final SocketAddress serverAddress;
+    protected final SocketAddress clientAddress;
 
     public EzyNioSocketChannel(SocketChannel channel) {
         this.channel = channel;

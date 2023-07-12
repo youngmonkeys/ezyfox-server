@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.nio;
 
-import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.nio.constant.EzyNioThreadPoolSizes;
 import com.tvd12.ezyfoxserver.nio.socket.*;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
@@ -149,7 +148,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private boolean isEnableL4Ssl() {
         EzySocketSetting setting = getSocketSetting();
-        return setting.isSslActive() && setting.getSslType() == SslType.L4;
+        return setting.isEnableL4Ssl();
     }
 
     public int getSslHandshakeTimeout() {

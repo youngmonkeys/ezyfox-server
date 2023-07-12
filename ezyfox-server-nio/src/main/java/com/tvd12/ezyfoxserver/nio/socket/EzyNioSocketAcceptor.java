@@ -11,6 +11,8 @@ import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 import lombok.Setter;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -36,6 +38,7 @@ public class EzyNioSocketAcceptor
     protected Selector readSelector;
     @Setter
     protected EzyHandlerGroupManager handlerGroupManager;
+    protected SSLContext sslContext;
     @Setter
     protected EzySslHandshakeHandler sslHandshakeHandler;
     protected final List<SocketChannel> acceptableConnections;
@@ -126,15 +129,18 @@ public class EzyNioSocketAcceptor
     private void doAcceptConnection(SocketChannel clientChannel) throws Exception {
         clientChannel.configureBlocking(false);
         clientChannel.socket().setTcpNoDelay(tcpNoDelay);
+        SSLEngine sslEngine = null;
         try {
             if (sslHandshakeHandler != null) {
-                sslHandshakeHandler.handle(clientChannel);
+                sslEngine = sslHandshakeHandler.handle(clientChannel);
             }
         } catch (Exception e) {
             clientChannel.close();
             throw e;
         }
-        EzyChannel channel = new EzyNioSocketChannel(clientChannel);
+        EzyChannel channel = sslEngine == null
+            ? new EzyNioSocketChannel(clientChannel)
+            : new EzyNioSecureSocketChannel(clientChannel, sslEngine);
 
         EzyNioHandlerGroup handlerGroup = handlerGroupManager
             .newHandlerGroup(channel, EzyConnectionType.SOCKET);

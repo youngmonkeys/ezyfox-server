@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeApplicationBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargePacketBuffer;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
 
@@ -18,7 +20,9 @@ public class EzySslHandshakeHandler extends EzyLoggable {
     private final int timeout;
 
     @SuppressWarnings("MethodLength")
-    public void handle(SocketChannel socketChannel) throws IOException {
+    public SSLEngine handle(
+        SocketChannel socketChannel
+    ) throws IOException {
         SSLEngine engine = sslContext.createSSLEngine();
         engine.setUseClientMode(false);
         engine.beginHandshake();
@@ -173,6 +177,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
         if (sslException != null) {
             throw sslException;
         }
+        return engine;
     }
 
     protected ByteBuffer handleBufferUnderflow(
@@ -187,34 +192,5 @@ public class EzySslHandshakeHandler extends EzyLoggable {
             replaceBuffer.put(buffer);
             return replaceBuffer;
         }
-    }
-
-    protected ByteBuffer enlargePacketBuffer(
-        SSLEngine engine,
-        ByteBuffer buffer
-    ) {
-        return enlargeBuffer(
-            buffer,
-            engine.getSession().getPacketBufferSize()
-        );
-    }
-
-    protected ByteBuffer enlargeApplicationBuffer(
-        SSLEngine engine,
-        ByteBuffer buffer
-    ) {
-        return enlargeBuffer(
-            buffer,
-            engine.getSession().getApplicationBufferSize()
-        );
-    }
-
-    protected ByteBuffer enlargeBuffer(
-        ByteBuffer buffer,
-        int sessionProposedCapacity
-    ) {
-        return sessionProposedCapacity > buffer.capacity()
-            ? ByteBuffer.allocate(sessionProposedCapacity)
-            : ByteBuffer.allocate(buffer.capacity() * 2);
     }
 }

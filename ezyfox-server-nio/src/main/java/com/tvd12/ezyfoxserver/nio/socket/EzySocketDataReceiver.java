@@ -10,6 +10,7 @@ import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.nio.ByteBuffer;
@@ -33,11 +34,7 @@ public class EzySocketDataReceiver
         this.executorServices = newExecutorServices(threadPoolSize);
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    private ByteBuffer[] newTcpByteBuffers(int size) {
+    protected ByteBuffer[] newTcpByteBuffers(int size) {
         ByteBuffer[] answer = new ByteBuffer[size];
         for (int i = 0; i < size; ++i) {
             answer[i] = ByteBuffer.allocateDirect(getMaxBufferSize());
@@ -90,25 +87,37 @@ public class EzySocketDataReceiver
         if (readBytes == -1) {
             tcpCloseConnection(channel);
         } else if (readBytes > 0) {
-            processReadBytes(channel, buffer);
+            processTcpReadBytes(channel, buffer);
         }
         if (exception != null) {
             throw exception;
         }
     }
 
-    private void processReadBytes(
+    private void processTcpReadBytes(
         SocketChannel channel,
         ByteBuffer buffer
     ) throws Exception {
-        buffer.flip();
-        byte[] binary = new byte[buffer.limit()];
-        buffer.get(binary);
         EzyNioHandlerGroup handlerGroup =
             handlerGroupManager.getHandlerGroup(channel);
-        if (handlerGroup != null) {
-            handlerGroup.fireBytesReceived(binary);
+        if (handlerGroup == null) {
+            return;
         }
+        buffer.flip();
+        byte[] binary = readTcpBytesFromBuffer(
+            handlerGroup.getChannel(),
+            buffer
+        );
+        handlerGroup.fireBytesReceived(binary);
+    }
+
+    protected byte[] readTcpBytesFromBuffer(
+        EzyChannel channel,
+        ByteBuffer buffer
+    ) throws Exception {
+        byte[] binary = new byte[buffer.limit()];
+        buffer.get(binary);
+        return binary;
     }
 
     private void tcpCloseConnection(SocketChannel channel) {
@@ -207,6 +216,10 @@ public class EzySocketDataReceiver
 
     private int getMaxBufferSize() {
         return EzyCoreConstants.MAX_READ_BUFFER_SIZE;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzySocketDataReceiver> {

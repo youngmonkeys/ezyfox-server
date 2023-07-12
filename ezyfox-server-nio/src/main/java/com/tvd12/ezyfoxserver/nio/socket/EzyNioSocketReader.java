@@ -36,7 +36,7 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
         }
     }
 
-    private void handleAcceptableConnections() {
+    private void handleAcceptableConnections() throws Exception {
         acceptableConnectionsHandler.handleAcceptableConnections();
     }
 

@@ -15,6 +15,7 @@ import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
 public class EzySslHandshakeHandler extends EzyLoggable {
 
     private final SSLContext sslContext;
+    private final int timeout;
 
     @SuppressWarnings("MethodLength")
     public void handle(SocketChannel socketChannel) throws IOException {
@@ -33,10 +34,13 @@ public class EzySslHandshakeHandler extends EzyLoggable {
         SSLEngineResult result;
         SSLException sslException = null;
         SSLEngineResult.HandshakeStatus handshakeStatus = engine.getHandshakeStatus();
+        long currentTime = System.currentTimeMillis();
+        long endTime = currentTime + timeout;
         while (handshakeStatus != FINISHED && handshakeStatus != NOT_HANDSHAKING) {
             switch (handshakeStatus) {
                 case NEED_UNWRAP:
-                    if (socketChannel.read(peerNetData) < 0) {
+                    int readBytes = socketChannel.read(peerNetData);
+                    if (readBytes < 0) {
                         if (engine.isInboundDone() && engine.isOutboundDone()) {
                             throw new SSLException(
                                 "status is NEED_UNWRAP " +
@@ -91,7 +95,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                                 break;
                             }
                         default:
-                            throw new IllegalStateException(
+                            throw new SSLException(
                                 "Invalid SSL status: " + result.getStatus()
                             );
                     }
@@ -116,7 +120,10 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         case OK :
                             netBuffer.flip();
                             while (netBuffer.hasRemaining()) {
-                                socketChannel.write(netBuffer);
+                                int writeBytes = socketChannel.write(netBuffer);
+                                if (writeBytes < 0) {
+                                    throw new SSLException("Maybe client closed.");
+                                }
                             }
                             break;
                         case BUFFER_OVERFLOW:
@@ -128,7 +135,10 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             try {
                                 netBuffer.flip();
                                 while (netBuffer.hasRemaining()) {
-                                    socketChannel.write(netBuffer);
+                                    int writeBytes = socketChannel.write(netBuffer);
+                                    if (writeBytes < 0) {
+                                        throw new SSLException("Maybe client closed.");
+                                    }
                                 }
                                 peerNetData.clear();
                             } catch (Exception e) {
@@ -153,7 +163,11 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                     handshakeStatus = engine.getHandshakeStatus();
                     break;
                 default:
-                    throw new IllegalStateException("Invalid SSL status: " + handshakeStatus);
+                    throw new SSLException("Invalid SSL status: " + handshakeStatus);
+            }
+            currentTime = System.currentTimeMillis();
+            if (currentTime >= endTime) {
+                throw new SSLException("Timeout");
             }
         }
         if (sslException != null) {

@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
@@ -14,9 +15,12 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -31,11 +35,23 @@ public class EzyNioSocketAcceptor
     @Setter
     protected Selector readSelector;
     @Setter
-    protected List<SocketChannel> acceptableConnections;
-    @Setter
     protected EzyHandlerGroupManager handlerGroupManager;
     @Setter
     protected EzySslHandshakeHandler sslHandshakeHandler;
+    protected final List<SocketChannel> acceptableConnections;
+    protected final List<SocketChannel> acceptableConnectionsBuffer;
+    protected final ExecutorService connectionAcceptorExecutorService;
+
+    public EzyNioSocketAcceptor(
+        int connectionAcceptorThreadPoolSize
+    ) {
+        acceptableConnections = new ArrayList<>();
+        acceptableConnectionsBuffer = new ArrayList<>();
+        connectionAcceptorExecutorService = EzyExecutors.newFixedThreadPool(
+            connectionAcceptorThreadPoolSize,
+            "connection-acceptor"
+        );
+    }
 
     @Override
     public void destroy() {
@@ -51,12 +67,24 @@ public class EzyNioSocketAcceptor
         }
     }
 
-    public void handleAcceptableConnections() {
-        if (acceptableConnections.size() > 0) {
-            //noinspection SynchronizeOnNonFinalField
-            synchronized (acceptableConnections) {
-                doHandleAcceptableConnections();
+    public void handleAcceptableConnections() throws Exception {
+        synchronized (acceptableConnections) {
+            acceptableConnectionsBuffer.addAll(acceptableConnections);
+            acceptableConnections.clear();
+        }
+        CountDownLatch countDownLatch = new CountDownLatch(
+            acceptableConnectionsBuffer.size()
+        );
+        try {
+            for (SocketChannel clientChannel : acceptableConnectionsBuffer) {
+                connectionAcceptorExecutorService.execute(() -> {
+                    acceptConnection(clientChannel);
+                    countDownLatch.countDown();
+                });
             }
+            countDownLatch.await();
+        } finally {
+            acceptableConnectionsBuffer.clear();
         }
     }
 
@@ -82,25 +110,15 @@ public class EzyNioSocketAcceptor
     }
 
     private void addConnection(SocketChannel clientChannel) {
-        //noinspection SynchronizeOnNonFinalField
         synchronized (acceptableConnections) {
             acceptableConnections.add(clientChannel);
-        }
-    }
-
-    private void doHandleAcceptableConnections() {
-        Iterator<SocketChannel> iterator = acceptableConnections.iterator();
-        while (iterator.hasNext()) {
-            SocketChannel clientChannel = iterator.next();
-            iterator.remove();
-            acceptConnection(clientChannel);
         }
     }
 
     private void acceptConnection(SocketChannel clientChannel) {
         try {
             doAcceptConnection(clientChannel);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.info("can't accept connection: {}", clientChannel, e);
         }
     }

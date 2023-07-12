@@ -37,7 +37,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.AbstractSelector;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
@@ -70,8 +69,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         channel1.configureBlocking(false);
         when(channel1.register(readSelector, SelectionKey.OP_READ)).thenReturn(selectionKey1);
 
-        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
-        acceptor.setAcceptableConnections(new ArrayList<>());
+        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor(1);
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);
@@ -101,8 +99,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 
         Selector readSelector = spy(ExSelector.class);
 
-        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
-        acceptor.setAcceptableConnections(new ArrayList<>());
+        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor(1);
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);
@@ -165,7 +162,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
 
         Selector readSelector = Selector.open();
-        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 

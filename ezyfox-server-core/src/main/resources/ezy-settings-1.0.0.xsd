@@ -64,9 +64,12 @@
             <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="ssl-type" type="ssl-type-type" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-handshake-timeout" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="connection-acceptor-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-connection-acceptor-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>

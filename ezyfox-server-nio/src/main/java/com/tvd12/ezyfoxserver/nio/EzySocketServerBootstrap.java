@@ -16,7 +16,6 @@ import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.util.ArrayList;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -84,10 +83,20 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzyNioSocketAcceptor newSocketAcceptor() {
-        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor acceptor;
         if (isEnableL4Ssl()) {
+            acceptor = new EzyNioSocketAcceptor(
+                getSslConnectionAcceptorThreadPoolSize()
+            );
             acceptor.setSslHandshakeHandler(
-                new EzySslHandshakeHandler(sslContext)
+                new EzySslHandshakeHandler(
+                    sslContext,
+                    getSslHandshakeTimeout()
+                )
+            );
+        } else {
+            acceptor = new EzyNioSocketAcceptor(
+                getConnectionAcceptorThreadPoolSize()
             );
         }
         return acceptor;
@@ -95,7 +104,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
         EzySocketWritingLoopHandler loopHandler = new EzySocketWritingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
+        loopHandler.setThreadPoolSize(getSocketWriterThreadPoolSize());
         loopHandler.setEventHandlerSupplier(() -> {
             EzySocketWriter eventHandler = new EzyNioSocketWriter();
             eventHandler.setWriterGroupFetcher(handlerGroupManager);
@@ -109,7 +118,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler
     ) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketReadingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
+        loopHandler.setThreadPoolSize(getSocketReaderThreadPoolSize());
         EzyNioSocketReader eventHandler = new EzyNioSocketReader();
         eventHandler.setOwnSelector(readSelector);
         eventHandler.setSocketDataReceiver(socketDataReceiver);
@@ -121,11 +130,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private EzySocketEventLoopHandler newSocketAcceptanceLoopHandler(
         EzyNioSocketAcceptor socketAcceptor) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
+        loopHandler.setThreadPoolSize(getSocketAcceptorThreadPoolSize());
         socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
         socketAcceptor.setReadSelector(readSelector);
         socketAcceptor.setOwnSelector(acceptSelector);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
         loopHandler.setEventHandler(socketAcceptor);
         return loopHandler;
@@ -144,15 +152,27 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return setting.isSslActive() && setting.getSslType() == SslType.L4;
     }
 
-    private int getSocketReaderPoolSize() {
+    public int getSslHandshakeTimeout() {
+        return getSocketSetting().getSslHandshakeTimeout();
+    }
+
+    private int getSocketReaderThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_READER;
     }
 
-    private int getSocketWriterPoolSize() {
+    private int getSocketWriterThreadPoolSize() {
         return getSocketSetting().getWriterThreadPoolSize();
     }
 
-    private int getSocketAcceptorPoolSize() {
+    private int getConnectionAcceptorThreadPoolSize() {
+        return getSocketSetting().getConnectionAcceptorThreadPoolSize();
+    }
+
+    private int getSslConnectionAcceptorThreadPoolSize() {
+        return getSocketSetting().getSslConnectionAcceptorThreadPoolSize();
+    }
+
+    private int getSocketAcceptorThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
     }
 

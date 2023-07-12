@@ -35,7 +35,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
@@ -100,10 +99,9 @@ public class EzyNioSocketReaderTest extends BaseTest {
         when(socketChannel5.isConnected()).thenReturn(true);
         when(socketChannel5.read(any(ByteBuffer.class))).then((Answer<Integer>) invocation -> -1);
 
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor(1);
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
 
         EzyNioSocketReader socketReader = new EzyNioSocketReader();
         socketReader.setOwnSelector(ownSelector);
@@ -138,10 +136,9 @@ public class EzyNioSocketReaderTest extends BaseTest {
             throw new IllegalStateException("server maintain");
         });
 
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor(1);
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
 
         EzyNioSocketReader socketReader = new EzyNioSocketReader();
         socketReader.setOwnSelector(ownSelector);

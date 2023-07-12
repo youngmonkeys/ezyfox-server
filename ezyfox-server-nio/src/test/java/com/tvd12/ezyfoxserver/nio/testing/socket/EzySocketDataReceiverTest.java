@@ -59,7 +59,7 @@ public class EzySocketDataReceiverTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("processReadBytes")
+            .method("processTcpReadBytes")
             .param(SocketChannel.class, channel)
             .param(ByteBuffer.class, buffer)
             .call();

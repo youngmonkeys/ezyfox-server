@@ -2,13 +2,16 @@ package com.tvd12.ezyfoxserver.api;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 import java.util.Collection;
 
-public abstract class EzyAbstractResponseApi implements EzyResponseApi {
+public abstract class EzyAbstractResponseApi
+    extends EzyLoggable
+    implements EzyResponseApi {
 
     @Override
     public void response(
@@ -34,11 +37,21 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         Object bytes = encodeData(pack.getData());
         if (immediate) {
             for (EzySession session : recipients) {
-                session.sendNow(createPacket(bytes, pack));
+                try {
+                    Object packedBytes = packMessage(session, bytes);
+                    session.sendNow(createPacket(packedBytes, pack));
+                } catch (Throwable e) {
+                    logger.info("response data now to session: {} failed", session, e);
+                }
             }
         } else {
             for (EzySession session : recipients) {
-                session.send(createPacket(bytes, pack));
+                try {
+                    Object packedBytes = packMessage(session, bytes);
+                    session.send(createPacket(packedBytes, pack));
+                } catch (Throwable e) {
+                    logger.info("response data to session: {} failed", session, e);
+                }
             }
         }
     }
@@ -55,13 +68,23 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         byte[] messageContent = dataToMessageContent(pack.getData());
         if (immediate) {
             for (EzySession session : recipients) {
-                byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                session.sendNow(createPacket(bytes, pack));
+                try {
+                    byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
+                    Object packedBytes = packMessage(session, bytes);
+                    session.sendNow(createPacket(packedBytes, pack));
+                } catch (Throwable e) {
+                    logger.info("response data now to session: {} failed", session, e);
+                }
             }
         } else {
             for (EzySession session : recipients) {
-                byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                session.send(createPacket(bytes, pack));
+                try {
+                    byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
+                    Object packedBytes = packMessage(session, bytes);
+                    session.send(createPacket(packedBytes, pack));
+                } catch (Throwable e) {
+                    logger.info("response data to session: {} failed", session, e);
+                }
             }
         }
     }
@@ -86,5 +109,12 @@ public abstract class EzyAbstractResponseApi implements EzyResponseApi {
         byte[] encryptionKey
     ) throws Exception {
         throw new UnsupportedOperationException("unsupported");
+    }
+
+    protected Object packMessage(
+        EzySession session,
+        Object message
+    ) throws Exception {
+        return message;
     }
 }

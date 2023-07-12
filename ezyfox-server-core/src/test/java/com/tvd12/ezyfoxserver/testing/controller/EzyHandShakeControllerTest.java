@@ -72,7 +72,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isL7SslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -95,6 +95,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         sut.handle(serverContext, request);
 
         // then
+        verify(socketSetting, times(1)).isL7SslActive();
         verify(session, times(1)).setClientId(clientId);
         verify(session, times(1)).setClientKey(clientKey);
         verify(session, times(1)).setClientType(clientType);

@@ -148,7 +148,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private boolean isEnableL4Ssl() {
         EzySocketSetting setting = getSocketSetting();
-        return setting.isEnableL4Ssl();
+        return setting.isL4SslActive();
     }
 
     public int getSslHandshakeTimeout() {

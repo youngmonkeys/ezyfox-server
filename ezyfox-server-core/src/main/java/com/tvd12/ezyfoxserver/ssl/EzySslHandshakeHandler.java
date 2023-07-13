@@ -36,11 +36,14 @@ public class EzySslHandshakeHandler extends EzyLoggable {
         ByteBuffer peerNetData = ByteBuffer.allocate(packetBufferSize);
 
         SSLEngineResult result;
-        SSLException sslException = null;
         SSLEngineResult.HandshakeStatus handshakeStatus = engine.getHandshakeStatus();
         long currentTime = System.currentTimeMillis();
         long endTime = currentTime + timeout;
         while (handshakeStatus != FINISHED && handshakeStatus != NOT_HANDSHAKING) {
+            currentTime = System.currentTimeMillis();
+            if (currentTime >= endTime) {
+                throw new SSLException("Timeout");
+            }
             switch (handshakeStatus) {
                 case NEED_UNWRAP:
                     int readBytes = socketChannel.read(peerNetData);
@@ -106,7 +109,6 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                     } catch (SSLException e) {
                         engine.closeOutbound();
                         handshakeStatus = engine.getHandshakeStatus();
-                        sslException = e;
                         logger.info(
                             "A problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
@@ -115,15 +117,6 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         break;
                     }
                     switch (result.getStatus()) {
-                        case OK :
-                            netBuffer.flip();
-                            while (netBuffer.hasRemaining()) {
-                                int writeBytes = socketChannel.write(netBuffer);
-                                if (writeBytes < 0) {
-                                    throw new SSLException("Maybe client closed.");
-                                }
-                            }
-                            break;
                         case BUFFER_OVERFLOW:
                             netBuffer = enlargeBuffer(netBuffer, packetBufferSize);
                             break;
@@ -133,10 +126,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             try {
                                 netBuffer.flip();
                                 while (netBuffer.hasRemaining()) {
-                                    int writeBytes = socketChannel.write(netBuffer);
-                                    if (writeBytes < 0) {
-                                        throw new SSLException("Maybe client closed.");
-                                    }
+                                    socketChannel.write(netBuffer);
                                 }
                                 peerNetData.clear();
                             } catch (Exception e) {
@@ -147,29 +137,22 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                                 handshakeStatus = engine.getHandshakeStatus();
                             }
                             break;
-                        default:
-                            throw new SSLException(
-                                "Invalid SSL status: " + result.getStatus()
-                            );
+                        default: // OK
+                            netBuffer.flip();
+                            while (netBuffer.hasRemaining()) {
+                                socketChannel.write(netBuffer);
+                            }
+                            break;
                     }
                     break;
-                case NEED_TASK:
+                default: // NEED_TASK:
                     Runnable task;
                     while ((task = engine.getDelegatedTask()) != null) {
                         task.run();
                     }
                     handshakeStatus = engine.getHandshakeStatus();
                     break;
-                default:
-                    throw new SSLException("Invalid SSL status: " + handshakeStatus);
             }
-            currentTime = System.currentTimeMillis();
-            if (currentTime >= endTime) {
-                throw new SSLException("Timeout");
-            }
-        }
-        if (sslException != null) {
-            throw sslException;
         }
         return engine;
     }

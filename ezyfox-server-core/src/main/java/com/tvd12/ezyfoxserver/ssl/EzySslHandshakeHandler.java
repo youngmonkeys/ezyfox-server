@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeApplicationBuffer;
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargePacketBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
 
@@ -54,7 +54,6 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         try {
                             engine.closeInbound();
                         } catch (SSLException e) {
-                            sslException = e;
                             logger.info(
                                 "This engine was forced to close inbound, " +
                                     "without having received the proper SSL/TLS close " +
@@ -71,24 +70,21 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         peerNetData.compact();
                         handshakeStatus = result.getHandshakeStatus();
                     } catch (SSLException e) {
-                        engine.closeOutbound();
-                        handshakeStatus = engine.getHandshakeStatus();
-                        sslException = e;
-                        logger.error(
+                        logger.info(
                             "A problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
                                 "Will try to properly close connection..."
                         );
+                        engine.closeOutbound();
+                        handshakeStatus = engine.getHandshakeStatus();
                         break;
                     }
                     switch (result.getStatus()) {
-                        case OK:
-                            break;
                         case BUFFER_OVERFLOW:
-                            peerAppData = enlargeApplicationBuffer(engine, peerAppData);
+                            peerAppData = enlargeBuffer(peerAppData, appBufferSize);
                             break;
                         case BUFFER_UNDERFLOW:
-                            peerNetData = handleBufferUnderflow(engine, peerNetData);
+                            peerNetData = enlargeBufferIfNeed(peerNetData, packetBufferSize);
                             break;
                         case CLOSED:
                             if (engine.isOutboundDone()) {
@@ -98,10 +94,8 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                                 handshakeStatus = engine.getHandshakeStatus();
                                 break;
                             }
-                        default:
-                            throw new SSLException(
-                                "Invalid SSL status: " + result.getStatus()
-                            );
+                        default: // OK
+                            break;
                     }
                     break;
                 case NEED_WRAP:
@@ -113,7 +107,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         engine.closeOutbound();
                         handshakeStatus = engine.getHandshakeStatus();
                         sslException = e;
-                        logger.error(
+                        logger.info(
                             "A problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
                                 "Will try to properly close connection..."
@@ -131,7 +125,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             }
                             break;
                         case BUFFER_OVERFLOW:
-                            netBuffer = enlargePacketBuffer(engine, netBuffer);
+                            netBuffer = enlargeBuffer(netBuffer, packetBufferSize);
                             break;
                         case BUFFER_UNDERFLOW:
                             throw new SSLException("Buffer underflow occurred after a wrap.");
@@ -146,7 +140,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                                 }
                                 peerNetData.clear();
                             } catch (Exception e) {
-                                logger.error(
+                                logger.info(
                                     "Failed to send server's close message " +
                                         "due to socket channel's failure."
                                 );
@@ -178,19 +172,5 @@ public class EzySslHandshakeHandler extends EzyLoggable {
             throw sslException;
         }
         return engine;
-    }
-
-    protected ByteBuffer handleBufferUnderflow(
-        SSLEngine engine,
-        ByteBuffer buffer
-    ) {
-        if (engine.getSession().getPacketBufferSize() < buffer.limit()) {
-            return buffer;
-        } else {
-            ByteBuffer replaceBuffer = enlargePacketBuffer(engine, buffer);
-            buffer.flip();
-            replaceBuffer.put(buffer);
-            return replaceBuffer;
-        }
     }
 }

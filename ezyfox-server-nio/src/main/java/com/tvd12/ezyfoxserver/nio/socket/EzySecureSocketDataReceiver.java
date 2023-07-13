@@ -5,11 +5,12 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeApplicationBuffer;
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargePacketBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 
 public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
 
@@ -28,6 +29,9 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         EzyNioSecureSocketChannel secureChannel =
             (EzyNioSecureSocketChannel) channel;
         SSLEngine engine = secureChannel.getEngine();
+        SSLSession session = engine.getSession();
+        int appBufferSize = session.getApplicationBufferSize();
+        int packageBufferSize = session.getPacketBufferSize();
         ByteBuffer appBuffer = buffer;
         int index = Math.abs(channel.hashCode() % threadPoolSize);
         ByteBuffer tcpNetBuffer = tcpNetBuffers[index];
@@ -41,10 +45,10 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     tcpNetBuffer.get(binary);
                     return binary;
                 case BUFFER_OVERFLOW:
-                    appBuffer = enlargeApplicationBuffer(engine, appBuffer);
+                    appBuffer = enlargeBuffer(appBuffer, appBufferSize);
                     break;
                 case BUFFER_UNDERFLOW:
-                    tcpNetBuffer = handleBufferUnderflow(engine, tcpNetBuffer);
+                    tcpNetBuffer = enlargeBufferIfNeed(tcpNetBuffer, packageBufferSize);
                     break;
                 case CLOSED:
                     engine.closeOutbound();
@@ -58,19 +62,6 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
             }
         }
         return new byte[0];
-    }
-
-    protected ByteBuffer handleBufferUnderflow(
-        SSLEngine engine,
-        ByteBuffer buffer) {
-        if (engine.getSession().getPacketBufferSize() < buffer.limit()) {
-            return buffer;
-        } else {
-            ByteBuffer replaceBuffer = enlargePacketBuffer(engine, buffer);
-            buffer.flip();
-            replaceBuffer.put(buffer);
-            return replaceBuffer;
-        }
     }
 
     public static Builder builder() {

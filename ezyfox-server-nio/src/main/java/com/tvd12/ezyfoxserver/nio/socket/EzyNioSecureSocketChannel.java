@@ -5,11 +5,12 @@ import lombok.Getter;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargePacketBuffer;
+import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 
 public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
 
@@ -27,9 +28,8 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        int netBufferLength = engine
-            .getSession()
-            .getPacketBufferSize();
+        SSLSession session = engine.getSession();
+        int netBufferLength = session.getPacketBufferSize();
         ByteBuffer netBuffer = ByteBuffer.allocate(netBufferLength);
         while (buffer.hasRemaining()) {
             SSLEngineResult result = engine.wrap(
@@ -43,7 +43,7 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
                     netBuffer.get(answer);
                     return answer;
                 case BUFFER_OVERFLOW:
-                    netBuffer = enlargePacketBuffer(engine, netBuffer);
+                    netBuffer = enlargeBuffer(netBuffer, netBufferLength);
                     break;
                 case BUFFER_UNDERFLOW:
                     throw new IOException("Buffer underflow occurred after a wrap");

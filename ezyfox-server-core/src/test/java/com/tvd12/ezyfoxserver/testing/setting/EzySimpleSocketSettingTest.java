@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.setting;
 
+import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSocketSetting;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -19,5 +21,77 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         assert setting.getCodecCreator().equals("hello");
         setting.setTcpNoDelay(true);
         assert setting.isTcpNoDelay();
+    }
+
+    @Test
+    public void isL4SslActiveTrueTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(true);
+        setting.setSslType(SslType.L4);
+
+        // when
+        // then
+        Asserts.assertTrue(setting.isL4SslActive());
+    }
+
+    @Test
+    public void isL4SslActiveFalseDueToSslEnableTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(false);
+        setting.setSslType(SslType.L4);
+
+        // when
+        // then
+        Asserts.assertFalse(setting.isL4SslActive());
+    }
+
+    @Test
+    public void isL4SslActiveFalseDueToSslTypeTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(true);
+        setting.setSslType(SslType.L7);
+
+        // when
+        // then
+        Asserts.assertFalse(setting.isL4SslActive());
+    }
+
+    @Test
+    public void isL7SslActiveTrueTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(true);
+        setting.setSslType(SslType.L7);
+
+        // when
+        // then
+        Asserts.assertTrue(setting.isL7SslActive());
+    }
+
+    @Test
+    public void isL7SslActiveFalseDueToSslEnableTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(false);
+        setting.setSslType(SslType.L7);
+
+        // when
+        // then
+        Asserts.assertFalse(setting.isL7SslActive());
+    }
+
+    @Test
+    public void isL7SslActiveFalseDueToSslTypeTest() {
+        // given
+        EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
+        setting.setSslActive(true);
+        setting.setSslType(SslType.L4);
+
+        // when
+        // then
+        Asserts.assertFalse(setting.isL7SslActive());
     }
 }

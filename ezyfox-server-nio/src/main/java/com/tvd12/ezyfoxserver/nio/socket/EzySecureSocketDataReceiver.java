@@ -27,11 +27,12 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         EzyNioSecureSocketChannel secureChannel =
             (EzyNioSecureSocketChannel) channel;
         SSLEngine engine = secureChannel.getEngine();
+        ByteBuffer appBuffer = buffer;
         int index = Math.abs(channel.hashCode() % threadPoolSize);
         ByteBuffer tcpNetBuffer = tcpNetBuffers[index];
-        while (buffer.hasRemaining()) {
+        while (appBuffer.hasRemaining()) {
             tcpNetBuffer.clear();
-            SSLEngineResult result = engine.unwrap(buffer, tcpNetBuffer);
+            SSLEngineResult result = engine.unwrap(appBuffer, tcpNetBuffer);
             switch (result.getStatus()) {
                 case OK:
                     tcpNetBuffer.flip();
@@ -39,7 +40,7 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     tcpNetBuffer.get(binary);
                     return binary;
                 case BUFFER_OVERFLOW:
-                    tcpNetBuffer = enlargeApplicationBuffer(engine, tcpNetBuffer);
+                    appBuffer = enlargeApplicationBuffer(engine, appBuffer);
                     break;
                 case BUFFER_UNDERFLOW:
                     tcpNetBuffer = handleBufferUnderflow(engine, tcpNetBuffer);

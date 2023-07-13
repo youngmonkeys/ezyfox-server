@@ -6,6 +6,7 @@ import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandlerGroup;
@@ -61,11 +62,13 @@ public class EzySocketDataReceiver
         try {
             tcpReadBytes(channel, buffer);
         } catch (Throwable e) {
+            if (e instanceof EzyConnectionCloseException) {
+                tcpCloseConnection(channel);
+            }
             logger.info(
-                "I/O error at tcp-data-reader (channel: {}): {}({})",
+                "I/O error at tcp-data-reader (channel: {})",
                 channel,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
@@ -143,10 +146,9 @@ public class EzySocketDataReceiver
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at udp-message-received (channel: {}): {}({})",
+                "I/O error at udp-message-received (channel: {})",
                 channel,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
 
@@ -170,10 +172,9 @@ public class EzySocketDataReceiver
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at ws-message-received (session: {}): {}({})",
+                "I/O error at ws-message-received (session: {})",
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
@@ -186,10 +187,9 @@ public class EzySocketDataReceiver
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at ws-message-received (session: {}): {}({})",
+                "I/O error at ws-message-received (session: {})",
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }

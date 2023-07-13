@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import lombok.Getter;
 
 import javax.net.ssl.SSLEngine;
@@ -48,8 +49,9 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
                     throw new IOException("Buffer underflow occurred after a wrap");
                 case CLOSED:
                     engine.closeOutbound();
-                    channel.close();
-                    break;
+                    throw new EzyConnectionCloseException(
+                        "ssl wrap result status is CLOSE"
+                    );
                 default:
                     throw new IOException("Invalid SSL status: " + result.getStatus());
             }

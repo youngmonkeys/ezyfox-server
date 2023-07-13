@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 import javax.net.ssl.SSLEngine;
@@ -47,8 +48,9 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     break;
                 case CLOSED:
                     engine.closeOutbound();
-                    channel.close();
-                    throw new IOException("connection close");
+                    throw new EzyConnectionCloseException(
+                        "ssl unwrap result status is CLOSE"
+                    );
                 default:
                     throw new IOException(
                         "Invalid SSL status: " + result.getStatus()

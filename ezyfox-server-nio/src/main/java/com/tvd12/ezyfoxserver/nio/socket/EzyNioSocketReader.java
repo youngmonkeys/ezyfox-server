@@ -32,7 +32,7 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
             doProcessReadyKeys();
             Thread.sleep(3L);
         } catch (Throwable e) {
-            logger.info("I/O error at socket-reader: {}({})", e.getClass().getName(), e.getMessage());
+            logger.info("I/O error at socket-reader", e);
         }
     }
 

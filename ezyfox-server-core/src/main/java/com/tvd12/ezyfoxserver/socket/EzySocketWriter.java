@@ -30,8 +30,8 @@ public class EzySocketWriter
             processSessionQueue(session);
         } catch (InterruptedException e) {
             logger.info("socket-writer thread interrupted");
-        } catch (Throwable throwable) {
-            logger.info("problems in socket-writer, thread", throwable);
+        } catch (Throwable e) {
+            logger.info("problems in socket-writer, thread", e);
         }
     }
 

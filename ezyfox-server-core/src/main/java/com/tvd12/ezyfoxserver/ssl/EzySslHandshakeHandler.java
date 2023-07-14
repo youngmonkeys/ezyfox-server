@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import static com.tvd12.ezyfoxserver.socket.EzySocketChannels.write;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
@@ -124,10 +125,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             throw new SSLException("Buffer underflow occurred after a wrap.");
                         case CLOSED:
                             try {
-                                netBuffer.flip();
-                                while (netBuffer.hasRemaining()) {
-                                    socketChannel.write(netBuffer);
-                                }
+                                write(socketChannel, netBuffer, endTime);
                                 peerNetData.clear();
                             } catch (Exception e) {
                                 logger.info(
@@ -138,10 +136,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             }
                             break;
                         default: // OK
-                            netBuffer.flip();
-                            while (netBuffer.hasRemaining()) {
-                                socketChannel.write(netBuffer);
-                            }
+                            write(socketChannel, netBuffer, endTime);
                             break;
                     }
                     break;

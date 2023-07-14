@@ -4,7 +4,6 @@ import com.tvd12.ezyfoxserver.EzyBootstrap;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
 import com.tvd12.ezyfoxserver.config.EzyConfig;
-import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
@@ -48,8 +47,7 @@ public abstract class EzyAbstractServerBootstrapBuilder
     protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
         EzySocketSetting socketSetting = getSocketSetting();
         EzyWebSocketSetting webSocketSetting = getWebsocketSetting();
-        boolean activeSslForSocket = socketSetting.isSslActive()
-            && socketSetting.getSslType() == SslType.L4;
+        boolean activeSslForSocket = socketSetting.isCertificationSslActive();
         boolean activeSslForWebsocket = webSocketSetting.isSslActive();
         if (activeSslForSocket || activeSslForWebsocket) {
             return newSslContextInitializer(sslConfig).init();

@@ -27,7 +27,7 @@
         <address>0.0.0.0</address>
         <active>true</active>
         <ssl-active>true</ssl-active>
-        <ssl-type>L7</ssl-type>
+        <ssl-type>CUSTOMIZATION</ssl-type>
         <ssl-handshake-timeout>300</ssl-handshake-timeout>
         <tcp-no-delay>true</tcp-no-delay>
         <max-request-size>4096</max-request-size>

@@ -17,11 +17,11 @@ public interface EzySocketSetting extends EzyBaseSocketSetting {
 
     int getWriterThreadPoolSize();
 
-    default boolean isL4SslActive() {
-        return isSslActive() && getSslType() == SslType.L4;
+    default boolean isCertificationSslActive() {
+        return isSslActive() && getSslType() == SslType.CERTIFICATION;
     }
 
-    default boolean isL7SslActive() {
-        return isSslActive() && getSslType() == SslType.L7;
+    default boolean isCustomizationSslActive() {
+        return isSslActive() && getSslType() == SslType.CUSTOMIZATION;
     }
 }

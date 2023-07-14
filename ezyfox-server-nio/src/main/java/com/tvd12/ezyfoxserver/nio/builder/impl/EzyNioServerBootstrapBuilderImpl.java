@@ -107,7 +107,7 @@ public class EzyNioServerBootstrapBuilderImpl
     private EzySocketDataReceiver newSocketDataReceiver(EzyHandlerGroupManager handlerGroupManager) {
         EzySocketSetting setting = getSocketSetting();
         return (
-            setting.isL4SslActive()
+            setting.isCertificationSslActive()
                 ? EzySecureSocketDataReceiver.builder()
                 : EzySocketDataReceiver.builder()
         )

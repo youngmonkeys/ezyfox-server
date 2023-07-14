@@ -28,11 +28,11 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(true);
-        setting.setSslType(SslType.L4);
+        setting.setSslType(SslType.CERTIFICATION);
 
         // when
         // then
-        Asserts.assertTrue(setting.isL4SslActive());
+        Asserts.assertTrue(setting.isCertificationSslActive());
     }
 
     @Test
@@ -40,11 +40,11 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(false);
-        setting.setSslType(SslType.L4);
+        setting.setSslType(SslType.CERTIFICATION);
 
         // when
         // then
-        Asserts.assertFalse(setting.isL4SslActive());
+        Asserts.assertFalse(setting.isCertificationSslActive());
     }
 
     @Test
@@ -52,11 +52,11 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(true);
-        setting.setSslType(SslType.L7);
+        setting.setSslType(SslType.CUSTOMIZATION);
 
         // when
         // then
-        Asserts.assertFalse(setting.isL4SslActive());
+        Asserts.assertFalse(setting.isCertificationSslActive());
     }
 
     @Test
@@ -64,11 +64,11 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(true);
-        setting.setSslType(SslType.L7);
+        setting.setSslType(SslType.CUSTOMIZATION);
 
         // when
         // then
-        Asserts.assertTrue(setting.isL7SslActive());
+        Asserts.assertTrue(setting.isCustomizationSslActive());
     }
 
     @Test
@@ -76,11 +76,11 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(false);
-        setting.setSslType(SslType.L7);
+        setting.setSslType(SslType.CUSTOMIZATION);
 
         // when
         // then
-        Asserts.assertFalse(setting.isL7SslActive());
+        Asserts.assertFalse(setting.isCustomizationSslActive());
     }
 
     @Test
@@ -88,10 +88,10 @@ public class EzySimpleSocketSettingTest extends BaseTest {
         // given
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
         setting.setSslActive(true);
-        setting.setSslType(SslType.L4);
+        setting.setSslType(SslType.CERTIFICATION);
 
         // when
         // then
-        Asserts.assertFalse(setting.isL7SslActive());
+        Asserts.assertFalse(setting.isCustomizationSslActive());
     }
 }

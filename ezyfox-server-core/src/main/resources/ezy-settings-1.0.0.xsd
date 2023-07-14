@@ -104,8 +104,8 @@
         <xs:list>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="L4"/>
-                    <xs:enumeration value="L7"/>
+                    <xs:enumeration value="CERTIFICATION"/>
+                    <xs:enumeration value="CUSTOMIZATION"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:list>

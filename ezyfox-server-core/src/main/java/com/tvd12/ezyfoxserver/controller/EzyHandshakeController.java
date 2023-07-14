@@ -43,7 +43,7 @@ public class EzyHandshakeController
             .getServer()
             .getSettings()
             .getSocket()
-            .isL7SslActive();
+            .isCustomizationSslActive();
         if (!enableL7SSL) {
             return;
         }

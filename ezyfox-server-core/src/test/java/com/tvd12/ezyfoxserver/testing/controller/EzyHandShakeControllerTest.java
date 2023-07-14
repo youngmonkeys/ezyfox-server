@@ -143,7 +143,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -174,7 +174,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -219,7 +219,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -277,7 +277,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 

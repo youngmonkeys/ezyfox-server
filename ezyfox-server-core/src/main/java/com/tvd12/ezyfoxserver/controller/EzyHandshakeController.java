@@ -39,12 +39,12 @@ public class EzyHandshakeController
         if (session.getConnectionType() == EzyConnectionType.WEBSOCKET) {
             return;
         }
-        boolean enableL7SSL = ctx
+        boolean enableCustomizationSsl = ctx
             .getServer()
             .getSettings()
             .getSocket()
             .isCustomizationSslActive();
-        if (!enableL7SSL) {
+        if (!enableCustomizationSsl) {
             return;
         }
         if (!event.isEnableEncryption()) {

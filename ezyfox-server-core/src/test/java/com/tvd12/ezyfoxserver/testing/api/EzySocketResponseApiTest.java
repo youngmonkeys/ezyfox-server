@@ -7,7 +7,11 @@ import com.tvd12.ezyfoxserver.api.EzySocketResponseApi;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySimplePackage;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
@@ -111,5 +115,74 @@ public class EzySocketResponseApiTest {
         // then
         verify(encoder, times(1)).toMessageContent(data);
         verify(encoder, times(sessionCount)).encryptMessageContent(any(byte[].class), any(byte[].class));
+    }
+
+    @Test
+    public void packMessage() throws Exception {
+        // given
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        EzySocketResponseApi instance = new EzySocketResponseApi(encoder);
+
+        byte[] message = RandomUtil.randomShortByteArray();
+        EzyChannel channel = mock(EzyChannel.class);
+        when(channel.pack(message)).thenReturn(message);
+
+        EzySession session = mock(EzySession.class);
+        when(session.getChannel()).thenReturn(channel);
+
+        // when
+        Object actual = MethodInvoker.create()
+            .object(instance)
+            .method("packMessage")
+            .param(EzySession.class, session)
+            .param(Object.class, message)
+            .invoke();
+
+        // then
+        Asserts.assertEquals(actual, message);
+
+        verify(session, times(1)).getChannel();
+        verifyNoMoreInteractions(session);
+
+        verify(channel, times(1)).pack(message);
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    public void packMessageThrowsException() throws Exception {
+        // given
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        EzySocketResponseApi instance = new EzySocketResponseApi(encoder);
+
+        byte[] message = RandomUtil.randomShortByteArray();
+        EzyChannel channel = mock(EzyChannel.class);
+        EzyConnectionCloseException error = new EzyConnectionCloseException("test");
+        when(channel.pack(message)).thenThrow(error);
+
+        EzySession session = mock(EzySession.class);
+        when(session.getChannel()).thenReturn(channel);
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            MethodInvoker.create()
+                .object(instance)
+                .method("packMessage")
+                .param(EzySession.class, session)
+                .param(Object.class, message)
+                .invoke()
+        );
+
+        // then
+        Asserts.assertEqualsType(
+            e.getCause().getCause(),
+            EzyConnectionCloseException.class
+        );
+
+        verify(session, times(1)).getChannel();
+        verify(session, times(1)).disconnect();
+        verifyNoMoreInteractions(session);
+
+        verify(channel, times(1)).pack(message);
+        verifyNoMoreInteractions(channel);
     }
 }

@@ -6,7 +6,6 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLSession;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
@@ -39,11 +38,6 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
             tcpNetBuffer.clear();
             SSLEngineResult result = engine.unwrap(appBuffer, tcpNetBuffer);
             switch (result.getStatus()) {
-                case OK:
-                    tcpNetBuffer.flip();
-                    byte[] binary = new byte[tcpNetBuffer.limit()];
-                    tcpNetBuffer.get(binary);
-                    return binary;
                 case BUFFER_OVERFLOW:
                     appBuffer = enlargeBuffer(appBuffer, appBufferSize);
                     break;
@@ -55,10 +49,11 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     throw new EzyConnectionCloseException(
                         "ssl unwrap result status is CLOSE"
                     );
-                default:
-                    throw new IOException(
-                        "Invalid SSL status: " + result.getStatus()
-                    );
+                default: // 0K
+                    tcpNetBuffer.flip();
+                    byte[] binary = new byte[tcpNetBuffer.limit()];
+                    tcpNetBuffer.get(binary);
+                    return binary;
             }
         }
         return new byte[0];

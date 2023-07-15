@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import static com.tvd12.ezyfoxserver.ssl.EzySslEngines.safeCloseOutbound;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 
 public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
@@ -37,23 +38,21 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
                 netBuffer
             );
             switch (result.getStatus()) {
-                case OK:
-                    netBuffer.flip();
-                    byte[] answer = new byte[netBuffer.limit()];
-                    netBuffer.get(answer);
-                    return answer;
                 case BUFFER_OVERFLOW:
                     netBuffer = enlargeBuffer(netBuffer, netBufferLength);
                     break;
                 case BUFFER_UNDERFLOW:
                     throw new IOException("Buffer underflow occurred after a wrap");
                 case CLOSED:
-                    engine.closeOutbound();
+                    safeCloseOutbound(engine);
                     throw new EzyConnectionCloseException(
                         "ssl wrap result status is CLOSE"
                     );
-                default:
-                    throw new IOException("Invalid SSL status: " + result.getStatus());
+                default: // OK
+                    netBuffer.flip();
+                    byte[] answer = new byte[netBuffer.limit()];
+                    netBuffer.get(answer);
+                    return answer;
             }
         }
         return bytes;

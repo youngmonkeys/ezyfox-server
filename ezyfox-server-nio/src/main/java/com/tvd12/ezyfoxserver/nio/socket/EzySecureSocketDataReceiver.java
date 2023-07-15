@@ -8,6 +8,7 @@ import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLSession;
 import java.nio.ByteBuffer;
 
+import static com.tvd12.ezyfoxserver.ssl.EzySslEngines.safeCloseOutbound;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 
@@ -45,7 +46,7 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     tcpNetBuffer = enlargeBufferIfNeed(tcpNetBuffer, packageBufferSize);
                     break;
                 case CLOSED:
-                    engine.closeOutbound();
+                    safeCloseOutbound(engine);
                     throw new EzyConnectionCloseException(
                         "ssl unwrap result status is CLOSE"
                     );

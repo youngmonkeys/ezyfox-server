@@ -15,7 +15,7 @@ public class SslByteBuffersTest {
     public void enlargeBufferTest() {
         // given
         ByteBuffer buffer = ByteBuffer.allocate(1);
-        int sessionProposedCapacity = RandomUtil.randomSmallInt() + 1;
+        int sessionProposedCapacity = RandomUtil.randomSmallInt() + 2;
 
         // when
         ByteBuffer actual = enlargeBuffer(

@@ -55,11 +55,6 @@ public class EzyNioSocketAcceptor
     }
 
     @Override
-    public void destroy() {
-        processWithLogException(ownSelector::close);
-    }
-
-    @Override
     public void handleEvent() {
         try {
             processReadyKeys();
@@ -149,5 +144,11 @@ public class EzyNioSocketAcceptor
 
         SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
         session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
+    }
+
+    @Override
+    public void destroy() {
+        processWithLogException(ownSelector::close);
+        processWithLogException(connectionAcceptorExecutorService::shutdown);
     }
 }

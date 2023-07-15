@@ -33,6 +33,7 @@ import org.testng.annotations.Test;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLException;
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -82,6 +83,26 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         assert acceptableConnections.size() == 1;
         acceptor.handleAcceptableConnections();
         assert acceptableConnections.size() == 0;
+    }
+
+    @Test
+    public void handleEventExceptionCase() throws Exception {
+        // given
+        EzyNioSocketAcceptor instance = new  EzyNioSocketAcceptor(
+            1
+        );
+
+        Selector ownSelector = mock(Selector.class);
+        IOException error = new IOException("test");
+        when(ownSelector.select()).thenThrow(error);
+        instance.setOwnSelector(ownSelector);
+
+        // when
+        instance.handleEvent();
+
+        // then
+        verify(ownSelector, times(1)).select();
+        verifyNoMoreInteractions(ownSelector);
     }
 
     @Test

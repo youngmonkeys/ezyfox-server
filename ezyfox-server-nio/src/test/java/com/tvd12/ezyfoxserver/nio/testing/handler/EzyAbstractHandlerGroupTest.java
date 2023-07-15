@@ -83,36 +83,9 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 
-        ExHandlerGroup group = (ExHandlerGroup) new ExHandlerGroup.Builder()
-            .session(session)
-            .decoder(decoder)
-            .sessionCount(new AtomicInteger())
-            .networkStats((EzyNetworkStats) statistics.getSocketStats().getNetworkStats())
-            .sessionStats((EzySessionStats) statistics.getSocketStats().getSessionStats())
-            .serverContext(serverContext)
-            .statsThreadPool(statsThreadPool)
-            .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
-            .build();
-
-        EzyChannel channelX = mock(EzyChannel.class);
-        try {
-            MethodInvoker.create()
-                .object(group)
-                .method("canWriteBytes")
-                .param(EzyChannel.class, null)
-                .invoke();
-            MethodInvoker.create()
-                .object(group)
-                .method("canWriteBytes")
-                .param(EzyChannel.class, channelX)
-                .invoke();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
         sessionTicketsRequestQueues = mock(EzySessionTicketsRequestQueues.class);
         when(sessionTicketsRequestQueues.addRequest(any())).thenReturn(false);
-        group = (ExHandlerGroup) new ExHandlerGroup.Builder()
+        ExHandlerGroup group = (ExHandlerGroup) new ExHandlerGroup.Builder()
             .session(session)
             .decoder(decoder)
             .sessionCount(new AtomicInteger())

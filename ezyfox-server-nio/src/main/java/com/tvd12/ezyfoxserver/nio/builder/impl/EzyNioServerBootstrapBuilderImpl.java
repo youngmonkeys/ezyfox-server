@@ -104,16 +104,20 @@ public class EzyNioServerBootstrapBuilderImpl
         return EzyExecutors.newFixedThreadPool(threadPoolSize, "statistics");
     }
 
-    private EzySocketDataReceiver newSocketDataReceiver(EzyHandlerGroupManager handlerGroupManager) {
-        EzySocketSetting setting = getSocketSetting();
-        return (
-            setting.isCertificationSslActive()
-                ? EzySecureSocketDataReceiver.builder()
-                : EzySocketDataReceiver.builder()
-        )
+    private EzySocketDataReceiver newSocketDataReceiver(
+        EzyHandlerGroupManager handlerGroupManager
+    ) {
+        return newSocketDataReceiverBuilder()
             .handlerGroupManager(handlerGroupManager)
             .threadPoolSize(getThreadPoolSizeSetting().getSocketDataReceiver())
             .build();
+    }
+
+    private EzySocketDataReceiver.Builder newSocketDataReceiverBuilder() {
+        EzySocketSetting setting = getSocketSetting();
+        return setting.isCertificationSslActive()
+            ? EzySecureSocketDataReceiver.builder()
+            : EzySocketDataReceiver.builder();
     }
 
     private EzySocketStreamQueue newStreamQueue() {

@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketChannel;
 import com.tvd12.ezyfoxserver.nio.socket.EzySecureSocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
@@ -15,6 +16,7 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLSession;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.Mockito.*;
@@ -238,5 +240,52 @@ public class EzySecureSocketDataReceiverTest {
 
         // then
         Asserts.assertEquals(actual, new byte[0]);
+    }
+
+    @Test
+    public void tcpReceiveCaseBufferClosed() throws Exception {
+        // given
+        SSLEngineResult result = new SSLEngineResult(
+            SSLEngineResult.Status.CLOSED,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenReturn(result);
+
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        byte[] bytes = new byte[] {1, 2, 3};
+        when(socketChannel.read(any(ByteBuffer.class))).thenAnswer(it -> {
+            ByteBuffer bf = it.getArgumentAt(0, ByteBuffer.class);
+            bf.clear();
+            bf.put(bytes);
+            return bytes.length;
+        });
+
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+        when(handlerGroupManager.getHandlerGroup(socketChannel))
+            .thenReturn(handlerGroup);
+        when(handlerGroup.getChannel()).thenReturn(channel);
+
+        // when
+        instance.tcpReceive(socketChannel);
+        Thread.sleep(300);
+
+        // then
+        verify(handlerGroupManager, times(2))
+            .getHandlerGroup(socketChannel);
+
+        verify(socketChannel, times(1)).read(any(ByteBuffer.class));
+        verifyNoMoreInteractions(socketChannel);
+
+        verify(sslEngine, times(1)).closeOutbound();
+        verify(sslEngine, times(1))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+
+        verify(handlerGroup, times(1)).getChannel();
+        verify(handlerGroup, times(1)).enqueueDisconnection();
+        verifyNoMoreInteractions(handlerGroup);
     }
 }

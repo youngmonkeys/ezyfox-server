@@ -10,6 +10,10 @@ import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.constant.*;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
+import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
+import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.entity.EzySimpleSession;
@@ -36,7 +40,9 @@ import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.Test;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -291,6 +297,65 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
 
         // then
         verify(session, times(1)).getDatagramChannelPool();
+    }
+
+    @Test
+    public void writeUdpPacketToSocketClientAddressNormally() throws Exception {
+        // given
+        ExHandlerGroup sut = newHandlerGroup();
+
+        EzyDatagramChannelPool udpChannelPool = mock(EzyDatagramChannelPool.class);
+        EzySession session = FieldUtil.getFieldValue(sut, "session");
+        when(session.getDatagramChannelPool()).thenReturn(udpChannelPool);
+
+        DatagramChannel datagramChannel = mock(DatagramChannel.class);
+        when(udpChannelPool.getChannel()).thenReturn(datagramChannel);
+
+        SocketAddress socketAddress = mock(SocketAddress.class);
+        when(session.getUdpClientAddress()).thenReturn(socketAddress);
+
+        EzyPacket packet = mock(EzyPacket.class);
+        byte[] data = new byte[] {1, 2, 3};
+        when(packet.getData()).thenReturn(data);
+
+        ByteBuffer writeBuffer = ByteBuffer.wrap(new byte[0]);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("writeUdpPacketToSocket")
+            .param(EzyPacket.class, packet)
+            .param(Object.class, writeBuffer)
+            .call();
+
+        // then
+        verify(session, times(1)).getDatagramChannelPool();
+        verify(session, times(1)).getUdpClientAddress();
+        verify(session, times(2)).getChannel();
+        verify((EzyAbstractSession) session, times(1))
+            .setDelegate(any(EzySessionDelegate.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDisconnectionQueue(any(EzySocketDisconnectionQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setSessionTicketsQueue(any(EzySessionTicketsQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDroppedPackets(any(EzyDroppedPackets.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setImmediateDeliver(any(EzyImmediateDeliver.class));
+        verifyNoMoreInteractions(session);
+
+        verify(udpChannelPool, times(1)).getChannel();
+        verifyNoMoreInteractions(udpChannelPool);
+
+        verify(datagramChannel, times(1)).send(
+            any(ByteBuffer.class),
+            any(SocketAddress.class)
+        );
+        verifyNoMoreInteractions(datagramChannel);
+
+        verify(packet, times(1)).getData();
+
+        verifyNoMoreInteractions(socketAddress);
     }
 
     @Test

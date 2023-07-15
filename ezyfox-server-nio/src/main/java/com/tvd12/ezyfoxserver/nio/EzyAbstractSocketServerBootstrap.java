@@ -3,11 +3,10 @@ package com.tvd12.ezyfoxserver.nio;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyStartable;
+import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
-import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
-import com.tvd12.ezyfoxserver.setting.EzySessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.socket.EzySessionTicketsQueue;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
@@ -16,6 +15,8 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, EzyDestroyable {
 
+    protected EzyServer server;
+    protected EzySettings serverSettings;
     protected EzyServerContext serverContext;
     protected EzySocketDataReceiver socketDataReceiver;
     protected EzyHandlerGroupManager handlerGroupManager;
@@ -24,6 +25,8 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
 
     public EzyAbstractSocketServerBootstrap(Builder<?, ?> builder) {
         this.serverContext = builder.serverContext;
+        this.server = this.serverContext.getServer();
+        this.serverSettings = this.server.getSettings();
         this.socketDataReceiver = builder.socketDataReceiver;
         this.handlerGroupManager = builder.handlerGroupManager;
         this.sessionTicketsQueue = builder.sessionTicketsQueue;
@@ -32,19 +35,6 @@ public abstract class EzyAbstractSocketServerBootstrap implements EzyStartable, 
     @Override
     public void destroy() {
         processWithLogException(() -> writingLoopHandler.destroy());
-    }
-
-    protected final EzySettings getServerSettings() {
-        return serverContext.getServer().getSettings();
-    }
-
-    protected final EzyNioSessionManager getSessionManager() {
-        return (EzyNioSessionManager)
-            serverContext.getServer().getSessionManager();
-    }
-
-    protected final EzySessionManagementSetting getSessionManagementSetting() {
-        return getServerSettings().getSessionManagement();
     }
 
     @SuppressWarnings("unchecked")

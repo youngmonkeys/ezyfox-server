@@ -11,7 +11,6 @@ import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
 import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 import lombok.Setter;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -38,7 +37,6 @@ public class EzyNioSocketAcceptor
     protected Selector readSelector;
     @Setter
     protected EzyHandlerGroupManager handlerGroupManager;
-    protected SSLContext sslContext;
     @Setter
     protected EzySslHandshakeHandler sslHandshakeHandler;
     protected final List<SocketChannel> acceptableConnections;
@@ -70,27 +68,6 @@ public class EzyNioSocketAcceptor
         }
     }
 
-    public void handleAcceptableConnections() throws Exception {
-        synchronized (acceptableConnections) {
-            acceptableConnectionsBuffer.addAll(acceptableConnections);
-            acceptableConnections.clear();
-        }
-        CountDownLatch countDownLatch = new CountDownLatch(
-            acceptableConnectionsBuffer.size()
-        );
-        try {
-            for (SocketChannel clientChannel : acceptableConnectionsBuffer) {
-                connectionAcceptorExecutorService.execute(() -> {
-                    acceptConnection(clientChannel);
-                    countDownLatch.countDown();
-                });
-            }
-            countDownLatch.await();
-        } finally {
-            acceptableConnectionsBuffer.clear();
-        }
-    }
-
     private void processReadyKeys() throws Exception {
         ownSelector.select();
 
@@ -115,6 +92,30 @@ public class EzyNioSocketAcceptor
     private void addConnection(SocketChannel clientChannel) {
         synchronized (acceptableConnections) {
             acceptableConnections.add(clientChannel);
+        }
+    }
+
+    public void handleAcceptableConnections() throws Exception {
+        synchronized (acceptableConnections) {
+            acceptableConnectionsBuffer.addAll(acceptableConnections);
+            acceptableConnections.clear();
+        }
+        CountDownLatch countDownLatch = new CountDownLatch(
+            acceptableConnectionsBuffer.size()
+        );
+        try {
+            for (SocketChannel clientChannel : acceptableConnectionsBuffer) {
+                connectionAcceptorExecutorService.execute(() -> {
+                    try {
+                        acceptConnection(clientChannel);
+                    } finally {
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+            countDownLatch.await();
+        } finally {
+            acceptableConnectionsBuffer.clear();
         }
     }
 

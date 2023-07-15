@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.nio;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsWritingLoopHandler;
+import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
@@ -14,12 +15,14 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
-    private Server server;
+    private Server websocketServer;
     private final SSLContext sslContext;
+    private final EzyWebSocketSetting webSocketSetting;
 
     public EzyWebSocketServerBootstrap(Builder builder) {
         super(builder);
         this.sslContext = builder.sslContext;
+        this.webSocketSetting = serverSettings.getWebsocket();
     }
 
     public static Builder builder() {
@@ -28,8 +31,8 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 
     @Override
     public void start() throws Exception {
-        server = newSocketServer();
-        server.start();
+        websocketServer = newWebsocketServer();
+        websocketServer.start();
         writingLoopHandler = newWritingLoopHandler();
         writingLoopHandler.start();
     }
@@ -37,22 +40,22 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
     @Override
     public void destroy() {
         processWithLogException(() -> writingLoopHandler.destroy());
-        processWithLogException(() -> server.stop());
+        processWithLogException(() -> websocketServer.stop());
     }
 
-    private Server newSocketServer() {
+    private Server newWebsocketServer() {
         return newSocketServerCreator()
-            .setting(getWsSetting())
-            .sessionManager(getSessionManager())
+            .setting(webSocketSetting)
+            .sessionManagementSetting(serverSettings.getSessionManagement())
+            .sessionManager((EzyNioSessionManager) server.getSessionManager())
             .handlerGroupManager(handlerGroupManager)
-            .sessionManagementSetting(getSessionManagementSetting())
             .socketDataReceiver(socketDataReceiver)
             .create();
     }
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
         EzyWsWritingLoopHandler loopHandler = new EzyWsWritingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
+        loopHandler.setThreadPoolSize(webSocketSetting.getWriterThreadPoolSize());
         loopHandler.setEventHandlerSupplier(() -> {
             EzySocketWriter eventHandler = new EzySocketWriter();
             eventHandler.setWriterGroupFetcher(handlerGroupManager);
@@ -63,22 +66,10 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
     }
 
     private EzyWebSocketServerCreator newSocketServerCreator() {
-        if (isSslActive()) {
+        if (webSocketSetting.isSslActive()) {
             return new EzyWebSocketSecureServerCreator(sslContext);
         }
         return new EzyWebSocketServerCreator();
-    }
-
-    private int getSocketWriterPoolSize() {
-        return getWsSetting().getWriterThreadPoolSize();
-    }
-
-    private boolean isSslActive() {
-        return getWsSetting().isSslActive();
-    }
-
-    private EzyWebSocketSetting getWsSetting() {
-        return getServerSettings().getWebsocket();
     }
 
     public static class Builder

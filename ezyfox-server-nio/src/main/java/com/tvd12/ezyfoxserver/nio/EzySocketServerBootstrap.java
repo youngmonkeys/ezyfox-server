@@ -27,10 +27,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
     private final SSLContext sslContext;
+    private final EzySocketSetting socketSetting;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
         this.sslContext = builder.sslContext;
+        this.socketSetting = serverSettings.getSocket();
     }
 
     public static Builder builder() {
@@ -67,7 +69,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private void getBindAndConfigServerSocket() throws Exception {
         this.serverSocket = serverSocketChannel.socket();
         this.serverSocket.setReuseAddress(true);
-        this.serverSocket.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
+        this.serverSocket.bind(
+            new InetSocketAddress(
+                socketSetting.getAddress(),
+                socketSetting.getPort()
+            )
+        );
         this.serverSocketChannel.register(acceptSelector, SelectionKey.OP_ACCEPT);
     }
 
@@ -83,19 +90,19 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private EzyNioSocketAcceptor newSocketAcceptor() {
         EzyNioSocketAcceptor acceptor;
-        if (isEnableL4Ssl()) {
+        if (socketSetting.isCertificationSslActive()) {
             acceptor = new EzyNioSocketAcceptor(
-                getSslConnectionAcceptorThreadPoolSize()
+                socketSetting.getSslConnectionAcceptorThreadPoolSize()
             );
             acceptor.setSslHandshakeHandler(
                 new EzySslHandshakeHandler(
                     sslContext,
-                    getSslHandshakeTimeout()
+                    socketSetting.getSslHandshakeTimeout()
                 )
             );
         } else {
             acceptor = new EzyNioSocketAcceptor(
-                getConnectionAcceptorThreadPoolSize()
+                socketSetting.getConnectionAcceptorThreadPoolSize()
             );
         }
         return acceptor;
@@ -103,7 +110,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
         EzySocketWritingLoopHandler loopHandler = new EzySocketWritingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketWriterThreadPoolSize());
+        loopHandler.setThreadPoolSize(socketSetting.getWriterThreadPoolSize());
         loopHandler.setEventHandlerSupplier(() -> {
             EzySocketWriter eventHandler = new EzyNioSocketWriter();
             eventHandler.setWriterGroupFetcher(handlerGroupManager);
@@ -130,7 +137,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         EzyNioSocketAcceptor socketAcceptor) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
         loopHandler.setThreadPoolSize(getSocketAcceptorThreadPoolSize());
-        socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
+        socketAcceptor.setTcpNoDelay(socketSetting.isTcpNoDelay());
         socketAcceptor.setReadSelector(readSelector);
         socketAcceptor.setOwnSelector(acceptSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
@@ -146,49 +153,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return ServerSocketChannel.open();
     }
 
-    private boolean isEnableL4Ssl() {
-        EzySocketSetting setting = getSocketSetting();
-        return setting.isCertificationSslActive();
-    }
-
-    public int getSslHandshakeTimeout() {
-        return getSocketSetting().getSslHandshakeTimeout();
-    }
-
     private int getSocketReaderThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_READER;
     }
 
-    private int getSocketWriterThreadPoolSize() {
-        return getSocketSetting().getWriterThreadPoolSize();
-    }
-
-    private int getConnectionAcceptorThreadPoolSize() {
-        return getSocketSetting().getConnectionAcceptorThreadPoolSize();
-    }
-
-    private int getSslConnectionAcceptorThreadPoolSize() {
-        return getSocketSetting().getSslConnectionAcceptorThreadPoolSize();
-    }
-
     private int getSocketAcceptorThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
-    }
-
-    private int getSocketPort() {
-        return getSocketSetting().getPort();
-    }
-
-    private String getSocketAddress() {
-        return getSocketSetting().getAddress();
-    }
-
-    private boolean getSocketTcpNoDelay() {
-        return getSocketSetting().isTcpNoDelay();
-    }
-
-    private EzySocketSetting getSocketSetting() {
-        return getServerSettings().getSocket();
     }
 
     public static class Builder

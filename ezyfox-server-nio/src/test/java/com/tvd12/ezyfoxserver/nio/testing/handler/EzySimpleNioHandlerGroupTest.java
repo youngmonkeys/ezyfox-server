@@ -11,7 +11,10 @@ import com.tvd12.ezyfoxserver.constant.EzyCommand;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
+import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
+import com.tvd12.ezyfoxserver.entity.EzyDroppedPackets;
+import com.tvd12.ezyfoxserver.entity.EzyImmediateDeliver;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -356,6 +359,54 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         when(session.getSelectionKey()).thenReturn(selectionKey);
         when(selectionKey.isValid()).thenReturn(false);
 
+        EzyPacket packet = mock(EzyPacket.class);
+        when(packet.getData()).thenReturn(new byte[]{1, 2, 3, 5});
+        when(packet.isBinary()).thenReturn(true);
+
+        ByteBuffer writeBuffer = ByteBuffer.allocate(5);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("writePacketToSocket")
+            .param(EzyPacket.class, packet)
+            .param(Object.class, writeBuffer)
+            .call();
+
+        // then
+        verify(packet, times(1)).getData();
+        verify(packet, times(1)).isBinary();
+        verify(packet, times(1)).setFragment(any());
+        verifyNoMoreInteractions(packet);
+
+        verify(selectionKey, times(1)).isValid();
+        verifyNoMoreInteractions(selectionKey);
+
+        verify(session, times(1)).getSelectionKey();
+        verify(session, times(2)).getChannel();
+        verify((EzyAbstractSession) session, times(1))
+                .setDelegate(any(EzySessionDelegate.class));
+        verify((EzyAbstractSession) session, times(1))
+                .setDisconnectionQueue(any(EzySocketDisconnectionQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+                .setSessionTicketsQueue(any(EzySessionTicketsQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+                .setDroppedPackets(any(EzyDroppedPackets.class));
+        verify((EzyAbstractSession) session, times(1))
+                .setImmediateDeliver(any(EzyImmediateDeliver.class));
+        verifyNoMoreInteractions(session);
+
+    }
+
+    @Test
+    public void writePacketToSocketSessionKeyIsValid() throws Exception {
+        // given
+        EzySimpleNioHandlerGroup sut = newHandlerGroup();
+
+        EzyNioSession session = FieldUtil.getFieldValue(sut, "session");
+        SelectionKey selectionKey = mock(SelectionKey.class);
+        when(session.getSelectionKey()).thenReturn(selectionKey);
+        when(selectionKey.isValid()).thenReturn(true);
 
         EzyPacket packet = mock(EzyPacket.class);
         when(packet.getData()).thenReturn(new byte[]{1, 2, 3, 5});
@@ -372,8 +423,90 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
             .call();
 
         // then
-        verify(session, times(1)).getSelectionKey();
+        verify(packet, times(1)).getData();
+        verify(packet, times(1)).isBinary();
+        verify(packet, times(1)).setFragment(any());
+        verifyNoMoreInteractions(packet);
+
         verify(selectionKey, times(1)).isValid();
+        verify(selectionKey, times(1)).interestOps(
+            SelectionKey.OP_READ | SelectionKey.OP_WRITE
+        );
+        verifyNoMoreInteractions(selectionKey);
+
+        verify(session, times(1)).getSelectionKey();
+        verify(session, times(2)).getChannel();
+        verify((EzyAbstractSession) session, times(1))
+            .setDelegate(any(EzySessionDelegate.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDisconnectionQueue(any(EzySocketDisconnectionQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setSessionTicketsQueue(any(EzySessionTicketsQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDroppedPackets(any(EzyDroppedPackets.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setImmediateDeliver(any(EzyImmediateDeliver.class));
+        verifyNoMoreInteractions(session);
+
+    }
+
+    @Test
+    public void writePacketToSocketNormally() throws Exception {
+        // given
+        EzySimpleNioHandlerGroup sut = newHandlerGroup();
+
+        EzyNioSession session = FieldUtil.getFieldValue(sut, "session");
+        SelectionKey selectionKey = mock(SelectionKey.class);
+        when(session.getSelectionKey()).thenReturn(selectionKey);
+        when(selectionKey.isValid()).thenReturn(false);
+
+        EzyPacket packet = mock(EzyPacket.class);
+        byte[] data = new byte[] {1, 2, 3, 5};
+        when(packet.getData()).thenReturn(data);
+        when(packet.isBinary()).thenReturn(true);
+
+        EzyChannel channel = session.getChannel();
+        when(channel.write(any(), anyBoolean()))
+            .thenReturn(data.length);
+
+        ByteBuffer writeBuffer = ByteBuffer.allocate(5);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("writePacketToSocket")
+            .param(EzyPacket.class, packet)
+            .param(Object.class, writeBuffer)
+            .call();
+
+        // then
+        verify(packet, times(1)).getData();
+        verify(packet, times(1)).isBinary();
+        verify(packet, times(1)).release();
+        verifyNoMoreInteractions(packet);
+
+        verify(channel, times(1)).write(
+            any(),
+            anyBoolean()
+        );
+        verify(channel, times(1)).getConnectionType();
+        verify(channel, times(1)).getClientAddress();
+        verify(channel, times(1)).getConnection();
+        verifyNoMoreInteractions(channel);
+
+        verify(session, times(3)).getChannel();
+        verify((EzyAbstractSession) session, times(1))
+            .setDelegate(any(EzySessionDelegate.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDisconnectionQueue(any(EzySocketDisconnectionQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setSessionTicketsQueue(any(EzySessionTicketsQueue.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setDroppedPackets(any(EzyDroppedPackets.class));
+        verify((EzyAbstractSession) session, times(1))
+            .setImmediateDeliver(any(EzyImmediateDeliver.class));
+        verifyNoMoreInteractions(session);
+
     }
 
     private EzySimpleNioHandlerGroup newHandlerGroup() throws IOException {

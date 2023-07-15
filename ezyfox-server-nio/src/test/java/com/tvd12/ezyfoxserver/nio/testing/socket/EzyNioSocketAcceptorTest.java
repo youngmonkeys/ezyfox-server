@@ -22,13 +22,17 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.Test;
 
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -181,6 +185,106 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 
         // then
         verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1)).setProperty(
+            any(String.class),
+            any(SelectionKey.class)
+        );
+        verifyNoMoreInteractions(session);
+    }
+
+    @Test
+    public void acceptConnectionSslTest() throws Exception {
+        // given
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+
+        Selector readSelector = Selector.open();
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
+        sut.setReadSelector(readSelector);
+        SocketChannel clientChannel = SocketChannel.open();
+
+        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        sut.setHandlerGroupManager(handlerGroupManager);
+
+        EzyNioSession session = mock(EzyNioSession.class);
+        when(handlerGroup.getSession()).thenReturn(session);
+
+        EzySslHandshakeHandler sslHandshakeHandler =
+            mock(EzySslHandshakeHandler.class);
+        SSLEngine sslEngine = mock(SSLEngine.class);
+        when(sslHandshakeHandler.handle(clientChannel))
+            .thenReturn(sslEngine);
+        sut.setSslHandshakeHandler(sslHandshakeHandler);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("acceptConnection")
+            .param(SocketChannel.class, clientChannel)
+            .call();
+
+        // then
+        verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1)).setProperty(
+            any(String.class),
+            any(SelectionKey.class)
+        );
+        verifyNoMoreInteractions(session);
+
+        verify(sslHandshakeHandler, times(1))
+            .handle(clientChannel);
+        verifyNoMoreInteractions(sslHandshakeHandler);
+        verifyNoMoreInteractions(sslEngine);
+    }
+
+    @Test
+    public void acceptConnectionSslExceptionTest() throws Exception {
+        // given
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+
+        Selector readSelector = Selector.open();
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
+        sut.setReadSelector(readSelector);
+        SocketChannel clientChannel = SocketChannel.open();
+
+        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        sut.setHandlerGroupManager(handlerGroupManager);
+
+        EzyNioSession session = mock(EzyNioSession.class);
+        when(handlerGroup.getSession()).thenReturn(session);
+
+        EzySslHandshakeHandler sslHandshakeHandler =
+            mock(EzySslHandshakeHandler.class);
+        SSLException error = new SSLException("test");
+        when(sslHandshakeHandler.handle(clientChannel))
+            .thenThrow(error);
+        sut.setSslHandshakeHandler(sslHandshakeHandler);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("acceptConnection")
+            .param(SocketChannel.class, clientChannel)
+            .call();
+
+        // then
+        verifyNoMoreInteractions(handlerGroupManager);
+        verifyNoMoreInteractions(handlerGroup);
+        verifyNoMoreInteractions(session);
+        verify(sslHandshakeHandler, times(1))
+            .handle(clientChannel);
+        verifyNoMoreInteractions(sslHandshakeHandler);
     }
 
     public static abstract class ExServerSocketChannel extends ServerSocketChannel {

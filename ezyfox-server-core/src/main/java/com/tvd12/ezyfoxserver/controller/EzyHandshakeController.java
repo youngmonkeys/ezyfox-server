@@ -60,7 +60,7 @@ public class EzyHandshakeController
         if (encryptedSessionKey == null) {
             encryptedSessionKey = sessionKey;
             try {
-                if (clientKey.length > 0) {
+                if (clientKey != null && clientKey.length > 0) {
                     encryptedSessionKey = EzyAsyCrypt.builder()
                         .publicKey(clientKey)
                         .build()

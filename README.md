@@ -34,11 +34,13 @@ Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent user
 
 # Introduction
 
+A Free and Open Solution for Multiplayer Game Development
+
 To develop online games rapidly, developers often need to use a game server engine like SmartFoxServer or Photon. Unfortunately, these engines come with a high price tag, especially as more and more users engage with our products. That's why we developed the EzyFox ecosystem, which aims to be free and open for anyone interested in building multiplayer games and applications.
 
 The EzyFox ecosystem supports a wide range of essential components for enterprise product development, including TCP, UDP, WebSocket protocols with SSL encryption, HTTP RESTful API, Remote Procedure Call (RPC) protocol, Database Interaction, Memory Caching, and Message Queue.
 
-With the EzyFox ecosystem, we can avoid the headache of choosing which technologies to use to manage and scale up an application, allowing us to focus solely on implementing business logic.
+With the EzyFox ecosystem, developers can foster creativity, collaboration, and innovation in multiplayer game development, irrespective of their budget constraints. By providing a comprehensive, free, and open solution, we aim to empower developers to bring their gaming visions to life and create memorable experiences for players worldwide.
 
 # Getting Started
 
@@ -160,9 +162,15 @@ mvn test
 - Ask us on [stackask.com](https://stackask.com)
 - Email us at [Dzung](mailto:itprono3@gmail.com)
 
-# Help us by making a donation.
+# Support Us: Make a Meaningful Donation.
 
 Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
+
+Your donation will enable us to:
+- Expand Development
+- Enhance Support
+- Community Growth
+- Promote Openness
 
 [https://youngmonkeys.org/donate/](https://youngmonkeys.org/donate/)
 

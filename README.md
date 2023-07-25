@@ -34,7 +34,7 @@ Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent user
 
 # Introduction
 
-An Open Solution for all your Real-Time needs
+An Open Solution for all your Real-Time needs.
 
 To develop online games rapidly, developers often need to use a game server engine like SmartFoxServer or Photon. Unfortunately, these engines come with a high price tag, especially as more and more users engage with our products. That's why we developed the EzyFox ecosystem, which aims to be free and open for anyone interested in building multiplayer games and applications.
 

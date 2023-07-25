@@ -34,6 +34,8 @@ Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent user
 
 # Introduction
 
+An Open Solution for all your Real-Time needs.
+
 To develop online games rapidly, developers often need to use a game server engine like SmartFoxServer or Photon. Unfortunately, these engines come with a high price tag, especially as more and more users engage with our products. That's why we developed the EzyFox ecosystem, which aims to be free and open for anyone interested in building multiplayer games and applications.
 
 The EzyFox ecosystem supports a wide range of essential components for enterprise product development, including TCP, UDP, WebSocket protocols with SSL encryption, HTTP RESTful API, Remote Procedure Call (RPC) protocol, Database Interaction, Memory Caching, and Message Queue.
@@ -48,7 +50,7 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 
 [https://youngmonkeys.org/ezyfox-sever/](https://youngmonkeys.org/project/ezyfox-sever/)
 
-# Latest version
+# Latest Version
 
 You can [download it here](https://resources.tvd12.com/)
 
@@ -142,7 +144,7 @@ You can find the full example [here](https://youngmonkeys.org/use-embedded-serve
 5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
 6. [Easy Smashers Unity](https://github.com/vu-luong/EzySmashers)
 
-# Tutorials:
+# Tutorials
 
 1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G): A simple realtime chat application
 2. [EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
@@ -154,13 +156,13 @@ Navigate to the source folder and run:
 mvn test
 ```
 
-# Contact us
+# Contact Us
 
 - Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)
 - Ask us on [stackask.com](https://stackask.com)
 - Email us at [Dzung](mailto:itprono3@gmail.com)
 
-# Help us by making a donation.
+# Support Us: Make a Meaningful Donation
 
 Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
 

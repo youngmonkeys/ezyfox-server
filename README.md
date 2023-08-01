@@ -2,7 +2,9 @@ EzyFox Server
 =======
 Empowering real-time experiences effortlessly.
 -----------
-<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="255" />
+<div align="center">
+    <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="255" />
+</div>
 
 ## Introduction
 

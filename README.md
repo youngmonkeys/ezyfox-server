@@ -137,12 +137,12 @@ You can find the full example [here](https://youngmonkeys.org/use-embedded-serve
 
 # Demos
 
-1. [Free Chat](https://youngmonkeys.org/asset/freechat/)
-2. [Space Game Cocos2d-x](https://youngmonkeys.org/asset/space-game/)
-3. [Space Shooter Unity](https://youngmonkeys.org/asset/space-shooter/)
-4. [Lucky Wheel Phaser HTML5](https://youngmonkeys.org/asset/lucky-wheel/)
+1. [Free Chat](https://github.com/youngmonkeys/freechat)
+2. [Space Game Cocos2d-x](https://github.com/tvd12/space-game)
+3. [Space Shooter Unity](https://github.com/tvd12/space-shooter)
+4. [Lucky Wheel Phaser HTML5](https://github.com/tvd12/ezyfox-server-example/tree/master/lucky-wheel)
 5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
-6. [Easy Smashers Unity](https://github.com/vu-luong/EzySmashers)
+6. [Easy Smashers Unity](https://github.com/vu-luong/ezy-smashers)
 
 # Tutorials
 

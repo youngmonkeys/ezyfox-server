@@ -98,7 +98,7 @@ Navigate to the source folder and run:
 mvn test
 ```
 
-## 🎉 Case Studies
+## 🎉 Who uses EzyFox?
 1. [Defi Warrior](https://defiwarrior.io/)
 2. ...
 3. Your awesome project ✨

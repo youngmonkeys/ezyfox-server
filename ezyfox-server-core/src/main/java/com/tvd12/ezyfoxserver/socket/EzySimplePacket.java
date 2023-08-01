@@ -25,13 +25,14 @@ public class EzySimplePacket implements EzyPacket {
 
     @Override
     public int getSize() {
-        if (data == null) {
+        Object currentData = data;
+        if (currentData == null) {
             return 0;
         }
-        if (data instanceof String) {
-            return ((String) data).length();
+        if (currentData instanceof String) {
+            return ((String) currentData).length();
         }
-        return ((byte[]) data).length;
+        return ((byte[]) currentData).length;
     }
 
     @Override

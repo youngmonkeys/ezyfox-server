@@ -108,12 +108,8 @@ mvn test
 - Ask us on [stackask.com](https://stackask.com)
 - Email us at [Dzung](mailto:itprono3@gmail.com)
 
-## 💖 Support Us: Make a Meaningful Donation
+## 💖 Support Us:
 
 Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
 
-[https://youngmonkeys.org/donate/](https://youngmonkeys.org/donate/)
-
-## 📃 License
-
-- Apache License, Version 2.0
+[Make a Meaningful Donation](https://youngmonkeys.org/donate/)

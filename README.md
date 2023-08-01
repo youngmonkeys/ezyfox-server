@@ -1,6 +1,6 @@
 # EzyFox Server
 
-[![GitHub release](https://img.shields.io/github/release/youngmonkeys/ezyfox-server.svg)][releases]
+![GitHub release](https://img.shields.io/github/release/youngmonkeys/ezyfox-server.svg)
 [![Java CI with Maven](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml/badge.svg)](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml)
 [![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
 

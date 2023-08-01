@@ -32,11 +32,11 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 
 ## 🚀 Getting Started
 
-[https://youngmonkeys.org/get-started/](https://youngmonkeys.org/get-started/)
+[Let's see how we can getting started just in 5 minutes!](https://youngmonkeys.org/get-started/)
 
 ## 📑 Documentation
 
-- [Official website document](https://youngmonkeys.org/project/ezyfox-sever/)
+- [Official website document](https://youngmonkeys.org/projects/ezyfox-server)
 - [Issue](https://github.com/youngmonkeys/ezyfox-server/issues)
 
 ## 📐 Architect Overview
@@ -44,10 +44,14 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
     <img src="./images/ezyfox-server-architecture.png" width="512" />
 </div>
 
+-----------
+
 - A EzyFox Server will contain multi zones
 - A zone will contain zone's user manager mutl apps and multi plugins
 - An App will contain app's user manager
 - A Plugin just handle events and client's requests
+
+See more detail about Sever Architect [here](https://youngmonkeys.org/ezyfox-server/guides/ezyfox-server-architecture)
 
 ## ✏️ Examples
 

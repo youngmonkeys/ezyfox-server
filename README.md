@@ -1,23 +1,19 @@
 
 # ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
 
-- [ezyfox-server ](#ezyfox-server-)
-- [Required](#required)
-- [Features](#features)
-- [Benchmark](#benchmark)
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-- [Documentation](#documentation)
-- [Latest Version](#latest-version)
-- [Code Example](#code-example)
-- [Client SDKs](#client-sdks)
-- [Products](#products)
-- [Demos](#demos)
-- [Tutorials](#tutorials)
-- [Tests](#tests)
-- [Contact Us](#contact-us)
-- [Support Us: Make a Meaningful Donation](#support-us-make-a-meaningful-donation)
-- [License](#license)
+* [Features](#features)
+* [Benchmark](#benchmark)
+* [Introduction](#introduction)
+* [Get started](#get-started)
+* [Documentation](#documentation)
+* [Latest Version](#latest-version)
+* [Code Example](#code-example)
+* [Client SDKs](#client-sdks)
+* [Products](#products)
+* [Demos](#demos)
+* [Tutorials](#tutorials)
+* [Tests](#tests)
+* [Contact us](#contact-us)
 
 # Required
 

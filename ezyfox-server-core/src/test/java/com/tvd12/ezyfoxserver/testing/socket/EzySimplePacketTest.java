@@ -9,6 +9,7 @@ public class EzySimplePacketTest {
     @Test
     public void test() {
         EzySimplePacket packet = new EzySimplePacket();
+        assert packet.getSize() == 0;
         packet.setData("hello");
         packet.setFragment("hello");
         packet.setBinary(false);

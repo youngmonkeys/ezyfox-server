@@ -1,6 +1,10 @@
+EzyFox Server
+=======
+Empowering real-time experiences effortlessly.
+-----------
+<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="255" />
 
-# ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
-
+-----------
 * [Features](#features)
 * [Benchmark](#benchmark)
 * [Introduction](#introduction)

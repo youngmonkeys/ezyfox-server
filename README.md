@@ -1,19 +1,23 @@
 
 # ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
 
-* [Features](#features)
-* [Benchmark](#benchmark)
-* [Introduction](#introduction)
-* [Get started](#get-started)
-* [Documentation](#documentation)
-* [Latest Version](#latest-version)
-* [Code Example](#code-example)
-* [Client SDKs](#client-sdks)
-* [Products](#products)
-* [Demos](#demos)
-* [Tutorials](#tutorials)
-* [Tests](#tests)
-* [Contact us](#contact-us)
+- [ezyfox-server ](#ezyfox-server-)
+- [Required](#required)
+- [Features](#features)
+- [Benchmark](#benchmark)
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [Latest Version](#latest-version)
+- [Code Example](#code-example)
+- [Client SDKs](#client-sdks)
+- [Products](#products)
+- [Demos](#demos)
+- [Tutorials](#tutorials)
+- [Tests](#tests)
+- [Contact Us](#contact-us)
+- [Support Us: Make a Meaningful Donation](#support-us-make-a-meaningful-donation)
+- [License](#license)
 
 # Required
 
@@ -137,12 +141,12 @@ You can find the full example [here](https://youngmonkeys.org/use-embedded-serve
 
 # Demos
 
-1. [Free Chat](https://youngmonkeys.org/asset/freechat/)
-2. [Space Game Cocos2d-x](https://youngmonkeys.org/asset/space-game/)
-3. [Space Shooter Unity](https://youngmonkeys.org/asset/space-shooter/)
-4. [Lucky Wheel Phaser HTML5](https://youngmonkeys.org/asset/lucky-wheel/)
+1. [Free Chat](https://github.com/youngmonkeys/freechat)
+2. [Space Game Cocos2d-x](https://github.com/tvd12?tab=repositories&q=space&type=&language=&sort=)
+3. [Space Shooter Unity](https://github.com/tvd12/space-shooter)
+4. [Lucky Wheel Phaser HTML5](https://github.com/youngmonkeys/lucky-wheel)
 5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
-6. [Easy Smashers Unity](https://github.com/vu-luong/EzySmashers)
+6. [Easy Smashers Unity](https://github.com/vu-luong/ezy-smashers)
 
 # Tutorials
 

@@ -1,16 +1,18 @@
 # EzyFox Server
+
+[![GitHub release](https://img.shields.io/github/release/youngmonkeys/ezyfox-server.svg)][releases]
 [![Java CI with Maven](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml/badge.svg)](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml)
 [![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
 
 <div align="center">
-    <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="255" />
+    <img src="./logo.png" width="255" />
 </div>
 
 <div align="center">
 ⚡ Empowering real-time experiences effortlessly ⚡
 </div>
 
-## Introduction
+## 📖 Introduction
 
 An Open Solution for all your Real-Time needs.
 
@@ -20,7 +22,7 @@ The EzyFox ecosystem supports a wide range of essential components for enterpris
 
 With the EzyFox ecosystem, we can avoid the headache of choosing which technologies to use to manage and scale up an application, allowing us to focus solely on implementing business logic.
 
-## Features
+## ✨ Features
 
 * **Core Container & Dependency Injection**: Includes bean manipulation, auto-binding, auto-implementation, and more.
 * **Multiple Communication Protocols**: Supports TCP, UDP, WebSocket, and HTTP.
@@ -28,18 +30,26 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 * **Multiple Client SDKs**: Includes Android, iOS, Unity, React, C++, Flutter, and more.
 
 
-## Getting Started
+## 🚀 Getting Started
 
 [https://youngmonkeys.org/get-started/](https://youngmonkeys.org/get-started/)
 
-## Documentation
+## 📑 Documentation
 
-[https://youngmonkeys.org/ezyfox-sever/](https://youngmonkeys.org/project/ezyfox-sever/)
+- [Official website document](https://youngmonkeys.org/project/ezyfox-sever/)
+- [Issue](https://github.com/youngmonkeys/ezyfox-server/issues)
 
-## EzyFox Server Architect
-Diagram ....
+## 📐 Architect Overview
+<div align="center">
+    <img src="./images/ezyfox-server-architecture.png" width="512" />
+</div>
 
-## Examples
+- A EzyFox Server will contain multi zones
+- A zone will contain zone's user manager mutl apps and multi plugins
+- An App will contain app's user manager
+- A Plugin just handle events and client's requests
+
+## ✏️ Examples
 
 1. [Free Chat](https://youngmonkeys.org/asset/freechat/)
 2. [Space Game Cocos2d-x](https://youngmonkeys.org/asset/space-game/)
@@ -48,18 +58,18 @@ Diagram ....
 5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
 6. [Easy Smashers Unity](https://github.com/vu-luong/EzySmashers)
 
-## Tutorials
+## 📜 Tutorials
 
 1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G): A simple realtime chat application
 2. [EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
 
-## Benchmark
+## 🔥 Benchmark
 
 Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent users in one hour on a VPS with 512MB of RAM and 1 CPU core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how we conducted the test.
 
-<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
+<img src="./images/ezyfox_1h.png" width="747" height="320" />
 
-## Client SDKs
+## 🔌 Client SDKs
 
 1.  [Android](https://github.com/youngmonkeys/ezyfox-server-android-client)
 2.  [C/C++](https://github.com/youngmonkeys/ezyfox-server-cpp-client)
@@ -72,11 +82,7 @@ Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent user
 9.  [Swift](https://github.com/youngmonkeys/ezyfox-server-swift-client)
 10. [React Native](https://github.com/youngmonkeys/ezyfox-react-native-client)
 
-## Case Studies
-
-1. [Defi Warrior](https://defiwarrior.io/)
-
-## Development
+## 🔨 Development
 ### Environment
 - JDK 1.8
 - Maven
@@ -88,18 +94,22 @@ Navigate to the source folder and run:
 mvn test
 ```
 
-## Contact Us
+## 🎉 Case Studies
+
+1. [Defi Warrior](https://defiwarrior.io/)
+
+## ☎️ Contact Us
 
 - Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)
 - Ask us on [stackask.com](https://stackask.com)
 - Email us at [Dzung](mailto:itprono3@gmail.com)
 
-## Support Us: Make a Meaningful Donation
+## 💖 Support Us: Make a Meaningful Donation
 
 Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
 
 [https://youngmonkeys.org/donate/](https://youngmonkeys.org/donate/)
 
-## License
+## 📃 License
 
 - Apache License, Version 2.0

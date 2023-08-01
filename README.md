@@ -1,9 +1,13 @@
-EzyFox Server
-=======
-Empowering real-time experiences effortlessly.
------------
+# EzyFox Server
+[![Java CI with Maven](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml/badge.svg)](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml)
+[![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
+
 <div align="center">
     <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="255" />
+</div>
+
+<div align="center">
+⚡ Empowering real-time experiences effortlessly ⚡
 </div>
 
 ## Introduction

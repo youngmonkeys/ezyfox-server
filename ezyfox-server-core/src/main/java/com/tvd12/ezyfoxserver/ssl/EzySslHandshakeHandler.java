@@ -77,7 +77,8 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         logger.info(
                             "A problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
-                                "Will try to properly close connection..."
+                                "Will try to properly close connection...",
+                            e
                         );
                         engine.closeOutbound();
                         handshakeStatus = engine.getHandshakeStatus();
@@ -113,7 +114,8 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                         logger.info(
                             "A problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
-                                "Will try to properly close connection..."
+                                "Will try to properly close connection...",
+                            e
                         );
                         break;
                     }

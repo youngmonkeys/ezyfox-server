@@ -24,10 +24,6 @@ public class EzySimpleSslContextFactory
 
     @Override
     public SSLContext newSslContext(EzySslConfig config) throws Exception {
-        return tryNewSslContext(config);
-    }
-
-    protected SSLContext tryNewSslContext(EzySslConfig config) throws Exception {
         InputStream keyStoreStream = loadKeyStoreStream(config.getKeyStoreFile());
         char[] keyStorePassword = getPassword(config.getKeyStorePasswordFile());
         char[] certificatePassword = getPassword(config.getCertificatePasswordFile());

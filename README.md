@@ -101,7 +101,7 @@ mvn test
 ```
 
 ## 🎉 Who uses EzyFox?
-As the EzyFox Community grows, we'd like to keep track of our users. Please send a PR with your organization name if you are using EzyFox.
+As the EzyFox community grows, we'd love to see how our open-source framework can help you and your organization solve real-world problems. Feel free to send a PR with your project name/organization name if you are using EzyFox.
 
 Currently, the following organizations are officially using EzyFox:
 

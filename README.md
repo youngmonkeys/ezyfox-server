@@ -34,7 +34,7 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 
 ## 🚀 Getting Started
 
-[Let's see how we can getting started just in 5 minutes!](https://youngmonkeys.org/get-started/)
+[Let's see how we can get started in just 5 minutes!](https://youngmonkeys.org/get-started/)
 
 ## 📑 Documentation
 

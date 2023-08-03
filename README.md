@@ -53,7 +53,7 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 - An app contains its user manager.
 - A plugin only handles events and clients' requests.
 
-See more detail about Sever Architect [here](https://youngmonkeys.org/ezyfox-server/guides/ezyfox-server-architecture)
+See more detail about the sever architecture [here](https://youngmonkeys.org/ezyfox-server/guides/ezyfox-server-architecture)
 
 ## ✏️ Examples
 

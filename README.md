@@ -48,10 +48,10 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 
 -----------
 
-- A EzyFox Server will contain multi zones
-- A zone will contain zone's user manager mutl apps and multi plugins
-- An App will contain app's user manager
-- A Plugin just handle events and client's requests
+- An EzyFox server contains multiple zones.
+- A zone contains its user manager, multiple apps and multiple plugins.
+- An app contains its user manager.
+- A plugin only handles events and clients' requests.
 
 See more detail about Sever Architect [here](https://youngmonkeys.org/ezyfox-server/guides/ezyfox-server-architecture)
 

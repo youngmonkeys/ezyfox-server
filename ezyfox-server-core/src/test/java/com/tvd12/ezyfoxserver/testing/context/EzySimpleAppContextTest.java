@@ -7,6 +7,7 @@ import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.command.EzyAppResponse;
 import com.tvd12.ezyfoxserver.command.EzyAppSendResponse;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
+import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
 import com.tvd12.ezyfoxserver.context.EzyZoneContext;
@@ -85,5 +86,17 @@ public class EzySimpleAppContextTest extends BaseTest {
 
         // then
         verify(sendResponse, times(1)).execute(data, recipients, encrypted, EzyTransportType.TCP);
+    }
+
+    @Test
+    public void makeSureVisibilityGetExecutorServiceTest() {
+        // given
+        EzyAppContext appContext = new EzySimpleAppContext();
+
+        // when
+        ScheduledExecutorService actual = appContext.getExecutorService();
+
+        // then
+        Asserts.assertNull(actual);
     }
 }

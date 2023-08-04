@@ -5,10 +5,13 @@ import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import java.util.Collection;
+import java.util.concurrent.ScheduledExecutorService;
 
 public interface EzyZoneChildContext extends EzyContext {
 
     EzyZoneContext getParent();
+
+    ScheduledExecutorService getExecutorService();
 
     void send(
         EzyData data,

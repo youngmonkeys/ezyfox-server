@@ -1,38 +1,20 @@
+# EzyFox Server
 
-# ezyfox-server <img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/logo.png" width="64" />
+![GitHub release](https://img.shields.io/github/release/youngmonkeys/ezyfox-server.svg)
+[![Java CI with Maven](https://img.shields.io/github/actions/workflow/status/youngmonkeys/ezyfox-server/maven.yml
+)](https://github.com/youngmonkeys/ezyfox-server/actions/workflows/maven.yml)
+![License](https://img.shields.io/github/license/youngmonkeys/ezyfox-server)
+[![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
 
-* [Features](#features)
-* [Benchmark](#benchmark)
-* [Introduction](#introduction)
-* [Get started](#get-started)
-* [Documentation](#documentation)
-* [Latest Version](#latest-version)
-* [Code Example](#code-example)
-* [Client SDKs](#client-sdks)
-* [Products](#products)
-* [Demos](#demos)
-* [Tutorials](#tutorials)
-* [Tests](#tests)
-* [Contact us](#contact-us)
+<div align="center">
+    <img src="./logo.png" width="255" />
+</div>
 
-# Required
+<div align="center">
+⚡ Empowering real-time experiences effortlessly ⚡
+</div>
 
-* Java version: 1.8
-
-# Features
-
-* **Core Container & Dependency Injection**: Includes bean manipulation, auto-binding, auto-implementation, and more.
-* **Multiple Communication Protocols**: Supports TCP, UDP, WebSocket, and HTTP.
-* **Traffic Encryption**: Allows for traffic between clients and servers to be encrypted using SSL.
-* **Multiple Client SDKs**: Includes Android, iOS, Unity, React, C++, Flutter, and more.
-
-# Benchmark
-
-Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent users in one hour on a VPS with 512MB of RAM and 1 CPU core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how we conducted the test.
-
-<img src="https://github.com/youngmonkeys/ezyfox-server/blob/master/images/ezyfox_1h.png" width="747" height="320" />
-
-# Introduction
+## 📖 Introduction
 
 An Open Solution for all your Real-Time needs.
 
@@ -42,83 +24,58 @@ The EzyFox ecosystem supports a wide range of essential components for enterpris
 
 With the EzyFox ecosystem, we can avoid the headache of choosing which technologies to use to manage and scale up an application, allowing us to focus solely on implementing business logic.
 
-# Getting Started
+## ✨ Features
 
-[https://youngmonkeys.org/get-started/](https://youngmonkeys.org/get-started/)
+* **Core Container & Dependency Injection**: Includes bean manipulation, auto-binding, auto-implementation, and more.
+* **Multiple Communication Protocols**: Supports TCP, UDP, WebSocket, and HTTP.
+* **Traffic Encryption**: Allows for traffic between clients and servers to be encrypted using SSL.
+* **Multiple Client SDKs**: Includes Android, iOS, Unity, React, C++, Flutter, and more.
 
-# Documentation
 
-[https://youngmonkeys.org/ezyfox-sever/](https://youngmonkeys.org/project/ezyfox-sever/)
+## 🚀 Getting Started
 
-# Latest Version
+[Let's see how we can get started in just 5 minutes!](https://youngmonkeys.org/get-started/)
 
-You can [download it here](https://resources.tvd12.com/)
+## 📑 Documentation
 
-# Code Example
+- [Official EzyFox Server documentation](https://youngmonkeys.org/projects/ezyfox-server)
+- [Issues](https://github.com/youngmonkeys/ezyfox-server/issues)
 
-**1. Create an app entry**
+## 📐 Architecture Overview
+<div align="center">
+    <img src="./images/ezyfox-server-architecture.png" width="512" />
+</div>
 
-```java
-public static class HelloAppEntry extends EzySimpleAppEntry {
+-----------
 
-    @Override
-    protected String[] getScanablePackages() {
-        return new String[] {
-                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
-        };
-    }
-}
-```
+- An EzyFox server contains multiple zones.
+- A zone contains its user manager, multiple apps and multiple plugins.
+- An app contains its user manager.
+- A plugin only handles events and clients' requests.
 
-**2. Create a plugin entry**
+See more detail about the sever architecture [here](https://youngmonkeys.org/ezyfox-server/guides/ezyfox-server-architecture)
 
-```java
-public static class HelloPluginEntry extends EzySimplePluginEntry {
+## ✏️ Examples
 
-    @Override
-    protected String[] getScanablePackages() {
-        return new String[] {
-                "com.tvd12.ezyfoxserver.embedded.test" // replace by your package
-        };
-    }
+1. [Free Chat](https://github.com/youngmonkeys/freechat)
+2. [Space Game Cocos2d-x](https://github.com/tvd12/space-game)
+3. [Space Shooter Unity](https://github.com/tvd12/space-shooter)
+4. [Lucky Wheel Phaser HTML5](https://github.com/tvd12/ezyfox-server-example/tree/master/lucky-wheel)
+5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
+6. [Easy Smashers Unity](https://github.com/vu-luong/ezy-smashers)
 
-}
-```
+## 📜 Tutorials
 
-**3. Setup**
+1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G): A simple real-time chat application
+2. [EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
 
-```java
-EzyPluginSettingBuilder pluginSettingBuilder = new EzyPluginSettingBuilder()
-        .name("hello")
-        .addListenEvent(EzyEventType.USER_LOGIN)
-        .entryLoader(HelloPluginEntryLoader.class);
+## 🔥 Benchmark
 
-EzyAppSettingBuilder appSettingBuilder = new EzyAppSettingBuilder()
-        .name("hello")
-        .entryLoader(HelloAppEntryLoader.class);
+Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent users in one hour on a VPS with 512MB of RAM and 1 CPU core. You can [watch this video](https://youtu.be/TiSLOWIid5o) to see how we conducted the test.
 
-EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
-        .name("hello")
-        .application(appSettingBuilder.build())
-        .plugin(pluginSettingBuilder.build());
+<img src="./images/ezyfox_1h.png" width="747" height="320" />
 
-EzySimpleSettings settings = new EzySettingsBuilder()
-        .zone(zoneSettingBuilder.build())
-        .build();
-```
-
-**4. Create and start a server**
-
-```java
-EzyEmbeddedServer server = EzyEmbeddedServer.builder()
-        .settings(settings)
-        .build();
-server.start();
-```
-
-You can find the full example [here](https://youngmonkeys.org/use-embedded-server/)
-
-# Client SDKs
+## 🔌 Client SDKs
 
 1.  [Android](https://github.com/youngmonkeys/ezyfox-server-android-client)
 2.  [C/C++](https://github.com/youngmonkeys/ezyfox-server-cpp-client)
@@ -131,43 +88,34 @@ You can find the full example [here](https://youngmonkeys.org/use-embedded-serve
 9.  [Swift](https://github.com/youngmonkeys/ezyfox-server-swift-client)
 10. [React Native](https://github.com/youngmonkeys/ezyfox-react-native-client)
 
-# Products
+## 🔨 Development
+### Environment
+- JDK 1.8
+- Maven
 
-1. [Defi Warrior](https://defiwarrior.io/)
-
-# Demos
-
-1. [Free Chat](https://github.com/youngmonkeys/freechat)
-2. [Space Game Cocos2d-x](https://github.com/tvd12/space-game)
-3. [Space Shooter Unity](https://github.com/tvd12/space-shooter)
-4. [Lucky Wheel Phaser HTML5](https://github.com/tvd12/ezyfox-server-example/tree/master/lucky-wheel)
-5. [One Two Three Simple Game Server](https://github.com/tvd12/ezyfox-server-example/tree/master/one-two-three)
-6. [Easy Smashers Unity](https://github.com/vu-luong/ezy-smashers)
-
-# Tutorials
-
-1. [EzyChat](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G): A simple realtime chat application
-2. [EzyRoulette](https://youtube.com/playlist?list=PLlZavoxtKE1LD6qI87wp3YjLGzL8rMbSG): A simple lucky wheel game
-
-# Tests
+### Tests
 
 Navigate to the source folder and run:
 ```
 mvn test
 ```
 
-# Contact Us
+## 🎉 Who uses EzyFox?
+As the EzyFox community grows, we'd love to see how our open-source framework can help you and your organization solve real-world problems. Feel free to send a PR with your project name/organization name if you are using EzyFox.
+
+Currently, the following organizations are officially using EzyFox:
+
+1. [Defi Warrior](https://defiwarrior.io/)
+2. ...
+3. Your awesome project ✨
+
+## 💖 Support Us
+[Make a Meaningful Donation 😎](https://youngmonkeys.org/donate/)
+
+Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
+
+## ☎️ Contact Us
 
 - Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)
 - Ask us on [stackask.com](https://stackask.com)
 - Email us at [Dzung](mailto:itprono3@gmail.com)
-
-# Support Us: Make a Meaningful Donation
-
-Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
-
-[https://youngmonkeys.org/donate/](https://youngmonkeys.org/donate/)
-
-# License
-
-- Apache License, Version 2.0

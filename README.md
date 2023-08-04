@@ -38,7 +38,7 @@ With the EzyFox ecosystem, we can avoid the headache of choosing which technolog
 
 ## 📑 Documentation
 
-- [Official website document](https://youngmonkeys.org/projects/ezyfox-server)
+- [Official EzyFox Server documentation](https://youngmonkeys.org/projects/ezyfox-server)
 - [Issue](https://github.com/youngmonkeys/ezyfox-server/issues)
 
 ## 📐 Architecture Overview

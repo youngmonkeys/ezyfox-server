@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
-import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
@@ -8,10 +7,8 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManagerAware;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzySocketAbstractEventHandler;
-import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 import lombok.Setter;
 
-import javax.net.ssl.SSLEngine;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -20,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -37,22 +32,10 @@ public class EzyNioSocketAcceptor
     protected Selector readSelector;
     @Setter
     protected EzyHandlerGroupManager handlerGroupManager;
-    @Setter
-    protected EzySslHandshakeHandler sslHandshakeHandler;
-    protected final List<SocketChannel> acceptableConnections;
-    protected final List<SocketChannel> acceptableConnectionsBuffer;
-    protected final ExecutorService connectionAcceptorExecutorService;
-
-    public EzyNioSocketAcceptor(
-        int connectionAcceptorThreadPoolSize
-    ) {
-        acceptableConnections = new ArrayList<>();
-        acceptableConnectionsBuffer = new ArrayList<>();
-        connectionAcceptorExecutorService = EzyExecutors.newFixedThreadPool(
-            connectionAcceptorThreadPoolSize,
-            "connection-acceptor"
-        );
-    }
+    protected final List<SocketChannel> acceptableConnections =
+        new ArrayList<>();
+    protected final List<SocketChannel> acceptableConnectionsBuffer =
+        new ArrayList<>();
 
     @Override
     public void handleEvent() {
@@ -90,25 +73,15 @@ public class EzyNioSocketAcceptor
         }
     }
 
-    public void handleAcceptableConnections() throws Exception {
+    public void handleAcceptableConnections() {
         synchronized (acceptableConnections) {
             acceptableConnectionsBuffer.addAll(acceptableConnections);
             acceptableConnections.clear();
         }
-        CountDownLatch countDownLatch = new CountDownLatch(
-            acceptableConnectionsBuffer.size()
-        );
         try {
             for (SocketChannel clientChannel : acceptableConnectionsBuffer) {
-                connectionAcceptorExecutorService.execute(() -> {
-                    try {
-                        acceptConnection(clientChannel);
-                    } finally {
-                        countDownLatch.countDown();
-                    }
-                });
+                acceptConnection(clientChannel);
             }
-            countDownLatch.await();
         } finally {
             acceptableConnectionsBuffer.clear();
         }
@@ -122,33 +95,29 @@ public class EzyNioSocketAcceptor
         }
     }
 
-    private void doAcceptConnection(SocketChannel clientChannel) throws Exception {
+    private void doAcceptConnection(
+        SocketChannel clientChannel
+    ) throws Exception {
         clientChannel.configureBlocking(false);
         clientChannel.socket().setTcpNoDelay(tcpNoDelay);
-        SSLEngine sslEngine = null;
-        try {
-            if (sslHandshakeHandler != null) {
-                sslEngine = sslHandshakeHandler.handle(clientChannel);
-            }
-        } catch (Exception e) {
-            clientChannel.close();
-            throw e;
-        }
-        EzyChannel channel = sslEngine == null
-            ? new EzyNioSocketChannel(clientChannel)
-            : new EzyNioSecureSocketChannel(clientChannel, sslEngine);
-
+        SelectionKey selectionKey = clientChannel
+            .register(readSelector, SelectionKey.OP_READ);
+        EzyChannel channel = newChannel(clientChannel);
         EzyNioHandlerGroup handlerGroup = handlerGroupManager
             .newHandlerGroup(channel, EzyConnectionType.SOCKET);
         EzyNioSession session = handlerGroup.getSession();
-
-        SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
         session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
+    }
+
+    protected EzyChannel newChannel(SocketChannel clientChannel) {
+        return new EzyNioSocketChannel(clientChannel);
     }
 
     @Override
     public void destroy() {
+        synchronized (acceptableConnections) {
+            acceptableConnections.clear();
+        }
         processWithLogException(ownSelector::close);
-        processWithLogException(connectionAcceptorExecutorService::shutdown);
     }
 }

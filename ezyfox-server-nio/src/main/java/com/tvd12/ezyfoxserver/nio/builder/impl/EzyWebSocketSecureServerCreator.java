@@ -8,7 +8,7 @@ import javax.net.ssl.SSLContext;
 
 public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
 
-    protected SSLContext sslContext;
+    protected final SSLContext sslContext;
 
     public EzyWebSocketSecureServerCreator(SSLContext sslContext) {
         this.sslContext = sslContext;

@@ -35,8 +35,7 @@ public class EzyNioSecureSocketChannelTest {
         sslSession = mock(SSLSession.class);
         socketChannel = mock(SocketChannel.class);
         instance = new EzyNioSecureSocketChannel(
-            socketChannel,
-            sslEngine
+            socketChannel
         );
         when(sslEngine.getSession()).thenReturn(sslSession);
         when(sslSession.getPacketBufferSize()).thenReturn(bufferSize);

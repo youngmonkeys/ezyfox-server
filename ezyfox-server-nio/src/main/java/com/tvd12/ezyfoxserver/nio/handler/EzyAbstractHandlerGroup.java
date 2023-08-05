@@ -173,11 +173,6 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
         try {
             if (session.isActivated() && channel.isConnected()) {
                 EzyConstant transportType = packet.getTransportType();
-                if (transportType == EzyTransportType.UDP_OR_TCP) {
-                    transportType = session.getDatagramChannelPool() != null
-                        ? EzyTransportType.UDP
-                        : EzyTransportType.TCP;
-                }
                 int writeBytes = transportType == EzyTransportType.TCP
                     ? writePacketToSocket(packet, writeBuffer)
                     : writeUdpPacketToSocket(packet, writeBuffer);

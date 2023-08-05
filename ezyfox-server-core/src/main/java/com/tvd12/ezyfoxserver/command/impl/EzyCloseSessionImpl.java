@@ -22,18 +22,19 @@ public class EzyCloseSessionImpl
 
     @Override
     public void close(EzySession session, EzyConstant reason) {
-        sendToClients(session, reason);
+        sendToClient(session, reason);
         disconnectSession(session, reason);
     }
 
-    protected void sendToClients(EzySession session, EzyConstant reason) {
+    protected void sendToClient(EzySession session, EzyConstant reason) {
         if (shouldSendToClient(reason)) {
-            doSendToClients(session, reason);
+            doSendToClient(session, reason);
         }
     }
 
     protected boolean shouldSendToClient(EzyConstant reason) {
-        return reason != EzyDisconnectReason.UNKNOWN;
+        return reason != EzyDisconnectReason.UNKNOWN
+            && reason != EzyDisconnectReason.SSH_HANDSHAKE_FAILED;
     }
 
     protected void disconnectSession(EzySession session, EzyConstant reason) {
@@ -41,7 +42,7 @@ public class EzyCloseSessionImpl
         session.close();
     }
 
-    protected void doSendToClients(EzySession session, EzyConstant reason) {
+    protected void doSendToClient(EzySession session, EzyConstant reason) {
         EzyResponse response = newResponse(reason);
         context.sendNow(response, session);
     }

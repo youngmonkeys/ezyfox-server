@@ -73,7 +73,7 @@ public class EzySocketDataReceiver
         }
     }
 
-    private void tcpReadBytes(
+    protected void tcpReadBytes(
         SocketChannel channel,
         ByteBuffer buffer
     ) throws Throwable {

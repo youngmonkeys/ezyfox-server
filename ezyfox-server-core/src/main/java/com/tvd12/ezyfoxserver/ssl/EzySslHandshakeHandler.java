@@ -61,7 +61,8 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             logger.info(
                                 "This engine was forced to close inbound, " +
                                     "without having received the proper SSL/TLS close " +
-                                    "notification message from the peer, due to end of stream."
+                                    "notification message from the peer, due to end of stream.",
+                                e
                             );
                         }
                         engine.closeOutbound();
@@ -132,7 +133,8 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                             } catch (Exception e) {
                                 logger.info(
                                     "Failed to send server's close message " +
-                                        "due to socket channel's failure."
+                                        "due to socket channel's failure.",
+                                    e
                                 );
                                 handshakeStatus = engine.getHandshakeStatus();
                             }
@@ -150,6 +152,9 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                     handshakeStatus = engine.getHandshakeStatus();
                     break;
             }
+        }
+        if (handshakeStatus == NOT_HANDSHAKING) {
+            throw new SSLException("not handshaking");
         }
         return engine;
     }

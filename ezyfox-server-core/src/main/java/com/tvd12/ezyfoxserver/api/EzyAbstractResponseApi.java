@@ -3,8 +3,10 @@ package com.tvd12.ezyfoxserver.api;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
+import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 import java.util.Collection;
@@ -35,11 +37,16 @@ public abstract class EzyAbstractResponseApi
             return;
         }
         Object bytes = encodeData(pack.getData());
+        EzyConstant transportType = pack.getTransportType();
         if (immediate) {
             for (EzySession session : recipients) {
                 try {
-                    Object packedBytes = packMessage(session, bytes);
-                    session.sendNow(createPacket(packedBytes, pack));
+                    EzyPacket packet = createPacket(
+                        session,
+                        transportType,
+                        bytes
+                    );
+                    session.sendNow(packet);
                 } catch (Throwable e) {
                     logger.info("response data now to session: {} failed", session, e);
                 }
@@ -47,8 +54,12 @@ public abstract class EzyAbstractResponseApi
         } else {
             for (EzySession session : recipients) {
                 try {
-                    Object packedBytes = packMessage(session, bytes);
-                    session.send(createPacket(packedBytes, pack));
+                    EzyPacket packet = createPacket(
+                        session,
+                        transportType,
+                        bytes
+                    );
+                    session.send(packet);
                 } catch (Throwable e) {
                     logger.info("response data to session: {} failed", session, e);
                 }
@@ -66,12 +77,17 @@ public abstract class EzyAbstractResponseApi
             return;
         }
         byte[] messageContent = dataToMessageContent(pack.getData());
+        EzyConstant transportType = pack.getTransportType();
         if (immediate) {
             for (EzySession session : recipients) {
                 try {
                     byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    Object packedBytes = packMessage(session, bytes);
-                    session.sendNow(createPacket(packedBytes, pack));
+                    EzyPacket packet = createPacket(
+                        session,
+                        transportType,
+                        bytes
+                    );
+                    session.sendNow(packet);
                 } catch (Throwable e) {
                     logger.info("response data now to session: {} failed", session, e);
                 }
@@ -80,8 +96,12 @@ public abstract class EzyAbstractResponseApi
             for (EzySession session : recipients) {
                 try {
                     byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    Object packedBytes = packMessage(session, bytes);
-                    session.send(createPacket(packedBytes, pack));
+                    EzyPacket packet = createPacket(
+                        session,
+                        transportType,
+                        bytes
+                    );
+                    session.send(packet);
                 } catch (Throwable e) {
                     logger.info("response data to session: {} failed", session, e);
                 }
@@ -89,9 +109,29 @@ public abstract class EzyAbstractResponseApi
         }
     }
 
-    protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
+    private EzyPacket createPacket(
+        EzySession session,
+        EzyConstant transportType,
+        Object bytes
+    ) throws Exception {
+        EzyConstant actualTransportType = transportType;
+        if (actualTransportType == EzyTransportType.UDP_OR_TCP) {
+            actualTransportType = session.getDatagramChannelPool() != null
+                ? EzyTransportType.UDP
+                : EzyTransportType.TCP;
+        }
+        Object packedBytes = actualTransportType == EzyTransportType.UDP
+            ? bytes
+            : packMessage(session, bytes);
+        return createPacket(actualTransportType, packedBytes);
+    }
+
+    protected EzySimplePacket createPacket(
+        EzyConstant transportType,
+        Object bytes
+    ) {
         EzySimplePacket packet = new EzySimplePacket();
-        packet.setTransportType(pack.getTransportType());
+        packet.setTransportType(transportType);
         packet.setData(bytes);
         return packet;
     }

@@ -7,9 +7,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
-import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 
-import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -26,12 +24,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private ServerSocketChannel serverSocketChannel;
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
-    private final SSLContext sslContext;
     private final EzySocketSetting socketSetting;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
-        this.sslContext = builder.sslContext;
         this.socketSetting = serverSettings.getSocket();
     }
 
@@ -89,23 +85,9 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzyNioSocketAcceptor newSocketAcceptor() {
-        EzyNioSocketAcceptor acceptor;
-        if (socketSetting.isCertificationSslActive()) {
-            acceptor = new EzyNioSocketAcceptor(
-                socketSetting.getSslConnectionAcceptorThreadPoolSize()
-            );
-            acceptor.setSslHandshakeHandler(
-                new EzySslHandshakeHandler(
-                    sslContext,
-                    socketSetting.getSslHandshakeTimeout()
-                )
-            );
-        } else {
-            acceptor = new EzyNioSocketAcceptor(
-                socketSetting.getConnectionAcceptorThreadPoolSize()
-            );
-        }
-        return acceptor;
+        return socketSetting.isCertificationSslActive()
+            ? new EzyNioSecureSocketAcceptor()
+            : new EzyNioSocketAcceptor();
     }
 
     private EzySocketEventLoopHandler newWritingLoopHandler() {
@@ -161,15 +143,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
     }
 
-    public static class Builder
-        extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
-
-        private SSLContext sslContext;
-
-        public Builder sslContext(SSLContext sslContext) {
-            this.sslContext = sslContext;
-            return this;
-        }
+    public static class Builder extends EzyAbstractSocketServerBootstrap.Builder<
+        Builder,
+        EzySocketServerBootstrap
+        > {
 
         @Override
         public EzySocketServerBootstrap build() {

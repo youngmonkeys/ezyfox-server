@@ -16,7 +16,8 @@ public enum EzyDisconnectReason implements EzyConstant {
     ADMIN_KICK(5),
     MAX_REQUEST_PER_SECOND(6),
     MAX_REQUEST_SIZE(7),
-    SERVER_ERROR(8);
+    SERVER_ERROR(8),
+    SSH_HANDSHAKE_FAILED(9);
 
     private static final Map<Integer, EzyDisconnectReason> REASONS_BY_ID = reasonsById();
 

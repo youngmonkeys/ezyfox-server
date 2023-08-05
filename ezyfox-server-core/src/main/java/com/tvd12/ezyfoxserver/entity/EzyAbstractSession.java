@@ -86,9 +86,9 @@ public abstract class EzyAbstractSession
     @Setter(AccessLevel.NONE)
     protected volatile boolean disconnectionRegistered;
     @Setter(AccessLevel.NONE)
-    protected Object disconnectionLock = new Object();
+    protected final Object disconnectionLock = new Object();
     @Setter(AccessLevel.NONE)
-    protected Map<String, Lock> locks = new ConcurrentHashMap<>();
+    protected final Map<String, Lock> locks = new ConcurrentHashMap<>();
 
     public void setOwner(EzyUser owner) {
         this.ownerName = owner.getName();
@@ -180,7 +180,6 @@ public abstract class EzyAbstractSession
         }
     }
 
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void disconnect(EzyConstant disconnectReason) {
         synchronized (disconnectionLock) {
@@ -236,12 +235,8 @@ public abstract class EzyAbstractSession
         this.readBytes = 0L;
         this.writtenBytes = 0L;
         this.connectionType = null;
-        this.disconnectionLock = null;
-        if (locks != null) {
-            this.locks.clear();
-        }
+        this.locks.clear();
         this.properties.clear();
-        this.locks = null;
         this.droppedPackets = null;
         this.immediateDeliver = null;
         if (packetQueue != null) {

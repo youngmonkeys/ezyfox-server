@@ -45,7 +45,7 @@ public class EzySimpleSocketSetting
         super();
         setPort(3005);
         setSslType(SslType.CUSTOMIZATION);
-        setSslHandshakeTimeout(300);
+        setSslHandshakeTimeout(350);
         setMaxRequestSize(4096);
         setConnectionAcceptorThreadPoolSize(1);
         setSslConnectionAcceptorThreadPoolSize(8);

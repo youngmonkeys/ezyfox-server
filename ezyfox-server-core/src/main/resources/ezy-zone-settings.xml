@@ -10,7 +10,7 @@
     <user-management>
         <allow-guest-login>true</allow-guest-login>
         <guest-name-prefix>Guest#</guest-name-prefix>
-        <user-max-idle-time>15000</user-max-idle-time>
+        <user-max-idle-time>15</user-max-idle-time>
         <allow-change-session>true</allow-change-session>
         <max-session-per-user>15</max-session-per-user>
         <user-name-pattern>^[a-zA-Z0-9_.#]{3,64}$</user-name-pattern>
@@ -32,7 +32,7 @@
             <name>ezyfox-chat</name>
             <entry-loader>com.tvd12.ezyfoxserver.chat.EzyChatEntryLoader</entry-loader>
             <max-users>10000</max-users>
-            <thread-pool-size>30</thread-pool-size>
+            <thread-pool-size>1</thread-pool-size>
             <config-file>config.properties</config-file>
         </application>
     </applications>
@@ -42,7 +42,7 @@
             <name>ezyfox-auth-plugin</name>
             <priority>-1</priority>
             <entry-loader>com.tvd12.ezyfoxserver.plugin.auth.EzyAuthPluginEntryLoader</entry-loader>
-            <thread-pool-size>30</thread-pool-size>
+            <thread-pool-size>1</thread-pool-size>
             <config-file>config.properties</config-file>
             <listen-events>
                 <event>USER_LOGIN</event>
@@ -53,4 +53,4 @@
     </plugins>
 </settings>
 
-        <!-- http://localhost:8080/schema/ezyfox/settings/ -->
+<!-- http://localhost:8080/schema/ezyfox/settings/ -->

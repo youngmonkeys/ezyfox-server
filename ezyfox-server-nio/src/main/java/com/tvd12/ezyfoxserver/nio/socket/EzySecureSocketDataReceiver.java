@@ -1,12 +1,16 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
+import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
+import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLSession;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 import static com.tvd12.ezyfoxserver.ssl.EzySslEngines.safeCloseOutbound;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
@@ -15,10 +19,39 @@ import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
 
     protected final ByteBuffer[] tcpNetBuffers;
+    protected final EzySslHandshakeHandler sslHandshakeHandler;
 
     public EzySecureSocketDataReceiver(Builder builder) {
         super(builder);
+        this.sslHandshakeHandler = builder.sslHandshakeHandler;
         this.tcpNetBuffers = newTcpByteBuffers(threadPoolSize);
+    }
+
+    @Override
+    protected void tcpReadBytes(
+        SocketChannel channel,
+        ByteBuffer buffer
+    ) throws Throwable {
+        EzyNioHandlerGroup handlerGroup =
+            handlerGroupManager.getHandlerGroup(channel);
+        if (handlerGroup != null) {
+            EzyNioSecureSocketChannel secureChannel =
+                (EzyNioSecureSocketChannel) handlerGroup.getChannel();
+            if (secureChannel.getEngine() == null) {
+                try {
+                    secureChannel.setEngine(
+                        sslHandshakeHandler.handle(channel)
+                    );
+                } catch (Exception e) {
+                    logger.info("handshake failed on channel: {}", channel, e);
+                    handlerGroup.enqueueDisconnection(
+                        EzyDisconnectReason.SSH_HANDSHAKE_FAILED
+                    );
+                    return;
+                }
+            }
+        }
+        super.tcpReadBytes(channel, buffer);
     }
 
     @Override
@@ -65,6 +98,13 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
     }
 
     public static class Builder extends EzySocketDataReceiver.Builder {
+
+        protected EzySslHandshakeHandler sslHandshakeHandler;
+
+        public Builder sslHandshakeHandler(EzySslHandshakeHandler sslHandshakeHandler) {
+            this.sslHandshakeHandler = sslHandshakeHandler;
+            return this;
+        }
 
         @Override
         public EzySocketDataReceiver build() {

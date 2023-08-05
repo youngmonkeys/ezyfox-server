@@ -16,15 +16,6 @@ public class EzySocketWriter
 
     @Override
     public void handleEvent() {
-        doProcessSessionTicketsQueue();
-    }
-
-    @Override
-    public void destroy() {
-        processWithLogException(() -> sessionTicketsQueue.clear());
-    }
-
-    private void doProcessSessionTicketsQueue() {
         try {
             EzySession session = sessionTicketsQueue.take();
             processSessionQueue(session);
@@ -35,8 +26,16 @@ public class EzySocketWriter
         }
     }
 
-    private void processSessionQueue(EzySession session) throws Exception {
-        EzySocketWriterGroup group = getWriterGroup(session);
+    @Override
+    public void destroy() {
+        processWithLogException(() -> sessionTicketsQueue.clear());
+    }
+
+    private void processSessionQueue(
+        EzySession session
+    ) throws Exception {
+        EzySocketWriterGroup group = writerGroupFetcher
+            .getWriterGroup(session);
         if (group == null) {
             return;
         }
@@ -50,7 +49,10 @@ public class EzySocketWriter
         }
     }
 
-    private boolean processSessionQueue(EzySocketWriterGroup group, EzyPacketQueue queue)
+    private boolean processSessionQueue(
+        EzySocketWriterGroup group,
+        EzyPacketQueue queue
+    )
         throws Exception {
         if (!queue.isEmpty()) {
             EzyPacket packet = queue.peek();
@@ -66,9 +68,5 @@ public class EzySocketWriter
 
     protected Object getWriteBuffer() {
         return null;
-    }
-
-    protected EzySocketWriterGroup getWriterGroup(EzySession session) {
-        return writerGroupFetcher.getWriterGroup(session);
     }
 }

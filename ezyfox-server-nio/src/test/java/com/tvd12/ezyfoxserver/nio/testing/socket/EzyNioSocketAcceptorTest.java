@@ -240,7 +240,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         SSLEngine sslEngine = mock(SSLEngine.class);
         when(sslHandshakeHandler.handle(clientChannel))
             .thenReturn(sslEngine);
-        sut.setSslHandshakeHandler(sslHandshakeHandler);
 
         // when
         MethodInvoker.create()

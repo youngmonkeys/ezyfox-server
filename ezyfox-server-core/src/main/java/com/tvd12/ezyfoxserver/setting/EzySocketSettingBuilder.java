@@ -18,7 +18,7 @@ public class EzySocketSettingBuilder extends
     public EzySocketSettingBuilder() {
         this.port = 3005;
         this.sslType = SslType.CUSTOMIZATION;
-        this.sslHandshakeTimeout = 300;
+        this.sslHandshakeTimeout = 350;
         this.maxRequestSize = 32768;
         this.connectionAcceptorThreadPoolSize = 1;
         this.sslConnectionAcceptorThreadPoolSize = 8;

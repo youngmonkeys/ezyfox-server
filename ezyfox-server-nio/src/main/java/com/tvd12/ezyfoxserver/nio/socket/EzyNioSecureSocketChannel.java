@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.nio.socket;
 
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
@@ -15,15 +16,14 @@ import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 
 public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
 
+    @Setter
     @Getter
-    private final SSLEngine engine;
+    private SSLEngine engine;
 
     public EzyNioSecureSocketChannel(
-        SocketChannel channel,
-        SSLEngine engine
+        SocketChannel channel
     ) {
         super(channel);
-        this.engine = engine;
     }
 
     @Override

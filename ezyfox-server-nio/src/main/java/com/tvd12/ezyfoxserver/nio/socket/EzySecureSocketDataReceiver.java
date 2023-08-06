@@ -12,19 +12,18 @@ import javax.net.ssl.SSLSession;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import static com.tvd12.ezyfoxserver.constant.EzyCoreConstants.MAX_SECURE_READ_BUFFER_SIZE;
 import static com.tvd12.ezyfoxserver.ssl.EzySslEngines.safeCloseOutbound;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 
 public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
 
-    protected final ByteBuffer[] tcpNetBuffers;
     protected final EzySslHandshakeHandler sslHandshakeHandler;
 
     public EzySecureSocketDataReceiver(Builder builder) {
         super(builder);
         this.sslHandshakeHandler = builder.sslHandshakeHandler;
-        this.tcpNetBuffers = newTcpByteBuffers(threadPoolSize);
     }
 
     @Override
@@ -65,18 +64,21 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         SSLSession session = engine.getSession();
         int appBufferSize = session.getApplicationBufferSize();
         int packageBufferSize = session.getPacketBufferSize();
-        ByteBuffer appBuffer = buffer;
-        int index = Math.abs(channel.hashCode() % threadPoolSize);
-        ByteBuffer tcpNetBuffer = tcpNetBuffers[index];
-        while (appBuffer.hasRemaining()) {
-            tcpNetBuffer.clear();
-            SSLEngineResult result = engine.unwrap(appBuffer, tcpNetBuffer);
+        ByteBuffer netBuffer = secureChannel.getReadAppBuffer();
+        if (netBuffer.position() > 0) {
+            netBuffer.compact();
+        }
+        netBuffer.put(buffer);
+        netBuffer.flip();
+        ByteBuffer tcpAppBuffer = ByteBuffer.allocate(appBufferSize);
+        while (netBuffer.hasRemaining()) {
+            SSLEngineResult result = engine.unwrap(netBuffer, tcpAppBuffer);
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
-                    appBuffer = enlargeBuffer(appBuffer, appBufferSize);
+                    netBuffer = enlargeBuffer(netBuffer, appBufferSize);
                     break;
                 case BUFFER_UNDERFLOW:
-                    tcpNetBuffer = enlargeBufferIfNeed(tcpNetBuffer, packageBufferSize);
+                    tcpAppBuffer = enlargeBufferIfNeed(tcpAppBuffer, packageBufferSize);
                     break;
                 case CLOSED:
                     safeCloseOutbound(engine);
@@ -84,13 +86,18 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                         "ssl unwrap result status is CLOSE"
                     );
                 default: // 0K
-                    tcpNetBuffer.flip();
-                    byte[] binary = new byte[tcpNetBuffer.limit()];
-                    tcpNetBuffer.get(binary);
+                    tcpAppBuffer.flip();
+                    byte[] binary = new byte[tcpAppBuffer.limit()];
+                    tcpAppBuffer.get(binary);
                     return binary;
             }
         }
         return new byte[0];
+    }
+
+    @Override
+    protected int getMaxBufferSize() {
+        return MAX_SECURE_READ_BUFFER_SIZE;
     }
 
     public static Builder builder() {

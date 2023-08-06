@@ -183,11 +183,10 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
             networkStats.addWriteErrorPackets(1);
             networkStats.addWriteErrorBytes(packetSize);
             logger.info(
-                "can't send {} bytes to session: {}, error: {}({})",
+                "can't send {} bytes to session: {}",
                 packetSize,
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }

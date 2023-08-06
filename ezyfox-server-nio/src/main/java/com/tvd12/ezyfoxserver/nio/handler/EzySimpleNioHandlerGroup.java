@@ -31,15 +31,6 @@ public class EzySimpleNioHandlerGroup
 
     @Override
     public void fireBytesReceived(byte[] bytes) {
-        handleReceivedBytes(bytes);
-    }
-
-    @Override
-    public void fireMessageReceived(EzyMessage message) {
-        handleReceivedMessage(message);
-    }
-
-    private void handleReceivedBytes(byte[] bytes) {
         try {
             decoder.decode(bytes, decodeBytesCallback);
         } catch (Throwable throwable) {
@@ -47,11 +38,12 @@ public class EzySimpleNioHandlerGroup
         }
     }
 
-    private void executeHandleReceivedMessage(EzyMessage message) {
-        handleReceivedMessage(message);
+    @Override
+    public void fireMessageReceived(EzyMessage message) {
+        executeHandleReceivedMessage(message);
     }
 
-    private void handleReceivedMessage(EzyMessage message) {
+    private void executeHandleReceivedMessage(EzyMessage message) {
         try {
             EzyMessageHeader header = message.getHeader();
             if (header.isRawBytes()) {
@@ -63,7 +55,7 @@ public class EzySimpleNioHandlerGroup
                 EzySocketStream stream = new EzySimpleSocketStream(session, rawBytes);
                 streamQueue.add(stream);
             } else {
-                Object data = decodeMessage(message);
+                Object data = decoder.decode(message, session.getSessionKey());
                 int dataSize = message.getByteCount();
                 handleReceivedData(data, dataSize);
             }
@@ -72,10 +64,6 @@ public class EzySimpleNioHandlerGroup
         } finally {
             executeAddReadBytes(message.getByteCount());
         }
-    }
-
-    private Object decodeMessage(EzyMessage message) throws Exception {
-        return decoder.decode(message, session.getSessionKey());
     }
 
     @Override

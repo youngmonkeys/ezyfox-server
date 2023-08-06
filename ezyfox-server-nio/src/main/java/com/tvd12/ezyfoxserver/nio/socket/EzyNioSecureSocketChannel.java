@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.nio.socket;
 
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
@@ -16,9 +15,11 @@ import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
 
 public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
 
-    @Setter
     @Getter
     private SSLEngine engine;
+    private SSLSession session;
+    @Getter
+    private ByteBuffer readAppBuffer;
 
     public EzyNioSecureSocketChannel(
         SocketChannel channel
@@ -26,10 +27,15 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
         super(channel);
     }
 
+    public void setEngine(SSLEngine engine) {
+        this.engine = engine;
+        this.session = engine.getSession();
+        this.readAppBuffer = ByteBuffer.allocate(session.getApplicationBufferSize());
+    }
+
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        SSLSession session = engine.getSession();
         int netBufferLength = session.getPacketBufferSize();
         ByteBuffer netBuffer = ByteBuffer.allocate(netBufferLength);
         while (buffer.hasRemaining()) {
@@ -56,5 +62,13 @@ public class EzyNioSecureSocketChannel extends EzyNioSocketChannel {
             }
         }
         return bytes;
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        this.engine = null;
+        this.readAppBuffer = null;
+
     }
 }

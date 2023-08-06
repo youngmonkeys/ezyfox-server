@@ -35,6 +35,10 @@ public class EzySocketDataReceiver
         this.executorServices = newExecutorServices(threadPoolSize);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     protected ByteBuffer[] newTcpByteBuffers(int size) {
         ByteBuffer[] answer = new ByteBuffer[size];
         for (int i = 0; i < size; ++i) {
@@ -214,12 +218,8 @@ public class EzySocketDataReceiver
         return executorServices[index];
     }
 
-    private int getMaxBufferSize() {
+    protected int getMaxBufferSize() {
         return EzyCoreConstants.MAX_READ_BUFFER_SIZE;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzySocketDataReceiver> {

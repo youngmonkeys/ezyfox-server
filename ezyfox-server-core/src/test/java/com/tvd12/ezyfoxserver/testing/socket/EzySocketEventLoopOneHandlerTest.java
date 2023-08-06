@@ -19,6 +19,11 @@ public class EzySocketEventLoopOneHandlerTest {
             @Override
             public void handleEvent() {
                 System.out.println("test socket event handler handle event");
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         handler.start();

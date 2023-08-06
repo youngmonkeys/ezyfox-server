@@ -18,6 +18,11 @@ public class EzySimplePacket implements EzyPacket {
     private EzyConstant transportType = EzyTransportType.TCP;
 
     @Override
+    public void replaceData(Object data) {
+        this.data = data;
+    }
+
+    @Override
     public void setFragment(Object fragment) {
         this.data = fragment;
         this.fragmented = true;

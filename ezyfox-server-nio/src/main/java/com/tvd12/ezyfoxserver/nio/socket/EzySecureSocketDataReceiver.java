@@ -72,7 +72,27 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         netBuffer.flip();
         ByteBuffer tcpAppBuffer = ByteBuffer.allocate(appBufferSize);
         while (netBuffer.hasRemaining()) {
-            SSLEngineResult result = engine.unwrap(netBuffer, tcpAppBuffer);
+            SSLEngineResult result;
+            try {
+                /*
+                logger.info(
+                    "before read on channel: {}, netbuffer: {}, appBuffer: {}",
+                    channel,
+                    netBuffer,
+                    tcpAppBuffer
+                );*/
+                result = engine.unwrap(netBuffer, tcpAppBuffer);
+            } catch (Exception e) {
+                /*
+                logger.info(
+                    "after read on channel: {} error, netbuffer: {}, appBuffer: {}",
+                    channel,
+                    netBuffer,
+                    tcpAppBuffer,
+                    e
+                );*/
+                throw e;
+            }
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
                     netBuffer = enlargeBuffer(netBuffer, appBufferSize);

@@ -2,10 +2,7 @@ package com.tvd12.ezyfoxserver.nio.builder.impl;
 
 import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfoxserver.EzyServerBootstrap;
-import com.tvd12.ezyfoxserver.api.EzyProxyResponseApi;
-import com.tvd12.ezyfoxserver.api.EzyProxyStreamingApi;
-import com.tvd12.ezyfoxserver.api.EzyResponseApi;
-import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
+import com.tvd12.ezyfoxserver.api.*;
 import com.tvd12.ezyfoxserver.builder.EzyHttpServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
@@ -104,7 +101,10 @@ public class EzyNioServerBootstrapBuilderImpl
     }
 
     protected EzyResponseApi newResponseApi(EzyCodecFactory codecFactory) {
-        return new EzyProxyResponseApi(codecFactory);
+        EzySocketSetting socketSetting = getSocketSetting();
+        return socketSetting.isCertificationSslActive()
+            ? new EzySecureProxyResponseApi(codecFactory)
+            : new EzyProxyResponseApi(codecFactory);
     }
 
     private ExecutorService newStatsThreadPool() {

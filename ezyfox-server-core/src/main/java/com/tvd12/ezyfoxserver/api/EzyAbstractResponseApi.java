@@ -46,7 +46,7 @@ public abstract class EzyAbstractResponseApi
                         transportType,
                         bytes
                     );
-                    session.sendNow(packet);
+                    sendPacketNow(session, packet);
                 } catch (Throwable e) {
                     logger.info("response data now to session: {} failed", session, e);
                 }
@@ -59,7 +59,7 @@ public abstract class EzyAbstractResponseApi
                         transportType,
                         bytes
                     );
-                    session.send(packet);
+                    sendPacket(session, packet);
                 } catch (Throwable e) {
                     logger.info("response data to session: {} failed", session, e);
                 }
@@ -87,7 +87,7 @@ public abstract class EzyAbstractResponseApi
                         transportType,
                         bytes
                     );
-                    session.sendNow(packet);
+                    sendPacketNow(session, packet);
                 } catch (Throwable e) {
                     logger.info("response data now to session: {} failed", session, e);
                 }
@@ -101,7 +101,7 @@ public abstract class EzyAbstractResponseApi
                         transportType,
                         bytes
                     );
-                    session.send(packet);
+                    sendPacket(session, packet);
                 } catch (Throwable e) {
                     logger.info("response data to session: {} failed", session, e);
                 }
@@ -113,17 +113,14 @@ public abstract class EzyAbstractResponseApi
         EzySession session,
         EzyConstant transportType,
         Object bytes
-    ) throws Exception {
+    ) {
         EzyConstant actualTransportType = transportType;
         if (actualTransportType == EzyTransportType.UDP_OR_TCP) {
             actualTransportType = session.getDatagramChannelPool() != null
                 ? EzyTransportType.UDP
                 : EzyTransportType.TCP;
         }
-        Object packedBytes = actualTransportType == EzyTransportType.UDP
-            ? bytes
-            : packMessage(session, bytes);
-        return createPacket(actualTransportType, packedBytes);
+        return createPacket(actualTransportType, bytes);
     }
 
     protected EzySimplePacket createPacket(
@@ -134,6 +131,42 @@ public abstract class EzyAbstractResponseApi
         packet.setTransportType(transportType);
         packet.setData(bytes);
         return packet;
+    }
+
+    private void sendPacket(
+        EzySession session,
+        EzyPacket packet
+    ) throws Exception {
+        if (packet.getTransportType() == EzyTransportType.UDP) {
+            session.send(packet);
+        } else {
+            sendTcpPacket(session, packet);
+        }
+    }
+
+    protected void sendTcpPacket(
+        EzySession session,
+        EzyPacket packet
+    ) throws Exception {
+        session.send(packet);
+    }
+
+    private void sendPacketNow(
+        EzySession session,
+        EzyPacket packet
+    ) throws Exception {
+        if (packet.getTransportType() == EzyTransportType.UDP) {
+            session.sendNow(packet);
+        } else {
+            sendTcpPacketNow(session, packet);
+        }
+    }
+
+    protected void sendTcpPacketNow(
+        EzySession session,
+        EzyPacket packet
+    ) throws Exception {
+        session.sendNow(packet);
     }
 
     protected abstract EzyConstant getConnectionType();
@@ -149,12 +182,5 @@ public abstract class EzyAbstractResponseApi
         byte[] encryptionKey
     ) throws Exception {
         throw new UnsupportedOperationException("unsupported");
-    }
-
-    protected Object packMessage(
-        EzySession session,
-        Object message
-    ) throws Exception {
-        return message;
     }
 }

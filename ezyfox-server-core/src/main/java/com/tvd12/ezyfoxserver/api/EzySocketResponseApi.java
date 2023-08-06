@@ -6,9 +6,6 @@ import com.tvd12.ezyfox.codec.EzySimpleMessageDataEncoder;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
-import com.tvd12.ezyfoxserver.entity.EzySession;
-import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
-import com.tvd12.ezyfoxserver.socket.EzyChannel;
 
 public class EzySocketResponseApi extends EzyAbstractResponseApi {
 
@@ -43,23 +40,6 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
             messageContent,
             encryptionKey
         );
-    }
-
-    @Override
-    protected Object packMessage(
-        EzySession session,
-        Object message
-    ) throws Exception {
-        EzyChannel channel = session.getChannel();
-        if (channel == null) {
-            return message;
-        }
-        try {
-            return channel.pack((byte[]) message);
-        } catch (EzyConnectionCloseException e) {
-            session.disconnect();
-            throw e;
-        }
     }
 
     @Override

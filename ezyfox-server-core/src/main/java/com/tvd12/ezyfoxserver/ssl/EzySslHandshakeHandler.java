@@ -153,7 +153,7 @@ public class EzySslHandshakeHandler extends EzyLoggable {
                     break;
             }
         }
-        if (handshakeStatus == NOT_HANDSHAKING) {
+        if (handshakeStatus != FINISHED) {
             throw new SSLException("not handshaking");
         }
         return engine;

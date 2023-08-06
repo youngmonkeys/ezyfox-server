@@ -9,7 +9,7 @@
         <version>1.0.6</version>
     </parent>
     <artifactId>ezyfox-server</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.8.1</version>
     <packaging>pom</packaging>
 
     <name>ezyfox-server</name>
@@ -57,6 +57,7 @@
     </developers>
 
     <properties>
+        <ezy.version>1.2.8</ezy.version>
         <ezy.core.version>2.1.7</ezy.core.version>
     </properties>
 

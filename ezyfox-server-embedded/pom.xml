@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.tvd12</groupId>
         <artifactId>ezyfox-server</artifactId>
-        <version>1.2.8</version>
+        <version>1.2.8.1</version>
     </parent>
     <artifactId>ezyfox-server-embedded</artifactId>
 
@@ -26,12 +26,12 @@
         <dependency>
             <groupId>com.tvd12</groupId>
             <artifactId>ezyfox-msgpack</artifactId>
-            <version>${project.version}</version>
+            <version>${ezy.version}</version>
         </dependency>
         <dependency>
             <groupId>com.tvd12</groupId>
             <artifactId>ezyfox-jackson</artifactId>
-            <version>${project.version}</version>
+            <version>${ezy.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,17 +1,17 @@
 package com.tvd12.ezyfoxserver.context;
 
 import com.tvd12.ezyfox.entity.EzyData;
+import com.tvd12.ezyfoxserver.concurrent.EzyExecutorServiceFetcher;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import java.util.Collection;
-import java.util.concurrent.ScheduledExecutorService;
 
-public interface EzyZoneChildContext extends EzyContext {
+public interface EzyZoneChildContext extends
+    EzyContext,
+    EzyExecutorServiceFetcher {
 
     EzyZoneContext getParent();
-
-    ScheduledExecutorService getExecutorService();
 
     void send(
         EzyData data,

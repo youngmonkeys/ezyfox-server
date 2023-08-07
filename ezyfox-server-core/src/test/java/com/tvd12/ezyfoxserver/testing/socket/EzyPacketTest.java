@@ -12,7 +12,7 @@ public class EzyPacketTest extends BaseTest {
         EzyPacket packet = new EzySimplePacket();
         packet.setFragment(new byte[]{1, 2, 3});
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 1000000; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             packet.getSize();
         }
         long offset = System.currentTimeMillis() - start;

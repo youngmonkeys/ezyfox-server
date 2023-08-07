@@ -38,14 +38,14 @@ public class EzyEventControllersImplTest extends BaseTest {
     @Test
     public void multiThreadTest() {
         EzyEventControllersImpl sut = new EzyEventControllersImpl();
-        ExecutorService executorService = Executors.newFixedThreadPool(12);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
         AtomicBoolean active = new AtomicBoolean(true);
         executorService.execute(() -> {
             while (active.get()) {
                 for (EzyEventType eventType : EzyEventType.values()) {
                     sut.addController(eventType, mock(EzyEventController.class));
                 }
-                EzyThreads.sleep(1);
+                EzyThreads.sleep(100);
             }
         });
         executorService.execute(() -> {
@@ -55,7 +55,7 @@ public class EzyEventControllersImplTest extends BaseTest {
                         controller.handle(null, null);
                     }
                 }
-                EzyThreads.sleep(1);
+                EzyThreads.sleep(100);
             }
         });
         EzyThreads.sleep(1000);

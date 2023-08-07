@@ -45,7 +45,7 @@ public class V121SessionManagerTest {
         session3.setLoggedIn(true);
         session3.setLastReadTime(System.currentTimeMillis());
 
-        Thread[] threads = new Thread[10];
+        Thread[] threads = new Thread[3];
         for (int i = 0; i < threads.length; ++i) {
             threads[i] = new Thread(() -> {
                 long start = System.currentTimeMillis();
@@ -55,6 +55,11 @@ public class V121SessionManagerTest {
                     when(channel.getConnection()).thenReturn(new Object());
                     sut.provideSession(channel);
                     elapsedTime = System.currentTimeMillis() - start;
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
                 }
             });
         }

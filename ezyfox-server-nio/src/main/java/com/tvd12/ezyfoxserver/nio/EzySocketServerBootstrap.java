@@ -13,7 +13,6 @@ import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.util.ArrayList;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -110,7 +109,6 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
         socketAcceptor.setReadSelector(readSelector);
         socketAcceptor.setOwnSelector(acceptSelector);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
         loopHandler.setEventHandler(socketAcceptor);
         return loopHandler;

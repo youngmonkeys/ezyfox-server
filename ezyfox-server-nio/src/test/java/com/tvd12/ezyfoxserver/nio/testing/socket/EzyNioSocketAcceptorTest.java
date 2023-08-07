@@ -71,7 +71,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         when(channel1.register(readSelector, SelectionKey.OP_READ)).thenReturn(selectionKey1);
 
         EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
-        acceptor.setAcceptableConnections(new ArrayList<>());
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);
@@ -102,7 +101,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         Selector readSelector = spy(ExSelector.class);
 
         EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
-        acceptor.setAcceptableConnections(new ArrayList<>());
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);

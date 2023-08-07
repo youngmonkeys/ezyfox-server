@@ -21,8 +21,4 @@ public interface EzyChannel {
     SocketAddress getServerAddress();
 
     SocketAddress getClientAddress();
-
-    default byte[] pack(byte[] bytes) throws Exception {
-        return bytes;
-    }
 }

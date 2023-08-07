@@ -4,6 +4,7 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
+import com.tvd12.ezyfoxserver.socket.EzySecureChannel;
 
 public class EzySecureSocketResponseApi extends EzySocketResponseApi {
 
@@ -20,9 +21,12 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
         if (channel == null) {
             session.send(packet);
         }
+        EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {
-            synchronized (channel) {
-                byte[] packedBytes = channel.pack((byte[]) packet.getData());
+            synchronized (secureChannel.getPackLock()) {
+                byte[] packedBytes = secureChannel.pack(
+                    (byte[]) packet.getData()
+                );
                 packet.replaceData(packedBytes);
                 session.send(packet);
             }
@@ -41,9 +45,12 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
         if (channel == null) {
             session.sendNow(packet);
         }
+        EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {
-            synchronized (channel) {
-                byte[] packedBytes = channel.pack((byte[]) packet.getData());
+            synchronized (secureChannel.getPackLock()) {
+                byte[] packedBytes = secureChannel.pack(
+                    (byte[]) packet.getData()
+                );
                 packet.replaceData(packedBytes);
                 session.sendNow(packet);
             }

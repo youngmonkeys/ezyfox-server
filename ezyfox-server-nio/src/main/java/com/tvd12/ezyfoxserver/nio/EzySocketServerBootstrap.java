@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
+import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -24,10 +25,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private ServerSocketChannel serverSocketChannel;
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
+    private final SSLContext sslContext;
     private final EzySocketSetting socketSetting;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
+        this.sslContext = builder.sslContext;
         this.socketSetting = serverSettings.getSocket();
     }
 
@@ -86,7 +89,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private EzyNioSocketAcceptor newSocketAcceptor() {
         return socketSetting.isCertificationSslActive()
-            ? new EzyNioSecureSocketAcceptor()
+            ? new EzyNioSecureSocketAcceptor(
+                sslContext,
+                socketSetting.getSslHandshakeTimeout()
+            )
             : new EzyNioSocketAcceptor();
     }
 
@@ -147,6 +153,13 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         Builder,
         EzySocketServerBootstrap
         > {
+
+        private SSLContext sslContext;
+
+        public Builder sslContext(SSLContext sslContext) {
+            this.sslContext = sslContext;
+            return this;
+        }
 
         @Override
         public EzySocketServerBootstrap build() {

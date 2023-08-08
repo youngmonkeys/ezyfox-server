@@ -6,6 +6,8 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
 import com.tvd12.ezyfoxserver.socket.EzySecureChannel;
 
+import java.io.IOException;
+
 public class EzySecureSocketResponseApi extends EzySocketResponseApi {
 
     public EzySecureSocketResponseApi(Object encoder) {
@@ -19,7 +21,7 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
     ) throws Exception {
         EzyChannel channel = session.getChannel();
         if (channel == null) {
-            session.send(packet);
+            throw new IOException("session disconnected");
         }
         EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {
@@ -43,7 +45,7 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
     ) throws Exception {
         EzyChannel channel = session.getChannel();
         if (channel == null) {
-            session.sendNow(packet);
+            throw new IOException("session disconnected");
         }
         EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {

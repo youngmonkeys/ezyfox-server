@@ -7,6 +7,7 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -22,17 +23,13 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleSessionManagementSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.*;
-import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 import com.tvd12.ezyfoxserver.statistics.EzySimpleStatistics;
 import com.tvd12.ezyfoxserver.statistics.EzyStatistics;
-import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.Test;
 
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -74,7 +71,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         channel1.configureBlocking(false);
         when(channel1.register(readSelector, SelectionKey.OP_READ)).thenReturn(selectionKey1);
 
-        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);
@@ -88,9 +85,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
     @Test
     public void handleEventExceptionCase() throws Exception {
         // given
-        EzyNioSocketAcceptor instance = new  EzyNioSocketAcceptor(
-            1
-        );
+        EzyNioSocketAcceptor instance = new  EzyNioSocketAcceptor();
 
         Selector ownSelector = mock(Selector.class);
         IOException error = new IOException("test");
@@ -124,7 +119,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 
         Selector readSelector = spy(ExSelector.class);
 
-        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor acceptor = new EzyNioSocketAcceptor();
         acceptor.setHandlerGroupManager(handlerGroupManager);
         acceptor.setOwnSelector(ownSelector);
         acceptor.setReadSelector(readSelector);
@@ -187,7 +182,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
 
         Selector readSelector = Selector.open();
-        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
@@ -225,7 +220,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
 
         Selector readSelector = Selector.open();
-        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
@@ -234,12 +229,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 
         EzyNioSession session = mock(EzyNioSession.class);
         when(handlerGroup.getSession()).thenReturn(session);
-
-        EzySslHandshakeHandler sslHandshakeHandler =
-            mock(EzySslHandshakeHandler.class);
-        SSLEngine sslEngine = mock(SSLEngine.class);
-        when(sslHandshakeHandler.handle(clientChannel))
-            .thenReturn(sslEngine);
 
         // when
         MethodInvoker.create()
@@ -260,11 +249,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
             any(SelectionKey.class)
         );
         verifyNoMoreInteractions(session);
-
-        verify(sslHandshakeHandler, times(1))
-            .handle(clientChannel);
-        verifyNoMoreInteractions(sslHandshakeHandler);
-        verifyNoMoreInteractions(sslEngine);
     }
 
     @Test
@@ -274,7 +258,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
 
         Selector readSelector = Selector.open();
-        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
@@ -284,13 +268,6 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         EzyNioSession session = mock(EzyNioSession.class);
         when(handlerGroup.getSession()).thenReturn(session);
 
-        EzySslHandshakeHandler sslHandshakeHandler =
-            mock(EzySslHandshakeHandler.class);
-        SSLException error = new SSLException("test");
-        when(sslHandshakeHandler.handle(clientChannel))
-            .thenThrow(error);
-        sut.setSslHandshakeHandler(sslHandshakeHandler);
-
         // when
         MethodInvoker.create()
             .object(sut)
@@ -299,12 +276,16 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
             .call();
 
         // then
+        verify(handlerGroupManager, times(1))
+            .newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class));
         verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
         verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1))
+            .setProperty(any(String.class), any(SelectionKey.class));
         verifyNoMoreInteractions(session);
-        verify(sslHandshakeHandler, times(1))
-            .handle(clientChannel);
-        verifyNoMoreInteractions(sslHandshakeHandler);
     }
 
     public static abstract class ExServerSocketChannel extends ServerSocketChannel {

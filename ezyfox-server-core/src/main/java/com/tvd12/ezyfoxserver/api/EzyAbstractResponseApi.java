@@ -40,27 +40,35 @@ public abstract class EzyAbstractResponseApi
         EzyConstant transportType = pack.getTransportType();
         if (immediate) {
             for (EzySession session : recipients) {
+                EzyPacket packet = null;
                 try {
-                    EzyPacket packet = createPacket(
+                    packet = createPacket(
                         session,
                         transportType,
                         bytes
                     );
                     sendPacketNow(session, packet);
                 } catch (Throwable e) {
+                    if (packet != null) {
+                        packet.release();
+                    }
                     logger.info("response data now to session: {} failed", session, e);
                 }
             }
         } else {
             for (EzySession session : recipients) {
+                EzyPacket packet = null;
                 try {
-                    EzyPacket packet = createPacket(
+                    packet = createPacket(
                         session,
                         transportType,
                         bytes
                     );
                     sendPacket(session, packet);
                 } catch (Throwable e) {
+                    if (packet != null) {
+                        packet.release();
+                    }
                     logger.info("response data to session: {} failed", session, e);
                 }
             }
@@ -80,29 +88,37 @@ public abstract class EzyAbstractResponseApi
         EzyConstant transportType = pack.getTransportType();
         if (immediate) {
             for (EzySession session : recipients) {
+                EzyPacket packet = null;
                 try {
                     byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    EzyPacket packet = createPacket(
+                    packet = createPacket(
                         session,
                         transportType,
                         bytes
                     );
                     sendPacketNow(session, packet);
                 } catch (Throwable e) {
+                    if (packet != null) {
+                        packet.release();
+                    }
                     logger.info("response data now to session: {} failed", session, e);
                 }
             }
         } else {
             for (EzySession session : recipients) {
+                EzyPacket packet = null;
                 try {
                     byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    EzyPacket packet = createPacket(
+                    packet = createPacket(
                         session,
                         transportType,
                         bytes
                     );
                     sendPacket(session, packet);
                 } catch (Throwable e) {
+                    if (packet != null) {
+                        packet.release();
+                    }
                     logger.info("response data to session: {} failed", session, e);
                 }
             }

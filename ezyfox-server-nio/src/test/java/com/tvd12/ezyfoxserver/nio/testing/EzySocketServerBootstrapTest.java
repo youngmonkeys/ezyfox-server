@@ -3,11 +3,11 @@ package com.tvd12.ezyfoxserver.nio.testing;
 import com.tvd12.ezyfoxserver.EzyServer;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.EzySocketServerBootstrap;
+import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.test.assertion.Asserts;
-import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -55,6 +55,8 @@ public class EzySocketServerBootstrapTest {
         verify(settings, times(1)).getSocket();
         verifyNoMoreInteractions(settings);
 
+        verify(socketSetting, times(1)).isCertificationSslActive();
+        verify(socketSetting, times(1)).getSslHandshakeTimeout();
         verifyNoMoreInteractions(socketSetting);
         verifyNoMoreInteractions(sslContext);
     }
@@ -63,7 +65,6 @@ public class EzySocketServerBootstrapTest {
     public void newSocketAcceptorCaseCertificationSsl() {
         // given
         when(socketSetting.isCertificationSslActive()).thenReturn(true);
-        when(socketSetting.getSslConnectionAcceptorThreadPoolSize()).thenReturn(1);
 
         // when
         EzyNioSocketAcceptor acceptor = MethodInvoker.create()
@@ -72,15 +73,9 @@ public class EzySocketServerBootstrapTest {
             .invoke(EzyNioSocketAcceptor.class);
 
         // then
-        Asserts.assertNotNull(
-            FieldUtil.getFieldValue(
-                acceptor,
-                "sslHandshakeHandler"
-            )
-        );
+        Asserts.assertEqualsType(acceptor, EzyNioSecureSocketAcceptor.class);
 
         verify(socketSetting, times(1)).isCertificationSslActive();
-        verify(socketSetting, times(1)).getSslConnectionAcceptorThreadPoolSize();
         verify(socketSetting, times(1)).getSslHandshakeTimeout();
     }
 }

@@ -3,12 +3,9 @@ package com.tvd12.ezyfoxserver.nio.socket;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
-import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
-import static com.tvd12.ezyfoxserver.constant.EzyCoreConstants.MAX_SECURE_READ_BUFFER_SIZE;
 
 public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
 
@@ -51,23 +48,11 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         return secureChannel.read(buffer);
     }
 
-    @Override
-    protected int getMaxBufferSize() {
-        return MAX_SECURE_READ_BUFFER_SIZE;
-    }
-
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder extends EzySocketDataReceiver.Builder {
-
-        protected EzySslHandshakeHandler sslHandshakeHandler;
-
-        public Builder sslHandshakeHandler(EzySslHandshakeHandler sslHandshakeHandler) {
-            this.sslHandshakeHandler = sslHandshakeHandler;
-            return this;
-        }
 
         @Override
         public EzySocketDataReceiver build() {

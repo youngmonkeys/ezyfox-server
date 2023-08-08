@@ -99,7 +99,7 @@ public class EzyNioSocketReaderTest extends BaseTest {
         when(socketChannel5.isConnected()).thenReturn(true);
         when(socketChannel5.read(any(ByteBuffer.class))).then((Answer<Integer>) invocation -> -1);
 
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
 
@@ -136,7 +136,7 @@ public class EzyNioSocketReaderTest extends BaseTest {
             throw new IllegalStateException("server maintain");
         });
 
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor(1);
+        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
 

@@ -11,10 +11,6 @@ public interface EzySocketSetting extends EzyBaseSocketSetting {
 
     int getMaxRequestSize();
 
-    int getConnectionAcceptorThreadPoolSize();
-
-    int getSslConnectionAcceptorThreadPoolSize();
-
     int getWriterThreadPoolSize();
 
     default boolean isCertificationSslActive() {

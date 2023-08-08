@@ -446,7 +446,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyPacket packet = mock(EzyPacket.class);
         when(
             packet.getTransportType()
-        ).thenReturn(EzyTransportType.UDP_OR_TCP);
+        ).thenReturn(EzyTransportType.UDP);
         when(packet.getData()).thenReturn(new byte[]{1, 2, 3});
         ByteBuffer buffer = ByteBuffer.allocate(100);
 
@@ -463,7 +463,6 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         // then
         verify(session, times(1)).isActivated();
         verify(session, times(2)).getChannel();
-        verify(session, times(2)).getDatagramChannelPool();
         verify(session, times(1)).getUdpClientAddress();
     }
 

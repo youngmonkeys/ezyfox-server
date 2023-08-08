@@ -32,12 +32,6 @@ public class EzySimpleSocketSetting
     @XmlElement(name = "tcp-no-delay")
     protected boolean tcpNoDelay;
 
-    @XmlElement(name = "connection-acceptor-thread-pool-size")
-    protected int connectionAcceptorThreadPoolSize;
-
-    @XmlElement(name = "ssl-connection-acceptor-thread-pool-size")
-    protected int sslConnectionAcceptorThreadPoolSize;
-
     @XmlElement(name = "writer-thread-pool-size")
     protected int writerThreadPoolSize;
 
@@ -47,8 +41,6 @@ public class EzySimpleSocketSetting
         setSslType(SslType.CUSTOMIZATION);
         setSslHandshakeTimeout(350);
         setMaxRequestSize(4096);
-        setConnectionAcceptorThreadPoolSize(1);
-        setSslConnectionAcceptorThreadPoolSize(8);
         setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
@@ -62,8 +54,6 @@ public class EzySimpleSocketSetting
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);
-        map.put("connectionAcceptorThreadPoolSize", connectionAcceptorThreadPoolSize);
-        map.put("sslConnectionAcceptorThreadPoolSize", sslConnectionAcceptorThreadPoolSize);
         return map;
     }
 }

@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import static com.tvd12.ezyfoxserver.ssl.EzySslEngines.safeCloseOutbound;
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBuffer;
-import static com.tvd12.ezyfoxserver.ssl.SslByteBuffers.enlargeBufferIfNeed;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
 
@@ -194,7 +191,7 @@ public class EzyNioSecureSocketChannel
                     tcpAppBuffer = enlargeBufferIfNeed(tcpAppBuffer, netBufferSize);
                     break;
                 case CLOSED:
-                    safeCloseOutbound(engine);
+                    safeCloseOutbound();
                     throw new EzyConnectionCloseException(
                         "ssl unwrap result status is CLOSE"
                     );
@@ -210,6 +207,9 @@ public class EzyNioSecureSocketChannel
 
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
+        if (!handshaked) {
+            throw new SSLException("not handshaked");
+        }
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         ByteBuffer netBuffer = ByteBuffer.allocate(netBufferSize);
         while (buffer.hasRemaining()) {
@@ -224,7 +224,7 @@ public class EzyNioSecureSocketChannel
                 case BUFFER_UNDERFLOW:
                     throw new IOException("Buffer underflow occurred after a wrap");
                 case CLOSED:
-                    safeCloseOutbound(engine);
+                    safeCloseOutbound();
                     throw new EzyConnectionCloseException(
                         "ssl wrap result status is CLOSE"
                     );
@@ -250,6 +250,40 @@ public class EzyNioSecureSocketChannel
                 throw new SSLException("Timeout");
             }
             channel.write(buffer);
+        }
+    }
+
+    private void safeCloseOutbound() {
+        try {
+            engine.closeOutbound();
+        } catch (Throwable e) {
+            logger.info("close outbound error", e);
+        }
+    }
+
+    private ByteBuffer enlargeBuffer(
+        ByteBuffer buffer,
+        int sessionProposedCapacity
+    ) {
+        return sessionProposedCapacity > buffer.capacity()
+            ? ByteBuffer.allocate(sessionProposedCapacity)
+            : ByteBuffer.allocate(buffer.capacity() * 2);
+    }
+
+    private ByteBuffer enlargeBufferIfNeed(
+        ByteBuffer buffer,
+        int packageBufferSize
+    ) {
+        if (packageBufferSize < buffer.limit()) {
+            return buffer;
+        } else {
+            ByteBuffer replaceBuffer = enlargeBuffer(
+                buffer,
+                packageBufferSize
+            );
+            buffer.flip();
+            replaceBuffer.put(buffer);
+            return replaceBuffer;
         }
     }
 }

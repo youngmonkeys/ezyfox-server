@@ -11,8 +11,6 @@ public class EzySocketSettingBuilder extends
     protected int sslHandshakeTimeout;
     protected int maxRequestSize;
     protected boolean tcpNoDelay;
-    protected int connectionAcceptorThreadPoolSize;
-    protected int sslConnectionAcceptorThreadPoolSize;
     protected int writerThreadPoolSize;
 
     public EzySocketSettingBuilder() {
@@ -20,8 +18,6 @@ public class EzySocketSettingBuilder extends
         this.sslType = SslType.CUSTOMIZATION;
         this.sslHandshakeTimeout = 350;
         this.maxRequestSize = 32768;
-        this.connectionAcceptorThreadPoolSize = 1;
-        this.sslConnectionAcceptorThreadPoolSize = 8;
         this.writerThreadPoolSize = 8;
         this.codecCreator = "com.tvd12.ezyfox.codec.MsgPackCodecCreator";
     }
@@ -46,20 +42,6 @@ public class EzySocketSettingBuilder extends
         return this;
     }
 
-    public EzySocketSettingBuilder connectionAcceptorThreadPoolSize(
-        int connectionAcceptorThreadPoolSize
-    ) {
-        this.connectionAcceptorThreadPoolSize = connectionAcceptorThreadPoolSize;
-        return this;
-    }
-
-    public EzySocketSettingBuilder sslConnectionAcceptorThreadPoolSize(
-        int sslConnectionAcceptorThreadPoolSize
-    ) {
-        this.sslConnectionAcceptorThreadPoolSize = sslConnectionAcceptorThreadPoolSize;
-        return this;
-    }
-
     public EzySocketSettingBuilder writerThreadPoolSize(int writerThreadPoolSize) {
         this.writerThreadPoolSize = writerThreadPoolSize;
         return this;
@@ -73,8 +55,6 @@ public class EzySocketSettingBuilder extends
         setting.setSslType(sslType);
         setting.setSslHandshakeTimeout(sslHandshakeTimeout);
         setting.setMaxRequestSize(maxRequestSize);
-        setting.setConnectionAcceptorThreadPoolSize(connectionAcceptorThreadPoolSize);
-        setting.setSslConnectionAcceptorThreadPoolSize(sslConnectionAcceptorThreadPoolSize);
         setting.setWriterThreadPoolSize(writerThreadPoolSize);
         setting.setCodecCreator(codecCreator);
         return setting;

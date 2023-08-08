@@ -15,9 +15,7 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.*;
-import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeHandler;
 
-import javax.net.ssl.SSLContext;
 import java.util.concurrent.ExecutorService;
 
 public class EzyNioServerBootstrapBuilderImpl
@@ -47,10 +45,8 @@ public class EzyNioServerBootstrapBuilderImpl
         EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager(
             handlerGroupBuilderFactory
         );
-        SSLContext sslContext = newSslContext(getWebsocketSetting().getSslConfig());
         EzySocketDataReceiver socketDataReceiver = newSocketDataReceiver(
-            handlerGroupManager,
-            sslContext
+            handlerGroupManager
         );
         EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
         bootstrap.setResponseApi(responseApi);
@@ -62,7 +58,7 @@ public class EzyNioServerBootstrapBuilderImpl
         bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
         bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
         bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
-        bootstrap.setSslContext(sslContext);
+        bootstrap.setSslContext(newSslContext(getWebsocketSetting().getSslConfig()));
         return bootstrap;
     }
 
@@ -113,28 +109,18 @@ public class EzyNioServerBootstrapBuilderImpl
     }
 
     private EzySocketDataReceiver newSocketDataReceiver(
-        EzyHandlerGroupManager handlerGroupManager,
-        SSLContext sslContext
+        EzyHandlerGroupManager handlerGroupManager
     ) {
-        return newSocketDataReceiverBuilder(sslContext)
+        return newSocketDataReceiverBuilder()
             .handlerGroupManager(handlerGroupManager)
             .threadPoolSize(getThreadPoolSizeSetting().getSocketDataReceiver())
             .build();
     }
 
-    private EzySocketDataReceiver.Builder newSocketDataReceiverBuilder(
-        SSLContext sslContext
-    ) {
+    private EzySocketDataReceiver.Builder newSocketDataReceiverBuilder() {
         EzySocketSetting setting = getSocketSetting();
         return setting.isCertificationSslActive()
-            ? EzySecureSocketDataReceiver
-                .builder()
-                .sslHandshakeHandler(
-                    new EzySslHandshakeHandler(
-                        sslContext,
-                        setting.getSslHandshakeTimeout()
-                    )
-                )
+            ? EzySecureSocketDataReceiver.builder()
             : EzySocketDataReceiver.builder();
     }
 

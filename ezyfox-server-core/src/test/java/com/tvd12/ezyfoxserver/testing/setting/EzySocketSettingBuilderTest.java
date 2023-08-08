@@ -16,15 +16,11 @@ public class EzySocketSettingBuilderTest {
             SslType.class
         );
         int sslHandshakeTimeout = RandomUtil.randomInt();
-        int connectionAcceptorThreadPoolSize = RandomUtil.randomInt();
-        int sslConnectionAcceptorThreadPoolSize = RandomUtil.randomInt();
 
         // when
         EzySocketSetting setting = new EzySocketSettingBuilder()
             .sslType(sslType)
             .sslHandshakeTimeout(sslHandshakeTimeout)
-            .connectionAcceptorThreadPoolSize(connectionAcceptorThreadPoolSize)
-            .sslConnectionAcceptorThreadPoolSize(sslConnectionAcceptorThreadPoolSize)
             .build();
 
         // then
@@ -32,14 +28,6 @@ public class EzySocketSettingBuilderTest {
         Asserts.assertEquals(
             setting.getSslHandshakeTimeout(),
             sslHandshakeTimeout
-        );
-        Asserts.assertEquals(
-            setting.getConnectionAcceptorThreadPoolSize(),
-            connectionAcceptorThreadPoolSize
-        );
-        Asserts.assertEquals(
-            setting.getSslConnectionAcceptorThreadPoolSize(),
-            sslConnectionAcceptorThreadPoolSize
         );
     }
 }

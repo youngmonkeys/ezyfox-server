@@ -1,4 +1,4 @@
-package com.tvd12.ezyfoxserver.testing.ssl;
+package com.tvd12.ezyfoxserver.nio.testing.socket;
 
 import javax.net.ssl.SSLContextSpi;
 import javax.net.ssl.SSLEngine;

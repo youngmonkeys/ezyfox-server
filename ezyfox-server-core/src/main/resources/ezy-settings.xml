@@ -31,8 +31,6 @@
         <ssl-handshake-timeout>300</ssl-handshake-timeout>
         <tcp-no-delay>true</tcp-no-delay>
         <max-request-size>4096</max-request-size>
-        <connection-acceptor-thread-pool-size>1</connection-acceptor-thread-pool-size>
-        <ssl-connection-acceptor-thread-pool-size>8</ssl-connection-acceptor-thread-pool-size>
         <writer-thread-pool-size>8</writer-thread-pool-size>
         <codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
     </socket>

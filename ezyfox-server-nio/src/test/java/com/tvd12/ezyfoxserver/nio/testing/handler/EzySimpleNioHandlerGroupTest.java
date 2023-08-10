@@ -290,7 +290,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMessage")
+            .method("fireMessageReceived")
             .param(EzyMessage.class, message)
             .call();
 
@@ -316,7 +316,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMessage")
+            .method("fireMessageReceived")
             .param(EzyMessage.class, message)
             .call();
 
@@ -340,7 +340,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         // when
         MethodInvoker.create()
             .object(sut)
-            .method("handleReceivedMessage")
+            .method("fireMessageReceived")
             .param(EzyMessage.class, message)
             .call();
 

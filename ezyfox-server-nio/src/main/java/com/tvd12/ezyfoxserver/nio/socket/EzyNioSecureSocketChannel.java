@@ -10,6 +10,7 @@ import javax.net.ssl.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
@@ -20,14 +21,13 @@ public class EzyNioSecureSocketChannel
 
     private SSLEngine engine;
     private ByteBuffer netBuffer;
-    @Getter
-    private boolean handshaked;
     private int appBufferSize;
     private int netBufferSize;
     private final SSLContext sslContext;
     private final int sslHandshakeTimeout;
     @Getter
-    private final Object packLock = new Object();
+    private final Object packingLock = new Object();
+    private final AtomicBoolean handshaked = new AtomicBoolean();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public EzyNioSecureSocketChannel(
@@ -38,6 +38,10 @@ public class EzyNioSecureSocketChannel
         super(channel);
         this.sslContext = sslContext;
         this.sslHandshakeTimeout = sslHandshakeTimeout;
+    }
+
+    public boolean isHandshaked() {
+        return handshaked.get();
     }
 
     @SuppressWarnings("MethodLength")
@@ -108,7 +112,6 @@ public class EzyNioSecureSocketChannel
                             peerAppData = enlargeBuffer(peerAppData, appBufferSize);
                             break;
                         case BUFFER_UNDERFLOW:
-                            peerNetData = enlargeBufferIfNeed(peerNetData, netBufferSize);
                             break;
                         case CLOSED:
                             if (engine.isOutboundDone()) {
@@ -143,7 +146,9 @@ public class EzyNioSecureSocketChannel
                             netBuffer = enlargeBuffer(netBuffer, netBufferSize);
                             break;
                         case BUFFER_UNDERFLOW:
-                            throw new SSLException("Buffer underflow occurred after a wrap.");
+                            throw new SSLException(
+                                "Should not happen, buffer underflow occurred after a wrap."
+                            );
                         case CLOSED:
                             try {
                                 writeOrTimeout(channel, netBuffer, endTime);
@@ -171,7 +176,7 @@ public class EzyNioSecureSocketChannel
                     break;
             }
         }
-        handshaked = true;
+        handshaked.set(true);
     }
 
     public byte[] read(ByteBuffer buffer) throws Exception {
@@ -188,10 +193,16 @@ public class EzyNioSecureSocketChannel
                     netBuffer = enlargeBuffer(netBuffer, appBufferSize);
                     break;
                 case BUFFER_UNDERFLOW:
-                    tcpAppBuffer = enlargeBufferIfNeed(tcpAppBuffer, netBufferSize);
                     break;
                 case CLOSED:
-                    safeCloseOutbound();
+                    try {
+                        engine.closeOutbound();
+                    } catch (Throwable e) {
+                        throw new EzyConnectionCloseException(
+                            "ssl unwrap result status is CLOSE",
+                            e
+                        );
+                    }
                     throw new EzyConnectionCloseException(
                         "ssl unwrap result status is CLOSE"
                     );
@@ -207,7 +218,7 @@ public class EzyNioSecureSocketChannel
 
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
-        if (!handshaked) {
+        if (!handshaked.get()) {
             throw new SSLException("not handshaked");
         }
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
@@ -222,9 +233,18 @@ public class EzyNioSecureSocketChannel
                     netBuffer = enlargeBuffer(netBuffer, netBufferSize);
                     break;
                 case BUFFER_UNDERFLOW:
-                    throw new IOException("Buffer underflow occurred after a wrap");
+                    throw new IOException(
+                        "Should not happen, buffer underflow occurred after a wrap."
+                    );
                 case CLOSED:
-                    safeCloseOutbound();
+                    try {
+                        engine.closeOutbound();
+                    } catch (Throwable e) {
+                        throw new EzyConnectionCloseException(
+                            "ssl wrap result status is CLOSE",
+                            e
+                        );
+                    }
                     throw new EzyConnectionCloseException(
                         "ssl wrap result status is CLOSE"
                     );
@@ -238,7 +258,7 @@ public class EzyNioSecureSocketChannel
         return bytes;
     }
 
-    public static void writeOrTimeout(
+    public void writeOrTimeout(
         SocketChannel channel,
         ByteBuffer buffer,
         long timeoutAt
@@ -247,17 +267,9 @@ public class EzyNioSecureSocketChannel
         while (buffer.hasRemaining()) {
             long currentTime = System.currentTimeMillis();
             if (currentTime >= timeoutAt) {
-                throw new SSLException("Timeout");
+                break;
             }
             channel.write(buffer);
-        }
-    }
-
-    private void safeCloseOutbound() {
-        try {
-            engine.closeOutbound();
-        } catch (Throwable e) {
-            logger.info("close outbound error", e);
         }
     }
 
@@ -268,22 +280,5 @@ public class EzyNioSecureSocketChannel
         return sessionProposedCapacity > buffer.capacity()
             ? ByteBuffer.allocate(sessionProposedCapacity)
             : ByteBuffer.allocate(buffer.capacity() * 2);
-    }
-
-    private ByteBuffer enlargeBufferIfNeed(
-        ByteBuffer buffer,
-        int packageBufferSize
-    ) {
-        if (packageBufferSize < buffer.limit()) {
-            return buffer;
-        } else {
-            ByteBuffer replaceBuffer = enlargeBuffer(
-                buffer,
-                packageBufferSize
-            );
-            buffer.flip();
-            replaceBuffer.put(buffer);
-            return replaceBuffer;
-        }
     }
 }

@@ -60,11 +60,7 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
             key.interestOps(SelectionKey.OP_READ);
         }
         if (key.isReadable()) {
-            processReadableChannel((SocketChannel) key.channel());
+            socketDataReceiver.tcpReceive((SocketChannel) key.channel());
         }
-    }
-
-    protected void processReadableChannel(SocketChannel channel) {
-        socketDataReceiver.tcpReceive(channel);
     }
 }

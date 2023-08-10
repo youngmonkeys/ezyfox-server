@@ -15,6 +15,7 @@ import javax.net.ssl.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.Matchers.any;
@@ -38,7 +39,7 @@ public class EzyNioSecureSocketChannelTest {
     public void setup() {
         bytes = new byte[] {1, 2, 3};
         buffer = ByteBuffer.allocate(bufferSize);
-        netBuffer = ByteBuffer.allocate(bufferSize);
+        netBuffer = ByteBuffer.allocate(bufferSize + 1);
         sslContext = mock(SSLContext.class);
         sslContextSpi = mock(EzySSLContextSpiForTest.class);
         sslEngine = mock(SSLEngine.class);
@@ -63,9 +64,10 @@ public class EzyNioSecureSocketChannelTest {
     public void beforeNotHandshakeMethod() {
         FieldUtil.setFieldValue(instance, "engine", sslEngine);
         FieldUtil.setFieldValue(instance, "netBuffer", netBuffer);
-        FieldUtil.setFieldValue(instance, "handshaked", true);
         FieldUtil.setFieldValue(instance, "appBufferSize", bufferSize);
         FieldUtil.setFieldValue(instance, "netBufferSize", bufferSize);
+        AtomicBoolean handshaked = FieldUtil.getFieldValue(instance, "handshaked");
+        handshaked.set(true);
     }
 
     @AfterMethod
@@ -114,6 +116,7 @@ public class EzyNioSecureSocketChannelTest {
 
         // then
         Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertNotNull(instance.getPackingLock());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -556,12 +559,6 @@ public class EzyNioSecureSocketChannelTest {
             return SSLEngineResult.HandshakeStatus.FINISHED;
         });
 
-        SSLEngineResult engineResult = new SSLEngineResult(
-            SSLEngineResult.Status.OK,
-            SSLEngineResult.HandshakeStatus.FINISHED,
-            0,
-            0
-        );
         SSLException error = new SSLException("test");
         when(
             sslEngine.wrap(any(ByteBuffer.class), any(ByteBuffer.class))
@@ -753,6 +750,49 @@ public class EzyNioSecureSocketChannelTest {
             .write(any(ByteBuffer.class));
 
         verify(sslEngine, times(2)).getHandshakeStatus();
+        verify(sslEngine, times(1))
+            .wrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
+    public void handleCaseHandshakeStatusIsNeedWrapEngineStatusIsClosedWriteTimeout() throws Exception {
+        // given
+        when(sslEngine.getHandshakeStatus()).thenReturn(
+            SSLEngineResult.HandshakeStatus.NEED_WRAP
+        );
+        when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
+            EzyThreads.sleep(sslHandshakeTimeout * 2);
+           return 0;
+        });
+
+        SSLEngineResult engineResult = new SSLEngineResult(
+            SSLEngineResult.Status.CLOSED,
+            SSLEngineResult.HandshakeStatus.NEED_WRAP,
+            0,
+            0
+        );
+        when(
+            sslEngine.wrap(any(ByteBuffer.class), any(ByteBuffer.class))
+        ).thenAnswer(it -> {
+            ByteBuffer buffer = it.getArgumentAt(1, ByteBuffer.class);
+            buffer.clear();
+            buffer.put(new byte[] {1, 2, 3});
+            return engineResult;
+        });
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            instance.handshake()
+        );
+
+        // then
+        Asserts.assertEqualsType(e, SSLException.class);
+
+        verifyAfterHandshake();
+        verify(socketChannel, times(1))
+            .write(any(ByteBuffer.class));
+
+        verify(sslEngine, times(1)).getHandshakeStatus();
         verify(sslEngine, times(1))
             .wrap(any(ByteBuffer.class), any(ByteBuffer.class));
     }
@@ -992,6 +1032,36 @@ public class EzyNioSecureSocketChannelTest {
     }
 
     @Test
+    public void packCaseBufferClosedButException() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+
+        SSLEngineResult result = new SSLEngineResult(
+            SSLEngineResult.Status.CLOSED,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+
+        when(sslEngine.wrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenReturn(result);
+        RuntimeException exception = new RuntimeException("test");
+        doThrow(exception).when(sslEngine).closeOutbound();
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            instance.pack(bytes)
+        );
+
+        // then
+        Asserts.assertEqualsType(e, EzyConnectionCloseException.class);
+
+        verify(sslEngine, times(1)).closeOutbound();
+        verify(sslEngine, times(1))
+            .wrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
     public void packNoRemaining() throws Exception {
         // when
         beforeNotHandshakeMethod();
@@ -1000,6 +1070,21 @@ public class EzyNioSecureSocketChannelTest {
 
         // then
         Asserts.assertEquals(actual, new byte[0]);
+    }
+
+    @Test
+    public void packBeforeHandshake() {
+        // when
+        beforeNotHandshakeMethod();
+        AtomicBoolean handshaked = FieldUtil.getFieldValue(instance, "handshaked");
+        handshaked.set(false);
+
+        Throwable e = Asserts.assertThrows(() ->
+            instance.pack(new byte[0])
+        );
+
+        // then
+        Asserts.assertEqualsType(e, SSLException.class);
     }
 
     @Test
@@ -1039,6 +1124,52 @@ public class EzyNioSecureSocketChannelTest {
     public void readCaseBufferOverFlow() throws Exception {
         // given
         beforeNotHandshakeMethod();
+
+        buffer.clear();
+        buffer.put(new byte[] {1, 2});
+        buffer.flip();
+        SSLEngineResult resultBufferOverflow = new SSLEngineResult(
+            SSLEngineResult.Status.BUFFER_OVERFLOW,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+        SSLEngineResult resultOk = new SSLEngineResult(
+            SSLEngineResult.Status.OK,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+
+        AtomicInteger unwrapCallCount = new AtomicInteger();
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenAnswer(it -> {
+                int callCount = unwrapCallCount.incrementAndGet();
+                if (callCount == 1) {
+                    return resultBufferOverflow;
+                }
+                ByteBuffer tcpNetBuffer = it.getArgumentAt(1, ByteBuffer.class);
+                tcpNetBuffer.clear();
+                tcpNetBuffer.put(netBuffer);
+                return resultOk;
+            });
+
+        // when
+        byte[] actual = instance.read(buffer);
+
+        // then
+        Asserts.assertEquals(actual, new byte[] {1, 2});
+
+        verify(sslEngine, times(2))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
+    public void readCaseBufferOverFlowButNetBufferEnough() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+        netBuffer = ByteBuffer.allocate(bufferSize / 2);
+        FieldUtil.setFieldValue(instance, "netBuffer", netBuffer);
 
         buffer.clear();
         buffer.put(new byte[] {1, 2});
@@ -1127,6 +1258,9 @@ public class EzyNioSecureSocketChannelTest {
     public void readCaseBufferClosed() throws Exception {
         // given
         beforeNotHandshakeMethod();
+        netBuffer.put((byte) 1);
+        netBuffer.flip();
+        netBuffer.get();
 
         SSLEngineResult result = new SSLEngineResult(
             SSLEngineResult.Status.CLOSED,
@@ -1141,6 +1275,39 @@ public class EzyNioSecureSocketChannelTest {
         // when
         Throwable e = Asserts.assertThrows(() ->
            instance.read(buffer)
+        );
+
+        // then
+        Asserts.assertEqualsType(e, EzyConnectionCloseException.class);
+
+        verify(sslEngine, times(1)).closeOutbound();
+        verify(sslEngine, times(1))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
+    public void readCaseBufferClosedButException() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+        netBuffer.put((byte) 1);
+        netBuffer.flip();
+        netBuffer.get();
+
+        SSLEngineResult result = new SSLEngineResult(
+            SSLEngineResult.Status.CLOSED,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenReturn(result);
+        RuntimeException exception = new RuntimeException("test");
+        doThrow(exception).when(sslEngine).closeOutbound();
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            instance.read(buffer)
         );
 
         // then

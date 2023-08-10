@@ -21,11 +21,11 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
     ) throws Exception {
         EzyChannel channel = session.getChannel();
         if (channel == null) {
-            throw new IOException("session disconnected");
+            throw new IOException("session destroyed");
         }
         EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {
-            synchronized (secureChannel.getPackLock()) {
+            synchronized (secureChannel.getPackingLock()) {
                 byte[] packedBytes = secureChannel.pack(
                     (byte[]) packet.getData()
                 );
@@ -45,11 +45,11 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
     ) throws Exception {
         EzyChannel channel = session.getChannel();
         if (channel == null) {
-            throw new IOException("session disconnected");
+            throw new IOException("session destroyed");
         }
         EzySecureChannel secureChannel = (EzySecureChannel) channel;
         try {
-            synchronized (secureChannel.getPackLock()) {
+            synchronized (secureChannel.getPackingLock()) {
                 byte[] packedBytes = secureChannel.pack(
                     (byte[]) packet.getData()
                 );

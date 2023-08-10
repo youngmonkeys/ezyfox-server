@@ -37,7 +37,7 @@ public class EzySecureSocketResponseApiTest {
         instance = new EzySecureSocketResponseApi(encoder);
 
         when(session.getChannel()).thenReturn(channel);
-        when(channel.getPackLock()).thenReturn(packLock);
+        when(channel.getPackingLock()).thenReturn(packLock);
         when(packet.getData()).thenReturn(data);
     }
 
@@ -66,7 +66,7 @@ public class EzySecureSocketResponseApiTest {
 
         // then
         verify(channel, times(1)).pack(data);
-        verify(channel, times(1)).getPackLock();
+        verify(channel, times(1)).getPackingLock();
 
         verify(packet, times(1)).getData();
         verify(packet, times(1)).replaceData(packedData);
@@ -94,7 +94,7 @@ public class EzySecureSocketResponseApiTest {
         Asserts.assertEqualsType(e.getCause().getCause(), EzyConnectionCloseException.class);
 
         verify(channel, times(1)).pack(data);
-        verify(channel, times(1)).getPackLock();
+        verify(channel, times(1)).getPackingLock();
 
         verify(packet, times(1)).getData();
 
@@ -133,7 +133,7 @@ public class EzySecureSocketResponseApiTest {
 
         // then
         verify(channel, times(1)).pack(data);
-        verify(channel, times(1)).getPackLock();
+        verify(channel, times(1)).getPackingLock();
 
         verify(packet, times(1)).getData();
         verify(packet, times(1)).replaceData(packedData);
@@ -161,7 +161,7 @@ public class EzySecureSocketResponseApiTest {
         Asserts.assertEqualsType(e.getCause().getCause(), EzyConnectionCloseException.class);
 
         verify(channel, times(1)).pack(data);
-        verify(channel, times(1)).getPackLock();
+        verify(channel, times(1)).getPackingLock();
 
         verify(packet, times(1)).getData();
 

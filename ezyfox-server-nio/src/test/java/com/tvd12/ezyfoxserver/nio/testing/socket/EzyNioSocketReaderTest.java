@@ -11,10 +11,7 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketChannel;
-import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketReader;
-import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
+import com.tvd12.ezyfoxserver.nio.socket.*;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
@@ -188,6 +185,53 @@ public class EzyNioSocketReaderTest extends BaseTest {
         return EzyHandlerGroupManagerImpl.builder()
             .handlerGroupBuilderFactory(handlerGroupBuilderFactory)
             .build();
+    }
+
+    @Test
+    public void processReadyKeyExceptionCase() throws Exception {
+        // given
+        EzyNioSocketReader instance = new EzyNioSocketReader();
+
+        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler =
+            mock(EzyNioAcceptableConnectionsHandler.class);
+        instance.setAcceptableConnectionsHandler(acceptableConnectionsHandler);
+
+        Selector ownSelector = mock(Selector.class);
+        when(ownSelector.selectNow()).thenReturn(1);
+        instance.setOwnSelector(ownSelector);
+
+        SelectionKey selectionKey = mock(SelectionKey.class);
+        when(selectionKey.isValid()).thenReturn(true);
+        when(selectionKey.readyOps()).thenReturn(SelectionKey.OP_READ);
+        when(ownSelector.selectedKeys())
+            .thenReturn(Sets.newHashSet(selectionKey));
+
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        when(selectionKey.channel()).thenReturn(socketChannel);
+
+        EzySocketDataReceiver socketDataReceiver = mock(EzySocketDataReceiver.class);
+        RuntimeException exception = new RuntimeException("test");
+        doThrow(exception).when(socketDataReceiver).tcpReceive(socketChannel);
+        instance.setSocketDataReceiver(socketDataReceiver);
+
+        // when
+        instance.handleEvent();
+
+        // then
+        verify(acceptableConnectionsHandler, times(1)).handleAcceptableConnections();
+        verifyNoMoreInteractions(acceptableConnectionsHandler);
+
+        verify(ownSelector, times(1)).selectNow();
+        verify(ownSelector, times(1)).selectedKeys();
+        verifyNoMoreInteractions(ownSelector);
+
+        verify(selectionKey, times(1)).isValid();
+        verify(selectionKey, times(2)).readyOps();
+        verify(selectionKey, times(1)).channel();
+        verifyNoMoreInteractions(selectionKey);
+
+        verify(socketDataReceiver, times(1)).tcpReceive(socketChannel);
+        verifyNoMoreInteractions(socketDataReceiver);
     }
 
     public static abstract class ExSocketChannel extends SocketChannel {

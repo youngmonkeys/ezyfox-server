@@ -4,5 +4,5 @@ public interface EzySecureChannel {
 
     byte[] pack(byte[] bytes) throws Exception;
 
-    Object getPackLock();
+    Object getPackingLock();
 }

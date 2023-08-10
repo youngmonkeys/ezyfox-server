@@ -377,7 +377,39 @@ public class EzyAbstractResponseApiTest {
     }
 
     @Test
-    public void secureResponseSendDueCreatePacketException() throws Exception {
+    public void secureResponseSendException() throws Exception {
+        // given
+        InternalResponseApi2 sut = new InternalResponseApi2();
+
+        EzyPackage pack = mock(EzyPackage.class);
+        when(pack.isEncrypted()).thenReturn(true);
+
+        EzySession session = mock(EzySession.class);
+        RuntimeException error = new RuntimeException("test");
+        doThrow(error).when(session).send(any(EzyPacket.class));
+
+        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+            Collections.singleton(session)
+        );
+
+        // when
+        sut.response(pack, false);
+
+        // then
+        verify(pack, times(1)).isEncrypted();
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getData();
+        verify(pack, times(1)).getTransportType();
+
+        verifyNoMoreInteractions(pack);
+
+        verify(session, times(1)).getSessionKey();
+        verify(session, times(1)).send(any(EzyPacket.class));
+        verifyNoMoreInteractions(session);
+    }
+
+    @Test
+    public void secureResponseSendDueToCreatePacketException() throws Exception {
         // given
         InternalResponseApi2 sut = new CreatePackFailedInternalResponseApi2();
 

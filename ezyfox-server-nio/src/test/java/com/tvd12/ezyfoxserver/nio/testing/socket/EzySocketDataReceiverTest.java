@@ -1,10 +1,12 @@
 package com.tvd12.ezyfoxserver.nio.testing.socket;
 
 import com.tvd12.ezyfox.codec.EzyMessage;
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.util.RandomUtil;
 import org.eclipse.jetty.websocket.api.Session;
@@ -32,14 +34,18 @@ public class EzySocketDataReceiverTest {
         when(channel.read(buffer)).thenThrow(new ClosedChannelException());
 
         // when
-        MethodInvoker.create()
-            .object(sut)
-            .method("tcpReadBytes")
-            .param(SocketChannel.class, channel)
-            .param(ByteBuffer.class, buffer)
-            .call();
+        Throwable e = Asserts.assertThrows(() ->
+            MethodInvoker.create()
+                .object(sut)
+                .method("tcpReadBytes")
+                .param(SocketChannel.class, channel)
+                .param(ByteBuffer.class, buffer)
+                .call()
+        );
 
         // then
+        Asserts.assertEqualsType(e.getCause().getCause(), ClosedChannelException.class);
+
         verify(handlerGroupManager, times(1)).getHandlerGroup(channel);
     }
 
@@ -199,5 +205,34 @@ public class EzySocketDataReceiverTest {
         // then
         verify(handlerGroupManager, times(1)).getHandlerGroup(session);
         verify(handlerGroup, times(1)).fireBytesReceived(payload, 0, payload.length);
+    }
+
+    @Test
+    public void tcpReadBytesEzyConnectionCloseException() throws Exception {
+        // given
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzySocketDataReceiver sut = EzySocketDataReceiver.builder()
+            .handlerGroupManager(handlerGroupManager)
+            .build();
+
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[]{1, 2, 3});
+
+        SocketChannel channel = mock(SocketChannel.class);
+        when(channel.read(buffer)).thenThrow(new EzyConnectionCloseException("test"));
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            MethodInvoker.create()
+                .object(sut)
+                .method("tcpReadBytes")
+                .param(SocketChannel.class, channel)
+                .param(ByteBuffer.class, buffer)
+                .call()
+        );
+
+        // then
+        Asserts.assertEqualsType(e.getCause().getCause(), EzyConnectionCloseException.class);
+
+        verify(handlerGroupManager, times(1)).getHandlerGroup(channel);
     }
 }

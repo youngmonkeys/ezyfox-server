@@ -15,7 +15,6 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 
@@ -66,9 +65,6 @@ public class EzySocketDataReceiver
         try {
             tcpReadBytes(channel, buffer);
         } catch (Throwable e) {
-            if (e instanceof EzyConnectionCloseException) {
-                tcpCloseConnection(channel);
-            }
             logger.info(
                 "I/O error at tcp-data-reader (channel: {})",
                 channel,
@@ -86,15 +82,17 @@ public class EzySocketDataReceiver
         try {
             buffer.clear();
             readBytes = channel.read(buffer);
-        } catch (ClosedChannelException e) {
-            // do nothing
+            if (readBytes > 0) {
+                processTcpReadBytes(channel, buffer);
+            }
+        } catch (EzyConnectionCloseException e) {
+            readBytes = -1;
+            exception = e;
         } catch (Throwable e) {
             exception = e;
         }
         if (readBytes == -1) {
             tcpCloseConnection(channel);
-        } else if (readBytes > 0) {
-            processTcpReadBytes(channel, buffer);
         }
         if (exception != null) {
             throw exception;

@@ -95,8 +95,6 @@ public class EzyAbstractSessionTest extends BaseCoreTest {
         assert session.getDisconnectionQueue() == disconnectionQueue;
         assert !session.isDisconnectionRegistered();
         assert session.getDisconnectionLock() != null;
-        assert session.getLocks().isEmpty();
-        assert session.getLock("test") != null;
 
         assert !session.isActivated();
         session.send(mock(EzyPacket.class));

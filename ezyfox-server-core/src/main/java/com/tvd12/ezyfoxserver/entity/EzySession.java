@@ -13,7 +13,6 @@ import com.tvd12.ezyfoxserver.socket.EzyRequestQueue;
 import java.io.Serializable;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
-import java.util.concurrent.locks.Lock;
 
 @SuppressWarnings("MethodCount")
 public interface EzySession extends
@@ -380,14 +379,6 @@ public interface EzySession extends
      * @return the disconnect reason
      */
     EzyConstant getDisconnectReason();
-
-    /**
-     * Get the lock of the session.
-     *
-     * @param name the lock name
-     * @return the lock
-     */
-    Lock getLock(String name);
 
     /**
      * Get client full ip address.

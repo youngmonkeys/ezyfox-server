@@ -136,6 +136,24 @@ public class EzySecureSocketDataReceiverTest {
     }
 
     @Test
+    public void tcpReadBytesHandleGroupNullCase() throws Exception {
+        // given
+        SocketChannel socketChannel = mock(SocketChannel.class);
+
+        // when
+        MethodInvoker.create()
+            .object(instance)
+            .method("tcpReadBytes")
+            .param(SocketChannel.class, socketChannel)
+            .param(ByteBuffer.class, buffer)
+            .invoke();
+
+        // then
+        verify(handlerGroupManager, times(1))
+            .getHandlerGroup(socketChannel);
+    }
+
+    @Test
     public void readTcpBytesFromBufferTest() throws Exception {
         // given
         byte[] bytes = RandomUtil.randomShortByteArray();

@@ -34,8 +34,8 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     return;
                 }
             }
+            super.tcpReadBytes(channel, buffer);
         }
-        super.tcpReadBytes(channel, buffer);
     }
 
     @Override

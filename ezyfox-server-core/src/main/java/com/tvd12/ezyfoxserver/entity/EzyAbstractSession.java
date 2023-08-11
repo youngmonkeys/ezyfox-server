@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.entity;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
-import com.tvd12.ezyfox.function.EzyFunctions;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.socket.*;
@@ -13,9 +12,6 @@ import lombok.Setter;
 
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
 
 @Getter
 @Setter
@@ -87,8 +83,6 @@ public abstract class EzyAbstractSession
     protected volatile boolean disconnectionRegistered;
     @Setter(AccessLevel.NONE)
     protected final Object disconnectionLock = new Object();
-    @Setter(AccessLevel.NONE)
-    protected final Map<String, Lock> locks = new ConcurrentHashMap<>();
 
     public void setOwner(EzyUser owner) {
         this.ownerName = owner.getName();
@@ -135,11 +129,6 @@ public abstract class EzyAbstractSession
             return maxIdleTime < offset;
         }
         return false;
-    }
-
-    @Override
-    public Lock getLock(String name) {
-        return locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
     }
 
     @Override
@@ -235,7 +224,6 @@ public abstract class EzyAbstractSession
         this.readBytes = 0L;
         this.writtenBytes = 0L;
         this.connectionType = null;
-        this.locks.clear();
         this.properties.clear();
         this.droppedPackets = null;
         this.immediateDeliver = null;

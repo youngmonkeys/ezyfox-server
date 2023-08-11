@@ -32,7 +32,7 @@
         <tcp-no-delay>true</tcp-no-delay>
         <max-request-size>4096</max-request-size>
         <writer-thread-pool-size>8</writer-thread-pool-size>
-        <codec-creator>com.tvd12.ezyfoxserver.netty.codec.MsgPackCodecCreator</codec-creator>
+        <codec-creator>com.tvd12.ezyfox.codec.MsgPackCodecCreator</codec-creator>
     </socket>
 
     <udp>
@@ -56,8 +56,7 @@
         <ssl-config>
             <file>ssl-config.properties</file>
             <loader>com.tvd12.ezyfoxserver.ssl.EzySimpleSslConfigLoader</loader>
-            <context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder
-            </context-factory-builder>
+            <context-factory-builder>com.tvd12.ezyfoxserver.ssl.EzySimpleSslContextFactoryBuilder</context-factory-builder>
         </ssl-config>
         <codec-creator>com.tvd12.ezyfox.codec.JacksonCodecCreator</codec-creator>
     </web-socket>

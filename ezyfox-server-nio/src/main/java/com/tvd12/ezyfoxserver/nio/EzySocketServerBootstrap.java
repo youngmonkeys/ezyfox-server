@@ -91,7 +91,8 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return socketSetting.isCertificationSslActive()
             ? new EzyNioSecureSocketAcceptor(
                 sslContext,
-                socketSetting.getSslHandshakeTimeout()
+                socketSetting.getSslHandshakeTimeout(),
+                socketSetting.getMaxRequestSize()
             )
             : new EzyNioSocketAcceptor();
     }

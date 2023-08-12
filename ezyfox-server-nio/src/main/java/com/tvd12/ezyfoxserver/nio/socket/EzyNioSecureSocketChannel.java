@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.FINISHED;
 import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
 
@@ -25,19 +26,24 @@ public class EzyNioSecureSocketChannel
     private int netBufferSize;
     private final SSLContext sslContext;
     private final int sslHandshakeTimeout;
+    private final int sslMaxAppBufferSize;
     @Getter
     private final Object packingLock = new Object();
     private final AtomicBoolean handshaked = new AtomicBoolean();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
+
     public EzyNioSecureSocketChannel(
         SocketChannel channel,
         SSLContext sslContext,
-        int sslHandshakeTimeout
+        int sslHandshakeTimeout,
+        int maxRequestSize
     ) {
         super(channel);
         this.sslContext = sslContext;
         this.sslHandshakeTimeout = sslHandshakeTimeout;
+        this.sslMaxAppBufferSize = maxRequestSize * 2;
     }
 
     public boolean isHandshaked() {
@@ -46,6 +52,18 @@ public class EzyNioSecureSocketChannel
 
     @SuppressWarnings("MethodLength")
     public void handshake() throws IOException {
+        if (!channel.isConnected()) {
+            logger.info("channel: {} closed", channel);
+            return;
+        }
+        if (engine != null) {
+            logger.info(
+                "channel: {} has already called handshake, handshaked: {}",
+                channel,
+                handshaked
+            );
+            return;
+        }
         engine = sslContext.createSSLEngine();
         engine.setUseClientMode(false);
         engine.beginHandshake();
@@ -53,8 +71,8 @@ public class EzyNioSecureSocketChannel
         SSLSession session = engine.getSession();
         appBufferSize = session.getApplicationBufferSize();
         netBufferSize = session.getPacketBufferSize();
+
         netBuffer = ByteBuffer.allocate(netBufferSize);
-        ByteBuffer appBuffer = ByteBuffer.allocate(appBufferSize);
         ByteBuffer peerAppData = ByteBuffer.allocate(appBufferSize);
         ByteBuffer peerNetData = ByteBuffer.allocate(netBufferSize);
 
@@ -81,7 +99,7 @@ public class EzyNioSecureSocketChannel
                             engine.closeInbound();
                         } catch (SSLException e) {
                             logger.info(
-                                "This engine was forced to close inbound, " +
+                                "this engine was forced to close inbound, " +
                                     "without having received the proper SSL/TLS close " +
                                     "notification message from the peer, due to end of stream.",
                                 e
@@ -98,7 +116,7 @@ public class EzyNioSecureSocketChannel
                         handshakeStatus = result.getHandshakeStatus();
                     } catch (SSLException e) {
                         logger.info(
-                            "A problem was encountered while processing the data " +
+                            "a problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
                                 "Will try to properly close connection...",
                             e
@@ -109,8 +127,7 @@ public class EzyNioSecureSocketChannel
                     }
                     switch (result.getStatus()) {
                         case BUFFER_OVERFLOW:
-                            peerAppData = enlargeBuffer(peerAppData, appBufferSize);
-                            break;
+                            throw new EzyConnectionCloseException("max request size");
                         case BUFFER_UNDERFLOW:
                             break;
                         case CLOSED:
@@ -128,13 +145,13 @@ public class EzyNioSecureSocketChannel
                 case NEED_WRAP:
                     netBuffer.clear();
                     try {
-                        result = engine.wrap(appBuffer, netBuffer);
+                        result = engine.wrap(EMPTY_BUFFER, netBuffer);
                         handshakeStatus = result.getHandshakeStatus();
                     } catch (SSLException e) {
                         engine.closeOutbound();
                         handshakeStatus = engine.getHandshakeStatus();
                         logger.info(
-                            "A problem was encountered while processing the data " +
+                            "a problem was encountered while processing the data " +
                                 "that caused the SSLEngine to abort. " +
                                 "Will try to properly close connection...",
                             e
@@ -143,11 +160,11 @@ public class EzyNioSecureSocketChannel
                     }
                     switch (result.getStatus()) {
                         case BUFFER_OVERFLOW:
-                            netBuffer = enlargeBuffer(netBuffer, netBufferSize);
+                            netBuffer = ByteBuffer.allocate(netBuffer.capacity() * 2);
                             break;
                         case BUFFER_UNDERFLOW:
                             throw new SSLException(
-                                "Should not happen, buffer underflow occurred after a wrap."
+                                "should not happen, buffer underflow occurred after a wrap."
                             );
                         case CLOSED:
                             try {
@@ -155,7 +172,7 @@ public class EzyNioSecureSocketChannel
                                 peerNetData.clear();
                             } catch (Exception e) {
                                 logger.info(
-                                    "Failed to send server's close message " +
+                                    "failed to send server's close message " +
                                         "due to socket channel's failure.",
                                     e
                                 );
@@ -190,7 +207,11 @@ public class EzyNioSecureSocketChannel
             SSLEngineResult result = engine.unwrap(netBuffer, tcpAppBuffer);
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
-                    netBuffer = enlargeBuffer(netBuffer, appBufferSize);
+                    int doubleSize = tcpAppBuffer.capacity() * 2;
+                    if (doubleSize > sslMaxAppBufferSize) {
+                        throw new EzyConnectionCloseException("max request size");
+                    }
+                    tcpAppBuffer = ByteBuffer.allocate(doubleSize);
                     break;
                 case BUFFER_UNDERFLOW:
                     break;
@@ -230,11 +251,11 @@ public class EzyNioSecureSocketChannel
             );
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
-                    netBuffer = enlargeBuffer(netBuffer, netBufferSize);
+                    netBuffer = ByteBuffer.allocate(netBuffer.capacity() * 2);
                     break;
                 case BUFFER_UNDERFLOW:
                     throw new IOException(
-                        "Should not happen, buffer underflow occurred after a wrap."
+                        "should not happen, buffer underflow occurred after a wrap."
                     );
                 case CLOSED:
                     try {
@@ -273,12 +294,11 @@ public class EzyNioSecureSocketChannel
         }
     }
 
-    private ByteBuffer enlargeBuffer(
-        ByteBuffer buffer,
-        int sessionProposedCapacity
-    ) {
-        return sessionProposedCapacity > buffer.capacity()
-            ? ByteBuffer.allocate(sessionProposedCapacity)
-            : ByteBuffer.allocate(buffer.capacity() * 2);
+    @Override
+    public void close() {
+        super.close();
+        if (engine != null) {
+            processWithLogException(engine::closeOutbound);
+        }
     }
 }

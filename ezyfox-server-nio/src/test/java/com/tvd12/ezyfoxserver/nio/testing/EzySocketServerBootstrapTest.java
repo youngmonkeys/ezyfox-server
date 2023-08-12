@@ -57,6 +57,7 @@ public class EzySocketServerBootstrapTest {
 
         verify(socketSetting, times(1)).isCertificationSslActive();
         verify(socketSetting, times(1)).getSslHandshakeTimeout();
+        verify(socketSetting, times(1)).getMaxRequestSize();
         verifyNoMoreInteractions(socketSetting);
         verifyNoMoreInteractions(sslContext);
     }

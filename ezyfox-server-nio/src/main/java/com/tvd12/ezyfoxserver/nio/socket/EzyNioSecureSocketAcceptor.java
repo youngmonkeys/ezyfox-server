@@ -11,13 +11,15 @@ public class EzyNioSecureSocketAcceptor extends EzyNioSocketAcceptor {
 
     private final SSLContext sslContext;
     private final int sslHandshakeTimeout;
+    private final int maxRequestSize;
 
     @Override
     protected EzyChannel newChannel(SocketChannel clientChannel) {
         return new EzyNioSecureSocketChannel(
             clientChannel,
             sslContext,
-            sslHandshakeTimeout
+            sslHandshakeTimeout,
+            maxRequestSize
         );
     }
 }

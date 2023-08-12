@@ -26,7 +26,7 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
             if (!secureChannel.isHandshaked()) {
                 try {
                     secureChannel.handshake();
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     logger.info("handshake failed on channel: {}", channel, e);
                     handlerGroup.enqueueDisconnection(
                         EzyDisconnectReason.SSH_HANDSHAKE_FAILED

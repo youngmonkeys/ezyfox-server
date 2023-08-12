@@ -25,7 +25,8 @@ public class EzyNioSecureSocketAcceptorTest {
     private SSLSession sslSession;
     private SocketChannel socketChannel;
     private EzyNioSecureSocketAcceptor instance;
-    private static final int sslHandshakeTimeout = 100;
+    private static final int SSL_HANDSHAKE_TIMEOUT = 100;
+    private static final int MAX_REQUEST_SIZE = 1024;
 
     @BeforeMethod
     public void setup() {
@@ -36,7 +37,8 @@ public class EzyNioSecureSocketAcceptorTest {
         socketChannel = mock(SocketChannel.class);
         instance = new EzyNioSecureSocketAcceptor(
             sslContext,
-            sslHandshakeTimeout
+            SSL_HANDSHAKE_TIMEOUT,
+            MAX_REQUEST_SIZE
         );
         FieldUtil.setFieldValue(
             sslContext,

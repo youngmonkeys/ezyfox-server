@@ -33,7 +33,8 @@ public class EzyNioSecureSocketChannelTest {
     private SocketChannel socketChannel;
     private EzyNioSecureSocketChannel instance;
     private final int bufferSize = 128;
-    private static final int sslHandshakeTimeout = 100;
+    private static final int SSL_HANDSHAKE_TIMEOUT = 100;
+    private static final int MAX_REQUEST_SIZE = 128;
 
     @BeforeMethod
     public void setup() {
@@ -48,7 +49,8 @@ public class EzyNioSecureSocketChannelTest {
         instance = new EzyNioSecureSocketChannel(
             socketChannel,
             sslContext,
-            sslHandshakeTimeout
+            SSL_HANDSHAKE_TIMEOUT,
+            MAX_REQUEST_SIZE
         );
         FieldUtil.setFieldValue(
             sslContext,
@@ -59,6 +61,7 @@ public class EzyNioSecureSocketChannelTest {
         when(sslEngine.getSession()).thenReturn(sslSession);
         when(sslSession.getPacketBufferSize()).thenReturn(bufferSize);
         when(sslSession.getApplicationBufferSize()).thenReturn(bufferSize);
+        when(socketChannel.isConnected()).thenReturn(true);
     }
 
     public void beforeNotHandshakeMethod() {
@@ -90,6 +93,8 @@ public class EzyNioSecureSocketChannelTest {
 
         verify(sslSession, times(1)).getApplicationBufferSize();
         verify(sslSession, times(1)).getPacketBufferSize();
+
+        verify(socketChannel, times(1)).isConnected();
     }
 
     @Test
@@ -327,17 +332,17 @@ public class EzyNioSecureSocketChannelTest {
         });
 
         // when
-        instance.handshake();
+        Throwable e = Asserts.assertThrows(() -> instance.handshake());
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertEqualsType(e, EzyConnectionCloseException.class);
 
         verifyAfterHandshake();
-        verify(socketChannel, times(2))
+        verify(socketChannel, times(1))
             .read(any(ByteBuffer.class));
 
         verify(sslEngine, times(1)).getHandshakeStatus();
-        verify(sslEngine, times(2))
+        verify(sslEngine, times(1))
             .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
     }
 
@@ -761,7 +766,7 @@ public class EzyNioSecureSocketChannelTest {
             SSLEngineResult.HandshakeStatus.NEED_WRAP
         );
         when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
-            EzyThreads.sleep(sslHandshakeTimeout * 2);
+            EzyThreads.sleep(SSL_HANDSHAKE_TIMEOUT * 2);
            return 0;
         });
 
@@ -874,7 +879,7 @@ public class EzyNioSecureSocketChannelTest {
         );
         int readBytes = RandomUtil.randomSmallInt();
         when(socketChannel.read(any(ByteBuffer.class))).thenAnswer(it -> {
-            EzyThreads.sleep(sslHandshakeTimeout * 2);
+            EzyThreads.sleep(SSL_HANDSHAKE_TIMEOUT * 2);
             return readBytes;
         });
 
@@ -903,6 +908,34 @@ public class EzyNioSecureSocketChannelTest {
         verify(sslEngine, times(1)).getHandshakeStatus();
         verify(sslEngine, times(1))
             .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
+    public void handleCaseHandshakeChannelNotConnected() throws Exception {
+        // given
+        when(socketChannel.isConnected()).thenReturn(false);
+
+        // whe
+        instance.handshake();
+
+        // then
+        Asserts.assertFalse(instance.isHandshaked());
+
+        verify(socketChannel, times(1)).isConnected();
+    }
+
+    @Test
+    public void handleCaseHandshakeEngineNotNull() throws Exception {
+        // given
+        FieldUtil.setFieldValue(instance, "engine", sslEngine);
+
+        // whe
+        instance.handshake();
+
+        // then
+        Asserts.assertFalse(instance.isHandshaked());
+
+        verify(socketChannel, times(1)).isConnected();
     }
 
     @Test
@@ -1211,6 +1244,53 @@ public class EzyNioSecureSocketChannelTest {
     }
 
     @Test
+    public void readCaseBufferOverFlowButMaxSize() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+        FieldUtil.setFieldValue(instance, "sslMaxAppBufferSize", bufferSize/2);
+
+        buffer.clear();
+        buffer.put(new byte[] {1, 2});
+        buffer.flip();
+        SSLEngineResult resultBufferOverflow = new SSLEngineResult(
+            SSLEngineResult.Status.BUFFER_OVERFLOW,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+        SSLEngineResult resultOk = new SSLEngineResult(
+            SSLEngineResult.Status.OK,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            0
+        );
+
+        AtomicInteger unwrapCallCount = new AtomicInteger();
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenAnswer(it -> {
+                int callCount = unwrapCallCount.incrementAndGet();
+                if (callCount == 1) {
+                    return resultBufferOverflow;
+                }
+                ByteBuffer tcpNetBuffer = it.getArgumentAt(1, ByteBuffer.class);
+                tcpNetBuffer.clear();
+                tcpNetBuffer.put(netBuffer);
+                return resultOk;
+            });
+
+        // when
+        Throwable e = Asserts.assertThrows(() ->
+            instance.read(buffer)
+        );
+
+        // then
+        Asserts.assertEqualsType(e, EzyConnectionCloseException.class);
+
+        verify(sslEngine, times(1))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
     public void readCaseBufferUnderFlow() throws Exception {
         // given
         beforeNotHandshakeMethod();
@@ -1331,5 +1411,25 @@ public class EzyNioSecureSocketChannelTest {
 
         // then
         Asserts.assertEquals(actual, new byte[0]);
+    }
+
+    @Test
+    public void closeNormalCase() {
+        // given
+        FieldUtil.setFieldValue(instance, "engine", sslEngine);
+
+        // when
+        instance.close();
+
+        // then
+        verify(sslEngine, times(1)).closeOutbound();
+    }
+
+    @Test
+    public void closeBeforeHandshakeCase() {
+        // given
+        // when
+        // then
+        instance.close();
     }
 }

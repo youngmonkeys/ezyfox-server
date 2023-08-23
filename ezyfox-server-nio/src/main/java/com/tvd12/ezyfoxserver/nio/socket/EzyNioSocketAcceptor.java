@@ -13,6 +13,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -30,14 +31,11 @@ public class EzyNioSocketAcceptor
     @Setter
     protected Selector readSelector;
     @Setter
-    protected List<SocketChannel> acceptableConnections;
-    @Setter
     protected EzyHandlerGroupManager handlerGroupManager;
-
-    @Override
-    public void destroy() {
-        processWithLogException(ownSelector::close);
-    }
+    protected final List<SocketChannel> acceptableConnections =
+        new ArrayList<>();
+    protected final List<SocketChannel> acceptableConnectionsBuffer =
+        new ArrayList<>();
 
     @Override
     public void handleEvent() {
@@ -45,16 +43,6 @@ public class EzyNioSocketAcceptor
             processReadyKeys();
         } catch (Throwable e) {
             logger.info("I/O error at socket-acceptor", e);
-        }
-    }
-
-    public void handleAcceptableConnections() {
-        if (acceptableConnections.isEmpty()) {
-            return;
-        }
-        //noinspection SynchronizeOnNonFinalField
-        synchronized (acceptableConnections) {
-            doHandleAcceptableConnections();
         }
     }
 
@@ -80,40 +68,56 @@ public class EzyNioSocketAcceptor
     }
 
     private void addConnection(SocketChannel clientChannel) {
-        //noinspection SynchronizeOnNonFinalField
         synchronized (acceptableConnections) {
             acceptableConnections.add(clientChannel);
         }
     }
 
-    private void doHandleAcceptableConnections() {
-        Iterator<SocketChannel> iterator = acceptableConnections.iterator();
-        while (iterator.hasNext()) {
-            SocketChannel clientChannel = iterator.next();
-            iterator.remove();
-            acceptConnection(clientChannel);
+    public void handleAcceptableConnections() {
+        synchronized (acceptableConnections) {
+            acceptableConnectionsBuffer.addAll(acceptableConnections);
+            acceptableConnections.clear();
+        }
+        try {
+            for (SocketChannel clientChannel : acceptableConnectionsBuffer) {
+                acceptConnection(clientChannel);
+            }
+        } finally {
+            acceptableConnectionsBuffer.clear();
         }
     }
 
     private void acceptConnection(SocketChannel clientChannel) {
         try {
             doAcceptConnection(clientChannel);
-        } catch (Exception e) {
-            logger.error("can't accept connection: {}", clientChannel, e);
+        } catch (Throwable e) {
+            logger.info("can't accept connection: {}", clientChannel, e);
         }
     }
 
-    private void doAcceptConnection(SocketChannel clientChannel) throws Exception {
+    private void doAcceptConnection(
+        SocketChannel clientChannel
+    ) throws Exception {
         clientChannel.configureBlocking(false);
         clientChannel.socket().setTcpNoDelay(tcpNoDelay);
-
-        EzyChannel channel = new EzyNioSocketChannel(clientChannel);
-
+        SelectionKey selectionKey = clientChannel
+            .register(readSelector, SelectionKey.OP_READ);
+        EzyChannel channel = newChannel(clientChannel);
         EzyNioHandlerGroup handlerGroup = handlerGroupManager
             .newHandlerGroup(channel, EzyConnectionType.SOCKET);
         EzyNioSession session = handlerGroup.getSession();
-
-        SelectionKey selectionKey = clientChannel.register(readSelector, SelectionKey.OP_READ);
         session.setProperty(EzyNioSession.SELECTION_KEY, selectionKey);
+    }
+
+    protected EzyChannel newChannel(SocketChannel clientChannel) {
+        return new EzyNioSocketChannel(clientChannel);
+    }
+
+    @Override
+    public void destroy() {
+        synchronized (acceptableConnections) {
+            acceptableConnections.clear();
+        }
+        processWithLogException(ownSelector::close);
     }
 }

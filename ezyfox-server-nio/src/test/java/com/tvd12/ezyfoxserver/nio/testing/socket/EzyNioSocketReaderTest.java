@@ -103,7 +103,6 @@ public class EzyNioSocketReaderTest extends BaseTest {
         EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
 
         EzyNioSocketReader socketReader = new EzyNioSocketReader();
         socketReader.setOwnSelector(ownSelector);
@@ -141,7 +140,6 @@ public class EzyNioSocketReaderTest extends BaseTest {
         EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
         socketAcceptor.setReadSelector(ownSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
-        socketAcceptor.setAcceptableConnections(new ArrayList<>());
 
         EzyNioSocketReader socketReader = new EzyNioSocketReader();
         socketReader.setOwnSelector(ownSelector);

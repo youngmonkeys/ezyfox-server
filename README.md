@@ -105,7 +105,7 @@ As the EzyFox community grows, we'd love to see how our open-source framework ca
 
 Currently, the following organizations are officially using EzyFox:
 
-1. [Defi Warrior](https://defiwarrior.io/)
+1. [Defi Warrior](https://gamefi.org/games/defi-warrior)
 2. ...
 3. Your awesome project ✨
 

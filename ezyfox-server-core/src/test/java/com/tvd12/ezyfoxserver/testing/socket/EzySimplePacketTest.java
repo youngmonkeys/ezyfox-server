@@ -29,7 +29,6 @@ public class EzySimplePacketTest {
         EzySimplePacket packet = new EzySimplePacket();
         packet.setData("hello");
 
-
         // when
         packet.replaceData("world");
 

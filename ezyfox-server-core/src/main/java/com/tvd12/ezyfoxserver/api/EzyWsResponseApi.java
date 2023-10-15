@@ -23,8 +23,8 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
     }
 
     @Override
-    protected EzySimplePacket createPacket(Object bytes, EzyPackage pack) {
-        EzySimplePacket packet = super.createPacket(bytes, pack);
+    protected EzySimplePacket createPacket(EzyConstant transportType, Object bytes) {
+        EzySimplePacket packet = super.createPacket(transportType, bytes);
         packet.setBinary(false);
         return packet;
     }

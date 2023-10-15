@@ -8,6 +8,7 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
 
+import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -22,12 +23,15 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private Selector acceptSelector;
     private ServerSocket serverSocket;
     private ServerSocketChannel serverSocketChannel;
-
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
+    private final SSLContext sslContext;
+    private final EzySocketSetting socketSetting;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
+        this.sslContext = builder.sslContext;
+        this.socketSetting = serverSettings.getSocket();
     }
 
     public static Builder builder() {
@@ -64,12 +68,17 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private void getBindAndConfigServerSocket() throws Exception {
         this.serverSocket = serverSocketChannel.socket();
         this.serverSocket.setReuseAddress(true);
-        this.serverSocket.bind(new InetSocketAddress(getSocketAddress(), getSocketPort()));
+        this.serverSocket.bind(
+            new InetSocketAddress(
+                socketSetting.getAddress(),
+                socketSetting.getPort()
+            )
+        );
         this.serverSocketChannel.register(acceptSelector, SelectionKey.OP_ACCEPT);
     }
 
     private void startSocketHandlers() throws Exception {
-        EzyNioSocketAcceptor socketAcceptor = new EzyNioSocketAcceptor();
+        EzyNioSocketAcceptor socketAcceptor = newSocketAcceptor();
         writingLoopHandler = newWritingLoopHandler();
         readingLoopHandler = newReadingLoopHandler(socketAcceptor);
         socketAcceptanceLoopHandler = newSocketAcceptanceLoopHandler(socketAcceptor);
@@ -78,9 +87,19 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         writingLoopHandler.start();
     }
 
+    private EzyNioSocketAcceptor newSocketAcceptor() {
+        return socketSetting.isCertificationSslActive()
+            ? new EzyNioSecureSocketAcceptor(
+                sslContext,
+                socketSetting.getSslHandshakeTimeout(),
+                socketSetting.getMaxRequestSize()
+            )
+            : new EzyNioSocketAcceptor();
+    }
+
     private EzySocketEventLoopHandler newWritingLoopHandler() {
         EzySocketWritingLoopHandler loopHandler = new EzySocketWritingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketWriterPoolSize());
+        loopHandler.setThreadPoolSize(socketSetting.getWriterThreadPoolSize());
         loopHandler.setEventHandlerSupplier(() -> {
             EzySocketWriter eventHandler = new EzyNioSocketWriter();
             eventHandler.setWriterGroupFetcher(handlerGroupManager);
@@ -91,9 +110,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     }
 
     private EzySocketEventLoopHandler newReadingLoopHandler(
-        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler) {
+        EzyNioAcceptableConnectionsHandler acceptableConnectionsHandler
+    ) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketReadingLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketReaderPoolSize());
+        loopHandler.setThreadPoolSize(getSocketReaderThreadPoolSize());
         EzyNioSocketReader eventHandler = new EzyNioSocketReader();
         eventHandler.setOwnSelector(readSelector);
         eventHandler.setSocketDataReceiver(socketDataReceiver);
@@ -105,8 +125,8 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private EzySocketEventLoopHandler newSocketAcceptanceLoopHandler(
         EzyNioSocketAcceptor socketAcceptor) {
         EzySocketEventLoopOneHandler loopHandler = new EzyNioSocketAcceptanceLoopHandler();
-        loopHandler.setThreadPoolSize(getSocketAcceptorPoolSize());
-        socketAcceptor.setTcpNoDelay(getSocketTcpNoDelay());
+        loopHandler.setThreadPoolSize(getSocketAcceptorThreadPoolSize());
+        socketAcceptor.setTcpNoDelay(socketSetting.isTcpNoDelay());
         socketAcceptor.setReadSelector(readSelector);
         socketAcceptor.setOwnSelector(acceptSelector);
         socketAcceptor.setHandlerGroupManager(handlerGroupManager);
@@ -122,36 +142,25 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         return ServerSocketChannel.open();
     }
 
-    private int getSocketReaderPoolSize() {
+    private int getSocketReaderThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_READER;
     }
 
-    private int getSocketWriterPoolSize() {
-        return getSocketSetting().getWriterThreadPoolSize();
-    }
-
-    private int getSocketAcceptorPoolSize() {
+    private int getSocketAcceptorThreadPoolSize() {
         return EzyNioThreadPoolSizes.SOCKET_ACCEPTOR;
     }
 
-    private int getSocketPort() {
-        return getSocketSetting().getPort();
-    }
+    public static class Builder extends EzyAbstractSocketServerBootstrap.Builder<
+        Builder,
+        EzySocketServerBootstrap
+        > {
 
-    private String getSocketAddress() {
-        return getSocketSetting().getAddress();
-    }
+        private SSLContext sslContext;
 
-    private boolean getSocketTcpNoDelay() {
-        return getSocketSetting().isTcpNoDelay();
-    }
-
-    private EzySocketSetting getSocketSetting() {
-        return getServerSettings().getSocket();
-    }
-
-    public static class Builder
-        extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzySocketServerBootstrap> {
+        public Builder sslContext(SSLContext sslContext) {
+            this.sslContext = sslContext;
+            return this;
+        }
 
         @Override
         public EzySocketServerBootstrap build() {

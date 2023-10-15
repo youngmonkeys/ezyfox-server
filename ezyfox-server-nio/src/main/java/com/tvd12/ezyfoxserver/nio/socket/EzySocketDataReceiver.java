@@ -6,14 +6,15 @@ import com.tvd12.ezyfox.concurrent.EzyExecutors;
 import com.tvd12.ezyfox.util.EzyDestroyable;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyCoreConstants;
+import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzyNioHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 
@@ -37,7 +38,7 @@ public class EzySocketDataReceiver
         return new Builder();
     }
 
-    private ByteBuffer[] newTcpByteBuffers(int size) {
+    protected ByteBuffer[] newTcpByteBuffers(int size) {
         ByteBuffer[] answer = new ByteBuffer[size];
         for (int i = 0; i < size; ++i) {
             answer[i] = ByteBuffer.allocateDirect(getMaxBufferSize());
@@ -65,15 +66,14 @@ public class EzySocketDataReceiver
             tcpReadBytes(channel, buffer);
         } catch (Throwable e) {
             logger.info(
-                "I/O error at tcp-data-reader (channel: {}): {}({})",
+                "I/O error at tcp-data-reader (channel: {})",
                 channel,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
 
-    private void tcpReadBytes(
+    protected void tcpReadBytes(
         SocketChannel channel,
         ByteBuffer buffer
     ) throws Throwable {
@@ -82,33 +82,47 @@ public class EzySocketDataReceiver
         try {
             buffer.clear();
             readBytes = channel.read(buffer);
-        } catch (ClosedChannelException e) {
-            // do nothing
+            if (readBytes > 0) {
+                processTcpReadBytes(channel, buffer);
+            }
+        } catch (EzyConnectionCloseException e) {
+            readBytes = -1;
+            exception = e;
         } catch (Throwable e) {
             exception = e;
         }
         if (readBytes == -1) {
             tcpCloseConnection(channel);
-        } else if (readBytes > 0) {
-            processReadBytes(channel, buffer);
         }
         if (exception != null) {
             throw exception;
         }
     }
 
-    private void processReadBytes(
+    private void processTcpReadBytes(
         SocketChannel channel,
         ByteBuffer buffer
     ) throws Exception {
-        buffer.flip();
-        byte[] binary = new byte[buffer.limit()];
-        buffer.get(binary);
         EzyNioHandlerGroup handlerGroup =
             handlerGroupManager.getHandlerGroup(channel);
-        if (handlerGroup != null) {
-            handlerGroup.fireBytesReceived(binary);
+        if (handlerGroup == null) {
+            return;
         }
+        buffer.flip();
+        byte[] binary = readTcpBytesFromBuffer(
+            handlerGroup.getChannel(),
+            buffer
+        );
+        handlerGroup.fireBytesReceived(binary);
+    }
+
+    protected byte[] readTcpBytesFromBuffer(
+        EzyChannel channel,
+        ByteBuffer buffer
+    ) throws Exception {
+        byte[] binary = new byte[buffer.limit()];
+        buffer.get(binary);
+        return binary;
     }
 
     private void tcpCloseConnection(SocketChannel channel) {
@@ -119,25 +133,24 @@ public class EzySocketDataReceiver
         }
     }
 
-    public void udpReceive(Object socketChannel, EzyMessage message) {
+    public void udpReceive(Object channel, EzyMessage message) {
         ExecutorService executorService =
-            selectedExecutorService(socketChannel);
-        executorService.execute(() -> doUdpReceive(socketChannel, message));
+            selectedExecutorService(channel);
+        executorService.execute(() -> doUdpReceive(channel, message));
     }
 
-    private void doUdpReceive(Object socketChannel, EzyMessage message) {
+    private void doUdpReceive(Object channel, EzyMessage message) {
         try {
             EzyNioHandlerGroup handlerGroup =
-                handlerGroupManager.getHandlerGroup(socketChannel);
+                handlerGroupManager.getHandlerGroup(channel);
             if (handlerGroup != null) {
                 handlerGroup.fireMessageReceived(message);
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at udp-message-received (channel: {}): {}({})",
-                socketChannel,
-                e.getClass().getName(),
-                e.getMessage()
+                "I/O error at udp-message-received (channel: {})",
+                channel,
+                e
             );
         }
 
@@ -161,10 +174,9 @@ public class EzySocketDataReceiver
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at ws-message-received (session: {}): {}({})",
+                "I/O error at ws-message-received (session: {})",
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
@@ -177,10 +189,9 @@ public class EzySocketDataReceiver
             }
         } catch (Throwable e) {
             logger.info(
-                "I/O error at ws-message-received (session: {}): {}({})",
+                "I/O error at ws-message-received (session: {})",
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
@@ -205,7 +216,7 @@ public class EzySocketDataReceiver
         return executorServices[index];
     }
 
-    private int getMaxBufferSize() {
+    protected int getMaxBufferSize() {
         return EzyCoreConstants.MAX_READ_BUFFER_SIZE;
     }
 

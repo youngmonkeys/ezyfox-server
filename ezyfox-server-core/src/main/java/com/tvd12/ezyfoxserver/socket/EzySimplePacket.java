@@ -18,6 +18,11 @@ public class EzySimplePacket implements EzyPacket {
     private EzyConstant transportType = EzyTransportType.TCP;
 
     @Override
+    public void replaceData(Object data) {
+        this.data = data;
+    }
+
+    @Override
     public void setFragment(Object fragment) {
         this.data = fragment;
         this.fragmented = true;
@@ -25,10 +30,14 @@ public class EzySimplePacket implements EzyPacket {
 
     @Override
     public int getSize() {
-        if (data instanceof String) {
-            return ((String) data).length();
+        Object currentData = data;
+        if (currentData == null) {
+            return 0;
         }
-        return ((byte[]) data).length;
+        if (currentData instanceof String) {
+            return ((String) currentData).length();
+        }
+        return ((byte[]) currentData).length;
     }
 
     @Override

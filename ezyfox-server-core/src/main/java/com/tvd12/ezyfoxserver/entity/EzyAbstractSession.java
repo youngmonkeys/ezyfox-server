@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.entity;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyEntity;
-import com.tvd12.ezyfox.function.EzyFunctions;
 import com.tvd12.ezyfox.util.EzyProcessor;
 import com.tvd12.ezyfoxserver.delegate.EzySessionDelegate;
 import com.tvd12.ezyfoxserver.socket.*;
@@ -13,9 +12,6 @@ import lombok.Setter;
 
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
 
 @Getter
 @Setter
@@ -86,9 +82,7 @@ public abstract class EzyAbstractSession
     @Setter(AccessLevel.NONE)
     protected volatile boolean disconnectionRegistered;
     @Setter(AccessLevel.NONE)
-    protected Object disconnectionLock = new Object();
-    @Setter(AccessLevel.NONE)
-    protected Map<String, Lock> locks = new ConcurrentHashMap<>();
+    protected final Object disconnectionLock = new Object();
 
     public void setOwner(EzyUser owner) {
         this.ownerName = owner.getName();
@@ -138,11 +132,6 @@ public abstract class EzyAbstractSession
     }
 
     @Override
-    public Lock getLock(String name) {
-        return locks.computeIfAbsent(name, EzyFunctions.NEW_REENTRANT_LOCK_FUNC);
-    }
-
-    @Override
     public final void send(EzyPacket packet) {
         if (activated) {
             addWrittenResponses(1);
@@ -180,7 +169,6 @@ public abstract class EzyAbstractSession
         }
     }
 
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void disconnect(EzyConstant disconnectReason) {
         synchronized (disconnectionLock) {
@@ -236,12 +224,7 @@ public abstract class EzyAbstractSession
         this.readBytes = 0L;
         this.writtenBytes = 0L;
         this.connectionType = null;
-        this.disconnectionLock = null;
-        if (locks != null) {
-            this.locks.clear();
-        }
         this.properties.clear();
-        this.locks = null;
         this.droppedPackets = null;
         this.immediateDeliver = null;
         if (packetQueue != null) {

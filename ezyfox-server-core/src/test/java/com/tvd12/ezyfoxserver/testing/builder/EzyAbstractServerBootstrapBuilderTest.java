@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.builder;
 
 import com.tvd12.ezyfoxserver.EzySimpleServer;
+import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestServerBootstrapBuilder;
@@ -71,6 +72,31 @@ public class EzyAbstractServerBootstrapBuilderTest extends BaseCoreTest {
         EzySimpleWebSocketSetting webSocketSetting =
             (EzySimpleWebSocketSetting) server.getSettings().getWebsocket();
         webSocketSetting.setSslActive(true);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        EzySimpleSslConfigSetting setting = new EzySimpleSslConfigSetting();
+
+        // when
+        SSLContext sslContext = MethodInvoker.create()
+            .object(builder)
+            .method("newSslContext")
+            .param(EzySslConfigSetting.class, setting)
+            .invoke(SSLContext.class);
+
+        Asserts.assertNotNull(sslContext);
+    }
+
+    @Test
+    public void newSslContextCauseBySocketTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(true);
+        socketSetting.setSslType(SslType.CERTIFICATION);
 
         MyTestServerBootstrapBuilder builder =
             (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()

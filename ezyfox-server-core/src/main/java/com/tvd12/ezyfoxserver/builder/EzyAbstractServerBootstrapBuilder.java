@@ -45,7 +45,11 @@ public abstract class EzyAbstractServerBootstrapBuilder
     }
 
     protected SSLContext newSslContext(EzySslConfigSetting sslConfig) {
-        if (getWebsocketSetting().isSslActive()) {
+        EzySocketSetting socketSetting = getSocketSetting();
+        EzyWebSocketSetting webSocketSetting = getWebsocketSetting();
+        boolean activeSslForSocket = socketSetting.isCertificationSslActive();
+        boolean activeSslForWebsocket = webSocketSetting.isSslActive();
+        if (activeSslForSocket || activeSslForWebsocket) {
             return newSslContextInitializer(sslConfig).init();
         }
         return null;

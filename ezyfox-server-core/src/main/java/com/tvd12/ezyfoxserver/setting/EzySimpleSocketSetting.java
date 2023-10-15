@@ -1,5 +1,6 @@
 package com.tvd12.ezyfoxserver.setting;
 
+import com.tvd12.ezyfoxserver.constant.SslType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,12 @@ public class EzySimpleSocketSetting
     extends EzyAbstractSocketSetting
     implements EzySocketSetting {
 
+    @XmlElement(name = "ssl-type")
+    protected SslType sslType;
+
+    @XmlElement(name = "ssl-handshake-timeout")
+    protected int sslHandshakeTimeout;
+
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
 
@@ -31,6 +38,8 @@ public class EzySimpleSocketSetting
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
+        setSslType(SslType.CUSTOMIZATION);
+        setSslHandshakeTimeout(350);
         setMaxRequestSize(4096);
         setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
@@ -40,6 +49,8 @@ public class EzySimpleSocketSetting
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = super.toMap();
         map.put("sslActive", sslActive);
+        map.put("sslType", sslType);
+        map.put("sslHandshakeTimeout", sslHandshakeTimeout);
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);

@@ -8,8 +8,7 @@ import com.tvd12.ezyfoxserver.socket.EzyChannel;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 public class EzyCloseSessionImplTest extends BaseTest {
 
@@ -31,5 +30,24 @@ public class EzyCloseSessionImplTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         session.setChannel(channel);
         cmd.close(session, EzyDisconnectReason.UNKNOWN);
+    }
+
+    @Test
+    public void noSendToClientDueToSshHandshakeFailed() {
+        // given
+        EzyAbstractSession session = mock(EzyAbstractSession.class);
+
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyCloseSessionImpl instance = new EzyCloseSessionImpl(serverContext);
+
+        // when
+        instance.close(session, EzyDisconnectReason.SSH_HANDSHAKE_FAILED);
+
+        // then
+        verifyNoMoreInteractions(serverContext);
+
+        verify(session, times(1)).getClientAddress();
+        verify(session, times(1)).close();
+        verifyNoMoreInteractions(session);
     }
 }

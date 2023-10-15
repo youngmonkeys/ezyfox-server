@@ -7,6 +7,8 @@ public interface EzyPacket extends EzyReleasable {
 
     Object getData();
 
+    void replaceData(Object data);
+
     boolean isBinary();
 
     boolean isReleased();

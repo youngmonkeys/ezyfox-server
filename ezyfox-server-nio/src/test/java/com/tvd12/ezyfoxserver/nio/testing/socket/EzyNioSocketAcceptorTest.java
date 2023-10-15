@@ -7,6 +7,7 @@ import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.context.EzySimpleServerContext;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyHandlerGroupBuilderFactoryImpl;
 import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
@@ -29,6 +30,7 @@ import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -37,7 +39,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.AbstractSelector;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
@@ -79,6 +80,24 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         assert acceptableConnections.size() == 1;
         acceptor.handleAcceptableConnections();
         assert acceptableConnections.size() == 0;
+    }
+
+    @Test
+    public void handleEventExceptionCase() throws Exception {
+        // given
+        EzyNioSocketAcceptor instance = new  EzyNioSocketAcceptor();
+
+        Selector ownSelector = mock(Selector.class);
+        IOException error = new IOException("test");
+        when(ownSelector.select()).thenThrow(error);
+        instance.setOwnSelector(ownSelector);
+
+        // when
+        instance.handleEvent();
+
+        // then
+        verify(ownSelector, times(1)).select();
+        verifyNoMoreInteractions(ownSelector);
     }
 
     @Test
@@ -182,6 +201,91 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
 
         // then
         verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1)).setProperty(
+            any(String.class),
+            any(SelectionKey.class)
+        );
+        verifyNoMoreInteractions(session);
+    }
+
+    @Test
+    public void acceptConnectionSslTest() throws Exception {
+        // given
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+
+        Selector readSelector = Selector.open();
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
+        sut.setReadSelector(readSelector);
+        SocketChannel clientChannel = SocketChannel.open();
+
+        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        sut.setHandlerGroupManager(handlerGroupManager);
+
+        EzyNioSession session = mock(EzyNioSession.class);
+        when(handlerGroup.getSession()).thenReturn(session);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("acceptConnection")
+            .param(SocketChannel.class, clientChannel)
+            .call();
+
+        // then
+        verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1)).setProperty(
+            any(String.class),
+            any(SelectionKey.class)
+        );
+        verifyNoMoreInteractions(session);
+    }
+
+    @Test
+    public void acceptConnectionSslExceptionTest() throws Exception {
+        // given
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+
+        Selector readSelector = Selector.open();
+        EzyNioSocketAcceptor sut = new EzyNioSocketAcceptor();
+        sut.setReadSelector(readSelector);
+        SocketChannel clientChannel = SocketChannel.open();
+
+        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        sut.setHandlerGroupManager(handlerGroupManager);
+
+        EzyNioSession session = mock(EzyNioSession.class);
+        when(handlerGroup.getSession()).thenReturn(session);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("acceptConnection")
+            .param(SocketChannel.class, clientChannel)
+            .call();
+
+        // then
+        verify(handlerGroupManager, times(1))
+            .newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class));
+        verifyNoMoreInteractions(handlerGroupManager);
+
+        verify(handlerGroup, times(1)).getSession();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(session, times(1))
+            .setProperty(any(String.class), any(SelectionKey.class));
+        verifyNoMoreInteractions(session);
     }
 
     public static abstract class ExServerSocketChannel extends ServerSocketChannel {

@@ -72,7 +72,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -95,6 +95,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         sut.handle(serverContext, request);
 
         // then
+        verify(socketSetting, times(1)).isCustomizationSslActive();
         verify(session, times(1)).setClientId(clientId);
         verify(session, times(1)).setClientKey(clientKey);
         verify(session, times(1)).setClientType(clientType);
@@ -142,7 +143,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -153,6 +154,50 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
 
         // then
         Asserts.assertNull(session.getSessionKey());
+    }
+
+    @Test
+    public void handleSocketSSLButClientKeyNullTest() {
+        // given
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(request.getSession()).thenReturn(session);
+
+        EzyServer server = mock(EzyServer.class);
+        EzySettings settings = mock(EzySettings.class);
+        EzySocketSetting socketSetting = mock(EzySocketSetting.class);
+        when(settings.getSocket()).thenReturn(socketSetting);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
+        when(serverContext.getServer()).thenReturn(server);
+        when(server.getSettings()).thenReturn(settings);
+
+        String clientId = RandomUtil.randomShortHexString();
+        String clientType = RandomUtil.randomShortAlphabetString();
+        String clientVersion = RandomUtil.randomShortAlphabetString();
+        String reconnectToken = RandomUtil.randomShortHexString();
+        when(params.getClientId()).thenReturn(clientId);
+        when(params.getClientKey()).thenReturn(null);
+        when(params.getClientType()).thenReturn(clientType);
+        when(params.getClientVersion()).thenReturn(clientVersion);
+        when(params.getReconnectToken()).thenReturn(reconnectToken);
+        when(params.isEnableEncryption()).thenReturn(true);
+
+        // when
+        sut.handle(serverContext, request);
+
+        // then
+        verify(session, times(1)).setClientId(clientId);
+        verify(session, times(1)).setClientKey(null);
+        verify(session, times(1)).setClientType(clientType);
+        verify(session, times(1)).setClientVersion(clientVersion);
+        verify(session, times(1)).setSessionKey(any(byte[].class));
     }
 
     @Test
@@ -173,7 +218,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -218,7 +263,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 
@@ -276,7 +321,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         EzySettings settings = mock(EzySettings.class);
         EzySocketSetting socketSetting = mock(EzySocketSetting.class);
         when(settings.getSocket()).thenReturn(socketSetting);
-        when(socketSetting.isSslActive()).thenReturn(true);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
         when(serverContext.getServer()).thenReturn(server);
         when(server.getSettings()).thenReturn(settings);
 

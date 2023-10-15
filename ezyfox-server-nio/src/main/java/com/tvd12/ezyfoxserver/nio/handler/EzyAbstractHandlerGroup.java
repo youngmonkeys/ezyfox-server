@@ -16,6 +16,7 @@ import com.tvd12.ezyfoxserver.nio.entity.EzyNioSession;
 import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.statistics.EzyNetworkStats;
 import com.tvd12.ezyfoxserver.statistics.EzySessionStats;
+import lombok.Getter;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -32,6 +33,7 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
     EzyDroppedPackets,
     EzyDestroyable {
 
+    @Getter
     protected final EzyChannel channel;
 
     protected final D decoder;
@@ -169,14 +171,8 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
 
     protected final void executeSendingPacket(EzyPacket packet, Object writeBuffer) {
         try {
-            EzyChannel channel = session.getChannel();
-            if (canWriteBytes(channel)) {
+            if (session.isActivated() && channel.isConnected()) {
                 EzyConstant transportType = packet.getTransportType();
-                if (transportType == EzyTransportType.UDP_OR_TCP) {
-                    transportType = session.getDatagramChannelPool() != null
-                        ? EzyTransportType.UDP
-                        : EzyTransportType.TCP;
-                }
                 int writeBytes = transportType == EzyTransportType.TCP
                     ? writePacketToSocket(packet, writeBuffer)
                     : writeUdpPacketToSocket(packet, writeBuffer);
@@ -186,12 +182,11 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
             int packetSize = packet.getSize();
             networkStats.addWriteErrorPackets(1);
             networkStats.addWriteErrorBytes(packetSize);
-            logger.warn(
-                "can't send {} bytes to session: {}, error: {}({})",
+            logger.info(
+                "can't send {} bytes to session: {}",
                 packetSize,
                 session,
-                e.getClass().getName(),
-                e.getMessage()
+                e
             );
         }
     }
@@ -236,13 +231,6 @@ public abstract class EzyAbstractHandlerGroup<D extends EzyDestroyable>
 
     protected ByteBuffer getWriteBuffer(ByteBuffer fixed, int bytesToWrite) {
         return bytesToWrite > fixed.capacity() ? ByteBuffer.allocate(bytesToWrite) : fixed;
-    }
-
-    private boolean canWriteBytes(EzyChannel channel) {
-        if (channel == null) {
-            return false;
-        }
-        return channel.isConnected();
     }
 
     protected final void executeAddReadBytes(int bytes) {

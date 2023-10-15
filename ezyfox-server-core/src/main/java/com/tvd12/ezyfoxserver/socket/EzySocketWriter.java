@@ -16,7 +16,14 @@ public class EzySocketWriter
 
     @Override
     public void handleEvent() {
-        doProcessSessionTicketsQueue();
+        try {
+            EzySession session = sessionTicketsQueue.take();
+            processSessionQueue(session);
+        } catch (InterruptedException e) {
+            logger.info("socket-writer thread interrupted");
+        } catch (Throwable e) {
+            logger.info("problems in socket-writer, thread", e);
+        }
     }
 
     @Override
@@ -24,19 +31,11 @@ public class EzySocketWriter
         processWithLogException(() -> sessionTicketsQueue.clear());
     }
 
-    private void doProcessSessionTicketsQueue() {
-        try {
-            EzySession session = sessionTicketsQueue.take();
-            processSessionQueue(session);
-        } catch (InterruptedException e) {
-            logger.info("socket-writer thread interrupted");
-        } catch (Throwable throwable) {
-            logger.warn("problems in socket-writer, thread", throwable);
-        }
-    }
-
-    private void processSessionQueue(EzySession session) throws Exception {
-        EzySocketWriterGroup group = getWriterGroup(session);
+    private void processSessionQueue(
+        EzySession session
+    ) throws Exception {
+        EzySocketWriterGroup group = writerGroupFetcher
+            .getWriterGroup(session);
         if (group == null) {
             return;
         }
@@ -50,7 +49,10 @@ public class EzySocketWriter
         }
     }
 
-    private boolean processSessionQueue(EzySocketWriterGroup group, EzyPacketQueue queue)
+    private boolean processSessionQueue(
+        EzySocketWriterGroup group,
+        EzyPacketQueue queue
+    )
         throws Exception {
         if (!queue.isEmpty()) {
             EzyPacket packet = queue.peek();
@@ -66,9 +68,5 @@ public class EzySocketWriter
 
     protected Object getWriteBuffer() {
         return null;
-    }
-
-    protected EzySocketWriterGroup getWriterGroup(EzySession session) {
-        return writerGroupFetcher.getWriterGroup(session);
     }
 }

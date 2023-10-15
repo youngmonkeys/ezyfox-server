@@ -39,8 +39,12 @@ public class EzyHandshakeController
         if (session.getConnectionType() == EzyConnectionType.WEBSOCKET) {
             return;
         }
-        boolean enableSSL = ctx.getServer().getSettings().getSocket().isSslActive();
-        if (!enableSSL) {
+        boolean customizationSslEnable = ctx
+            .getServer()
+            .getSettings()
+            .getSocket()
+            .isCustomizationSslActive();
+        if (!customizationSslEnable) {
             return;
         }
         if (!event.isEnableEncryption()) {
@@ -56,7 +60,7 @@ public class EzyHandshakeController
         if (encryptedSessionKey == null) {
             encryptedSessionKey = sessionKey;
             try {
-                if (clientKey.length > 0) {
+                if (clientKey != null && clientKey.length > 0) {
                     encryptedSessionKey = EzyAsyCrypt.builder()
                         .publicKey(clientKey)
                         .build()

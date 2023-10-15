@@ -12,7 +12,9 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
     protected final EzyMessageDataEncoder encoder;
 
     public EzySocketResponseApi(Object encoder) {
-        this.encoder = new EzySimpleMessageDataEncoder((EzyObjectToByteEncoder) encoder);
+        this.encoder = new EzySimpleMessageDataEncoder(
+            (EzyObjectToByteEncoder) encoder
+        );
     }
 
     @Override
@@ -21,14 +23,21 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
     }
 
     @Override
-    protected byte[] dataToMessageContent(EzyArray data) throws Exception {
+    protected byte[] dataToMessageContent(
+        EzyArray data
+    ) throws Exception {
         return encoder.toMessageContent(data);
     }
 
     @Override
     protected byte[] encryptMessageContent(
-        byte[] messageContent, byte[] encryptionKey) throws Exception {
-        return encoder.encryptMessageContent(messageContent, encryptionKey);
+        byte[] messageContent,
+        byte[] encryptionKey
+    ) throws Exception {
+        return encoder.encryptMessageContent(
+            messageContent,
+            encryptionKey
+        );
     }
 
     @Override

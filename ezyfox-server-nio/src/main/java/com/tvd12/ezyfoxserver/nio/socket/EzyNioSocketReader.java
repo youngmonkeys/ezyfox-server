@@ -28,51 +28,39 @@ public class EzyNioSocketReader extends EzySocketAbstractEventHandler {
     @Override
     public void handleEvent() {
         try {
-            handleAcceptableConnections();
-            doProcessReadyKeys();
+            acceptableConnectionsHandler.handleAcceptableConnections();
+            int readyKeyCount = ownSelector.selectNow();
+            if (readyKeyCount > 0) {
+                processReadyKeys();
+            }
             Thread.sleep(3L);
         } catch (Throwable e) {
-            logger.info("I/O error at socket-reader: {}({})", e.getClass().getName(), e.getMessage());
+            logger.info("I/O error at socket-reader", e);
         }
     }
 
-    private void handleAcceptableConnections() {
-        acceptableConnectionsHandler.handleAcceptableConnections();
-    }
-
-    private void doProcessReadyKeys() throws Exception {
-        int readyKeyCount = ownSelector.selectNow();
-        if (readyKeyCount > 0) {
-            processReadyKeys();
-        }
-    }
-
-    private void processReadyKeys() {
+    protected void processReadyKeys() {
         Set<SelectionKey> readyKeys = this.ownSelector.selectedKeys();
         Iterator<SelectionKey> iterator = readyKeys.iterator();
         while (iterator.hasNext()) {
             SelectionKey key = iterator.next();
             iterator.remove();
             if (key.isValid()) {
-                processReadyKey(key);
+                try {
+                    processReadyKey(key);
+                } catch (Throwable e) {
+                    logger.info("process ready key: {} error", key, e);
+                }
             }
         }
     }
 
     private void processReadyKey(SelectionKey key) {
         if (key.isWritable()) {
-            processWritableKey(key);
+            key.interestOps(SelectionKey.OP_READ);
         }
         if (key.isReadable()) {
-            processReadableKey(key);
+            socketDataReceiver.tcpReceive((SocketChannel) key.channel());
         }
-    }
-
-    private void processWritableKey(SelectionKey key) {
-        key.interestOps(SelectionKey.OP_READ);
-    }
-
-    private void processReadableKey(SelectionKey key) {
-        socketDataReceiver.tcpReceive((SocketChannel) key.channel());
     }
 }

@@ -6,11 +6,11 @@
 ![License](https://img.shields.io/github/license/youngmonkeys/ezyfox-server)
 [![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
 
-<div style="text-align: center">
+<div align="center">
     <img src="./logo.png" width="255" />
 </div>
 
-<div style="text-align: center">
+<div align="center">
 ⚡ Empowering real-time experiences effortlessly ⚡
 </div>
 

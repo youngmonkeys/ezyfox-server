@@ -6,11 +6,11 @@
 ![License](https://img.shields.io/github/license/youngmonkeys/ezyfox-server)
 [![GitHub star chart](https://img.shields.io/github/stars/youngmonkeys/ezyfox-server?style=social)](https://star-history.com/#youngmonkeys/ezyfox-server)
 
-<div align="center">
+<div style="text-align: center">
     <img src="./logo.png" width="255" />
 </div>
 
-<div align="center">
+<div style="text-align: center">
 ⚡ Empowering real-time experiences effortlessly ⚡
 </div>
 
@@ -106,8 +106,9 @@ As the EzyFox community grows, we'd love to see how our open-source framework ca
 Currently, the following organizations are officially using EzyFox:
 
 1. [Defi Warrior](https://gamefi.org/games/defi-warrior)
-2. ...
-3. Your awesome project ✨
+2. [EzySmashers](https://ezysmashers.ezyplatform.com/)
+3. ...
+4. Your awesome project ✨
 
 ## 💖 Support Us
 [Make a Meaningful Donation 😎](https://youngmonkeys.org/donate/)
@@ -118,4 +119,4 @@ Currently, our operating budget is fully supported by our own salaries, and all 
 
 - Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)
 - Ask us on [stackask.com](https://stackask.com)
-- Email us at [Dzung](mailto:itprono3@gmail.com)
+- Email us at [contact@youngmonkeys.org](mailto:contact@youngmonkeys.org)

@@ -88,7 +88,7 @@ Ezyfox Server's benchmark involved broadcasting messages to 1000 concurrent user
 9.  [Swift](https://github.com/youngmonkeys/ezyfox-server-swift-client)
 10. [React Native](https://github.com/youngmonkeys/ezyfox-react-native-client)
 
-## Game libraries
+## 📦 Game libraries
 
 [Game Box](https://github.com/youngmonkeys/game-box): Provide Entities, Managers, Handlers, Maths classes for many types of online games (Turn-based (Located), MMO, Normal), you can take a look [here](https://youngmonkeys.org/projects/game-box) to get more details.
 

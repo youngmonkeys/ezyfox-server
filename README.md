@@ -117,8 +117,6 @@ Currently, the following organizations are officially using EzyFox:
 ## 💖 Support Us
 [Make a Meaningful Donation 😎](https://youngmonkeys.org/donate/)
 
-Currently, our operating budget is fully supported by our own salaries, and all product development is still based on voluntary contributions from a few organization members. The low budget is causing significant difficulties for us. Therefore, with a clear roadmap and an ambitious goal to provide intellectual products for the community, we would greatly appreciate your support in the form of a donation to help us take further steps. Thank you in advance for your meaningful contributions!
-
 ## ☎️ Contact Us
 
 - Get in touch with us on [Facebook](https://www.facebook.com/youngmonkeys.org)

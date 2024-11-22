@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.constant;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import lombok.Getter;
 
+@Getter
 public enum EzyEventType implements EzyConstant {
 
     SERVER_INITIALIZING(0),
@@ -13,10 +14,10 @@ public enum EzyEventType implements EzyConstant {
     USER_ADDED(26),
     USER_REMOVED(27),
     USER_ACCESSED_APP(28),
+    USER_EXITED_APP(29),
     SESSION_REMOVED(35),
     STREAMING(36);
 
-    @Getter
     private final int id;
 
     EzyEventType(int id) {

@@ -7,8 +7,8 @@ import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopOneHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
 import com.tvd12.ezyfoxserver.socket.EzySocketWritingLoopHandler;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 
-import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -25,12 +25,12 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private ServerSocketChannel serverSocketChannel;
     private EzySocketEventLoopHandler readingLoopHandler;
     private EzySocketEventLoopHandler socketAcceptanceLoopHandler;
-    private final SSLContext sslContext;
+    private final EzySslContextProxy sslContextProxy;
     private final EzySocketSetting socketSetting;
 
     public EzySocketServerBootstrap(Builder builder) {
         super(builder);
-        this.sslContext = builder.sslContext;
+        this.sslContextProxy = builder.sslContextProxy;
         this.socketSetting = serverSettings.getSocket();
     }
 
@@ -90,7 +90,7 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
     private EzyNioSocketAcceptor newSocketAcceptor() {
         return socketSetting.isCertificationSslActive()
             ? new EzyNioSecureSocketAcceptor(
-                sslContext,
+                sslContextProxy,
                 socketSetting.getSslHandshakeTimeout(),
                 socketSetting.getMaxRequestSize()
             )
@@ -155,10 +155,10 @@ public class EzySocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
         EzySocketServerBootstrap
         > {
 
-        private SSLContext sslContext;
+        private EzySslContextProxy sslContextProxy;
 
-        public Builder sslContext(SSLContext sslContext) {
-            this.sslContext = sslContext;
+        public Builder sslContextProxy(EzySslContextProxy sslContextProxy) {
+            this.sslContextProxy = sslContextProxy;
             return this;
         }
 

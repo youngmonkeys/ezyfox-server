@@ -2,6 +2,7 @@ package com.tvd12.ezyfoxserver.nio.socket;
 
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.socket.EzySecureChannel;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class EzyNioSecureSocketChannel
     private ByteBuffer netBuffer;
     private int appBufferSize;
     private int netBufferSize;
-    private final SSLContext sslContext;
+    private SSLContext sslContext;
     private final int sslHandshakeTimeout;
     private final int sslMaxAppBufferSize;
     @Getter
@@ -36,14 +37,17 @@ public class EzyNioSecureSocketChannel
 
     public EzyNioSecureSocketChannel(
         SocketChannel channel,
-        SSLContext sslContext,
+        EzySslContextProxy sslContextProxy,
         int sslHandshakeTimeout,
         int maxRequestSize
     ) {
         super(channel);
-        this.sslContext = sslContext;
         this.sslHandshakeTimeout = sslHandshakeTimeout;
         this.sslMaxAppBufferSize = maxRequestSize * 2;
+        this.sslContext = sslContextProxy.loadSslContext();
+        sslContextProxy.onSslContextReload(newSslContext ->
+            this.sslContext = newSslContext
+        );
     }
 
     public boolean isHandshaked() {

@@ -16,14 +16,13 @@ import lombok.Setter;
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 
+@Setter
 public abstract class EzyServerBootstrap
     extends EzyLoggable
     implements EzyStartable, EzyDestroyable {
 
-    @Setter
     @Getter
     protected EzyServerContext context;
-    @Setter
     protected EzyBootstrap localBootstrap;
 
     @Override

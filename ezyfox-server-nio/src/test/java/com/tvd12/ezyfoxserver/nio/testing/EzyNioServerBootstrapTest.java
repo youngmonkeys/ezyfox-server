@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.setting.EzySimpleEventControllersSetting;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
 import com.tvd12.ezyfoxserver.setting.EzySimpleStreamingSetting;
 import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
 import com.tvd12.ezyfoxserver.wrapper.EzyServerControllers;
 import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
@@ -100,7 +101,10 @@ public class EzyNioServerBootstrapTest extends BaseTest {
         EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
         bootstrap.setContext(serverContext);
         bootstrap.setLocalBootstrap(localBootstrap);
-        bootstrap.setSslContext(sslContext);
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(() ->
+            sslContext
+        );
+        bootstrap.setSslContextProxy(sslContextProxy);
         bootstrap.setResponseApi(responseApi);
         bootstrap.setStreamingApi(streamingApi);
         bootstrap.setStreamQueue(streamQueue);

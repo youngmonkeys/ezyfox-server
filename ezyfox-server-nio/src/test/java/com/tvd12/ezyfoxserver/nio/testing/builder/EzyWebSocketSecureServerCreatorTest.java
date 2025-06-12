@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.nio.testing.builder;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketSecureServerCreator;
 import com.tvd12.ezyfoxserver.nio.websocket.EzyWsHandler;
 import com.tvd12.ezyfoxserver.setting.EzySimpleWebSocketSetting;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.test.base.BaseTest;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -15,8 +16,13 @@ public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
     @Test
     public void test() throws Exception {
         SSLContext sslContext = SSLContext.getDefault();
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(
+            () -> sslContext
+        );
         EzySimpleWebSocketSetting webSocketSetting = new EzySimpleWebSocketSetting();
-        EzyWebSocketSecureServerCreator creator = new EzyWebSocketSecureServerCreator(sslContext);
+        EzyWebSocketSecureServerCreator creator = new EzyWebSocketSecureServerCreator(
+            sslContextProxy
+        );
         creator.setting(webSocketSetting);
         creator.create();
 

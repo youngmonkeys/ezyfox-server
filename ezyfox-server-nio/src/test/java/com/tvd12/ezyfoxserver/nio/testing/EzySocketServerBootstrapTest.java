@@ -7,6 +7,7 @@ import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSocketAcceptor;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.AfterMethod;
@@ -38,8 +39,11 @@ public class EzySocketServerBootstrapTest {
         when(server.getSettings()).thenReturn(settings);
         when(settings.getSocket()).thenReturn(socketSetting);
 
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(() ->
+            sslContext
+        );
         instance = EzySocketServerBootstrap.builder()
-            .sslContext(sslContext)
+            .sslContextProxy(sslContextProxy)
             .serverContext(serverContext)
             .build();
     }

@@ -7,21 +7,20 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyNioSessionManager;
 import com.tvd12.ezyfoxserver.setting.EzyWebSocketSetting;
 import com.tvd12.ezyfoxserver.socket.EzySocketEventLoopHandler;
 import com.tvd12.ezyfoxserver.socket.EzySocketWriter;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import org.eclipse.jetty.server.Server;
-
-import javax.net.ssl.SSLContext;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
 public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstrap {
 
     private Server websocketServer;
-    private final SSLContext sslContext;
+    private final EzySslContextProxy sslContextProxy;
     private final EzyWebSocketSetting webSocketSetting;
 
     public EzyWebSocketServerBootstrap(Builder builder) {
         super(builder);
-        this.sslContext = builder.sslContext;
+        this.sslContextProxy = builder.sslContextProxy;
         this.webSocketSetting = serverSettings.getWebsocket();
     }
 
@@ -67,7 +66,7 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
 
     private EzyWebSocketServerCreator newSocketServerCreator() {
         if (webSocketSetting.isSslActive()) {
-            return new EzyWebSocketSecureServerCreator(sslContext);
+            return new EzyWebSocketSecureServerCreator(sslContextProxy);
         }
         return new EzyWebSocketServerCreator();
     }
@@ -75,10 +74,10 @@ public class EzyWebSocketServerBootstrap extends EzyAbstractSocketServerBootstra
     public static class Builder
         extends EzyAbstractSocketServerBootstrap.Builder<Builder, EzyWebSocketServerBootstrap> {
 
-        private SSLContext sslContext;
+        private EzySslContextProxy sslContextProxy;
 
-        public Builder sslContext(SSLContext sslContext) {
-            this.sslContext = sslContext;
+        public Builder sslContextProxy(EzySslContextProxy sslContextProxy) {
+            this.sslContextProxy = sslContextProxy;
             return this;
         }
 

@@ -1,17 +1,19 @@
 package com.tvd12.ezyfoxserver.nio.builder.impl;
 
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
-import javax.net.ssl.SSLContext;
+public class EzyWebSocketSecureServerCreator
+    extends EzyWebSocketServerCreator {
 
-public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
+    protected final EzySslContextProxy sslContextProxy;
 
-    protected final SSLContext sslContext;
-
-    public EzyWebSocketSecureServerCreator(SSLContext sslContext) {
-        this.sslContext = sslContext;
+    public EzyWebSocketSecureServerCreator(
+        EzySslContextProxy sslContextProxy
+    ) {
+        this.sslContextProxy = sslContextProxy;
     }
 
     @Override
@@ -25,7 +27,12 @@ public class EzyWebSocketSecureServerCreator extends EzyWebSocketServerCreator {
         httpsConfig.addCustomizer(new SecureRequestCustomizer());
 
         SslContextFactory sslContextFactory = new SslContextFactory.Server();
-        sslContextFactory.setSslContext(sslContext);
+        sslContextFactory.setSslContext(sslContextProxy.loadSslContext());
+        sslContextProxy.onSslContextReload(sslContext ->
+            sslContextFactory.reload(factory ->
+                factory.setSslContext(sslContext)
+            )
+        );
 
         ServerConnector wssConnector = new ServerConnector(
             server,

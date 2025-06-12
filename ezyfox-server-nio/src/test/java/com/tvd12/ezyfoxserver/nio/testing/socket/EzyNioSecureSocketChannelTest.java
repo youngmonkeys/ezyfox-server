@@ -4,6 +4,7 @@ import com.tvd12.ezyfox.io.EzyByteBuffers;
 import com.tvd12.ezyfox.util.EzyThreads;
 import com.tvd12.ezyfoxserver.exception.EzyConnectionCloseException;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketChannel;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
@@ -46,9 +47,12 @@ public class EzyNioSecureSocketChannelTest {
         sslEngine = mock(SSLEngine.class);
         sslSession = mock(SSLSession.class);
         socketChannel = mock(SocketChannel.class);
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(() ->
+            sslContext
+        );
         instance = new EzyNioSecureSocketChannel(
             socketChannel,
-            sslContext,
+            sslContextProxy,
             SSL_HANDSHAKE_TIMEOUT,
             MAX_REQUEST_SIZE
         );

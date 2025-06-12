@@ -10,9 +10,8 @@ import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import lombok.Setter;
-
-import javax.net.ssl.SSLContext;
 
 import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 
@@ -20,7 +19,7 @@ import static com.tvd12.ezyfox.util.EzyProcessor.processWithLogException;
 public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
 
     @Setter
-    private SSLContext sslContext;
+    private EzySslContextProxy sslContextProxy;
     @Setter
     private EzyResponseApi responseApi;
     @Setter
@@ -130,7 +129,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
     private EzySocketServerBootstrap newSocketServerBootstrap() {
         return EzySocketServerBootstrap.builder()
             .serverContext(context)
-            .sslContext(sslContext)
+            .sslContextProxy(sslContextProxy)
             .socketDataReceiver(socketDataReceiver)
             .handlerGroupManager(handlerGroupManager)
             .sessionTicketsQueue(socketSessionTicketsQueue)
@@ -148,7 +147,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
     private EzyWebSocketServerBootstrap newWebSocketServerBootstrap() {
         return EzyWebSocketServerBootstrap.builder()
             .serverContext(context)
-            .sslContext(sslContext)
+            .sslContextProxy(sslContextProxy)
             .socketDataReceiver(socketDataReceiver)
             .handlerGroupManager(handlerGroupManager)
             .sessionTicketsQueue(websocketSessionTicketsQueue)

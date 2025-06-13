@@ -37,5 +37,6 @@ public class EzyWebSocketSecureServerCreatorTest extends BaseTest {
             .param(EzyWsHandler.class, wsHandler)
             .invoke(WebSocketCreator.class);
         webSocketCreator.createWebSocket(null, null);
+        sslContextProxy.reloadSsl();
     }
 }

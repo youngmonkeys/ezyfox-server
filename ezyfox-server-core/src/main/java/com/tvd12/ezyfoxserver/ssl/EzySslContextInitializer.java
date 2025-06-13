@@ -29,9 +29,12 @@ public class EzySslContextInitializer {
 
     protected SSLContext newSslContext() {
         EzySslConfig config = loadSslConfig();
-        EzySslContextFactoryBuilder builder = newSslContextFactoryBuilder();
+        EzySslContextFactoryBuilder builder =
+            newSslContextFactoryBuilder();
         EzySslContextFactory factory = builder.build();
-        return EzyReturner.returnWithException(() -> factory.newSslContext(config));
+        return EzyReturner.returnWithException(
+            () -> factory.newSslContext(config)
+        );
     }
 
     protected EzySslConfig loadSslConfig() {
@@ -41,7 +44,9 @@ public class EzySslContextInitializer {
     }
 
     protected EzySslContextFactoryBuilder newSslContextFactoryBuilder() {
-        return EzyClasses.newInstance(sslConfig.getContextFactoryBuilder());
+        return EzyClasses.newInstance(
+            sslConfig.getContextFactoryBuilder()
+        );
     }
 
     protected EzySslConfigLoader newSslConfigLoader() {
@@ -49,14 +54,19 @@ public class EzySslContextInitializer {
     }
 
     protected String getSslConfigFile() {
-        return getPath(homeFolderPath, EzyFolderNamesSetting.SETTINGS, sslConfig.getFile());
+        return getPath(
+            homeFolderPath,
+            EzyFolderNamesSetting.SETTINGS,
+            sslConfig.getFile()
+        );
     }
 
     protected String getPath(String first, String... more) {
         return Paths.get(first, more).toString();
     }
 
-    public static class Builder implements EzyBuilder<EzySslContextInitializer> {
+    public static class Builder
+        implements EzyBuilder<EzySslContextInitializer> {
 
         protected String homeFolderPath;
         protected EzySslConfigSetting sslConfig;

@@ -66,6 +66,7 @@ public class EzyNioSecureSocketChannelTest {
         when(sslSession.getPacketBufferSize()).thenReturn(bufferSize);
         when(sslSession.getApplicationBufferSize()).thenReturn(bufferSize);
         when(socketChannel.isConnected()).thenReturn(true);
+        sslContextProxy.reloadSsl();
     }
 
     public void beforeNotHandshakeMethod() {

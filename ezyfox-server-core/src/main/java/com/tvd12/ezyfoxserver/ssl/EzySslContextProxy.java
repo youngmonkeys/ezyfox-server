@@ -37,7 +37,7 @@ public class EzySslContextProxy extends EzyLoggable {
                 listener.apply(newSslContext);
             } catch (Exception e) {
                 logger.error(
-                    "reload ssl context on listener: {}",
+                    "reload ssl context on listener: {} error",
                     listener,
                     e
                 );

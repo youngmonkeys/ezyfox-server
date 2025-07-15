@@ -15,6 +15,7 @@ import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.*;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 
 import java.util.concurrent.ExecutorService;
 
@@ -48,6 +49,10 @@ public class EzyNioServerBootstrapBuilderImpl
         EzySocketDataReceiver socketDataReceiver = newSocketDataReceiver(
             handlerGroupManager
         );
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(
+            () -> newSslContext(getWebsocketSetting().getSslConfig())
+        );
+        serverContext.setProperty(EzySslContextProxy.class, sslContextProxy);
         EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
         bootstrap.setResponseApi(responseApi);
         bootstrap.setStreamingApi(streamingApi);
@@ -58,7 +63,7 @@ public class EzyNioServerBootstrapBuilderImpl
         bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
         bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
         bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
-        bootstrap.setSslContext(newSslContext(getWebsocketSetting().getSslConfig()));
+        bootstrap.setSslContextProxy(sslContextProxy);
         return bootstrap;
     }
 

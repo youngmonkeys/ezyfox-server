@@ -1,15 +1,15 @@
 package com.tvd12.ezyfoxserver.nio.socket;
 
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import lombok.AllArgsConstructor;
 
-import javax.net.ssl.SSLContext;
 import java.nio.channels.SocketChannel;
 
 @AllArgsConstructor
 public class EzyNioSecureSocketAcceptor extends EzyNioSocketAcceptor {
 
-    private final SSLContext sslContext;
+    private final EzySslContextProxy sslContextProxy;
     private final int sslHandshakeTimeout;
     private final int maxRequestSize;
 
@@ -17,7 +17,7 @@ public class EzyNioSecureSocketAcceptor extends EzyNioSocketAcceptor {
     protected EzyChannel newChannel(SocketChannel clientChannel) {
         return new EzyNioSecureSocketChannel(
             clientChannel,
-            sslContext,
+            sslContextProxy,
             sslHandshakeTimeout,
             maxRequestSize
         );

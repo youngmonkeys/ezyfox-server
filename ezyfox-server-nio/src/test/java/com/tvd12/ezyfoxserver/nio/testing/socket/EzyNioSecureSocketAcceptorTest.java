@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.nio.testing.socket;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketAcceptor;
 import com.tvd12.ezyfoxserver.nio.socket.EzyNioSecureSocketChannel;
 import com.tvd12.ezyfoxserver.socket.EzyChannel;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.reflect.MethodInvoker;
@@ -35,8 +36,11 @@ public class EzyNioSecureSocketAcceptorTest {
         sslEngine = mock(SSLEngine.class);
         sslSession = mock(SSLSession.class);
         socketChannel = mock(SocketChannel.class);
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(() ->
+            sslContext
+        );
         instance = new EzyNioSecureSocketAcceptor(
-            sslContext,
+            sslContextProxy,
             SSL_HANDSHAKE_TIMEOUT,
             MAX_REQUEST_SIZE
         );

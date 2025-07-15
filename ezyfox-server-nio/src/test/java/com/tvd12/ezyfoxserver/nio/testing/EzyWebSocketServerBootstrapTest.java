@@ -5,6 +5,7 @@ import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.nio.EzyWebSocketServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyWebSocketServerCreator;
 import com.tvd12.ezyfoxserver.setting.EzySimpleSettings;
+import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodUtil;
 import org.testng.annotations.Test;
@@ -30,8 +31,12 @@ public class EzyWebSocketServerBootstrapTest {
         settings.getWebsocket().setSslActive(true);
         server.setSettings(settings);
 
+        EzySslContextProxy sslContextProxy = new EzySslContextProxy(
+            () -> sslContext
+        );
+
         EzyWebSocketServerBootstrap sut = EzyWebSocketServerBootstrap.builder()
-            .sslContext(sslContext)
+            .sslContextProxy(sslContextProxy)
             .serverContext(serverContext)
             .build();
 

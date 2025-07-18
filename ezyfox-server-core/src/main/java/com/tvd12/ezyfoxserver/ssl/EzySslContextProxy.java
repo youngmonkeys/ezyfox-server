@@ -34,10 +34,12 @@ public class EzySslContextProxy extends EzyLoggable {
         SSLContext newSslContext = loadSslContext();
         sslContextReloadListeners.forEach(listener -> {
             try {
+                logger.info("start apply reload ssl for: {}", listener);
                 listener.apply(newSslContext);
+                logger.info("finish apply reload ssl for: {}", listener);
             } catch (Exception e) {
                 logger.error(
-                    "reload ssl context on listener: {} error",
+                    "apply reload ssl context on listener: {} error",
                     listener,
                     e
                 );

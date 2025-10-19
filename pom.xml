@@ -6,10 +6,10 @@
     <parent>
         <groupId>com.tvd12</groupId>
         <artifactId>ezyfox</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </parent>
     <artifactId>ezyfox-server</artifactId>
-    <version>1.2.9.1</version>
+    <version>1.3.0</version>
     <packaging>pom</packaging>
 
     <name>ezyfox-server</name>
@@ -57,8 +57,8 @@
     </developers>
 
     <properties>
-        <ezy.version>1.2.9</ezy.version>
-        <ezy.core.version>2.1.7</ezy.core.version>
+        <ezy.version>1.3.0</ezy.version>
+        <ezy.core.version>2.1.8</ezy.core.version>
     </properties>
 
     <build>

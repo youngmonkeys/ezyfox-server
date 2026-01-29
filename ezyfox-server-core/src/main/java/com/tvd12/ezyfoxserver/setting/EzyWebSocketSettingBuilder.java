@@ -6,6 +6,8 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     protected int sslPort;
     protected int maxFrameSize;
     protected int writerThreadPoolSize;
+    protected int minHandlerThreadPoolSize;
+    protected int maxHandlerThreadPoolSize;
     protected EzySimpleSslConfigSetting sslConfig;
     protected boolean managementEnable;
 
@@ -14,6 +16,8 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         this.sslPort = 2812;
         this.maxFrameSize = 2048;
         this.writerThreadPoolSize = 8;
+        this.minHandlerThreadPoolSize = 4;
+        this.maxHandlerThreadPoolSize = 16;
         this.managementEnable = false;
         this.sslConfig = new EzySimpleSslConfigSetting();
         this.codecCreator = "com.tvd12.ezyfox.codec.JacksonCodecCreator";
@@ -34,6 +38,20 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         return this;
     }
 
+    public EzyWebSocketSettingBuilder minHandlerThreadPoolSize(
+        int minHandlerThreadPoolSize
+    ) {
+        this.minHandlerThreadPoolSize = minHandlerThreadPoolSize;
+        return this;
+    }
+
+    public EzyWebSocketSettingBuilder maxHandlerThreadPoolSize(
+        int maxHandlerThreadPoolSize
+    ) {
+        this.maxHandlerThreadPoolSize = maxHandlerThreadPoolSize;
+        return this;
+    }
+
     public EzyWebSocketSettingBuilder sslConfig(EzySimpleSslConfigSetting sslConfig) {
         this.sslConfig = sslConfig;
         return this;
@@ -49,6 +67,8 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         EzySimpleWebSocketSetting p = new EzySimpleWebSocketSetting();
         p.setSslPort(sslPort);
         p.setMaxFrameSize(maxFrameSize);
+        p.setMinHandlerThreadPoolSize(minHandlerThreadPoolSize);
+        p.setMaxHandlerThreadPoolSize(maxHandlerThreadPoolSize);
         p.setWriterThreadPoolSize(writerThreadPoolSize);
         p.setSslActive(sslActive);
         p.setSslConfig(sslConfig);

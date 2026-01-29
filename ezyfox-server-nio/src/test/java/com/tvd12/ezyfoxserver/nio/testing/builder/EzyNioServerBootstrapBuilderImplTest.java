@@ -207,6 +207,8 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
             .thenReturn(ExEzySslConfigLoader.class.getName());
         when(websocketSetting.getSslConfig()).thenReturn(sslConfigSetting);
         when(websocketSetting.getMaxFrameSize()).thenReturn(512);
+        when(websocketSetting.getMinHandlerThreadPoolSize()).thenReturn(4);
+        when(websocketSetting.getMaxHandlerThreadPoolSize()).thenReturn(8);
         when(settings.getWebsocket()).thenReturn(websocketSetting);
 
         EzyHttpSetting httpSetting = mock(EzyHttpSetting.class);
@@ -282,6 +284,8 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(websocketSetting, times(1)).getPort();
         verify(websocketSetting, times(2)).getAddress();
         verify(websocketSetting, times(1)).getSslConfig();
+        verify(websocketSetting, times(1)).getMinHandlerThreadPoolSize();
+        verify(websocketSetting, times(1)).getMaxHandlerThreadPoolSize();
         verify(websocketSetting, times(1)).getWriterThreadPoolSize();
         verifyNoMoreInteractions(websocketSetting);
     }

@@ -50,6 +50,8 @@
         <active>true</active>
         <ssl-port>2812</ssl-port>
         <max-frame-size>2048</max-frame-size>
+        <min-handler-thread-pool-size>4</min-handler-thread-pool-size>
+        <max-handler-thread-pool-size>16</max-handler-thread-pool-size>
         <writer-thread-pool-size>8</writer-thread-pool-size>
         <management-enable>true</management-enable>
         <ssl-active>false</ssl-active>
@@ -95,4 +97,4 @@
 
 </settings>
 
-        <!-- http://localhost:8080/schema/ezyfox/settings/ -->
+<!-- http://localhost:8080/schema/ezyfox/settings/ -->

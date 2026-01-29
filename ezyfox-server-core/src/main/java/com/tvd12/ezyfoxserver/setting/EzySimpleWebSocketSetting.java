@@ -25,6 +25,12 @@ public class EzySimpleWebSocketSetting
     @XmlElement(name = "max-frame-size")
     protected int maxFrameSize;
 
+    @XmlElement(name = "min-handler-thread-pool-size")
+    protected int minHandlerThreadPoolSize;
+
+    @XmlElement(name = "max-handler-thread-pool-size")
+    protected int maxHandlerThreadPoolSize;
+
     @XmlElement(name = "writer-thread-pool-size")
     protected int writerThreadPoolSize;
 
@@ -39,6 +45,8 @@ public class EzySimpleWebSocketSetting
         setPort(2208);
         setSslPort(2812);
         setMaxFrameSize(2048);
+        setMinHandlerThreadPoolSize(4);
+        setMaxHandlerThreadPoolSize(16);
         setWriterThreadPoolSize(8);
         setSslConfig(new EzySimpleSslConfigSetting());
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
@@ -52,6 +60,8 @@ public class EzySimpleWebSocketSetting
         map.put("sslActive", sslActive);
         map.put("sslConfig", sslConfig.toMap());
         map.put("managementEnable", managementEnable);
+        map.put("minHandlerThreadPoolSize", minHandlerThreadPoolSize);
+        map.put("maxHandlerThreadPoolSize", maxHandlerThreadPoolSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);
         return map;
     }

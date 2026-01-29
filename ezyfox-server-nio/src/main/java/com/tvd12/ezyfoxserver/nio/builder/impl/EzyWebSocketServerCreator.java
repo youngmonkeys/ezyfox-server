@@ -30,27 +30,37 @@ public class EzyWebSocketServerCreator {
     protected EzyHandlerGroupManager handlerGroupManager;
     protected EzySessionManagementSetting sessionManagementSetting;
 
-    public EzyWebSocketServerCreator socketDataReceiver(EzySocketDataReceiver socketDataReceiver) {
+    public EzyWebSocketServerCreator socketDataReceiver(
+        EzySocketDataReceiver socketDataReceiver
+    ) {
         this.socketDataReceiver = socketDataReceiver;
         return this;
     }
 
-    public EzyWebSocketServerCreator setting(EzyWebSocketSetting setting) {
+    public EzyWebSocketServerCreator setting(
+        EzyWebSocketSetting setting
+    ) {
         this.setting = setting;
         return this;
     }
 
-    public EzyWebSocketServerCreator sessionManager(EzyNioSessionManager sessionManager) {
+    public EzyWebSocketServerCreator sessionManager(
+        EzyNioSessionManager sessionManager
+    ) {
         this.sessionManager = sessionManager;
         return this;
     }
 
-    public EzyWebSocketServerCreator handlerGroupManager(EzyHandlerGroupManager handlerGroupManager) {
+    public EzyWebSocketServerCreator handlerGroupManager(
+        EzyHandlerGroupManager handlerGroupManager
+    ) {
         this.handlerGroupManager = handlerGroupManager;
         return this;
     }
 
-    public EzyWebSocketServerCreator sessionManagementSetting(EzySessionManagementSetting sessionManagementSetting) {
+    public EzyWebSocketServerCreator sessionManagementSetting(
+        EzySessionManagementSetting sessionManagementSetting
+    ) {
         this.sessionManagementSetting = sessionManagementSetting;
         return this;
     }
@@ -60,7 +70,10 @@ public class EzyWebSocketServerCreator {
         wsContextHandler.setAllowNullPathInfo(true);
         EzyWsHandler wsHandler = newWsHandler();
         wsContextHandler.setHandler(newWebSocketHandler(wsHandler));
-        QueuedThreadPool threadPool = new QueuedThreadPool(16, 8);
+        QueuedThreadPool threadPool = new QueuedThreadPool(
+            setting.getMaxHandlerThreadPoolSize(),
+            setting.getMinHandlerThreadPoolSize()
+        );
         threadPool.setName("ezyfox-ws-handler");
         Server server = new Server(threadPool);
         ContextHandlerCollection contextHandlers = new ContextHandlerCollection();

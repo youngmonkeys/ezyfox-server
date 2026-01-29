@@ -19,4 +19,19 @@ public class EzyWebSocketSettingBuilderTest {
         // then
         Asserts.assertEquals(true, setting.isManagementEnable());
     }
+
+    @Test
+    public void testHandlerThreadPoolSize() {
+        // given
+        EzyWebSocketSettingBuilder sut = new EzyWebSocketSettingBuilder()
+            .minHandlerThreadPoolSize(2)
+            .maxHandlerThreadPoolSize(5);
+
+        // when
+        EzySimpleWebSocketSetting setting = sut.build();
+
+        // then
+        Asserts.assertEquals(setting.getMinHandlerThreadPoolSize(), 2);
+        Asserts.assertEquals(setting.getMaxHandlerThreadPoolSize(), 5);
+    }
 }

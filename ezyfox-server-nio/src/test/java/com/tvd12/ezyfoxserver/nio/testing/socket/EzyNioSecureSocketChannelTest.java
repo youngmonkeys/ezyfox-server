@@ -74,8 +74,8 @@ public class EzyNioSecureSocketChannelTest {
         FieldUtil.setFieldValue(instance, "netBuffer", netBuffer);
         FieldUtil.setFieldValue(instance, "appBufferSize", bufferSize);
         FieldUtil.setFieldValue(instance, "netBufferSize", bufferSize);
-        AtomicBoolean handshaked = FieldUtil.getFieldValue(instance, "handshaked");
-        handshaked.set(true);
+        AtomicBoolean handshakeComplete = FieldUtil.getFieldValue(instance, "handshakeComplete");
+        handshakeComplete.set(true);
     }
 
     @AfterMethod
@@ -1114,8 +1114,8 @@ public class EzyNioSecureSocketChannelTest {
     public void packBeforeHandshake() {
         // when
         beforeNotHandshakeMethod();
-        AtomicBoolean handshaked = FieldUtil.getFieldValue(instance, "handshaked");
-        handshaked.set(false);
+        AtomicBoolean handshakeComplete = FieldUtil.getFieldValue(instance, "handshakeComplete");
+        handshakeComplete.set(false);
 
         Throwable e = Asserts.assertThrows(() ->
             instance.pack(new byte[0])

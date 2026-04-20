@@ -125,7 +125,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
         Asserts.assertNotNull(instance.getPackingLock());
 
         verifyAfterHandshake();
@@ -154,7 +154,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -187,7 +187,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -219,7 +219,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -392,7 +392,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(2))
@@ -444,7 +444,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -546,7 +546,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -578,7 +578,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
 
@@ -630,7 +630,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -709,7 +709,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -753,7 +753,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(socketChannel, times(1))
@@ -832,7 +832,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(sslEngine, times(2)).getHandshakeStatus();
@@ -853,7 +853,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(sslEngine, times(1)).getHandshakeStatus();
@@ -870,7 +870,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertTrue(instance.isHandshaked());
+        Asserts.assertTrue(instance.isHandshakeComplete());
 
         verifyAfterHandshake();
         verify(sslEngine, times(1)).getHandshakeStatus();
@@ -924,7 +924,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertFalse(instance.isHandshaked());
+        Asserts.assertFalse(instance.isHandshakeComplete());
 
         verify(socketChannel, times(1)).isConnected();
     }
@@ -938,7 +938,7 @@ public class EzyNioSecureSocketChannelTest {
         instance.handshake();
 
         // then
-        Asserts.assertFalse(instance.isHandshaked());
+        Asserts.assertFalse(instance.isHandshakeComplete());
 
         verify(socketChannel, times(1)).isConnected();
     }

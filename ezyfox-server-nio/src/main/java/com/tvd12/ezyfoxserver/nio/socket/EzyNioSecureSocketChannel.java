@@ -30,7 +30,7 @@ public class EzyNioSecureSocketChannel
     private final int sslMaxAppBufferSize;
     @Getter
     private final Object packingLock = new Object();
-    private final AtomicBoolean handshaked = new AtomicBoolean();
+    private final AtomicBoolean handshakeComplete = new AtomicBoolean();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
@@ -50,8 +50,8 @@ public class EzyNioSecureSocketChannel
         );
     }
 
-    public boolean isHandshaked() {
-        return handshaked.get();
+    public boolean isHandshakeComplete() {
+        return handshakeComplete.get();
     }
 
     @SuppressWarnings("MethodLength")
@@ -62,9 +62,9 @@ public class EzyNioSecureSocketChannel
         }
         if (engine != null) {
             logger.info(
-                "channel: {} has already called handshake, handshaked: {}",
+                "channel: {} handshake already initiated, handshakeComplete: {}",
                 channel,
-                handshaked
+                    handshakeComplete
             );
             return;
         }
@@ -197,7 +197,7 @@ public class EzyNioSecureSocketChannel
                     break;
             }
         }
-        handshaked.set(true);
+        handshakeComplete.set(true);
     }
 
     public byte[] read(ByteBuffer buffer) throws Exception {
@@ -243,8 +243,8 @@ public class EzyNioSecureSocketChannel
 
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
-        if (!handshaked.get()) {
-            throw new SSLException("not handshaked");
+        if (!handshakeComplete.get()) {
+            throw new SSLException("SSL handshake not established");
         }
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         ByteBuffer netBuffer = ByteBuffer.allocate(netBufferSize);

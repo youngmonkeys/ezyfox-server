@@ -9,7 +9,7 @@ import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import java.util.Map;
 import java.util.Set;
 
-public class EzyAppsStarter extends EzyZoneComponentsStater {
+public class EzyAppsStarter extends EzyZoneComponentsStarter {
 
     protected final ClassLoader classLoader;
     protected final boolean enableAppClassLoader;
@@ -114,7 +114,7 @@ public class EzyAppsStarter extends EzyZoneComponentsStater {
     }
 
     public static class Builder
-        extends EzyZoneComponentsStater.Builder<EzyAppsStarter, Builder> {
+        extends EzyZoneComponentsStarter.Builder<EzyAppsStarter, Builder> {
 
         protected ClassLoader classLoader;
         protected boolean enableAppClassLoader;

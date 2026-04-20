@@ -1,13 +1,13 @@
 ### 1. fork
 
-You need for `ezyfox` to your Github
+You need for `ezyfox` to your GitHub
 
 ### 2. create a pull request with policies:
 
 - must include only one feature or update
 - must [create a new branch](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) for the feature or update
 - must include unit test and coverage 100%
-- should have 6 files or less
+- should have 6 files or fewer
 - don't change old code style if it has no problem
     
 ### 3. resolve review comment if we have any

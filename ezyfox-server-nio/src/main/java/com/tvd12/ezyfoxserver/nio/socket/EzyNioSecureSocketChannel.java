@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -21,11 +22,25 @@ public class EzyNioSecureSocketChannel
     extends EzyNioSocketChannel
     implements EzySecureChannel {
 
+    /*
+     * Buffer state convention:
+     * - netBuffer stores encrypted inbound TLS bytes and is kept in write mode
+     *   between read calls. read() flips it before unwrap and compacts it before
+     *   returning, so partial TLS records remain available for the next read.
+     * - appBuffer stores plaintext produced by SSLEngine.unwrap(). It is reused
+     *   to reduce per-read allocations and is drained into the returned byte[].
+     * - outboundNetBuffer stores encrypted outbound TLS bytes produced by
+     *   SSLEngine.wrap(). It is reused while pack() may emit multiple TLS
+     *   records for one application payload.
+     */
     private SSLEngine engine;
     private ByteBuffer netBuffer;
+    private ByteBuffer appBuffer;
+    private ByteBuffer outboundNetBuffer;
     private int appBufferSize;
     private int netBufferSize;
-    private SSLContext sslContext;
+    private int sslMaxNetBufferSize;
+    private volatile SSLContext sslContext;
     private final int sslHandshakeTimeout;
     private final int sslMaxAppBufferSize;
     @Getter
@@ -75,8 +90,17 @@ public class EzyNioSecureSocketChannel
         SSLSession session = engine.getSession();
         appBufferSize = session.getApplicationBufferSize();
         netBufferSize = session.getPacketBufferSize();
+        /*
+         * netBuffer holds encrypted pending data. It must be allowed to hold at
+         * least a couple of TLS packets because TCP can coalesce records, but it
+         * must not grow without bound when a peer sends malformed or incomplete
+         * records. The application-size limit gives us a stable upper bound.
+         */
+        sslMaxNetBufferSize = Math.max(netBufferSize * 2, sslMaxAppBufferSize);
 
         netBuffer = ByteBuffer.allocate(netBufferSize);
+        appBuffer = ByteBuffer.allocate(appBufferSize);
+        outboundNetBuffer = ByteBuffer.allocate(netBufferSize);
         ByteBuffer peerAppData = ByteBuffer.allocate(appBufferSize);
         ByteBuffer peerNetData = ByteBuffer.allocate(netBufferSize);
 
@@ -147,9 +171,9 @@ public class EzyNioSecureSocketChannel
                     }
                     break;
                 case NEED_WRAP:
-                    netBuffer.clear();
+                    outboundNetBuffer.clear();
                     try {
-                        result = engine.wrap(EMPTY_BUFFER, netBuffer);
+                        result = engine.wrap(EMPTY_BUFFER, outboundNetBuffer);
                         handshakeStatus = result.getHandshakeStatus();
                     } catch (SSLException e) {
                         engine.closeOutbound();
@@ -164,7 +188,9 @@ public class EzyNioSecureSocketChannel
                     }
                     switch (result.getStatus()) {
                         case BUFFER_OVERFLOW:
-                            netBuffer = ByteBuffer.allocate(netBuffer.capacity() * 2);
+                            outboundNetBuffer = ByteBuffer.allocate(
+                                outboundNetBuffer.capacity() * 2
+                            );
                             break;
                         case BUFFER_UNDERFLOW:
                             throw new SSLException(
@@ -172,8 +198,10 @@ public class EzyNioSecureSocketChannel
                             );
                         case CLOSED:
                             try {
-                                writeOrTimeout(channel, netBuffer, endTime);
+                                writeOrTimeout(channel, outboundNetBuffer, endTime);
                                 peerNetData.clear();
+                            } catch (SSLException e) {
+                                throw e;
                             } catch (Exception e) {
                                 logger.info(
                                     "failed to send server's close message " +
@@ -184,7 +212,7 @@ public class EzyNioSecureSocketChannel
                             }
                             break;
                         default: // OK
-                            writeOrTimeout(channel, netBuffer, endTime);
+                            writeOrTimeout(channel, outboundNetBuffer, endTime);
                             break;
                     }
                     break;
@@ -197,28 +225,71 @@ public class EzyNioSecureSocketChannel
                     break;
             }
         }
+        /*
+         * A client can send application data immediately after its final
+         * handshake message. If unwrap consumed only the handshake portion,
+         * peerNetData may still contain encrypted application bytes. Preserve
+         * those bytes for read() instead of dropping the first request.
+         */
+        peerNetData.flip();
+        if (peerNetData.hasRemaining()) {
+            appendToNetBuffer(peerNetData);
+        }
         handshakeComplete.set(true);
     }
 
+    /**
+     * Decrypts the encrypted bytes currently read from the socket.
+     *
+     * <p>The input buffer can contain a partial TLS record, one record, or
+     * multiple coalesced records. Any encrypted bytes that cannot be unwrapped
+     * yet are retained in {@link #netBuffer}. The returned array contains all
+     * plaintext produced during this call and is bounded by
+     * {@link #sslMaxAppBufferSize} to prevent memory exhaustion from oversized
+     * inbound payloads.</p>
+     */
+    @SuppressWarnings("MethodLength")
     public byte[] read(ByteBuffer buffer) throws Exception {
-        if (netBuffer.position() > 0) {
-            netBuffer.compact();
+        if (!handshakeComplete.get()) {
+            throw new SSLException("SSL handshake not established");
         }
-        netBuffer.put(buffer);
+        if (appBuffer == null) {
+            appBuffer = ByteBuffer.allocate(appBufferSize);
+        }
+        /*
+         * Some tests initialize private fields directly. Runtime initialization
+         * happens during handshake(), but this fallback keeps the invariant valid
+         * if read() is exercised with reflected state.
+         */
+        if (sslMaxNetBufferSize <= 0) {
+            sslMaxNetBufferSize = Math.max(
+                netBuffer.capacity() * 2,
+                sslMaxAppBufferSize
+            );
+        }
+        appendToNetBuffer(buffer);
         netBuffer.flip();
-        ByteBuffer tcpAppBuffer = ByteBuffer.allocate(appBufferSize);
+        ByteArrayOutputStream output = null;
         while (netBuffer.hasRemaining()) {
-            SSLEngineResult result = engine.unwrap(netBuffer, tcpAppBuffer);
+            SSLEngineResult result = engine.unwrap(netBuffer, appBuffer);
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
-                    int doubleSize = tcpAppBuffer.capacity() * 2;
-                    if (doubleSize > sslMaxAppBufferSize) {
-                        throw new EzyConnectionCloseException("max request size");
-                    }
-                    tcpAppBuffer = ByteBuffer.allocate(doubleSize);
+                    /*
+                     * SSLEngine produced more plaintext than appBuffer can hold.
+                     * Drain what we have, grow within the configured limit, and
+                     * retry with the remaining encrypted bytes.
+                     */
+                    output = drainAppBuffer(output);
+                    appBuffer = allocateDoubleAppBuffer(appBuffer);
                     break;
                 case BUFFER_UNDERFLOW:
-                    break;
+                    /*
+                     * The current encrypted bytes do not form a complete TLS
+                     * record. Keep them in netBuffer and return whatever
+                     * plaintext was already produced.
+                     */
+                    netBuffer.compact();
+                    return getOutputBytes(drainAppBuffer(output));
                 case CLOSED:
                     try {
                         engine.closeOutbound();
@@ -232,30 +303,55 @@ public class EzyNioSecureSocketChannel
                         "ssl unwrap result status is CLOSE"
                     );
                 default: // 0K
-                    tcpAppBuffer.flip();
-                    byte[] binary = new byte[tcpAppBuffer.limit()];
-                    tcpAppBuffer.get(binary);
-                    return binary;
+                    output = drainAppBuffer(output);
+                    /*
+                     * Defensive progress check: a valid SSLEngine result should
+                     * consume input or produce output. If it does neither, stop
+                     * this read cycle to avoid a tight loop.
+                     */
+                    if (result.bytesConsumed() == 0 && result.bytesProduced() == 0) {
+                        netBuffer.compact();
+                        return getOutputBytes(output);
+                    }
+                    break;
             }
         }
-        return new byte[0];
+        netBuffer.compact();
+        return getOutputBytes(output);
     }
 
+    /**
+     * Encrypts plaintext bytes into one or more TLS records.
+     *
+     * <p>SSLEngine.wrap() is not required to consume the whole input in one
+     * call. This method loops until all plaintext has been wrapped and returns
+     * the concatenated encrypted records.</p>
+     */
     @Override
     public byte[] pack(byte[] bytes) throws Exception {
         if (!handshakeComplete.get()) {
             throw new SSLException("SSL handshake not established");
         }
+        if (outboundNetBuffer == null) {
+            outboundNetBuffer = ByteBuffer.allocate(netBufferSize);
+        }
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        ByteBuffer netBuffer = ByteBuffer.allocate(netBufferSize);
+        outboundNetBuffer.clear();
+        ByteArrayOutputStream output = null;
         while (buffer.hasRemaining()) {
             SSLEngineResult result = engine.wrap(
                 buffer,
-                netBuffer
+                outboundNetBuffer
             );
             switch (result.getStatus()) {
                 case BUFFER_OVERFLOW:
-                    netBuffer = ByteBuffer.allocate(netBuffer.capacity() * 2);
+                    /*
+                     * The outbound TLS record did not fit in outboundNetBuffer.
+                     * Drain the encrypted bytes already produced, grow the
+                     * reusable buffer, and continue wrapping the same plaintext.
+                     */
+                    output = drainOutboundNetBuffer(output);
+                    outboundNetBuffer = allocateDoubleNetBuffer(outboundNetBuffer);
                     break;
                 case BUFFER_UNDERFLOW:
                     throw new IOException(
@@ -274,13 +370,18 @@ public class EzyNioSecureSocketChannel
                         "ssl wrap result status is CLOSE"
                     );
                 default: // OK
-                    netBuffer.flip();
-                    byte[] answer = new byte[netBuffer.limit()];
-                    netBuffer.get(answer);
-                    return answer;
+                    output = drainOutboundNetBuffer(output);
+                    /*
+                     * A no-progress OK result should not normally happen. Stop
+                     * rather than spinning forever on a broken engine state.
+                     */
+                    if (result.bytesConsumed() == 0 && result.bytesProduced() == 0) {
+                        return getOutputBytes(output);
+                    }
+                    break;
             }
         }
-        return bytes;
+        return getOutputBytes(output);
     }
 
     public void writeOrTimeout(
@@ -292,10 +393,140 @@ public class EzyNioSecureSocketChannel
         while (buffer.hasRemaining()) {
             long currentTime = System.currentTimeMillis();
             if (currentTime >= timeoutAt) {
-                break;
+                throw new SSLException("Timeout");
             }
             channel.write(buffer);
         }
+    }
+
+    /**
+     * Appends encrypted inbound bytes while keeping netBuffer in write mode.
+     */
+    private void appendToNetBuffer(
+        ByteBuffer buffer
+    ) throws EzyConnectionCloseException {
+        netBuffer = ensureRemaining(netBuffer, buffer.remaining());
+        netBuffer.put(buffer);
+    }
+
+    /**
+     * Ensures enough room for encrypted pending data.
+     *
+     * <p>The upper bound is important for security: a peer can intentionally
+     * send incomplete or malformed TLS records. Without this cap, those bytes
+     * could accumulate in heap memory until the process runs out of RAM.</p>
+     */
+    private ByteBuffer ensureRemaining(
+        ByteBuffer byteBuffer,
+        int remaining
+    ) throws EzyConnectionCloseException {
+        if (byteBuffer.remaining() >= remaining) {
+            return byteBuffer;
+        }
+        int newCapacity = byteBuffer.capacity();
+        int requiredCapacity = byteBuffer.position() + remaining;
+        if (requiredCapacity > sslMaxNetBufferSize) {
+            throw new EzyConnectionCloseException("max request size");
+        }
+        while (newCapacity < requiredCapacity) {
+            if (newCapacity > sslMaxNetBufferSize / 2) {
+                newCapacity = sslMaxNetBufferSize;
+                break;
+            }
+            newCapacity *= 2;
+        }
+        ByteBuffer answer = ByteBuffer.allocate(newCapacity);
+        byteBuffer.flip();
+        answer.put(byteBuffer);
+        return answer;
+    }
+
+    /**
+     * Grows the plaintext buffer used by unwrap(), but never beyond the
+     * configured inbound request limit.
+     */
+    private ByteBuffer allocateDoubleAppBuffer(
+        ByteBuffer byteBuffer
+    ) throws EzyConnectionCloseException {
+        int doubleSize = byteBuffer.capacity() * 2;
+        if (doubleSize > sslMaxAppBufferSize) {
+            throw new EzyConnectionCloseException("max request size");
+        }
+        return ByteBuffer.allocate(doubleSize);
+    }
+
+    /**
+     * Grows the outbound encrypted buffer. Outbound data is generated by the
+     * server, so request-size limits are enforced before data reaches this path.
+     */
+    private ByteBuffer allocateDoubleNetBuffer(ByteBuffer byteBuffer) {
+        return ByteBuffer.allocate(byteBuffer.capacity() * 2);
+    }
+
+    /**
+     * Moves plaintext from appBuffer into the current read output and clears the
+     * reusable buffer for the next unwrap().
+     */
+    private ByteArrayOutputStream drainAppBuffer(
+        ByteArrayOutputStream output
+    ) throws EzyConnectionCloseException {
+        appBuffer.flip();
+        ByteArrayOutputStream answer = drainBuffer(
+            output,
+            appBuffer,
+            sslMaxAppBufferSize
+        );
+        appBuffer.clear();
+        return answer;
+    }
+
+    /**
+     * Moves encrypted bytes from outboundNetBuffer into the current pack output
+     * and clears the reusable buffer for the next wrap().
+     */
+    private ByteArrayOutputStream drainOutboundNetBuffer(
+        ByteArrayOutputStream output
+    ) throws EzyConnectionCloseException {
+        outboundNetBuffer.flip();
+        ByteArrayOutputStream answer = drainBuffer(output, outboundNetBuffer, 0);
+        outboundNetBuffer.clear();
+        return answer;
+    }
+
+    /**
+     * Copies all remaining bytes from a ByteBuffer into a byte-array output.
+     *
+     * @param maxSize maximum total output size, or {@code 0} for no limit
+     */
+    private ByteArrayOutputStream drainBuffer(
+        ByteArrayOutputStream output,
+        ByteBuffer buffer,
+        int maxSize
+    ) throws EzyConnectionCloseException {
+        if (!buffer.hasRemaining()) {
+            return output;
+        }
+        if (maxSize > 0
+            && output != null
+            && output.size() + buffer.remaining() > maxSize
+        ) {
+            throw new EzyConnectionCloseException("max request size");
+        }
+        ByteArrayOutputStream answer = output;
+        if (answer == null) {
+            if (maxSize > 0 && buffer.remaining() > maxSize) {
+                throw new EzyConnectionCloseException("max request size");
+            }
+            answer = new ByteArrayOutputStream(buffer.remaining());
+        }
+        while (buffer.hasRemaining()) {
+            answer.write(buffer.get());
+        }
+        return answer;
+    }
+
+    private byte[] getOutputBytes(ByteArrayOutputStream output) {
+        return output != null ? output.toByteArray() : new byte[0];
     }
 
     @Override

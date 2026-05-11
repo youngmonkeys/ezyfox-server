@@ -1172,31 +1172,16 @@ public class EzyNioSecureSocketChannelTest {
             0,
             0
         );
-        SSLEngineResult resultOk = new SSLEngineResult(
-            SSLEngineResult.Status.OK,
-            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
-            0,
-            0
-        );
-
-        AtomicInteger unwrapCallCount = new AtomicInteger();
         when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
-            .thenAnswer(it -> {
-                int callCount = unwrapCallCount.incrementAndGet();
-                if (callCount == 1) {
-                    return resultBufferOverflow;
-                }
-                ByteBuffer tcpNetBuffer = it.getArgumentAt(1, ByteBuffer.class);
-                tcpNetBuffer.clear();
-                tcpNetBuffer.put(netBuffer);
-                return resultOk;
-            });
+            .thenReturn(resultBufferOverflow);
 
         // when
-        byte[] actual = instance.read(buffer);
+        Throwable e = Asserts.assertThrows(() ->
+            instance.read(buffer)
+        );
 
         // then
-        Asserts.assertEquals(actual, new byte[] {1, 2});
+        Asserts.assertEqualsType(e, EzyConnectionCloseException.class);
 
         verify(sslEngine, times(2))
             .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
@@ -1224,7 +1209,6 @@ public class EzyNioSecureSocketChannelTest {
             0,
             0
         );
-
         AtomicInteger unwrapCallCount = new AtomicInteger();
         when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
             .thenAnswer(it -> {
@@ -1263,25 +1247,8 @@ public class EzyNioSecureSocketChannelTest {
             0,
             0
         );
-        SSLEngineResult resultOk = new SSLEngineResult(
-            SSLEngineResult.Status.OK,
-            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
-            0,
-            0
-        );
-
-        AtomicInteger unwrapCallCount = new AtomicInteger();
         when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
-            .thenAnswer(it -> {
-                int callCount = unwrapCallCount.incrementAndGet();
-                if (callCount == 1) {
-                    return resultBufferOverflow;
-                }
-                ByteBuffer tcpNetBuffer = it.getArgumentAt(1, ByteBuffer.class);
-                tcpNetBuffer.clear();
-                tcpNetBuffer.put(netBuffer);
-                return resultOk;
-            });
+            .thenReturn(resultBufferOverflow);
 
         // when
         Throwable e = Asserts.assertThrows(() ->
@@ -1333,9 +1300,9 @@ public class EzyNioSecureSocketChannelTest {
         byte[] actual = instance.read(buffer);
 
         // then
-        Asserts.assertEquals(actual, new byte[] {1, 2});
+        Asserts.assertEquals(actual, new byte[0]);
 
-        verify(sslEngine, times(2))
+        verify(sslEngine, times(1))
             .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
     }
 

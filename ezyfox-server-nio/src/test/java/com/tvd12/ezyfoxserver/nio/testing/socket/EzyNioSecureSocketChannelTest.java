@@ -1418,6 +1418,83 @@ public class EzyNioSecureSocketChannelTest {
     }
 
     @Test
+    public void readCaseConsumedOnlyProgress() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+
+        buffer.clear();
+        buffer.put(new byte[] {1, 2});
+        buffer.flip();
+        SSLEngineResult result = new SSLEngineResult(
+            SSLEngineResult.Status.OK,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            2,
+            0
+        );
+
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenAnswer(it -> {
+                ByteBuffer source = it.getArgumentAt(0, ByteBuffer.class);
+                source.position(source.limit());
+                return result;
+            });
+
+        // when
+        byte[] actual = instance.read(buffer);
+
+        // then
+        Asserts.assertEquals(actual, new byte[0]);
+
+        verify(sslEngine, times(1))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
+    public void readCaseProducedOnlyProgressThenConsumed() throws Exception {
+        // given
+        beforeNotHandshakeMethod();
+
+        buffer.clear();
+        buffer.put(new byte[] {1, 2});
+        buffer.flip();
+        SSLEngineResult resultProducedOnly = new SSLEngineResult(
+            SSLEngineResult.Status.OK,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            0,
+            2
+        );
+        SSLEngineResult resultConsumedOnly = new SSLEngineResult(
+            SSLEngineResult.Status.OK,
+            SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING,
+            2,
+            0
+        );
+
+        AtomicInteger unwrapCallCount = new AtomicInteger();
+        when(sslEngine.unwrap(any(ByteBuffer.class), any(ByteBuffer.class)))
+            .thenAnswer(it -> {
+                int callCount = unwrapCallCount.incrementAndGet();
+                ByteBuffer source = it.getArgumentAt(0, ByteBuffer.class);
+                ByteBuffer target = it.getArgumentAt(1, ByteBuffer.class);
+                if (callCount == 1) {
+                    target.put(new byte[] {1, 2});
+                    return resultProducedOnly;
+                }
+                source.position(source.limit());
+                return resultConsumedOnly;
+            });
+
+        // when
+        byte[] actual = instance.read(buffer);
+
+        // then
+        Asserts.assertEquals(actual, new byte[] {1, 2});
+
+        verify(sslEngine, times(2))
+            .unwrap(any(ByteBuffer.class), any(ByteBuffer.class));
+    }
+
+    @Test
     public void readCaseRequiredNetBufferCapacityOverMax() throws Exception {
         // given
         beforeNotHandshakeMethod();

@@ -69,7 +69,7 @@ public class EzySecureSocketDataReceiverTest {
         verify(handlerGroup, times(1)).getChannel();
         verifyNoMoreInteractions(handlerGroup);
 
-        verify(channel, times(1)).isHandshaked();
+        verify(channel, times(1)).isHandshakeComplete();
         verify(channel, times(1)).handshake();
     }
 
@@ -103,7 +103,7 @@ public class EzySecureSocketDataReceiverTest {
         );
         verifyNoMoreInteractions(handlerGroup);
 
-        verify(channel, times(1)).isHandshaked();
+        verify(channel, times(1)).isHandshakeComplete();
         verify(channel, times(1)).handshake();
     }
 
@@ -115,7 +115,7 @@ public class EzySecureSocketDataReceiverTest {
         when(handlerGroupManager.getHandlerGroup(socketChannel))
             .thenReturn(handlerGroup);
         when(handlerGroup.getChannel()).thenReturn(channel);
-        when(channel.isHandshaked()).thenReturn(true);
+        when(channel.isHandshakeComplete()).thenReturn(true);
 
         // when
         MethodInvoker.create()
@@ -132,7 +132,7 @@ public class EzySecureSocketDataReceiverTest {
         verify(handlerGroup, times(1)).getChannel();
         verifyNoMoreInteractions(handlerGroup);
 
-        verify(channel, times(1)).isHandshaked();
+        verify(channel, times(1)).isHandshakeComplete();
     }
 
     @Test

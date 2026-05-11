@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <name>ezyfox-server</name>
-    <url>https://youngmonkeys.org/project/ezyfox-sever/</url>
+    <url>https://youngmonkeys.org/projects/ezyfox-server/</url>
     <description>
         EzyFox Server maven project configuration
     </description>

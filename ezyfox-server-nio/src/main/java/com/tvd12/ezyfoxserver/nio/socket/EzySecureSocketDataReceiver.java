@@ -23,7 +23,7 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
         if (handlerGroup != null) {
             EzyNioSecureSocketChannel secureChannel =
                 (EzyNioSecureSocketChannel) handlerGroup.getChannel();
-            if (!secureChannel.isHandshaked()) {
+            if (!secureChannel.isHandshakeComplete()) {
                 try {
                     secureChannel.handshake();
                 } catch (Throwable e) {

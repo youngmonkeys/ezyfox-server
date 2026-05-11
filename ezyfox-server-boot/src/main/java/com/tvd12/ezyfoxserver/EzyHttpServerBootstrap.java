@@ -14,12 +14,12 @@ public abstract class EzyHttpServerBootstrap extends EzyServerBootstrap {
             return;
         }
         logger.debug("starting http server bootstrap ....");
-        httpBootstrap = newHttpBottstrap();
+        httpBootstrap = newHttpBootstrap();
         httpBootstrap.start();
         logger.debug("http server bootstrap has started");
     }
 
-    private EzyHttpBootstrap newHttpBottstrap() {
+    private EzyHttpBootstrap newHttpBootstrap() {
         EzyEmptyHttpBootstrap bootstrap = new EzyEmptyHttpBootstrap();
         bootstrap.setServerContext(context);
         return bootstrap;

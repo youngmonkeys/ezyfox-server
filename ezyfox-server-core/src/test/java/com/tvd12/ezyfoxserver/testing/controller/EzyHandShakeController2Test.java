@@ -41,7 +41,7 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
     private EzyArray newHandShakeData(String reconnectToken) {
         KeyPair keyPair = newRSAKeys();
         return newArrayBuilder()
-            .append("adroid#1")
+            .append("android#1")
             .append(EzyBase64.encode2utf(keyPair.getPublic().getEncoded()))
             .append("android")
             .append("1.0.0")

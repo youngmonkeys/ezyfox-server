@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.setting.EzyPluginSetting;
 
 import java.util.Set;
 
-public class EzyPluginsStarter extends EzyZoneComponentsStater {
+public class EzyPluginsStarter extends EzyZoneComponentsStarter {
 
     protected EzyPluginsStarter(Builder builder) {
         super(builder);
@@ -93,7 +93,7 @@ public class EzyPluginsStarter extends EzyZoneComponentsStater {
         return zoneContext.getPluginContext(pluginName);
     }
 
-    public static class Builder extends EzyZoneComponentsStater.Builder<EzyPluginsStarter, Builder> {
+    public static class Builder extends EzyZoneComponentsStarter.Builder<EzyPluginsStarter, Builder> {
         @Override
         public EzyPluginsStarter build() {
             return new EzyPluginsStarter(this);

@@ -8,7 +8,7 @@ import com.tvd12.ezyfoxserver.event.EzySimpleServerInitializingEvent;
 import java.util.Map;
 import java.util.Set;
 
-public class EzyZonesStarter extends EzyComponentsStater {
+public class EzyZonesStarter extends EzyComponentsStarter {
 
     protected EzyZonesStarter(Builder builder) {
         super(builder);
@@ -72,13 +72,13 @@ public class EzyZonesStarter extends EzyComponentsStater {
     }
 
     protected void startComponents(
-        EzyZoneComponentsStater.Builder<?, ?> builder, EzyZoneContext zoneContext) {
-        EzyZoneComponentsStater starter = newComponentsStater(builder, zoneContext);
+            EzyZoneComponentsStarter.Builder<?, ?> builder, EzyZoneContext zoneContext) {
+        EzyZoneComponentsStarter starter = newComponentsStater(builder, zoneContext);
         starter.start();
     }
 
-    protected EzyZoneComponentsStater newComponentsStater(
-        EzyZoneComponentsStater.Builder<?, ?> builder, EzyZoneContext zoneContext) {
+    protected EzyZoneComponentsStarter newComponentsStater(
+            EzyZoneComponentsStarter.Builder<?, ?> builder, EzyZoneContext zoneContext) {
         return builder
             .zoneContext(zoneContext)
             .build();
@@ -92,7 +92,7 @@ public class EzyZonesStarter extends EzyComponentsStater {
         return serverContext.getServer().getAppClassLoaders();
     }
 
-    public static class Builder extends EzyComponentsStater.Builder<EzyZonesStarter, Builder> {
+    public static class Builder extends EzyComponentsStarter.Builder<EzyZonesStarter, Builder> {
 
         @Override
         public EzyZonesStarter build() {

@@ -64,7 +64,7 @@ public class EzyNioSecureSocketChannel
             logger.info(
                 "channel: {} handshake already initiated, handshakeComplete: {}",
                 channel,
-                    handshakeComplete
+                handshakeComplete
             );
             return;
         }

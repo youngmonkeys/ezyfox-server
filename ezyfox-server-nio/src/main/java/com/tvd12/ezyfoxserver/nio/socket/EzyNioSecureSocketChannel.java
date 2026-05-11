@@ -40,7 +40,7 @@ public class EzyNioSecureSocketChannel
     private int appBufferSize;
     private int netBufferSize;
     private int sslMaxNetBufferSize;
-    private SSLContext sslContext;
+    private volatile SSLContext sslContext;
     private final int sslHandshakeTimeout;
     private final int sslMaxAppBufferSize;
     @Getter
@@ -200,6 +200,8 @@ public class EzyNioSecureSocketChannel
                             try {
                                 writeOrTimeout(channel, outboundNetBuffer, endTime);
                                 peerNetData.clear();
+                            } catch (SSLException e) {
+                                throw e;
                             } catch (Exception e) {
                                 logger.info(
                                     "failed to send server's close message " +
@@ -391,7 +393,7 @@ public class EzyNioSecureSocketChannel
         while (buffer.hasRemaining()) {
             long currentTime = System.currentTimeMillis();
             if (currentTime >= timeoutAt) {
-                break;
+                throw new SSLException("Timeout");
             }
             channel.write(buffer);
         }

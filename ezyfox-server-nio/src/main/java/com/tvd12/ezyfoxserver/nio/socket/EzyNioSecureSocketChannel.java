@@ -425,11 +425,11 @@ public class EzyNioSecureSocketChannel
             throw new EzyConnectionCloseException("max request size");
         }
         while (newCapacity < requiredCapacity) {
-            newCapacity *= 2;
-            if (newCapacity < 0 || newCapacity > sslMaxNetBufferSize) {
+            if (newCapacity > sslMaxNetBufferSize / 2) {
                 newCapacity = sslMaxNetBufferSize;
                 break;
             }
+            newCapacity *= 2;
         }
         ByteBuffer answer = ByteBuffer.allocate(newCapacity);
         byteBuffer.flip();

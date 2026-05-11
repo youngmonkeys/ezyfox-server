@@ -171,9 +171,9 @@ public class EzyNioSecureSocketChannel
                     }
                     break;
                 case NEED_WRAP:
-                    netBuffer.clear();
+                    outboundNetBuffer.clear();
                     try {
-                        result = engine.wrap(EMPTY_BUFFER, netBuffer);
+                        result = engine.wrap(EMPTY_BUFFER, outboundNetBuffer);
                         handshakeStatus = result.getHandshakeStatus();
                     } catch (SSLException e) {
                         engine.closeOutbound();
@@ -188,7 +188,9 @@ public class EzyNioSecureSocketChannel
                     }
                     switch (result.getStatus()) {
                         case BUFFER_OVERFLOW:
-                            netBuffer = ByteBuffer.allocate(netBuffer.capacity() * 2);
+                            outboundNetBuffer = ByteBuffer.allocate(
+                                outboundNetBuffer.capacity() * 2
+                            );
                             break;
                         case BUFFER_UNDERFLOW:
                             throw new SSLException(
@@ -196,7 +198,7 @@ public class EzyNioSecureSocketChannel
                             );
                         case CLOSED:
                             try {
-                                writeOrTimeout(channel, netBuffer, endTime);
+                                writeOrTimeout(channel, outboundNetBuffer, endTime);
                                 peerNetData.clear();
                             } catch (Exception e) {
                                 logger.info(
@@ -208,7 +210,7 @@ public class EzyNioSecureSocketChannel
                             }
                             break;
                         default: // OK
-                            writeOrTimeout(channel, netBuffer, endTime);
+                            writeOrTimeout(channel, outboundNetBuffer, endTime);
                             break;
                     }
                     break;

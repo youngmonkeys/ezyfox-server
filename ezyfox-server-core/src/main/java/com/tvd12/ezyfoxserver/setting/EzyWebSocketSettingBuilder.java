@@ -18,7 +18,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         this.writerThreadPoolSize = 8;
         this.minHandlerThreadPoolSize = 4;
         this.maxHandlerThreadPoolSize = 16;
-        this.managementEnable = false;
+        this.managementEnable = true;
         this.sslConfig = new EzySimpleSslConfigSetting();
         this.codecCreator = "com.tvd12.ezyfox.codec.JacksonCodecCreator";
     }

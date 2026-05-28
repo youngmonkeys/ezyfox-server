@@ -48,6 +48,7 @@ public class EzySimpleWebSocketSetting
         setMinHandlerThreadPoolSize(4);
         setMaxHandlerThreadPoolSize(16);
         setWriterThreadPoolSize(8);
+        setManagementEnable(true);
         setSslConfig(new EzySimpleSslConfigSetting());
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
     }

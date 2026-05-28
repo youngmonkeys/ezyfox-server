@@ -21,6 +21,8 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class EzyWebSocketServerCreator {
 
@@ -137,8 +139,14 @@ public class EzyWebSocketServerCreator {
         private static final long serialVersionUID = -5456527539188272097L;
 
         @Override
-        protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-            resp.setStatus(200);
+        protected void doGet(
+            HttpServletRequest req,
+            HttpServletResponse resp
+        ) throws IOException {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("text/plain;charset=UTF-8");
+            resp.getOutputStream()
+                .write("OK".getBytes(StandardCharsets.UTF_8));
         }
     }
 }

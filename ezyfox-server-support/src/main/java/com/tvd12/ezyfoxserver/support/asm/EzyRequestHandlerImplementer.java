@@ -51,7 +51,7 @@ public class EzyRequestHandlerImplementer
         }
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected EzyAsmRequestHandler doImplement() throws Exception {
         ClassPool pool = ClassPool.getDefault();
         String implClassName = getImplClassName();
@@ -75,7 +75,9 @@ public class EzyRequestHandlerImplementer
         implClass.addMethod(CtNewMethod.make(getRequestDataTypeMethodContent, implClass));
         Class answerClass = implClass.toClass();
         implClass.detach();
-        EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass.newInstance();
+        EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass
+            .getDeclaredConstructor()
+            .newInstance();
         handler.setCommand(handlerMethod.getCommand());
         handler.setResponseFactory(responseFactory);
         setRepoComponent(handler);
@@ -163,7 +165,7 @@ public class EzyRequestHandlerImplementer
             body.append(instructionHandle);
             body.append(new EzyInstruction("\t", "\n", false).append("}"));
         }
-        if (exceptionClasses.size() > 0) {
+        if (!exceptionClasses.isEmpty()) {
             body.append(new EzyInstruction("\t", "\n", false).append("else {"));
             body.append(new EzyInstruction("\t\t", "\n").append("throw arg3"));
             body.append(new EzyInstruction("\t", "\n", false).append("}"));

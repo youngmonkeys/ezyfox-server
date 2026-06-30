@@ -83,7 +83,7 @@ public class EzyPluginsStarter extends EzyZoneComponentsStarter {
             getPluginEntryLoaderClass(pluginName);
         EzyPluginSetting pluginSetting = getPluginByName(pluginName);
         if (pluginSetting.getEntryLoaderArgs() == null) {
-            return pluginLoaderClass.newInstance();
+            return pluginLoaderClass.getDeclaredConstructor().newInstance();
         }
         return (EzyPluginEntryLoader) pluginLoaderClass.getConstructors()[0]
             .newInstance(pluginSetting.getEntryLoaderArgs());

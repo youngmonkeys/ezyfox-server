@@ -48,6 +48,7 @@ public class EzyExceptionHandlerImplementer
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected EzyUncaughtExceptionHandler doImplement() throws Exception {
         ClassPool pool = ClassPool.getDefault();
         String implClassName = getImplClassName();
@@ -66,7 +67,10 @@ public class EzyExceptionHandlerImplementer
         implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
         Class answerClass = implClass.toClass();
         implClass.detach();
-        EzyAsmUncaughtExceptionHandler handler = (EzyAsmUncaughtExceptionHandler) answerClass.newInstance();
+        EzyAsmUncaughtExceptionHandler handler =
+            (EzyAsmUncaughtExceptionHandler) answerClass
+                .getDeclaredConstructor()
+                .newInstance();
         setRepoComponent(handler);
         return handler;
     }

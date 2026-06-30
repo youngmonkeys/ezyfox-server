@@ -81,7 +81,7 @@ public class EzyRequestHandlersImplementerTest {
         verify(objectResponse, times(1)).data(new GreetResponse("Hello Dzung!"));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testImplementFailedCase() {
         EzyRequestControllerProxy proxy
             = new EzyRequestControllerProxy(new HelloController());

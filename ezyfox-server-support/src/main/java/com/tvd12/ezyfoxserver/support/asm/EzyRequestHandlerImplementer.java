@@ -46,8 +46,13 @@ public class EzyRequestHandlerImplementer
     public EzyAsmRequestHandler implement() {
         try {
             return doImplement();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        } catch (Throwable e) {
+            logger.error(
+                "implement request handler: {} error",
+                controller,
+                e
+            );
+            return null;
         }
     }
 

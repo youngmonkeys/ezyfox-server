@@ -30,6 +30,9 @@ public class EzyExceptionHandlersImplementer extends EzyLoggable {
         for (EzyExceptionHandlerMethod method : proxy.getExceptionHandlerMethods()) {
             EzyExceptionHandlerImplementer implementer = newImplementer(proxy, method);
             EzyUncaughtExceptionHandler handler = implementer.implement();
+            if (handler == null) {
+                continue;
+            }
             for (Class<?> exceptionClass : method.getExceptionClasses()) {
                 handlers.put(exceptionClass, handler);
             }

@@ -43,8 +43,13 @@ public class EzyExceptionHandlerImplementer
     public EzyUncaughtExceptionHandler implement() {
         try {
             return doImplement();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        } catch (Throwable e) {
+            logger.error(
+                "implement exception handler: {} error",
+                exceptionHandler,
+                e
+            );
+            return null;
         }
     }
 

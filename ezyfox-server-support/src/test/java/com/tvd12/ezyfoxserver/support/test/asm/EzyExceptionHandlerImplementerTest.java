@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 public class EzyExceptionHandlerImplementerTest {
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testFailedCase() throws Exception {
         EzyExceptionHandlerProxy handlerProxy =
             new EzyExceptionHandlerProxy(new ExceptionHandlerFail());

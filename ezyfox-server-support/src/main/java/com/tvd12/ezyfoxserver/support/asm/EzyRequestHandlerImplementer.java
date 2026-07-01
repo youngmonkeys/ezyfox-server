@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.tvd12.reflections.ReflectionUtils.toClass;
+
 public class EzyRequestHandlerImplementer
     extends EzyAbstractHandlerImplementer<EzyRequestHandlerMethod> {
 
@@ -78,7 +80,7 @@ public class EzyRequestHandlerImplementer
         implClass.addMethod(CtNewMethod.make(handleRequestMethodContent, implClass));
         implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
         implClass.addMethod(CtNewMethod.make(getRequestDataTypeMethodContent, implClass));
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, getSuperClass());
         implClass.detach();
         EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass
             .getDeclaredConstructor()
@@ -237,7 +239,8 @@ public class EzyRequestHandlerImplementer
     }
 
     protected String getImplClassName() {
-        return controller.getControllerName()
+        return getSuperClass().getPackage().getName()
+            + "." + controller.getControllerName()
             + "$" + handlerMethod.getName() + "$Handler$AutoImpl$" + COUNT.incrementAndGet();
     }
 

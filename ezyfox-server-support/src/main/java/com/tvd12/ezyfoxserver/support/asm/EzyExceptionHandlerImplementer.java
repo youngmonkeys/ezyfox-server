@@ -21,6 +21,8 @@ import lombok.Setter;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.tvd12.reflections.ReflectionUtils.toClass;
+
 @SuppressWarnings("rawtypes")
 public class EzyExceptionHandlerImplementer
     extends EzyAbstractHandlerImplementer<EzyExceptionHandlerMethod> {
@@ -70,7 +72,7 @@ public class EzyExceptionHandlerImplementer
         implClass.addField(CtField.make(exceptionHandlerFieldContent, implClass));
         implClass.addMethod(CtNewMethod.make(setExceptionHandlerMethodContent, implClass));
         implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, getSuperClass());
         implClass.detach();
         EzyAsmUncaughtExceptionHandler handler =
             (EzyAsmUncaughtExceptionHandler) answerClass
@@ -160,7 +162,8 @@ public class EzyExceptionHandlerImplementer
     }
 
     protected String getImplClassName() {
-        return exceptionHandler.getClassSimpleName()
+        return getSuperClass().getPackage().getName()
+            + "." + exceptionHandler.getClassSimpleName()
             + "$" + handlerMethod.getName() + "$ExceptionHandler$AutoImpl$" + COUNT.incrementAndGet();
     }
 

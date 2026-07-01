@@ -48,6 +48,9 @@ public class EzyRequestHandlersImplementer extends EzyLoggable {
         for (EzyRequestHandlerMethod method : proxy.getRequestHandlerMethods()) {
             EzyRequestHandlerImplementer implementer = newImplementer(proxy, method);
             EzyAsmRequestHandler handler = implementer.implement();
+            if (handler == null) {
+                continue;
+            }
             String command = handler.getCommand();
             handlers.put(command, handler);
             requestCommandManager.addCommand(command);

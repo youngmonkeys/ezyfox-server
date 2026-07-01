@@ -88,7 +88,7 @@ public class EzyAppsStarter extends EzyZoneComponentsStarter {
         Class<EzyAppEntryLoader> entryLoaderClass = getAppEntryLoaderClass(appName);
         EzyAppSetting appSetting = getAppByName(appName);
         if (appSetting.getEntryLoaderArgs() == null) {
-            return entryLoaderClass.newInstance();
+            return entryLoaderClass.getDeclaredConstructor().newInstance();
         }
         return (EzyAppEntryLoader) entryLoaderClass.getConstructors()[0]
             .newInstance(appSetting.getEntryLoaderArgs());
@@ -106,7 +106,9 @@ public class EzyAppsStarter extends EzyZoneComponentsStarter {
             return classLoader;
         }
         throw new IllegalArgumentException(
-            "folder: " + appFolder + " for app: " + appName + " doesn't exist");
+            "folder: " + appFolder + " for app: " +
+                appName + " doesn't exist"
+        );
     }
 
     protected EzyAppContext getAppContext(String appName) {

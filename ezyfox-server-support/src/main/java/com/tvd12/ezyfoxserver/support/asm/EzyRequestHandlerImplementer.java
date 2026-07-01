@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.tvd12.reflections.ReflectionUtils.toClass;
+
 public class EzyRequestHandlerImplementer
     extends EzyAbstractHandlerImplementer<EzyRequestHandlerMethod> {
 
@@ -46,12 +48,17 @@ public class EzyRequestHandlerImplementer
     public EzyAsmRequestHandler implement() {
         try {
             return doImplement();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        } catch (Throwable e) {
+            logger.error(
+                "implement request handler: {} error",
+                controller,
+                e
+            );
+            return null;
         }
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected EzyAsmRequestHandler doImplement() throws Exception {
         ClassPool pool = ClassPool.getDefault();
         String implClassName = getImplClassName();
@@ -73,9 +80,11 @@ public class EzyRequestHandlerImplementer
         implClass.addMethod(CtNewMethod.make(handleRequestMethodContent, implClass));
         implClass.addMethod(CtNewMethod.make(handleExceptionMethodContent, implClass));
         implClass.addMethod(CtNewMethod.make(getRequestDataTypeMethodContent, implClass));
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, getSuperClass());
         implClass.detach();
-        EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass.newInstance();
+        EzyAsmRequestHandler handler = (EzyAsmRequestHandler) answerClass
+            .getDeclaredConstructor()
+            .newInstance();
         handler.setCommand(handlerMethod.getCommand());
         handler.setResponseFactory(responseFactory);
         setRepoComponent(handler);
@@ -163,7 +172,7 @@ public class EzyRequestHandlerImplementer
             body.append(instructionHandle);
             body.append(new EzyInstruction("\t", "\n", false).append("}"));
         }
-        if (exceptionClasses.size() > 0) {
+        if (!exceptionClasses.isEmpty()) {
             body.append(new EzyInstruction("\t", "\n", false).append("else {"));
             body.append(new EzyInstruction("\t\t", "\n").append("throw arg3"));
             body.append(new EzyInstruction("\t", "\n", false).append("}"));
@@ -230,7 +239,8 @@ public class EzyRequestHandlerImplementer
     }
 
     protected String getImplClassName() {
-        return controller.getControllerName()
+        return getSuperClass().getPackage().getName()
+            + "." + controller.getControllerName()
             + "$" + handlerMethod.getName() + "$Handler$AutoImpl$" + COUNT.incrementAndGet();
     }
 

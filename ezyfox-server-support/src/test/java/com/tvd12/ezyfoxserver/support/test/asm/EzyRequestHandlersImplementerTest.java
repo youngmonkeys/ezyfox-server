@@ -17,6 +17,7 @@ import com.tvd12.ezyfoxserver.support.handler.EzyUserRequestHandler;
 import com.tvd12.ezyfoxserver.support.manager.EzyFeatureCommandManager;
 import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 import com.tvd12.ezyfoxserver.support.reflect.EzyRequestControllerProxy;
+import com.tvd12.ezyfoxserver.support.reflect.EzyRequestHandlerMethod;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController;
 import com.tvd12.ezyfoxserver.support.test.controller.HelloController2;
 import com.tvd12.ezyfoxserver.support.test.data.GreetRequest;
@@ -81,7 +82,7 @@ public class EzyRequestHandlersImplementerTest {
         verify(objectResponse, times(1)).data(new GreetResponse("Hello Dzung!"));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testImplementFailedCase() {
         EzyRequestControllerProxy proxy
             = new EzyRequestControllerProxy(new HelloController());
@@ -129,5 +130,40 @@ public class EzyRequestHandlersImplementerTest {
         implementer.setRequestCommandManager(requestCommandManager);
         implementer.setAllowOverrideCommand(true);
         implementer.implement(Arrays.asList(new HelloController(), new HelloController()));
+    }
+
+    @Test
+    public void implementWithNullHandler() {
+        // given
+        EzyFeatureCommandManager featureCommandManager = new EzyFeatureCommandManager();
+        EzyRequestCommandManager requestCommandManager = new EzyRequestCommandManager();
+        EzyRequestHandlersImplementer implementer = new EzyRequestHandlersImplementer() {
+            @Override
+            protected EzyRequestHandlerImplementer newImplementer(
+                EzyRequestControllerProxy controller,
+                EzyRequestHandlerMethod method
+            ) {
+                return new EzyRequestHandlerImplementer(controller, method) {
+                    @Override
+                    public EzyAsmRequestHandler implement() {
+                        return null;
+                    }
+                };
+            }
+        };
+        implementer.setFeatureCommandManager(featureCommandManager);
+        implementer.setRequestCommandManager(requestCommandManager);
+
+        // when
+        Map<String, EzyUserRequestHandler> handlers = implementer.implement(
+            Collections.singletonList(new HelloController())
+        );
+
+        // then
+        Asserts.assertEquals(handlers.size(), 0);
+        Asserts.assertEquals(requestCommandManager.getCommands().size(), 0);
+        Asserts.assertEquals(requestCommandManager.getManagementCommands().size(), 0);
+        Asserts.assertEquals(requestCommandManager.getPaymentCommands().size(), 0);
+        Asserts.assertEquals(featureCommandManager.getFeatures().size(), 0);
     }
 }

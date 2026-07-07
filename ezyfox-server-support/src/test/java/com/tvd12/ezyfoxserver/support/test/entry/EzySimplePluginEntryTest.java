@@ -2,11 +2,14 @@ package com.tvd12.ezyfoxserver.support.test.entry;
 
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimplePlugin;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
+import com.tvd12.ezyfoxserver.constant.EzyEventNames;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyPluginContext;
 import com.tvd12.ezyfoxserver.context.EzySimplePluginContext;
@@ -16,6 +19,7 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestPluginEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestPluginEvent;
 import com.tvd12.ezyfoxserver.plugin.EzyPluginRequestController;
 import com.tvd12.ezyfoxserver.setting.*;
@@ -198,6 +202,55 @@ public class EzySimplePluginEntryTest {
         entry.destroy();
     }
 
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void explicitEventTypeTest() throws Exception {
+        // given
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleZone zone = new EzySimpleZone();
+        zone.setSetting(zoneSetting);
+        EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
+        zoneContext.setZone(zone);
+        zoneContext.init();
+        zoneContext.setParent(serverContext);
+
+        EzySimplePluginSetting pluginSetting = new EzySimplePluginSetting();
+        pluginSetting.setName("test");
+
+        EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
+        EzySimplePlugin plugin = new EzySimplePlugin();
+        plugin.setSetting(pluginSetting);
+        plugin.setEventControllers(eventControllers);
+
+        ScheduledExecutorService pluginScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
+        EzySimplePluginContext pluginContext = new EzySimplePluginContext();
+        pluginContext.setPlugin(plugin);
+        pluginContext.setParent(zoneContext);
+        pluginContext.setExecutorService(pluginScheduledExecutorService);
+        pluginContext.init();
+
+        EzySimplePluginEntry entry = new EventTypeAwarePluginEntry();
+
+        // when
+        entry.config(pluginContext);
+
+        // then
+        List<EzyEventController> userLoginHandlers = pluginContext
+            .getPlugin()
+            .getEventControllers()
+            .getControllers(EzyEventType.USER_LOGIN);
+        Assert.assertEquals(userLoginHandlers.size(), 1);
+        Assert.assertEquals(userLoginHandlers.get(0).getClass(), EventTypeAwareUserLoginHandler.class);
+    }
+
     public static class EzyPluginEntryEx extends EzySimplePluginEntry {
 
         @Override
@@ -230,5 +283,30 @@ public class EzySimplePluginEntryTest {
 
         @Override
         protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {}
+    }
+
+    public static class EventTypeAwarePluginEntry extends EzySimplePluginEntry {
+
+        @Override
+        protected boolean allowRequest() {
+            return false;
+        }
+
+        @Override
+        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
+            builder.addSingleton(new EventTypeAwareUserLoginHandler());
+        }
+    }
+
+    @EzyEventHandler(EzyEventNames.USER_LOGIN)
+    private static class EventTypeAwareUserLoginHandler
+        implements EzyEventController<EzyPluginContext, EzyUserLoginEvent> {
+
+        public EzyConstant getEventType() {
+            return EzyEventType.USER_LOGIN;
+        }
+
+        @Override
+        public void handle(EzyPluginContext ctx, EzyUserLoginEvent event) {}
     }
 }

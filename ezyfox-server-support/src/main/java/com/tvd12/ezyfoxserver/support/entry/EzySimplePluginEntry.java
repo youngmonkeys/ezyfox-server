@@ -5,6 +5,7 @@ import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfox.core.annotation.EzyExceptionHandler;
 import com.tvd12.ezyfox.core.annotation.EzyRequestController;
@@ -64,11 +65,16 @@ public class EzySimplePluginEntry extends EzyAbstractPluginEntry {
         List<Object> eventControllers = beanContext.getSingletons(EzyEventHandler.class);
         sortEventHandlersByPriority(eventControllers);
         for (Object controller : eventControllers) {
-            Class<?> handlerType = controller.getClass();
-            EzyEventHandler annotation = handlerType.getAnnotation(EzyEventHandler.class);
-            String eventName = EzyEventHandlerAnnotations.getEvent(annotation);
-            setup.addEventController(EzyEventType.valueOf(eventName), (EzyEventController) controller);
-            logger.info("add  event {} controller {}", eventName, controller);
+            EzyEventController eventController = (EzyEventController) controller;
+            EzyConstant eventType = eventController.getEventType();
+            if (eventType == null) {
+                Class<?> handlerType = controller.getClass();
+                EzyEventHandler annotation = handlerType.getAnnotation(EzyEventHandler.class);
+                String eventName = EzyEventHandlerAnnotations.getEvent(annotation);
+                eventType = EzyEventType.valueOf(eventName);
+            }
+            setup.addEventController(eventType, eventController);
+            logger.info("add event {} controller {}", eventType, controller);
         }
     }
 

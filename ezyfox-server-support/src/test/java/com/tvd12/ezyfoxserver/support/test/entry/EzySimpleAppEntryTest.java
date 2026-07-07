@@ -1,13 +1,17 @@
 package com.tvd12.ezyfoxserver.support.test.entry;
 
+import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.concurrent.EzyErrorScheduledExecutorService;
+import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfoxserver.EzySimpleApplication;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.EzySimpleZone;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
+import com.tvd12.ezyfoxserver.constant.EzyEventNames;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.context.EzySimpleAppContext;
@@ -17,8 +21,10 @@ import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySimpleUser;
 import com.tvd12.ezyfoxserver.event.EzySimpleUserRequestAppEvent;
+import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.event.EzyUserRequestAppEvent;
 import com.tvd12.ezyfoxserver.setting.*;
+import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.wrapper.EzyAppUserManager;
 import com.tvd12.ezyfoxserver.wrapper.EzyEventControllers;
@@ -27,10 +33,12 @@ import com.tvd12.ezyfoxserver.wrapper.impl.EzyEventControllersImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 public class EzySimpleAppEntryTest {
 
@@ -217,6 +225,59 @@ public class EzySimpleAppEntryTest {
         entry.destroy();
     }
 
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void explicitEventTypeTest() throws Exception {
+        // given
+        EzySimpleSettings settings = new EzySimpleSettings();
+        EzySimpleServer server = new EzySimpleServer();
+        server.setSettings(settings);
+        EzySimpleServerContext serverContext = new EzySimpleServerContext();
+        serverContext.setServer(server);
+        serverContext.init();
+
+        EzySimpleZoneSetting zoneSetting = new EzySimpleZoneSetting();
+        EzySimpleZone zone = new EzySimpleZone();
+        zone.setSetting(zoneSetting);
+        EzySimpleZoneContext zoneContext = new EzySimpleZoneContext();
+        zoneContext.setZone(zone);
+        zoneContext.init();
+        zoneContext.setParent(serverContext);
+
+        EzySimpleAppSetting appSetting = new EzySimpleAppSetting();
+        appSetting.setName("test");
+
+        EzyAppUserManager appUserManager = EzyAppUserManagerImpl.builder()
+            .build();
+
+        EzyEventControllersSetting eventControllersSetting = new EzySimpleEventControllersSetting();
+        EzyEventControllers eventControllers = EzyEventControllersImpl.create(eventControllersSetting);
+        EzySimpleApplication application = new EzySimpleApplication();
+        application.setSetting(appSetting);
+        application.setUserManager(appUserManager);
+        application.setEventControllers(eventControllers);
+
+        ScheduledExecutorService appScheduledExecutorService = new EzyErrorScheduledExecutorService("not implement");
+        EzySimpleAppContext appContext = new EzySimpleAppContext();
+        appContext.setApp(application);
+        appContext.setParent(zoneContext);
+        appContext.setExecutorService(appScheduledExecutorService);
+        appContext.init();
+
+        EzySimpleAppEntry entry = new EventTypeAwareAppEntry();
+
+        // when
+        entry.config(appContext);
+
+        // then
+        List<EzyEventController> userLoginHandlers = appContext
+            .getApp()
+            .getEventControllers()
+            .getControllers(EzyEventType.USER_LOGIN);
+        Assert.assertEquals(userLoginHandlers.size(), 1);
+        Assert.assertEquals(userLoginHandlers.get(0).getClass(), EventTypeAwareUserLoginHandler.class);
+    }
+
     public static class EzyAppEntryEx extends EzySimpleAppEntry {
 
         @Override
@@ -249,5 +310,45 @@ public class EzySimpleAppEntryTest {
 
         @Override
         protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {}
+    }
+
+    public static class EventTypeAwareAppEntry extends EzySimpleAppEntry {
+
+        @Override
+        protected EzyBeanContext createBeanContext(EzyAppContext context) {
+            EzyBeanContext beanContext = mock(EzyBeanContext.class);
+            when(beanContext.getSingletons(EzyEventHandler.class))
+                .thenReturn(Collections.singletonList(new EventTypeAwareUserLoginHandler()));
+            return beanContext;
+        }
+
+        @Override
+        protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
+            return new NoOpRequestController();
+        }
+    }
+
+    @EzyEventHandler(EzyEventNames.USER_LOGIN)
+    public static class EventTypeAwareUserLoginHandler
+        implements EzyEventController<EzyAppContext, EzyUserLoginEvent> {
+
+        public EzyConstant getEventType() {
+            return EzyEventType.USER_LOGIN;
+        }
+
+        @Override
+        public void handle(EzyAppContext ctx, EzyUserLoginEvent event) {}
+    }
+
+    public static class NoOpRequestController
+        implements EzyAppRequestController, EzyCommandsAware {
+
+        @Override
+        public Set<String> getCommands() {
+            return Collections.emptySet();
+        }
+
+        @Override
+        public void handle(EzyAppContext ctx, EzyUserRequestAppEvent event) {}
     }
 }

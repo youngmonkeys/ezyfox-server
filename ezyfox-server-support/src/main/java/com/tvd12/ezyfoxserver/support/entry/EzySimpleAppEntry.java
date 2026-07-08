@@ -5,21 +5,16 @@ import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
 import com.tvd12.ezyfox.core.annotation.EzyExceptionHandler;
 import com.tvd12.ezyfox.core.annotation.EzyRequestController;
 import com.tvd12.ezyfox.core.annotation.EzyRequestInterceptor;
-import com.tvd12.ezyfox.core.util.EzyEventHandlerAnnotations;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import com.tvd12.ezyfoxserver.app.EzyAppRequestController;
 import com.tvd12.ezyfoxserver.command.EzyAppSetup;
-import com.tvd12.ezyfoxserver.command.EzySetup;
-import com.tvd12.ezyfoxserver.constant.EzyEventType;
 import com.tvd12.ezyfoxserver.context.EzyAppContext;
 import com.tvd12.ezyfoxserver.controller.EzyAppEventController;
-import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.ext.EzyAbstractAppEntry;
 import com.tvd12.ezyfoxserver.setting.EzyAppSetting;
 import com.tvd12.ezyfoxserver.support.controller.EzyCommandsAware;
@@ -31,13 +26,12 @@ import com.tvd12.ezyfoxserver.support.manager.EzyRequestCommandManager;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static com.tvd12.ezyfox.core.util.EzyEventHandlerLists.sortEventHandlersByPriority;
 import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.COMMANDS;
 import static com.tvd12.ezyfoxserver.support.constant.EzySupportConstants.DEFAULT_PACKAGE_TO_SCAN;
+import static com.tvd12.ezyfoxserver.support.entry.EzyComponentBeanContextEntries.addEventControllersToContext;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class EzySimpleAppEntry extends EzyAbstractAppEntry {
@@ -59,22 +53,12 @@ public class EzySimpleAppEntry extends EzyAbstractAppEntry {
 
     protected void postConfig(EzyAppContext context, EzyBeanContext beanContext) {}
 
-    private void addEventControllers(EzyAppContext appContext, EzyBeanContext beanContext) {
-        EzySetup setup = appContext.get(EzySetup.class);
-        List<Object> eventControllers = beanContext.getSingletons(EzyEventHandler.class);
-        sortEventHandlersByPriority(eventControllers);
-        for (Object controller : eventControllers) {
-            EzyEventController eventController = (EzyEventController) controller;
-            EzyConstant eventType = eventController.getEventType();
-            if (eventType == null) {
-                Class<?> controllerType = controller.getClass();
-                EzyEventHandler annotation = controllerType.getAnnotation(EzyEventHandler.class);
-                String eventName = EzyEventHandlerAnnotations.getEvent(annotation);
-                eventType = EzyEventType.valueOf(eventName);
-            }
-            setup.addEventController(eventType, eventController);
-            logger.info("add event {} controller {}", eventType, controller);
-        }
+    private void addEventControllers(EzyAppContext context, EzyBeanContext beanContext) {
+        addEventControllersToContext(
+            context,
+            beanContext,
+            logger
+        );
     }
 
     private void setAppRequestController(EzyAppContext appContext, EzyBeanContext beanContext) {
@@ -191,10 +175,4 @@ public class EzySimpleAppEntry extends EzyAbstractAppEntry {
     }
 
     protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {}
-
-    @Override
-    public void start() throws Exception {}
-
-    @Override
-    public void destroy() {}
 }

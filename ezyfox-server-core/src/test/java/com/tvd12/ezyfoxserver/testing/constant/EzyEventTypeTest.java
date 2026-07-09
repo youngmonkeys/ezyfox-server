@@ -1,6 +1,7 @@
 package com.tvd12.ezyfoxserver.testing.constant;
 
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -11,6 +12,19 @@ public class EzyEventTypeTest extends BaseTest {
         assert EzyEventType.USER_LOGIN.getId() >= 0;
         assert EzyEventType.USER_LOGIN.getName().equals("USER_LOGIN");
         EzyEventType.valueOf("USER_LOGIN");
+    }
+
+    @Test
+    public void ofTest() {
+        // given
+        // when
+        // then
+        Asserts.assertNull(EzyEventType.of(null));
+        Asserts.assertNull(EzyEventType.of("hello"));
+        Asserts.assertEquals(
+            EzyEventType.of("USER_LOGIN"),
+            EzyEventType.USER_LOGIN
+        );
     }
 
     @Test()

@@ -1,7 +1,10 @@
 package com.tvd12.ezyfoxserver.constant;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyEnums;
 import lombok.Getter;
+
+import java.util.Map;
 
 @Getter
 public enum EzyEventType implements EzyConstant {
@@ -20,8 +23,15 @@ public enum EzyEventType implements EzyConstant {
 
     private final int id;
 
+    private static final Map<String, EzyEventType> MAP_BY_NAME = EzyEnums
+        .enumMap(EzyEventType.class, EzyEventType::toString);
+
     EzyEventType(int id) {
         this.id = id;
+    }
+
+    public static EzyEventType of(String name) {
+        return name == null ? null : MAP_BY_NAME.get(name);
     }
 
     @Override

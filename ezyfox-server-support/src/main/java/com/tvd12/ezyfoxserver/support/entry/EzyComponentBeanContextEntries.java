@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import java.util.List;
 
 import static com.tvd12.ezyfox.core.util.EzyEventHandlerLists.sortEventHandlersByPriority;
+import static com.tvd12.ezyfox.io.EzyStrings.EMPTY_STRING;
+import static com.tvd12.ezyfox.io.EzyStrings.isBlank;
 
 public final class EzyComponentBeanContextEntries {
 
@@ -31,16 +33,53 @@ public final class EzyComponentBeanContextEntries {
         for (Object controller : eventControllers) {
             EzyEventController eventController = (EzyEventController) controller;
             EzyConstant eventType = eventController.getEventType();
+            String eventName = EMPTY_STRING;
             if (eventType == null) {
                 Class<?> controllerType = controller.getClass();
                 EzyEventHandler annotation = controllerType
                     .getAnnotation(EzyEventHandler.class);
-                String eventName = EzyEventHandlerAnnotations
+                eventName = EzyEventHandlerAnnotations
                     .getEvent(annotation);
-                eventType = EzyEventType.valueOf(eventName);
+                eventType = EzyEventType.of(eventName);
+                if (eventType == null) {
+                    eventType = eventNameToEventType(eventName);
+                }
             }
-            setup.addEventController(eventType, eventController);
-            logger.info("add event {} controller {}", eventType, controller);
+            if (eventType == null) {
+                logger.info(
+                    "there is no event with name: {}, skill controller: {}",
+                    eventName,
+                    controller
+                );
+            } else {
+                logger.info("add event {} controller {}", eventType, controller);
+                setup.addEventController(eventType, eventController);
+            }
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static EzyConstant eventNameToEventType(
+        String eventName
+    ) {
+        try {
+            if (isBlank(eventName)) {
+                return null;
+            }
+            int lastDotIndex = eventName.lastIndexOf('.');
+            if (lastDotIndex < 0) {
+                return null;
+            }
+            String className = eventName.substring(0, lastDotIndex);
+            String constantName = eventName.substring(lastDotIndex + 1);
+            Class<?> eventClass = Class.forName(className);
+            if (!eventClass.isEnum()) {
+                return null;
+            }
+            Enum eventEnum = Enum.valueOf((Class<Enum>) eventClass, constantName);
+            return (EzyConstant) eventEnum;
+        } catch (Throwable e) {
+            return null;
         }
     }
 }

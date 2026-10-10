@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -23,11 +22,8 @@ public class EzySimplePackage implements EzyPackage {
     protected EzyConstant transportType = EzyTransportType.TCP;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected EzyHashMapList<EzyConstant, EzySession> recipients
+    protected EzyHashMapList<String, EzySession> recipients
         = new EzyHashMapList<>();
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    protected Set<String> connectionTypes = new HashSet<>();
 
     public void addRecipients(Collection<EzySession> recipients) {
         for (EzySession recipient : recipients) {
@@ -37,28 +33,25 @@ public class EzySimplePackage implements EzyPackage {
 
     public void addRecipient(EzySession recipient) {
         EzyConstant connectionType = recipient.getConnectionType();
-        this.recipients.addItems(connectionType, recipient);
         if (connectionType != null) {
-            this.connectionTypes.add(connectionType.getName());
+            this.recipients.addItems(connectionType.getName(), recipient);
         }
     }
 
     @Override
-    public Collection<EzySession> getRecipients(EzyConstant connectionType) {
+    public Collection<EzySession> getRecipients(String connectionType) {
         return recipients.getItems(connectionType);
     }
 
     @Override
     public Set<String> getConnectionTypes() {
-        return connectionTypes;
+        return recipients.keySet();
     }
 
     @Override
     public void release() {
         this.recipients.deepClear();
-        this.connectionTypes.clear();
         this.data = null;
         this.recipients = null;
-        this.connectionTypes = null;
     }
 }

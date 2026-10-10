@@ -33,7 +33,7 @@ public class EzySecureProxyResponseApiTest {
         verifyNoMoreInteractions(encoder);
 
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verifyNoMoreInteractions(pack);
     }
 }

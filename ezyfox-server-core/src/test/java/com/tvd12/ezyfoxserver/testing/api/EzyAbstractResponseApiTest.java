@@ -26,7 +26,7 @@ public class EzyAbstractResponseApiTest {
     public void secureResponseNoRecipients() {
         // given
         EzyPackage packet = mock(EzyPackage.class);
-        when(packet.getRecipients(EzyConnectionType.SOCKET)).thenReturn(Collections.emptyList());
+        when(packet.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(Collections.emptyList());
 
         InternalResponseApi sut = new InternalResponseApi();
 
@@ -39,7 +39,7 @@ public class EzyAbstractResponseApiTest {
             .invoke();
 
         // then
-        verify(packet, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(packet, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class EzyAbstractResponseApiTest {
             return null;
         }).when(session).send(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -104,7 +104,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -134,7 +134,7 @@ public class EzyAbstractResponseApiTest {
             return null;
         }).when(session).send(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -143,7 +143,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -175,7 +175,7 @@ public class EzyAbstractResponseApiTest {
             return null;
         }).when(session).sendNow(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -184,7 +184,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -209,7 +209,7 @@ public class EzyAbstractResponseApiTest {
         RuntimeException error = new RuntimeException("test");
         doThrow(error).when(session).sendNow(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -218,7 +218,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -238,7 +238,7 @@ public class EzyAbstractResponseApiTest {
 
         EzySession session = mock(EzySession.class);
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -247,7 +247,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -268,7 +268,7 @@ public class EzyAbstractResponseApiTest {
         RuntimeException error = new RuntimeException("test");
         doThrow(error).when(session).send(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -277,7 +277,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -297,7 +297,7 @@ public class EzyAbstractResponseApiTest {
 
         EzySession session = mock(EzySession.class);
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -306,7 +306,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -327,7 +327,7 @@ public class EzyAbstractResponseApiTest {
         RuntimeException error = new RuntimeException("test");
         doThrow(error).when(session).sendNow(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -336,7 +336,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -357,7 +357,7 @@ public class EzyAbstractResponseApiTest {
 
         EzySession session = mock(EzySession.class);
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -366,7 +366,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -388,7 +388,7 @@ public class EzyAbstractResponseApiTest {
         RuntimeException error = new RuntimeException("test");
         doThrow(error).when(session).send(any(EzyPacket.class));
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -397,7 +397,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 
@@ -418,7 +418,7 @@ public class EzyAbstractResponseApiTest {
 
         EzySession session = mock(EzySession.class);
 
-        when(pack.getRecipients(EzyConnectionType.SOCKET)).thenReturn(
+        when(pack.getRecipients(EzyConnectionType.SOCKET.getName())).thenReturn(
             Collections.singleton(session)
         );
 
@@ -427,7 +427,7 @@ public class EzyAbstractResponseApiTest {
 
         // then
         verify(pack, times(1)).isEncrypted();
-        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET);
+        verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verify(pack, times(1)).getData();
         verify(pack, times(1)).getTransportType();
 

@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.testing.api;
 import com.tvd12.ezyfox.codec.EzyObjectToByteEncoder;
 import com.tvd12.ezyfox.codec.EzyObjectToStringEncoder;
 import com.tvd12.ezyfox.collect.Lists;
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.api.EzyProxyResponseApi;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -34,7 +33,7 @@ public class EzyProxyResponseApiTest extends BaseTest {
         EzyImmediateDeliver immediateDeliver = mock(EzyImmediateDeliver.class);
         EzyAbstractSession session = spy(EzyAbstractSession.class);
         session.setImmediateDeliver(immediateDeliver);
-        when(pack.getRecipients(any(EzyConstant.class))).thenReturn(Lists.newArrayList(session));
+        when(pack.getRecipients(anyString())).thenReturn(Lists.newArrayList(session));
 
         api.response(pack);
         api.response(pack, true);

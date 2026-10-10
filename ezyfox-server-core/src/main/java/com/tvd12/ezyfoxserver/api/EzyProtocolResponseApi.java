@@ -33,9 +33,7 @@ public class EzyProtocolResponseApi
         String connectionType,
         boolean immediate
     ) {
-        Collection<EzySession> recipients = pack.getRecipients(
-            EzyConnectionTypes.of(connectionType)
-        );
+        Collection<EzySession> recipients = pack.getRecipients(connectionType);
         EzyArray data = pack.getData();
         for (EzySession session : recipients) {
             EzySimplePacket packet = null;

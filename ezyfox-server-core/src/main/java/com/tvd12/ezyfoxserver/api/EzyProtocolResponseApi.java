@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.api;
 
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionTypes;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.protocol.EzyProtocolChannel;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
@@ -11,29 +10,15 @@ import com.tvd12.ezyfoxserver.socket.EzySimplePacket;
 
 import java.util.Collection;
 
-public class EzyProtocolResponseApi
-    extends EzyLoggable
-    implements EzyResponseApi {
+public class EzyProtocolResponseApi extends EzyLoggable {
 
-    @Override
     public void response(
-        EzyPackage pack,
-        boolean immediate
-    ) {
-        for (String connectionType : pack.getConnectionTypes()) {
-            if (EzyConnectionTypes.isBuiltIn(connectionType)) {
-                continue;
-            }
-            response(pack, connectionType, immediate);
-        }
-    }
-
-    private void response(
         EzyPackage pack,
         String connectionType,
         boolean immediate
     ) {
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack
+            .getRecipients(connectionType);
         EzyArray data = pack.getData();
         for (EzySession session : recipients) {
             EzySimplePacket packet = null;

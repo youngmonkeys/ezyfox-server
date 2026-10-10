@@ -7,6 +7,8 @@ import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
+
 import static org.mockito.Mockito.*;
 
 public class EzySecureProxyResponseApiTest {
@@ -21,6 +23,9 @@ public class EzySecureProxyResponseApiTest {
         EzySecureProxyResponseApi api = new EzySecureProxyResponseApi(codecFactory);
         EzyPackage pack = mock(EzyPackage.class);
         when(pack.getTransportType()).thenReturn(EzyConnectionType.SOCKET);
+        when(pack.getConnectionTypes()).thenReturn(
+            Collections.singleton(EzyConnectionType.SOCKET.getName())
+        );
 
         // when
         api.response(pack);
@@ -32,6 +37,7 @@ public class EzySecureProxyResponseApiTest {
 
         verifyNoMoreInteractions(encoder);
 
+        verify(pack, times(1)).getConnectionTypes();
         verify(pack, times(1)).isEncrypted();
         verify(pack, times(1)).getRecipients(EzyConnectionType.SOCKET.getName());
         verifyNoMoreInteractions(pack);

@@ -4,17 +4,26 @@ import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EzyProxyResponseApi implements EzyResponseApi {
 
-    private final EzyResponseApi websocketResponseApi;
-    private final EzyResponseApi socketResponseApi;
-    private final EzyResponseApi protocolResponseApi;
+    private final Map<String, EzyResponseApi> responseApiByConnectionType;
+    private final EzyProtocolResponseApi protocolResponseApi;
 
     public EzyProxyResponseApi(EzyCodecFactory codecFactory) {
         Object socketEncoder = codecFactory.newEncoder(EzyConnectionType.SOCKET);
         Object wsEncoder = codecFactory.newEncoder(EzyConnectionType.WEBSOCKET);
-        this.socketResponseApi = newSocketResponseApi(socketEncoder);
-        this.websocketResponseApi = newWebsocketResponseApi(wsEncoder);
+        this.responseApiByConnectionType = new HashMap<>();
+        this.responseApiByConnectionType.put(
+            EzyConnectionType.SOCKET.getName(),
+            newSocketResponseApi(socketEncoder)
+        );
+        this.responseApiByConnectionType.put(
+            EzyConnectionType.WEBSOCKET.getName(),
+            newWebsocketResponseApi(wsEncoder)
+        );
         this.protocolResponseApi = new EzyProtocolResponseApi();
     }
 
@@ -38,8 +47,15 @@ public class EzyProxyResponseApi implements EzyResponseApi {
 
     @Override
     public void response(EzyPackage pack, boolean immediate) throws Exception {
-        socketResponseApi.response(pack, immediate);
-        websocketResponseApi.response(pack, immediate);
-        protocolResponseApi.response(pack, immediate);
+        for (String connectionType : pack.getConnectionTypes()) {
+            EzyResponseApi responseApi = responseApiByConnectionType.get(
+                connectionType
+            );
+            if (responseApi != null) {
+                responseApi.response(pack, immediate);
+            } else {
+                protocolResponseApi.response(pack, connectionType, immediate);
+            }
+        }
     }
 }

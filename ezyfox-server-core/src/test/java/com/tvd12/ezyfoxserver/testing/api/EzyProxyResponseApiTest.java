@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.testing.api;
 import com.tvd12.ezyfox.codec.EzyObjectToByteEncoder;
 import com.tvd12.ezyfox.codec.EzyObjectToStringEncoder;
 import com.tvd12.ezyfox.collect.Lists;
+import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfoxserver.api.EzyProxyResponseApi;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -21,6 +22,13 @@ public class EzyProxyResponseApiTest extends BaseTest {
         EzyCodecFactory codecFactory = mock(EzyCodecFactory.class);
         EzyProxyResponseApi api = new EzyProxyResponseApi(codecFactory);
         EzyPackage pack = mock(EzyPackage.class);
+        when(pack.getConnectionTypes()).thenReturn(
+            Sets.newHashSet(
+                EzyConnectionType.SOCKET.getName(),
+                EzyConnectionType.WEBSOCKET.getName(),
+                "MQTT"
+            )
+        );
         api.response(pack);
         EzyObjectToByteEncoder byteEncoder = mock(EzyObjectToByteEncoder.class);
         EzyObjectToStringEncoder stringEncoder = mock(EzyObjectToStringEncoder.class);

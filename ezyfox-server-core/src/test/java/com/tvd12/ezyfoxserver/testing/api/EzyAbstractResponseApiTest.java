@@ -440,8 +440,8 @@ public class EzyAbstractResponseApiTest {
     private static class InternalResponseApi extends EzyAbstractResponseApi {
 
         @Override
-        protected EzyConstant getConnectionType() {
-            return EzyConnectionType.SOCKET;
+        protected String getConnectionType() {
+            return EzyConnectionType.SOCKET.getName();
         }
 
         @Override
@@ -453,8 +453,8 @@ public class EzyAbstractResponseApiTest {
     private static class InternalResponseApi2 extends EzyAbstractResponseApi {
 
         @Override
-        protected EzyConstant getConnectionType() {
-            return EzyConnectionType.SOCKET;
+        protected String getConnectionType() {
+            return EzyConnectionType.SOCKET.getName();
         }
 
         @Override

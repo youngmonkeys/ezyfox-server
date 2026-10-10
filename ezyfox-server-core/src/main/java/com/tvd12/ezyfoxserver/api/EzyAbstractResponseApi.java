@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.api;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfoxserver.constant.EzyConnectionTypes;
 import com.tvd12.ezyfoxserver.constant.EzyTransportType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyPackage;
@@ -31,8 +32,9 @@ public abstract class EzyAbstractResponseApi
         EzyPackage pack,
         boolean immediate
     ) throws Exception {
-        EzyConstant connectionType = getConnectionType();
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            EzyConnectionTypes.of(getConnectionType())
+        );
         if (recipients.isEmpty()) {
             return;
         }
@@ -79,8 +81,9 @@ public abstract class EzyAbstractResponseApi
         EzyPackage pack,
         boolean immediate
     ) throws Exception {
-        EzyConstant connectionType = getConnectionType();
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            EzyConnectionTypes.of(getConnectionType())
+        );
         if (recipients.isEmpty()) {
             return;
         }
@@ -185,7 +188,7 @@ public abstract class EzyAbstractResponseApi
         session.sendNow(packet);
     }
 
-    protected abstract EzyConstant getConnectionType();
+    protected abstract String getConnectionType();
 
     protected abstract Object encodeData(EzyArray data) throws Exception;
 

@@ -57,6 +57,10 @@ public class EzySimpleSettings implements EzySettings {
     protected EzySimpleWebSocketSetting websocket
         = new EzySimpleWebSocketSetting();
 
+    @XmlElement(name = "protocols")
+    protected EzySimpleProtocolsSetting protocols
+        = new EzySimpleProtocolsSetting();
+
     @XmlElement(name = "thread-pool-size")
     protected EzySimpleThreadPoolSizeSetting threadPoolSize
         = new EzySimpleThreadPoolSizeSetting();
@@ -113,6 +117,7 @@ public class EzySimpleSettings implements EzySettings {
         map.put("socket", socket.toMap());
         map.put("udp", udp.toMap());
         map.put("websocket", websocket.toMap());
+        map.put("protocols", protocols.toMap());
         map.put("logger", logger.toMap());
         map.put("admins", admins.toMap());
         map.put("sessionManagement", sessionManagement.toMap());

@@ -36,8 +36,8 @@ public class EzyNioSocketChannel implements EzyChannel {
     }
 
     @Override
-    public EzyConnectionType getConnectionType() {
-        return EzyConnectionType.SOCKET;
+    public String getConnectionType() {
+        return EzyConnectionType.SOCKET.getName();
     }
 
     @Override

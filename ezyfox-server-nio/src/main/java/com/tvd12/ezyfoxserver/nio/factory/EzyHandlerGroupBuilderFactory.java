@@ -8,6 +8,13 @@ public interface EzyHandlerGroupBuilderFactory {
 
     EzyAbstractHandlerGroup.Builder newBuilder(
         EzyChannel channel,
-        EzyConnectionType type
+        String type
     );
+
+    default EzyAbstractHandlerGroup.Builder newBuilder(
+        EzyChannel channel,
+        EzyConnectionType type
+    ) {
+        return newBuilder(channel, type.getName());
+    }
 }

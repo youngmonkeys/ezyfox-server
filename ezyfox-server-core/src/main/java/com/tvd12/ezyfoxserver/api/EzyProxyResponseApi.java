@@ -8,12 +8,14 @@ public class EzyProxyResponseApi implements EzyResponseApi {
 
     private final EzyResponseApi websocketResponseApi;
     private final EzyResponseApi socketResponseApi;
+    private final EzyResponseApi protocolResponseApi;
 
     public EzyProxyResponseApi(EzyCodecFactory codecFactory) {
         Object socketEncoder = codecFactory.newEncoder(EzyConnectionType.SOCKET);
         Object wsEncoder = codecFactory.newEncoder(EzyConnectionType.WEBSOCKET);
         this.socketResponseApi = newSocketResponseApi(socketEncoder);
         this.websocketResponseApi = newWebsocketResponseApi(wsEncoder);
+        this.protocolResponseApi = new EzyProtocolResponseApi();
     }
 
     private EzyResponseApi newSocketResponseApi(Object socketEncoder) {
@@ -38,5 +40,6 @@ public class EzyProxyResponseApi implements EzyResponseApi {
     public void response(EzyPackage pack, boolean immediate) throws Exception {
         socketResponseApi.response(pack, immediate);
         websocketResponseApi.response(pack, immediate);
+        protocolResponseApi.response(pack, immediate);
     }
 }

@@ -84,7 +84,7 @@ public class EzySimpleWsHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET.getName());
         EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
         ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
@@ -331,7 +331,7 @@ public class EzySimpleWsHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET.getName());
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
         EzySocketStreamQueue streamQueue = new EzyBlockingSocketStreamQueue();
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();

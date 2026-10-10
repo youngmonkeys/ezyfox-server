@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -37,6 +38,11 @@ public class EzySimplePackage implements EzyPackage {
     @Override
     public Collection<EzySession> getRecipients(EzyConstant connectionType) {
         return recipients.getItems(connectionType);
+    }
+
+    @Override
+    public Set<EzyConstant> getConnectionTypes() {
+        return recipients.keySet();
     }
 
     @Override

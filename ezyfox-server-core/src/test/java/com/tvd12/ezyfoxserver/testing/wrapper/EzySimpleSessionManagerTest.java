@@ -74,7 +74,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
         Object connection = new Object();
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.getConnection()).thenReturn(connection);
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         session = manager.provideSession(channel);
 
         assert manager.getSession(session.getId()) == session;

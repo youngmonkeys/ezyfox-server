@@ -2,7 +2,6 @@ package com.tvd12.ezyfoxserver.nio.wrapper.impl;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.util.EzyLoggable;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.handler.EzyHandlerGroup;
@@ -37,7 +36,7 @@ public class EzyHandlerGroupManagerImpl
     @Override
     public <T extends EzyHandlerGroup> T newHandlerGroup(
         EzyChannel channel,
-        EzyConnectionType type
+        String type
     ) {
         EzyHandlerGroup group = handlerGroupBuilderFactory
             .newBuilder(channel, type)

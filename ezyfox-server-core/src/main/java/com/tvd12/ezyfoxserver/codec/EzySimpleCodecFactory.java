@@ -33,7 +33,7 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
             if (socketCodecCreator != null) {
                 return socketCodecCreator.newEncoder();
             }
-        } else {
+        } else if (type == EzyConnectionType.WEBSOCKET) {
             if (websocketCodecCreator != null) {
                 return websocketCodecCreator.newEncoder();
             }
@@ -48,7 +48,7 @@ public class EzySimpleCodecFactory implements EzyCodecFactory {
                 int maxRequestSize = socketSetting.getMaxRequestSize();
                 return socketCodecCreator.newDecoder(maxRequestSize);
             }
-        } else {
+        } else if (type == EzyConnectionType.WEBSOCKET) {
             if (websocketCodecCreator != null) {
                 int maxFrameSize = websocketSetting.getMaxFrameSize();
                 return websocketCodecCreator.newDecoder(maxFrameSize);

@@ -1,20 +1,17 @@
 package com.tvd12.ezyfoxserver.constant;
 
 import com.tvd12.ezyfox.constant.EzyConstant;
+import com.tvd12.ezyfox.util.EzyEnums;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class EzyConnectionTypes {
 
-    private static final Map<String, EzyConstant> TYPE_BY_NAME =
+    private static final Map<String, EzyConnectionType> BUILT_IN_TYPE_BY_NAME =
+        EzyEnums.enumMap(EzyConnectionType.class, EzyConnectionType::getName);
+    private static final Map<String, EzyConstant> EXTENDED_TYPE_BY_NAME =
         new ConcurrentHashMap<>();
-
-    static {
-        for (EzyConnectionType type : EzyConnectionType.values()) {
-            TYPE_BY_NAME.put(type.getName(), type);
-        }
-    }
 
     private EzyConnectionTypes() {}
 
@@ -22,19 +19,17 @@ public final class EzyConnectionTypes {
         if (name == null || name.isEmpty()) {
             return null;
         }
-        return TYPE_BY_NAME.computeIfAbsent(name, EzyConstant::one);
-    }
-
-    public static boolean isBuiltIn(EzyConstant type) {
-        return type instanceof EzyConnectionType;
+        EzyConstant builtInType = BUILT_IN_TYPE_BY_NAME.get(name);
+        if (builtInType != null) {
+            return builtInType;
+        }
+        return EXTENDED_TYPE_BY_NAME.computeIfAbsent(
+            name,
+            EzyConstant::one
+        );
     }
 
     public static boolean isBuiltIn(String name) {
-        for (EzyConnectionType type : EzyConnectionType.values()) {
-            if (type.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        return BUILT_IN_TYPE_BY_NAME.containsKey(name);
     }
 }

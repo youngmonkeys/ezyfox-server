@@ -21,11 +21,15 @@ public class EzyProtocolResponseApi
         EzyPackage pack,
         boolean immediate
     ) {
-        for (EzyConstant connectionType : pack.getConnectionTypes()) {
-            if (connectionType == null || EzyConnectionTypes.isBuiltIn(connectionType)) {
+        for (String connectionType : pack.getConnectionTypes()) {
+            if (EzyConnectionTypes.isBuiltIn(connectionType)) {
                 continue;
             }
-            response(pack, connectionType, immediate);
+            response(
+                pack,
+                EzyConnectionTypes.of(connectionType),
+                immediate
+            );
         }
     }
 

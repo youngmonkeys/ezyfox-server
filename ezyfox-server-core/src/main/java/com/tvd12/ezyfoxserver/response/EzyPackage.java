@@ -18,6 +18,6 @@ public interface EzyPackage extends EzyReleasable {
 
     Collection<EzySession> getRecipients(EzyConstant connectionType);
 
-    Set<EzyConstant> getConnectionTypes();
+    Set<String> getConnectionTypes();
 
 }

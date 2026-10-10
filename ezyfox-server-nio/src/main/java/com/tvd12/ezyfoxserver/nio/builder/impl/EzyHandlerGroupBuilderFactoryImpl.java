@@ -26,7 +26,6 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     private final EzyStatistics statistics;
     private final AtomicInteger socketSessionCount;
     private final AtomicInteger webSocketSessionCount;
-    private final AtomicInteger protocolSessionCount;
     private final EzyCodecFactory codecFactory;
     private final EzyServerContext serverContext;
     private final EzySessionCreator sessionCreator;
@@ -40,7 +39,6 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     public EzyHandlerGroupBuilderFactoryImpl(Builder builder) {
         this.socketSessionCount = new AtomicInteger(0);
         this.webSocketSessionCount = new AtomicInteger(0);
-        this.protocolSessionCount = new AtomicInteger(0);
         this.statistics = builder.statistics;
         this.statsThreadPool = builder.statsThreadPool;
         this.streamQueue = builder.streamQueue;
@@ -103,7 +101,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 
     private EzyAbstractHandlerGroup.Builder newBuilderByProtocolType() {
         EzyAbstractHandlerGroup.Builder builder = EzyProtocolHandlerGroup.builder();
-        builder.sessionCount(protocolSessionCount);
+        builder.sessionCount(socketSessionCount);
         builder.sessionStats(getSocketSessionStats());
         builder.networkStats(getSocketNetworkStats());
         builder.sessionTicketsQueue(protocolSessionTicketsQueue);

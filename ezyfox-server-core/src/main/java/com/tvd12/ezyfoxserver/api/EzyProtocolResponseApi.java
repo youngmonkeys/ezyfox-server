@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.api;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionTypes;
@@ -25,20 +24,18 @@ public class EzyProtocolResponseApi
             if (EzyConnectionTypes.isBuiltIn(connectionType)) {
                 continue;
             }
-            response(
-                pack,
-                EzyConnectionTypes.of(connectionType),
-                immediate
-            );
+            response(pack, connectionType, immediate);
         }
     }
 
     private void response(
         EzyPackage pack,
-        EzyConstant connectionType,
+        String connectionType,
         boolean immediate
     ) {
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            EzyConnectionTypes.of(connectionType)
+        );
         EzyArray data = pack.getData();
         for (EzySession session : recipients) {
             EzySimplePacket packet = null;
@@ -67,7 +64,7 @@ public class EzyProtocolResponseApi
                 }
                 logger.info(
                     "response data to {} session: {} failed",
-                    connectionType.getName(),
+                    connectionType,
                     session,
                     e
                 );

@@ -32,9 +32,9 @@ public class EzySimplePackage implements EzyPackage {
     }
 
     public void addRecipient(EzySession recipient) {
-        EzyConstant connectionType = recipient.getConnectionType();
+        String connectionType = recipient.getConnectionType();
         if (connectionType != null) {
-            this.recipients.addItems(connectionType.getName(), recipient);
+            this.recipients.addItems(connectionType, recipient);
         }
     }
 

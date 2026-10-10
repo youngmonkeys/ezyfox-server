@@ -35,7 +35,7 @@ public class EzySocketResponseApiTest {
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
-            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
             return session;
         });
         pack.addRecipients(sessions);
@@ -68,7 +68,7 @@ public class EzySocketResponseApiTest {
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
-            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
             return session;
         });
         pack.addRecipients(sessions);
@@ -99,7 +99,7 @@ public class EzySocketResponseApiTest {
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
-            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+            when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
             return session;
         });
         pack.addRecipients(sessions);

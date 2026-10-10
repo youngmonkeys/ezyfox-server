@@ -22,11 +22,11 @@ public class EzyHandShakeController2Test extends EzyBaseControllerTest {
     @Test
     public void test() {
         EzyServerContext ctx = newServerContext();
-        EzySession first = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
+        EzySession first = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET.getName());
         System.err.println("first.token:    " + first);
         System.err.println("alive sessions: " + getSessionManager(ctx).getAliveSessions());
         assertTrue(getSessionManager(ctx).containsSession(first.getId()));
-        EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET);
+        EzySession session = getSessionManager(ctx).provideSession(EzyConnectionType.SOCKET.getName());
         System.err.println("session: " + session);
         EzyArray data = newHandShakeData(first.getToken());
         EzySimpleHandshakeRequest request = new EzySimpleHandshakeRequest();

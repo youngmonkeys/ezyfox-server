@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.wrapper;
 import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectProvider;
 import com.tvd12.ezyfox.util.EzyTimes;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionTypes;
 import com.tvd12.ezyfoxserver.constant.EzyDisconnectReason;
 import com.tvd12.ezyfoxserver.entity.EzyAbstractSession;
 import com.tvd12.ezyfoxserver.entity.EzySession;
@@ -93,9 +92,7 @@ public class EzySimpleSessionManager<S extends EzySession>
 
     @Override
     public S provideSession(EzyChannel channel) {
-        S ss = provideSession(
-            EzyConnectionTypes.of(channel.getConnectionType())
-        );
+        S ss = provideSession(channel.getConnectionType());
         ss.setChannel(channel);
         sessionsByConnection.put(channel.getConnection(), ss);
         logger.info(
@@ -107,7 +104,7 @@ public class EzySimpleSessionManager<S extends EzySession>
     }
 
     @SuppressWarnings("unchecked")
-    protected S provideSession(EzyConstant connectionType) {
+    protected S provideSession(String connectionType) {
         checkMaxSessions();
         EzyAbstractSession session = (EzyAbstractSession) provideObject();
         session.setLoggedIn(false);

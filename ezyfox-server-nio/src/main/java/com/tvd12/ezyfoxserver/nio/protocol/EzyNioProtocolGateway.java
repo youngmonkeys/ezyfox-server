@@ -5,7 +5,6 @@ import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
-import com.tvd12.ezyfoxserver.constant.EzyConnectionTypes;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.protocol.EzyProtocolChannel;
@@ -26,12 +25,6 @@ public class EzyNioProtocolGateway
     @Override
     public EzySession openSession(EzyProtocolChannel channel) {
         String connectionType = channel.getConnectionType();
-        if (EzyConnectionTypes.isBuiltIn(connectionType)) {
-            throw new IllegalArgumentException(
-                "protocol channel can not use built-in connection type: " +
-                    connectionType
-            );
-        }
         EzyProtocolHandlerGroup handlerGroup = handlerGroupManager
             .newHandlerGroup(channel, connectionType);
         return handlerGroup.getSession();

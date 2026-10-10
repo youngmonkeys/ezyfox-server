@@ -28,27 +28,27 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
             .validationDelay(5)
             .validationInterval(5)
             .build();
-        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET);
+        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         manager.removeSession(session);
-        session = manager.provideSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setDelegate(new EzyAbstractSessionDelegate() {});
         manager.removeSession(session, EzyDisconnectReason.IDLE);
         manager.removeSession(null, EzyDisconnectReason.IDLE);
 
-        session = manager.provideSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setDelegate(new EzyAbstractSessionDelegate() {
         });
         session.setLoggedIn(true);
         manager.addLoggedInSession(session);
         assertEquals(manager.getLoggedInSessions(), Lists.newArrayList(session));
 
-        session = manager.provideSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setActivated(true);
         session.setLoggedIn(false);
         session.setCreationTime(System.currentTimeMillis() - 1000);
         session.setMaxWaitingTime(100);
 
-        session = manager.provideSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setLoggedIn(false);
         session.setCreationTime(System.currentTimeMillis());
         session.setMaxWaitingTime(10000);
@@ -57,7 +57,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
         assert manager.getAliveSessionCount() == 5;
         assert manager.getLoggedInSessionCount() == 1;
 
-        session = manager.provideSession(EzyConnectionType.SOCKET);
+        session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setActivated(true);
         session.setLoggedIn(true);
         session.setLastReadTime(0);
@@ -93,10 +93,10 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
             (MyTestSessionManager) new MyTestSessionManager.Builder()
                 .tokenGenerator(() -> UUID.randomUUID().toString())
                 .build();
-        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET);
+        MyTestSession session = manager.provideSession(EzyConnectionType.SOCKET.getName());
         session.setLoggedIn(true);
         manager.addLoggedInSession(session);
-        MyTestSession session2 = manager.provideSession(EzyConnectionType.SOCKET);
+        MyTestSession session2 = manager.provideSession(EzyConnectionType.SOCKET.getName());
         assert session.getId() != session2.getId();
         assertEquals(manager.getAllSessions(), Lists.newArrayList(session, session2));
     }
@@ -120,7 +120,7 @@ public class EzySimpleSessionManagerTest extends BaseCoreTest {
             .build();
         // when
         Throwable e = Asserts.assertThrows(() ->
-            manager.provideSession(EzyConnectionType.SOCKET)
+            manager.provideSession(EzyConnectionType.SOCKET.getName())
         );
 
         // then

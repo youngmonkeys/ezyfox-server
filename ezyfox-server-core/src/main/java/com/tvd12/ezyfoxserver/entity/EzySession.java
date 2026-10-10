@@ -104,7 +104,7 @@ public interface EzySession extends
      *
      * @return the connection type
      */
-    EzyConstant getConnectionType();
+    String getConnectionType();
 
     /**
      * Get session reconnect token.

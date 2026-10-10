@@ -12,6 +12,6 @@ public interface EzyBytesPackage extends EzyReleasable {
 
     EzyConstant getTransportType();
 
-    Collection<EzySession> getRecipients(EzyConstant connectionType);
+    Collection<EzySession> getRecipients(String connectionType);
 
 }

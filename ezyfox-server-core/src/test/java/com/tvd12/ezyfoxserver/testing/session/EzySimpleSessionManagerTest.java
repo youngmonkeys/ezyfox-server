@@ -52,7 +52,7 @@ public class EzySimpleSessionManagerTest {
         }
 
         public MySession provideSession() {
-            return provideSession(EzyConnectionType.SOCKET);
+            return provideSession(EzyConnectionType.SOCKET.getName());
         }
 
         public static class Builder extends EzySimpleSessionManager.Builder<MySession> {

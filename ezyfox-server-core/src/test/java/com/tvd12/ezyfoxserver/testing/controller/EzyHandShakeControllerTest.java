@@ -126,6 +126,29 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
     }
 
     @Test
+    public void handleSocketSSLButExtendedConnectionTypeTest() {
+        // given
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(params.isEnableEncryption()).thenReturn(true);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn("MQTT");
+        when(request.getSession()).thenReturn(session);
+
+        // when
+        sut.handle(serverContext, request);
+
+        // then
+        verify(serverContext, never()).getServer();
+        Asserts.assertNull(session.getSessionKey());
+    }
+
+    @Test
     public void handleSocketSSLButEventNoEncryptionTest() {
         // given
         EzyHandshakeController sut = new EzyHandshakeController();

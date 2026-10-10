@@ -36,7 +36,11 @@ public class EzyHandshakeController
     @SuppressWarnings("AbbreviationAsWordInName")
     protected void handleSocketSSL(EzyServerContext ctx, EzyHandshakeEvent event) {
         EzySession session = event.getSession();
-        if (EzyConnectionType.WEBSOCKET.getName().equals(session.getConnectionType())) {
+        if (!EzyConnectionType
+            .SOCKET
+            .getName()
+            .equals(session.getConnectionType())
+        ) {
             return;
         }
         boolean customizationSslEnable = ctx

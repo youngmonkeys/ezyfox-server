@@ -52,6 +52,9 @@ public class EzySettingsBuilderTest {
             .writerThreadPoolSize(3)
             .build();
         EzySimpleAdminsSetting adminsSetting = new EzySimpleAdminsSetting();
+        EzySimpleProtocolsSetting protocolsSetting = new EzySimpleProtocolsSetting();
+        EzySimpleProtocolSetting protocolSetting = new EzySimpleProtocolSetting();
+        protocolSetting.setName("test-protocol");
         EzySimpleAdminSetting adminSetting = new EzyAdminSettingBuilder()
             .accessToken("123")
             .username("admin")
@@ -90,6 +93,8 @@ public class EzySettingsBuilderTest {
             .streaming(streamingSetting)
             .http(httpSetting)
             .websocket(webSocketSetting)
+            .protocols(protocolsSetting)
+            .protocol(protocolSetting)
             .admins(adminsSetting)
             .admin(adminSetting)
             .logger(loggerSetting)
@@ -105,6 +110,9 @@ public class EzySettingsBuilderTest {
         assertEquals(settings.getMaxSessions(), 100);
         assertEquals(settings.getStreaming(), streamingSetting);
         assertEquals(settings.getHttp(), httpSetting);
+        assertEquals(settings.getProtocols(), protocolsSetting);
+        assertEquals(settings.getProtocols().getProtocols().size(), 1);
+        assertEquals(settings.getProtocols().getProtocols().get(0), protocolSetting);
 
         socketSetting = settings.getSocket();
         assertTrue(socketSetting.isActive());

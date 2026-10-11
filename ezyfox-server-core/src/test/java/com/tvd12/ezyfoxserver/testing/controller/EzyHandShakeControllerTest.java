@@ -65,7 +65,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);
@@ -115,13 +115,36 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         // when
         sut.handle(serverContext, request);
 
         // then
+        Asserts.assertNull(session.getSessionKey());
+    }
+
+    @Test
+    public void handleSocketSSLButExtendedConnectionTypeTest() {
+        // given
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(params.isEnableEncryption()).thenReturn(true);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn("MQTT");
+        when(request.getSession()).thenReturn(session);
+
+        // when
+        sut.handle(serverContext, request);
+
+        // then
+        verify(serverContext, never()).getServer();
         Asserts.assertNull(session.getSessionKey());
     }
 
@@ -136,7 +159,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);
@@ -167,7 +190,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);
@@ -211,7 +234,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);
@@ -256,7 +279,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);
@@ -314,7 +337,7 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         when(request.getParams()).thenReturn(params);
 
         EzySession session = spy(EzyAbstractSession.class);
-        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(request.getSession()).thenReturn(session);
 
         EzyServer server = mock(EzyServer.class);

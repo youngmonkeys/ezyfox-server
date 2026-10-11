@@ -31,8 +31,9 @@ public abstract class EzyAbstractResponseApi
         EzyPackage pack,
         boolean immediate
     ) throws Exception {
-        EzyConstant connectionType = getConnectionType();
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            getConnectionType()
+        );
         if (recipients.isEmpty()) {
             return;
         }
@@ -79,8 +80,9 @@ public abstract class EzyAbstractResponseApi
         EzyPackage pack,
         boolean immediate
     ) throws Exception {
-        EzyConstant connectionType = getConnectionType();
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            getConnectionType()
+        );
         if (recipients.isEmpty()) {
             return;
         }
@@ -185,7 +187,7 @@ public abstract class EzyAbstractResponseApi
         session.sendNow(packet);
     }
 
-    protected abstract EzyConstant getConnectionType();
+    protected abstract String getConnectionType();
 
     protected abstract Object encodeData(EzyArray data) throws Exception;
 

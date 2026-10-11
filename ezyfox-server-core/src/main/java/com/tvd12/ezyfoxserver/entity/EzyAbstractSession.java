@@ -57,7 +57,7 @@ public abstract class EzyAbstractSession
     protected String clientType;
     protected String clientVersion;
     protected String beforeToken;
-    protected EzyConstant connectionType;
+    protected String connectionType;
     protected EzyConstant disconnectReason;
     protected SocketAddress udpClientAddress;
     protected DatagramChannel datagramChannel;

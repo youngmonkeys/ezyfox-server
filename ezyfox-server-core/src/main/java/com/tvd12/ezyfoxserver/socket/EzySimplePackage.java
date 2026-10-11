@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class EzySimplePackage implements EzyPackage {
     protected EzyConstant transportType = EzyTransportType.TCP;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    protected EzyHashMapList<EzyConstant, EzySession> recipients
+    protected EzyHashMapList<String, EzySession> recipients
         = new EzyHashMapList<>();
 
     public void addRecipients(Collection<EzySession> recipients) {
@@ -31,12 +32,20 @@ public class EzySimplePackage implements EzyPackage {
     }
 
     public void addRecipient(EzySession recipient) {
-        this.recipients.addItems(recipient.getConnectionType(), recipient);
+        String connectionType = recipient.getConnectionType();
+        if (connectionType != null) {
+            this.recipients.addItems(connectionType, recipient);
+        }
     }
 
     @Override
-    public Collection<EzySession> getRecipients(EzyConstant connectionType) {
+    public Collection<EzySession> getRecipients(String connectionType) {
         return recipients.getItems(connectionType);
+    }
+
+    @Override
+    public Set<String> getConnectionTypes() {
+        return recipients.keySet();
     }
 
     @Override

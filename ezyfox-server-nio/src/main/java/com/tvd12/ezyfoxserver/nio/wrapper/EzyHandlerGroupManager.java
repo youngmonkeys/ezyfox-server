@@ -19,7 +19,14 @@ public interface EzyHandlerGroupManager
 
     <T extends EzyHandlerGroup> T getHandlerGroup(Object connection);
 
-    <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, EzyConnectionType type);
+    <T extends EzyHandlerGroup> T newHandlerGroup(EzyChannel channel, String type);
+
+    default <T extends EzyHandlerGroup> T newHandlerGroup(
+        EzyChannel channel,
+        EzyConnectionType type
+    ) {
+        return newHandlerGroup(channel, type.getName());
+    }
 
     void unmapHandlerGroup(SocketAddress udpAddress);
 

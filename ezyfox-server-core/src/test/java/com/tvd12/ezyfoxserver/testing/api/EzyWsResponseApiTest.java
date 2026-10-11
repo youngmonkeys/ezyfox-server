@@ -33,7 +33,7 @@ public class EzyWsResponseApiTest {
         int sessionCount = RandomUtil.randomSmallInt() + 1;
         List<EzySession> sessions = RandomUtil.randomList(sessionCount, () -> {
             EzySession session = mock(EzySession.class);
-            when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET);
+            when(session.getConnectionType()).thenReturn(EzyConnectionType.WEBSOCKET.getName());
             return session;
         });
         pack.addRecipients(sessions);

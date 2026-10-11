@@ -104,7 +104,7 @@ public class EzySimpleSessionManager<S extends EzySession>
     }
 
     @SuppressWarnings("unchecked")
-    protected S provideSession(EzyConstant connectionType) {
+    protected S provideSession(String connectionType) {
         checkMaxSessions();
         EzyAbstractSession session = (EzyAbstractSession) provideObject();
         session.setLoggedIn(false);

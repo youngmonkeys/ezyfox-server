@@ -15,6 +15,7 @@
                 <xs:element ref="socket" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="udp" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="web-socket" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="protocols" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="administrators" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="session-management" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="event-controllers" minOccurs="0" maxOccurs="1"/>
@@ -30,6 +31,7 @@
     <xs:element name="socket" type="socket-type"/>
     <xs:element name="udp" type="udp-type"/>
     <xs:element name="web-socket" type="web-socket-type"/>
+    <xs:element name="protocols" type="protocols-type"/>
     <xs:element name="streaming" type="streaming-type"/>
     <xs:element name="thread-pool-size" type="thread-pool-size-type"/>
     <xs:element name="administrators" type="administrators-type"/>
@@ -110,6 +112,40 @@
             </xs:simpleType>
         </xs:list>
     </xs:simpleType>
+
+    <xs:complexType name="protocols-type">
+        <xs:sequence>
+            <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="protocol" type="protocol-type" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="protocol-type">
+        <xs:all>
+            <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="address" type="xs:string" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="port" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="server-creator" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="config-file" type="xs:string" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="properties" type="protocol-properties-type" maxOccurs="1" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="protocol-properties-type">
+        <xs:sequence>
+            <xs:element name="property" type="protocol-property-type" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="protocol-property-type">
+        <xs:all>
+            <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="value" type="xs:string" maxOccurs="1" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
 
     <xs:complexType name="ssl-config-type">
         <xs:all>

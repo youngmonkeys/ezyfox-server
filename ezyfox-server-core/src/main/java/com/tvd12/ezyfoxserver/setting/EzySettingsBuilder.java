@@ -15,6 +15,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
     protected EzySimpleAdminsSetting admins = new EzySimpleAdminsSetting();
     protected EzySimpleLoggerSetting logger = new EzySimpleLoggerSetting();
     protected EzySimpleWebSocketSetting websocket = new EzySimpleWebSocketSetting();
+    protected EzySimpleProtocolsSetting protocols = new EzySimpleProtocolsSetting();
     protected EzySimpleThreadPoolSizeSetting threadPoolSize = new EzySimpleThreadPoolSizeSetting();
     protected EzySimpleSessionManagementSetting sessionManagement = new EzySimpleSessionManagementSetting();
     protected EzySimpleEventControllersSetting eventControllers = new EzySimpleEventControllersSetting();
@@ -75,6 +76,16 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         return this;
     }
 
+    public EzySettingsBuilder protocols(EzySimpleProtocolsSetting protocols) {
+        this.protocols = protocols;
+        return this;
+    }
+
+    public EzySettingsBuilder protocol(EzySimpleProtocolSetting protocol) {
+        this.protocols.setItem(protocol);
+        return this;
+    }
+
     public EzySettingsBuilder threadPoolSize(EzySimpleThreadPoolSizeSetting threadPoolSize) {
         this.threadPoolSize = threadPoolSize;
         return this;
@@ -125,6 +136,7 @@ public class EzySettingsBuilder implements EzyBuilder<EzySettings> {
         p.setAdmins(admins);
         p.setLogger(logger);
         p.setWebsocket(websocket);
+        p.setProtocols(protocols);
         p.setThreadPoolSize(threadPoolSize);
         p.setSessionManagement(sessionManagement);
         p.setEventControllers(eventControllers);

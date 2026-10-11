@@ -6,8 +6,10 @@ import com.tvd12.ezyfoxserver.api.EzyResponseApi;
 import com.tvd12.ezyfoxserver.api.EzyResponseApiAware;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApi;
 import com.tvd12.ezyfoxserver.api.EzyStreamingApiAware;
+import com.tvd12.ezyfoxserver.nio.protocol.EzyProtocolServersBootstrap;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
+import com.tvd12.ezyfoxserver.protocol.EzyProtocolGateway;
 import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
@@ -37,11 +39,16 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
     @Setter
     private EzySessionTicketsQueue websocketSessionTicketsQueue;
     @Setter
+    private EzySessionTicketsQueue protocolSessionTicketsQueue;
+    @Setter
+    private EzyProtocolGateway protocolGateway;
+    @Setter
     private EzySocketDisconnectionQueue socketDisconnectionQueue;
 
     private EzyUdpServerBootstrap udpServerBootstrap;
     private EzySocketServerBootstrap socketServerBootstrap;
     private EzyWebSocketServerBootstrap websocketServerBootstrap;
+    private EzyProtocolServersBootstrap protocolServersBootstrap;
     private EzySocketEventLoopOneHandler systemRequestHandlingLoopHandler;
     private EzySocketEventLoopOneHandler extensionRequestHandlingLoopHandler;
     private EzySocketEventLoopOneHandler streamHandlingLoopHandler;
@@ -60,6 +67,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
         startSocketServerBootstrap();
         startUdpServerBootstrap();
         startWebSocketServerBootstrap();
+        startProtocolServersBootstrap();
         startRequestHandlingLoopHandlers();
         startStreamHandlingLoopHandlers();
         startDisconnectionHandlingLoopHandlers();
@@ -98,6 +106,17 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
         websocketServerBootstrap = newWebSocketServerBootstrap();
         websocketServerBootstrap.start();
         logger.debug("websocket server bootstrap has started");
+    }
+
+    protected void startProtocolServersBootstrap() throws Exception {
+        EzyProtocolsSetting protocolsSetting = getServerSettings().getProtocols();
+        if (protocolsSetting == null || !protocolsSetting.hasActiveProtocol()) {
+            return;
+        }
+        logger.debug("starting protocol servers bootstrap ....");
+        protocolServersBootstrap = newProtocolServersBootstrap();
+        protocolServersBootstrap.start();
+        logger.debug("protocol servers bootstrap has started");
     }
 
     private void startRequestHandlingLoopHandlers() throws Exception {
@@ -151,6 +170,16 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
             .socketDataReceiver(socketDataReceiver)
             .handlerGroupManager(handlerGroupManager)
             .sessionTicketsQueue(websocketSessionTicketsQueue)
+            .build();
+    }
+
+    private EzyProtocolServersBootstrap newProtocolServersBootstrap() {
+        return EzyProtocolServersBootstrap.builder()
+            .serverContext(context)
+            .protocolGateway(protocolGateway)
+            .sslContextProxy(sslContextProxy)
+            .handlerGroupManager(handlerGroupManager)
+            .sessionTicketsQueue(protocolSessionTicketsQueue)
             .build();
     }
 
@@ -235,6 +264,9 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
         if (udpServerBootstrap != null) {
             processWithLogException(udpServerBootstrap::destroy);
         }
+        if (protocolServersBootstrap != null) {
+            processWithLogException(protocolServersBootstrap::destroy);
+        }
         if (socketDataReceiver != null) {
             processWithLogException(socketDataReceiver::destroy);
         }
@@ -258,6 +290,7 @@ public class EzyNioServerBootstrap extends EzyHttpServerBootstrap {
         }
         this.socketServerBootstrap = null;
         this.websocketServerBootstrap = null;
+        this.protocolServersBootstrap = null;
         this.socketDataReceiver = null;
         this.handlerGroupManager = null;
         this.streamHandlingLoopHandler = null;

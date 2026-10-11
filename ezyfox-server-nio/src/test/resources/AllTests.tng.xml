@@ -6,6 +6,7 @@
             <package name="com.tvd12.ezyfoxserver.nio.testing"></package>
             <package name="com.tvd12.ezyfoxserver.nio.testing.builder"></package>
             <package name="com.tvd12.ezyfoxserver.nio.testing.handler"></package>
+            <package name="com.tvd12.ezyfoxserver.nio.testing.protocol"></package>
             <package name="com.tvd12.ezyfoxserver.nio.testing.websocket"></package>
             <package name="com.tvd12.ezyfoxserver.nio.testing.socket"></package>
             <package name="com.tvd12.ezyfoxserver.nio.testing.udp"></package>

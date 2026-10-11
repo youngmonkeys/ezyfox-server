@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.api;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 import com.tvd12.ezyfoxserver.response.EzyBytesPackage;
 import com.tvd12.ezyfoxserver.socket.EzyPacket;
@@ -12,8 +11,9 @@ public abstract class EzyAbstractStreamingApi implements EzyStreamingApi {
 
     @Override
     public void response(EzyBytesPackage pack) throws Exception {
-        EzyConstant connectionType = getConnectionType();
-        Collection<EzySession> recipients = pack.getRecipients(connectionType);
+        Collection<EzySession> recipients = pack.getRecipients(
+            getConnectionType()
+        );
         if (recipients.isEmpty()) {
             return;
         }
@@ -30,5 +30,5 @@ public abstract class EzyAbstractStreamingApi implements EzyStreamingApi {
         return packet;
     }
 
-    protected abstract EzyConstant getConnectionType();
+    protected abstract String getConnectionType();
 }

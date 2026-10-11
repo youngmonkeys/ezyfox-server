@@ -6,6 +6,7 @@ import com.tvd12.ezyfox.util.EzyReleasable;
 import com.tvd12.ezyfoxserver.entity.EzySession;
 
 import java.util.Collection;
+import java.util.Set;
 
 public interface EzyPackage extends EzyReleasable {
 
@@ -15,6 +16,7 @@ public interface EzyPackage extends EzyReleasable {
 
     EzyConstant getTransportType();
 
-    Collection<EzySession> getRecipients(EzyConstant connectionType);
+    Collection<EzySession> getRecipients(String connectionType);
 
+    Set<String> getConnectionTypes();
 }

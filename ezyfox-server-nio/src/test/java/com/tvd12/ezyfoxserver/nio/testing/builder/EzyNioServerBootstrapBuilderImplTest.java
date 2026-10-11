@@ -235,7 +235,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         }
 
         // then
-        verify(server, times(23)).getSettings();
+        verify(server, times(24)).getSettings();
         verify(server, times(1)).getStatistics();
         verify(server, times(3)).getSessionManager();
         verify(server, times(2)).getEventControllers();
@@ -250,6 +250,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(settings, times(1)).getZoneIds();
         verify(settings, times(6)).getThreadPoolSize();
         verify(settings, times(5)).getWebsocket();
+        verify(settings, times(1)).getProtocols();
         verify(settings, times(2)).getSessionManagement();
         verify(settings, times(1)).getHttp();
         verify(settings, times(1)).getUdp();

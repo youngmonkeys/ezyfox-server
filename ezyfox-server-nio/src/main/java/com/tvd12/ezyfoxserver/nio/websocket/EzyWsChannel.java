@@ -65,8 +65,8 @@ public class EzyWsChannel implements EzyChannel {
     }
 
     @Override
-    public EzyConnectionType getConnectionType() {
-        return EzyConnectionType.WEBSOCKET;
+    public String getConnectionType() {
+        return EzyConnectionType.WEBSOCKET.getName();
     }
 
     @Override

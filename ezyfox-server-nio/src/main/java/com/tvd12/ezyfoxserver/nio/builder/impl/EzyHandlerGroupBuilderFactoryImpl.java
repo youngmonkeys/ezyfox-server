@@ -10,6 +10,7 @@ import com.tvd12.ezyfoxserver.creator.EzySimpleSessionCreator;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
 import com.tvd12.ezyfoxserver.nio.handler.EzyAbstractHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.handler.EzySimpleNioHandlerGroup;
+import com.tvd12.ezyfoxserver.nio.protocol.EzyProtocolHandlerGroup;
 import com.tvd12.ezyfoxserver.nio.websocket.EzySimpleWsHandlerGroup;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.socket.*;
@@ -32,6 +33,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     private final EzySocketDisconnectionQueue disconnectionQueue;
     private final EzySessionTicketsQueue socketSessionTicketsQueue;
     private final EzySessionTicketsQueue webSocketSessionTicketsQueue;
+    private final EzySessionTicketsQueue protocolSessionTicketsQueue;
     private final EzySessionTicketsRequestQueues sessionTicketsRequestQueues;
 
     public EzyHandlerGroupBuilderFactoryImpl(Builder builder) {
@@ -46,6 +48,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
         this.disconnectionQueue = builder.disconnectionQueue;
         this.socketSessionTicketsQueue = builder.socketSessionTicketsQueue;
         this.webSocketSessionTicketsQueue = builder.webSocketSessionTicketsQueue;
+        this.protocolSessionTicketsQueue = builder.protocolSessionTicketsQueue;
         this.sessionTicketsRequestQueues = builder.sessionTicketsRequestQueues;
     }
 
@@ -56,11 +59,9 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
     @Override
     public EzyAbstractHandlerGroup.Builder newBuilder(
         EzyChannel channel,
-        EzyConnectionType type
+        String type
     ) {
-        EzyAbstractHandlerGroup.Builder builder = (type == EzyConnectionType.SOCKET)
-            ? newBuilderBySocketType()
-            : newBuilderByWebSocketType();
+        EzyAbstractHandlerGroup.Builder builder = newBuilderByType(type);
         builder.session(sessionCreator.create(channel));
         builder.serverContext(serverContext);
         builder.streamQueue(streamQueue);
@@ -69,6 +70,16 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
         builder.statsThreadPool(statsThreadPool);
         builder.sessionTicketsRequestQueues(sessionTicketsRequestQueues);
         return builder;
+    }
+
+    protected EzyAbstractHandlerGroup.Builder newBuilderByType(String type) {
+        if (EzyConnectionType.SOCKET.getName().equals(type)) {
+            return newBuilderBySocketType();
+        }
+        if (EzyConnectionType.WEBSOCKET.getName().equals(type)) {
+            return newBuilderByWebSocketType();
+        }
+        return newBuilderByProtocolType();
     }
 
     private EzyAbstractHandlerGroup.Builder newBuilderBySocketType() {
@@ -88,8 +99,23 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
         return builder;
     }
 
-    private Object newDataDecoder(EzyConnectionType type) {
-        return codecFactory.newDecoder(type);
+    private EzyAbstractHandlerGroup.Builder newBuilderByProtocolType() {
+        EzyAbstractHandlerGroup.Builder builder = EzyProtocolHandlerGroup.builder();
+        builder.sessionCount(socketSessionCount);
+        builder.sessionStats(getSocketSessionStats());
+        builder.networkStats(getSocketNetworkStats());
+        builder.sessionTicketsQueue(protocolSessionTicketsQueue);
+        return builder;
+    }
+
+    private Object newDataDecoder(String type) {
+        if (EzyConnectionType.SOCKET.getName().equals(type)) {
+            return codecFactory.newDecoder(EzyConnectionType.SOCKET);
+        }
+        if (EzyConnectionType.WEBSOCKET.getName().equals(type)) {
+            return codecFactory.newDecoder(EzyConnectionType.WEBSOCKET);
+        }
+        return null;
     }
 
     private EzySessionStats getSocketSessionStats() {
@@ -126,6 +152,7 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
         private EzySocketDisconnectionQueue disconnectionQueue;
         private EzySessionTicketsQueue socketSessionTicketsQueue;
         private EzySessionTicketsQueue webSocketSessionTicketsQueue;
+        private EzySessionTicketsQueue protocolSessionTicketsQueue;
         private EzySessionTicketsRequestQueues sessionTicketsRequestQueues;
 
         public Builder statistics(EzyStatistics statistics) {
@@ -170,6 +197,11 @@ public class EzyHandlerGroupBuilderFactoryImpl implements EzyHandlerGroupBuilder
 
         public Builder webSocketSessionTicketsQueue(EzySessionTicketsQueue webSocketSessionTicketsQueue) {
             this.webSocketSessionTicketsQueue = webSocketSessionTicketsQueue;
+            return this;
+        }
+
+        public Builder protocolSessionTicketsQueue(EzySessionTicketsQueue protocolSessionTicketsQueue) {
+            this.protocolSessionTicketsQueue = protocolSessionTicketsQueue;
             return this;
         }
 

@@ -75,7 +75,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
         ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
@@ -365,7 +365,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
 
         EzySimpleSession session = mock(EzySimpleSession.class);
 
@@ -412,7 +412,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 
         EzySimpleSession session = mock(EzySimpleSession.class);
@@ -485,7 +485,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 
         EzySimpleSession session = mock(EzySimpleSession.class);
@@ -629,7 +629,7 @@ public class EzyAbstractHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         when(channel.write(any(ByteBuffer.class), anyBoolean())).thenReturn(123456);
 
         EzySimpleSession session = mock(EzySimpleSession.class);

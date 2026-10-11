@@ -1,6 +1,5 @@
 package com.tvd12.ezyfoxserver.testing;
 
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.pattern.EzyObjectFactory;
 import com.tvd12.ezyfoxserver.factory.EzyAbstractSessionFactory;
 import com.tvd12.ezyfoxserver.service.impl.EzySimpleSessionTokenGenerator;
@@ -18,7 +17,7 @@ public class MyTestSessionManager extends EzySimpleSessionManager<MyTestSession>
     }
 
     @Override
-    public MyTestSession provideSession(EzyConstant type) {
+    public MyTestSession provideSession(String type) {
         return super.provideSession(type);
     }
 

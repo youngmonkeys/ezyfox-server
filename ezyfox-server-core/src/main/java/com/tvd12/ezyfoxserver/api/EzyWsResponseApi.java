@@ -35,7 +35,7 @@ public class EzyWsResponseApi extends EzyAbstractResponseApi {
     }
 
     @Override
-    protected EzyConstant getConnectionType() {
-        return EzyConnectionType.WEBSOCKET;
+    protected String getConnectionType() {
+        return EzyConnectionType.WEBSOCKET.getName();
     }
 }

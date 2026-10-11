@@ -74,7 +74,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues = new EzySessionTicketsRequestQueues();
@@ -183,7 +183,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
         ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
@@ -241,7 +241,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         EzyNioSession session = (EzyNioSession) sessionManager.provideSession(channel);
         ExEzyByteToObjectDecoder decoder = new ExEzyByteToObjectDecoder();
         ExecutorService statsThreadPool = EzyExecutors.newFixedThreadPool(1, "stats");
@@ -535,7 +535,7 @@ public class EzySimpleNioHandlerGroupTest extends BaseTest {
         EzyChannel channel = mock(EzyChannel.class);
         when(channel.isConnected()).thenReturn(true);
         when(channel.getConnection()).thenReturn(SocketChannel.open());
-        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET);
+        when(channel.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
         EzySimpleSession session = mock(EzySimpleSession.class);
         when(session.getChannel()).thenReturn(channel);
 

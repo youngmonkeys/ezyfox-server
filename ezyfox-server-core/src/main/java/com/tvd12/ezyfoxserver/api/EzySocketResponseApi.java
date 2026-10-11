@@ -3,7 +3,6 @@ package com.tvd12.ezyfoxserver.api;
 import com.tvd12.ezyfox.codec.EzyMessageDataEncoder;
 import com.tvd12.ezyfox.codec.EzyObjectToByteEncoder;
 import com.tvd12.ezyfox.codec.EzySimpleMessageDataEncoder;
-import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 
@@ -41,7 +40,7 @@ public class EzySocketResponseApi extends EzyAbstractResponseApi {
     }
 
     @Override
-    protected EzyConstant getConnectionType() {
-        return EzyConnectionType.SOCKET;
+    protected String getConnectionType() {
+        return EzyConnectionType.SOCKET.getName();
     }
 }

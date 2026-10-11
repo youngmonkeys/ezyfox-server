@@ -9,10 +9,12 @@ import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.nio.EzyNioServerBootstrap;
 import com.tvd12.ezyfoxserver.nio.builder.EzyNioServerBootstrapBuilder;
 import com.tvd12.ezyfoxserver.nio.factory.EzyHandlerGroupBuilderFactory;
+import com.tvd12.ezyfoxserver.nio.protocol.EzyNioProtocolGateway;
 import com.tvd12.ezyfoxserver.nio.socket.EzySecureSocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.socket.EzySocketDataReceiver;
 import com.tvd12.ezyfoxserver.nio.wrapper.EzyHandlerGroupManager;
 import com.tvd12.ezyfoxserver.nio.wrapper.impl.EzyHandlerGroupManagerImpl;
+import com.tvd12.ezyfoxserver.protocol.EzyProtocolGateway;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
@@ -32,6 +34,7 @@ public class EzyNioServerBootstrapBuilderImpl
         EzySocketStreamQueue streamQueue = newStreamQueue();
         EzySessionTicketsQueue socketSessionTicketsQueue = newSocketSessionTicketsQueue();
         EzySessionTicketsQueue websocketSessionTicketsQueue = newWebSocketSessionTicketsQueue();
+        EzySessionTicketsQueue protocolSessionTicketsQueue = newProtocolSessionTicketsQueue();
         EzySocketDisconnectionQueue socketDisconnectionQueue = newSocketDisconnectionQueue();
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues = newSessionTicketsRequestQueues();
         EzyHandlerGroupBuilderFactory handlerGroupBuilderFactory = newHandlerGroupBuilderFactory(
@@ -41,6 +44,7 @@ public class EzyNioServerBootstrapBuilderImpl
             socketDisconnectionQueue,
             socketSessionTicketsQueue,
             websocketSessionTicketsQueue,
+            protocolSessionTicketsQueue,
             sessionTicketsRequestQueues
         );
         EzyHandlerGroupManager handlerGroupManager = newHandlerGroupManager(
@@ -53,6 +57,10 @@ public class EzyNioServerBootstrapBuilderImpl
             () -> newSslContext(getWebsocketSetting().getSslConfig())
         );
         serverContext.setProperty(EzySslContextProxy.class, sslContextProxy);
+        EzyProtocolGateway protocolGateway = new EzyNioProtocolGateway(
+            handlerGroupManager
+        );
+        serverContext.setProperty(EzyProtocolGateway.class, protocolGateway);
         EzyNioServerBootstrap bootstrap = new EzyNioServerBootstrap();
         bootstrap.setResponseApi(responseApi);
         bootstrap.setStreamingApi(streamingApi);
@@ -62,6 +70,8 @@ public class EzyNioServerBootstrapBuilderImpl
         bootstrap.setSocketDisconnectionQueue(socketDisconnectionQueue);
         bootstrap.setSocketSessionTicketsQueue(socketSessionTicketsQueue);
         bootstrap.setWebsocketSessionTicketsQueue(websocketSessionTicketsQueue);
+        bootstrap.setProtocolSessionTicketsQueue(protocolSessionTicketsQueue);
+        bootstrap.setProtocolGateway(protocolGateway);
         bootstrap.setSocketSessionTicketsRequestQueues(sessionTicketsRequestQueues);
         bootstrap.setSslContextProxy(sslContextProxy);
         return bootstrap;
@@ -82,6 +92,7 @@ public class EzyNioServerBootstrapBuilderImpl
         EzySocketDisconnectionQueue disconnectionQueue,
         EzySessionTicketsQueue socketSessionTicketsQueue,
         EzySessionTicketsQueue websocketSessionTicketsQueue,
+        EzySessionTicketsQueue protocolSessionTicketsQueue,
         EzySessionTicketsRequestQueues sessionTicketsRequestQueues) {
 
         return EzyHandlerGroupBuilderFactoryImpl.builder()
@@ -93,6 +104,7 @@ public class EzyNioServerBootstrapBuilderImpl
             .disconnectionQueue(disconnectionQueue)
             .socketSessionTicketsQueue(socketSessionTicketsQueue)
             .webSocketSessionTicketsQueue(websocketSessionTicketsQueue)
+            .protocolSessionTicketsQueue(protocolSessionTicketsQueue)
             .sessionTicketsRequestQueues(sessionTicketsRequestQueues)
             .build();
     }
@@ -138,6 +150,10 @@ public class EzyNioServerBootstrapBuilderImpl
     }
 
     private EzySessionTicketsQueue newWebSocketSessionTicketsQueue() {
+        return new EzyBlockingSessionTicketsQueue();
+    }
+
+    private EzySessionTicketsQueue newProtocolSessionTicketsQueue() {
         return new EzyBlockingSessionTicketsQueue();
     }
 

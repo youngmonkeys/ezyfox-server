@@ -18,7 +18,7 @@ public class EzySimpleBytesPackage implements EzyBytesPackage {
     @Getter
     @Setter
     protected EzyConstant transportType = EzyTransportType.TCP;
-    protected EzyHashMapList<EzyConstant, EzySession> recipients
+    protected EzyHashMapList<String, EzySession> recipients
         = new EzyHashMapList<>();
 
     public void addRecipients(Collection<EzySession> recipients) {
@@ -32,7 +32,7 @@ public class EzySimpleBytesPackage implements EzyBytesPackage {
     }
 
     @Override
-    public Collection<EzySession> getRecipients(EzyConstant connectionType) {
+    public Collection<EzySession> getRecipients(String connectionType) {
         return recipients.getItems(connectionType);
     }
 

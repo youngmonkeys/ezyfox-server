@@ -186,7 +186,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
-        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        when(handlerGroupManager.newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class))).thenReturn(handlerGroup);
         sut.setHandlerGroupManager(handlerGroupManager);
 
         EzyNioSession session = mock(EzyNioSession.class);
@@ -200,7 +200,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
             .call();
 
         // then
-        verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verify(handlerGroupManager, times(1)).newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class));
         verifyNoMoreInteractions(handlerGroupManager);
 
         verify(handlerGroup, times(1)).getSession();
@@ -224,7 +224,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
-        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        when(handlerGroupManager.newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class))).thenReturn(handlerGroup);
         sut.setHandlerGroupManager(handlerGroupManager);
 
         EzyNioSession session = mock(EzyNioSession.class);
@@ -238,7 +238,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
             .call();
 
         // then
-        verify(handlerGroupManager, times(1)).newHandlerGroup(any(), any());
+        verify(handlerGroupManager, times(1)).newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class));
         verifyNoMoreInteractions(handlerGroupManager);
 
         verify(handlerGroup, times(1)).getSession();
@@ -262,7 +262,7 @@ public class EzyNioSocketAcceptorTest extends BaseTest {
         sut.setReadSelector(readSelector);
         SocketChannel clientChannel = SocketChannel.open();
 
-        when(handlerGroupManager.newHandlerGroup(any(), any())).thenReturn(handlerGroup);
+        when(handlerGroupManager.newHandlerGroup(any(EzyChannel.class), any(EzyConnectionType.class))).thenReturn(handlerGroup);
         sut.setHandlerGroupManager(handlerGroupManager);
 
         EzyNioSession session = mock(EzyNioSession.class);

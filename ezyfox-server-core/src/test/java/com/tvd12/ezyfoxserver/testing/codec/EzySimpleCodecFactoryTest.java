@@ -1,6 +1,8 @@
 package com.tvd12.ezyfoxserver.testing.codec;
 
 import com.tvd12.ezyfox.codec.*;
+import com.tvd12.ezyfox.codec.EzyStringToObjectDecoder;
+import com.tvd12.ezyfox.constant.EzyConstant;
 import com.tvd12.ezyfoxserver.codec.EzyCodecFactory;
 import com.tvd12.ezyfoxserver.codec.EzySimpleCodecFactory;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
@@ -25,13 +27,21 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
             .build();
         assert factory.newEncoder(EzyConnectionType.SOCKET) == null;
         assert factory.newEncoder(EzyConnectionType.WEBSOCKET) == null;
+        EzyConstant otherType = EzyConstant.one("OTHER");
+        assert factory.newEncoder(otherType) == null;
         assert factory.newDecoder(EzyConnectionType.SOCKET) == null;
+        assert factory.newDecoder(EzyConnectionType.WEBSOCKET) == null;
+        assert factory.newDecoder(otherType) == null;
+
+        // The WebSocket branch is selected, but its creator is absent while inactive.
+        webSocketSetting.setActive(true);
+        assert factory.newEncoder(EzyConnectionType.WEBSOCKET) == null;
         assert factory.newDecoder(EzyConnectionType.WEBSOCKET) == null;
 
         socketSetting.setActive(true);
         socketSetting.setCodecCreator(ExBytesCodecCreator.class.getName());
-        webSocketSetting.setActive(true);
         webSocketSetting.setCodecCreator(ExStringCodecCreator.class.getName());
+        webSocketSetting.setMaxFrameSize(8192);
 
         factory = EzySimpleCodecFactory.builder()
             .socketSetting(socketSetting)
@@ -39,9 +49,13 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
             .build();
 
         assert factory.newEncoder(EzyConnectionType.SOCKET) != null;
-        assert factory.newEncoder(EzyConnectionType.WEBSOCKET) != null;
+        assert factory.newEncoder(EzyConnectionType.WEBSOCKET)
+            instanceof EzyObjectToStringEncoder;
         assert factory.newDecoder(EzyConnectionType.SOCKET) != null;
-        assert factory.newDecoder(EzyConnectionType.WEBSOCKET) != null;
+        EzyStringToObjectDecoder websocketDecoder =
+            (EzyStringToObjectDecoder) factory.newDecoder(EzyConnectionType.WEBSOCKET);
+        assert websocketDecoder != null;
+        assert ExStringCodecCreator.maxFrameSize == 8192;
     }
 
     public static class ExBytesCodecCreator implements EzyCodecCreator {
@@ -60,6 +74,8 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
 
     public static class ExStringCodecCreator implements EzyCodecCreator {
 
+        private static int maxFrameSize;
+
         @Override
         public Object newEncoder() {
             return mock(EzyObjectToStringEncoder.class);
@@ -67,6 +83,7 @@ public class EzySimpleCodecFactoryTest extends BaseTest {
 
         @Override
         public Object newDecoder(int maxRequestSize) {
+            maxFrameSize = maxRequestSize;
             return mock(EzyStringToObjectDecoder.class);
         }
 

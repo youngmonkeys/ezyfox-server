@@ -29,5 +29,19 @@ public class EzySocketSettingBuilderTest {
             setting.getSslHandshakeTimeout(),
             sslHandshakeTimeout
         );
+        Asserts.assertTrue(setting.isSslHandshakeSigning());
+    }
+
+    @Test
+    public void disableSslHandshakeSigningTest() {
+        // given
+        // when
+        EzySocketSetting setting = new EzySocketSettingBuilder()
+            .sslHandshakeSigning(false)
+            .build();
+
+        // then
+        Asserts.assertFalse(setting.isSslHandshakeSigning());
+        Asserts.assertEquals(setting.toMap().get("sslHandshakeSigning"), false);
     }
 }

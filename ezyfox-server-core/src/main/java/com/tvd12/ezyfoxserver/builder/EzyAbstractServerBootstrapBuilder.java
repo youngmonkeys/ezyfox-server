@@ -7,6 +7,7 @@ import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.setting.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextInitializer;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeSigner;
 
 import javax.net.ssl.SSLContext;
 
@@ -53,6 +54,20 @@ public abstract class EzyAbstractServerBootstrapBuilder
             return newSslContextInitializer(sslConfig).init();
         }
         return null;
+    }
+
+    protected EzySslHandshakeSigner newSslHandshakeSigner(EzySslConfigSetting sslConfig) {
+        EzySocketSetting socketSetting = getSocketSetting();
+        if (sslConfig == null
+            || !socketSetting.isCustomizationSslActive()
+            || !socketSetting.isSslHandshakeSigning()
+        ) {
+            return null;
+        }
+        EzySslContextInitializer initializer = newSslContextInitializer(sslConfig);
+        EzySslHandshakeSigner signer = new EzySslHandshakeSigner(initializer::readSslConfig);
+        signer.reload();
+        return signer;
     }
 
     protected EzySslContextInitializer newSslContextInitializer(EzySslConfigSetting sslConfig) {

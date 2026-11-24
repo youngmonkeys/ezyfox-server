@@ -37,6 +37,10 @@ public class EzySslContextInitializer {
         );
     }
 
+    public EzySslConfig readSslConfig() {
+        return loadSslConfig();
+    }
+
     protected EzySslConfig loadSslConfig() {
         String file = getSslConfigFile();
         EzySslConfigLoader loader = newSslConfigLoader();

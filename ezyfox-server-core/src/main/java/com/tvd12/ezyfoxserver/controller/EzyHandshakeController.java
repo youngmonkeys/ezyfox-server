@@ -14,6 +14,9 @@ import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeParams;
 import com.tvd12.ezyfoxserver.response.EzyHandShakeResponse;
 import com.tvd12.ezyfoxserver.response.EzyResponse;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeSigner;
+
+import java.util.Arrays;
 
 public class EzyHandshakeController
     extends EzyAbstractServerController
@@ -74,6 +77,32 @@ public class EzyHandshakeController
                 logger.debug("cannot encrypt session key for session: {}", session, e);
             }
             event.setEncryptedSessionKey(encryptedSessionKey);
+        }
+        signHandshake(ctx, session, clientKey, sessionKey, encryptedSessionKey);
+    }
+
+    protected void signHandshake(
+        EzyServerContext ctx,
+        EzySession session,
+        byte[] clientKey,
+        byte[] sessionKey,
+        byte[] encryptedSessionKey
+    ) {
+        if (clientKey == null
+            || clientKey.length == 0
+            || encryptedSessionKey == null
+            || Arrays.equals(encryptedSessionKey, sessionKey)
+        ) {
+            return;
+        }
+        EzySslHandshakeSigner signer = ctx.getProperty(EzySslHandshakeSigner.class);
+        if (signer == null || !signer.isActive()) {
+            return;
+        }
+        try {
+            session.setPublicKey(signer.sign(clientKey, encryptedSessionKey));
+        } catch (Exception e) {
+            logger.info("cannot sign handshake for session: {}", session, e);
         }
     }
 

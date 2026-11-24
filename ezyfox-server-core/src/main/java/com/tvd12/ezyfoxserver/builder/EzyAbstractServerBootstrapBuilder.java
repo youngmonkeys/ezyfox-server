@@ -65,7 +65,7 @@ public abstract class EzyAbstractServerBootstrapBuilder
             return null;
         }
         EzySslContextInitializer initializer = newSslContextInitializer(sslConfig);
-        EzySslHandshakeSigner signer = new EzySslHandshakeSigner(initializer::readSslConfig);
+        EzySslHandshakeSigner signer = new EzySslHandshakeSigner(initializer::loadSslConfig);
         signer.reload();
         return signer;
     }

@@ -40,13 +40,17 @@ public abstract class EzyAbstractResponseApi
         EzyArray data = pack.getData();
         Object bytes = null;
         Object compressedBytes = null;
+        boolean encoded = false;
+        boolean compressedEncoded = false;
         for (EzySession session : recipients) {
             if (isCompressionEnable(session)) {
-                if (compressedBytes == null) {
+                if (!compressedEncoded) {
                     compressedBytes = encodeCompressedData(data);
+                    compressedEncoded = true;
                 }
-            } else if (bytes == null) {
+            } else if (!encoded) {
                 bytes = encodeData(data);
+                encoded = true;
             }
         }
         EzyConstant transportType = pack.getTransportType();

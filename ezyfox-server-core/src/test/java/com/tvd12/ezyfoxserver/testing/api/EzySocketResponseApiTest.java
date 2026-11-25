@@ -232,6 +232,130 @@ public class EzySocketResponseApiTest {
         verify(encoder, times(1)).encryptMessageContent(messageContent, sessionKey);
     }
 
+    @Test
+    public void normalResponseCompressionEncodeErrorTest() throws Exception {
+        // given
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        RuntimeException error = new RuntimeException("test");
+        when(encoder.toMessageContent(data)).thenThrow(error);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
+
+        EzySimplePackage pack = new EzySimplePackage();
+        pack.setData(data);
+        pack.setEncrypted(false);
+        pack.setTransportType(EzyTransportType.TCP);
+
+        EzySession session = mock(EzySession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(session.isCompressionEnable()).thenReturn(true);
+        pack.addRecipient(session);
+
+        // when
+        Throwable e = Asserts.assertThrows(() -> sut.response(pack, true));
+
+        // then
+        Asserts.assertEquals(e, error);
+        verify(session, times(0)).sendNow(any(EzyPacket.class));
+    }
+
+    @Test
+    public void normalResponseMixedRecipientsEncodeErrorTest() throws Exception {
+        // given
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        RuntimeException error = new RuntimeException("test");
+        when(encoder.toMessageContent(data)).thenReturn(new byte[1024]);
+        when(encoder.compressMessageContent(any(byte[].class))).thenReturn(new byte[16]);
+        when(encoder.encode(data)).thenThrow(error);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
+
+        EzySimplePackage pack = new EzySimplePackage();
+        pack.setData(data);
+        pack.setEncrypted(false);
+        pack.setTransportType(EzyTransportType.TCP);
+
+        EzySession compressionSession = mock(EzySession.class);
+        when(compressionSession.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(compressionSession.isCompressionEnable()).thenReturn(true);
+        EzySession normalSession = mock(EzySession.class);
+        when(normalSession.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        pack.addRecipient(compressionSession);
+        pack.addRecipient(normalSession);
+
+        // when
+        Throwable e = Asserts.assertThrows(() -> sut.response(pack, false));
+
+        // then
+        Asserts.assertEquals(e, error);
+        verify(compressionSession, times(0)).send(any(EzyPacket.class));
+        verify(normalSession, times(0)).send(any(EzyPacket.class));
+    }
+
+    @Test
+    public void normalResponseCompressionImmediateTest() throws Exception {
+        // given
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        byte[] messageContent = new byte[1024];
+        byte[] compressedMessageContent = new byte[16];
+        byte[] compressedBytes = RandomUtil.randomShortByteArray();
+        when(encoder.toMessageContent(data)).thenReturn(messageContent);
+        when(encoder.compressMessageContent(messageContent)).thenReturn(compressedMessageContent);
+        when(encoder.encryptMessageContent(compressedMessageContent, null, true))
+            .thenReturn(compressedBytes);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
+
+        EzySimplePackage pack = new EzySimplePackage();
+        pack.setData(data);
+        pack.setEncrypted(false);
+        pack.setTransportType(EzyTransportType.TCP);
+
+        EzySession session = mock(EzySession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(session.isCompressionEnable()).thenReturn(true);
+        pack.addRecipient(session);
+
+        // when
+        sut.response(pack, true);
+
+        // then
+        ArgumentCaptor<EzyPacket> captor = ArgumentCaptor.forClass(EzyPacket.class);
+        verify(session, times(1)).sendNow(captor.capture());
+        Asserts.assertEquals(captor.getValue().getData(), compressedBytes);
+        verify(encoder, times(0)).encode(data);
+    }
+
+    @Test
+    public void normalResponseCompressionNotSmallerTest() throws Exception {
+        // given
+        EzyArray data = EzyEntityFactory.EMPTY_ARRAY;
+        EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
+        byte[] messageContent = new byte[1024];
+        byte[] bytes = RandomUtil.randomShortByteArray();
+        when(encoder.toMessageContent(data)).thenReturn(messageContent);
+        when(encoder.compressMessageContent(messageContent)).thenReturn(new byte[2048]);
+        when(encoder.encryptMessageContent(messageContent, null)).thenReturn(bytes);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
+
+        EzySimplePackage pack = new EzySimplePackage();
+        pack.setData(data);
+        pack.setEncrypted(false);
+        pack.setTransportType(EzyTransportType.TCP);
+
+        EzySession session = mock(EzySession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(session.isCompressionEnable()).thenReturn(true);
+        pack.addRecipient(session);
+
+        // when
+        sut.response(pack);
+
+        // then
+        Asserts.assertEquals(sentData(session), bytes);
+        verify(encoder, times(0)).encryptMessageContent(any(byte[].class), any(byte[].class), anyBoolean());
+    }
+
     private static Object sentData(EzySession session) throws Exception {
         ArgumentCaptor<EzyPacket> captor = ArgumentCaptor.forClass(EzyPacket.class);
         verify(session, times(1)).send(captor.capture());

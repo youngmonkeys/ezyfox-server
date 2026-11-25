@@ -151,6 +151,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verifyNoMoreInteractions(ignoredCommandsSetting);
 
         verify(socketSetting, times(1)).isCertificationSslActive();
+        verify(socketSetting, times(1)).getCompressionThreshold();
         verifyNoMoreInteractions(socketSetting);
 
         verify(codecFactory, times(1)).newEncoder(EzyConnectionType.SOCKET);
@@ -268,6 +269,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(socketSetting, times(3)).isCertificationSslActive();
         verify(socketSetting, times(2)).isActive();
         verify(socketSetting, times(1)).isCustomizationSslActive();
+        verify(socketSetting, times(1)).getCompressionThreshold();
         verifyNoMoreInteractions(socketSetting);
 
         verify(threadPoolSizeSetting, times(1)).getStatistics();
@@ -290,6 +292,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(websocketSetting, times(1)).getMinHandlerThreadPoolSize();
         verify(websocketSetting, times(1)).getMaxHandlerThreadPoolSize();
         verify(websocketSetting, times(1)).getWriterThreadPoolSize();
+        verify(websocketSetting, times(1)).isCompressionEnable();
         verifyNoMoreInteractions(websocketSetting);
     }
 

@@ -14,6 +14,10 @@ public class EzySecureSocketResponseApi extends EzySocketResponseApi {
         super(encoder);
     }
 
+    public EzySecureSocketResponseApi(Object encoder, int compressionThreshold) {
+        super(encoder, compressionThreshold);
+    }
+
     @Override
     protected void sendTcpPacket(
         EzySession session,

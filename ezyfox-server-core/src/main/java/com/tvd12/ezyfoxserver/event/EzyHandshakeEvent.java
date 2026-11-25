@@ -14,6 +14,8 @@ public interface EzyHandshakeEvent extends EzySessionEvent {
 
     boolean isEnableEncryption();
 
+    boolean isEnableCompression();
+
     byte[] getSessionKey();
 
     void setSessionKey(byte[] sessionKey);

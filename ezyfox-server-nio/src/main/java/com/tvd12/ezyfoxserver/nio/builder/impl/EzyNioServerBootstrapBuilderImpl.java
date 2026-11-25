@@ -123,9 +123,10 @@ public class EzyNioServerBootstrapBuilderImpl
 
     protected EzyResponseApi newResponseApi(EzyCodecFactory codecFactory) {
         EzySocketSetting socketSetting = getSocketSetting();
+        int compressionThreshold = socketSetting.getCompressionThreshold();
         return socketSetting.isCertificationSslActive()
-            ? new EzySecureProxyResponseApi(codecFactory)
-            : new EzyProxyResponseApi(codecFactory);
+            ? new EzySecureProxyResponseApi(codecFactory, compressionThreshold)
+            : new EzyProxyResponseApi(codecFactory, compressionThreshold);
     }
 
     private ExecutorService newStatsThreadPool() {

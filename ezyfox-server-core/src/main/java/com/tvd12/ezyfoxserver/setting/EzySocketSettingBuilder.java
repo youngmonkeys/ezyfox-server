@@ -13,6 +13,8 @@ public class EzySocketSettingBuilder extends
     protected int maxRequestSize;
     protected boolean tcpNoDelay;
     protected int writerThreadPoolSize;
+    protected boolean compressionEnable;
+    protected int compressionThreshold;
 
     public EzySocketSettingBuilder() {
         this.port = 3005;
@@ -21,6 +23,8 @@ public class EzySocketSettingBuilder extends
         this.sslHandshakeSigning = true;
         this.maxRequestSize = 32768;
         this.writerThreadPoolSize = 8;
+        this.compressionEnable = true;
+        this.compressionThreshold = 512;
         this.codecCreator = "com.tvd12.ezyfox.codec.MsgPackCodecCreator";
     }
 
@@ -54,6 +58,16 @@ public class EzySocketSettingBuilder extends
         return this;
     }
 
+    public EzySocketSettingBuilder compressionEnable(boolean compressionEnable) {
+        this.compressionEnable = compressionEnable;
+        return this;
+    }
+
+    public EzySocketSettingBuilder compressionThreshold(int compressionThreshold) {
+        this.compressionThreshold = compressionThreshold;
+        return this;
+    }
+
     @Override
     protected EzySimpleSocketSetting newSetting() {
         EzySimpleSocketSetting setting = new EzySimpleSocketSetting();
@@ -64,6 +78,8 @@ public class EzySocketSettingBuilder extends
         setting.setSslHandshakeSigning(sslHandshakeSigning);
         setting.setMaxRequestSize(maxRequestSize);
         setting.setWriterThreadPoolSize(writerThreadPoolSize);
+        setting.setCompressionEnable(compressionEnable);
+        setting.setCompressionThreshold(compressionThreshold);
         setting.setCodecCreator(codecCreator);
         return setting;
     }

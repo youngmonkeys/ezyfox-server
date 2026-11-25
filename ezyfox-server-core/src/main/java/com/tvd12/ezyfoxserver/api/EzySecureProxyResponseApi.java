@@ -8,10 +8,17 @@ public class EzySecureProxyResponseApi extends EzyProxyResponseApi {
         super(codecFactory);
     }
 
+    public EzySecureProxyResponseApi(
+        EzyCodecFactory codecFactory,
+        int compressionThreshold
+    ) {
+        super(codecFactory, compressionThreshold);
+    }
+
     @Override
     protected EzySocketResponseApi createSocketResponseApi(
         Object socketEncoder
     ) {
-        return new EzySecureSocketResponseApi(socketEncoder);
+        return new EzySecureSocketResponseApi(socketEncoder, compressionThreshold);
     }
 }

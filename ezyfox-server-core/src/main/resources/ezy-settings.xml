@@ -32,6 +32,8 @@
         <tcp-no-delay>true</tcp-no-delay>
         <max-request-size>4096</max-request-size>
         <writer-thread-pool-size>8</writer-thread-pool-size>
+        <compression-enable>true</compression-enable>
+        <compression-threshold>512</compression-threshold>
         <codec-creator>com.tvd12.ezyfox.codec.MsgPackCodecCreator</codec-creator>
     </socket>
 

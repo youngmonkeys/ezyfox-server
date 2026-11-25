@@ -15,6 +15,10 @@ public interface EzySocketSetting extends EzyBaseSocketSetting {
 
     int getWriterThreadPoolSize();
 
+    boolean isCompressionEnable();
+
+    int getCompressionThreshold();
+
     default boolean isCertificationSslActive() {
         return isSslActive() && getSslType() == SslType.CERTIFICATION;
     }

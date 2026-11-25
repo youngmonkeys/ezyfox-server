@@ -14,5 +14,7 @@ public interface EzyHandshakeParams extends EzyRequestParams {
 
     boolean isEnableEncryption();
 
+    boolean isEnableCompression();
+
     <T> T getData();
 }

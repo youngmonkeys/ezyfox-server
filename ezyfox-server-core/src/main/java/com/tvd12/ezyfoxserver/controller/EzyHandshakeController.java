@@ -33,6 +33,7 @@ public class EzyHandshakeController
         ctx.handleEvent(EzyEventType.CLIENT_HANDSHAKE, event);
         handleSocketSSL(ctx, event);
         updateSession(session, event);
+        updateSessionCompression(ctx, session, event);
         EzyResponse response = newHandShakeResponse(session, event);
         ctx.send(response, session, false);
         event.release();
@@ -121,6 +122,24 @@ public class EzyHandshakeController
         ((EzyAbstractSession) session).setBeforeToken(event.getReconnectToken());
     }
 
+    protected void updateSessionCompression(
+        EzyServerContext ctx,
+        EzySession session,
+        EzyHandshakeEvent event
+    ) {
+        boolean compressionEnable = event.isEnableCompression()
+            && EzyConnectionType
+                .SOCKET
+                .getName()
+                .equals(session.getConnectionType())
+            && ctx
+                .getServer()
+                .getSettings()
+                .getSocket()
+                .isCompressionEnable();
+        ((EzyAbstractSession) session).setCompressionEnable(compressionEnable);
+    }
+
     protected EzyHandshakeEvent newHandshakeEvent(
         EzySession session,
         EzyHandshakeParams params
@@ -132,7 +151,9 @@ public class EzyHandshakeController
             params.getClientType(),
             params.getClientVersion(),
             params.getReconnectToken(),
-            params.isEnableEncryption());
+            params.isEnableEncryption(),
+            params.isEnableCompression()
+        );
     }
 
     protected EzyResponse newHandShakeResponse(
@@ -144,6 +165,7 @@ public class EzyHandshakeController
         params.setReconnectToken(session.getToken());
         params.setSessionId(session.getId());
         params.setSessionKey(event.getEncryptedSessionKey());
+        params.setCompressionEnable(session.isCompressionEnable());
         return new EzyHandShakeResponse(params);
     }
 }

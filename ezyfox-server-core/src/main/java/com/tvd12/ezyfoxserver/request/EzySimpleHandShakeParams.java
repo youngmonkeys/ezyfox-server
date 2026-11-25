@@ -16,6 +16,7 @@ public class EzySimpleHandShakeParams
     protected boolean enableEncryption;
     protected String reconnectToken;
     protected Object data;
+    protected boolean enableCompression;
 
     @Override
     public void deserialize(EzyArray t) {
@@ -26,5 +27,6 @@ public class EzySimpleHandShakeParams
         this.enableEncryption = t.get(4, boolean.class);
         this.reconnectToken = t.get(5, String.class);
         this.data = t.getWithDefault(6, null);
+        this.enableCompression = Boolean.TRUE.equals(t.getWithDefault(7, Boolean.FALSE));
     }
 }

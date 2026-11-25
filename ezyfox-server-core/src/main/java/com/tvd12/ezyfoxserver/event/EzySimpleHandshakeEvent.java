@@ -15,6 +15,7 @@ public class EzySimpleHandshakeEvent
     protected final String clientVersion;
     protected final String reconnectToken;
     protected final boolean enableEncryption;
+    protected final boolean enableCompression;
     @Setter
     protected byte[] sessionKey;
     @Setter
@@ -29,6 +30,28 @@ public class EzySimpleHandshakeEvent
         String reconnectToken,
         boolean enableEncryption
     ) {
+        this(
+            session,
+            clientId,
+            clientKey,
+            clientType,
+            clientVersion,
+            reconnectToken,
+            enableEncryption,
+            false
+        );
+    }
+
+    public EzySimpleHandshakeEvent(
+        EzySession session,
+        String clientId,
+        byte[] clientKey,
+        String clientType,
+        String clientVersion,
+        String reconnectToken,
+        boolean enableEncryption,
+        boolean enableCompression
+    ) {
         super(session);
         this.clientId = clientId;
         this.clientKey = clientKey;
@@ -36,6 +59,7 @@ public class EzySimpleHandshakeEvent
         this.clientVersion = clientVersion;
         this.reconnectToken = reconnectToken;
         this.enableEncryption = enableEncryption;
+        this.enableCompression = enableCompression;
     }
 
     @Override

@@ -40,6 +40,7 @@ public class CompressionRawClient implements AutoCloseable {
     private long sessionId;
     private String token;
     private boolean serverCompressionEnable;
+    private long tcpSentBytes;
 
     public CompressionRawClient(String host, int port) throws IOException {
         MsgPackCodecCreator codecCreator = new MsgPackCodecCreator(true);
@@ -193,8 +194,21 @@ public class CompressionRawClient implements AutoCloseable {
         boolean encrypted,
         boolean compressed
     ) throws Exception {
-        output.write(encode(request, encrypted, compressed));
+        sendTcpBytes(encode(request, encrypted, compressed));
+    }
+
+    public void sendTcpBytes(byte[] bytes) throws IOException {
+        output.write(bytes);
         output.flush();
+        tcpSentBytes += bytes.length;
+    }
+
+    public void sendUdpBytes(byte[] bytes) throws IOException {
+        datagramSocket.send(new DatagramPacket(bytes, bytes.length));
+    }
+
+    public long getTcpSentBytes() {
+        return tcpSentBytes;
     }
 
     private byte[] encode(

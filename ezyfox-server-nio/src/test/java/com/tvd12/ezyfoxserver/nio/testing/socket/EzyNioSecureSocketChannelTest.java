@@ -568,7 +568,7 @@ public class EzyNioSecureSocketChannelTest {
         );
         when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
             ByteBuffer buffer = it.getArgumentAt(0, ByteBuffer.class);
-            EzyByteBuffers.getBytes(buffer);
+            EzyByteBuffers.getRemainingBytes(buffer);
             return bufferSize;
         });
 
@@ -641,7 +641,7 @@ public class EzyNioSecureSocketChannelTest {
         );
         when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
             ByteBuffer buffer = it.getArgumentAt(0, ByteBuffer.class);
-            EzyByteBuffers.getBytes(buffer);
+            EzyByteBuffers.getRemainingBytes(buffer);
             return bufferSize;
         });
 
@@ -694,7 +694,7 @@ public class EzyNioSecureSocketChannelTest {
         );
         when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
             ByteBuffer buffer = it.getArgumentAt(0, ByteBuffer.class);
-            EzyByteBuffers.getBytes(buffer);
+            EzyByteBuffers.getRemainingBytes(buffer);
             return bufferSize;
         });
 
@@ -731,7 +731,7 @@ public class EzyNioSecureSocketChannelTest {
         );
         when(socketChannel.write(any(ByteBuffer.class))).thenAnswer(it -> {
             ByteBuffer buffer = it.getArgumentAt(0, ByteBuffer.class);
-            EzyByteBuffers.getBytes(buffer);
+            EzyByteBuffers.getRemainingBytes(buffer);
             return bufferSize;
         });
 
@@ -1004,7 +1004,7 @@ public class EzyNioSecureSocketChannelTest {
             .thenAnswer(it -> {
                 ByteBuffer inputBuffer = it.getArgumentAt(0, ByteBuffer.class);
                 ByteBuffer netBuffer = it.getArgumentAt(1, ByteBuffer.class);
-                netBuffer.put(EzyByteBuffers.getBytes(inputBuffer));
+                netBuffer.put(EzyByteBuffers.getRemainingBytes(inputBuffer));
                 return result;
             });
 
@@ -1039,7 +1039,7 @@ public class EzyNioSecureSocketChannelTest {
             .thenAnswer(it -> {
                 ByteBuffer inputBuffer = it.getArgumentAt(0, ByteBuffer.class);
                 ByteBuffer netBuffer = it.getArgumentAt(1, ByteBuffer.class);
-                netBuffer.put(EzyByteBuffers.getBytes(inputBuffer));
+                netBuffer.put(EzyByteBuffers.getRemainingBytes(inputBuffer));
                 return result;
             });
 
@@ -1176,7 +1176,7 @@ public class EzyNioSecureSocketChannelTest {
                 }
                 ByteBuffer inputBuffer = it.getArgumentAt(0, ByteBuffer.class);
                 ByteBuffer netBuffer = it.getArgumentAt(1, ByteBuffer.class);
-                netBuffer.put(EzyByteBuffers.getBytes(inputBuffer));
+                netBuffer.put(EzyByteBuffers.getRemainingBytes(inputBuffer));
                 return resultOk;
             });
 

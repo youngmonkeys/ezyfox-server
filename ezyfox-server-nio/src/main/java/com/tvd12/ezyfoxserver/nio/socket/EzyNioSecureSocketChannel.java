@@ -516,8 +516,18 @@ public class EzyNioSecureSocketChannel
             }
             answer = new ByteArrayOutputStream(buffer.remaining());
         }
-        while (buffer.hasRemaining()) {
-            answer.write(buffer.get());
+        int length = buffer.remaining();
+        if (buffer.hasArray()) {
+            answer.write(
+                buffer.array(),
+                buffer.arrayOffset() + buffer.position(),
+                length
+            );
+            buffer.position(buffer.limit());
+        } else {
+            byte[] bytes = new byte[length];
+            buffer.get(bytes);
+            answer.write(bytes, 0, length);
         }
         return answer;
     }

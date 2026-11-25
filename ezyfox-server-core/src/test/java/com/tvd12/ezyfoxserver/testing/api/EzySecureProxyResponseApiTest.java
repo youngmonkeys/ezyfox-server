@@ -20,7 +20,7 @@ public class EzySecureProxyResponseApiTest {
         EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
         when(codecFactory.newEncoder(EzyConnectionType.SOCKET)).thenReturn(encoder);
 
-        EzySecureProxyResponseApi api = new EzySecureProxyResponseApi(codecFactory);
+        EzySecureProxyResponseApi api = new EzySecureProxyResponseApi(codecFactory, 512);
         EzyPackage pack = mock(EzyPackage.class);
         when(pack.getTransportType()).thenReturn(EzyConnectionType.SOCKET);
         when(pack.getConnectionTypes()).thenReturn(

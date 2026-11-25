@@ -52,6 +52,7 @@ public abstract class EzyAbstractSession
     protected volatile boolean activated;
     protected volatile boolean destroyed;
     protected volatile boolean streamingEnable;
+    protected volatile boolean compressionEnable;
 
     protected String token;
     protected String clientType;

@@ -629,4 +629,46 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
             super.signHandshake(ctx, session, clientKey, sessionKey, encryptedSessionKey);
         }
     }
+
+    @Test
+    public void handleCompressionTest() {
+        Asserts.assertTrue(handleCompression(EzyConnectionType.SOCKET, true, true));
+        Asserts.assertFalse(handleCompression(EzyConnectionType.SOCKET, false, true));
+        Asserts.assertFalse(handleCompression(EzyConnectionType.SOCKET, true, false));
+        Asserts.assertFalse(handleCompression(EzyConnectionType.WEBSOCKET, true, true));
+    }
+
+    private boolean handleCompression(
+        EzyConnectionType connectionType,
+        boolean clientEnableCompression,
+        boolean serverCompressionEnable
+    ) {
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(params.isEnableCompression()).thenReturn(clientEnableCompression);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn(connectionType.getName());
+        when(request.getSession()).thenReturn(session);
+
+        EzyServer server = mock(EzyServer.class);
+        EzySettings settings = mock(EzySettings.class);
+        EzySocketSetting socketSetting = mock(EzySocketSetting.class);
+        when(settings.getSocket()).thenReturn(socketSetting);
+        when(socketSetting.isCompressionEnable()).thenReturn(serverCompressionEnable);
+        when(serverContext.getServer()).thenReturn(server);
+        when(server.getSettings()).thenReturn(settings);
+
+        sut.handle(serverContext, request);
+
+        ArgumentCaptor<EzyResponse> responseCaptor = ArgumentCaptor.forClass(EzyResponse.class);
+        verify(serverContext, times(1)).send(responseCaptor.capture(), any(EzySession.class), anyBoolean());
+        EzyArray responseParams = responseCaptor.getValue().serialize().get(1, EzyArray.class);
+        Asserts.assertEquals(responseParams.get(4, boolean.class), session.isCompressionEnable());
+        return session.isCompressionEnable();
+    }
 }

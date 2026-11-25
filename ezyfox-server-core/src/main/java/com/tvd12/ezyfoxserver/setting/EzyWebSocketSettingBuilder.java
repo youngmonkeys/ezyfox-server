@@ -10,6 +10,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
     protected int maxHandlerThreadPoolSize;
     protected EzySimpleSslConfigSetting sslConfig;
     protected boolean managementEnable;
+    protected boolean compressionEnable;
 
     public EzyWebSocketSettingBuilder() {
         this.port = 2208;
@@ -19,6 +20,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         this.minHandlerThreadPoolSize = 4;
         this.maxHandlerThreadPoolSize = 16;
         this.managementEnable = true;
+        this.compressionEnable = true;
         this.sslConfig = new EzySimpleSslConfigSetting();
         this.codecCreator = "com.tvd12.ezyfox.codec.JacksonCodecCreator";
     }
@@ -62,6 +64,11 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         return this;
     }
 
+    public EzyWebSocketSettingBuilder compressionEnable(boolean compressionEnable) {
+        this.compressionEnable = compressionEnable;
+        return this;
+    }
+
     @Override
     public EzySimpleWebSocketSetting newSetting() {
         EzySimpleWebSocketSetting p = new EzySimpleWebSocketSetting();
@@ -73,6 +80,7 @@ public class EzyWebSocketSettingBuilder extends EzyAbstractSocketSettingBuilder<
         p.setSslActive(sslActive);
         p.setSslConfig(sslConfig);
         p.setManagementEnable(managementEnable);
+        p.setCompressionEnable(compressionEnable);
         return p;
     }
 }

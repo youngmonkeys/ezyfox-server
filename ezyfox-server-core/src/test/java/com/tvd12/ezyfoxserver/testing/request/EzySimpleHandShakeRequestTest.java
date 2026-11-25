@@ -77,4 +77,49 @@ public class EzySimpleHandShakeRequestTest extends BaseCoreTest {
         Asserts.assertEquals(sut.getReconnectToken(), reconnectToken);
         Asserts.assertEquals(sut.isEnableEncryption(), enableEncryption);
     }
+
+    @Test
+    public void deserializeWithCompressionTest() {
+        // given
+        EzySimpleHandShakeParams sut = new EzySimpleHandShakeParams();
+
+        // when
+        sut.deserialize(
+            EzyEntityArrays.newArray(
+                "clientId",
+                new byte[0],
+                "JAVA",
+                "1.0.0",
+                false,
+                "token",
+                null,
+                true
+            )
+        );
+
+        // then
+        Asserts.assertTrue(sut.isEnableCompression());
+        Asserts.assertNull(sut.getData());
+    }
+
+    @Test
+    public void deserializeWithoutCompressionTest() {
+        // given
+        EzySimpleHandShakeParams sut = new EzySimpleHandShakeParams();
+
+        // when
+        sut.deserialize(
+            EzyEntityArrays.newArray(
+                "clientId",
+                new byte[0],
+                "JAVA",
+                "1.0.0",
+                false,
+                "token"
+            )
+        );
+
+        // then
+        Asserts.assertFalse(sut.isEnableCompression());
+    }
 }

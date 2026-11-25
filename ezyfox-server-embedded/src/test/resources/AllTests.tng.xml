@@ -4,6 +4,9 @@
     <test name="All">
         <packages>
             <package name="com.tvd12.ezyfoxserver.embedded.test"></package>
+            <package name="com.tvd12.ezyfoxserver.embedded.test.client"></package>
+            <package name="com.tvd12.ezyfoxserver.embedded.test.compression"></package>
+            <package name="com.tvd12.ezyfoxserver.embedded.test.streaming"></package>
         </packages>
     </test>
 </suite>

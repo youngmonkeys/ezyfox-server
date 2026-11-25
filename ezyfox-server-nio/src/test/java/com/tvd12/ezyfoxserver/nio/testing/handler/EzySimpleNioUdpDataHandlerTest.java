@@ -16,15 +16,18 @@ import com.tvd12.ezyfoxserver.socket.EzyDatagramChannelPool;
 import com.tvd12.ezyfoxserver.socket.EzySimpleUdpReceivedPacket;
 import com.tvd12.ezyfoxserver.socket.EzyUdpReceivedPacket;
 import com.tvd12.ezyfoxserver.wrapper.EzySessionManager;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.util.RandomUtil;
 import org.eclipse.jetty.websocket.api.Session;
+import org.mockito.ArgumentCaptor;
 import org.testng.annotations.Test;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -51,7 +54,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         EzyUdpReceivedPacket packet = new EzySimpleUdpReceivedPacket(
             DatagramChannel.open(),
             new InetSocketAddress(12345),
@@ -117,7 +120,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         when(message.getContent()).thenReturn(bytes);
 
         // when
@@ -156,7 +159,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         when(message.getContent()).thenReturn(bytes);
 
         EzySessionManager sessionManager = mock(EzySessionManager.class);
@@ -199,7 +202,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         when(message.getContent()).thenReturn(bytes);
 
         EzySessionManager sessionManager = mock(EzySessionManager.class);
@@ -247,7 +250,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         EzyUdpReceivedPacket packet = new EzySimpleUdpReceivedPacket(
             DatagramChannel.open(),
             new InetSocketAddress(12345),
@@ -285,7 +288,7 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        byte[] bytes = EzyByteBuffers.getBytes(buffer);
+        byte[] bytes = EzyByteBuffers.getRemainingBytes(buffer);
         EzyUdpReceivedPacket packet = new EzySimpleUdpReceivedPacket(
             DatagramChannel.open(),
             new InetSocketAddress(12345),
@@ -456,6 +459,47 @@ public class EzySimpleNioUdpDataHandlerTest {
         buffer.putShort((short) tokenSize);
         buffer.put(sessionToken.getBytes());
         buffer.flip();
-        return EzyByteBuffers.getBytes(buffer);
+        return EzyByteBuffers.getRemainingBytes(buffer);
+    }
+
+    @Test
+    public void handleReceivedCompressedUdpPacketTest() {
+        // given
+        EzySimpleNioUdpDataHandler sut = new EzySimpleNioUdpDataHandler(1);
+
+        byte[] content = new byte[] {1, 2, 3, 4, 5};
+        ByteBuffer buffer = ByteBuffer.allocate(1 + 2 + content.length);
+        buffer.put((byte) (1 << 2));
+        buffer.putShort((short) content.length);
+        buffer.put(content);
+        byte[] messageBytes = buffer.array();
+
+        InetSocketAddress udpAddress = new InetSocketAddress(3005);
+        EzyUdpReceivedPacket packet = mock(EzyUdpReceivedPacket.class);
+        when(packet.getBytes()).thenReturn(messageBytes);
+        when(packet.getAddress()).thenReturn(udpAddress);
+
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        EzyHandlerGroupManager handlerGroupManager = mock(EzyHandlerGroupManager.class);
+        when(handlerGroupManager.getSocketChannel(udpAddress)).thenReturn(socketChannel);
+        sut.setHandlerGroupManager(handlerGroupManager);
+
+        EzySocketDataReceiver socketDataReceiver = mock(EzySocketDataReceiver.class);
+        sut.setSocketDataReceiver(socketDataReceiver);
+
+        // when
+        MethodInvoker.create()
+            .object(sut)
+            .method("handleReceivedUdpPacket")
+            .param(EzyUdpReceivedPacket.class, packet)
+            .call();
+
+        // then
+        ArgumentCaptor<EzyMessage> messageCaptor = ArgumentCaptor.forClass(EzyMessage.class);
+        verify(socketDataReceiver, times(1)).udpReceive(eq(socketChannel), messageCaptor.capture());
+        EzyMessage message = messageCaptor.getValue();
+        Asserts.assertTrue(message.getHeader().isCompressed());
+        Asserts.assertTrue(Arrays.equals(message.getContent(), content));
+        sut.destroy();
     }
 }

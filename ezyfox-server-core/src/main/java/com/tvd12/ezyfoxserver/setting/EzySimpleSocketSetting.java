@@ -38,6 +38,12 @@ public class EzySimpleSocketSetting
     @XmlElement(name = "writer-thread-pool-size")
     protected int writerThreadPoolSize;
 
+    @XmlElement(name = "compression-enable")
+    protected boolean compressionEnable;
+
+    @XmlElement(name = "compression-threshold")
+    protected int compressionThreshold;
+
     public EzySimpleSocketSetting() {
         super();
         setPort(3005);
@@ -46,6 +52,8 @@ public class EzySimpleSocketSetting
         setSslHandshakeSigning(true);
         setMaxRequestSize(4096);
         setWriterThreadPoolSize(8);
+        setCompressionEnable(true);
+        setCompressionThreshold(512);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
     }
 
@@ -59,6 +67,8 @@ public class EzySimpleSocketSetting
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);
+        map.put("compressionEnable", compressionEnable);
+        map.put("compressionThreshold", compressionThreshold);
         return map;
     }
 }

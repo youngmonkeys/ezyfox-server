@@ -13,6 +13,7 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
     protected String reconnectToken;
     protected long sessionId;
     protected byte[] sessionKey;
+    protected boolean compressionEnable;
 
     @Override
     protected EzyArrayBuilder doSerialize() {
@@ -20,6 +21,7 @@ public class EzyHandShakeParams extends EzySimpleResponseParams {
             .append(serverPublicKey)
             .append(reconnectToken)
             .append(sessionId)
-            .append(sessionKey);
+            .append(sessionKey)
+            .append(compressionEnable);
     }
 }

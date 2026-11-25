@@ -37,41 +37,37 @@ public abstract class EzyAbstractResponseApi
         if (recipients.isEmpty()) {
             return;
         }
-        Object bytes = encodeData(pack.getData());
-        EzyConstant transportType = pack.getTransportType();
-        if (immediate) {
-            for (EzySession session : recipients) {
-                EzyPacket packet = null;
-                try {
-                    packet = createPacket(
-                        session,
-                        transportType,
-                        bytes
-                    );
-                    sendPacketNow(session, packet);
-                } catch (Throwable e) {
-                    if (packet != null) {
-                        packet.release();
-                    }
-                    logger.info("response data now to session: {} failed", session, e);
+        EzyArray data = pack.getData();
+        Object bytes = null;
+        Object compressedBytes = null;
+        boolean encoded = false;
+        boolean compressedEncoded = false;
+        for (EzySession session : recipients) {
+            if (isCompressionEnable(session)) {
+                if (!compressedEncoded) {
+                    compressedBytes = encodeCompressedData(data);
+                    compressedEncoded = true;
                 }
+            } else if (!encoded) {
+                bytes = encodeData(data);
+                encoded = true;
             }
-        } else {
-            for (EzySession session : recipients) {
-                EzyPacket packet = null;
-                try {
-                    packet = createPacket(
-                        session,
-                        transportType,
-                        bytes
-                    );
-                    sendPacket(session, packet);
-                } catch (Throwable e) {
-                    if (packet != null) {
-                        packet.release();
-                    }
-                    logger.info("response data to session: {} failed", session, e);
+        }
+        EzyConstant transportType = pack.getTransportType();
+        for (EzySession session : recipients) {
+            EzyPacket packet = null;
+            try {
+                packet = createPacket(
+                    session,
+                    transportType,
+                    isCompressionEnable(session) ? compressedBytes : bytes
+                );
+                sendPacketToSession(session, packet, immediate);
+            } catch (Throwable e) {
+                if (packet != null) {
+                    packet.release();
                 }
+                logResponseFailed(session, immediate, e);
             }
         }
     }
@@ -87,43 +83,64 @@ public abstract class EzyAbstractResponseApi
             return;
         }
         byte[] messageContent = dataToMessageContent(pack.getData());
+        byte[] compressedMessageContent = null;
+        for (EzySession session : recipients) {
+            if (isCompressionEnable(session)) {
+                compressedMessageContent = compressMessageContent(messageContent);
+                break;
+            }
+        }
         EzyConstant transportType = pack.getTransportType();
+        for (EzySession session : recipients) {
+            EzyPacket packet = null;
+            try {
+                byte[] bytes = compressedMessageContent != null
+                    && isCompressionEnable(session)
+                    ? encryptMessageContent(
+                        compressedMessageContent,
+                        session.getSessionKey(),
+                        true
+                    )
+                    : encryptMessageContent(
+                        messageContent,
+                        session.getSessionKey()
+                    );
+                packet = createPacket(
+                    session,
+                    transportType,
+                    bytes
+                );
+                sendPacketToSession(session, packet, immediate);
+            } catch (Throwable e) {
+                if (packet != null) {
+                    packet.release();
+                }
+                logResponseFailed(session, immediate, e);
+            }
+        }
+    }
+
+    private void sendPacketToSession(
+        EzySession session,
+        EzyPacket packet,
+        boolean immediate
+    ) throws Exception {
         if (immediate) {
-            for (EzySession session : recipients) {
-                EzyPacket packet = null;
-                try {
-                    byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    packet = createPacket(
-                        session,
-                        transportType,
-                        bytes
-                    );
-                    sendPacketNow(session, packet);
-                } catch (Throwable e) {
-                    if (packet != null) {
-                        packet.release();
-                    }
-                    logger.info("response data now to session: {} failed", session, e);
-                }
-            }
+            sendPacketNow(session, packet);
         } else {
-            for (EzySession session : recipients) {
-                EzyPacket packet = null;
-                try {
-                    byte[] bytes = encryptMessageContent(messageContent, session.getSessionKey());
-                    packet = createPacket(
-                        session,
-                        transportType,
-                        bytes
-                    );
-                    sendPacket(session, packet);
-                } catch (Throwable e) {
-                    if (packet != null) {
-                        packet.release();
-                    }
-                    logger.info("response data to session: {} failed", session, e);
-                }
-            }
+            sendPacket(session, packet);
+        }
+    }
+
+    private void logResponseFailed(
+        EzySession session,
+        boolean immediate,
+        Throwable e
+    ) {
+        if (immediate) {
+            logger.info("response data now to session: {} failed", session, e);
+        } else {
+            logger.info("response data to session: {} failed", session, e);
         }
     }
 
@@ -195,9 +212,31 @@ public abstract class EzyAbstractResponseApi
         throw new UnsupportedOperationException("unsupported");
     }
 
+    protected boolean isCompressionEnable(EzySession session) {
+        return false;
+    }
+
+    protected Object encodeCompressedData(EzyArray data) throws Exception {
+        return encodeData(data);
+    }
+
+    protected byte[] compressMessageContent(
+        byte[] messageContent
+    ) throws Exception {
+        return null;
+    }
+
     protected byte[] encryptMessageContent(
         byte[] messageContent,
         byte[] encryptionKey
+    ) throws Exception {
+        throw new UnsupportedOperationException("unsupported");
+    }
+
+    protected byte[] encryptMessageContent(
+        byte[] messageContent,
+        byte[] encryptionKey,
+        boolean compressed
     ) throws Exception {
         throw new UnsupportedOperationException("unsupported");
     }

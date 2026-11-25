@@ -11,8 +11,13 @@ public class EzyProxyResponseApi implements EzyResponseApi {
 
     private final Map<String, EzyResponseApi> responseApiByConnectionType;
     private final EzyProtocolResponseApi protocolResponseApi;
+    protected final int compressionThreshold;
 
-    public EzyProxyResponseApi(EzyCodecFactory codecFactory) {
+    public EzyProxyResponseApi(
+        EzyCodecFactory codecFactory,
+        int compressionThreshold
+    ) {
+        this.compressionThreshold = compressionThreshold;
         Object socketEncoder = codecFactory.newEncoder(EzyConnectionType.SOCKET);
         Object wsEncoder = codecFactory.newEncoder(EzyConnectionType.WEBSOCKET);
         this.responseApiByConnectionType = new HashMap<>();
@@ -36,7 +41,7 @@ public class EzyProxyResponseApi implements EzyResponseApi {
     protected EzySocketResponseApi createSocketResponseApi(
         Object socketEncoder
     ) {
-        return new EzySocketResponseApi(socketEncoder);
+        return new EzySocketResponseApi(socketEncoder, compressionThreshold);
     }
 
     private EzyResponseApi newWebsocketResponseApi(Object wsEncoder) {

@@ -72,6 +72,8 @@
             <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="compression-enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="compression-threshold" type="xs:integer" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
@@ -100,6 +102,7 @@
             <xs:element name="max-handler-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="writer-thread-pool-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="management-enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="compression-enable" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 

@@ -366,6 +366,8 @@ public interface EzySession extends
      */
     boolean isStreamingEnable();
 
+    boolean isCompressionEnable();
+
     /**
      * Get the owner username of the session.
      *

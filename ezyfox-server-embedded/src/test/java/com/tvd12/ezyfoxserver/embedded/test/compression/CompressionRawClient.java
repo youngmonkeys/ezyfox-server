@@ -15,12 +15,15 @@ import com.tvd12.ezyfox.util.EzyEntityArrays;
 import com.tvd12.ezyfoxserver.constant.EzyCommand;
 
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
@@ -49,6 +52,7 @@ public class CompressionRawClient implements AutoCloseable {
         this.decoder = codecCreator.newDecoder(Integer.MAX_VALUE);
         this.socket = new Socket(host, port);
         this.socket.setSoTimeout(5000);
+        this.socket.setTcpNoDelay(true);
         this.input = new DataInputStream(socket.getInputStream());
         this.output = socket.getOutputStream();
     }
@@ -136,6 +140,29 @@ public class CompressionRawClient implements AutoCloseable {
     ) throws Exception {
         sendTcp(newEchoRequest(pluginId, payload, false, encrypted), encrypted, compressed);
         return readTcp();
+    }
+
+    public byte[] newEchoBytes(
+        int pluginId,
+        String payload,
+        boolean encrypted,
+        boolean compressed
+    ) throws Exception {
+        return encode(newEchoRequest(pluginId, payload, false, encrypted), encrypted, compressed);
+    }
+
+    public boolean waitDisconnected() throws Exception {
+        try {
+            while (true) {
+                if (readTcp().command() == EzyCommand.DISCONNECT.getId()) {
+                    return true;
+                }
+            }
+        } catch (EOFException | SocketException e) {
+            return true;
+        } catch (SocketTimeoutException e) {
+            return false;
+        }
     }
 
     public void udpHandshake(int udpPort) throws Exception {

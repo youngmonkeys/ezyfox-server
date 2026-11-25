@@ -40,5 +40,11 @@
             <version>${ezyfox.server.java.client.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-jackson</artifactId>
+            <version>${ezy.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

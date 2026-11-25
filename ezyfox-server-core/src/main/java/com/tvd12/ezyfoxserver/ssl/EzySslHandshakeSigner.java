@@ -42,12 +42,15 @@ public class EzySslHandshakeSigner extends EzyLoggable {
         try {
             SigningKey key = loadSigningKey(sslConfigSupplier.get());
             if (key == null) {
-                logger.warn("ssl handshake signer: no usable RSA or EC key, socket handshakes are not signed");
+                logger.warn(
+                    "ssl handshake signer: no usable RSA or EC key, " +
+                        "socket handshakes are not signed");
                 return false;
             }
             signingKey = key;
             logger.info(
-                "ssl handshake signer: sign socket handshakes with {} ({} bits), certificate: {}, expires: {}",
+                "ssl handshake signer: sign socket handshakes with " +
+                    "{} ({} bits), certificate: {}, expires: {}",
                 key.algorithm,
                 key.keyBits,
                 key.subject,
@@ -55,7 +58,11 @@ public class EzySslHandshakeSigner extends EzyLoggable {
             );
             return true;
         } catch (Throwable e) {
-            logger.info("ssl handshake signer: cannot load the key store, socket handshakes are not signed: {}", e.toString());
+            logger.info(
+                "ssl handshake signer: cannot load the key store, " +
+                    "socket handshakes are not signed: {}",
+                e.toString()
+            );
             return false;
         }
     }

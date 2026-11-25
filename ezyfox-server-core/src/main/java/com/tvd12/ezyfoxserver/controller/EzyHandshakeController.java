@@ -22,6 +22,8 @@ public class EzyHandshakeController
     extends EzyAbstractServerController
     implements EzyServerController<EzyHandShakeRequest> {
 
+    private EzySslHandshakeSigner sslHandshakeSigner;
+
     @SuppressWarnings("AbbreviationAsWordInName")
     @Override
     public void handle(EzyServerContext ctx, EzyHandShakeRequest request) {
@@ -95,12 +97,16 @@ public class EzyHandshakeController
         ) {
             return;
         }
-        EzySslHandshakeSigner signer = ctx.getProperty(EzySslHandshakeSigner.class);
-        if (signer == null || !signer.isActive()) {
+        if (sslHandshakeSigner == null) {
+            sslHandshakeSigner = ctx.getProperty(EzySslHandshakeSigner.class);
+        }
+        if (sslHandshakeSigner == null || !sslHandshakeSigner.isActive()) {
             return;
         }
         try {
-            session.setPublicKey(signer.sign(clientKey, encryptedSessionKey));
+            session.setPublicKey(
+                sslHandshakeSigner.sign(clientKey, encryptedSessionKey)
+            );
         } catch (Exception e) {
             logger.info("cannot sign handshake for session: {}", session, e);
         }

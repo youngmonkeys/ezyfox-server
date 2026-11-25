@@ -407,7 +407,7 @@ public class EzyNioSecureSocketChannelTest {
             }
             return SSLEngineResult.HandshakeStatus.FINISHED;
         });
-        int readBytes = RandomUtil.randomSmallInt();
+        int readBytes = RandomUtil.randomInt(1, 100);
         when(socketChannel.read(any(ByteBuffer.class))).thenReturn(readBytes);
 
         SSLEngineResult engineResultOverflow = new SSLEngineResult(

@@ -11,6 +11,8 @@ import javax.net.ssl.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -154,6 +156,9 @@ public class EzyNioSecureSocketChannel
                         case BUFFER_OVERFLOW:
                             throw new EzyConnectionCloseException("max request size");
                         case BUFFER_UNDERFLOW:
+                            if (readBytes == 0) {
+                                waitForReadable(endTime);
+                            }
                             break;
                         case CLOSED:
                             if (engine.isOutboundDone()) {
@@ -379,6 +384,17 @@ public class EzyNioSecureSocketChannel
             }
         }
         return getOutputBytes(output);
+    }
+
+    private void waitForReadable(long timeoutAt) throws IOException {
+        long timeout = timeoutAt - System.currentTimeMillis();
+        if (timeout <= 0 || channel.isBlocking()) {
+            return;
+        }
+        try (Selector selector = Selector.open()) {
+            channel.register(selector, SelectionKey.OP_READ);
+            selector.select(timeout);
+        }
     }
 
     public void writeOrTimeout(

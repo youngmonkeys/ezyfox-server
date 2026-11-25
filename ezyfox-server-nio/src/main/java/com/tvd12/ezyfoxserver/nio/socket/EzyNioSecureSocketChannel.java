@@ -40,7 +40,7 @@ public class EzyNioSecureSocketChannel
     private int appBufferSize;
     private int netBufferSize;
     private int sslMaxNetBufferSize;
-    private volatile SSLContext sslContext;
+    private final EzySslContextProxy sslContextProxy;
     private final int sslHandshakeTimeout;
     private final int sslMaxAppBufferSize;
     @Getter
@@ -59,10 +59,7 @@ public class EzyNioSecureSocketChannel
         super(channel);
         this.sslHandshakeTimeout = sslHandshakeTimeout;
         this.sslMaxAppBufferSize = maxRequestSize * 2;
-        this.sslContext = sslContextProxy.loadSslContext();
-        sslContextProxy.onSslContextReload(newSslContext ->
-            this.sslContext = newSslContext
-        );
+        this.sslContextProxy = sslContextProxy;
     }
 
     public boolean isHandshakeComplete() {
@@ -83,7 +80,7 @@ public class EzyNioSecureSocketChannel
             );
             return;
         }
-        engine = sslContext.createSSLEngine();
+        engine = sslContextProxy.loadSslContext().createSSLEngine();
         engine.setUseClientMode(false);
         engine.beginHandshake();
 

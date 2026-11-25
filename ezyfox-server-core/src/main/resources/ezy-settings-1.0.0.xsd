@@ -67,6 +67,7 @@
             <xs:element name="ssl-active" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="ssl-type" type="ssl-type-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="ssl-handshake-timeout" type="xs:integer" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="ssl-handshake-signing" type="xs:boolean" maxOccurs="1" minOccurs="0"/>
             <xs:element name="codec-creator" type="codec-creator-type" maxOccurs="1" minOccurs="0"/>
             <xs:element name="max-request-size" type="xs:integer" maxOccurs="1" minOccurs="0"/>
             <xs:element name="tcp-no-delay" type="xs:boolean" maxOccurs="1" minOccurs="0"/>

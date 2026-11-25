@@ -26,6 +26,9 @@ public class EzySimpleSocketSetting
     @XmlElement(name = "ssl-handshake-timeout")
     protected int sslHandshakeTimeout;
 
+    @XmlElement(name = "ssl-handshake-signing")
+    protected boolean sslHandshakeSigning;
+
     @XmlElement(name = "max-request-size")
     protected int maxRequestSize;
 
@@ -40,6 +43,7 @@ public class EzySimpleSocketSetting
         setPort(3005);
         setSslType(SslType.CUSTOMIZATION);
         setSslHandshakeTimeout(350);
+        setSslHandshakeSigning(true);
         setMaxRequestSize(4096);
         setWriterThreadPoolSize(8);
         setCodecCreator("com.tvd12.ezyfox.codec.MsgPackCodecCreator");
@@ -51,6 +55,7 @@ public class EzySimpleSocketSetting
         map.put("sslActive", sslActive);
         map.put("sslType", sslType);
         map.put("sslHandshakeTimeout", sslHandshakeTimeout);
+        map.put("sslHandshakeSigning", sslHandshakeSigning);
         map.put("tcpNoDelay", tcpNoDelay);
         map.put("maxRequestSize", maxRequestSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);

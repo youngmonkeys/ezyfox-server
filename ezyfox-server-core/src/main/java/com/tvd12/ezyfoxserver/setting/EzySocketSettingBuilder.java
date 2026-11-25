@@ -9,6 +9,7 @@ public class EzySocketSettingBuilder extends
 
     protected SslType sslType;
     protected int sslHandshakeTimeout;
+    protected boolean sslHandshakeSigning;
     protected int maxRequestSize;
     protected boolean tcpNoDelay;
     protected int writerThreadPoolSize;
@@ -17,6 +18,7 @@ public class EzySocketSettingBuilder extends
         this.port = 3005;
         this.sslType = SslType.CUSTOMIZATION;
         this.sslHandshakeTimeout = 350;
+        this.sslHandshakeSigning = true;
         this.maxRequestSize = 32768;
         this.writerThreadPoolSize = 8;
         this.codecCreator = "com.tvd12.ezyfox.codec.MsgPackCodecCreator";
@@ -29,6 +31,11 @@ public class EzySocketSettingBuilder extends
 
     public EzySocketSettingBuilder sslHandshakeTimeout(int sslHandshakeTimeout) {
         this.sslHandshakeTimeout = sslHandshakeTimeout;
+        return this;
+    }
+
+    public EzySocketSettingBuilder sslHandshakeSigning(boolean sslHandshakeSigning) {
+        this.sslHandshakeSigning = sslHandshakeSigning;
         return this;
     }
 
@@ -54,6 +61,7 @@ public class EzySocketSettingBuilder extends
         setting.setSslActive(sslActive);
         setting.setSslType(sslType);
         setting.setSslHandshakeTimeout(sslHandshakeTimeout);
+        setting.setSslHandshakeSigning(sslHandshakeSigning);
         setting.setMaxRequestSize(maxRequestSize);
         setting.setWriterThreadPoolSize(writerThreadPoolSize);
         setting.setCodecCreator(codecCreator);

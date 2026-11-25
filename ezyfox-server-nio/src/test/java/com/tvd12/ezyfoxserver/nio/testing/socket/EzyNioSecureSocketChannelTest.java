@@ -407,7 +407,7 @@ public class EzyNioSecureSocketChannelTest {
             }
             return SSLEngineResult.HandshakeStatus.FINISHED;
         });
-        int readBytes = RandomUtil.randomSmallInt();
+        int readBytes = RandomUtil.randomInt(1, 100);
         when(socketChannel.read(any(ByteBuffer.class))).thenReturn(readBytes);
 
         SSLEngineResult engineResultOverflow = new SSLEngineResult(
@@ -1691,6 +1691,90 @@ public class EzyNioSecureSocketChannelTest {
         // then
         Asserts.assertTrue(actual == output);
         Asserts.assertEquals(actual.toByteArray(), new byte[] {1, 2, 3});
+    }
+
+    @Test
+    public void drainBufferCaseHeapBufferWithOffsetAndPosition() throws Exception {
+        // given
+        ByteBuffer wrapped = ByteBuffer.wrap(new byte[] {0, 1, 2, 3, 4, 5, 6});
+        wrapped.position(1);
+        ByteBuffer source = wrapped.slice();
+        source.position(2);
+        source.limit(5);
+
+        // when
+        ByteArrayOutputStream actual = invokeDrainBuffer(null, source, 0);
+
+        // then
+        Asserts.assertTrue(source.hasArray());
+        Asserts.assertEquals(source.arrayOffset(), 1);
+        Asserts.assertEquals(actual.toByteArray(), new byte[] {3, 4, 5});
+        Asserts.assertEquals(source.position(), 5);
+        Asserts.assertFalse(source.hasRemaining());
+    }
+
+    @Test
+    public void drainBufferCaseDirectBufferNewOutput() throws Exception {
+        // given
+        ByteBuffer source = ByteBuffer.allocateDirect(5);
+        source.put(new byte[] {1, 2, 3, 4, 5});
+        source.flip();
+        source.position(1);
+
+        // when
+        ByteArrayOutputStream actual = invokeDrainBuffer(null, source, 4);
+
+        // then
+        Asserts.assertFalse(source.hasArray());
+        Asserts.assertEquals(actual.toByteArray(), new byte[] {2, 3, 4, 5});
+        Asserts.assertEquals(source.position(), 5);
+        Asserts.assertFalse(source.hasRemaining());
+    }
+
+    @Test
+    public void drainBufferCaseDirectBufferAppendToExistingOutput() throws Exception {
+        // given
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        output.write(1);
+        ByteBuffer source = ByteBuffer.allocateDirect(2);
+        source.put(new byte[] {2, 3});
+        source.flip();
+
+        // when
+        ByteArrayOutputStream actual = invokeDrainBuffer(output, source, 3);
+
+        // then
+        Asserts.assertTrue(actual == output);
+        Asserts.assertEquals(actual.toByteArray(), new byte[] {1, 2, 3});
+        Asserts.assertFalse(source.hasRemaining());
+    }
+
+    @Test
+    public void drainBufferCaseReadOnlyHeapBuffer() throws Exception {
+        // given
+        ByteBuffer source = ByteBuffer.wrap(new byte[] {1, 2, 3}).asReadOnlyBuffer();
+
+        // when
+        ByteArrayOutputStream actual = invokeDrainBuffer(null, source, 0);
+
+        // then
+        Asserts.assertFalse(source.hasArray());
+        Asserts.assertEquals(actual.toByteArray(), new byte[] {1, 2, 3});
+        Asserts.assertFalse(source.hasRemaining());
+    }
+
+    private ByteArrayOutputStream invokeDrainBuffer(
+        ByteArrayOutputStream output,
+        ByteBuffer buffer,
+        int maxSize
+    ) {
+        return MethodInvoker.create()
+            .object(instance)
+            .method("drainBuffer")
+            .param(ByteArrayOutputStream.class, output)
+            .param(ByteBuffer.class, buffer)
+            .param(int.class, maxSize)
+            .call();
     }
 
     @Test

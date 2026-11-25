@@ -16,11 +16,15 @@ import com.tvd12.ezyfoxserver.event.EzyHandshakeEvent;
 import com.tvd12.ezyfoxserver.request.EzyHandShakeRequest;
 import com.tvd12.ezyfoxserver.request.EzyHandshakeParams;
 import com.tvd12.ezyfoxserver.request.EzySimpleHandshakeRequest;
+import com.tvd12.ezyfoxserver.response.EzyResponse;
 import com.tvd12.ezyfoxserver.setting.EzySettings;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeSigner;
+import com.tvd12.ezyfoxserver.testing.ssl.EzySslHandshakeSignerTest;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.performance.Performance;
 import com.tvd12.test.util.RandomUtil;
+import org.mockito.ArgumentCaptor;
 import org.testng.annotations.Test;
 
 import java.security.KeyPair;
@@ -102,6 +106,92 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
         verify(session, times(1)).setClientVersion(clientVersion);
         verify(session, times(1)).setSessionKey(any(byte[].class));
         Asserts.assertNotNull(session.getSessionKey());
+    }
+
+    @Test
+    public void handleSocketSSLWithSignerTest() throws Exception {
+        // given
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(request.getSession()).thenReturn(session);
+
+        EzyServer server = mock(EzyServer.class);
+        EzySettings settings = mock(EzySettings.class);
+        EzySocketSetting socketSetting = mock(EzySocketSetting.class);
+        when(settings.getSocket()).thenReturn(socketSetting);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
+        when(serverContext.getServer()).thenReturn(server);
+        when(server.getSettings()).thenReturn(settings);
+
+        EzySslHandshakeSigner signer = new EzySslHandshakeSigner(EzySslHandshakeSignerTest::newSslConfig);
+        signer.reload();
+        when(serverContext.getProperty(EzySslHandshakeSigner.class)).thenReturn(signer);
+
+        KeyPair keyPair = EzyKeysGenerator.builder()
+            .build()
+            .generate();
+        byte[] clientKey = keyPair.getPublic().getEncoded();
+        when(params.getClientId()).thenReturn(RandomUtil.randomShortHexString());
+        when(params.getClientKey()).thenReturn(clientKey);
+        when(params.getClientType()).thenReturn(RandomUtil.randomShortAlphabetString());
+        when(params.getClientVersion()).thenReturn(RandomUtil.randomShortAlphabetString());
+        when(params.getReconnectToken()).thenReturn(RandomUtil.randomShortHexString());
+        when(params.isEnableEncryption()).thenReturn(true);
+
+        // when
+        sut.handle(serverContext, request);
+
+        // then
+        ArgumentCaptor<EzyResponse> responseCaptor = ArgumentCaptor.forClass(EzyResponse.class);
+        verify(serverContext, times(1)).send(responseCaptor.capture(), any(EzySession.class), anyBoolean());
+        EzyArray data = responseCaptor.getValue().serialize().get(1, EzyArray.class);
+        byte[] proof = data.get(0, byte[].class);
+        byte[] encryptedSessionKey = data.get(3, byte[].class);
+        Asserts.assertEquals(proof, session.getPublicKey());
+        EzySslHandshakeSignerTest.verifyProof(proof, clientKey, encryptedSessionKey);
+        verify(serverContext, times(1)).getProperty(EzySslHandshakeSigner.class);
+    }
+
+    @Test
+    public void handleSocketSSLWithSignerButNoClientKeyTest() {
+        // given
+        EzyHandshakeController sut = new EzyHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzyHandShakeRequest request = mock(EzyHandShakeRequest.class);
+
+        EzyHandshakeParams params = mock(EzyHandshakeParams.class);
+        when(request.getParams()).thenReturn(params);
+
+        EzySession session = spy(EzyAbstractSession.class);
+        when(session.getConnectionType()).thenReturn(EzyConnectionType.SOCKET.getName());
+        when(request.getSession()).thenReturn(session);
+
+        EzyServer server = mock(EzyServer.class);
+        EzySettings settings = mock(EzySettings.class);
+        EzySocketSetting socketSetting = mock(EzySocketSetting.class);
+        when(settings.getSocket()).thenReturn(socketSetting);
+        when(socketSetting.isCustomizationSslActive()).thenReturn(true);
+        when(serverContext.getServer()).thenReturn(server);
+        when(server.getSettings()).thenReturn(settings);
+
+        EzySslHandshakeSigner signer = new EzySslHandshakeSigner(EzySslHandshakeSignerTest::newSslConfig);
+        signer.reload();
+        when(serverContext.getProperty(EzySslHandshakeSigner.class)).thenReturn(signer);
+        when(params.isEnableEncryption()).thenReturn(true);
+
+        // when
+        sut.handle(serverContext, request);
+
+        // then
+        Asserts.assertNull(session.getPublicKey());
+        verify(serverContext, times(0)).getProperty(EzySslHandshakeSigner.class);
     }
 
     @Test
@@ -407,5 +497,136 @@ public class EzyHandShakeControllerTest extends EzyBaseControllerTest {
     @Override
     protected EzyConstant getCommand() {
         return EzyCommand.HANDSHAKE;
+    }
+
+    @Test
+    public void signHandshakeTest() throws Exception {
+        // given
+        TestHandshakeController sut = new TestHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySession session = mock(EzySession.class);
+        EzySslHandshakeSigner signer = mock(EzySslHandshakeSigner.class);
+        when(signer.isActive()).thenReturn(true);
+        byte[] proof = new byte[] {9, 9};
+        when(signer.sign(any(byte[].class), any(byte[].class))).thenReturn(proof);
+        when(serverContext.getProperty(EzySslHandshakeSigner.class)).thenReturn(signer);
+        byte[] clientKey = new byte[] {1, 2};
+        byte[] sessionKey = new byte[] {3, 4};
+        byte[] encryptedSessionKey = new byte[] {5, 6};
+
+        // when
+        sut.signHandshake(serverContext, session, clientKey, sessionKey, encryptedSessionKey);
+        sut.signHandshake(serverContext, session, clientKey, sessionKey, encryptedSessionKey);
+
+        // then
+        verify(session, times(2)).setPublicKey(proof);
+        verify(signer, times(2)).sign(clientKey, encryptedSessionKey);
+        verify(serverContext, times(1)).getProperty(EzySslHandshakeSigner.class);
+    }
+
+    @Test
+    public void signHandshakeClientKeyNullTest() {
+        assertSignHandshakeSkipped(null, new byte[] {3}, new byte[] {5});
+    }
+
+    @Test
+    public void signHandshakeClientKeyEmptyTest() {
+        assertSignHandshakeSkipped(new byte[0], new byte[] {3}, new byte[] {5});
+    }
+
+    @Test
+    public void signHandshakeEncryptedSessionKeyNullTest() {
+        assertSignHandshakeSkipped(new byte[] {1}, new byte[] {3}, null);
+    }
+
+    @Test
+    public void signHandshakeSessionKeyNotEncryptedTest() {
+        assertSignHandshakeSkipped(new byte[] {1}, new byte[] {3, 4}, new byte[] {3, 4});
+    }
+
+    @Test
+    public void signHandshakeSignerNullTest() {
+        // given
+        TestHandshakeController sut = new TestHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySession session = mock(EzySession.class);
+
+        // when
+        sut.signHandshake(serverContext, session, new byte[] {1}, new byte[] {3}, new byte[] {5});
+        sut.signHandshake(serverContext, session, new byte[] {1}, new byte[] {3}, new byte[] {5});
+
+        // then
+        verify(session, times(0)).setPublicKey(any(byte[].class));
+        verify(serverContext, times(2)).getProperty(EzySslHandshakeSigner.class);
+    }
+
+    @Test
+    public void signHandshakeSignerInactiveTest() throws Exception {
+        // given
+        TestHandshakeController sut = new TestHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySession session = mock(EzySession.class);
+        EzySslHandshakeSigner signer = mock(EzySslHandshakeSigner.class);
+        when(signer.isActive()).thenReturn(false);
+        when(serverContext.getProperty(EzySslHandshakeSigner.class)).thenReturn(signer);
+
+        // when
+        sut.signHandshake(serverContext, session, new byte[] {1}, new byte[] {3}, new byte[] {5});
+
+        // then
+        verify(session, times(0)).setPublicKey(any(byte[].class));
+        verify(signer, times(1)).isActive();
+        verify(signer, times(0)).sign(any(byte[].class), any(byte[].class));
+    }
+
+    @Test
+    public void signHandshakeSignErrorTest() throws Exception {
+        // given
+        TestHandshakeController sut = new TestHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySession session = mock(EzySession.class);
+        EzySslHandshakeSigner signer = mock(EzySslHandshakeSigner.class);
+        when(signer.isActive()).thenReturn(true);
+        when(signer.sign(any(byte[].class), any(byte[].class))).thenThrow(new Exception("test"));
+        when(serverContext.getProperty(EzySslHandshakeSigner.class)).thenReturn(signer);
+
+        // when
+        sut.signHandshake(serverContext, session, new byte[] {1}, new byte[] {3}, new byte[] {5});
+
+        // then
+        verify(session, times(0)).setPublicKey(any(byte[].class));
+        verify(signer, times(1)).sign(any(byte[].class), any(byte[].class));
+    }
+
+    private static void assertSignHandshakeSkipped(
+        byte[] clientKey,
+        byte[] sessionKey,
+        byte[] encryptedSessionKey
+    ) {
+        // given
+        TestHandshakeController sut = new TestHandshakeController();
+        EzyServerContext serverContext = mock(EzyServerContext.class);
+        EzySession session = mock(EzySession.class);
+
+        // when
+        sut.signHandshake(serverContext, session, clientKey, sessionKey, encryptedSessionKey);
+
+        // then
+        verify(session, times(0)).setPublicKey(any(byte[].class));
+        verify(serverContext, times(0)).getProperty(EzySslHandshakeSigner.class);
+    }
+
+    private static class TestHandshakeController extends EzyHandshakeController {
+
+        @Override
+        public void signHandshake(
+            EzyServerContext ctx,
+            EzySession session,
+            byte[] clientKey,
+            byte[] sessionKey,
+            byte[] encryptedSessionKey
+        ) {
+            super.signHandshake(ctx, session, clientKey, sessionKey, encryptedSessionKey);
+        }
     }
 }

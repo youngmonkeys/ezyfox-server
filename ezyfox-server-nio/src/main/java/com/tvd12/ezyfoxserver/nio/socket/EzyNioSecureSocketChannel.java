@@ -11,6 +11,8 @@ import javax.net.ssl.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,7 +42,7 @@ public class EzyNioSecureSocketChannel
     private int appBufferSize;
     private int netBufferSize;
     private int sslMaxNetBufferSize;
-    private volatile SSLContext sslContext;
+    private final EzySslContextProxy sslContextProxy;
     private final int sslHandshakeTimeout;
     private final int sslMaxAppBufferSize;
     @Getter
@@ -59,10 +61,7 @@ public class EzyNioSecureSocketChannel
         super(channel);
         this.sslHandshakeTimeout = sslHandshakeTimeout;
         this.sslMaxAppBufferSize = maxRequestSize * 2;
-        this.sslContext = sslContextProxy.loadSslContext();
-        sslContextProxy.onSslContextReload(newSslContext ->
-            this.sslContext = newSslContext
-        );
+        this.sslContextProxy = sslContextProxy;
     }
 
     public boolean isHandshakeComplete() {
@@ -83,7 +82,7 @@ public class EzyNioSecureSocketChannel
             );
             return;
         }
-        engine = sslContext.createSSLEngine();
+        engine = sslContextProxy.loadSslContext().createSSLEngine();
         engine.setUseClientMode(false);
         engine.beginHandshake();
 
@@ -157,6 +156,9 @@ public class EzyNioSecureSocketChannel
                         case BUFFER_OVERFLOW:
                             throw new EzyConnectionCloseException("max request size");
                         case BUFFER_UNDERFLOW:
+                            if (readBytes == 0) {
+                                waitForReadable(endTime);
+                            }
                             break;
                         case CLOSED:
                             if (engine.isOutboundDone()) {
@@ -384,6 +386,17 @@ public class EzyNioSecureSocketChannel
         return getOutputBytes(output);
     }
 
+    private void waitForReadable(long timeoutAt) throws IOException {
+        long timeout = timeoutAt - System.currentTimeMillis();
+        if (timeout <= 0 || channel.isBlocking()) {
+            return;
+        }
+        try (Selector selector = Selector.open()) {
+            channel.register(selector, SelectionKey.OP_READ);
+            selector.select(timeout);
+        }
+    }
+
     public void writeOrTimeout(
         SocketChannel channel,
         ByteBuffer buffer,
@@ -519,8 +532,18 @@ public class EzyNioSecureSocketChannel
             }
             answer = new ByteArrayOutputStream(buffer.remaining());
         }
-        while (buffer.hasRemaining()) {
-            answer.write(buffer.get());
+        int length = buffer.remaining();
+        if (buffer.hasArray()) {
+            answer.write(
+                buffer.array(),
+                buffer.arrayOffset() + buffer.position(),
+                length
+            );
+            buffer.position(buffer.limit());
+        } else {
+            byte[] bytes = new byte[length];
+            buffer.get(bytes);
+            answer.write(bytes, 0, length);
         }
         return answer;
     }

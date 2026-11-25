@@ -69,8 +69,98 @@ public class EzySecureSocketDataReceiverTest {
         verify(handlerGroup, times(1)).getChannel();
         verifyNoMoreInteractions(handlerGroup);
 
-        verify(channel, times(1)).isHandshakeComplete();
+        verify(channel, times(2)).isHandshakeComplete();
         verify(channel, times(1)).handshake();
+    }
+
+    @Test
+    public void tcpReadBytesHandshakeWithPendingBytesCase() throws Exception {
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+        when(handlerGroupManager.getHandlerGroup(socketChannel))
+            .thenReturn(handlerGroup);
+        when(handlerGroup.getChannel()).thenReturn(channel);
+        when(channel.isHandshakeComplete()).thenReturn(false, true);
+        byte[] pendingBytes = RandomUtil.randomShortByteArray();
+        when(channel.read(any(ByteBuffer.class))).thenReturn(pendingBytes);
+
+        MethodInvoker.create()
+            .object(instance)
+            .method("tcpReadBytes")
+            .param(SocketChannel.class, socketChannel)
+            .param(ByteBuffer.class, buffer)
+            .invoke();
+
+        verify(handlerGroupManager, times(1))
+            .getHandlerGroup(socketChannel);
+
+        verify(handlerGroup, times(1)).getChannel();
+        verify(handlerGroup, times(1)).fireBytesReceived(pendingBytes);
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(channel, times(2)).isHandshakeComplete();
+        verify(channel, times(1)).handshake();
+        verify(channel, times(1)).read(any(ByteBuffer.class));
+    }
+
+    @Test
+    public void tcpReadBytesHandshakeWithoutPendingBytesCase() throws Exception {
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+        when(handlerGroupManager.getHandlerGroup(socketChannel))
+            .thenReturn(handlerGroup);
+        when(handlerGroup.getChannel()).thenReturn(channel);
+        when(channel.isHandshakeComplete()).thenReturn(false, true);
+        when(channel.read(any(ByteBuffer.class))).thenReturn(new byte[0]);
+
+        MethodInvoker.create()
+            .object(instance)
+            .method("tcpReadBytes")
+            .param(SocketChannel.class, socketChannel)
+            .param(ByteBuffer.class, buffer)
+            .invoke();
+
+        verify(handlerGroupManager, times(1))
+            .getHandlerGroup(socketChannel);
+
+        verify(handlerGroup, times(1)).getChannel();
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(channel, times(2)).isHandshakeComplete();
+        verify(channel, times(1)).handshake();
+        verify(channel, times(1)).read(any(ByteBuffer.class));
+    }
+
+    @Test
+    public void tcpReadBytesReadPendingBytesFailedCase() throws Exception {
+        SocketChannel socketChannel = mock(SocketChannel.class);
+        EzyNioHandlerGroup handlerGroup = mock(EzyNioHandlerGroup.class);
+        when(handlerGroupManager.getHandlerGroup(socketChannel))
+            .thenReturn(handlerGroup);
+        when(handlerGroup.getChannel()).thenReturn(channel);
+        when(channel.isHandshakeComplete()).thenReturn(false, true);
+        when(channel.read(any(ByteBuffer.class)))
+            .thenThrow(new SSLException("test"));
+
+        MethodInvoker.create()
+            .object(instance)
+            .method("tcpReadBytes")
+            .param(SocketChannel.class, socketChannel)
+            .param(ByteBuffer.class, buffer)
+            .invoke();
+
+        verify(handlerGroupManager, times(1))
+            .getHandlerGroup(socketChannel);
+
+        verify(handlerGroup, times(1)).getChannel();
+        verify(handlerGroup, times(1)).enqueueDisconnection(
+            EzyDisconnectReason.SSH_HANDSHAKE_FAILED
+        );
+        verifyNoMoreInteractions(handlerGroup);
+
+        verify(channel, times(2)).isHandshakeComplete();
+        verify(channel, times(1)).handshake();
+        verify(channel, times(1)).read(any(ByteBuffer.class));
     }
 
     @Test

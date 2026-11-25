@@ -7,6 +7,8 @@ public interface EzySocketSetting extends EzyBaseSocketSetting {
 
     int getSslHandshakeTimeout();
 
+    boolean isSslHandshakeSigning();
+
     boolean isTcpNoDelay();
 
     int getMaxRequestSize();

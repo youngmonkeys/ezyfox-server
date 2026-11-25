@@ -13,6 +13,7 @@ import com.tvd12.ezyfoxserver.config.EzyConfig;
 import com.tvd12.ezyfoxserver.config.EzySimpleConfig;
 import com.tvd12.ezyfoxserver.constant.EzyConnectionType;
 import com.tvd12.ezyfoxserver.constant.EzyEventType;
+import com.tvd12.ezyfoxserver.context.EzyServerContext;
 import com.tvd12.ezyfoxserver.controller.EzyEventController;
 import com.tvd12.ezyfoxserver.nio.builder.impl.EzyNioServerBootstrapBuilderImpl;
 import com.tvd12.ezyfoxserver.nio.socket.EzySecureSocketDataReceiver;
@@ -235,7 +236,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         }
 
         // then
-        verify(server, times(24)).getSettings();
+        verify(server, times(26)).getSettings();
         verify(server, times(1)).getStatistics();
         verify(server, times(3)).getSessionManager();
         verify(server, times(2)).getEventControllers();
@@ -245,11 +246,11 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(((EzyStreamingApiAware) server), times(1)).setStreamingApi(any());
         verifyNoMoreInteractions(server);
 
-        verify(settings, times(5)).getSocket();
+        verify(settings, times(6)).getSocket();
         verify(settings, times(1)).getLogger();
         verify(settings, times(1)).getZoneIds();
         verify(settings, times(6)).getThreadPoolSize();
-        verify(settings, times(5)).getWebsocket();
+        verify(settings, times(6)).getWebsocket();
         verify(settings, times(1)).getProtocols();
         verify(settings, times(2)).getSessionManagement();
         verify(settings, times(1)).getHttp();
@@ -266,6 +267,7 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
 
         verify(socketSetting, times(3)).isCertificationSslActive();
         verify(socketSetting, times(2)).isActive();
+        verify(socketSetting, times(1)).isCustomizationSslActive();
         verifyNoMoreInteractions(socketSetting);
 
         verify(threadPoolSizeSetting, times(1)).getStatistics();
@@ -284,11 +286,74 @@ public class EzyNioServerBootstrapBuilderImplTest extends BaseTest {
         verify(websocketSetting, times(2)).getSslPort();
         verify(websocketSetting, times(1)).getPort();
         verify(websocketSetting, times(2)).getAddress();
-        verify(websocketSetting, times(1)).getSslConfig();
+        verify(websocketSetting, times(2)).getSslConfig();
         verify(websocketSetting, times(1)).getMinHandlerThreadPoolSize();
         verify(websocketSetting, times(1)).getMaxHandlerThreadPoolSize();
         verify(websocketSetting, times(1)).getWriterThreadPoolSize();
         verifyNoMoreInteractions(websocketSetting);
+    }
+
+    @Test
+    public void buildWithSslHandshakeSignerTest() {
+        // given
+        EzySslHandshakeSigner signer = mock(EzySslHandshakeSigner.class);
+        SslHandshakeSignerBuilder builder = new SslHandshakeSignerBuilder(signer);
+        builder.server(newDefaultServer());
+
+        // when
+        builder.build();
+        EzyServerContext serverContext = builder.getServerContext();
+        EzySslContextProxy sslContextProxy = serverContext.getProperty(EzySslContextProxy.class);
+        sslContextProxy.reloadSsl();
+
+        // then
+        Asserts.assertTrue(serverContext.getProperty(EzySslHandshakeSigner.class) == signer);
+        verify(signer, times(1)).reload();
+        verifyNoMoreInteractions(signer);
+    }
+
+    @Test
+    public void buildWithoutSslHandshakeSignerTest() {
+        // given
+        SslHandshakeSignerBuilder builder = new SslHandshakeSignerBuilder(null);
+        builder.server(newDefaultServer());
+
+        // when
+        builder.build();
+        EzyServerContext serverContext = builder.getServerContext();
+
+        // then
+        Asserts.assertNull(serverContext.getProperty(EzySslHandshakeSigner.class));
+        Asserts.assertNotNull(serverContext.getProperty(EzySslContextProxy.class));
+    }
+
+    private static EzySimpleServer newDefaultServer() {
+        EzySimpleConfig config = new EzySimpleConfig();
+        EzySimpleSettings settings = new EzySimpleSettings();
+        settings.getSocket().setCodecCreator(ExCodecCreator.class.getName());
+        settings.getWebsocket().setCodecCreator(ExCodecCreator.class.getName());
+        EzySimpleServer server = new EzySimpleServer();
+        server.setConfig(config);
+        server.setSettings(settings);
+        return server;
+    }
+
+    private static class SslHandshakeSignerBuilder extends EzyNioServerBootstrapBuilderImpl {
+
+        private final EzySslHandshakeSigner sslHandshakeSigner;
+
+        SslHandshakeSignerBuilder(EzySslHandshakeSigner sslHandshakeSigner) {
+            this.sslHandshakeSigner = sslHandshakeSigner;
+        }
+
+        @Override
+        protected EzySslHandshakeSigner newSslHandshakeSigner(EzySslConfigSetting sslConfig) {
+            return sslHandshakeSigner;
+        }
+
+        EzyServerContext getServerContext() {
+            return serverContext;
+        }
     }
 
     public static class ExCodecCreator implements EzyCodecCreator {

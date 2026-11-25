@@ -9,6 +9,11 @@ import java.nio.channels.SocketChannel;
 
 public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
 
+    private static final byte[] EMPTY_BYTES =
+        new byte[0];
+    private static final ByteBuffer EMPTY_BUFFER =
+        ByteBuffer.allocate(0);
+
     public EzySecureSocketDataReceiver(Builder builder) {
         super(builder);
     }
@@ -24,8 +29,10 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
             EzyNioSecureSocketChannel secureChannel =
                 (EzyNioSecureSocketChannel) handlerGroup.getChannel();
             if (!secureChannel.isHandshakeComplete()) {
+                byte[] pendingBytes;
                 try {
                     secureChannel.handshake();
+                    pendingBytes = readPendingBytes(secureChannel);
                 } catch (Throwable e) {
                     logger.info("handshake failed on channel: {}", channel, e);
                     handlerGroup.enqueueDisconnection(
@@ -33,9 +40,20 @@ public class EzySecureSocketDataReceiver extends EzySocketDataReceiver {
                     );
                     return;
                 }
+                if (pendingBytes.length > 0) {
+                    handlerGroup.fireBytesReceived(pendingBytes);
+                }
             }
             super.tcpReadBytes(channel, buffer);
         }
+    }
+
+    private byte[] readPendingBytes(
+        EzyNioSecureSocketChannel secureChannel
+    ) throws Exception {
+        return secureChannel.isHandshakeComplete()
+            ? secureChannel.read(EMPTY_BUFFER)
+            : EMPTY_BYTES;
     }
 
     @Override

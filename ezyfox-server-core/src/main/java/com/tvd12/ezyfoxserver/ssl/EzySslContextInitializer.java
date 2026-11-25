@@ -37,7 +37,7 @@ public class EzySslContextInitializer {
         );
     }
 
-    protected EzySslConfig loadSslConfig() {
+    public EzySslConfig loadSslConfig() {
         String file = getSslConfigFile();
         EzySslConfigLoader loader = newSslConfigLoader();
         return loader.load(file);

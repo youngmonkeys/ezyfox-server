@@ -18,6 +18,7 @@ import com.tvd12.ezyfoxserver.protocol.EzyProtocolGateway;
 import com.tvd12.ezyfoxserver.setting.EzySocketSetting;
 import com.tvd12.ezyfoxserver.socket.*;
 import com.tvd12.ezyfoxserver.ssl.EzySslContextProxy;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeSigner;
 
 import java.util.concurrent.ExecutorService;
 
@@ -57,6 +58,13 @@ public class EzyNioServerBootstrapBuilderImpl
             () -> newSslContext(getWebsocketSetting().getSslConfig())
         );
         serverContext.setProperty(EzySslContextProxy.class, sslContextProxy);
+        EzySslHandshakeSigner sslHandshakeSigner = newSslHandshakeSigner(
+            getWebsocketSetting().getSslConfig()
+        );
+        if (sslHandshakeSigner != null) {
+            serverContext.setProperty(EzySslHandshakeSigner.class, sslHandshakeSigner);
+            sslContextProxy.onSslContextReload(sslContext -> sslHandshakeSigner.reload());
+        }
         EzyProtocolGateway protocolGateway = new EzyNioProtocolGateway(
             handlerGroupManager
         );

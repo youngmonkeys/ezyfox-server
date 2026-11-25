@@ -9,6 +9,8 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Signature;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -77,6 +79,49 @@ public class EzySslHandshakeSignerTest extends BaseCoreTest {
         Asserts.assertTrue(loaded);
         Asserts.assertTrue(sut.isActive());
         verifyProof(proof, clientKey, encryptedSessionKey);
+    }
+
+    @Test
+    public void signFixedVectorTest() throws Exception {
+        // given
+        EzySslHandshakeSigner sut = new EzySslHandshakeSigner(() -> {
+            EzySimpleSslConfig sslConfig = new EzySimpleSslConfig();
+            sslConfig.setKeyStoreFile("test-input/ssl-handshake-keystore.jks");
+            sslConfig.setKeyStorePasswordFile("test-input/ssl-handshake-password.txt");
+            sslConfig.setCertificatePasswordFile("test-input/ssl-handshake-password.txt");
+            return sslConfig;
+        });
+        byte[] clientKey = byteRange(0x01, 0x21);
+        byte[] encryptedSessionKey = byteRange(0xA0, 0xC0);
+        String expectedProof = new String(
+            Files.readAllBytes(Paths.get("test-input/ssl-handshake-proof.txt")),
+            StandardCharsets.US_ASCII
+        ).trim();
+
+        // when
+        boolean loaded = sut.reload();
+        byte[] proof = sut.sign(clientKey, encryptedSessionKey);
+
+        // then
+        Asserts.assertTrue(loaded);
+        Asserts.assertEquals(toHex(proof), expectedProof);
+        verifyProof(proof, clientKey, encryptedSessionKey);
+    }
+
+    private static byte[] byteRange(int from, int to) {
+        byte[] answer = new byte[to - from];
+        for (int i = 0; i < answer.length; ++i) {
+            answer[i] = (byte) (from + i);
+        }
+        return answer;
+    }
+
+    private static String toHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b & 0xFF));
+        }
+        return builder.toString();
     }
 
     @Test

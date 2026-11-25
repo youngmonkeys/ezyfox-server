@@ -14,6 +14,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
+import org.eclipse.jetty.websocket.api.extensions.ExtensionFactory;
 import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
@@ -31,6 +32,12 @@ public class EzyWebSocketServerCreator {
     protected EzyNioSessionManager sessionManager;
     protected EzyHandlerGroupManager handlerGroupManager;
     protected EzySessionManagementSetting sessionManagementSetting;
+
+    private static final String[] COMPRESSION_EXTENSION_NAMES = {
+        "permessage-deflate",
+        "deflate-frame",
+        "x-webkit-deflate-frame"
+    };
 
     public EzyWebSocketServerCreator socketDataReceiver(
         EzySocketDataReceiver socketDataReceiver
@@ -131,8 +138,18 @@ public class EzyWebSocketServerCreator {
                 policy.setMaxBinaryMessageSize(setting.getMaxFrameSize());
                 policy.setMaxTextMessageBufferSize(setting.getMaxFrameSize());
                 policy.setMaxBinaryMessageBufferSize(setting.getMaxFrameSize());
+                if (!setting.isCompressionEnable()) {
+                    disableCompression(factory);
+                }
             }
         };
+    }
+
+    private void disableCompression(WebSocketServletFactory factory) {
+        ExtensionFactory extensionFactory = factory.getExtensionFactory();
+        for (String extensionName : COMPRESSION_EXTENSION_NAMES) {
+            extensionFactory.unregister(extensionName);
+        }
     }
 
     public static class HealthCheckServlet extends HttpServlet {

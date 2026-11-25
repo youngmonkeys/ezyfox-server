@@ -54,6 +54,7 @@
         <max-handler-thread-pool-size>16</max-handler-thread-pool-size>
         <writer-thread-pool-size>8</writer-thread-pool-size>
         <management-enable>true</management-enable>
+        <compression-enable>true</compression-enable>
         <ssl-active>false</ssl-active>
         <ssl-config>
             <file>ssl-config.properties</file>

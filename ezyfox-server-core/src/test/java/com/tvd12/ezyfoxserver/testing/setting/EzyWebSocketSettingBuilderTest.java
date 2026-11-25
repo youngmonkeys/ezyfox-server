@@ -34,4 +34,24 @@ public class EzyWebSocketSettingBuilderTest {
         Asserts.assertEquals(setting.getMinHandlerThreadPoolSize(), 2);
         Asserts.assertEquals(setting.getMaxHandlerThreadPoolSize(), 5);
     }
+
+    @Test
+    public void testCompressionEnable() {
+        // given
+        EzyWebSocketSettingBuilder sut = new EzyWebSocketSettingBuilder();
+
+        // when
+        EzySimpleWebSocketSetting defaultSetting = sut.build();
+        EzySimpleWebSocketSetting disabledSetting = sut
+            .compressionEnable(false)
+            .build();
+
+        // then
+        Asserts.assertTrue(defaultSetting.isCompressionEnable());
+        Asserts.assertFalse(disabledSetting.isCompressionEnable());
+        Asserts.assertEquals(
+            disabledSetting.toMap().get("compressionEnable"),
+            false
+        );
+    }
 }

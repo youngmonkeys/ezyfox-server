@@ -40,6 +40,9 @@ public class EzySimpleWebSocketSetting
     @XmlElement(name = "management-enable")
     protected boolean managementEnable;
 
+    @XmlElement(name = "compression-enable")
+    protected boolean compressionEnable;
+
     public EzySimpleWebSocketSetting() {
         super();
         setPort(2208);
@@ -49,6 +52,7 @@ public class EzySimpleWebSocketSetting
         setMaxHandlerThreadPoolSize(16);
         setWriterThreadPoolSize(8);
         setManagementEnable(true);
+        setCompressionEnable(true);
         setSslConfig(new EzySimpleSslConfigSetting());
         setCodecCreator("com.tvd12.ezyfox.codec.JacksonCodecCreator");
     }
@@ -61,6 +65,7 @@ public class EzySimpleWebSocketSetting
         map.put("sslActive", sslActive);
         map.put("sslConfig", sslConfig.toMap());
         map.put("managementEnable", managementEnable);
+        map.put("compressionEnable", compressionEnable);
         map.put("minHandlerThreadPoolSize", minHandlerThreadPoolSize);
         map.put("maxHandlerThreadPoolSize", maxHandlerThreadPoolSize);
         map.put("writerThreadPoolSize", writerThreadPoolSize);

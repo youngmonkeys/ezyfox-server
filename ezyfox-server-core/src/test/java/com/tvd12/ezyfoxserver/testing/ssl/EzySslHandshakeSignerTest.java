@@ -153,6 +153,25 @@ public class EzySslHandshakeSignerTest extends BaseCoreTest {
     }
 
     @Test
+    public void expiredKeyTest() throws Exception {
+        // given
+        EzySslHandshakeSigner sut = new EzySslHandshakeSigner(EzySslHandshakeSignerTest::newSslConfig) {
+            @Override
+            protected long currentTimeMillis() {
+                return Long.MAX_VALUE;
+            }
+        };
+
+        // when
+        sut.reload();
+        byte[] proof = sut.sign(new byte[] {1}, new byte[] {2});
+
+        // then
+        Asserts.assertFalse(sut.isActive());
+        Asserts.assertNull(proof);
+    }
+
+    @Test
     public void reloadConfigErrorTest() {
         // given
         EzySslHandshakeSigner sut = new EzySslHandshakeSigner(() -> {

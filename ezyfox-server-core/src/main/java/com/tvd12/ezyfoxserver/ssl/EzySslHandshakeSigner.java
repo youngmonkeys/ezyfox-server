@@ -19,6 +19,7 @@ import java.security.interfaces.ECKey;
 import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -46,10 +47,11 @@ public class EzySslHandshakeSigner extends EzyLoggable {
             }
             signingKey = key;
             logger.info(
-                "ssl handshake signer: sign socket handshakes with {} ({} bits), certificate: {}",
+                "ssl handshake signer: sign socket handshakes with {} ({} bits), certificate: {}, expires: {}",
                 key.algorithm,
                 key.keyBits,
-                key.subject
+                key.subject,
+                new Date(key.notAfter)
             );
             return true;
         } catch (Throwable e) {
@@ -59,12 +61,13 @@ public class EzySslHandshakeSigner extends EzyLoggable {
     }
 
     public boolean isActive() {
-        return signingKey != null;
+        SigningKey key = signingKey;
+        return key != null && !isExpired(key);
     }
 
     public byte[] sign(byte[] clientKey, byte[] encryptedSessionKey) throws Exception {
         SigningKey key = signingKey;
-        if (key == null) {
+        if (key == null || isExpired(key)) {
             return null;
         }
         Signature signature = Signature.getInstance(key.algorithm);
@@ -107,7 +110,7 @@ public class EzySslHandshakeSigner extends EzyLoggable {
         SigningKey best = null;
         for (String alias : Collections.list(keyStore.aliases())) {
             SigningKey candidate = newSigningKey(keyStore, alias, keyPassword);
-            if (candidate != null && (best == null || candidate.keyBits > best.keyBits)) {
+            if (candidate != null && (best == null || candidate.notAfter > best.notAfter)) {
                 best = candidate;
             }
         }
@@ -154,12 +157,21 @@ public class EzySslHandshakeSigner extends EzyLoggable {
                 algorithm,
                 keyBits,
                 certificates,
-                leaf.getSubjectX500Principal().getName()
+                leaf.getSubjectX500Principal().getName(),
+                leaf.getNotAfter().getTime()
             );
         } catch (Exception e) {
             logger.info("ssl handshake signer: skip key store entry: {}, error: {}", alias, e.toString());
             return null;
         }
+    }
+
+    protected boolean isExpired(SigningKey key) {
+        return currentTimeMillis() > key.notAfter;
+    }
+
+    protected long currentTimeMillis() {
+        return System.currentTimeMillis();
     }
 
     protected char[] readPassword(String file) throws Exception {
@@ -184,19 +196,22 @@ public class EzySslHandshakeSigner extends EzyLoggable {
         protected final int keyBits;
         protected final List<byte[]> certificates;
         protected final String subject;
+        protected final long notAfter;
 
         protected SigningKey(
             PrivateKey privateKey,
             String algorithm,
             int keyBits,
             List<byte[]> certificates,
-            String subject
+            String subject,
+            long notAfter
         ) {
             this.privateKey = privateKey;
             this.algorithm = algorithm;
             this.keyBits = keyBits;
             this.certificates = certificates;
             this.subject = subject;
+            this.notAfter = notAfter;
         }
     }
 }

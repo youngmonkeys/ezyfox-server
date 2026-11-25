@@ -9,14 +9,8 @@ import com.tvd12.ezyfoxserver.entity.EzySession;
 
 public class EzySocketResponseApi extends EzyAbstractResponseApi {
 
-    public static final int DEFAULT_COMPRESSION_THRESHOLD = 512;
-
     protected final EzyMessageDataEncoder encoder;
     protected final int compressionThreshold;
-
-    public EzySocketResponseApi(Object encoder) {
-        this(encoder, DEFAULT_COMPRESSION_THRESHOLD);
-    }
 
     public EzySocketResponseApi(Object encoder, int compressionThreshold) {
         this.encoder = new EzySimpleMessageDataEncoder(

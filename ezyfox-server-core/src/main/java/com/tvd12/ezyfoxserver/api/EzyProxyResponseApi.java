@@ -13,10 +13,6 @@ public class EzyProxyResponseApi implements EzyResponseApi {
     private final EzyProtocolResponseApi protocolResponseApi;
     protected final int compressionThreshold;
 
-    public EzyProxyResponseApi(EzyCodecFactory codecFactory) {
-        this(codecFactory, EzySocketResponseApi.DEFAULT_COMPRESSION_THRESHOLD);
-    }
-
     public EzyProxyResponseApi(
         EzyCodecFactory codecFactory,
         int compressionThreshold

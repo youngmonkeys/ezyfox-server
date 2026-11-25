@@ -20,7 +20,7 @@ public class EzyProxyResponseApiTest extends BaseTest {
     @Test
     public void test() throws Exception {
         EzyCodecFactory codecFactory = mock(EzyCodecFactory.class);
-        EzyProxyResponseApi api = new EzyProxyResponseApi(codecFactory);
+        EzyProxyResponseApi api = new EzyProxyResponseApi(codecFactory, 512);
         EzyPackage pack = mock(EzyPackage.class);
         when(pack.getConnectionTypes()).thenReturn(
             Sets.newHashSet(
@@ -34,7 +34,7 @@ public class EzyProxyResponseApiTest extends BaseTest {
         EzyObjectToStringEncoder stringEncoder = mock(EzyObjectToStringEncoder.class);
         when(codecFactory.newEncoder(EzyConnectionType.SOCKET)).thenReturn(byteEncoder);
         when(codecFactory.newEncoder(EzyConnectionType.WEBSOCKET)).thenReturn(stringEncoder);
-        api = new EzyProxyResponseApi(codecFactory);
+        api = new EzyProxyResponseApi(codecFactory, 512);
         api.response(pack);
         api.response(pack, true);
 

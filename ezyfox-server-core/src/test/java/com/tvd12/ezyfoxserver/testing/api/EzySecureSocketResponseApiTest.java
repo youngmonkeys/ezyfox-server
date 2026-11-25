@@ -34,7 +34,7 @@ public class EzySecureSocketResponseApiTest {
         channel = mock(CombineChannel.class);
         packet = mock(EzyPacket.class);
         encoder = mock(EzyObjectToByteEncoder.class);
-        instance = new EzySecureSocketResponseApi(encoder);
+        instance = new EzySecureSocketResponseApi(encoder, 512);
 
         when(session.getChannel()).thenReturn(channel);
         when(channel.getPackingLock()).thenReturn(packLock);

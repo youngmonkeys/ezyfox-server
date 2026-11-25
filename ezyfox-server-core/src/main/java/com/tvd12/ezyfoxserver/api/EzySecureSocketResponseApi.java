@@ -10,10 +10,6 @@ import java.io.IOException;
 
 public class EzySecureSocketResponseApi extends EzySocketResponseApi {
 
-    public EzySecureSocketResponseApi(Object encoder) {
-        super(encoder);
-    }
-
     public EzySecureSocketResponseApi(Object encoder, int compressionThreshold) {
         super(encoder, compressionThreshold);
     }

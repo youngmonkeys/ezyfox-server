@@ -28,7 +28,7 @@ public class EzySocketResponseApiTest {
         EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
         byte[] bytes = RandomUtil.randomShortByteArray();
         when(encoder.encode(data)).thenReturn(bytes);
-        EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
 
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
@@ -61,7 +61,7 @@ public class EzySocketResponseApiTest {
         byte[] bytes = RandomUtil.randomShortByteArray();
         EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
         when(encoder.toMessageContent(data)).thenReturn(bytes);
-        EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
 
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);
@@ -92,7 +92,7 @@ public class EzySocketResponseApiTest {
         byte[] bytes = RandomUtil.randomShortByteArray();
         EzyObjectToByteEncoder encoder = mock(EzyObjectToByteEncoder.class);
         when(encoder.toMessageContent(data)).thenReturn(bytes);
-        EzySocketResponseApi sut = new EzySocketResponseApi(encoder);
+        EzySocketResponseApi sut = new EzySocketResponseApi(encoder, 512);
 
         EzySimplePackage pack = new EzySimplePackage();
         pack.setData(data);

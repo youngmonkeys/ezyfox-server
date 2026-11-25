@@ -3,6 +3,7 @@ package com.tvd12.ezyfoxserver.testing.builder;
 import com.tvd12.ezyfoxserver.EzySimpleServer;
 import com.tvd12.ezyfoxserver.constant.SslType;
 import com.tvd12.ezyfoxserver.setting.*;
+import com.tvd12.ezyfoxserver.ssl.EzySslHandshakeSigner;
 import com.tvd12.ezyfoxserver.testing.BaseCoreTest;
 import com.tvd12.ezyfoxserver.testing.MyTestServerBootstrapBuilder;
 import com.tvd12.test.assertion.Asserts;
@@ -112,5 +113,134 @@ public class EzyAbstractServerBootstrapBuilderTest extends BaseCoreTest {
             .invoke(SSLContext.class);
 
         Asserts.assertNotNull(sslContext);
+    }
+
+    @Test
+    public void newSslHandshakeSignerTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(true);
+        socketSetting.setSslType(SslType.CUSTOMIZATION);
+        socketSetting.setSslHandshakeSigning(true);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        // when
+        EzySslHandshakeSigner signer = invokeNewSslHandshakeSigner(
+            builder,
+            new EzySimpleSslConfigSetting()
+        );
+
+        // then
+        Asserts.assertNotNull(signer);
+        Asserts.assertTrue(signer.isActive());
+    }
+
+    @Test
+    public void newSslHandshakeSignerSslConfigNullTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(true);
+        socketSetting.setSslType(SslType.CUSTOMIZATION);
+        socketSetting.setSslHandshakeSigning(true);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        // when
+        EzySslHandshakeSigner signer = invokeNewSslHandshakeSigner(builder, null);
+
+        // then
+        Asserts.assertNull(signer);
+    }
+
+    @Test
+    public void newSslHandshakeSignerSslInactiveTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(false);
+        socketSetting.setSslType(SslType.CUSTOMIZATION);
+        socketSetting.setSslHandshakeSigning(true);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        // when
+        EzySslHandshakeSigner signer = invokeNewSslHandshakeSigner(
+            builder,
+            new EzySimpleSslConfigSetting()
+        );
+
+        // then
+        Asserts.assertNull(signer);
+    }
+
+    @Test
+    public void newSslHandshakeSignerCertificationSslTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(true);
+        socketSetting.setSslType(SslType.CERTIFICATION);
+        socketSetting.setSslHandshakeSigning(true);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        // when
+        EzySslHandshakeSigner signer = invokeNewSslHandshakeSigner(
+            builder,
+            new EzySimpleSslConfigSetting()
+        );
+
+        // then
+        Asserts.assertNull(signer);
+    }
+
+    @Test
+    public void newSslHandshakeSignerSigningDisabledTest() {
+        // given
+        EzySimpleServer server = newServer();
+        EzySimpleSocketSetting socketSetting =
+            (EzySimpleSocketSetting) server.getSettings().getSocket();
+        socketSetting.setSslActive(true);
+        socketSetting.setSslType(SslType.CUSTOMIZATION);
+        socketSetting.setSslHandshakeSigning(false);
+
+        MyTestServerBootstrapBuilder builder =
+            (MyTestServerBootstrapBuilder) new MyTestServerBootstrapBuilder()
+                .server(server);
+
+        // when
+        EzySslHandshakeSigner signer = invokeNewSslHandshakeSigner(
+            builder,
+            new EzySimpleSslConfigSetting()
+        );
+
+        // then
+        Asserts.assertNull(signer);
+    }
+
+    private static EzySslHandshakeSigner invokeNewSslHandshakeSigner(
+        MyTestServerBootstrapBuilder builder,
+        EzySslConfigSetting sslConfig
+    ) {
+        return MethodInvoker.create()
+            .object(builder)
+            .method("newSslHandshakeSigner")
+            .param(EzySslConfigSetting.class, sslConfig)
+            .invoke(EzySslHandshakeSigner.class);
     }
 }
